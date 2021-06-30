@@ -6,6 +6,20 @@ namespace fort {
 namespace myrmidon {
 namespace priv {
 
+template<typename Object>
+class Handle {
+public:
+	Handle(const std::shared_ptr<Object> & object)
+		: d_object(object) {
+	}
+
+	inline Object & Get() {
+		return *d_object;
+	}
+protected:
+	std::shared_ptr<Object> d_object;
+};
+
 template<typename Object,typename Context>
 class HandleInContext {
 public:

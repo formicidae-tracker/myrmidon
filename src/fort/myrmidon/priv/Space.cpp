@@ -298,16 +298,16 @@ void Space::Universe::DeleteZone(ZoneID zoneID) {
 myrmidon::Zone & Space::PublicCreateZone(const std::string & name, ZoneID zoneID) {
 	auto zone = LockUniverse()->CreateZone(zoneID,name,d_URI);
 	d_zones.insert({zone->ID(),zone});
-	d_publicZones.insert_or_assign(zone->ID(),myrmidon::Zone(zone));
-	return d_publicZones.at(zone->ID());
+	d_publicZones.insert_or_assign(zone->ID(),nullptr);
+	return *d_publicZones.at(zone->ID());
 }
 
 Zone::Ptr Space::CreateZone(const std::string & name, ZoneID zoneID) {
 	auto & res = PublicCreateZone(name,zoneID);
-	return res.d_p;
+	return nullptr;
 }
 
-const myrmidon::Zone::ByID & Space::PublicZones() const {
+const myrmidon::ZoneByID & Space::PublicZones() const {
 	return d_publicZones;
 }
 

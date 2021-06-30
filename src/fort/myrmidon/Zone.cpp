@@ -17,26 +17,27 @@ public:
 		: HandleInContext(zoneDefinition,zone) {}
 };
 
-class ZoneHandle : public priv::HandleInContext<priv::Zone,priv::Space> {
+class ZoneHandle : public priv::Handle<priv::Zone> {
 public:
-	ZoneHandle(const std::shared_ptr<priv::Zone> & zone,
-	           const std::shared_ptr<priv::Space> & space)
-		: HandleInContext(zone,space) {
+	ZoneHandle(const std::shared_ptr<priv::Zone> & zone)
+		: Handle(zone) {
+		for(const auto & definition : zone->Definitions() ) {
+			d_definitions.push_back(MakeDefinitionPtr(definition));
+		}
 	}
 
 	const ZoneDefinition::Ptr & AddDefinition(const Shape::List & shapes,
 	                                          const Time & start,
 	                                          const Time & end) {
-		auto definition = d_object->AddDefinition(shapes,start,end);
-		auto publicDefinition = std::shared_ptr<ZoneDefinition>(new ZoneDefinition(std::make_unique<ZoneDefinitionHandle>(definition,d_object)));
-		d_definitions.push_back(publicDefinition);
-		priv::TimeValid::SortAndCheckOverlap(d_definitions);
-		return *std::find(d_definitions.begin(),d_defintions.end(),publicDefinition);
+		auto definition = MakeDefinitionPtr(d_object->AddDefinition(shapes,start,end));
+		d_definitions.push_back(definition);
+		priv::TimeValid::SortAndCheckOverlap(d_definitions.begin(),d_definitions.end());
+		return *std::find(d_definitions.begin(),d_definitions.end(),definition);
 	}
 
 	void DeleteDefinition(size_t index) {
 		d_object->EraseDefinition(index);
-		d_definitions.erase(index);
+		d_definitions.erase(d_definitions.begin()+index);
 	}
 
 	const ZoneDefinitionList & Definitions() const {
@@ -44,15 +45,19 @@ public:
 	}
 
 private:
+	ZoneDefinition::Ptr MakeDefinitionPtr(const priv::ZoneDefinition::Ptr & definition) {
+		return ZoneDefinition::Ptr(new ZoneDefinition(std::make_shared<ZoneDefinitionHandle>(definition,d_object)));
+	}
+
 	ZoneDefinitionList d_definitions;
 };
 
 
-Zone::Zone(std::unique_ptr<ZoneHandle> handle)
+Zone::Zone(const std::shared_ptr<ZoneHandle> & handle)
 	: d_p(handle) {
 }
 
-ZoneDefinition::ZoneDefinition(std::unique_ptr<ZoneDefinitionHandle> handle)
+ZoneDefinition::ZoneDefinition(const std::shared_ptr<ZoneDefinitionHandle> & handle)
 	: d_p(handle) {
 }
 
@@ -87,7 +92,7 @@ const ZoneDefinition::Ptr & Zone::AddDefinition(const Shape::List & shapes,
 	return d_p->AddDefinition(shapes,start,end);
 }
 
-const ZoneDefinition::List & Zone::Definitions() const {
+const ZoneDefinitionList & Zone::Definitions() const {
 	return d_p->Definitions();
 }
 

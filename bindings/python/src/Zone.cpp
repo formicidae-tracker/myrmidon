@@ -7,9 +7,10 @@ namespace py = pybind11;
 
 void BindZoneDefinition(py::module_ & m) {
 	using namespace fort::myrmidon;
-	py::class_<ZoneDefinition>(m,
-	                           "ZoneDefinition",
-	                           "Defines the geometry of a Zone during a time interval")
+	py::class_<ZoneDefinition,
+	           ZoneDefinition::Ptr>(m,
+	                                "ZoneDefinition",
+	                                "Defines the geometry of a Zone during a time interval")
 		.def_property("Shapes",
 		     &ZoneDefinition::Shapes,
 		     &ZoneDefinition::SetShapes,
@@ -28,9 +29,9 @@ void BindZoneDefinition(py::module_ & m) {
 void BindZone(py::module_ & m) {
 	using namespace fort::myrmidon;
 	BindZoneDefinition(m);
-	py::class_<Zone>(m,
-	                 "Zone",
-	                 "Defines a named region of interest for tracking and interactions")
+	py::class_<Zone,Zone::Ptr>(m,
+	                           "Zone",
+	                           "Defines a named region of interest for tracking and interactions")
 		.def_property("Name",
 		     &Zone::Name,
 		     &Zone::SetName,

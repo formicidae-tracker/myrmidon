@@ -118,6 +118,9 @@ public:
 	 */
 	void SetEnd(const Time & end);
 
+	ZoneDefinition & operator=( const ZoneDefinition &) = delete;
+	ZoneDefinition(const ZoneDefinition & ) = delete;
+
 private:
 	friend class ZoneHandle;
 
@@ -126,12 +129,9 @@ private:
 	//
 	// User cannot build Defoninition directly. They must be build and
 	// accessed from <Zone>.
-	ZoneDefinition(std::unique_ptr<ZoneDefinitionHandle> handle);
+	ZoneDefinition(const std::shared_ptr<ZoneDefinitionHandle> & handle);
 
-	ZoneDefinition & operator=( const ZoneDefinition &) = delete;
-	ZoneDefinition(const ZoneDefinition & ) = delete;
-
-	std::unique_ptr<ZoneDefinitionHandle> d_p;
+	std::shared_ptr<ZoneDefinitionHandle> d_p;
 };
 
 
@@ -169,7 +169,10 @@ private:
  */
 class Zone {
 public:
-
+	/**
+	 * a pointer to a Zone
+	 */
+	typedef std::shared_ptr<Zone> Ptr;
 	/**
 	 * Adds a new timed ZoneDefinition
 	 *
@@ -281,13 +284,13 @@ private:
 	//
 	// User cannot build Zone directly. They must be build and
 	// accessed from <Space>.
-	Zone(std::unique_ptr<ZoneHandle> handle);
+	Zone(const std::shared_ptr<ZoneHandle> & handle);
 
 	Zone & operator=( const Zone &) = delete;
 	Zone(const Zone &) = delete;
 
 
-	std::unique_ptr<ZoneHandle> d_p;
+	std::shared_ptr<ZoneHandle> d_p;
 };
 
 
