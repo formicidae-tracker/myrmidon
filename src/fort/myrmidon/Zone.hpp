@@ -121,6 +121,8 @@ public:
 	ZoneDefinition & operator=( const ZoneDefinition &) = delete;
 	ZoneDefinition(const ZoneDefinition & ) = delete;
 
+	~ZoneDefinition();
+
 private:
 	friend class ZoneHandle;
 
@@ -129,9 +131,9 @@ private:
 	//
 	// User cannot build Defoninition directly. They must be build and
 	// accessed from <Zone>.
-	ZoneDefinition(const std::shared_ptr<ZoneDefinitionHandle> & handle);
+	ZoneDefinition(std::unique_ptr<ZoneDefinitionHandle> handle);
 
-	std::shared_ptr<ZoneDefinitionHandle> d_p;
+	std::unique_ptr<ZoneDefinitionHandle> d_p;
 };
 
 
@@ -276,6 +278,8 @@ public:
 	ZoneID ID() const;
 
 
+	~Zone();
+
 private:
 	friend class Space;
 
@@ -284,13 +288,12 @@ private:
 	//
 	// User cannot build Zone directly. They must be build and
 	// accessed from <Space>.
-	Zone(const std::shared_ptr<ZoneHandle> & handle);
+	Zone(std::unique_ptr<ZoneHandle> handle);
 
 	Zone & operator=( const Zone &) = delete;
 	Zone(const Zone &) = delete;
 
-
-	std::shared_ptr<ZoneHandle> d_p;
+	std::unique_ptr<ZoneHandle> d_p;
 };
 
 

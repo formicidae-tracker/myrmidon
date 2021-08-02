@@ -46,20 +46,24 @@ public:
 
 private:
 	ZoneDefinition::Ptr MakeDefinitionPtr(const priv::ZoneDefinition::Ptr & definition) {
-		return ZoneDefinition::Ptr(new ZoneDefinition(std::make_shared<ZoneDefinitionHandle>(definition,d_object)));
+		return ZoneDefinition::Ptr(new ZoneDefinition(std::make_unique<ZoneDefinitionHandle>(definition,d_object)));
 	}
 
 	ZoneDefinitionList d_definitions;
 };
 
 
-Zone::Zone(const std::shared_ptr<ZoneHandle> & handle)
-	: d_p(handle) {
+Zone::Zone(std::unique_ptr<ZoneHandle> handle)
+	: d_p(std::move(handle)) {
 }
 
-ZoneDefinition::ZoneDefinition(const std::shared_ptr<ZoneDefinitionHandle> & handle)
-	: d_p(handle) {
+Zone::~Zone() = default;
+
+ZoneDefinition::ZoneDefinition(std::unique_ptr<ZoneDefinitionHandle> handle)
+	: d_p(std::move(handle)) {
 }
+
+ZoneDefinition::~ZoneDefinition() = default;
 
 const Shape::List & ZoneDefinition::Shapes() const {
 	return d_p->Get().Shapes();
