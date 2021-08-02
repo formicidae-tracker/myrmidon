@@ -201,9 +201,9 @@ public:
 	 *         resulting definition overlap in time with another
 	 *         ZoneDefinition for this Zone.
 	 */
-	const ZoneDefinition::Ptr & AddDefinition(const Shape::List & shapes,
-	                                          const Time & start,
-	                                          const Time & end);
+	ZoneDefinition::Ptr AddDefinition(const Shape::List & shapes,
+	                                  const Time & start,
+	                                  const Time & end);
 
 	/**
 	 * Gets the Zone's ZoneDefinition
@@ -281,7 +281,7 @@ public:
 	~Zone();
 
 private:
-	friend class Space;
+	friend class SpaceHandle;
 
 	// Private implementation constructor
 	// @pZone opaque pointer to implementation

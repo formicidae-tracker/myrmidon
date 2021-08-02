@@ -3,6 +3,9 @@
 #include <tbb/pipeline.h>
 
 #include "priv/Query.hpp"
+
+#include "handle/ExperimentHandle.hpp"
+
 namespace fort {
 namespace myrmidon {
 
@@ -10,13 +13,13 @@ ComputedMeasurement::List Query::ComputeMeasurementFor(const Experiment & experi
                                                        AntID antID,
                                                        MeasurementTypeID mTypeID) {
 	ComputedMeasurement::List res;
-	experiment.d_p->ComputeMeasurementsForAnt(res,antID,mTypeID);
+	experiment.d_p->Get().ComputeMeasurementsForAnt(res,antID,mTypeID);
 	return res;
 }
 
 TagStatistics::ByTagID Query::ComputeTagStatistics(const Experiment & experiment) {
 	TagStatistics::ByTagID res;
-	priv::Query::ComputeTagStatistics(experiment.d_p,res);
+	priv::Query::ComputeTagStatistics(experiment.d_p->Get(),res);
 	return res;
 }
 
@@ -27,14 +30,14 @@ Query::IdentifyFramesArgs::IdentifyFramesArgs()
 void Query::IdentifyFramesFunctor(const Experiment & experiment,
                                   std::function<void (const IdentifiedFrame::Ptr &)> storeData,
                                   const IdentifyFramesArgs & args) {
-	priv::Query::IdentifyFrames(experiment.d_p,storeData,args);
+	priv::Query::IdentifyFrames(experiment.d_p->Get(),storeData,args);
 }
 
 
 void Query::IdentifyFrames(const Experiment & experiment,
                            std::vector<IdentifiedFrame::Ptr> & result,
                            const IdentifyFramesArgs & args) {
-	priv::Query::IdentifyFrames(experiment.d_p,
+	priv::Query::IdentifyFrames(experiment.d_p->Get(),
 	                            [&result] (const IdentifiedFrame::Ptr & i) {
 		                            result.push_back(i);
 	                            },
@@ -51,14 +54,14 @@ Query::QueryArgs::QueryArgs()
 void Query::CollideFramesFunctor(const Experiment & experiment,
                                  std::function<void (const CollisionData & data)> storeData,
                                  const QueryArgs & args) {
-	priv::Query::CollideFrames(experiment.d_p,storeData,args);
+	priv::Query::CollideFrames(experiment.d_p->Get(),storeData,args);
 }
 
 
 void Query::CollideFrames(const Experiment & experiment,
                           std::vector<CollisionData> & result,
                           const QueryArgs & args) {
-	priv::Query::CollideFrames(experiment.d_p,
+	priv::Query::CollideFrames(experiment.d_p->Get(),
 	                           [&result](const CollisionData & data) {
 		                           result.push_back(data);
 	                           },
@@ -74,7 +77,7 @@ Query::ComputeAntTrajectoriesArgs::ComputeAntTrajectoriesArgs()
 void Query::ComputeAntTrajectoriesFunctor(const Experiment & experiment,
                                           std::function<void (const AntTrajectory::Ptr &)> storeTrajectory,
                                           const ComputeAntTrajectoriesArgs & args) {
-	priv::Query::ComputeTrajectories(experiment.d_p,
+	priv::Query::ComputeTrajectories(experiment.d_p->Get(),
 	                                 storeTrajectory,
 	                                 args);
 }
@@ -83,7 +86,7 @@ void Query::ComputeAntTrajectoriesFunctor(const Experiment & experiment,
 void Query::ComputeAntTrajectories(const Experiment & experiment,
                                    std::vector<AntTrajectory::Ptr> & trajectories,
                                    const ComputeAntTrajectoriesArgs & args) {
-	priv::Query::ComputeTrajectories(experiment.d_p,
+	priv::Query::ComputeTrajectories(experiment.d_p->Get(),
 	                                 [&trajectories](const AntTrajectory::Ptr & trajectory) {
 		                                 trajectories.push_back(trajectory);
 	                                 },
@@ -99,7 +102,7 @@ void Query::ComputeAntInteractionsFunctor(const Experiment & experiment,
                                           std::function<void ( const AntTrajectory::Ptr&) > storeTrajectory,
                                           std::function<void ( const AntInteraction::Ptr&) > storeInteraction,
                                           const ComputeAntInteractionsArgs & args) {
-	priv::Query::ComputeAntInteractions(experiment.d_p,
+	priv::Query::ComputeAntInteractions(experiment.d_p->Get(),
 	                                    storeTrajectory,
 	                                    storeInteraction,
 	                                    args);
@@ -109,7 +112,7 @@ void Query::ComputeAntInteractions(const Experiment & experiment,
                                    std::vector<AntTrajectory::Ptr> & trajectories,
                                    std::vector<AntInteraction::Ptr> & interactions,
                                    const ComputeAntInteractionsArgs & args) {
-	priv::Query::ComputeAntInteractions(experiment.d_p,
+	priv::Query::ComputeAntInteractions(experiment.d_p->Get(),
 	                                    [&trajectories](const AntTrajectory::Ptr & trajectory) {
 		                                    trajectories.push_back(trajectory);
 	                                    },

@@ -38,11 +38,11 @@ static void EnsureTagStatisticsAreComputed(const SpaceConstPtr & space) {
 		                  });
 }
 
-void Query::ComputeTagStatistics(const Experiment::ConstPtr & experiment,TagStatistics::ByTagID & result) {
+void Query::ComputeTagStatistics(const Experiment & experiment,TagStatistics::ByTagID & result) {
 	std::vector<TagStatistics::ByTagID> allSpaceResult;
 
 	typedef std::vector<TagStatisticsHelper::Loader> StatisticLoaderList;
-	for ( const auto & [spaceID,space] : experiment->Spaces() ) {
+	for ( const auto & [spaceID,space] : experiment.Spaces() ) {
 		EnsureTagStatisticsAreComputed(space);
 		std::vector<TagStatisticsHelper::Timed> spaceResults;
 		for ( const auto & tdd : space->TrackingDataDirectories() ) {
@@ -55,7 +55,7 @@ void Query::ComputeTagStatistics(const Experiment::ConstPtr & experiment,TagStat
 }
 
 
-void Query::IdentifyFrames(const Experiment::ConstPtr & experiment,
+void Query::IdentifyFrames(const Experiment & experiment,
                            std::function<void (const IdentifiedFrame::Ptr &)> storeDataFunctor,
                            const myrmidon::Query::IdentifyFramesArgs & args) {
 
@@ -73,7 +73,7 @@ void Query::IdentifyFrames(const Experiment::ConstPtr & experiment,
 		   });
 }
 
-void Query::CollideFrames(const Experiment::ConstPtr & experiment,
+void Query::CollideFrames(const Experiment & experiment,
                           std::function<void (const CollisionData &)> storeDataFunctor,
                           const myrmidon::Query::QueryArgs & args) {
 
@@ -91,7 +91,7 @@ void Query::CollideFrames(const Experiment::ConstPtr & experiment,
 		   });
 }
 
-void Query::ComputeTrajectories(const Experiment::ConstPtr & experiment,
+void Query::ComputeTrajectories(const Experiment & experiment,
                                 std::function<void (const AntTrajectory::Ptr &)> storeDataFunctor,
                                 const myrmidon::Query::ComputeAntTrajectoriesArgs & args) {
 	auto runner = QueryRunner::RunnerFor(args.SingleThreaded == false,
@@ -118,7 +118,7 @@ void Query::ComputeTrajectories(const Experiment::ConstPtr & experiment,
 		   });
 }
 
-void Query::ComputeAntInteractions(const Experiment::ConstPtr & experiment,
+void Query::ComputeAntInteractions(const Experiment & experiment,
                                    std::function<void ( const AntTrajectory::Ptr &) > storeTrajectory,
                                    std::function<void ( const AntInteraction::Ptr &) > storeInteraction,
                                    const myrmidon::Query::ComputeAntInteractionsArgs & args) {
@@ -152,8 +152,6 @@ void Query::ComputeAntInteractions(const Experiment::ConstPtr & experiment,
 			   segmenter(data);
 		   });
 }
-
-
 
 
 

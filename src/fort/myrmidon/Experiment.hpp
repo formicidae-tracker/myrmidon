@@ -13,13 +13,7 @@
 namespace fort {
 namespace myrmidon {
 
-namespace priv {
-// private <fort::myrmidon::priv> Implementation
-class Experiment;
-// private <fort::myrmidon::priv> Implementation
-class TrackingSolver;
-} // namespace priv
-
+class ExperimentHandle;
 
 class Query;
 
@@ -171,7 +165,7 @@ public:
 	 *
 	 * @return the newly created Space.
 	 */
-	Space & CreateSpace(const std::string & name);
+	Space::Ptr CreateSpace(const std::string & name);
 
 	/**
 	 * Deletes a Space
@@ -206,7 +200,7 @@ public:
 	 *
 	 * @return a map of the Experiment Space indexed by their SpaceID
 	 */
-	const Space::ByID & Spaces() const;
+	const SpaceByID & Spaces() const;
 
 	/**
 	 * Adds a tracking data directory to one of Experiment's Space
@@ -781,24 +775,23 @@ public:
 	TrackingSolver CompileTrackingSolver() const;
 
 
+	~Experiment();
+
 private:
 	friend class Query;
-
-	// Opaque pointer to implementation
-	typedef const std::shared_ptr<priv::Experiment> PPtr;
 
 	// Private implementation constructor
 	// @pExperiment opaque pointer to implementation
 	//
 	// User cannot create an Experiment directly. They must use
 	// <Open>, <OpenReadOnly>, <Create> and <NewFile>.
-	Experiment(const PPtr & pExperiment);
+	Experiment(std::unique_ptr<ExperimentHandle> handle);
 
 
 	Experiment & operator=(const Experiment &) = delete;
 	Experiment(const Experiment &) = delete;
 
-	PPtr d_p;
+	std::unique_ptr<ExperimentHandle> d_p;
 };
 
 } // namespace mrymidon

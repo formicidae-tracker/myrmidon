@@ -28,6 +28,7 @@ namespace fort {
 namespace myrmidon {
 namespace priv {
 
+
 Experiment::Experiment(const fs::path & filepath )
 	: d_absoluteFilepath(fs::absolute(fs::weakly_canonical(filepath)))
 	, d_basedir(d_absoluteFilepath.parent_path())
@@ -166,9 +167,6 @@ Space::Ptr Experiment::CreateSpace(const std::string & name,SpaceID spaceID) {
 	return Space::Universe::CreateSpace(d_universe,spaceID,name);
 }
 
-myrmidon::Space & Experiment::PublicCreateSpace(const std::string & name,SpaceID spaceID) {
-	return Space::Universe::PublicCreateSpace(d_universe,spaceID,name);
-}
 
 void Experiment::DeleteSpace(SpaceID spaceID) {
 	d_universe->DeleteSpace(spaceID);
@@ -176,10 +174,6 @@ void Experiment::DeleteSpace(SpaceID spaceID) {
 
 const SpaceByID & Experiment::Spaces() const {
 	return d_universe->Spaces();
-}
-
-const myrmidon::Space::ByID & Experiment::PublicSpaces() const {
-	return d_universe->PublicSpaces();
 }
 
 const Space::Universe::TrackingDataDirectoryByURI &
@@ -285,6 +279,11 @@ Ant::Ptr Experiment::CreateAnt(fort::myrmidon::AntID antID) {
 	                               antID);
 }
 
+const myrmidon::Ant::Ptr & Experiment::PublicCreateAnt(AntID antID) {
+	return d_identifier->PublicCreateAnt(d_antShapeTypes,
+	                                     d_antMetadata,
+	                                     antID);
+}
 
 
 void Experiment::SetMeasurement(const Measurement::ConstPtr & m) {

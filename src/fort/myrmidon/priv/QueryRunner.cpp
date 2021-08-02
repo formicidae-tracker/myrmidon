@@ -10,7 +10,7 @@ namespace priv {
 
 class DataLoader {
 public:
-	DataLoader(const Experiment::ConstPtr & experiment,
+	DataLoader(const Experiment & experiment,
 			   const QueryRunner::Args & args)
 		: d_dataRanges(std::make_shared<DataRangeBySpaceID>())
 		, d_rangeIterators(std::make_shared<RangesIteratorByID>())
@@ -74,11 +74,11 @@ private:
 	typedef std::map<SpaceID,std::vector<DataRange>::const_iterator> RangesIteratorByID;
 	typedef std::map<SpaceID,TrackingDataDirectory::const_iterator>  DataIteratorByID;
 
-	static void BuildRanges(const Experiment::ConstPtr & experiment,
+	static void BuildRanges(const Experiment & experiment,
 							const Time & start,
 							const Time & end,
 							DataRangeBySpaceID & ranges) {
-		const auto & spaces = experiment->Spaces();
+		const auto & spaces = experiment.Spaces();
 		for ( const auto & [spaceID,space] : spaces ) {
 			for ( const auto & tdd : space->TrackingDataDirectories() ) {
 				TrackingDataDirectory::const_iterator ibegin(tdd->begin()),iend(tdd->end());
@@ -109,7 +109,7 @@ private:
 };
 
 
-void QueryRunner::RunMultithread(const Experiment::ConstPtr & experiment,
+void QueryRunner::RunMultithread(const Experiment & experiment,
 								 const Args & args,
 								 Finalizer finalizer) {
 
@@ -131,7 +131,7 @@ void QueryRunner::RunMultithread(const Experiment::ConstPtr & experiment,
 
 }
 
-void QueryRunner::RunSingleThread(const Experiment::ConstPtr & experiment,
+void QueryRunner::RunSingleThread(const Experiment & experiment,
 								  const Args & args,
 								  Finalizer finalizer) {
 
@@ -148,7 +148,7 @@ void QueryRunner::RunSingleThread(const Experiment::ConstPtr & experiment,
 	}
 }
 
-void QueryRunner::RunMultithreadFinalizeInCurrent(const Experiment::ConstPtr & experiment,
+void QueryRunner::RunMultithreadFinalizeInCurrent(const Experiment & experiment,
 												  const Args & args,
 												  Finalizer finalizer) {
 	// we use a queue to retrieve all data in the main thread
@@ -156,7 +156,7 @@ void QueryRunner::RunMultithreadFinalizeInCurrent(const Experiment::ConstPtr & e
 
 	// we spawn a child process that will feed and close the queue
 	auto process
-		= [&queue,experiment,args]() {
+		= [&queue,&experiment,args]() {
 			  RunMultithread(experiment,
 							 args,
 							 [&queue](const myrmidon::Query::CollisionData & data) {
@@ -194,16 +194,16 @@ QueryRunner::Runner QueryRunner::RunnerFor(bool multithread,bool finalizerInCurr
 
 
 std::function<Query::CollisionData(const QueryRunner::RawData &)>
-QueryRunner::computeData(const Experiment::ConstPtr & experiment,
+QueryRunner::computeData(const Experiment & experiment,
 						 const QueryRunner::Args & args) {
-	auto identifier = experiment->Identifier()->Compile();
+	auto identifier = experiment.Identifier()->Compile();
 	if ( args.Collide == false && args.Localize == false ) {
 		return [identifier](const RawData & raw) {
 				   auto identified = std::get<1>(raw)->IdentifyFrom(*identifier,std::get<0>(raw));
 				   return std::make_pair(identified,nullptr);
 			   };
 	}
-	auto collider = experiment->CompileCollisionSolver();
+	auto collider = experiment.CompileCollisionSolver();
 	if ( args.Collide == false ) {
 		return [identifier,collider] (const RawData & raw) {
 				   auto identified = std::get<1>(raw)->IdentifyFrom(*identifier,std::get<0>(raw));

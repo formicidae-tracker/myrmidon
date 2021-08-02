@@ -3,7 +3,6 @@
 #include "priv/Identification.hpp"
 #include "priv/Ant.hpp"
 
-#include "utils/ConstClassHelper.hpp"
 
 namespace fort {
 namespace myrmidon {

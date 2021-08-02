@@ -33,7 +33,7 @@ public:
 		return *d_object;
 	}
 
-private:
+protected:
 	std::shared_ptr<Context> d_context;
 	std::shared_ptr<Object>  d_object;
 };

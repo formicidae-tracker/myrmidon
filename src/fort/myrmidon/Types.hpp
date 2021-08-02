@@ -97,6 +97,9 @@ typedef std::vector<std::shared_ptr<ZoneDefinition>> ZoneDefinitionList;
 class Zone;
 typedef std::map<ZoneID,std::shared_ptr<Zone>> ZoneByID;
 
+class Space;
+typedef std::map<SpaceID,std::shared_ptr<Space>> SpaceByID;
+
 /**
  * The ID for Ant virtual body parts
  *

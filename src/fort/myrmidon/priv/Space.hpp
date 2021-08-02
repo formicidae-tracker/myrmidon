@@ -111,19 +111,12 @@ public:
 		                              SpaceID spaceID,
 		                              const std::string & name);
 
-		static myrmidon::Space & PublicCreateSpace(const Ptr & itself,
-		                                           SpaceID spaceID,
-		                                           const std::string & name);
-
-
 
 		void DeleteSpace(SpaceID spaceID);
 
 		void DeleteTrackingDataDirectory(const std::string & URI);
 
 		const SpaceByID & Spaces() const;
-
-		const myrmidon::Space::ByID & PublicSpaces() const;
 
 		const TrackingDataDirectoryByURI & TrackingDataDirectories() const;
 
@@ -162,11 +155,7 @@ public:
 
 	const static ZoneID NEXT_AVAILABLE_ID = 0;
 
-	myrmidon::Zone & PublicCreateZone(const std::string & name, ZoneID zoneID = NEXT_AVAILABLE_ID);
-
 	Zone::Ptr CreateZone(const std::string & name, ZoneID zoneID = NEXT_AVAILABLE_ID);
-
-	const myrmidon::ZoneByID & PublicZones() const;
 
 	void DeleteZone(ZoneID ID);
 

@@ -7,11 +7,7 @@
 namespace fort {
 namespace myrmidon {
 
-namespace priv {
-// private <fort::myrmidon::priv> implementation
-class Space;
-} // namespace priv
-
+class SpaceHandle;
 
 /**
  *  An homogenous coordinate system for tracking data
@@ -33,11 +29,7 @@ class Space;
  */
 class Space {
 public:
-	/**
-	 * Space indexed by their ID
-	 */
-
-	typedef std::map<SpaceID,Space> ByID;
+	typedef std::shared_ptr<Space> Ptr;
 
 	/**
 	 * Gets the Space ID
@@ -93,7 +85,7 @@ public:
 	 *
 	 * @return the newly created Zone
 	 */
-	Zone & CreateZone(const std::string & name);
+	Zone::Ptr CreateZone(const std::string & name);
 
 	/**
 	 * Deletes a Zone in this Space.
@@ -147,27 +139,24 @@ public:
 	 */
 	std::pair<std::string,uint64_t> LocateMovieFrame(const Time & time) const;
 
-
-	Space(Space &&) = default;
-	Space & operator= (Space &&) = default;
+	// needed as SpaceHandle is opaque and we store a unique_ptr.
+	~Space();
 
 private:
-	friend class priv::Space;
-
-	// Opaque pointer for implementation
-	typedef std::shared_ptr<priv::Space> PPtr;
+	friend class ExperimentHandle;
 
 	// Private implementation constructor
 	// @pSpace opaque pointer to implementation
 	//
 	// User cannot build Space directly. They must be build and
 	// accessed from <Experiment>.
-	Space(const PPtr & pSpace);
+	Space(std::unique_ptr<SpaceHandle> handle);
 
 	Space & operator=(const Space &) = delete;
+
 	Space(const Space &) = delete;
 
-	PPtr d_p;
+	std::unique_ptr<SpaceHandle> d_p;
 };
 
 } // namespace myrmidon

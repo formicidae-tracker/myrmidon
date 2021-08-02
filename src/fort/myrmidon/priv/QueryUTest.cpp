@@ -26,7 +26,7 @@ void QueryUTest::SetUp() {
 TEST_F(QueryUTest,TagStatistics) {
 	TagStatistics::ByTagID tagStats;
 	ASSERT_NO_THROW({
-			Query::ComputeTagStatistics(experiment,
+			Query::ComputeTagStatistics(*experiment,
 			                            tagStats);
 		});
 
@@ -63,7 +63,7 @@ TEST_F(QueryUTest,IdentifiedFrame) {
 	std::vector<IdentifiedFrame::Ptr> identifieds;
 	ASSERT_NO_THROW({
 			myrmidon::Query::IdentifyFramesArgs args;
-			Query::IdentifyFrames(experiment,
+			Query::IdentifyFrames(*experiment,
 			                      [&identifieds] (const IdentifiedFrame::Ptr & i) {
 				                      identifieds.push_back(i);
 			                      },args);
@@ -80,7 +80,7 @@ TEST_F(QueryUTest,IdentifiedFrame) {
 	ASSERT_NO_THROW({
 			myrmidon::Query::IdentifyFramesArgs args;
 			args.End = t.Add(1);
-			Query::IdentifyFrames(experiment,
+			Query::IdentifyFrames(*experiment,
 			                      [&identifieds] (const IdentifiedFrame::Ptr & i) {
 				                      identifieds.push_back(i);
 			                      },
@@ -92,7 +92,7 @@ TEST_F(QueryUTest,IdentifiedFrame) {
 	try {
 		myrmidon::Query::IdentifyFramesArgs args;
 		args.Start = t.Add(1);
-		Query::IdentifyFrames(experiment,
+		Query::IdentifyFrames(*experiment,
 		                      [&identifieds] (const IdentifiedFrame::Ptr & i) {
 			                      identifieds.push_back(i);
 		                      },
@@ -124,7 +124,7 @@ TEST_F(QueryUTest,InteractionFrame) {
 
 	ASSERT_NO_THROW({
 			myrmidon::Query::QueryArgs args;
-			Query::CollideFrames(experiment,
+			Query::CollideFrames(*experiment,
 			                     [&collisionData] (const Query::CollisionData & data) {
 				                     collisionData.push_back(data);
 			                     },
@@ -157,7 +157,7 @@ TEST_F(QueryUTest,TrajectoryComputation) {
 	ASSERT_NO_THROW({
 			myrmidon::Query::ComputeAntTrajectoriesArgs args;
 			args.MaximumGap = 20000 * Duration::Millisecond;
-			Query::ComputeTrajectories(experiment,
+			Query::ComputeTrajectories(*experiment,
 			                           [&trajectories]( const AntTrajectory::Ptr & t) {
 				                           trajectories.push_back(t);
 			                           },
@@ -196,7 +196,7 @@ TEST_F(QueryUTest,InteractionComputation) {
 			myrmidon::Query::ComputeAntInteractionsArgs args;
 			args.MaximumGap = 220 * Duration::Millisecond;
 
-			Query::ComputeAntInteractions(experiment,
+			Query::ComputeAntInteractions(*experiment,
 			                              [&trajectories]( const AntTrajectory::Ptr & t) {
 				                              trajectories.push_back(t);
 			                              },
@@ -245,7 +245,7 @@ TEST_F(QueryUTest,FrameSelection) {
 
 	// issue 138, should select all frames
 	args.Start = firstDate;
-	Query::IdentifyFrames(experiment,
+	Query::IdentifyFrames(*experiment,
 	                      [&frames](const IdentifiedFrame::Ptr & f) {
 		                      frames.push_back(f);
 	                      },
@@ -257,7 +257,7 @@ TEST_F(QueryUTest,FrameSelection) {
 	//selects the first frame
 	args.Start = firstDate;
 	args.End = firstDate.Add(1);
-	Query::IdentifyFrames(experiment,
+	Query::IdentifyFrames(*experiment,
 	                      [&frames](const IdentifiedFrame::Ptr & f) {
 		                      frames.push_back(f);
 	                      },
@@ -270,7 +270,7 @@ TEST_F(QueryUTest,FrameSelection) {
 	// won't access any
 	args.Start = firstDate;
 	args.End = firstDate;
-	Query::IdentifyFrames(experiment,
+	Query::IdentifyFrames(*experiment,
 	                      [&frames](const IdentifiedFrame::Ptr & f) {
 		                      frames.push_back(f);
 	                      },

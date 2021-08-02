@@ -65,6 +65,10 @@ const AntByID & Identifier::Ants() const {
 	return Objects();
 }
 
+const std::map<AntID,const myrmidon::Ant::Ptr> & Identifier::PublicAnts() const {
+	static std::map<AntID,const myrmidon::Ant::Ptr> foo;
+	return foo;
+}
 
 
 

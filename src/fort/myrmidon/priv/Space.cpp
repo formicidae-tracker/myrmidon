@@ -68,24 +68,12 @@ Space::TDDAlreadyInUse::TDDAlreadyInUse(const std::string & tddURI, const std::s
 	                     + spaceURI + "'") {
 }
 
-myrmidon::Space & Space::Universe::PublicCreateSpace(const Ptr & itself,
-                                                     SpaceID spaceID,
-                                                     const std::string & name) {
-	auto space = itself->d_spaces.CreateObject([&itself,&name](SpaceID spaceID) {
-		                                           return Space::Ptr(new Space(spaceID,name,itself));
-	                                           });
-	itself->d_publicSpaces.insert_or_assign(space->ID(),myrmidon::Space(space));
-
-	return itself->d_publicSpaces.at(space->ID());
-}
-
 Space::Ptr Space::Universe::CreateSpace(const Ptr & itself,
                                         SpaceID spaceID,
                                         const std::string & name) {
-	auto & res = PublicCreateSpace(itself,
-	                               spaceID,
-	                               name);
-	return res.d_p;
+	return itself->d_spaces.CreateObject([&itself,&name](SpaceID spaceID) {
+		                                     return Space::Ptr(new Space(spaceID,name,itself));
+	                                     });
 }
 
 void Space::Universe::DeleteSpace(SpaceID spaceID) {
@@ -115,10 +103,6 @@ void Space::Universe::DeleteTrackingDataDirectory(const std::string & URI) {
 
 const SpaceByID & Space::Universe::Spaces() const {
 	return d_spaces.Objects();
-}
-
-const myrmidon::Space::ByID & Space::Universe::PublicSpaces() const {
-	return d_publicSpaces;
 }
 
 Space::Space(SpaceID spaceID, const std::string & name, const Universe::Ptr & universe)
@@ -295,21 +279,12 @@ void Space::Universe::DeleteZone(ZoneID zoneID) {
 }
 
 
-myrmidon::Zone & Space::PublicCreateZone(const std::string & name, ZoneID zoneID) {
+Zone::Ptr Space::CreateZone(const std::string & name, ZoneID zoneID) {
 	auto zone = LockUniverse()->CreateZone(zoneID,name,d_URI);
 	d_zones.insert({zone->ID(),zone});
-	d_publicZones.insert_or_assign(zone->ID(),nullptr);
-	return *d_publicZones.at(zone->ID());
+	return zone;
 }
 
-Zone::Ptr Space::CreateZone(const std::string & name, ZoneID zoneID) {
-	auto & res = PublicCreateZone(name,zoneID);
-	return nullptr;
-}
-
-const myrmidon::ZoneByID & Space::PublicZones() const {
-	return d_publicZones;
-}
 
 void Space::DeleteZone(ZoneID zoneID) {
 	LockUniverse()->DeleteZone(zoneID);

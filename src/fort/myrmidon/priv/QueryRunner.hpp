@@ -22,18 +22,18 @@ public:
 
 	typedef std::function<void (const Query::CollisionData & data)> Finalizer;
 
-	typedef std::function<void (const Experiment::ConstPtr &,const Args &,Finalizer)> Runner;
+	typedef std::function<void (const Experiment &,const Args &,Finalizer)> Runner;
 
-	static void RunMultithread(const Experiment::ConstPtr & experiment,
+	static void RunMultithread(const Experiment & experiment,
 							   const Args & args,
 							   Finalizer finalizer);
 
-	static void RunMultithreadFinalizeInCurrent(const Experiment::ConstPtr & experiment,
+	static void RunMultithreadFinalizeInCurrent(const Experiment & experiment,
 												const Args & args,
 												Finalizer finalizer);
 
 
-	static void RunSingleThread(const Experiment::ConstPtr & experiment,
+	static void RunSingleThread(const Experiment & experiment,
 								const Args & args,
 								Finalizer finalizer);
 
@@ -48,7 +48,7 @@ public:
 private:
 
 
-	static std::function<Query::CollisionData(const RawData &)> computeData(const Experiment::ConstPtr & experiment,
+	static std::function<Query::CollisionData(const RawData &)> computeData(const Experiment & experiment,
 																			const Args & args);
 
 };

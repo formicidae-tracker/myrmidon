@@ -106,15 +106,10 @@ public :
 	Space::Ptr CreateSpace(const std::string & name,
 	                       SpaceID spaceID = Space::Universe::NEXT_AVAILABLE_SPACE_ID);
 
-	myrmidon::Space & PublicCreateSpace(const std::string & name,
-	                                    SpaceID spaceID = Space::Universe::NEXT_AVAILABLE_SPACE_ID);
-
 
 	void DeleteSpace(SpaceID spaceID);
 
 	const SpaceByID & Spaces() const;
-
-	const myrmidon::Space::ByID & PublicSpaces() const;
 
 	const Space::Universe::TrackingDataDirectoryByURI & TrackingDataDirectories() const;
 
