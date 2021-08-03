@@ -66,28 +66,28 @@ void Experiment::RemoveTrackingDataDirectory(const std::string & URI) {
 }
 
 
-const Ant::Ptr & Experiment::CreateAnt() {
-	return d_p->Get().PublicCreateAnt();
+Ant::Ptr Experiment::CreateAnt() {
+	return d_p->CreateAnt();
 }
 
-const std::map<AntID,const Ant::Ptr> & Experiment::Ants() const {
-	return d_p->Get().Identifier()->PublicAnts();
+const AntByID & Experiment::Ants() const {
+	return d_p->Ants();
 }
+
+void Experiment::DeleteAnt(AntID antID) {
+	d_p->DeleteAnt(antID);
+}
+
 
 Identification::Ptr Experiment::AddIdentification(AntID antID,
                                                   TagID tagID,
                                                   const Time & start,
                                                   const Time & end) {
-	auto i = priv::Identifier::AddIdentification(d_p->Get().Identifier(),
-	                                             antID,
-	                                             tagID,
-	                                             start,
-	                                             end);
-	return Identification::Ptr(new Identification(i));
+	return d_p->AddIdentification(antID,tagID,start,end);
 }
 
 void Experiment::DeleteIdentification(const Identification::Ptr & identification) {
-	d_p->Get().Identifier()->DeleteIdentification(identification->d_p);
+	d_p->DeleteIdentification(identification);
 }
 
 

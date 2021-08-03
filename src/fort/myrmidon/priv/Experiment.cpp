@@ -279,12 +279,6 @@ Ant::Ptr Experiment::CreateAnt(fort::myrmidon::AntID antID) {
 	                               antID);
 }
 
-const myrmidon::Ant::Ptr & Experiment::PublicCreateAnt(AntID antID) {
-	return d_identifier->PublicCreateAnt(d_antShapeTypes,
-	                                     d_antMetadata,
-	                                     antID);
-}
-
 
 void Experiment::SetMeasurement(const Measurement::ConstPtr & m) {
 	if ( d_measurementTypes.Objects().count(m->Type()) == 0 ) {

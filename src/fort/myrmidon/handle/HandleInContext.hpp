@@ -16,6 +16,11 @@ public:
 	inline Object & Get() {
 		return *d_object;
 	}
+
+	const std::shared_ptr<Object> & Ptr() const {
+		return d_object;
+	}
+
 protected:
 	std::shared_ptr<Object> d_object;
 };
@@ -31,6 +36,10 @@ public:
 
 	inline Object & Get() {
 		return *d_object;
+	}
+
+	const std::shared_ptr<Object> & Ptr() const {
+		return d_object;
 	}
 
 protected:

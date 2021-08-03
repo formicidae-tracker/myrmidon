@@ -72,10 +72,6 @@ public:
 	                 const AntMetadataConstPtr & metadataColumns,
 	                 AntID ID = NEXT_AVAILABLE_ID);
 
-	const myrmidon::Ant::Ptr & PublicCreateAnt(const AntShapeTypeContainerConstPtr & shapeTypes,
-	                                           const AntMetadataConstPtr & metadataColumns,
-	                                           AntID ID = NEXT_AVAILABLE_ID);
-
 	// Deletes an Ant
 	// @ID the <priv::Ant> to delete
 	//
@@ -87,8 +83,6 @@ public:
 	// Gets the Ants in the Identifier
 	// @return the map of <priv::Ant> by their <myrmidon::Ant::ID>
 	const AntByID & Ants() const;
-
-	const std::map<AntID,const myrmidon::Ant::Ptr> & PublicAnts() const;
 
 	// Adds a new Identification
 	// @id the targeted <priv::Ant>
@@ -248,8 +242,6 @@ private:
 	AntPoseEstimateByTagID   d_tagPoseEstimates;
 	OnPositionUpdateCallback d_callback;
 
-
-	std::map<AntID,myrmidon::Ant::Ptr> d_publicAnts;
 };
 
 

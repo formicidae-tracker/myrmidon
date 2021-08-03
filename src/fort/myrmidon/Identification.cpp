@@ -3,74 +3,76 @@
 #include "priv/Identification.hpp"
 #include "priv/Ant.hpp"
 
+#include "handle/IdentificationHandle.hpp"
 
 namespace fort {
 namespace myrmidon {
 
 const double Identification::DEFAULT_TAG_SIZE = 0.0;
 
-Identification::Identification(const PPtr & pptr)
-	: d_p(pptr) {
+Identification::Identification(std::unique_ptr<IdentificationHandle> handle)
+	: d_p(std::move(handle)) {
 }
 
+Identification::~Identification() {}
 
 TagID Identification::TagValue() const {
-	return d_p->TagValue();
+	return d_p->Get().TagValue();
 }
 
 AntID Identification::TargetAntID() const {
-	return d_p->Target()->AntID();
+	return d_p->Get().Target()->AntID();
 }
 
 
 void Identification::SetStart(const Time & start) {
-	d_p->SetStart(start);
+	d_p->Get().SetStart(start);
 }
 
 void Identification::SetEnd(const Time & end) {
-	d_p->SetEnd(end);
+	d_p->Get().SetEnd(end);
 }
 
 Time Identification::Start() const {
-	return d_p->Start();
+	return d_p->Get().Start();
 }
 
 Time Identification::End() const {
-	return d_p->End();
+	return d_p->Get().End();
 }
 
 Eigen::Vector2d Identification::AntPosition() const {
-	return d_p->AntPosition();
+	return d_p->Get().AntPosition();
 }
 
 double Identification::AntAngle() const {
-	return d_p->AntAngle();
+	return d_p->Get().AntAngle();
 }
 
 bool Identification::HasUserDefinedAntPose() const {
-	return d_p->HasUserDefinedAntPose();
+	return d_p->Get().HasUserDefinedAntPose();
 }
 
 void Identification::SetUserDefinedAntPose(const Eigen::Vector2d & antPosition,
                                            double antAngle) {
-	d_p->SetUserDefinedAntPose(antPosition,antAngle);
+	d_p->Get().SetUserDefinedAntPose(antPosition,antAngle);
 }
 
 void Identification::ClearUserDefinedAntPose() {
-	d_p->ClearUserDefinedAntPose();
+	d_p->Get().ClearUserDefinedAntPose();
 }
 
 
 void Identification::SetTagSize(double size) {
-	d_p->SetTagSize(size);
+	d_p->Get().SetTagSize(size);
 }
 
 double Identification::TagSize() const {
-	return d_p->TagSize();
+	return d_p->Get().TagSize();
 }
 
 bool Identification::HasDefaultTagSize() const {
-	return d_p->UseDefaultTagSize();
+	return d_p->Get().UseDefaultTagSize();
 }
 
 OverlappingIdentification::OverlappingIdentification(const priv::Identification & a,
@@ -94,5 +96,5 @@ std::string OverlappingIdentification::Reason(const priv::Identification & a,
 
 std::ostream & operator<<(std::ostream & out,
                           const fort::myrmidon::Identification & identification) {
-	return out << *identification.d_p;
+	return out << identification.d_p->Get();
 }

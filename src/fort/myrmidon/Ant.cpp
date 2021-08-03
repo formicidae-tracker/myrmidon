@@ -2,85 +2,82 @@
 
 #include "priv/Ant.hpp"
 
+#include "handle/AntHandle.hpp"
 
 namespace fort {
 namespace myrmidon {
 
-Ant::Ant(const PPtr & pAnt)
-	: d_p(pAnt) {
+Ant::Ant(std::unique_ptr<AntHandle> handle)
+	: d_p(std::move(handle)) {
 }
+
+Ant::~Ant() = default;
 
 TagID Ant::IdentifiedAt(const Time & time) const {
-	return d_p->IdentifiedAt(time);
+	return d_p->Get().IdentifiedAt(time);
 }
 
 
 
-Identification::List Ant::Identifications() {
-	Identification::List res;
-	const auto & idents = d_p->Identifications();
-	res.reserve(idents.size());
-	for ( const auto & pIdent : idents ) {
-		res.push_back(Identification::Ptr(new Identification(pIdent)));
-	}
-	return res;
+const IdentificationList & Ant::Identifications() const{
+	return d_p->Identifications();
 }
 
 AntID Ant::ID() const {
-	return d_p->AntID();
+	return d_p->Get().AntID();
 }
 
 std::string Ant::FormattedID() const {
-	return d_p->FormattedID();
+	return d_p->Get().FormattedID();
 }
 
 const Color & Ant::DisplayColor() const {
-	return d_p->DisplayColor();
+	return d_p->Get().DisplayColor();
 }
 
 void Ant::SetDisplayColor(const Color & color) {
-	d_p->SetDisplayColor(color);
+	d_p->Get().SetDisplayColor(color);
 }
 
 Ant::DisplayState Ant::DisplayStatus() const {
-	return d_p->DisplayStatus();
+	return d_p->Get().DisplayStatus();
 }
 
 void Ant::SetDisplayStatus(DisplayState s) {
-	d_p->SetDisplayStatus(s);
+	d_p->Get().SetDisplayStatus(s);
 }
 
 const AntStaticValue & Ant::GetValue(const std::string & name,
                                       const Time & time) const {
-	return d_p->GetValue(name,time);
+	return d_p->Get().GetValue(name,time);
 }
 
 void Ant::SetValue(const std::string & name,
                    const AntStaticValue & value,
                    const Time & time) {
-	d_p->SetValue(name,value,time);
+	d_p->Get().SetValue(name,value,time);
 }
 
 void Ant::DeleteValue(const std::string & name,
                       const Time & time) {
-	d_p->DeleteValue(name,time);
+	d_p->Get().DeleteValue(name,time);
 }
 
 void Ant::AddCapsule(AntShapeTypeID shapeTypeID,
                      const std::shared_ptr<Capsule> & capsule) {
-	d_p->AddCapsule(shapeTypeID,capsule);
+	d_p->Get().AddCapsule(shapeTypeID,capsule);
 }
 
 const TypedCapsuleList & Ant::Capsules() const {
-	return d_p->Capsules();
+	return d_p->Get().Capsules();
 }
 
 void Ant::DeleteCapsule(const size_t index) {
-	d_p->DeleteCapsule(index);
+	d_p->Get().DeleteCapsule(index);
 }
 
 void Ant::ClearCapsules() {
-	d_p->ClearCapsules();
+	d_p->Get().ClearCapsules();
 }
 
 

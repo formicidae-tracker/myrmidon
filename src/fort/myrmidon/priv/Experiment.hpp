@@ -127,8 +127,6 @@ public :
 
 	AntPtr CreateAnt(AntID aID = 0);
 
-	const myrmidon::Ant::Ptr & PublicCreateAnt(AntID antID = 0);
-
 	// Accessor to the underlying Identifier
 	//
 	// @return a reference to the underlying <Identifier>

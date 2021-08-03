@@ -29,10 +29,10 @@ namespace fort {
 namespace myrmidon {
 
 namespace priv {
-// private <fort::myrmidon::Ant> implemenation
 class Identification;
 }
 
+class IdentificationHandle;
 
 /**
  * Relates TagID to Ant
@@ -77,14 +77,6 @@ class Identification {
 public:
 	/** A pointer to an Identification */
 	typedef std::shared_ptr<Identification>       Ptr;
-
-	/**
-	 * A list of Identification
-	 *
-	 * * Python: a `list` of `py_fort_myrmidon.Identification`
-	 * * R: a `slist` of `Rcpp_fmIdentification`
-	 */
-	typedef std::vector<Ptr>                      List;
 
 	/**
 	 *  Gets the ::TagID of this Identification
@@ -346,26 +338,27 @@ public:
 	 */
 	bool HasDefaultTagSize() const;
 
+	~Identification();
 
 private:
-	friend class Ant;
-	friend class Experiment;
+	friend class AntHandle;
+	friend class ExperimentHandle;
 	friend std::ostream & ::operator<<(std::ostream &, const Identification&);
 
-	// An opaque pointer to implementation
-	typedef std::shared_ptr<priv::Identification> PPtr;
 
-	PPtr d_p;
 
 	// Private implementation constructor
 	// @pptr opaque pointer to implementation
 	//
 	// User cannot build Identification directly. They must be build
 	// from <Experiment> and accessed from <Ant>
-	Identification(const PPtr & pptr);
+	Identification(std::unique_ptr<IdentificationHandle> handle);
 
 	Identification & operator= (const Identification &) = delete;
 	Identification(const Identification &) = delete;
+
+	std::unique_ptr<IdentificationHandle> d_p;
+
 };
 
 // Exception when two <Identification> overlaps in time.

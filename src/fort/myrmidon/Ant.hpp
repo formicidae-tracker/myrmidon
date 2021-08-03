@@ -11,12 +11,7 @@
 namespace fort {
 namespace myrmidon {
 
-namespace priv {
-class Ant;
-class Identifier;
-} // namespace priv
-
-
+class AntHandle;
 
 /**
  * The main object of interest of any Experiment
@@ -84,7 +79,7 @@ public:
 	/**
 	 * A pointer to an Ant
 	 */
-	typedef std::unique_ptr<Ant>       Ptr;
+	typedef std::shared_ptr<Ant>       Ptr;
 
 	/**
 	 * The DisplayState of an Ant in an Experiment
@@ -159,7 +154,7 @@ public:
 	 *
 	 * @return an Identification::List of Identification that target this object.
 	 */
-	Identification::List Identifications();
+	const IdentificationList & Identifications() const;
 
 	/**
 	 *  Gets the AntID of an Ant.
@@ -418,22 +413,22 @@ public:
 	 */
 	void ClearCapsules();
 
+	~Ant();
+
 private:
-	friend class priv::Identifier;
-	// Opaque pointer to implementation
-	typedef const std::shared_ptr<priv::Ant> PPtr;
+	friend class ExperimentHandle;
 
 	// Private implementation constructor
 	// @pAnt opaque pointer to implementation
 	//
 	// User cannot build Ant directly. They must be build and accessed
 	// from <Experiment>.
-	Ant(const PPtr & pAnt);
+	Ant(std::unique_ptr<AntHandle> handle);
 
 	Ant & operator=(const Ant &) = delete;
 	Ant(const Ant &) = delete;
 
-	PPtr d_p;
+	std::unique_ptr<AntHandle> d_p;
 };
 
 

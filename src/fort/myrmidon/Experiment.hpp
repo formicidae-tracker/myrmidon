@@ -261,7 +261,7 @@ public:
 	 *
 	 * @return the newly created Ant
 	 */
-	const Ant::Ptr & CreateAnt();
+	Ant::Ptr CreateAnt();
 
 	/**
 	 * Gets the Ant in the Experiment
@@ -277,7 +277,26 @@ public:
 	 *
 	 * @return the Ant indexed by their AntID in the Experiment.
 	 */
-	const std::map<AntID,const Ant::Ptr> & Ants() const;
+	const AntByID & Ants() const;
+
+	/**
+	 * Deletes an Ant
+	 *
+	 * * Python:
+	 * ```python
+	 * py_fort_myrmidon.Experiment.DeleteAnt(self,antID: int) -> None
+	 * ```
+	 * * R:
+	 * ```R
+	 * fmExperimentDeleteAnt <- function(experiment, antID = 0)
+	 * ```
+	 * @param antID the AntID of the Ant to delete from the experiment
+	 *
+	 * @throws std::out_of_range if antID is not valid for this Experiment
+	 * @throws std::runtime_error if the Ant stills have an Identification
+	 */
+	void DeleteAnt(AntID antID);
+
 
 	/**
 	 * Adds an Identification to the Experiment

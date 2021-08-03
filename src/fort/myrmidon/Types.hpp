@@ -100,6 +100,12 @@ typedef std::map<ZoneID,std::shared_ptr<Zone>> ZoneByID;
 class Space;
 typedef std::map<SpaceID,std::shared_ptr<Space>> SpaceByID;
 
+class Ant;
+typedef std::map<AntID,std::shared_ptr<Ant>> AntByID;
+
+class Identification;
+typedef std::vector<std::shared_ptr<Identification>> IdentificationList;
+
 /**
  * The ID for Ant virtual body parts
  *
