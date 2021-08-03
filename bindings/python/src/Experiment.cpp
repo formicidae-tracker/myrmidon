@@ -144,6 +144,10 @@ void BindExperiment(py::module_ & m) {
         IndexError: if URI does not identifies a tracking data
             directory in this experiment.
 )pydoc")
+
+		.def_property_readonly("Ants",
+		                       &Experiment::Ants,
+		                       " (Dict[int,py_fort_myrmidon.Ant]): the Ant indexed by their AntID.")
 		.def("CreateAnt",
 		     &Experiment::CreateAnt,
 		     R"pydoc(
@@ -165,6 +169,8 @@ void BindExperiment(py::module_ & m) {
         RuntimeError: if the ant still have Identification targetting
                       her
 )pydoc")
+
+
 		.def("AddIdentification",
 		     &Experiment::AddIdentification,
 		     py::arg("antID"),
@@ -229,6 +235,8 @@ void BindExperiment(py::module_ & m) {
    Raises:
         RuntimeError: if tagID already identifies an Ant at time
 )pydoc")
+
+
 		.def_property("Name",
 		              &Experiment::Name,
 		              &Experiment::SetName,
@@ -249,5 +257,137 @@ void BindExperiment(py::module_ & m) {
 		              &Experiment::SetDefaultTagSize,
 		              " (float): the default tag size in mm used in the Experiment")
 
+
+		.def_property_readonly("MeasurementTypeNames",
+		                       &Experiment::MeasurementTypeNames,
+		                       " (Dict[int,str]): the measurement type name by their MeasurementTypeID")
+		.def("CreateMeasurementType",
+		     &Experiment::CreateMeasurementType,
+		     py::arg("name"),
+		     R"pydoc(
+    Creates a new measurement type
+
+    Args:
+        name (str): the name of the measurement type
+    Returns:
+        int: the MeasurementTypeID for the new type
+)pydoc")
+		.def_readonly_static("HEAD_TAIL_MEASUREMENT_TYPE_ID",
+		                     &Experiment::HEAD_TAIL_MEASUREMENT_TYPE_ID,
+		                     " (int): the default available measurement type for tail - head measurements")
+		.def("SetMeasurementTypeName",
+		     &Experiment::SetMeasurementTypeName,
+		     py::arg("measurementTypeID"),
+		     py::arg("name"),
+		     R"pydoc(
+    Sets the name for a measurement type
+
+    Args:
+        measurementTypeID (int): the type to modify
+        name (str): the wanted name
+    Raises:
+        IndexError: if measurementTypeID is invalid for this
+            Experiment
+)pydoc")
+		.def("DeleteMeasurementType",
+		     &Experiment::DeleteMeasurementType,
+		     py::arg("measurementTypeID"),
+		     R"pydoc(
+    Deletes a measurement type
+
+    Args:
+        measurementTypeID (int): the measurement type to delete
+    Raises:
+        IndexError: if measurementTypeID is not valid for Experiment
+        ValueError: if measurementTypeID is
+            Experiment.HEAD_TAIL_MEASUREMENT_TYPE_ID
+)pydoc")
+
+
+		.def_property_readonly("AntShapeTypeNames",
+		                       &Experiment::AntShapeTypeNames,
+		                       " (Dict[int,str]): the ant shape type name by their AntShapeTypeID")
+		.def("CreateAntShapeType",
+		     &Experiment::CreateAntShapeType,
+		     py::arg("name"),
+		     R"pydoc(
+    Creates a new Ant shape type
+
+    Args:
+        name (str): the name of the ant shape type
+    Returns:
+        int: the AntShapeTypeID for the new type
+)pydoc")
+		.def("SetAntShapeTypeName",
+		     &Experiment::SetAntShapeTypeName,
+		     py::arg("antShapeTypeID"),
+		     py::arg("name"),
+		     R"pydoc(
+    Sets the name for an Ant shape type
+
+    Args:
+        antShapeTypeID (int): the type to modify
+        name (str): the wanted name
+    Raises:
+        IndexError: if antShapeTypeID is invalid for this
+            Experiment
+)pydoc")
+		.def("DeleteAntShapeType",
+		     &Experiment::DeleteMeasurementType,
+		     py::arg("antShapeTypeID"),
+		     R"pydoc(
+    Deletes an Ant shape type
+
+    Args:
+        antShapeTypeID (int): the type to delete
+    Raises:
+        IndexError: if antShapeTypeID is not valid for Experiment
+)pydoc")
+
+
+		.def_property_readonly("MetaDataKeys",
+		                       &Experiment::MetaDataKeys,
+		                       " (Dict[str,Tuple[py_fort_myrmidon.AntMetaDataType,object]): metadata key type and default value by their unique names")
+		.def("SetMetaDataKey",
+		     &Experiment::SetMetaDataKey,
+		     py::arg("key"),
+		     py::arg("defaultValue"),
+		     R"pydoc(
+    Adds or modifies a meta data key
+
+    Args:
+        key (str): the key to modify
+        defaultValue (object): the default value for the key. It will
+            sets its type. Must be a boolean, an int, a float, a str
+            or a py_fort_myrmidon.Time
+)pydoc")
+		.def("DeleteMetaDataKey",
+		     &Experiment::DeleteMetaDataKey,
+		     py::arg("key"),
+		     R"pydoc(
+    Deletes a meta data key
+
+    Args:
+        key (str): the key to delete
+
+    Raises:
+        IndexError: if key is not valid for this Experiment
+        RuntimeError: if any ant contains timed data for key
+)pydoc")
+		.def("RenameMetaDataKey",
+		     &Experiment::RenameMetaDataKey,
+		     py::arg("oldKey"),
+		     py::arg("newKey"),
+		     R"pydoc(
+    Renames a meta data key
+
+    Args:
+        oldKey (str): the old name of the key
+        newKey (str): the new name for the key
+
+    Raises:
+        IndexError: if oldKey is invalid for the Experiment
+        ValueError: if newKey is in use for the Experiment
+)pydoc")
 		;
 }

@@ -187,6 +187,10 @@ void AntMetadata::Key::SetName(const std::string & name) {
 	if ( fi == metadata->d_keys.end() ) {
 		throw std::logic_error("Key '" + d_name + "' is not managed by its manager");
 	}
+	if ( metadata->d_keys.find(name) != metadata->d_keys.end() ) {
+		std::invalid_argument(name + " is already used");
+	}
+
 	metadata->d_keys.insert(std::make_pair(name,fi->second));
 	metadata->d_keys.erase(d_name);
 	metadata->d_onNameChange(d_name,name);

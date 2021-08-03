@@ -12,6 +12,8 @@
 namespace fort {
 namespace myrmidon {
 
+const MeasurementTypeID Experiment::HEAD_TAIL_MEASUREMENT_TYPE_ID = priv::Measurement::HEAD_TAIL_TYPE;
+
 
 Experiment::Ptr Experiment::Open(const std::string & filepath) {
 	priv::Experiment::Ptr e = priv::Experiment::Open(filepath);

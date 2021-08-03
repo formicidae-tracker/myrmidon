@@ -42,6 +42,12 @@ public:
 	/** A pointer to an Experiment. */
 	typedef std::unique_ptr<Experiment> Ptr;
 
+
+	/**
+	 * the default MeasurementTypeID for Head-Tail measuremrent
+	 */
+	const static MeasurementTypeID HEAD_TAIL_MEASUREMENT_TYPE_ID;
+
 	/**
 	 * Opens an existing Experiment.
 	 *
@@ -546,6 +552,7 @@ public:
 	 *
 	 * @throws std::invalid_argument if measurementTypeID is not valid
 	 *         for this Experiment.
+	 * @throws
 	 */
 	void DeleteMeasurementType(MeasurementTypeID measurementTypeID);
 
@@ -564,8 +571,10 @@ public:
 	 * @param measurementTypeID the MeasurementTypeID to modify
 	 * @param name the wanted name
 	 *
-	 * @throws std::invalid_argument if measurementTypeID is not valid
+	 * @throws std::out_of_range if measurementTypeID is not valid
 	 *         for this Experiment.
+	 * @throws std::invalid_argument if measurementTypeID is
+	 *         HEAD_TAIL_MEASUREMENT_TYPE_ID.
 	 */
 	void SetMeasurementTypeName(MeasurementTypeID measurementTypeID,
 	                            const std::string & name);
@@ -697,8 +706,10 @@ public:
 	 *
 	 * @param key the key to remove
 	 *
-	 * @throws std::invalid_argument if key is not valid for this
+	 * @throws std::out_of_range if key is not valid for this
 	 *         Experiment.
+	 * @throws std::runtime_error if any Ant has a defined TimedData
+	 *         for key.
 	 */
 	void DeleteMetaDataKey(const std::string & key);
 
@@ -735,7 +746,9 @@ public:
 	 * @param newKey the new key name
 	 *
 	 *
-	 * @throws std::invalid_argument if key is not valid for this
+	 * @throws std::out_of_range if oldKey is not valid for this
+	 *         Experiment.
+	 * @throws std::invalid_argument if newKey is already used in this
 	 *         Experiment.
 	 */
 	void RenameMetaDataKey(const std::string & oldKey,
