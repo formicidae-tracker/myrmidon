@@ -63,7 +63,7 @@ TEST_F(AntUTest,StaticDataTest) {
 		ADD_FAILURE() << "Got unexpected exception: " << e.what();
 	}
 
-	EXPECT_THROW(ant->SetValue("isQueen",true,Time::SinceEver()),std::invalid_argument);
+	EXPECT_THROW(ant->SetValue("isQueen",true,Time::SinceEver()),std::out_of_range);
 	EXPECT_THROW(ant->SetValue("dead",0,Time::SinceEver()),std::bad_variant_access);
 	EXPECT_THROW({ant->SetValue("dead",false,Time::Forever());},std::invalid_argument);
 	EXPECT_NO_THROW({

@@ -309,7 +309,7 @@ public:
 	 * Time::SinceEver(), sets the starting value for name instead of
 	 * the Experiment's default value for name.
 	 *
-	 * @throws std::invalid_argument if name is not a defined key in Experiment
+	 * @throws std::out_of_range if name is not a defined key in Experiment
 	 * @throws std::invalid_argument if time is Time::Forever()
 	 * @throws std::invalid_argument if value is not of the right type for key
 	 *

@@ -56,7 +56,7 @@ TEST_F(ExperimentUTest,CanAddTrackingDataDirectory) {
 				ASSERT_EQ(artagData->DetectionSettings().Family,tags::Family::Tag36ARTag);
 				// Could not add wrong family to experiment
 				ee->AddTrackingDataDirectory(s,artagData);
-			},std::runtime_error);
+			},std::invalid_argument);
 
 
 	} catch (const std::exception & e) {
@@ -159,7 +159,7 @@ TEST_F(ExperimentUTest,MeasurementEndToEnd) {
 	EXPECT_THROW({
 			//we can't delete an inexistant one
 			e->DeleteMeasurementType(Measurement::HEAD_TAIL_TYPE+1);
-		},std::runtime_error);
+		},std::out_of_range);
 
 
 	EXPECT_THROW({

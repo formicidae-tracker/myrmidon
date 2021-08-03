@@ -71,7 +71,7 @@ void BindAnt(py::module_ & m) {
             Experiment default value for key if the value is not
             defined for this Ant.
     Raises:
-        Error: if key is not a defined metadata key in Experiment
+        IndexError: if key is not a defined metadata key in Experiment
 )pydoc")
 		.def("SetValue",
 		     &Ant::SetValue,
@@ -87,9 +87,9 @@ void BindAnt(py::module_ & m) {
         time (py_fort_myrmidon.Time): the first Time where key will be
             set to value. It can be Time.SinceEver()
      Raises:
-        ValueError: if key is not defined in the Experiment
+        IndexError: if key is not defined in the Experiment
         ValueError: if time is Time.Forever()
-        ValueError: if value is not the right type for key
+        RuntimeError: if value is not the right type for key
 )pydoc")
 		.def("DeleteValue",
 		     &Ant::DeleteValue,

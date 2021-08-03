@@ -26,10 +26,10 @@ public:
 		virtual ~AlreadyExistingObject() noexcept {};
 	};
 
-	class UnmanagedObject : public std::runtime_error {
+	class UnmanagedObject : public std::out_of_range {
 	public:
 		UnmanagedObject(TID ID) noexcept
-			: std::runtime_error(std::string(typeid(T).name()) + " " + std::to_string(ID) + " is not managed") {
+			: std::out_of_range(std::string(typeid(T).name()) + " " + std::to_string(ID) + " is not managed") {
 		};
 		virtual ~UnmanagedObject() noexcept {};
 	};

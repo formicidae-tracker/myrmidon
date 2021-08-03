@@ -54,7 +54,7 @@ std::string Experiment::AddTrackingDataDirectory(SpaceID spaceID,
                                                  const std::string & filepath) {
 	auto fi  = d_p->Get().Spaces().find(spaceID);
 	if ( fi == d_p->Get().Spaces().end() ) {
-		throw std::invalid_argument("Unknown Space::ID " + std::to_string(spaceID));
+		throw std::out_of_range("Unknown Space::ID " + std::to_string(spaceID));
 	}
 	auto tdd = priv::TrackingDataDirectory::Open(filepath,d_p->Get().Basedir());
 	d_p->Get().AddTrackingDataDirectory(fi->second,tdd);

@@ -222,7 +222,11 @@ public:
 	 *
 	 * @return the URI used to designate the tdd
 	 *
-	 * @throws std::runtime_error if the Tracking Data Directory
+	 * @throws std::out_of_range if spaceID is not valid for this
+	 *         Experiment
+	 * @throws std::runtime_error if filepath is not a valid Tracking
+	 *         Data Directory
+	 * @throws std::invalid_argument if the Tracking Data Directory
 	 *         contains data that would overlap in time with other
 	 *         Tracking Data Directory associated with the same space.
 	 */
@@ -321,6 +325,8 @@ public:
 	 *
 	 * @return the new Identification
 	 *
+	 * @throws std::out_of_range if antID is not valid for this
+	 *         Experiment
 	 * @throws OverlapingIdentification if it will conflict in time
 	 *         with another Identification with the same antID or
 	 *         tagID.

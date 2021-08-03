@@ -221,7 +221,7 @@ void Experiment::AddTrackingDataDirectory(const Space::Ptr & space,
 	if ( myFamily != tags::Family::Undefined
 	     && tddFamily != tags::Family::Undefined
 	     && myFamily != tddFamily ) {
-		throw std::runtime_error("Family for TrackingDataDirectory '" + tdd->URI()
+		throw std::invalid_argument("Family for TrackingDataDirectory '" + tdd->URI()
 		                         + "' ("
 		                         + tags::GetFamilyName(tddFamily)
 		                         + ") does not match family of other directories ("

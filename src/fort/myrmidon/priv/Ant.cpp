@@ -125,7 +125,7 @@ void Ant::SetValue(const std::string & name,
 	}
 	auto fi = d_metadata->Keys().find(name);
 	if ( fi == d_metadata->Keys().end() ) {
-		throw std::invalid_argument("Unknown meta data key '" + name + "'");
+		throw std::out_of_range("Unknown meta data key '" + name + "'");
 	}
 	AntMetadata::CheckType(fi->second->Type(),value);
 	auto vi = d_data.find(name);
