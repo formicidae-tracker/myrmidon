@@ -16,6 +16,8 @@ void BindAnt(py::module_ & );
 void BindZone(py::module_ &);
 void BindSpace(py::module_ &);
 
+void BindTrackingSolver(py::module_ & p);
+
 
 void BindExperiment(py::module_ & );
 void BindMatchers(py::module_ &);

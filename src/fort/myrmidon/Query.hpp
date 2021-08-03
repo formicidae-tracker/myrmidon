@@ -56,6 +56,23 @@ public:
 	                                                       AntID antID,
 	                                                       MeasurementTypeID mTypeID);
 
+	/**
+	 * Gets tracking data statistics about the Experiment
+	 *
+	 * * Python:
+	 * ```python
+	 * py_fort_myrmidon.Query.GetDataInformations(experiment: py_fort_myrmidon.Experiment) -> py_fort_myrmidon.ExperimentDataInfo
+	 * ```
+	 * * R :
+	 * ```R
+	 * fmQueryGetDataInformations <- function(experiment) # a list of number of frames, and start and end date of the experiment.
+	 * ```
+	 *
+	 * @return an ExperimentDataInfo structure of informations
+	 */
+	static ExperimentDataInfo GetDataInformations(const Experiment & experiment);
+
+
 
 	struct QueryArgs {
 		// Start of the <Time> range (default: <Time::SinceEver>)

@@ -389,5 +389,31 @@ void BindExperiment(py::module_ & m) {
         IndexError: if oldKey is invalid for the Experiment
         ValueError: if newKey is in use for the Experiment
 )pydoc")
-		;
-}
+		.def("IdentificationsAt",
+		     &Experiment::IdentificationsAt,
+		     py::arg("time"),
+		     py::kw_only(),
+		     py::arg("removeUnidentifiedAnt") = true,
+		     R"pydoc(
+    Gets AntID <-> TagID correspondances at a given Time
+
+    Args:
+        time (py_fort_myrmidon.Time): the wanted Time for the
+            correspondance matching.
+        removeUnidentifiedAnt (boolean): if true, Ant without an
+            Identification will not be part of the result. Otherwise
+            the associated tagID will 2^32-1.
+     Returns:
+        Dict[int,int]: TagID indexed by their associated AntID.
+ )pydoc")
+		.def("CompileTrackingSolver",
+		     &Experiment::CompileTrackingSolver,
+		     R"pydoc(
+    Compiles a TrackingSolver that can be used to identify and collide
+    ant from raw data.
+
+    Returns:
+        py_fort_myrmidon.TrackingSolver: the compiled tracking solver.
+)pydoc")
+
+		; }

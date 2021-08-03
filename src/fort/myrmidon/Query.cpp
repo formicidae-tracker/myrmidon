@@ -23,6 +23,48 @@ TagStatistics::ByTagID Query::ComputeTagStatistics(const Experiment & experiment
 	return res;
 }
 
+TrackingDataDirectoryInfo buildTddInfos(const priv::TrackingDataDirectory::Ptr & tdd) {
+	return {
+	        .URI = tdd->URI(),
+	        .AbsoluteFilePath = tdd->AbsoluteFilePath().string(),
+	        .Frames = tdd->EndFrame() - tdd->StartFrame() + 1,
+	        .Start  = tdd->Start(),
+	        .End = tdd->End(),
+	};
+}
+
+
+SpaceDataInfo buildSpaceInfos( const priv::Space::ConstPtr & space ) {
+	SpaceDataInfo res = {.URI = space->URI(),.Name = space->Name(), .Frames = 0 , .Start = Time(), .End = Time()};
+	const auto & tdds = space->TrackingDataDirectories();
+	if ( tdds.empty() == true ) {
+		return res;
+	}
+	res.Start = tdds.front()->Start();
+	res.End = tdds.back()->End();
+	res.TrackingDataDirectories.reserve(tdds.size());
+	for ( const auto & tdd : tdds ) {
+		res.TrackingDataDirectories.push_back(buildTddInfos(tdd));
+		res.Frames += res.TrackingDataDirectories.back().Frames;
+	}
+	return res;
+}
+
+ExperimentDataInfo Query::GetDataInformations(const Experiment & experiment) {
+	ExperimentDataInfo res = { .Frames = 0, .Start = Time::Forever(), .End = Time::SinceEver() };
+	const auto & spaces = experiment.d_p->Get().Spaces();
+	for ( const auto & [spaceID,space] : spaces ) {
+		auto sInfo = buildSpaceInfos(space);
+		res.Start = std::min(res.Start,sInfo.Start);
+		res.End = std::max(res.End,sInfo.End);
+		res.Frames += sInfo.Frames;
+		res.Spaces[spaceID] = sInfo;
+	}
+
+	return res;
+}
+
+
 Query::IdentifyFramesArgs::IdentifyFramesArgs()
 	: ComputeZones(false) {
 }

@@ -20,7 +20,7 @@ CollisionFrame::Ptr TrackingSolver::CollideFrame(const IdentifiedFrame::Ptr & id
 	return d_p->CollideFrame(identified);
 }
 
-AntID TrackingSolver::IdentifyTag(TagID tagID, const Time & time) {
+AntID TrackingSolver::IdentifyAnt(TagID tagID, const Time & time) {
 	return d_p->IdentifyTag(tagID,time);
 }
 

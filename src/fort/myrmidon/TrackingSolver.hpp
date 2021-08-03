@@ -14,42 +14,79 @@ namespace myrmidon {
 class Experiment;
 
 namespace priv {
-// private <fort::myrmidon::priv> Implementation
 class TrackingSolver;
 } // namespace priv
 
 
-// Identifies and Collides Ant from raw tracking data
-//
-// This class lets the user to manually identify and track ants from
-// raw tracking data, as for example, obtained from a network stream
-// with `fort::hermes`
+/**
+ * Identifies and Collides Ant from raw tracking data
+ *
+ * This class lets the user to manually identify and track ants from
+ * raw tracking data, as for example, obtained from a network stream
+ * with `fort-hermes`
+ */
 
 class TrackingSolver {
 public :
 
-	// Identifies a single tag
-	// @tagID the TagID to identify
-	// @time the time to consider to identify the tag
-	//
-	// @return 0 if the tag is not idnetified, or the corresponding ID
-	AntID IdentifyTag(TagID tagID, const Time & time);
+	/**
+	 *  Identifies a single ant
+	 *
+	 * * Python:
+	 * ```python
+	 * py_fort_myrmidon.TrackingSolver(self,tagID: int,time: py_fort_myrmidon.Time) -> int
+	 * ```
+	 * * R:
+	 * fmTrackingSolverIdentifyAnt <- function(solver, tagID = 0, time = fmTimeNow()) # returns an integer
+	 * ```
+	 *
+	 * @param tagID the TagID to identify
+	 * @param time the time to consider to identify the tag
+	 *
+	 * @return returns the AntID of the Ant tagID is identifying at
+	 *         time, or 0 if there is no matching identification.
+	 */
+	AntID IdentifyAnt(TagID tagID, const Time & time);
 
-	// Identifies Ants from a `fort::hermes::FrameReadout`
-	// @frame the `fort::hermes::FrameReadout` to identify
-	// @spaceID the spaceID the frame correspond to
-	//
-	// @return an <IdentifiedFrame> with all identified ant (without zone)
+	/**
+	 * Identifies Ants from a `fort::hermes::FrameReadout`
+	 *
+	 * * Python:
+	 * ```python
+	 * py_fort_myrmidon.Trackingsolver.IdentifyFrame(self,frame: py_fort_hermes.FrameReadout, spaceID: int) -> py_fort_myrmidon.IdentifiedFrame
+	 * ```
+	 * * R:
+	 * ```R
+	 * fmTrackingSolverIdentifyFrame <- function(solver, frame, spaceID = 0)
+	 * ```
+	 *
+	 * @param frame the `fort::hermes::FrameReadout` to identify
+	 * @param spaceID the spaceID the frame correspond to
+	 *
+	 * @return an IdentifiedFrame with all identified ant without their zone
+	 */
 	IdentifiedFrame::Ptr IdentifyFrame(const fort::hermes::FrameReadout & frame,
 	                                   SpaceID spaceID) const;
 
-	// Collides Ants from an IdentifiedFrame
-	// @identified the <IdentifiedFrame> with the ant position data.
-	//
-	// Collides Ants from an <IdentifiedFrame>. <identified> will be
-	// modified to contains for each Ant its current zone.
-	//
-	// @return a <CollisionFrame> with all current Ant collisions.
+	/**
+	 * Collides Ants from an IdentifiedFrame
+	 *
+	 * * Python:
+	 * ```python
+	 * py_fort_myrmidon.Trackingsolver.CollideFrame(self,identified: py_fort_myrmidon.IdentifiedFrame) -> py_fort_myrmidon.CollisionFrame
+	 * ```
+	 * * R:
+	 * ```R
+	 * fmTrackingSolverCollideFrame <- function(solver, identified)
+	 * ```
+	 *
+	 * @param identified the IdentifiedFrame with the ant position data.
+	 *
+	 * Collides Ants from an IdentifiedFrame. identified will be
+	 * modified to contains for each Ant its current zone.
+	 *
+	 * @return a CollisionFrame with all current Ant collisions.
+	 */
 	CollisionFrame::Ptr CollideFrame(const IdentifiedFrame::Ptr & identified) const;
 
 private:

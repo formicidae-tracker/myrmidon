@@ -9,6 +9,7 @@ set(SRC_FILES Time.cpp
               Color.cpp
               Zone.cpp
               Space.cpp
+              TrackingSolver.cpp
               main.cpp
               )
 

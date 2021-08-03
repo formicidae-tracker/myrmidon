@@ -754,21 +754,6 @@ public:
 	void RenameMetaDataKey(const std::string & oldKey,
 	                       const std::string & newKey);
 
-	/**
-	 * Gets tracking data statistics about the Experiment
-	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.GetDataInformations(self) -> py_fort_myrmidon.ExperimentDataInfo
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentGetDataInformations <- function(experiment) # a list of number of frames, and start and end date of the experiment.
-	 * ```
-	 *
-	 * @return an ExperimentDataInfo structure of informations
-	 */
-	ExperimentDataInfo GetDataInformations() const;
 
 	/**
 	 * Gets AntID <- TagID correspondances at a given time
