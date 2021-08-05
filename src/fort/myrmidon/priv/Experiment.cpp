@@ -149,7 +149,7 @@ void Experiment::Save(const fs::path & filepath) {
 	auto newBasedir = fs::weakly_canonical(filepath).parent_path();
 	//TODO: should not be an error.
 	if ( basedir != newBasedir ) {
-		throw std::runtime_error("Changing experiment file directory is not yet supported");
+		throw std::invalid_argument("Changing experiment file directory is not yet supported");
 	}
 
 	{
@@ -191,11 +191,11 @@ void Experiment::CheckTDDIsDeletable(const std::string & URI) const {
 		                       return elem.second.empty() == false;
 	                       });
 	if ( fi != d_measurementByURI.end() ) {
-		throw std::runtime_error("Could not remove TrackingDataDirectory '" + URI
-		                         + "': it contains measurement '"
-		                         + fi->first
-		                         + "'");
-
+		auto reason = "Could not remove TrackingDataDirectory '" + URI
+			+ "': it contains measurement '"
+			+ fi->first
+			+ "'";
+		throw std::runtime_error(reason);
 	}
 }
 
@@ -282,7 +282,7 @@ Ant::Ptr Experiment::CreateAnt(fort::myrmidon::AntID antID) {
 
 void Experiment::SetMeasurement(const Measurement::ConstPtr & m) {
 	if ( d_measurementTypes.Objects().count(m->Type()) == 0 ) {
-		throw std::runtime_error("Unknown MeasurementType::ID " + std::to_string(m->Type()));
+		throw std::out_of_range("Unknown MeasurementType::ID " + std::to_string(m->Type()));
 	}
 
 	auto [tddURI,frameID,tagID,mtID] = Measurement::DecomposeURI(m->URI());

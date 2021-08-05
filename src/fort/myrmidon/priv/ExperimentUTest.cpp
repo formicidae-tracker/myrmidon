@@ -200,14 +200,32 @@ TEST_F(ExperimentUTest,MeasurementEndToEnd) {
 	                                                        Eigen::Vector2d(10,12),
 	                                                        12.0);
 
+	auto badType = std::make_shared<Measurement>(tcuPath.generic_string(),
+	                                             Measurement::HEAD_TAIL_TYPE+42,
+	                                             Eigen::Vector2d(12,12),
+	                                             Eigen::Vector2d(10,12),
+	                                             12.0);
+
+
 	EXPECT_NO_THROW({
 			e->SetMeasurement(goodDefault);
 			e->SetMeasurement(goodCustom);
 		});
 
+	//we cannot remove a directory that have a measurement
+	EXPECT_FALSE(e->TrackingDataDirectoryIsDeletable(foo0->URI()));
+	EXPECT_THROW({
+			e->DeleteTrackingDataDirectory(foo0->URI());
+		},std::runtime_error);
+
 	EXPECT_THROW({
 			e->SetMeasurement(defaultWithBadPath);
 		},std::invalid_argument);
+
+	EXPECT_THROW({
+			e->SetMeasurement(badType);
+		},std::out_of_range);
+
 
 	std::vector<Measurement::ConstPtr> list = {goodCustom, goodDefault, defaultWithBadPath} ;
 	ListAllMeasurements(e->Measurements(),list);
@@ -601,7 +619,7 @@ TEST_F(ExperimentUTest,OldFilesAreOpenable) {
 		});
 }
 
-TEST_F(ExperimentUTest,WillNotOpenFileQhichAreTooRecent) {
+TEST_F(ExperimentUTest,WillNotOpenFileWhichAreTooRecent) {
 	auto path = TestSetup::Basedir() / "test-future.myrmidon";
 
 	try {
@@ -617,6 +635,11 @@ TEST_F(ExperimentUTest,WillNotOpenFileQhichAreTooRecent) {
 	}
 }
 
+TEST_F(ExperimentUTest,CannotChangeDirectory) {
+	EXPECT_THROW({
+			e->Save(TestSetup::Basedir()/"foo"/"bar"/"exp.myrmidon");
+		},std::invalid_argument);
+}
 
 } //namespace priv
 } //namespace myrmidon
