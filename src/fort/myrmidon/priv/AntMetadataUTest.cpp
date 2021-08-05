@@ -247,12 +247,27 @@ TEST_F(AntMetadataUTest,ColumnHaveDefaults) {
 	EXPECT_NO_THROW({
 			boolCol->SetDefaultValue(true);
 		});
+
+	EXPECT_NO_THROW({
+			AntMetadata::SetKey(metadata,"bool",true);
+		});
+
 	EXPECT_NO_THROW({
 			boolCol->SetDefaultValue(fort::Time());
 		});
 
 	EXPECT_EQ(boolCol->DefaultValue(),AntStaticValue(Time()));
 
+}
+
+
+TEST_F(AntMetadataUTest,DefinesDefaultValue) {
+	EXPECT_EQ(AntMetadata::DefaultValue(AntMetaDataType::BOOL),AntStaticValue(false));
+	EXPECT_EQ(AntMetadata::DefaultValue(AntMetaDataType::INT),AntStaticValue(0));
+	EXPECT_EQ(AntMetadata::DefaultValue(AntMetaDataType::DOUBLE),AntStaticValue(0.0));
+	EXPECT_EQ(AntMetadata::DefaultValue(AntMetaDataType::STRING),AntStaticValue(std::string()));
+	EXPECT_EQ(AntMetadata::DefaultValue(AntMetaDataType::TIME),AntStaticValue(Time()));
+	EXPECT_THROW(AntMetadata::DefaultValue(AntMetaDataType(int(AntMetaDataType::TIME)+1)),std::invalid_argument);
 }
 
 
