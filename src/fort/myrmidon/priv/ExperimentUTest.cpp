@@ -575,6 +575,29 @@ TEST_F(ExperimentUTest,CornerWidthRatioForFamilies) {
 
 }
 
+TEST_F(ExperimentUTest,AntShapeTypeManipulation) {
+	auto bodyType = e->CreateAntShapeType("body");
+	auto antennaType = e->CreateAntShapeType("antennas");
+	auto a = e->CreateAnt();
+	a->AddCapsule(bodyType->TypeID(),
+	              std::make_shared<Capsule>(Eigen::Vector2d(0,0),
+	                                        Eigen::Vector2d(0,1),
+	                                        0.1,0.1));
+
+	EXPECT_NO_THROW({
+			e->DeleteAntShapeType(antennaType->TypeID());
+		});
+
+	EXPECT_THROW({
+			e->DeleteAntShapeType(bodyType->TypeID());
+		},std::runtime_error);
+
+	EXPECT_THROW({
+			e->DeleteAntShapeType(antennaType->TypeID());
+		},std::out_of_range);
+
+}
+
 TEST_F(ExperimentUTest,AntMetadataManipulation) {
 	auto alive = e->SetMetaDataKey("alive",true);
 	auto group = e->SetMetaDataKey("group",std::string());
@@ -608,10 +631,81 @@ TEST_F(ExperimentUTest,AntMetadataManipulation) {
 		});
 
 	EXPECT_THROW(e->DeleteMetaDataKey("social-group"),std::runtime_error);
+	EXPECT_THROW(e->RenameMetaDataKey("foo","bar"),std::out_of_range);
+	EXPECT_THROW(e->RenameMetaDataKey("social-group","age-in-days"),std::invalid_argument);
+	EXPECT_NO_THROW(e->RenameMetaDataKey("social-group","group"));
+
 	EXPECT_NO_THROW(e->DeleteMetaDataKey("age-in-days"));
 	EXPECT_THROW(ant->GetValue("age-in-days",Time()),std::out_of_range);
 
 }
+
+
+TEST_F(ExperimentUTest,AntCloning) {
+	auto foo0 = TrackingDataDirectory::Open(TestSetup::Basedir() / "foo.0000",TestSetup::Basedir());
+	auto s = e->CreateSpace("nest");
+	e->AddTrackingDataDirectory(s,foo0);
+
+	std::vector<Ant::Ptr> ants =
+		{ e->CreateAnt(),e->CreateAnt(),e->CreateAnt() };
+
+	e->SetMeasurement(std::make_shared<Measurement>(fs::path(foo0->URI()) / "frames" / std::to_string(foo0->StartFrame()) / "closeups/0x001",
+	                                                Measurement::HEAD_TAIL_TYPE,
+	                                                Eigen::Vector2d(12,12),
+	                                                Eigen::Vector2d(0,12),
+	                                                12.0));
+
+	e->SetMeasurement(std::make_shared<Measurement>(fs::path(foo0->URI()) / "frames" / std::to_string(foo0->StartFrame()) / "closeups/0x002",
+	                                                Measurement::HEAD_TAIL_TYPE,
+	                                                Eigen::Vector2d(12,12),
+	                                                Eigen::Vector2d(0,12),
+	                                                6.0));
+
+	Identifier::AddIdentification(e->Identifier(),
+	                              1,1,Time::SinceEver(),Time::Forever());
+
+	Identifier::AddIdentification(e->Identifier(),
+	                              2,2,Time::SinceEver(),Time::Forever());
+
+	e->CreateAntShapeType("body");
+	ants[0]->AddCapsule(1,std::make_shared<Capsule>(Eigen::Vector2d(0,0),
+	                                                Eigen::Vector2d(1,1),
+	                                                1,1));
+
+	EXPECT_THROW(e->CloneAntShape(42,false,false),std::out_of_range);
+	EXPECT_NO_THROW(e->CloneAntShape(2,false,false)); //do nothing as second ant has no shape
+	EXPECT_THROW(e->CloneAntShape(3,true,true),std::runtime_error); //cannot work has ant 3 has no shape
+
+	EXPECT_NO_THROW(e->CloneAntShape(1,false,false));
+	ASSERT_EQ(ants[1]->Capsules().size(),1);
+	ASSERT_EQ(ants[2]->Capsules().size(),1);
+	EXPECT_TRUE(CapsuleEqual(*ants[1]->Capsules().front().second,
+	                         *ants[0]->Capsules().front().second));
+
+	EXPECT_TRUE(CapsuleEqual(*ants[2]->Capsules().front().second,
+	                         *ants[0]->Capsules().front().second));
+
+	ants[2]->ClearCapsules();
+	EXPECT_NO_THROW(e->CloneAntShape(1,true,false));
+	ASSERT_EQ(ants[1]->Capsules().size(),1);
+	ASSERT_EQ(ants[2]->Capsules().size(),1);
+	EXPECT_TRUE(CapsuleEqual(*ants[1]->Capsules().front().second,
+	                         *ants[0]->Capsules().front().second));
+
+	EXPECT_TRUE(CapsuleEqual(*ants[2]->Capsules().front().second,
+	                         *ants[0]->Capsules().front().second));
+
+	EXPECT_NO_THROW(e->CloneAntShape(1,true,true));
+	EXPECT_TRUE(CapsuleEqual(*ants[1]->Capsules().front().second,
+	                         Capsule(Eigen::Vector2d(0,0),
+	                                 Eigen::Vector2d(2,2),
+	                                 2.0,2.0)));
+
+	EXPECT_TRUE(CapsuleEqual(*ants[2]->Capsules().front().second,
+	                         *ants[0]->Capsules().front().second));
+
+}
+
 
 TEST_F(ExperimentUTest,OldFilesAreOpenable) {
 	EXPECT_NO_THROW({

@@ -596,7 +596,7 @@ void Experiment::CloneAntShape(fort::myrmidon::AntID sourceAntID,
                                bool overwriteShapes) {
 	auto sourceIt = d_identifier->Ants().find(sourceAntID);
 	if ( sourceIt == d_identifier->Ants().cend() ) {
-		throw std::invalid_argument("Cannot find and " + Ant::FormatID(sourceAntID) );
+		throw std::out_of_range("Cannot find ant " + Ant::FormatID(sourceAntID) );
 	}
 
 	auto source = sourceIt->second;
