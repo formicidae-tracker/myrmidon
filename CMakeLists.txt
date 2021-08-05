@@ -135,7 +135,7 @@ if(ENABLE_COVERAGE)
 	                          DEPENDENCIES check
 	                          LCOV_OPTIONS --exclude "'*UTest.*'"
 	                                       --exclude "main-check.cpp"
-										   --include "'${PROJECT_SOURCE_DIR}/src/fort/myrmidon/priv/*'"
+										   --include "'${PROJECT_SOURCE_DIR}/src/fort/myrmidon/*'"
 	                          )
 endif(ENABLE_COVERAGE)
 

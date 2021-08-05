@@ -5,7 +5,8 @@
 #include "Ant.hpp"
 #include "AntShapeType.hpp"
 #include "AntMetadata.hpp"
-
+#include "Experiment.hpp"
+#include "Identifier.hpp"
 
 namespace fort {
 namespace myrmidon {
@@ -79,6 +80,14 @@ TEST_F(AntUTest,StaticDataTest) {
 	EXPECT_THROW(ant->DeleteValue("dead",Time()),std::out_of_range);
 	EXPECT_NO_THROW(ant->DeleteValue("dead",Time::SinceEver()));
 
+
+	EXPECT_THROW(ant->GetBaseValue("dead"),std::out_of_range);
+
+
+	EXPECT_NO_THROW(ant->SetValue("dead",false,Time(),true));
+	EXPECT_THROW(ant->SetValue("dead",false,Time(),true),std::runtime_error);
+
+	EXPECT_NO_THROW(ant->DeleteValue("group",Time::SinceEver()));
 }
 
 TEST_F(AntUTest,IDFormatting) {
@@ -92,6 +101,17 @@ TEST_F(AntUTest,IDFormatting) {
 		EXPECT_EQ(Ant::FormatID(d.first),d.second);
 	}
 
+}
+
+TEST_F(AntUTest,IdentificationAt) {
+	auto e = Experiment::Create("/tmp/foo.myrmidon");
+	auto a = e->CreateAnt();
+	Identifier::AddIdentification(e->Identifier(),
+		a->AntID(),0,Time::FromTimeT(0),Time::FromTimeT(1));
+	EXPECT_NO_THROW({
+			EXPECT_EQ(a->IdentifiedAt(Time::FromTimeT(0)),0);
+		});
+	EXPECT_THROW(a->IdentifiedAt(Time::FromTimeT(1)),std::runtime_error);
 }
 
 } // namespace priv
