@@ -47,28 +47,58 @@ TEST_F(DenseMapUTest,IterationAndErase) {
 	DM map;
 	size_t i = 0;
 	for ( const auto & v : values ) {
-		++i;
-		auto res = map.insert(std::make_pair(i,v));
+		auto res = map.insert(std::make_pair(2*i+1,v));
 		ASSERT_TRUE(res.second);
+		++i;
 	}
 
 	ASSERT_EQ(map.size(),values.size());
 	i = 0;
 	for ( const auto & [k,v] : map) {
+		EXPECT_EQ(k,2*i+1);
+		EXPECT_EQ(v,values[i]);
 		++i;
-		EXPECT_EQ(k,i);
-		EXPECT_EQ(v,values[i-1]);
 	}
 
+	for( auto it = map.end();
+	     it != map.begin();
+	     --it) {
+	}
+
+	for( auto it = map.cend();
+	     it != map.cbegin();
+	     --it) {
+	}
+
+
+	EXPECT_EQ(--(map.begin()),map.begin());
+	EXPECT_EQ(++map.end(),map.end());
+	EXPECT_EQ(--map.cbegin(),map.cbegin());
+	EXPECT_EQ(++map.cend(),map.cend());
+
+	//decrement bug if no first key.
+	auto begin = map.begin();
+	map.erase(begin);
+	EXPECT_NO_THROW(map.erase(begin));
+	EXPECT_NO_THROW(map.erase(1));
+	EXPECT_THROW(map.at(1),std::out_of_range);
+	EXPECT_EQ(--(map.begin()),map.begin());
+	EXPECT_EQ(--(const_cast<const DM*>(&map)->begin()),map.cbegin());
+	EXPECT_EQ(--(map.cbegin()),map.cbegin());
+
+
+
+	map.insert({1,1});
+
 	for ( i = 0; i < values.size(); ++i) {
-		auto erased = map.erase(i+1);
+		auto erased = map.erase(2*i+1);
 		EXPECT_EQ(erased,1);
 		EXPECT_EQ(map.size(),values.size() - i - 1);
 		size_t ii = i+1;
 		for ( const auto & [k,v] : map) {
+			EXPECT_EQ(k,2*ii+1);
+			EXPECT_EQ(v,values[ii]);
 			++ii;
-			EXPECT_EQ(k,ii);
-			EXPECT_EQ(v,values[ii-1]);
 		}
 	}
 

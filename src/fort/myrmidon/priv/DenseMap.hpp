@@ -17,11 +17,12 @@ public:
 	class const_iterator;
 
 	class iterator {
-    public:
+	public:
 		iterator(const typename std::vector<std::pair<Key,T>>::iterator & iter,
 		         const typename std::vector<std::pair<Key,T>>::iterator & begin,
 		         const typename std::vector<std::pair<Key,T>>::iterator & end)
 			: d_iter(iter)
+			, d_begin(begin)
 			, d_end(end) {
 		}
 
@@ -42,34 +43,37 @@ public:
 			do {
 				--d_iter;
 			}while(d_iter != d_begin && d_iter->first == 0);
+			while( d_iter != d_end && d_iter->first == 0) {
+				++d_iter;
+			}
 			return *this;
 		}
 
 
-        iterator operator++(int) {iterator retval = *this; ++(*this); return retval;}
-        iterator operator--(int) {iterator retval = *this; --(*this); return retval;}
+		iterator operator++(int) {iterator retval = *this; ++(*this); return retval;}
+		iterator operator--(int) {iterator retval = *this; --(*this); return retval;}
 
-        bool operator==(const iterator & other) const {return d_iter == other.d_iter;}
-        bool operator!=(const iterator & other) const {return !(*this == other);}
+		bool operator==(const iterator & other) const {return d_iter == other.d_iter;}
+		bool operator!=(const iterator & other) const {return !(*this == other);}
 		DenseMap::value_type & operator*() {
 			return reinterpret_cast<std::pair<const Key,T>&>(*d_iter);
-        }
+		}
 		DenseMap::value_type * operator->() {
 			return reinterpret_cast<std::pair<const Key,T>*>(&(*d_iter));
 		}
-        // iterator traits
-        using difference_type = long;
+		// iterator traits
+		using difference_type = long;
 		using value_type = DenseMap::value_type;
 		using pointer = const DenseMap::value_type*;
 		using reference = const DenseMap::value_type&;
-        using iterator_category = std::forward_iterator_tag;
+		using iterator_category = std::forward_iterator_tag;
 	private :
 		friend class DenseMap::const_iterator;
 		typename std::vector<std::pair<Key,T>>::iterator d_iter,d_begin,d_end;
 	};
 
 	class const_iterator {
-    public:
+	public:
 		const_iterator(const typename std::vector<std::pair<Key,T>>::const_iterator & iter,
 		               const typename std::vector<std::pair<Key,T>>::const_iterator & begin,
 		               const typename std::vector<std::pair<Key,T>>::const_iterator & end)
@@ -100,25 +104,28 @@ public:
 			do {
 				--d_iter;
 			}while(d_iter != d_begin && d_iter->first == 0);
+			while( d_iter != d_end && d_iter->first == 0) {
+				++d_iter;
+			}
 			return *this;
 		}
 
-        const_iterator operator++(int) {const_iterator retval = *this; ++(*this); return retval;}
+		const_iterator operator++(int) {const_iterator retval = *this; ++(*this); return retval;}
 		const_iterator operator--(int) {const_iterator retval = *this; --(*this); return retval;}
-        bool operator==(const const_iterator & other) const {return d_iter == other.d_iter;}
-        bool operator!=(const const_iterator & other) const {return !(*this == other);}
+		bool operator==(const const_iterator & other) const {return d_iter == other.d_iter;}
+		bool operator!=(const const_iterator & other) const {return !(*this == other);}
 		const DenseMap::value_type & operator*() const {
 			return reinterpret_cast<const std::pair<const Key,T>&>(*d_iter);
-        }
+		}
 		const DenseMap::value_type * operator->() const {
 			return reinterpret_cast<const std::pair<const Key,T>*>(&(*d_iter));
 		}
-        // iterator traits
-        using difference_type = long;
+		// iterator traits
+		using difference_type = long;
 		using value_type = const DenseMap::value_type;
 		using pointer = const DenseMap::value_type*;
 		using reference = const DenseMap::value_type&;
-        using iterator_category = std::forward_iterator_tag;
+		using iterator_category = std::forward_iterator_tag;
 	private :
 		typename std::vector<std::pair<Key,T>>::const_iterator d_iter,d_begin,d_end;
 	};
@@ -149,14 +156,14 @@ public:
 		while ( b != d_values.cend() && b->first == 0 ) {
 			++b;
 		}
-		return const_iterator(b,d_values.begin(),d_values.cend());
+		return const_iterator(b,d_values.cbegin(),d_values.cend());
 	}
 	const_iterator cbegin() const noexcept {
 		auto b = d_values.cbegin();
 		while ( b != d_values.cend() && b->first == 0 ) {
 			++b;
 		}
-		return const_iterator(b,d_values.begin(),d_values.cend());
+		return const_iterator(b,d_values.cbegin(),d_values.cend());
 	}
 
 	iterator end() noexcept {
