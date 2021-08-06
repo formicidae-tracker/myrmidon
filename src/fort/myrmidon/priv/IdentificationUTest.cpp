@@ -190,6 +190,19 @@ TEST_F(IdentificationUTest,TestIdentificationBoundary) {
 }
 
 
+TEST_F(IdentificationUTest,InvalidTimeChangeDoesNotModify) {
+	priv::Identifier::AddIdentification(d_identifier,
+	                                    d_ant->AntID(),1,
+	                                    Time::SinceEver(),Time());
+	priv::Identifier::AddIdentification(d_identifier,
+	                                    d_ant->AntID(),2,
+	                                    Time(),Time::Forever());
+	EXPECT_THROW(d_ant->Identifications().back()->SetStart(Time().Add(-1)),OverlappingIdentification);
+	EXPECT_EQ(d_ant->Identifications().back()->Start(),Time());
+	EXPECT_NO_THROW(d_ant->Identifications().back()->SetStart(Time().Add(1)));
+	EXPECT_EQ(d_ant->Identifications().back()->Start(),Time().Add(1));
+}
+
 
 } // namespace priv
 } // namespace myrmidon
