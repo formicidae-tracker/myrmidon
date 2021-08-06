@@ -252,7 +252,7 @@ add_executable(fort-studio-tests ${SRC_UTEST_FILES}
 set_target_properties(fort-studio-tests PROPERTIES AUTOUIC_SEARCH_PATHS ${PROJECT_SOURCE_DIR}/src/fort/studio/widget)
 
 target_link_libraries(fort-studio-tests fort-studio-common
-                                        myrmidon-utest-common
+                                        fort-myrmidon-utest-common
                                         Qt5::Test
                                         gtest
                                         gmock

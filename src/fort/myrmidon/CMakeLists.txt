@@ -252,6 +252,9 @@ set(HDR_UTEST_FILES utils/NotYetImplementedUTest.hpp
                     priv/LocatableTypesUTest.hpp
                     )
 
+set(FAKEDATA_SRC_FILES fakedata/Fakedata.hpp)
+set(FAKEDATA_HDR_FILES fakedata/Fakedata.cpp)
+
 add_library(fort-myrmidon SHARED ${SRC_FILES}
                                  ${SRC_PRIVATE_FILES}
                                  ${HDR_PRIVATE_FILES}
@@ -277,17 +280,21 @@ set_target_properties(fort-myrmidon PROPERTIES
 install(TARGETS fort-myrmidon DESTINATION lib)
 install(FILES ${HDR_PUBLIC_FILES} DESTINATION include/fort/myrmidon)
 
-add_library(myrmidon-utest-common STATIC ${COMMON_UTEST_SRC_FILES}
-                                         ${COMMON_UTEST_HDR_FILES}
-                                         ${PROTO_HDR}
-                                         )
-target_link_libraries(myrmidon-utest-common gtest gmock fort-myrmidon)
+add_library(fort-myrmidon-fakedata STATIC ${FAKEDATA_SRC_FILES}
+	                                      ${FAKEDATA_HDR_FILES})
+
+target_link_libraries(fort-myrmidon-fakedata fort-myrmidon)
+
+add_library(fort-myrmidon-utest-common STATIC ${COMMON_UTEST_SRC_FILES}
+                                              ${COMMON_UTEST_HDR_FILES}
+                                              )
+target_link_libraries(fort-myrmidon-utest-common gtest gmock fort-myrmidon-fakedata)
 
 add_executable(myrmidon-tests ${SRC_UTEST_FILES}
                               ${HDR_UTEST_FILES}
                               )
 target_link_libraries(myrmidon-tests fort-myrmidon
-                                     myrmidon-utest-common
+                                     fort-myrmidon-utest-common
                                      gtest)
 
 add_test(NAME myrmidon-tests COMMAND myrmidon-tests)
