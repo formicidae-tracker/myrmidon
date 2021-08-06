@@ -209,6 +209,7 @@ set(SRC_UTEST_FILES main-check.cpp
                     priv/TagStatisticsUTest.cpp
                     priv/MatchersUTest.cpp
                     priv/QueryUTest.cpp
+                    priv/LocatableTypesUTest.cpp
                     )
 
 
@@ -248,6 +249,7 @@ set(HDR_UTEST_FILES utils/NotYetImplementedUTest.hpp
                     priv/TagStatisticsUTest.hpp
                     priv/MatchersUTest.hpp
                     priv/QueryUTest.hpp
+                    priv/LocatableTypesUTest.hpp
                     )
 
 add_library(fort-myrmidon SHARED ${SRC_FILES}
