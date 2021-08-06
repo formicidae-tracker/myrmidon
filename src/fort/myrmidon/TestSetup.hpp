@@ -45,7 +45,6 @@ private:
 	static void CreateMyrmidonFile(const std::string & name, const semver::version & version );
 
 
-
 	static fs::path                                                          s_testdir;
 	static std::map<fs::path,std::pair<fort::Time,fort::Time> >              s_times;
 	static std::map<fs::path,std::map<fs::path,std::shared_ptr<uint32_t> > > s_closeUpFiles;

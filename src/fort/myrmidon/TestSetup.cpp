@@ -32,6 +32,8 @@
 
 #include <fort/myrmidon/priv/proto/IOUtils.hpp>
 
+#include <fort/myrmidon/fakedata/Fakedata.hpp>
+
 #ifndef O_BINARY
 #define O_BINARY 0
 #endif
@@ -505,6 +507,8 @@ void TestSetup::OnTestProgramEnd(const ::testing::UnitTest& unit_test) {
 	if (Basedir().empty()) {
 		return;
 	}
+	Fakedata(Basedir()/"new");
+
 	std::cerr << "removing testdata in " << Basedir() << std::endl;
 	fs::remove_all(Basedir());
 	s_testdir = "";
