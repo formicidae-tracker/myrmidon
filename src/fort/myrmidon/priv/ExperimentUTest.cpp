@@ -735,6 +735,33 @@ TEST_F(ExperimentUTest,CannotChangeDirectory) {
 		},std::invalid_argument);
 }
 
+TEST_F(ExperimentUTest,FortTagFamilyName) {
+	struct TestData{
+		fort::tags::Family Family;
+		std::string        Name;
+	};
+	std::vector<TestData> testdata =
+		{
+		 {fort::tags::Family::Tag36h11, "Tag36h11"},
+		 {fort::tags::Family::Tag36h10, "Tag36h10"},
+		 {fort::tags::Family::Tag36ARTag, "Tag36ARTag"},
+		 {fort::tags::Family::Tag16h5, "Tag16h5"},
+		 {fort::tags::Family::Tag25h9, "Tag25h9"},
+		 {fort::tags::Family::Circle21h7, "Circle21h7"},
+		 {fort::tags::Family::Circle49h12, "Circle49h12"},
+		 {fort::tags::Family::Custom48h12, "Custom48h12"},
+		 {fort::tags::Family::Standard41h12, "Standard41h12"},
+		 {fort::tags::Family::Standard52h13, "Standard52h13"},
+		 {fort::tags::Family::Undefined, "<unknown>"},
+		 {fort::tags::Family(1001), "<unknown>"},
+		};
+	for ( const auto & d : testdata ) {
+		std::ostringstream oss;
+		oss << d.Family;
+		EXPECT_EQ(oss.str(),d.Name);
+	}
+}
+
 } //namespace priv
 } //namespace myrmidon
 } //namespace fort
