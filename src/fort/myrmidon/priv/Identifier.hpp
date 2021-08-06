@@ -129,6 +129,7 @@ public:
 
 	public:
 		friend class Identification;
+		friend class IdentifierUTest_CanIdentifyAntByTag_Test;
 	};
 
 	// Performs invarinat checks for two tags sharing the same ant or the same TagID

@@ -157,6 +157,20 @@ TEST_F(IdentifierUTest,CanIdentifyAntByTag) {
 	EXPECT_TRUE(TimeEqual(freeStart,end));
 	EXPECT_TRUE(TimeEqual(freeEnd,secondStart));
 
+	EXPECT_THROW(Identifier::Accessor::IdentificationsForTag(*i,1),Identifier::UnmanagedTag);
+	i->SetAntPositionUpdateCallback([](const Identification::Ptr & , const std::vector<AntPoseEstimateConstPtr> &){
+	                                });
+	EXPECT_NO_THROW(Identifier::Accessor::UpdateIdentificationAntPosition(*i,ident));
+
+	auto idents = i->IdentificationsAt(end,true);
+	EXPECT_EQ(idents.size(),0);
+	idents = i->IdentificationsAt(end,false);
+	EXPECT_EQ(idents.size(),1);
+	EXPECT_EQ(idents[1],std::numeric_limits<TagID>::max());
+	idents = i->IdentificationsAt(start,false);
+	EXPECT_EQ(idents.size(),1);
+	EXPECT_EQ(idents[1],123);
+
 }
 
 
