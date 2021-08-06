@@ -2,6 +2,10 @@
 
 #include "FrameReference.hpp"
 
+namespace fort {
+namespace myrmidon {
+namespace priv {
+
 TEST_F(FrameReferenceUTest,CanBeFormatted) {
 
 	struct TestData {
@@ -40,3 +44,28 @@ TEST_F(FrameReferenceUTest,CanBeFormatted) {
 	}
 
 }
+
+
+TEST_F(FrameReferenceUTest,HaveWeakOrdering){
+	struct TestData {
+		FrameReference A,B;
+		bool           Expected;
+	};
+
+	std::vector<TestData> testdata =
+		{
+		 {FrameReference("foo",1,Time()),FrameReference("foo",1,Time()),false},
+		 {FrameReference("foo",1,Time()),FrameReference("foo",2,Time()),true},
+		 {FrameReference("foo",2,Time()),FrameReference("foo",1,Time()),false},
+		 {FrameReference("foo",1,Time()),FrameReference("bar",2,Time()),false},
+		};
+
+	for ( const auto & d : testdata ) {
+		EXPECT_EQ(d.A < d.B, d.Expected);
+	}
+}
+
+
+} // namespace priv
+} // namespace myrmidon
+} // namespace fort

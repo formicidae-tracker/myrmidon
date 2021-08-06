@@ -2,5 +2,14 @@
 
 #include <gtest/gtest.h>
 
+namespace fort {
+namespace myrmidon {
+namespace priv {
+
 class FrameReferenceUTest : public ::testing::Test {
 };
+
+
+} // namespace priv
+} // namespace myrmidon
+} // namespace fort
