@@ -106,7 +106,15 @@ TEST_F(MatchersUTest,IDMatcher) {
 			idMatcher->SetUp({},{});
 		});
 
+	//Matches as expected for trajectories
 	EXPECT_TRUE(idMatcher->Match(42,0,{}));
+	// Matches as expected for interactions
+	EXPECT_TRUE(idMatcher->Match(42,43,{}));
+	// Matches when other in interaction matches
+	EXPECT_TRUE(idMatcher->Match(41,42,{}));
+
+	// does not match as expected
+	EXPECT_FALSE(idMatcher->Match(41,43,{}));
 	EXPECT_FALSE(idMatcher->Match(0,0,{}));
 }
 
