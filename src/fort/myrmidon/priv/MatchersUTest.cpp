@@ -128,6 +128,10 @@ TEST_F(MatchersUTest,ColumnMatcher) {
 	auto a = experiment->CreateAnt();
 	a->SetValue("bar",42,Time::SinceEver());
 	a->SetValue("bar",43,Time());
+	auto b = experiment->CreateAnt();
+	b->SetValue("bar",42,Time::SinceEver());
+
+
 
 	auto identifiedFrame = std::make_shared<IdentifiedFrame>();
 	identifiedFrame->FrameTime = Time().Add(-1);
@@ -146,6 +150,8 @@ TEST_F(MatchersUTest,ColumnMatcher) {
 
 	EXPECT_FALSE(columnMatcher->Match(0,0,{}));
 	EXPECT_TRUE(columnMatcher->Match(a->AntID(),0,{}));
+	// it should also match with another ant in interaction.
+	EXPECT_TRUE(columnMatcher->Match(a->AntID(),b->AntID(),{}));
 	ASSERT_NO_THROW({
 			columnMatcher->SetUp({},collisionFrame);
 		});
@@ -234,6 +240,48 @@ TEST_F(MatchersUTest,AngleMatcher) {
 
 }
 
+InteractionTypes BuildTypes(const std::vector<uint32_t> & types) {
+	if ( (types.size() % 2) != 0 ) {
+		throw std::invalid_argument("even number of types");
+	}
+	InteractionTypes res(types.size()/2,2);
+	for (size_t i = 0; i < types.size()/2 ; ++i) {
+		res(i,0) = types[2*i];
+		res(i,1) = types[2*i+1];
+	}
+	return res;
+}
+
+TEST_F(MatchersUTest,InteractionsTypesMatcher) {
+	auto oneOne = priv::Matcher::InteractionType(1,1);
+	auto oneTwo = priv::Matcher::InteractionType(1,2);
+	auto twoThree = priv::Matcher::InteractionType(3,2);
+
+	EXPECT_NO_THROW({
+			oneOne->SetUpOnce({});
+			oneTwo->SetUpOnce({});
+			oneOne->SetUp({},{});
+			oneTwo->SetUp({},{});
+		});
+	// always matches single ant
+	EXPECT_TRUE(oneOne->Match(1,0,{}));
+	EXPECT_TRUE(oneTwo->Match(42,0,{}));
+
+
+	EXPECT_TRUE(oneOne->Match(1,2,BuildTypes({1,1,1,2})));
+	EXPECT_FALSE(oneOne->Match(1,2,BuildTypes({2,1,1,2})));
+
+
+	EXPECT_TRUE(oneTwo->Match(1,2,BuildTypes({1,1,1,2})));
+	EXPECT_TRUE(oneTwo->Match(1,2,BuildTypes({1,1,2,1})));
+	EXPECT_FALSE(oneTwo->Match(1,2,BuildTypes({1,1,2,2})));
+
+
+	EXPECT_TRUE(twoThree->Match(1,2,BuildTypes({1,1,2,3})));
+	EXPECT_TRUE(twoThree->Match(1,2,BuildTypes({1,1,3,2})));
+	EXPECT_FALSE(twoThree->Match(1,2,BuildTypes({1,1,2,2,3,3})));
+
+}
 
 TEST_F(MatchersUTest,Formatting) {
 	struct TestData {
@@ -278,6 +326,15 @@ TEST_F(MatchersUTest,Formatting) {
 		                  StaticMatcher::Create(true),
 		                  StaticMatcher::Create(false)}),
 		    "( false || true || false )",
+		   },
+		   {
+		    Matcher::InteractionType(4,2),
+		    "InteractionType (2 - 4)",
+		   },
+
+		   {
+		    Matcher::InteractionType(5,5),
+		    "InteractionType (5 - 5)",
 		   },
 
 	};
