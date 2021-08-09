@@ -265,7 +265,7 @@ struct IdentifiedFrame {
 	// A pointer to an IdentifiedFrame
 	typedef std::shared_ptr<IdentifiedFrame>       Ptr;
 
-	// A Matrix of posi
+	// A Matrix of position
 	typedef Eigen::Matrix<double,Eigen::Dynamic,5,Eigen::RowMajor> PositionMatrix;
 
 	// The <Time> at which this frame was taken.

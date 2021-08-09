@@ -8,6 +8,8 @@
 namespace fort {
 namespace myrmidon {
 
+struct Generator;
+
 class Fakedata {
 public:
 	static fs::path GenerateTempDir();
@@ -28,9 +30,9 @@ public:
 	};
 
 	struct ExpectedResult {
-		Time     Start,End;
-		Duration MaximumGap;
-		Matcher  Matches;
+		Time          Start,End;
+		Duration      MaximumGap;
+		Matcher::Ptr  Matches;
 		std::vector<AntTrajectory::Ptr> Trajectories;
 		std::vector<AntInteraction::Ptr> Interactions;
 	};
@@ -61,11 +63,21 @@ private:
 	void BuildFakeData(const fs::path & basedir);
 	void CleanUpFilesystem();
 
-	void GenerateFakedata();
-	void WriteFakedata();
+	void GenerateFakedata(const Generator &);
+
+
+	void SaveFullExpectedResult(const Generator &);
+	void GenerateTruncatedResults();
+
+
+	void WriteFakedata(const Generator &);
 
 
 	fs::path d_basedir;
+
+
+	std::vector<ExpectedResult> d_results;
+	std::vector<std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr>> d_frames;
 };
 
 } // namespace myrmidon

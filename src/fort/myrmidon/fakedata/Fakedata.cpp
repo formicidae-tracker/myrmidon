@@ -21,13 +21,6 @@ Fakedata::~Fakedata() {
 }
 
 
-void Fakedata::BuildFakeData(const fs::path & basedir) {
-	auto start = Time::Now();
-	GenerateFakedata();
-	d_basedir = basedir;
-	WriteFakedata();
-	std::cerr << "Generated data in " << Time::Now().Sub(start) << std::endl;
-}
 
 void Fakedata::CleanUpFilesystem() {
 	if (d_basedir.empty()) {
@@ -75,8 +68,6 @@ struct Generator {
 	Duration  Framerate;
 	float     Jitter;
 
-
-
 	std::map<AntID,AntData> Ants;
 
 	std::vector<Time> NestTicks,ForageTicks;
@@ -84,6 +75,8 @@ struct Generator {
 
 	std::vector<AntTrajectory::Ptr> Trajectories;
 	std::vector<AntInteraction::Ptr> Interactions;
+
+	std::vector<std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr>> Frames;
 
 	Generator() {
 		Start = Time::Parse("2019-11-02T22:03:21.002+01:00");
@@ -175,6 +168,7 @@ struct Generator {
 		BuildFrameTicks();
 		BuildTrajectories();
 		BuildInteractions();
+		BuildFrames();
 	}
 
 	std::vector<Time> DrawFrameTicks() const {
@@ -182,12 +176,16 @@ struct Generator {
 		std::mt19937 gen{rd()};
 
 		std::normal_distribution<> d{0.0,Framerate.Microseconds()*Jitter};
-
+		std::uniform_real_distribution<float> u(0,1);
 		std::vector<Time> res;
+		res.push_back(Start);
 		for ( Time current = Start; current.Before(End); ) {
-			res.push_back(current);
 			auto increment = Framerate + std::clamp(int64_t(d(gen)),-15000L,15000L)*Duration::Microsecond;
 			current = current.Add(increment);
+			if ( u(gen) < 0.05 ) { // 5% uniform framedrop
+				continue;
+			}
+			res.push_back(current);
 		}
 		return res;
 	}
@@ -384,14 +382,111 @@ struct Generator {
 		return std::make_tuple(std::move(res),resStart,resEnd);
 	}
 
+
+
+	void BuildFrames() {
+		struct TrajectoryIterator {
+			size_t             Index;
+			AntTrajectory::Ptr Trajectory;
+			TrajectoryIterator(const AntTrajectory::Ptr & t)
+				: Index(0)
+				, Trajectory(t) {
+			}
+			bool Done() const {
+				return !Trajectory || Trajectory->Positions.rows() >= Index;
+			}
+			void Increment() {
+				if (Done()) { return; }
+				++Index;
+			}
+
+			fort::Time Time() const {
+				if ( Done() ) {
+					return Time::Forever();
+				}
+				return Trajectory->Start.Add(Trajectory->Positions(Index,0) * Duration::Second.Nanoseconds());
+			}
+
+		};
+
+		std::map<AntID,TrajectoryIterator> trajectories;
+
+		Frames.clear();
+		Frames.reserve(Ticks.size());
+		for ( const auto & t : Trajectories ) {
+			trajectories.insert({t->Ant,TrajectoryIterator(t)});
+		}
+
+
+		for ( const auto & [spaceID,time] : Ticks ) {
+			auto identified = std::make_shared<IdentifiedFrame>();
+			auto collision = std::make_shared<CollisionFrame>();
+			identified->FrameTime = time;
+			identified->Space = spaceID;
+			identified->Height = 1000;
+			identified->Width = 1000;
+			identified->Positions = IdentifiedFrame::PositionMatrix(3,5);
+			size_t i = 0;
+			for ( auto & [antID,current] : trajectories ) {
+				if ( current.Done() == true ) {
+					auto fi = std::find_if(Trajectories.begin(),
+					                       Trajectories.end(),
+					                       [&](const AntTrajectory::Ptr & t ) {
+						                       return t->Ant == current.Trajectory->Ant
+							                       && t->Start > current.Trajectory->End();
+					                       });
+					if ( fi != Trajectories.end() ) {
+						current = TrajectoryIterator(*fi);
+					}
+				}
+				while ( current.Time() < time ) {
+					current.Increment();
+				}
+				if ( current.Done() || current.Time() > time || spaceID != current.Trajectory->Space ) {
+					continue;
+				}
+				identified->Positions(i,0) = antID;
+				identified->Positions.block<1,4>(i,1) = current.Trajectory->Positions.block<1,4>(current.Index,1);
+				current.Increment();
+				++i;
+			}
+			identified->Positions.conservativeResize(i,5);
+			Frames.push_back({identified,collision});
+		}
+	}
+
 };
 
-void Fakedata::GenerateFakedata() {
+void Fakedata::BuildFakeData(const fs::path & basedir) {
+	auto start = Time::Now();
 	Generator gen;
-
+	GenerateFakedata(gen);
+	d_basedir = basedir;
+	WriteFakedata(gen);
+	std::cerr << "Generated data in " << Time::Now().Sub(start) << std::endl;
 }
 
-void Fakedata::WriteFakedata() {
+
+void Fakedata::GenerateFakedata(const Generator & gen) {
+	SaveFullExpectedResult(gen);
+	GenerateTruncatedResults();
+}
+
+void Fakedata::SaveFullExpectedResult(const Generator & gen) {
+	ExpectedResult full;
+	full.Start = Time::SinceEver();
+	full.End = Time::Forever();
+	full.MaximumGap = Duration::Hour;
+	full.Trajectories = gen.Trajectories;
+	full.Interactions = gen.Interactions;
+	d_results.push_back(full);
+}
+
+void Fakedata::GenerateTruncatedResults() {
+}
+
+
+void Fakedata::WriteFakedata(const Generator & gen) {
 }
 
 } // namespace myrmidon
