@@ -160,13 +160,10 @@ void DataSegmenter::operator()(const myrmidon::Query::CollisionData & data) {
 	if ( hasCollision ) {
 		BuildInteractions(std::get<1>(data));
 	}
-
-
 }
 
-void
-DataSegmenter::BuildTrajectories(const IdentifiedFrame::Ptr & identified,
-								 bool conserveAllTrajectory) {
+void DataSegmenter::BuildTrajectories(const IdentifiedFrame::Ptr & identified,
+                                      bool conserveAllTrajectory) {
 	for ( size_t i = 0; i < identified->Positions.rows(); ++i ) {
 		AntID antID = identified->Positions(i,0);
 		if ( conserveAllTrajectory == false

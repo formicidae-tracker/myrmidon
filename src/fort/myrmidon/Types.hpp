@@ -424,6 +424,7 @@ struct AntTrajectorySegment {
 	 * Optionally report the mean trajectory.
 	 */
 	std::unique_ptr<Eigen::Vector3d> Mean;
+
 };
 
 
