@@ -33,10 +33,58 @@ GeneratedData::GeneratedData(const Config & config) {
 	GenerateFrames(config);
 }
 
+void CheckFrameDrop(const std::vector<Time> & ticks,
+                    Duration framerate) {
+	framerate = 1.5 * framerate.Nanoseconds();
+	Time last = ticks.front();
+	auto fi = std::find_if(ticks.begin(),
+	                       ticks.end(),
+	                       [&] ( const Time & t ) {
+		                       if ( t.Sub(last) > framerate ) {
+			                       return true;
+		                       }
+		                       last = t;
+		                       return false;
+	                       });
+	if ( fi == ticks.end() ) {
+		throw std::runtime_error("No framedrop found");
+	}
+}
+
+Duration RoundDuration(Duration v, Duration r) {
+	return (v.Nanoseconds()/r.Nanoseconds()) * r;
+}
+
+void DrawHistogram(const std::vector<Time> & time ) {
+	std::map<Duration,int> hist;
+	Duration round = 125 * Duration::Millisecond;
+	for ( auto it = time.begin() + 1; it != time.end(); ++it ) {
+		auto d = RoundDuration(it->Sub(*(it-1)),round);
+		++hist[d];
+	}
+	std::cerr << "histogram of ticks" << std::endl;
+	for(const auto & [b,c] : hist) {
+		std::cerr << "+ "<< b
+		          << " - " << (b + round)
+		          << ": "
+		          << std::string(c/20,'*')
+		          << "(" << c << ") "
+		          << std::endl;
+	}
+	std::cerr << std::endl;
+}
+
 
 void GeneratedData::GenerateFrameTicks(const Config & config) {
 	NestTicks = DrawFrameTicks(config);
 	ForageTicks = DrawFrameTicks(config);
+
+#ifndef NDEBUG
+	DrawHistogram(NestTicks);
+	DrawHistogram(ForageTicks);
+#endif
+	CheckFrameDrop(NestTicks, config.Framerate);
+	CheckFrameDrop(ForageTicks, config.Framerate);
 
 	Ticks.clear();
 	Ticks.reserve(NestTicks.size()+ForageTicks.size());
@@ -254,6 +302,7 @@ void GeneratedData::GenerateFrames(const Config & config) {
 
 		};
 
+
 		std::map<AntID,TrajectoryIterator> trajectories;
 
 		Frames.clear();
@@ -271,6 +320,8 @@ void GeneratedData::GenerateFrames(const Config & config) {
 			identified->Height = 1000;
 			identified->Width = 1000;
 			identified->Positions = IdentifiedFrame::PositionMatrix(3,5);
+
+
 			size_t i = 0;
 			for ( auto & [antID,current] : trajectories ) {
 				if ( current.Done() == true ) {
@@ -296,9 +347,27 @@ void GeneratedData::GenerateFrames(const Config & config) {
 				++i;
 			}
 			identified->Positions.conservativeResize(i,5);
+
+			collision->FrameTime = time;
+			collision->Space = spaceID;
+
+
+			for ( const auto & i : Interactions ) {
+				if ( i->Space != spaceID
+				     || i->Start > time
+				     || i->End < time ) {
+					continue;
+				}
+				Collision c;
+				c.IDs = i->IDs;
+				c.Types = i->Types;
+				c.Zone = 0;
+				collision->Collisions.push_back(c);
+			}
 			Frames.push_back({identified,collision});
 		}
-	}
+
+}
 
 
 } // namespace myrmidon
