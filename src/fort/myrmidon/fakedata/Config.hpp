@@ -28,6 +28,12 @@ struct AntData {
 	std::vector<Keypoint>        Keypoints;
 	std::vector<InteractionData> Interactions;
 
+	Eigen::Vector3d              AntPose;
+
+	void ComputeTagPosition(double & xTag,
+	                        double & yTag,
+	                        double & tagAngle,
+	                        const Eigen::Vector3d & antPosition) const;
 };
 
 

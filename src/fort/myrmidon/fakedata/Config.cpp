@@ -1,6 +1,6 @@
 #include "Config.hpp"
 
-
+#include <fort/myrmidon/priv/Isometry2D.hpp>
 
 namespace fort {
 namespace myrmidon {
@@ -42,10 +42,11 @@ Config::Config() {
 		                                            40.0)},
 		               },
 		     .Keypoints = {
-		                   {1,50,50,0.0,Start},
-		                   {1,49,51,0.0,End},
+		                   {1,100,100,0.0,Start},
+		                   {1,99,101,0.0,End},
 		                   },
 		     .Interactions = {},
+		     .AntPose = Eigen::Vector3d(0,0,0),
 			 }},
 		 {2,{ // 2 is kind of a Nurse
 		     .Shape = {
@@ -59,18 +60,18 @@ Config::Config() {
 		                                            15.0)},
 		               },
 		     .Keypoints = {
-		                   {1,950,50,M_PI,Start},
-		                   {1,200,50,M_PI,Start.Add(1*Duration::Minute).Add(-1)},
-		                   {1,50,50,0.0,Start.Add(1*Duration::Minute)},
-		                   {1,50,50,0.0,Start.Add(1*Duration::Minute+10*Duration::Second)},
-		                   {1,50,200,M_PI/2,Start.Add(1*Duration::Minute+10*Duration::Second).Add(1)},
-		                   {1,50,950,M_PI/2,Start.Add(2*Duration::Minute)},
-		                   {1,50,950,-M_PI/2,Start.Add(2*Duration::Minute+1*Duration::Second)},
-		                   {1,50,200,-M_PI/2,Start.Add(3*Duration::Minute).Add(-1)},
-		                   {1,50,50,M_PI,Start.Add(3*Duration::Minute)},
-		                   {1,50,50,M_PI,Start.Add(4*Duration::Minute)},
-		                   {1,200,200,M_PI/4,Start.Add(4*Duration::Minute).Add(1)},
-		                   {1,900,900,M_PI/4,End},
+		                   {1,800,100,M_PI,Start},
+		                   {1,300,100,M_PI,Start.Add(1*Duration::Minute).Add(-1)},
+		                   {1,100,100,0.0,Start.Add(1*Duration::Minute)},
+		                   {1,100,100,0.0,Start.Add(1*Duration::Minute+10*Duration::Second)},
+		                   {1,100,300,M_PI/2,Start.Add(1*Duration::Minute+10*Duration::Second).Add(1)},
+		                   {1,100,800,M_PI/2,Start.Add(2*Duration::Minute)},
+		                   {1,100,800,-M_PI/2,Start.Add(2*Duration::Minute+1*Duration::Second)},
+		                   {1,100,300,-M_PI/2,Start.Add(3*Duration::Minute).Add(-1)},
+		                   {1,100,100,M_PI,Start.Add(3*Duration::Minute)},
+		                   {1,100,100,M_PI,Start.Add(4*Duration::Minute)},
+		                   {1,300,300,M_PI/4,Start.Add(4*Duration::Minute).Add(1)},
+		                   {1,800,800,M_PI/4,End},
 		                   },
 		     .Interactions = {
 		                      InteractionData(1,
@@ -82,6 +83,7 @@ Config::Config() {
 		                                      Start.Add(4*Duration::Minute),
 		                                      {1,2,2,1}),
 		                      },
+		     .AntPose = Eigen::Vector3d(-40,-40,M_PI/4),
 			 }},
 		 {3,{ // 3 is a kind of forager
 		     .Shape = {
@@ -95,21 +97,34 @@ Config::Config() {
 		                                            15.0)},
 		               },
 		     .Keypoints = {
-		                   {1,50,500,0.0,Start},
+		                   {1,100,500,0.0,Start},
 		                   {1,1000,500,0.0,Start.Add(1*Duration::Minute)},
-		                   {2,0,500,0.0,Start.Add(1*Duration::Minute+30*Duration::Second)},
+		                   {2,40,500,0.0,Start.Add(1*Duration::Minute+30*Duration::Second)},
 		                   {2,500,500,0.0,Start.Add(2*Duration::Minute)},
 		                   {2,500,500,M_PI,Start.Add(2*Duration::Minute+1*Duration::Second)},
 		                   {2,0,500,M_PI,Start.Add(3*Duration::Minute)},
-		                   {1,1000,500,M_PI,Start.Add(3*Duration::Minute+30*Duration::Second)},
-		                   {1,1000,500,M_PI/2,Start.Add(3*Duration::Minute+31*Duration::Second)},
-		                   {1,1000,1000,M_PI/2,End},
+		                   {1,960,500,M_PI,Start.Add(3*Duration::Minute+30*Duration::Second)},
+		                   {1,960,500,M_PI/2,Start.Add(3*Duration::Minute+31*Duration::Second)},
+		                   {1,800,800,M_PI/2,End},
 		                   },
 		     .Interactions = {},
+		     .AntPose = Eigen::Vector3d(20,0,M_PI),
 			 }},
 		};
 }
 
+
+void AntData::ComputeTagPosition(double & x,
+                                 double & y,
+                                 double & tagAngle,
+                                 const Eigen::Vector3d & antPosition) const {
+	priv::Isometry2Dd antToOrig(antPosition.z(),antPosition.block<2,1>(0,0));
+	auto tagToAnt = priv::Isometry2Dd(AntPose.z(),AntPose.block<2,1>(0,0)).inverse();
+	auto tagToOrig = antToOrig * tagToAnt;
+	x = tagToOrig.translation().x();
+	y = tagToOrig.translation().y();
+	tagAngle = tagToOrig.angle();
+}
 
 } // namespace myrmidon
 } // namespace fort

@@ -31,6 +31,7 @@ GeneratedData::GeneratedData(const Config & config) {
 	GenerateTrajectories(config);
 	GenerateInteractions(config);
 	GenerateFrames(config);
+	GenerateReadouts(config);
 }
 
 void CheckFrameDrop(const std::vector<Time> & ticks,
@@ -246,129 +247,158 @@ GeneratedData::FindTrajectorySegment(AntID antID,
                                      const Time & start,
                                      const Time & end) {
 	auto fi = std::find_if(Trajectories.begin(),
-		                       Trajectories.end(),
-		                       [&](const AntTrajectory::Ptr & t) {
-			                       return t->Ant == antID
-				                       && t->Start <= start
-				                       && t->End() >= end;
-		                       });
-		if ( fi == Trajectories.end() ) {
-			throw std::runtime_error("could not find any suitable trajectory");
-		}
-		AntTrajectorySegment res;
-		res.Trajectory = *fi;
-		Duration offsetStart,offsetEnd;
-		for(res.Begin = 0 ;res.Begin < res.Trajectory->Positions.rows();++res.Begin) {
-			offsetStart = res.Trajectory->Positions(res.Begin,0) * Duration::Second.Nanoseconds();
-			if ( res.Trajectory->Start.Add(offsetStart) >= start ) {
-				break;
-			}
-		}
-		for ( res.End = res.Begin; res.End < res.Trajectory->Positions.rows(); ++res.End) {
-			offsetEnd = res.Trajectory->Positions(res.End,0) * Duration::Second.Nanoseconds();
-			if ( res.Trajectory->Start.Add(offsetEnd) > end ) {
-				break;
-			}
-		}
-		Time resStart = res.Trajectory->Start.Add(offsetStart);
-		Time resEnd = res.Trajectory->Start.Add(res.Trajectory->Positions(res.End-1,0) * Duration::Second.Nanoseconds());
-		return std::make_tuple(std::move(res),resStart,resEnd);
+	                       Trajectories.end(),
+	                       [&](const AntTrajectory::Ptr & t) {
+		                       return t->Ant == antID
+			                       && t->Start <= start
+			                       && t->End() >= end;
+	                       });
+	if ( fi == Trajectories.end() ) {
+		throw std::runtime_error("could not find any suitable trajectory");
 	}
+	AntTrajectorySegment res;
+	res.Trajectory = *fi;
+	Duration offsetStart,offsetEnd;
+	for(res.Begin = 0 ;res.Begin < res.Trajectory->Positions.rows();++res.Begin) {
+		offsetStart = res.Trajectory->Positions(res.Begin,0) * Duration::Second.Nanoseconds();
+		if ( res.Trajectory->Start.Add(offsetStart) >= start ) {
+			break;
+		}
+	}
+	for ( res.End = res.Begin; res.End < res.Trajectory->Positions.rows(); ++res.End) {
+		offsetEnd = res.Trajectory->Positions(res.End,0) * Duration::Second.Nanoseconds();
+		if ( res.Trajectory->Start.Add(offsetEnd) > end ) {
+			break;
+		}
+	}
+	Time resStart = res.Trajectory->Start.Add(offsetStart);
+	Time resEnd = res.Trajectory->Start.Add(res.Trajectory->Positions(res.End-1,0) * Duration::Second.Nanoseconds());
+	return std::make_tuple(std::move(res),resStart,resEnd);
+}
 
 
 
 void GeneratedData::GenerateFrames(const Config & config) {
-		struct TrajectoryIterator {
-			size_t             Index;
-			AntTrajectory::Ptr Trajectory;
-			TrajectoryIterator(const AntTrajectory::Ptr & t)
-				: Index(0)
-				, Trajectory(t) {
-			}
-			bool Done() const {
-				return !Trajectory || Trajectory->Positions.rows() >= Index;
-			}
-			void Increment() {
-				if (Done()) { return; }
-				++Index;
-			}
-
-			fort::Time Time() const {
-				if ( Done() ) {
-					return Time::Forever();
-				}
-				return Trajectory->Start.Add(Trajectory->Positions(Index,0) * Duration::Second.Nanoseconds());
-			}
-
-		};
-
-
-		std::map<AntID,TrajectoryIterator> trajectories;
-
-		Frames.clear();
-		Frames.reserve(Ticks.size());
-		for ( const auto & t : Trajectories ) {
-			trajectories.insert({t->Ant,TrajectoryIterator(t)});
+	struct TrajectoryIterator {
+		size_t             Index;
+		AntTrajectory::Ptr Trajectory;
+		TrajectoryIterator(const AntTrajectory::Ptr & t)
+			: Index(0)
+			, Trajectory(t) {
+		}
+		bool Done() const {
+			return !Trajectory || Trajectory->Positions.rows() >= Index;
+		}
+		void Increment() {
+			if (Done()) { return; }
+			++Index;
 		}
 
+		fort::Time Time() const {
+			if ( Done() ) {
+				return Time::Forever();
+			}
+			return Trajectory->Start.Add(Trajectory->Positions(Index,0) * Duration::Second.Nanoseconds());
+		}
 
-		for ( const auto & [spaceID,time] : Ticks ) {
-			auto identified = std::make_shared<IdentifiedFrame>();
-			auto collision = std::make_shared<CollisionFrame>();
-			identified->FrameTime = time;
-			identified->Space = spaceID;
-			identified->Height = 1000;
-			identified->Width = 1000;
-			identified->Positions = IdentifiedFrame::PositionMatrix(3,5);
+	};
 
 
-			size_t i = 0;
-			for ( auto & [antID,current] : trajectories ) {
-				if ( current.Done() == true ) {
-					auto fi = std::find_if(Trajectories.begin(),
-					                       Trajectories.end(),
-					                       [&](const AntTrajectory::Ptr & t ) {
-						                       return t->Ant == current.Trajectory->Ant
-							                       && t->Start > current.Trajectory->End();
-					                       });
-					if ( fi != Trajectories.end() ) {
-						current = TrajectoryIterator(*fi);
-					}
+	std::map<AntID,TrajectoryIterator> trajectories;
+
+	Frames.clear();
+	Frames.reserve(Ticks.size());
+	for ( const auto & t : Trajectories ) {
+		trajectories.insert({t->Ant,TrajectoryIterator(t)});
+	}
+
+
+	for ( const auto & [spaceID,time] : Ticks ) {
+		auto identified = std::make_shared<IdentifiedFrame>();
+		auto collision = std::make_shared<CollisionFrame>();
+		identified->FrameTime = time;
+		identified->Space = spaceID;
+		identified->Height = 1000;
+		identified->Width = 1000;
+		identified->Positions = IdentifiedFrame::PositionMatrix(3,5);
+
+
+		size_t i = 0;
+		for ( auto & [antID,current] : trajectories ) {
+			if ( current.Done() == true ) {
+				auto fi = std::find_if(Trajectories.begin(),
+				                       Trajectories.end(),
+				                       [&](const AntTrajectory::Ptr & t ) {
+					                       return t->Ant == current.Trajectory->Ant
+						                       && t->Start > current.Trajectory->End();
+				                       });
+				if ( fi != Trajectories.end() ) {
+					current = TrajectoryIterator(*fi);
 				}
-				while ( current.Time() < time ) {
-					current.Increment();
-				}
-				if ( current.Done() || current.Time() > time || spaceID != current.Trajectory->Space ) {
-					continue;
-				}
-				identified->Positions(i,0) = antID;
-				identified->Positions.block<1,4>(i,1) = current.Trajectory->Positions.block<1,4>(current.Index,1);
+			}
+			while ( current.Time() < time ) {
 				current.Increment();
-				++i;
 			}
-			identified->Positions.conservativeResize(i,5);
-
-			collision->FrameTime = time;
-			collision->Space = spaceID;
-
-
-			for ( const auto & i : Interactions ) {
-				if ( i->Space != spaceID
-				     || i->Start > time
-				     || i->End < time ) {
-					continue;
-				}
-				Collision c;
-				c.IDs = i->IDs;
-				c.Types = i->Types;
-				c.Zone = 0;
-				collision->Collisions.push_back(c);
+			if ( current.Done() || current.Time() > time || spaceID != current.Trajectory->Space ) {
+				continue;
 			}
-			Frames.push_back({identified,collision});
+			identified->Positions(i,0) = antID;
+			identified->Positions.block<1,4>(i,1) = current.Trajectory->Positions.block<1,4>(current.Index,1);
+			current.Increment();
+			++i;
 		}
+		identified->Positions.conservativeResize(i,5);
 
+		collision->FrameTime = time;
+		collision->Space = spaceID;
+
+
+		for ( const auto & i : Interactions ) {
+			if ( i->Space != spaceID
+			     || i->Start > time
+			     || i->End < time ) {
+				continue;
+			}
+			Collision c;
+			c.IDs = i->IDs;
+			c.Types = i->Types;
+			c.Zone = 0;
+			collision->Collisions.push_back(c);
+		}
+		Frames.push_back({identified,collision});
+	}
 }
 
+void GeneratedData::GenerateReadouts(const Config &config) {
+	std::vector<hermes::FrameReadout> & dest = NestReadouts;
+	for ( const auto & [identified,collision] : Frames ) {
+		if ( identified->Space == 2 ) {
+			dest = ForageReadouts;
+		} else {
+			dest = NestReadouts;
+		}
+
+		hermes::FrameReadout ro;
+		ro.set_timestamp(identified->FrameTime.Sub(config.Start).Microseconds());
+		identified->FrameTime.ToTimestamp(ro.mutable_time());
+		ro.set_frameid(dest.size()+1);
+		ro.set_quads(identified->Positions.rows());
+		for ( size_t i = 0; i < identified->Positions.rows(); ++i ) {
+			AntID antID = identified->Positions(i,0);
+			auto t = ro.add_tags();
+			double x,y,angle;
+
+			config.Ants.at(antID).ComputeTagPosition(x,y,angle,identified->Positions.block<1,3>(i,1).transpose());
+			t->set_x(x);
+			t->set_y(y);
+			t->set_theta(angle);
+			t->set_id(antID-1);
+		}
+
+		dest.push_back(ro);
+	}
+
+}
 
 } // namespace myrmidon
 } // namespace fort
