@@ -507,7 +507,8 @@ void TestSetup::OnTestProgramEnd(const ::testing::UnitTest& unit_test) {
 	if (Basedir().empty()) {
 		return;
 	}
-	Fakedata(Basedir()/"new");
+	fs::remove_all("/tmp/test/foo");
+	Fakedata("/tmp/test/foo");
 
 	std::cerr << "removing testdata in " << Basedir() << std::endl;
 	fs::remove_all(Basedir());

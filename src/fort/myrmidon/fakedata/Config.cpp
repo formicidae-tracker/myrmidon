@@ -26,8 +26,10 @@ Config::Config() {
 	Start = Time::Parse("2019-11-02T22:03:21.002+01:00");
 	End = Start.Add(5 * Duration::Minute);
 	Framerate = 250 * Duration::Millisecond;
+	Segment = Duration::Minute;
 	Jitter = 0.1;
-
+	Width = 1000;
+	Height = 1000;
 	Ants =
 		{
 		 {1,{ // 1 is a static Queen
@@ -105,7 +107,7 @@ Config::Config() {
 		                   {2,0,500,M_PI,Start.Add(3*Duration::Minute)},
 		                   {1,960,500,M_PI,Start.Add(3*Duration::Minute+30*Duration::Second)},
 		                   {1,960,500,M_PI/2,Start.Add(3*Duration::Minute+31*Duration::Second)},
-		                   {1,800,800,M_PI/2,End},
+		                   {1,960,800,M_PI/2,End},
 		                   },
 		     .Interactions = {},
 		     .AntPose = Eigen::Vector3d(20,0,M_PI),

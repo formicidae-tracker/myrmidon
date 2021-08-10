@@ -8,6 +8,9 @@
 #include "Config.hpp"
 
 namespace fort {
+namespace hermes {
+class FrameReadout;
+}
 namespace myrmidon {
 
 struct GeneratedData;
@@ -24,6 +27,7 @@ public:
 		bool        HasFullFrame;
 		bool        HasMovie;
 		bool        HasConfig;
+		Time        Start,End;
 	};
 
 	struct ExperimentInfo {
@@ -60,7 +64,7 @@ public:
 
 	const std::vector<ExpectedResult> & QueryResult() const;
 private:
-
+	typedef std::vector<std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr>> FrameList;
 
 	void BuildFakeData(const fs::path & basedir);
 	void CleanUpFilesystem();
@@ -70,16 +74,37 @@ private:
 
 	void SaveFullExpectedResult(const GeneratedData & gen);
 	void GenerateTruncatedResults();
-
+	void GenerateTDDStructure();
 
 	void WriteFakedata();
+	void WriteTDDs();
+	void WriteTDD(const TDDInfo & info,SpaceID spaceID);
+	void WriteHermesFiles(const TDDInfo & info,
+	                      SpaceID spaceID);
+
+	void ForeachSegment(const TDDInfo & tddInfo,
+	                    std::function<void(size_t,FrameList::const_iterator,FrameList::const_iterator,bool)> apply);
+
+	void WriteHermesFile(size_t index,
+	                     const std::string & basepath,
+	                     SpaceID spaceID,
+	                     uint64_t & frameID,
+	                     FrameList::const_iterator begin,
+	                     FrameList::const_iterator end,
+	                     bool last);
+
+	void FillReadout(hermes::FrameReadout * ro,
+	                 uint64_t frameID,
+	                 const IdentifiedFrame::Ptr & identified);
 
 
 	fs::path d_basedir;
 	Config   d_config;
 
+	std::vector<TDDInfo> d_nestTDDs,d_forageTDDs;
+
 	std::vector<ExpectedResult> d_results;
-	std::vector<std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr>> d_frames;
+	FrameList                   d_frames;
 };
 
 } // namespace myrmidon

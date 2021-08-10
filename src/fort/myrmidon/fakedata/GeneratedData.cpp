@@ -13,11 +13,10 @@ std::vector<Time> GeneratedData::DrawFrameTicks(const Config & config) {
 	std::normal_distribution<> d{0.0,config.Framerate.Microseconds()*config.Jitter};
 	std::uniform_real_distribution<float> u(0,1);
 	std::vector<Time> res;
-	res.push_back(config.Start);
-	for ( Time current = config.Start; current.Before(config.End); ) {
-		auto increment = config.Framerate + std::clamp(int64_t(d(gen)),-15000L,15000L)*Duration::Microsecond;
-		current = current.Add(increment);
-		if ( u(gen) < 0.05 ) { // 5% uniform framedrop
+	Duration increment;
+	for ( Time current = config.Start; current.Before(config.End); current = current.Add(increment) ) {
+		increment = config.Framerate + std::clamp(int64_t(d(gen)),-15000L,15000L)*Duration::Microsecond;
+		if ( current > config.Start && u(gen) < 0.05 ) { // 5% uniform framedrop
 			continue;
 		}
 		res.push_back(current);
@@ -31,7 +30,6 @@ GeneratedData::GeneratedData(const Config & config) {
 	GenerateTrajectories(config);
 	GenerateInteractions(config);
 	GenerateFrames(config);
-	GenerateReadouts(config);
 }
 
 void CheckFrameDrop(const std::vector<Time> & ticks,
@@ -150,7 +148,8 @@ void GeneratedData::GenerateTrajectoriesFor(AntID antID,
 			Trajectories.push_back(current);
 			current.reset();
 		}
-		if ( spaceID != prevKey->Space ) {
+		if ( spaceID != prevKey->Space
+		     || prevKey->At > t) {
 			continue;
 		}
 
@@ -221,7 +220,10 @@ void GeneratedData::GenerateInteractions(const Config & config) {
 	// 	          << " + b ed "
 	// 	          << b.Trajectory->Start.Add(b.Trajectory->Positions(b.End-1,0) * Duration::Second.Nanoseconds())
 	// 	          << std::endl
-
+	// 	          << " + a range: " << a.Begin << " - " << a.End << std::endl
+	// 	          << " + a Traj size " << a.Trajectory->Positions.rows() << std::endl
+	// 	          << " + b range: " << b.Begin << " - " << b.End << std::endl
+	// 	          << " + b Traj size " << b.Trajectory->Positions.rows() << std::endl
 	// 	          << std::endl;
 	// }
 }
@@ -287,7 +289,7 @@ void GeneratedData::GenerateFrames(const Config & config) {
 			, Trajectory(t) {
 		}
 		bool Done() const {
-			return !Trajectory || Trajectory->Positions.rows() >= Index;
+			return !Trajectory || Index >= Trajectory->Positions.rows();
 		}
 		void Increment() {
 			if (Done()) { return; }
@@ -312,7 +314,6 @@ void GeneratedData::GenerateFrames(const Config & config) {
 		trajectories.insert({t->Ant,TrajectoryIterator(t)});
 	}
 
-
 	for ( const auto & [spaceID,time] : Ticks ) {
 		auto identified = std::make_shared<IdentifiedFrame>();
 		auto collision = std::make_shared<CollisionFrame>();
@@ -336,22 +337,23 @@ void GeneratedData::GenerateFrames(const Config & config) {
 					current = TrajectoryIterator(*fi);
 				}
 			}
-			while ( current.Time() < time ) {
-				current.Increment();
+			if ( spaceID != current.Trajectory->Space ) {
+				continue;
 			}
-			if ( current.Done() || current.Time() > time || spaceID != current.Trajectory->Space ) {
+			if ( current.Done() || current.Time() > time ) {
 				continue;
 			}
 			identified->Positions(i,0) = antID;
 			identified->Positions.block<1,4>(i,1) = current.Trajectory->Positions.block<1,4>(current.Index,1);
 			current.Increment();
 			++i;
+
 		}
+
 		identified->Positions.conservativeResize(i,5);
 
 		collision->FrameTime = time;
 		collision->Space = spaceID;
-
 
 		for ( const auto & i : Interactions ) {
 			if ( i->Space != spaceID
@@ -369,36 +371,6 @@ void GeneratedData::GenerateFrames(const Config & config) {
 	}
 }
 
-void GeneratedData::GenerateReadouts(const Config &config) {
-	std::vector<hermes::FrameReadout> & dest = NestReadouts;
-	for ( const auto & [identified,collision] : Frames ) {
-		if ( identified->Space == 2 ) {
-			dest = ForageReadouts;
-		} else {
-			dest = NestReadouts;
-		}
-
-		hermes::FrameReadout ro;
-		ro.set_timestamp(identified->FrameTime.Sub(config.Start).Microseconds());
-		identified->FrameTime.ToTimestamp(ro.mutable_time());
-		ro.set_frameid(dest.size()+1);
-		ro.set_quads(identified->Positions.rows());
-		for ( size_t i = 0; i < identified->Positions.rows(); ++i ) {
-			AntID antID = identified->Positions(i,0);
-			auto t = ro.add_tags();
-			double x,y,angle;
-
-			config.Ants.at(antID).ComputeTagPosition(x,y,angle,identified->Positions.block<1,3>(i,1).transpose());
-			t->set_x(x);
-			t->set_y(y);
-			t->set_theta(angle);
-			t->set_id(antID-1);
-		}
-
-		dest.push_back(ro);
-	}
-
-}
 
 } // namespace myrmidon
 } // namespace fort

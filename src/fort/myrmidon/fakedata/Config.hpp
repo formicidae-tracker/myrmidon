@@ -39,8 +39,9 @@ struct AntData {
 
 struct Config {
 	Time      Start,End;
-	Duration  Framerate;
+	Duration  Framerate,Segment;
 	float     Jitter;
+	size_t    Width,Height;
 
 	std::map<AntID,AntData> Ants;
 	Config();

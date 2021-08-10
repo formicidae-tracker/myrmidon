@@ -17,8 +17,6 @@ struct GeneratedData {
 
 	std::vector<std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr>> Frames;
 
-	std::vector<hermes::FrameReadout> NestReadouts,ForageReadouts;
-
 	static std::vector<Time> DrawFrameTicks(const Config & config);
 
 	GeneratedData(const Config & config);
@@ -27,7 +25,6 @@ struct GeneratedData {
 	void GenerateTrajectories(const Config & config);
 	void GenerateInteractions(const Config & config);
 	void GenerateFrames(const Config & config);
-	void GenerateReadouts(const Config & config);
 
 
 	void GenerateTrajectoriesFor(AntID antID, const AntData & ant);
