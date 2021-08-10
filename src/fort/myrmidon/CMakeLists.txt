@@ -252,8 +252,14 @@ set(HDR_UTEST_FILES utils/NotYetImplementedUTest.hpp
                     priv/LocatableTypesUTest.hpp
                     )
 
-set(FAKEDATA_SRC_FILES fakedata/Fakedata.hpp)
-set(FAKEDATA_HDR_FILES fakedata/Fakedata.cpp)
+set(FAKEDATA_SRC_FILES fakedata/Fakedata.hpp
+                       fakedata/Config.hpp
+                       fakedata/GeneratedData.hpp
+                       )
+set(FAKEDATA_HDR_FILES fakedata/Fakedata.cpp
+                       fakedata/Config.cpp
+                       fakedata/GeneratedData.cpp
+                       )
 
 add_library(fort-myrmidon SHARED ${SRC_FILES}
                                  ${SRC_PRIVATE_FILES}

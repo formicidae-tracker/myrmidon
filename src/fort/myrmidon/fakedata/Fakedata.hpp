@@ -5,10 +5,12 @@
 #include <fort/myrmidon/utils/FileSystem.hpp>
 #include <semver.hpp>
 
+#include "Config.hpp"
+
 namespace fort {
 namespace myrmidon {
 
-struct Generator;
+struct GeneratedData;
 
 class Fakedata {
 public:
@@ -63,18 +65,18 @@ private:
 	void BuildFakeData(const fs::path & basedir);
 	void CleanUpFilesystem();
 
-	void GenerateFakedata(const Generator &);
+	void GenerateFakedata();
 
 
-	void SaveFullExpectedResult(const Generator &);
+	void SaveFullExpectedResult(const GeneratedData & gen);
 	void GenerateTruncatedResults();
 
 
-	void WriteFakedata(const Generator &);
+	void WriteFakedata();
 
 
 	fs::path d_basedir;
-
+	Config   d_config;
 
 	std::vector<ExpectedResult> d_results;
 	std::vector<std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr>> d_frames;
