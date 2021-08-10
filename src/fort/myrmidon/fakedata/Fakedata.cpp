@@ -1,19 +1,7 @@
 #include "Fakedata.hpp"
 
 #include "GeneratedData.hpp"
-#include <fort/hermes/Header.pb.h>
-
-#include <sys/types.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <sys/stat.h>
-
-#include <google/protobuf/util/delimited_message_util.h>
-#include <google/protobuf/io/gzip_stream.h>
-
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
+#include "HermesFileWriter.hpp"
 
 
 namespace fort {
@@ -130,12 +118,29 @@ void Fakedata::WriteTDDs() {
 
 void Fakedata::WriteTDD(const TDDInfo & tddInfo,SpaceID spaceID) {
 	fs::create_directories(tddInfo.AbsoluteFilePath);
-	WriteHermesFiles(tddInfo,spaceID);
+	if ( tddInfo.HasConfig ) {
+		WriteTDDConfig(tddInfo);
+	}
+	SegmentedDataWriter::List writers
+		= {
+		   HermesWriter(tddInfo),
+		   CloseUpWriter(tddInfo),
+	};
+	if ( tddInfo.HasFullFrame ) {
+		writers.push_back(FullFrameWriter(tddInfo));
+	}
+	if ( tddInfo.HasMovie ) {
+		writers.push_back(MovieWriter(tddInfo));
+	}
+	WriteSegmentedData(tddInfo,spaceID,writers);
+
 }
 
-void Fakedata::ForeachSegment(const TDDInfo & tddInfo,
-                              std::function<void(size_t,FrameList::const_iterator,FrameList::const_iterator,bool)> apply) {
+void Fakedata::WriteSegmentedData(const TDDInfo & tddInfo,
+                                  SpaceID spaceID,
+                                  const SegmentedDataWriter::List & writers ) {
 	size_t i = 0;
+	uint64_t frameID = 0;
 	for ( Time current = tddInfo.Start;
 	      current.Before(tddInfo.End);
 	      current = current.Add(d_config.Segment) ) {
@@ -147,120 +152,57 @@ void Fakedata::ForeachSegment(const TDDInfo & tddInfo,
 		                          });
 		auto end = std::find_if(d_frames.begin(),
 		                        d_frames.end(),
-		                          [&](const std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr> & it ) {
-			                          return it.first->FrameTime >= endTime;
-		                          });
-		apply(i,begin,end,endTime == tddInfo.End);
+		                        [&](const std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr> & it ) {
+			                        return it.first->FrameTime >= endTime;
+		                        });
+		std::for_each(writers.begin(),writers.end(),
+		              [&](const SegmentedDataWriter::Ptr & w) {
+			              w->Prepare(i);
+		              });
+		for(auto iter = begin; iter != end ; ++iter ) {
+			if ( iter->first->Space != spaceID ) {
+				continue;
+			}
+			std::for_each(writers.begin(),writers.end(),
+			              [&](const SegmentedDataWriter::Ptr & w) {
+				             w->WriteFrom(iter->first,++frameID);
+			              });
+		}
+		std::for_each(writers.begin(),writers.end(),
+		              [&](const SegmentedDataWriter::Ptr & w) {
+			              w->Finalize(i,endTime == tddInfo.End);
+		              });
 		++i;
 	}
-
 }
 
-void Fakedata::WriteHermesFiles(const TDDInfo & tddInfo,
-                                SpaceID spaceID) {
-	uint64_t frameID = 1;
-	ForeachSegment(tddInfo,
-	               [&](size_t index,
-	                   FrameList::const_iterator begin,
-	                   FrameList::const_iterator end,
-	                   bool last) {
-		               WriteHermesFile(index,
-		                               tddInfo.AbsoluteFilePath,
-		                               spaceID,
-		                               frameID,
-		                               begin,
-		                               end,
-		                               last);
-	               });
-
+SegmentedDataWriter::Ptr Fakedata::HermesWriter(const TDDInfo & info) {
+	return std::make_shared<HermesFileWriter>(info.AbsoluteFilePath,d_config);
 }
 
-std::string HermesFileName(size_t i ) {
-	std::ostringstream os;
-	os << "tracking." << std::setw(4) << std::setfill('0') << i << ".hermes";
-	return os.str();
+class NullWriter : public SegmentedDataWriter {
+public:
+	void Prepare(size_t index) override {}
+	void WriteFrom(const IdentifiedFrame::Ptr & data,
+	               uint64_t frameID) override {}
+	void Finalize(size_t index,bool last) override {}
+};
+
+SegmentedDataWriter::Ptr Fakedata::MovieWriter(const TDDInfo &) {
+	return std::make_shared<NullWriter>();
 }
 
+SegmentedDataWriter::Ptr Fakedata::FullFrameWriter(const TDDInfo &) {
+	return std::make_shared<NullWriter>();
+}
 
-void Fakedata::WriteHermesFile(size_t index,
-                               const std::string & basepath,
-                               SpaceID spaceID,
-                               uint64_t & frameID,
-                               FrameList::const_iterator begin,
-                               FrameList::const_iterator end,
-                               bool last) {
-
-	hermes::Header header;
-	auto v = header.mutable_version();
-	v->set_vmajor(0);
-	v->set_vminor(1);
-	header.set_type(hermes::Header::Type::Header_Type_File);
-	header.set_width(d_config.Width);
-	header.set_height(d_config.Height);
-	if ( index > 0 ) {
-		header.set_previous(HermesFileName(index-1));
-	}
-	auto filename = fs::path(basepath) / HermesFileName(index);
-	int fd = open( filename.c_str(),
-	           O_CREAT | O_TRUNC | O_RDWR | O_BINARY,
-	           0644);
-
-	if ( fd <= 0 ) {
-		throw std::runtime_error("open('"
-		                         + filename.string()
-		                         + "',O_RDONLY | O_BINARY)");
-	}
-
-	auto file = std::make_unique<google::protobuf::io::FileOutputStream>(fd);
-	file->SetCloseOnDelete(true);
-	auto gzipped = std::make_unique<google::protobuf::io::GzipOutputStream>(file.get());
-	if (!google::protobuf::util::SerializeDelimitedToZeroCopyStream(header,gzipped.get())) {
-		throw std::runtime_error("could not write hermes header");
-	}
-	fort::hermes::FileLine lineRO,lineFooter;
-	for( auto iter = begin; iter != end; ++iter) {
-		if ( iter->first->Space != spaceID ) {
-			continue;
-		}
-		auto ro = lineRO.mutable_readout();
-		FillReadout(ro,frameID,iter->first);
-		++frameID;
-		if ( !google::protobuf::util::SerializeDelimitedToZeroCopyStream(lineRO,gzipped.get()) ) {
-			throw std::runtime_error("could not write readout");
-		}
-	}
-	auto footer = lineFooter.mutable_footer();
-	if ( last == false ) {
-		footer->set_next(HermesFileName(index+1));
-	}
-	if ( !google::protobuf::util::SerializeDelimitedToZeroCopyStream(lineFooter, gzipped.get()) ) {
-		throw std::runtime_error("Could not write footer");
-	}
-
+SegmentedDataWriter::Ptr Fakedata::CloseUpWriter(const TDDInfo & ) {
+	return std::make_shared<NullWriter>();
 }
 
 
-void Fakedata::FillReadout(hermes::FrameReadout * ro,
-                           uint64_t frameID,
-                           const IdentifiedFrame::Ptr & identified) {
-	ro->Clear();
-	ro->set_timestamp(identified->FrameTime.Sub(d_config.Start).Microseconds());
-	identified->FrameTime.ToTimestamp(ro->mutable_time());
-	ro->set_frameid(frameID);
-	ro->set_quads(identified->Positions.rows());
-	for ( size_t i = 0; i < identified->Positions.rows(); ++i ) {
-		AntID antID = identified->Positions(i,0);
-		auto t = ro->add_tags();
-		double x,y,angle;
-
-		d_config.Ants.at(antID).ComputeTagPosition(x,y,angle,identified->Positions.block<1,3>(i,1).transpose());
-		t->set_x(x);
-		t->set_y(y);
-		t->set_theta(angle);
-		t->set_id(antID-1);
-	}
+void Fakedata::WriteTDDConfig(const TDDInfo & info) {
 }
-
 
 } // namespace myrmidon
 } // namespace fort

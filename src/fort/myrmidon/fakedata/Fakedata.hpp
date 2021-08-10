@@ -14,6 +14,9 @@ class FrameReadout;
 namespace myrmidon {
 
 struct GeneratedData;
+class SegmentedDataWriter;
+typedef std::shared_ptr<SegmentedDataWriter> SegmentedDataWriterPtr;
+typedef std::vector<SegmentedDataWriterPtr> SegmentedDataWriterList;
 
 class Fakedata {
 public:
@@ -79,23 +82,18 @@ private:
 	void WriteFakedata();
 	void WriteTDDs();
 	void WriteTDD(const TDDInfo & info,SpaceID spaceID);
-	void WriteHermesFiles(const TDDInfo & info,
-	                      SpaceID spaceID);
+	void WriteTDDConfig(const TDDInfo & info);
 
-	void ForeachSegment(const TDDInfo & tddInfo,
-	                    std::function<void(size_t,FrameList::const_iterator,FrameList::const_iterator,bool)> apply);
 
-	void WriteHermesFile(size_t index,
-	                     const std::string & basepath,
-	                     SpaceID spaceID,
-	                     uint64_t & frameID,
-	                     FrameList::const_iterator begin,
-	                     FrameList::const_iterator end,
-	                     bool last);
 
-	void FillReadout(hermes::FrameReadout * ro,
-	                 uint64_t frameID,
-	                 const IdentifiedFrame::Ptr & identified);
+	SegmentedDataWriterPtr HermesWriter(const TDDInfo &);
+	SegmentedDataWriterPtr MovieWriter(const TDDInfo &);
+	SegmentedDataWriterPtr FullFrameWriter(const TDDInfo &);
+	SegmentedDataWriterPtr CloseUpWriter(const TDDInfo & );
+
+	void WriteSegmentedData(const TDDInfo & info,
+	                        SpaceID spaceID,
+	                        const SegmentedDataWriterList & writers);
 
 
 	fs::path d_basedir;
