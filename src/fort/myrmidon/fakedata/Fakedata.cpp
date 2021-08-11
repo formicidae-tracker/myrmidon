@@ -2,7 +2,8 @@
 
 #include "GeneratedData.hpp"
 #include "HermesFileWriter.hpp"
-
+#include "MovieWriter.hpp"
+#include "CloseUpWriter.hpp"
 
 namespace fort {
 namespace myrmidon {
@@ -126,9 +127,6 @@ void Fakedata::WriteTDD(const TDDInfo & tddInfo,SpaceID spaceID) {
 		   HermesWriter(tddInfo),
 		   CloseUpWriter(tddInfo),
 	};
-	if ( tddInfo.HasFullFrame ) {
-		writers.push_back(FullFrameWriter(tddInfo));
-	}
 	if ( tddInfo.HasMovie ) {
 		writers.push_back(MovieWriter(tddInfo));
 	}
@@ -180,24 +178,12 @@ SegmentedDataWriter::Ptr Fakedata::HermesWriter(const TDDInfo & info) {
 	return std::make_shared<HermesFileWriter>(info.AbsoluteFilePath,d_config);
 }
 
-class NullWriter : public SegmentedDataWriter {
-public:
-	void Prepare(size_t index) override {}
-	void WriteFrom(const IdentifiedFrame::Ptr & data,
-	               uint64_t frameID) override {}
-	void Finalize(size_t index,bool last) override {}
-};
-
 SegmentedDataWriter::Ptr Fakedata::MovieWriter(const TDDInfo &) {
-	return std::make_shared<NullWriter>();
-}
-
-SegmentedDataWriter::Ptr Fakedata::FullFrameWriter(const TDDInfo &) {
-	return std::make_shared<NullWriter>();
+	return std::make_shared<myrmidon::MovieWriter>();
 }
 
 SegmentedDataWriter::Ptr Fakedata::CloseUpWriter(const TDDInfo & ) {
-	return std::make_shared<NullWriter>();
+	return std::make_shared<myrmidon::CloseUpWriter>();
 }
 
 

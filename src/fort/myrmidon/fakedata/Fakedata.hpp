@@ -88,7 +88,6 @@ private:
 
 	SegmentedDataWriterPtr HermesWriter(const TDDInfo &);
 	SegmentedDataWriterPtr MovieWriter(const TDDInfo &);
-	SegmentedDataWriterPtr FullFrameWriter(const TDDInfo &);
 	SegmentedDataWriterPtr CloseUpWriter(const TDDInfo & );
 
 	void WriteSegmentedData(const TDDInfo & info,
