@@ -111,7 +111,7 @@ public:
 	}
 
 	// inverses the isometry
-	//
+
 	// @return a new <Isometry2D> representing the inverse transformation
 	Isometry2D<T> inverse() const {
 		return Isometry2D<T>(-d_angle,Eigen::Rotation2D<T>(-d_angle)*(-d_translation));

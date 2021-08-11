@@ -4,6 +4,7 @@
 #include "HermesFileWriter.hpp"
 #include "MovieWriter.hpp"
 #include "CloseUpWriter.hpp"
+#include "FrameDrawer.hpp"
 
 namespace fort {
 namespace myrmidon {
@@ -122,6 +123,16 @@ void Fakedata::WriteTDD(const TDDInfo & tddInfo,SpaceID spaceID) {
 	if ( tddInfo.HasConfig ) {
 		WriteTDDConfig(tddInfo);
 	}
+	FrameDrawer foo(d_config);
+	for(const auto & [identified,collision] : d_frames ) {
+		if ( identified->Space != 1 ) {
+			continue;
+		}
+		cv::Mat res;
+		foo.Draw(res,*identified);
+		break;
+	}
+
 	SegmentedDataWriter::List writers
 		= {
 		   HermesWriter(tddInfo),

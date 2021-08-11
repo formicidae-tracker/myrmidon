@@ -44,11 +44,13 @@ Config::Config() {
 		                                            40.0)},
 		               },
 		     .Keypoints = {
-		                   {1,100,100,0.0,Start},
+		                   {1,100,100,M_PI/4,Start},
 		                   {1,99,101,0.0,End},
 		                   },
 		     .Interactions = {},
 		     .AntPose = Eigen::Vector3d(0,0,0),
+		     .AntSize = 160,
+		     .TagSize = 30,
 			 }},
 		 {2,{ // 2 is kind of a Nurse
 		     .Shape = {
@@ -85,7 +87,9 @@ Config::Config() {
 		                                      Start.Add(4*Duration::Minute),
 		                                      {1,2,2,1}),
 		                      },
-		     .AntPose = Eigen::Vector3d(-40,-40,M_PI/4),
+		     .AntPose = Eigen::Vector3d(0,7,M_PI/6),
+		     .AntSize = 80,
+		     .TagSize = 30,
 			 }},
 		 {3,{ // 3 is a kind of forager
 		     .Shape = {
@@ -110,7 +114,9 @@ Config::Config() {
 		                   {1,960,800,M_PI/2,End},
 		                   },
 		     .Interactions = {},
-		     .AntPose = Eigen::Vector3d(20,0,M_PI),
+		     .AntPose = Eigen::Vector3d(7,2,M_PI*9.0/10.0),
+		     .AntSize = 80,
+		     .TagSize = 30,
 			 }},
 		};
 }

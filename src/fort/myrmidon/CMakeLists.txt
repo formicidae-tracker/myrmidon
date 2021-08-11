@@ -259,6 +259,7 @@ set(FAKEDATA_SRC_FILES fakedata/Fakedata.hpp
                        fakedata/HermesFileWriter.hpp
                        fakedata/CloseUpWriter.hpp
                        fakedata/MovieWriter.hpp
+                       fakedata/FrameDrawer.hpp
                        )
 set(FAKEDATA_HDR_FILES fakedata/Fakedata.cpp
                        fakedata/Config.cpp
@@ -266,6 +267,7 @@ set(FAKEDATA_HDR_FILES fakedata/Fakedata.cpp
                        fakedata/HermesFileWriter.cpp
                        fakedata/CloseUpWriter.cpp
                        fakedata/MovieWriter.cpp
+                       fakedata/FrameDrawer.cpp
                        )
 
 add_library(fort-myrmidon SHARED ${SRC_FILES}

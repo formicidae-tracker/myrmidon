@@ -29,6 +29,8 @@ struct AntData {
 	std::vector<InteractionData> Interactions;
 
 	Eigen::Vector3d              AntPose;
+	size_t                       AntSize,TagSize;
+
 
 	void ComputeTagPosition(double & xTag,
 	                        double & yTag,
