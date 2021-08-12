@@ -114,7 +114,7 @@ Config::Config() {
 		                   {1,960,800,M_PI/2,End},
 		                   },
 		     .Interactions = {},
-		     .AntPose = Eigen::Vector3d(7,2,M_PI*9.0/10.0),
+		     .AntPose = Eigen::Vector3d(-7,-7,M_PI*9.0/10.0),
 		     .AntSize = 80,
 		     .TagSize = 30,
 			 }},

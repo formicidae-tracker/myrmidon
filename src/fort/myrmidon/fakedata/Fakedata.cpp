@@ -130,7 +130,9 @@ void Fakedata::WriteTDD(const TDDInfo & tddInfo,SpaceID spaceID) {
 	SegmentedDataWriter::List writers
 		= {
 		   std::make_shared<HermesFileWriter>(tddInfo.AbsoluteFilePath,d_config),
-		   std::make_shared<CloseUpWriter>(drawer),
+		   std::make_shared<CloseUpWriter>(tddInfo.AbsoluteFilePath,
+		                                   tddInfo.HasFullFrame,
+		                                   drawer),
 	};
 	if ( tddInfo.HasMovie ) {
 		writers.push_back(std::make_shared<MovieWriter>(tddInfo.AbsoluteFilePath,d_config,drawer));
