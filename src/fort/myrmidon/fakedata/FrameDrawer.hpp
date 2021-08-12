@@ -4,12 +4,15 @@
 
 #include <fort/myrmidon/Types.hpp>
 
-#include <opencv2/core.hpp>
 
-
+namespace cv {
+class Mat;
+}
 
 namespace fort {
 namespace myrmidon {
+
+
 
 namespace priv {
 template<typename T> class Isometry2D;
@@ -20,6 +23,7 @@ class AntData;
 
 class FrameDrawer {
 public :
+	typedef std::shared_ptr<FrameDrawer> Ptr;
 
 	FrameDrawer(const Config & config);
 

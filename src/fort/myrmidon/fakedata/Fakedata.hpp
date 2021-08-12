@@ -85,11 +85,6 @@ private:
 	void WriteTDDConfig(const TDDInfo & info);
 
 
-
-	SegmentedDataWriterPtr HermesWriter(const TDDInfo &);
-	SegmentedDataWriterPtr MovieWriter(const TDDInfo &);
-	SegmentedDataWriterPtr CloseUpWriter(const TDDInfo & );
-
 	void WriteSegmentedData(const TDDInfo & info,
 	                        SpaceID spaceID,
 	                        const SegmentedDataWriterList & writers);

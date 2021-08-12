@@ -6,6 +6,8 @@
 #include "CloseUpWriter.hpp"
 #include "FrameDrawer.hpp"
 
+#include <opencv2/core.hpp>
+
 namespace fort {
 namespace myrmidon {
 
@@ -123,23 +125,15 @@ void Fakedata::WriteTDD(const TDDInfo & tddInfo,SpaceID spaceID) {
 	if ( tddInfo.HasConfig ) {
 		WriteTDDConfig(tddInfo);
 	}
-	FrameDrawer foo(d_config);
-	for(const auto & [identified,collision] : d_frames ) {
-		if ( identified->Space != 1 ) {
-			continue;
-		}
-		cv::Mat res;
-		foo.Draw(res,*identified);
-		break;
-	}
+	auto drawer = std::make_shared<FrameDrawer>(d_config);
 
 	SegmentedDataWriter::List writers
 		= {
-		   HermesWriter(tddInfo),
-		   CloseUpWriter(tddInfo),
+		   std::make_shared<HermesFileWriter>(tddInfo.AbsoluteFilePath,d_config),
+		   std::make_shared<CloseUpWriter>(drawer),
 	};
 	if ( tddInfo.HasMovie ) {
-		writers.push_back(MovieWriter(tddInfo));
+		writers.push_back(std::make_shared<MovieWriter>(drawer));
 	}
 	WriteSegmentedData(tddInfo,spaceID,writers);
 
@@ -185,17 +179,6 @@ void Fakedata::WriteSegmentedData(const TDDInfo & tddInfo,
 	}
 }
 
-SegmentedDataWriter::Ptr Fakedata::HermesWriter(const TDDInfo & info) {
-	return std::make_shared<HermesFileWriter>(info.AbsoluteFilePath,d_config);
-}
-
-SegmentedDataWriter::Ptr Fakedata::MovieWriter(const TDDInfo &) {
-	return std::make_shared<myrmidon::MovieWriter>();
-}
-
-SegmentedDataWriter::Ptr Fakedata::CloseUpWriter(const TDDInfo & ) {
-	return std::make_shared<myrmidon::CloseUpWriter>();
-}
 
 
 void Fakedata::WriteTDDConfig(const TDDInfo & info) {
