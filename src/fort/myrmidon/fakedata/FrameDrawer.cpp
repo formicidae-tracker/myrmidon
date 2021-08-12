@@ -10,38 +10,27 @@
 namespace fort {
 namespace myrmidon {
 
-cv::Mat TransformFromCenter(double x,double y,double angle, double size) {
-
-	cv::Mat_<double> rot(2,3);
-
-	auto trans = priv::Isometry2Dd(0.0,Eigen::Vector2d(size/2,size/2)) *
-		priv::Isometry2Dd(angle,
-		                  Eigen::Vector2d(x,y)) *
-		priv::Isometry2Dd(0.0,Eigen::Vector2d(-size/2,-size/2));
-
-	auto m = trans.rotation().matrix();
-	rot << m(0,0),m(0,1),trans.translation().x(),
-		m(1,0),m(1,1),trans.translation().y();
-
-	return rot;
-}
-
 
 FrameDrawer::FrameDrawer(const Config & config) {
-	d_AA = 2.0;
 	auto [create,destroy]  = fort::tags::GetFamily(fort::tags::Family::Tag36h11);
 	d_family = std::shared_ptr<apriltag_family_t>(create(),destroy);
 
 	for ( const auto & [antID,ant] : config.Ants ) {
-		d_ants.insert({antID,BuildIndexImage(antID,ant)});
+		d_ants.insert({antID,BuildAntShape(antID,ant)});
 	}
 }
 
 void FrameDrawer::Draw(cv::Mat & dest,
                        const IdentifiedFrame & frame) const {
-	dest = cv::Mat(frame.Height,frame.Width,CV_8UC1);
+	// sets the right type
+	if ( dest.type() != CV_8UC1 ||
+	     dest.size() != cv::Size(frame.Width,frame.Height) ) {
+		dest = cv::Mat(frame.Height,frame.Width,CV_8UC1);
+	}
+	//fills background
 	dest.setTo(127);
-	cv::Mat tempShape,tempMask;
+
+	//draw shapes at the right position
 	for ( size_t i = 0;
 	      i < frame.Positions.rows();
 	      ++i ) {
@@ -49,126 +38,126 @@ void FrameDrawer::Draw(cv::Mat & dest,
 		if ( d_ants.count(antID) == 0 ) {
 			continue;
 		}
-		const AntIndexImage & images = d_ants.at(antID);
-		cv::Size tempSize(images.Shape.size().width/d_AA,
-		                  images.Shape.size().height/d_AA);
+		auto transform = priv::Isometry2Dd(frame.Positions(i,3),
+		                                   frame.Positions.block<1,2>(i,1).transpose());
 
-		//first we rotate the shape
-		auto rot = TransformFromCenter(0,0,frame.Positions(i,3),images.Shape.rows);
-		rot /= d_AA;
-
-		cv::warpAffine(images.Shape,tempShape,rot,tempSize,cv::INTER_LINEAR,cv::BORDER_CONSTANT,127);
-		cv::warpAffine(images.Mask,tempMask,rot,tempSize,cv::INTER_LINEAR,cv::BORDER_CONSTANT,0);
-
-
+		DrawShapeOnImage(dest,
+		                 d_ants.at(antID),
+		                 transform);
 
 	}
 }
 
 
-void FrameDrawer::WriteAnt(cv::Mat & shape,
-                           cv::Mat & mask) const {
-	std::vector<std::vector<cv::Point2f>> polys =
+void FrameDrawer::WriteAnt(ColoredShape & shape,
+                           size_t antSize) const {
+	std::vector<Vector2dList> polys =
 		{
 		 {
-		  {0.6,0.5},
-		  {0.5,0.4},
-		  {0.4,0.5},
-		  {0.5,0.6},
+		  {0.1,0.0},
+		  {0.0,-0.1},
+		  {-0.1,0.0},
+		  {0.0,0.1},
 		 },
 		 {
-		  {0.45,0.5},
-		  {0.3,0.35},
-		  {0.05,0.5},
-		  {0.3,0.65},
+		  {-0.05,0.0},
+		  {-0.2,-0.15},
+		  {-0.45,0.0},
+		  {-0.2,0.15},
 		 },
 		 {
-		  {0.55,0.5},
-		  {0.65,0.375},
-		  {0.8,0.5},
-		  {0.65,0.625},
+		  {0.05,0.0},
+		  {0.15,-0.125},
+		  {0.3,0.0},
+		  {0.15,0.125},
 		 },
 		};
 
-	for (  auto & points : polys ) {
-		std::vector<cv::Point> pp;
-		for ( auto & p : points ) {
-			pp.push_back(shape.rows*p);
+	for (  auto & poly : polys ) {
+		shape.push_back({0,Vector2dList()});
+		shape.back().second.reserve(poly.size());
+		for ( const auto & p : poly ) {
+			shape.back().second.push_back(p*antSize);
 		}
-		cv::fillPoly(shape,pp,0);
-		cv::fillPoly(mask,pp,255);
 	}
-
 }
 
-void FrameDrawer::WriteTag(cv::Mat & image,
+void FrameDrawer::WriteTag(ColoredShape & shape,
                            uint32_t tagID,
+                           const priv::Isometry2Dd tagToAnt,
                            size_t pixelSize) const {
 	uint8_t border(255),inside(0);
 	if ( d_family->reversed_border == true ) {
 		border = 0;
 		inside = 255;
 	}
-	auto setPixel = [&](size_t x,
-	                    size_t y,
-	                    uint8_t value) {
-		                image(cv::Rect(x*pixelSize,y*pixelSize,pixelSize,pixelSize)).setTo(value);
-	                };
-	size_t insideStart = (d_family->total_width - d_family->width_at_border)/2;
-	image.setTo(border);
-	image(cv::Rect(insideStart * pixelSize,
-	               insideStart * pixelSize,
-	               d_family->width_at_border*pixelSize,
-	               d_family->width_at_border*pixelSize)).setTo(inside);
+
+
+
+	auto setQuad =
+		[&](double x,
+		    double y,
+		    double w,
+		    double h,
+		    uint8_t value) {
+			shape.push_back({value,{{x,y},{x+w,y},{x+w,y+h},{x,y+h}}});
+			for ( auto & p : shape.back().second ) {
+				p *= pixelSize;
+				p = tagToAnt * p ;
+			}
+		};
+
+	int offset = d_family->total_width / 2;
+	offset *= -1;
+	setQuad(offset,offset,d_family->total_width,d_family->total_width,border);
+	offset += (d_family->total_width - d_family->width_at_border)/2;
+	setQuad(offset,offset,d_family->width_at_border,d_family->width_at_border,inside);
+
 
 	uint64_t code = d_family->codes[tagID % d_family->ncodes];
 	for ( size_t i = 0; i < d_family->nbits; ++i) {
 		uint8_t color = (code & 1) ?  255 : 0 ;
 		code = code >> 1;
 		size_t ii = d_family->nbits - i - 1;
-		setPixel(d_family->bit_x[ii]+insideStart,d_family->bit_y[ii]+insideStart,color);
+		setQuad(int(d_family->bit_x[ii])+offset,
+		        int(d_family->bit_y[ii])+offset,
+		        1,
+		        1,
+		        color);
 	}
-
 
 }
 
 
-FrameDrawer::AntIndexImage FrameDrawer::BuildIndexImage(AntID antID,
-                                                        const AntData & ant) const {
-	AntIndexImage res = {
-	                     .Shape = cv::Mat(d_AA*ant.AntSize,d_AA*ant.AntSize,CV_8UC1),
-	                     .Mask = cv::Mat(d_AA*ant.AntSize,d_AA*ant.AntSize,CV_8UC1),
-	};
-	res.Shape.setTo(127);
-	res.Mask.setTo(0);
+FrameDrawer::ColoredShape FrameDrawer::BuildAntShape(AntID antID,
+                                                     const AntData & ant) const {
+	ColoredShape res;
+	WriteAnt(res,ant.AntSize);
 
-	WriteAnt(res.Shape,res.Mask);
-
-	cv::Mat tempShape,tempMask;
-	cv::Size tempSize(d_AA*ant.AntSize,d_AA*ant.AntSize);
-
-	auto rot = TransformFromCenter(d_AA*ant.AntPose.x(),
-	                               d_AA*ant.AntPose.y(),
-	                               ant.AntPose.z(),
-	                               d_AA*ant.AntSize);
-
-	cv::warpAffine(res.Shape,tempShape,rot,tempSize,cv::INTER_LINEAR,cv::BORDER_CONSTANT,127);
-	cv::warpAffine(res.Mask,tempMask,rot,tempSize,cv::INTER_LINEAR,cv::BORDER_CONSTANT,0);
-
-
-	cv::Rect tagRoi(d_AA*(ant.AntSize-ant.TagSize)/2,
-	                d_AA*(ant.AntSize-ant.TagSize)/2,
-	                d_AA*ant.TagSize,
-	                d_AA*ant.TagSize);
-	auto tagShape = tempShape(tagRoi);
-	WriteTag(tagShape,antID-1,d_AA*ant.TagSize/d_family->total_width);
-	tempMask(tagRoi).setTo(255);
-
-	cv::warpAffine(tempShape,res.Shape,rot,res.Shape.size(),cv::INTER_LINEAR|cv::WARP_INVERSE_MAP,cv::BORDER_CONSTANT,127);
-	cv::warpAffine(tempMask,res.Mask,rot,res.Shape.size(),cv::INTER_LINEAR|cv::WARP_INVERSE_MAP,cv::BORDER_CONSTANT,0);
+	auto tagToAnt = priv::Isometry2Dd(ant.AntPose.z(),ant.AntPose.block<2,1>(0,0)).inverse();
+	WriteTag(res,
+	         antID-1,
+	         tagToAnt,
+	         ant.TagSize/d_family->total_width);
 
 	return res;
 }
+
+void FrameDrawer::DrawShapeOnImage(cv::Mat & dest,
+                                   const ColoredShape & shape,
+                                   const priv::Isometry2D<double> & transformation) {
+	std::vector<cv::Point> vertices;
+	for ( const auto & [color,poly] : shape ) {
+		vertices.clear();
+		vertices.reserve(poly.size());
+		for ( const auto & p : poly ) {
+			auto v = transformation * p;
+			vertices.push_back(cv::Point(v.x(),v.y()));
+		}
+		cv::fillConvexPoly(dest,vertices,color);
+	}
+}
+
 
 
 } // namespace myrmidon

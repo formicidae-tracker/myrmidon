@@ -11,6 +11,10 @@
 namespace fort {
 namespace myrmidon {
 
+namespace priv {
+template<typename T> class Isometry2D;
+}
+
 class Config;
 class AntData;
 
@@ -23,25 +27,29 @@ public :
 	          const IdentifiedFrame & frame) const;
 
 private :
-	struct AntIndexImage {
-		cv::Mat Shape,Mask;
-	};
+	typedef std::vector<std::pair<uint8_t,Vector2dList>> ColoredShape;
 
-	AntIndexImage BuildIndexImage(AntID antID,
-	                              const AntData & ant) const;
 
-	void WriteTag(cv::Mat & image,
+	static void DrawShapeOnImage(cv::Mat & dest,
+	                             const ColoredShape & shape,
+	                             const priv::Isometry2D<double> & transformation);
+
+	ColoredShape BuildAntShape(AntID antID,
+	                           const AntData & ant) const;
+
+	void WriteTag(ColoredShape & shape,
 	              uint32_t tagID,
+	              const priv::Isometry2D<double> tagToAnt,
 	              size_t pixelSize) const;
 
-	void WriteAnt(cv::Mat & shape,
-	              cv::Mat & mask) const;
+	void WriteAnt(ColoredShape & shape,
+	              size_t antSize) const;
 
 
-	std::map<AntID,AntIndexImage> d_ants;
+	std::map<AntID,ColoredShape> d_ants;
 
 	std::shared_ptr<apriltag_family_t> d_family;
-	double d_AA;
+
 };
 
 } // namespace myrmidon
