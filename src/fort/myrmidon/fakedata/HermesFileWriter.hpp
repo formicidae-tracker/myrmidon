@@ -29,13 +29,13 @@ public:
 	virtual ~HermesFileWriter();
 
 	void Prepare(size_t index) override;
-	void WriteFrom(const IdentifiedFrame::Ptr & data,
+	void WriteFrom(const IdentifiedFrame & data,
 	               uint64_t frameID) override;
 
 	void Finalize(size_t index,bool last) override;
 	void FillReadout(hermes::FrameReadout * ro,
 	                 uint64_t frameID,
-	                 const IdentifiedFrame::Ptr & identified);
+	                 const IdentifiedFrame & identified);
 private:
 	fs::path         d_basepath;
 	hermes::FileLine d_line;

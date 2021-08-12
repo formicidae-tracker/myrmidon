@@ -66,7 +66,7 @@ void HermesFileWriter::Prepare(size_t index) {
 	d_line.Clear();
 }
 
-void HermesFileWriter::WriteFrom(const IdentifiedFrame::Ptr & data,
+void HermesFileWriter::WriteFrom(const IdentifiedFrame & data,
                                  uint64_t frameID) {
 	auto ro = d_line.mutable_readout();
 	FillReadout(ro,frameID,data);
@@ -90,18 +90,18 @@ void HermesFileWriter::Finalize(size_t index,bool last) {
 
 void HermesFileWriter::FillReadout(hermes::FrameReadout * ro,
                                    uint64_t frameID,
-                                   const IdentifiedFrame::Ptr & identified) {
+                                   const IdentifiedFrame & identified) {
 	ro->Clear();
-	ro->set_timestamp(identified->FrameTime.Sub(d_config.Start).Microseconds());
-	identified->FrameTime.ToTimestamp(ro->mutable_time());
+	ro->set_timestamp(identified.FrameTime.Sub(d_config.Start).Microseconds());
+	identified.FrameTime.ToTimestamp(ro->mutable_time());
 	ro->set_frameid(frameID);
-	ro->set_quads(identified->Positions.rows());
-	for ( size_t i = 0; i < identified->Positions.rows(); ++i ) {
-		AntID antID = identified->Positions(i,0);
+	ro->set_quads(identified.Positions.rows());
+	for ( size_t i = 0; i < identified.Positions.rows(); ++i ) {
+		AntID antID = identified.Positions(i,0);
 		auto t = ro->add_tags();
 		double x,y,angle;
 
-		d_config.Ants.at(antID).ComputeTagPosition(x,y,angle,identified->Positions.block<1,3>(i,1).transpose());
+		d_config.Ants.at(antID).ComputeTagPosition(x,y,angle,identified.Positions.block<1,3>(i,1).transpose());
 		t->set_x(x);
 		t->set_y(y);
 		t->set_theta(angle);

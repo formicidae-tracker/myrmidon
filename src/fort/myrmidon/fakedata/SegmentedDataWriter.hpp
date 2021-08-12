@@ -15,7 +15,7 @@ public:
 	virtual ~SegmentedDataWriter(){};
 
 	virtual void Prepare(size_t index) = 0;
-	virtual void WriteFrom(const IdentifiedFrame::Ptr & data,
+	virtual void WriteFrom(const IdentifiedFrame & data,
 	                       uint64_t frameID) = 0;
 	virtual void Finalize(size_t index,bool last) = 0;
 };

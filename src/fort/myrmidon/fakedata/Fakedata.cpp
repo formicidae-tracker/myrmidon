@@ -73,14 +73,14 @@ void Fakedata::GenerateTDDStructure() {
 		  .HasMovie = true,
 		  .HasConfig = true,
 		  .Start = d_config.Start,
-		  .End = d_config.Start.Add(20*Duration::Second),
+		  .End = d_config.Start.Add(10*Duration::Second),
 		 },
 		 {
 		  .AbsoluteFilePath = (d_basedir / "nest.0001").string(),
 		  .HasFullFrame = true,
 		  .HasMovie = false,
 		  .HasConfig = true,
-		  .Start = d_config.Start.Add(20*Duration::Second),
+		  .Start = d_config.Start.Add(10*Duration::Second),
 		  .End = d_config.Start.Add(3*Duration::Minute),
 		 },
 		 {
@@ -90,7 +90,7 @@ void Fakedata::GenerateTDDStructure() {
 		  .HasConfig = true,
 		  .Start = d_config.Start.Add(3*Duration::Minute),
 		  .End = d_config.End,
-		 },
+		  },
 		};
 
 		d_forageTDDs =
@@ -133,7 +133,7 @@ void Fakedata::WriteTDD(const TDDInfo & tddInfo,SpaceID spaceID) {
 		   std::make_shared<CloseUpWriter>(drawer),
 	};
 	if ( tddInfo.HasMovie ) {
-		writers.push_back(std::make_shared<MovieWriter>(drawer));
+		writers.push_back(std::make_shared<MovieWriter>(tddInfo.AbsoluteFilePath,d_config,drawer));
 	}
 	WriteSegmentedData(tddInfo,spaceID,writers);
 
@@ -166,9 +166,10 @@ void Fakedata::WriteSegmentedData(const TDDInfo & tddInfo,
 			if ( iter->first->Space != spaceID ) {
 				continue;
 			}
+			++frameID;
 			std::for_each(writers.begin(),writers.end(),
 			              [&](const SegmentedDataWriter::Ptr & w) {
-				             w->WriteFrom(iter->first,++frameID);
+				             w->WriteFrom(*iter->first,frameID);
 			              });
 		}
 		std::for_each(writers.begin(),writers.end(),
