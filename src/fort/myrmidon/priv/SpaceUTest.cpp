@@ -13,11 +13,13 @@ std::vector<TrackingDataDirectory::Ptr> SpaceUTest::s_nest;
 
 void SpaceUTest::SetUpTestSuite() {
 	for ( const auto & tddInfo : TestSetup::UTestData().NestDataDirs()) {
-		EXPECT_NO_THROW({
-				auto tdd = TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,
-				                                       TestSetup::UTestData().Basedir());
-				s_nest.push_back(tdd);
-			});
+		try {
+			auto tdd = TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,
+			                                       TestSetup::UTestData().Basedir());
+			s_nest.push_back(tdd);
+		} catch ( const std::exception & e ) {
+			ADD_FAILURE() << "Could not open " << tddInfo.AbsoluteFilePath << ": " << e.what();
+		};
 	}
 
 	ASSERT_TRUE(s_nest.size() >= 3 );

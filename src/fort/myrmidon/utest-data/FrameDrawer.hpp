@@ -3,7 +3,7 @@
 #include <fort/tags/fort-tags.hpp>
 
 #include <fort/myrmidon/Types.hpp>
-
+#include "Config.hpp"
 
 namespace cv {
 class Mat;
@@ -18,7 +18,6 @@ namespace priv {
 template<typename T> class Isometry2D;
 }
 
-class Config;
 class AntData;
 
 class FrameDrawer {
@@ -30,6 +29,16 @@ public :
 
 	void Draw(cv::Mat & dest,
 	          const IdentifiedFrame & frame) const;
+
+	void ComputeTagPosition(Eigen::Vector2d & position,
+	                        double & angle,
+	                        AntID antID,
+	                        const Eigen::Vector3d & antPosition);
+
+	void ComputeCorners(Vector2dList & results,
+	                    AntID antID,
+	                    const Eigen::Vector3d & antPosition);
+
 
 private :
 	typedef std::vector<std::pair<uint8_t,Vector2dList>> ColoredShape;
@@ -51,6 +60,7 @@ private :
 	              size_t antSize) const;
 
 
+	Config                       d_config;
 	std::map<AntID,ColoredShape> d_ants;
 
 	std::shared_ptr<apriltag_family_t> d_family;

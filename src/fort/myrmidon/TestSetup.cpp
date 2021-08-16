@@ -10,8 +10,8 @@ void TestSetup::OnTestProgramStart(const ::testing::UnitTest& /* unit_test */)  
 	std::ostringstream oss;
 	oss << "myrmidon-test-" << getpid();
 	auto tmppath = fs::temp_directory_path() / oss.str();
-	s_utestdata = std::make_unique<fort::myrmidon::UTestData>(tmppath);
-
+	fs::remove_all("/tmp/test/foo");
+	s_utestdata = std::make_unique<fort::myrmidon::UTestData>("/tmp/test/foo");
 }
 
 // Called after all test activities have ended.

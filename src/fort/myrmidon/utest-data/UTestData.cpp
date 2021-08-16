@@ -37,7 +37,7 @@ UTestData::UTestData(const fs::path & basedir) {
 }
 
 UTestData::~UTestData() {
-	CleanUpFilesystem();
+	//	CleanUpFilesystem();
 }
 
 const fs::path & UTestData::Basedir() const {
@@ -56,6 +56,11 @@ const std::vector<UTestData::TDDInfo> & UTestData::ForagingDataDirs() const {
 const UTestData::TDDInfo & UTestData::NoConfigDataDir() const {
 	return d_noConfigDir;
 }
+
+const UTestData::TDDInfo & UTestData::NoFamilyDataDir() const {
+	return d_noFamilyDir;
+}
+
 
 const UTestData::TDDInfo & UTestData::ARTagDataDir() const {
 	return d_ARTagDir;
@@ -162,7 +167,7 @@ void UTestData::GenerateTDDStructure() {
 		d_foragingTDDs =
 		{
 		 {
-		  .AbsoluteFilePath = d_basedir / "forage.0000",
+		  .AbsoluteFilePath = d_basedir / "foraging.0000",
 		  .Family = fort::tags::Family::Tag36h11,
 		  .HasFullFrame = true,
 		  .HasMovie = false,
@@ -181,6 +186,17 @@ void UTestData::GenerateTDDStructure() {
 			 .Start = d_config.Start,
 			 .End = d_config.Start.Add(10*Duration::Second),
 			};
+		d_noFamilyDir =
+			{
+			 .AbsoluteFilePath =  d_basedir / "no-family.0000",
+			 .Family = fort::tags::Family::Undefined,
+			 .HasFullFrame = false,
+			 .HasMovie = false,
+			 .HasConfig = true,
+			 .Start = d_config.Start,
+			 .End = d_config.Start.Add(10*Duration::Second),
+			};
+
 		d_ARTagDir =
 			{
 			 .AbsoluteFilePath =  d_basedir / "ARTag.0000",
@@ -233,6 +249,7 @@ void UTestData::WriteTDDs() {
 	}
 	WriteTDD(d_noConfigDir,2);
 	WriteTDD(d_ARTagDir,2);
+	WriteTDD(d_noFamilyDir,2);
 }
 
 
@@ -288,23 +305,28 @@ private:
 };
 
 void UTestData::WriteTDD(TDDInfo & tddInfo,SpaceID spaceID) {
-	fs::create_directories(tddInfo.AbsoluteFilePath);
+	fs::create_directories(tddInfo.AbsoluteFilePath / "ants");
 	if ( tddInfo.HasConfig ) {
 		WriteTDDConfig(tddInfo);
 	}
-
-	auto drawer = DrawerFactory(tddInfo.Family);
-
 	SegmentedDataWriter::List writers
 		= {
 		   std::make_shared<HermesFileWriter>(tddInfo.AbsoluteFilePath,d_config),
-		   std::make_shared<CloseUpWriter>(tddInfo,
-		                                   drawer),
-		   std::make_shared<SegmentInfoWriter>(tddInfo),
 	};
-	if ( tddInfo.HasMovie ) {
-		writers.push_back(std::make_shared<MovieWriter>(tddInfo.AbsoluteFilePath,d_config,drawer));
+
+	if ( tddInfo.Family != fort::tags::Family::Undefined ) {
+		auto drawer = DrawerFactory(tddInfo.Family);
+		writers.push_back(std::make_shared<CloseUpWriter>(tddInfo,
+		                                                  drawer));
+
+		if ( tddInfo.HasMovie ) {
+			writers.push_back(std::make_shared<MovieWriter>(tddInfo.AbsoluteFilePath,d_config,drawer));
+		}
 	}
+
+	// since segmentInfoWriter is modifying data, it should be the last one
+	writers.push_back(std::make_shared<SegmentInfoWriter>(tddInfo));
+
 	WriteSegmentedData(tddInfo,spaceID,writers);
 }
 
@@ -369,19 +391,21 @@ void UTestData::WriteTDDConfig(const TDDInfo & info) {
 	       << "  strobe-duration: 1.5ms" << std::endl
 	       << "  fps: " << int(std::round(Duration::Second.Seconds()/d_config.Framerate.Seconds())) << std::endl
 	       << "  stub-path: \"\"" << std::endl
-	       << "apriltag:" << std::endl
-	       << "  family: " << fort::tags::GetFamilyName(info.Family) <<  std::endl
-	       << "  quad:" << std::endl
-	       << "    decimate: 1" << std::endl
-	       << "    sigma: 0" << std::endl
-	       << "    refine-edges: false" << std::endl
-	       << "    min-cluster-pixel: 25" << std::endl
-	       << "    max-n-maxima: 10" << std::endl
-	       << "    critical-angle-radian: 0.17453299" << std::endl
-	       << "    max-line-mean-square-error: 10" << std::endl
-	       << "    min-black-white-diff: 75" << std::endl
-	       << "    deglitch: false" << std::endl
-	       << "highlights: []" << std::endl;
+	       << "apriltag:" << std::endl;
+	if ( info.Family != fort::tags::Family::Undefined ) {
+		config << "  family: " << fort::tags::GetFamilyName(info.Family) <<  std::endl
+		       << "  quad:" << std::endl
+		       << "    decimate: 1" << std::endl
+		       << "    sigma: 0" << std::endl
+		       << "    refine-edges: false" << std::endl
+		       << "    min-cluster-pixel: 25" << std::endl
+		       << "    max-n-maxima: 10" << std::endl
+		       << "    critical-angle-radian: 0.17453299" << std::endl
+		       << "    max-line-mean-square-error: 10" << std::endl
+		       << "    min-black-white-diff: 75" << std::endl
+		       << "    deglitch: false" << std::endl;
+	}
+	config << "highlights: []" << std::endl;
 }
 
 void UTestData::WriteExperimentFile(const ExperimentInfo & info) {

@@ -21,6 +21,7 @@ public:
 	void WriteFrom(const IdentifiedFrame & data,
 	               uint64_t frameID) override;
 	void Finalize(size_t index,bool last) override;
+
 private:
 	UTestData::TDDInfo & d_tddInfo;
 	bool d_fullFrameNeeded;
@@ -36,14 +37,19 @@ private:
 	void SaveExpectedFullFrame(const IdentifiedFrame & data,
 	                           uint64_t frameID);
 
-	void SaveExpectedCloseUp(const IdentifiedFrame & data,
+	void SaveExpectedCloseUpFrame(const IdentifiedFrame & data,
+	                              uint64_t frameID,
+	                              AntID antID);
+
+	void SaveExpectedCloseUp(const fs::path & path,
+	                         const IdentifiedFrame & data,
 	                         uint64_t frameID,
-	                         AntID antID);
+	                         AntID antID,
+	                         bool fullFrame);
 
 	std::string FullFramePath(uint64_t frameID) const;
 
 	std::string CloseUpPath(uint64_t frameID, AntID antID) const;
-
 
 	std::set<AntID> d_seen;
 

@@ -82,6 +82,8 @@ public:
 
 	const TDDInfo & NoConfigDataDir() const;
 
+	const TDDInfo & NoFamilyDataDir() const;
+
 	const TDDInfo & ARTagDataDir() const;
 
 	const TDDInfo & WithVideoDataDir() const;
@@ -133,7 +135,7 @@ private:
 	Config   d_config;
 
 	std::vector<TDDInfo> d_nestTDDs,d_foragingTDDs;
-	TDDInfo              d_noConfigDir,d_ARTagDir;
+	TDDInfo              d_noConfigDir,d_ARTagDir,d_noFamilyDir;
 	std::vector<ExperimentInfo> d_experiments;
 
 	std::vector<ExpectedResult> d_results;

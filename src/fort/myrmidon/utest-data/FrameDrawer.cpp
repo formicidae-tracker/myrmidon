@@ -12,7 +12,8 @@ namespace myrmidon {
 
 
 FrameDrawer::FrameDrawer(fort::tags::Family family,
-                         const Config & config) {
+                         const Config & config)
+	: d_config(config) {
 	auto [create,destroy]  = fort::tags::GetFamily(family);
 	d_family = std::shared_ptr<apriltag_family_t>(create(),destroy);
 
@@ -158,6 +159,38 @@ void FrameDrawer::DrawShapeOnImage(cv::Mat & dest,
 		cv::fillConvexPoly(dest,vertices,color);
 	}
 }
+
+void FrameDrawer::ComputeTagPosition(Eigen::Vector2d & position,
+                                     double & angle,
+                                     AntID antID,
+                                     const Eigen::Vector3d & antPosition) {
+	auto & ant = d_config.Ants.at(antID);
+	auto transform = priv::Isometry2Dd(antPosition.z(),
+	                                   antPosition.block<2,1>(0,0));
+
+	auto tagToOrig = transform
+		* priv::Isometry2Dd(ant.AntPose.z(),ant.AntPose.block<2,1>(0,0)).inverse();
+	position = tagToOrig.translation();
+	angle = tagToOrig.angle();
+}
+
+void FrameDrawer::ComputeCorners(Vector2dList & results,
+                                 AntID antID,
+                                 const Eigen::Vector3d & antPosition) {
+
+	auto transform = priv::Isometry2Dd(antPosition.z(),
+	                                   antPosition.block<2,1>(0,0));
+	auto & shapes = d_ants.at(antID)[4].second;
+
+
+	results.resize(4);
+	results[0] = transform * shapes[3];
+	results[1] = transform * shapes[2];
+	results[2] = transform * shapes[1];
+	results[3] = transform * shapes[0];
+
+}
+
 
 
 

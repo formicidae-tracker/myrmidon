@@ -22,7 +22,7 @@ MovieWriter::~MovieWriter() {
 
 std::string MovieWriter::NumberSuffix(size_t i) {
 	std::ostringstream oss;
-	oss << std::setw(4) << std::setfill('0') << i;
+	oss << "." << std::setw(4) << std::setfill('0') << i;
 	return oss.str();
 }
 

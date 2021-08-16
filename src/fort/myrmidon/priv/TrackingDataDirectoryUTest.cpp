@@ -54,22 +54,17 @@ TEST_F(TrackingDataDirectoryUTest,ExtractInfoFromTrackingDatadirectories) {
 		for ( auto it = tdd->begin(); it != tdd->end() ; ++it) {
 			auto f = *it;
 			EXPECT_EQ(f->Frame().FrameID(),i);
-			ASSERT_EQ(f->Tags().size(),2);
-			EXPECT_EQ(f->Tags().Get(0).id(),123);
-			EXPECT_EQ(f->Tags().Get(1).id(),124);
+			ASSERT_TRUE(f->Tags().size() >= 2);
+			ASSERT_TRUE(f->Tags().size() <= 3);
+			EXPECT_EQ(f->Tags().Get(0).id(),0);
+			EXPECT_EQ(f->Tags().Get(1).id(),1);
+			if ( f->Tags().size() == 3 ) {
+				EXPECT_EQ(f->Tags().Get(2).id(),2);
+			}
 			++i;
 		}
 		auto iterEnd = Time::Now();
 		std::cerr << "Iterating over all frames from " <<  tddInfo.AbsoluteFilePath << " took " << iterEnd.Sub(iterStart) << std::endl;
-		i = tdd->EndFrame()-3;
-		for( auto it = tdd->FrameAt(tdd->EndFrame()-3); it != tdd->end(); ++it ) {
-			EXPECT_EQ((*it)->Frame().FrameID(),i);
-			ASSERT_EQ((*it)->Tags().size(),2);
-			EXPECT_EQ((*it)->Tags().Get(0).id(),123);
-			EXPECT_EQ((*it)->Tags().Get(1).id(),124);
-			++i;
-		}
-
 
 
 	} catch( const std::exception & e) {
@@ -222,12 +217,16 @@ TEST_F(TrackingDataDirectoryUTest,CanBeFormatted) {
 	TrackingDataDirectory::Ptr nest;
 	EXPECT_NO_THROW({
 			nest = TrackingDataDirectory::Open(TestSetup::UTestData().Basedir() / "nest.0000",
-			                                  TestSetup::UTestData().Basedir() / "foraging.0000");
+			                                   TestSetup::UTestData().Basedir() / "foraging.0000");
 		});
 	std::ostringstream oss;
 	oss << *nest;
 	EXPECT_EQ(oss.str(),
-	          "TDD{URI:'../nest.0000', start:2019-11-02T09:00:20.021Z, end:2019-11-02T09:00:40.024014001Z}");
+	          "TDD{URI:'../nest.0000', start:"
+	          + TestSetup::UTestData().NestDataDirs().front().Start.Format()
+	          + ", end:"
+	          + TestSetup::UTestData().NestDataDirs().front().End.Format()
+	          + "}");
 
 }
 
@@ -273,15 +272,17 @@ TEST_F(TrackingDataDirectoryUTest,CanBeFormatted) {
 }
 
 TEST_F(TrackingDataDirectoryUTest,ParsesDetectionSettings) {
-	TrackingDataDirectory::Ptr nest,noConfig;
+	TrackingDataDirectory::Ptr nest,noFamily;
 	EXPECT_NO_THROW({
 			nest = TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
-			                                     TestSetup::UTestData().Basedir());
-			noConfig = TrackingDataDirectory::Open(TestSetup::UTestData().NoConfigDataDir().AbsoluteFilePath,
-			                                     TestSetup::UTestData().Basedir());
+			                                   TestSetup::UTestData().Basedir());
 		});
+	//EXPECT_NO_THROW({
+			noFamily = TrackingDataDirectory::Open(TestSetup::UTestData().NoFamilyDataDir().AbsoluteFilePath,
+			                                       TestSetup::UTestData().Basedir());
+			// });
 	tags::ApriltagOptions expected;
-	EXPECT_TRUE(ApriltagOptionsEqual(noConfig->DetectionSettings(),expected));
+	EXPECT_TRUE(ApriltagOptionsEqual(noFamily->DetectionSettings(),expected));
 
 	expected.Family = tags::Family::Tag36h11;
 	expected.QuadMinClusterPixel = 25;
@@ -366,8 +367,8 @@ TEST_F(TrackingDataDirectoryUTest,CanListTagCloseUpFiles) {
 		auto files = TrackingDataDirectory::ListTagCloseUpFiles(tddInfo.AbsoluteFilePath/"ants");
 		auto expectedFiles = tddInfo.TagCloseUpFiles;
 		ASSERT_EQ(files.size(),expectedFiles.size());
-		for (const auto & [frameID,ff] : files ) {
-			const auto & [fi,end] = expectedFiles.equal_range(frameID);
+		for (const auto & [frameID,ff] : expectedFiles ) {
+			const auto & [fi,end] = files.equal_range(frameID);
 			if ( fi == end) {
 				ADD_FAILURE() << "Returned a file for unexpected frameID " << frameID;
 			} else {
@@ -375,7 +376,7 @@ TEST_F(TrackingDataDirectoryUTest,CanListTagCloseUpFiles) {
 					                               return ff.first == it.second.first;
 				                               });
 				if (ffi == end ) {
-					ADD_FAILURE() << "Returned unexpected file " << ff.first.generic_string();
+					ADD_FAILURE() << "Missing file " << ff.first.generic_string();
 				} else if ( !(ff.second) != !(ffi->second.second) ) {
 					ADD_FAILURE() << "Filtering mismatch for file " << ff.first.generic_string();
 				} else if (ff.second) {
@@ -419,13 +420,32 @@ TEST_F(TrackingDataDirectoryUTest,ComputesAndCacheTagCloseUps) {
 			computed = tdd->TagCloseUps();
 			tdd = TrackingDataDirectory::Open(tddPath,
 			                                  TestSetup::UTestData().Basedir());
-			ASSERT_EQ(tdd->TagCloseUps().size(),1);
+			ASSERT_FALSE(tdd->TagCloseUps().empty());
 			cached = tdd->TagCloseUps();
 		});
 	EXPECT_TRUE(tdd->TagCloseUpsComputed());
 
 	ASSERT_EQ(cached.size(),tddInfo.TagCloseUps.size());
 	ASSERT_EQ(computed.size(),tddInfo.TagCloseUps.size());
+
+
+	std::sort(cached.begin(),cached.end(),
+	          [](const priv::TagCloseUp::ConstPtr & a,
+	             const priv::TagCloseUp::ConstPtr & b) {
+		          if ( a->AbsoluteFilePath() == b->AbsoluteFilePath() ) {
+			          return a->TagValue() < b->TagValue();
+		          }
+		          return a->AbsoluteFilePath() < b->AbsoluteFilePath();
+	          });
+
+	std::sort(computed.begin(),computed.end(),
+	          [](const priv::TagCloseUp::ConstPtr & a,
+	             const priv::TagCloseUp::ConstPtr & b) {
+		          if ( a->AbsoluteFilePath() == b->AbsoluteFilePath() ) {
+			          return a->TagValue() < b->TagValue();
+		          }
+		          return a->AbsoluteFilePath() < b->AbsoluteFilePath();
+	          });
 
 	auto expectTCUEq =
 		[](const priv::TagCloseUp::ConstPtr & result,
@@ -434,19 +454,25 @@ TEST_F(TrackingDataDirectoryUTest,ComputesAndCacheTagCloseUps) {
 			EXPECT_EQ(result->TagValue(), expected->TagValue()) << " for " << expected->URI();
 
 
-			EXPECT_TRUE(VectorAlmostEqual(result->TagPosition(),expected->TagPosition())) << " for " << expected->URI();
+			EXPECT_TRUE((result->TagPosition()-expected->TagPosition()).squaredNorm() < 9.0)
+				<< " for " << expected->URI() << " - " << expected->AbsoluteFilePath() << std::endl
+				<< " got:    " << result->TagPosition().transpose() << std::endl
+				<< " expect: " << expected->TagPosition().transpose();
+
 			for (int i = 0; i < 4; ++i ) {
-				EXPECT_TRUE(VectorAlmostEqual(result->Corners()[i],expected->Corners()[i]))
-					<< " for " << expected->URI() << " corner " << i;
+				EXPECT_TRUE((result->Corners()[i]-expected->Corners()[i]).squaredNorm() < 9.0)
+					<< " for " << expected->URI() << " - " << expected->AbsoluteFilePath() << " corner " << i << std::endl
+					<< " got:    " << result->Corners()[i].transpose() << std::endl
+					<< " expect: " << expected->Corners()[i].transpose();
 			}
 
-			EXPECT_DOUBLE_EQ(result->TagAngle(),expected->TagAngle()) << " for " << expected->URI();
+			EXPECT_TRUE(std::abs(result->TagAngle()-expected->TagAngle()) < 5 * M_PI / 180.0) << " for " << expected->URI();
 		};
 
 	for ( const auto & tcu : tddInfo.TagCloseUps ) {
 		auto co = std::find_if(computed.begin(),computed.end(),
 		                       [&tcu](const priv::TagCloseUp::ConstPtr & itcu ) {
-			                       return itcu->URI() == tcu->URI();
+			                       return itcu->URI() == tcu->URI() && tcu->AbsoluteFilePath() == itcu->AbsoluteFilePath();
 		                       });
 		if ( co == computed.end() ) {
 			ADD_FAILURE() << "missing computed close-up " << tcu->URI();
@@ -454,7 +480,7 @@ TEST_F(TrackingDataDirectoryUTest,ComputesAndCacheTagCloseUps) {
 		}
 		auto ca = std::find_if(cached.begin(),cached.end(),
 		                       [&tcu](const priv::TagCloseUp::ConstPtr & itcu ) {
-			                       return itcu->URI() == tcu->URI();
+			                       return itcu->URI() == tcu->URI() && tcu->AbsoluteFilePath() == itcu->AbsoluteFilePath();
 		                       });
 		if ( ca == cached.end() ) {
 			ADD_FAILURE() << "missing cached close-up " << tcu->URI();
