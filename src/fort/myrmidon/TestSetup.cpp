@@ -29,3 +29,7 @@ void TestSetup::OnTestPartResult(const ::testing::TestPartResult& test_part_resu
 void TestSetup::OnTestEnd(const ::testing::TestInfo& test_info) {}
 
 std::unique_ptr<fort::myrmidon::UTestData> TestSetup::s_utestdata;
+
+const fort::myrmidon::UTestData & TestSetup::UTestData() {
+	return *s_utestdata;
+}

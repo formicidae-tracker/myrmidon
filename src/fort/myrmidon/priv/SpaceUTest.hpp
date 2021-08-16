@@ -14,7 +14,7 @@ protected:
 	static void SetUpTestSuite();
 	static void TearDownTestSuite();
 
-	static TrackingDataDirectory::Ptr s_foo[3];
+	static std::vector<TrackingDataDirectory::Ptr> s_nest;
 };
 
 } //namespace priv

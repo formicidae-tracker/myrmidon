@@ -4,12 +4,8 @@
 
 #include <gtest/gtest.h>
 
+#include <fort/myrmidon/utest-data/UTestData.hpp>
 
-namespace fort {
-namespace myrmidon {
-class UTestData;
-} // namespace myrmidon
-} // namespace fort
 
 class TestSetup : public ::testing::EmptyTestEventListener {
 public:

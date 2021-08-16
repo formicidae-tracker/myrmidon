@@ -42,7 +42,7 @@ TEST_F(TagCloseUpUTest,CanBeFormatted) {
 		FrameReference a(d.Path.generic_string(),
 		                 d.FrameID,
 		                 fort::Time::FromTimeT(0));
-		TagCloseUp t(TestSetup::Basedir() / "foo", a,d.TagID,Eigen::Vector2d::Zero(),0.0,corners);
+		TagCloseUp t(TestSetup::UTestData().Basedir() / "foo", a,d.TagID,Eigen::Vector2d::Zero(),0.0,corners);
 		fs::path expectedParentPath(d.Path.generic_string().empty() ? "/" : d.Path);
 		std::ostringstream os;
 		os << t;
@@ -86,7 +86,7 @@ TEST_F(TagCloseUpUTest,CanComputeGeometricValues) {
 		                                                 transCorners[3]);
 		EXPECT_DOUBLE_EQ(res,a);
 
-		auto tcu = TagCloseUp(TestSetup::Basedir() / "foo.png",
+		auto tcu = TagCloseUp(TestSetup::UTestData().Basedir() / "foo.png",
 		                      FrameReference("",0,Time()),
 		                      0,
 		                      trans * center,
@@ -129,7 +129,7 @@ TEST_F(TagCloseUpUTest,ComputesSquareness) {
 		};
 
 	for ( const auto & d : testdata ) {
-		auto tcu = TagCloseUp(TestSetup::Basedir() / "foo.png",
+		auto tcu = TagCloseUp(TestSetup::UTestData().Basedir() / "foo.png",
 		                      FrameReference("",0,Time()),
 		                      0,
 		                      Eigen::Vector2d(0,0),
@@ -161,18 +161,18 @@ TEST_F(TagCloseUpUTest,ClassInvariants) {
 
 		EXPECT_THROW({
 				// Not having 4 corners
-				TagCloseUp(TestSetup::Basedir() / "foo",
-	                         FrameReference(),
-	                         0,
-	                         Eigen::Vector2d(),
-	                         0.0,
-	                         {
-	                          Eigen::Vector2d(),
-	                          Eigen::Vector2d(),
-	                          Eigen::Vector2d(),
-	                         });
+				TagCloseUp(TestSetup::UTestData().Basedir() / "foo",
+				           FrameReference(),
+				           0,
+				           Eigen::Vector2d(),
+				           0.0,
+				           {
+				            Eigen::Vector2d(),
+				            Eigen::Vector2d(),
+				            Eigen::Vector2d(),
+				           });
 
-		}, std::invalid_argument);
+			}, std::invalid_argument);
 
 }
 

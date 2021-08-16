@@ -16,10 +16,11 @@ namespace myrmidon {
 namespace priv {
 
 void ExperimentUTest::SetUp() {
-	e = Experiment::Create(TestSetup::Basedir() / "experiment-utest.myrmidon");
+	e = Experiment::Create(TestSetup::UTestData().Basedir() / "experiment-utest.myrmidon");
 }
 
 void ExperimentUTest::TearDown() {
+	fs::remove_all(e->AbsoluteFilePath());
 	e.reset();
 }
 
@@ -36,26 +37,20 @@ void ReadAll(const fs::path & a, std::vector<uint8_t> & data) {
 
 TEST_F(ExperimentUTest,CanAddTrackingDataDirectory) {
 	try {
-		e = Experiment::Open(TestSetup::Basedir() / "test.myrmidon");
-		auto tdd = TrackingDataDirectory::Open(TestSetup::Basedir() / "foo.0002", TestSetup::Basedir());
+		auto s = e->CreateSpace("nest");
+		auto tdd = TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
+		                                       TestSetup::UTestData().Basedir());
 
-		ASSERT_FALSE(e->Spaces().empty());
-		auto s = e->Spaces().begin()->second;
 		e->AddTrackingDataDirectory(s,tdd);
 
-		ASSERT_EQ(s->TrackingDataDirectories().size(),2);
-		e->Save(TestSetup::Basedir() / "test3.myrmidon");
-		e.reset();
-		auto ee = Experiment::Open(TestSetup::Basedir() / "test3.myrmidon");
-		ASSERT_FALSE(ee->Spaces().empty());
-		s = ee->Spaces().begin()->second;
-		ASSERT_EQ(s->TrackingDataDirectories().size(),2);
+		ASSERT_EQ(s->TrackingDataDirectories().size(),1);
 
 		EXPECT_THROW({
-				auto artagData = TrackingDataDirectory::Open(TestSetup::Basedir() / "artag.0000", TestSetup::Basedir());
+				auto artagData = TrackingDataDirectory::Open(TestSetup::UTestData().ARTagDataDir().AbsoluteFilePath,
+				                                             TestSetup::UTestData().Basedir());
 				ASSERT_EQ(artagData->DetectionSettings().Family,tags::Family::Tag36ARTag);
 				// Could not add wrong family to experiment
-				ee->AddTrackingDataDirectory(s,artagData);
+				e->AddTrackingDataDirectory(s,artagData);
 			},std::invalid_argument);
 
 
@@ -64,39 +59,40 @@ TEST_F(ExperimentUTest,CanAddTrackingDataDirectory) {
 	}
 
 
-
 }
 
 
 TEST_F(ExperimentUTest,IOTest) {
+	auto experimentPath = TestSetup::UTestData().CurrentVersionFile().AbsoluteFilePath;
+	auto binaryResPath = TestSetup::UTestData().Basedir() / "test-binary-io-match.myrmidon";
 	try{
-		e = Experiment::Open(TestSetup::Basedir() / "test.myrmidon" );
-		ASSERT_FALSE(e->Spaces().empty());
-		auto tdd = e->Spaces().begin()->second->TrackingDataDirectories();
-		ASSERT_EQ(tdd.size(),1);
-		ASSERT_EQ(tdd[0]->URI(),"foo.0000");
-		ASSERT_EQ(tdd[0]->AbsoluteFilePath(),TestSetup::Basedir() / "foo.0000");
+		e = Experiment::Open(experimentPath);
+		ASSERT_EQ(e->Spaces().size(),2);
+		ASSERT_EQ(e->Spaces().at(1)->TrackingDataDirectories().size(),
+		          TestSetup::UTestData().NestDataDirs().size());
+		ASSERT_EQ(e->Spaces().at(2)->TrackingDataDirectories().size(),
+		          TestSetup::UTestData().ForagingDataDirs().size());
 		ASSERT_EQ(e->Identifier()->Ants().size(),3);
 		EXPECT_EQ(e->Identifier()->Ants().find(1)->second->AntID(),1);
 		EXPECT_EQ(e->Identifier()->Ants().find(2)->second->AntID(),2);
 		EXPECT_EQ(e->Identifier()->Ants().find(3)->second->AntID(),3);
-		EXPECT_EQ(e->AbsoluteFilePath(),TestSetup::Basedir() / "test.myrmidon");
-		EXPECT_EQ(e->Basedir(), TestSetup::Basedir());
+		EXPECT_EQ(e->AbsoluteFilePath(),TestSetup::UTestData().CurrentVersionFile().AbsoluteFilePath);
+		EXPECT_EQ(e->Basedir(), TestSetup::UTestData().Basedir());
 
 		EXPECT_EQ(e->Name(),"myrmidon test data");
 		EXPECT_EQ(e->Author(),"myrmidon-tests");
 		EXPECT_EQ(e->Comment(),"automatically generated data");
 		EXPECT_EQ(e->Family(),fort::tags::Family::Tag36h11);
 
-		e->Save(TestSetup::Basedir() / "test2.myrmidon");
+		e->Save(binaryResPath);
 	} catch (const std::exception & e) {
 		ADD_FAILURE() << "Got unexpected exception: " << e.what();
 	}
 
 	try {
 		std::vector<uint8_t> originalData,newData;
-		ReadAll( TestSetup::Basedir() /"test.myrmidon",originalData);
-		ReadAll( TestSetup::Basedir() /"test2.myrmidon",newData);
+		ReadAll( experimentPath,originalData);
+		ReadAll( binaryResPath,newData);
 		ASSERT_EQ(newData.size(),originalData.size());
 		for(size_t i = 0; i < newData.size(); ++i) {
 			ASSERT_EQ(newData[i],originalData[i]) << "At byte " << i << " over " << originalData.size();
@@ -124,16 +120,19 @@ void ListAllMeasurements(const Experiment::MeasurementByTagCloseUp & measurement
 }
 
 TEST_F(ExperimentUTest,MeasurementEndToEnd) {
-	TrackingDataDirectory::Ptr foo0,foo1;
+	TrackingDataDirectory::Ptr nest0,nest1;
 	Space::Ptr s;
 	ASSERT_NO_THROW({
-			e = Experiment::Create(TestSetup::Basedir() / "new-file.myrmidon");
-			e->Save(TestSetup::Basedir() / "new-file.myrmidon");
-			foo0 = TrackingDataDirectory::Open(TestSetup::Basedir() / "foo.0000",TestSetup::Basedir());
-			foo1 = TrackingDataDirectory::Open(TestSetup::Basedir() / "foo.0001",TestSetup::Basedir());
+			e = Experiment::Create(TestSetup::UTestData().Basedir() / "measurement-e2e.myrmidon");
+			e->Save(TestSetup::UTestData().Basedir() / "measurement-e2e.myrmidon");
 			s = e->CreateSpace("box");
-			e->AddTrackingDataDirectory(s,foo0);
-			e->AddTrackingDataDirectory(s,foo1);
+			nest0 = TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs()[0].AbsoluteFilePath,
+			                                    TestSetup::UTestData().Basedir());
+			nest1 = TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs()[1].AbsoluteFilePath,
+			                                    TestSetup::UTestData().Basedir());
+
+			e->AddTrackingDataDirectory(s,nest0);
+			e->AddTrackingDataDirectory(s,nest1);
 		});
 
 	// It has a default measurment type Measurement::HEAD_TAIL_TYPE called "head-tail"
@@ -164,7 +163,7 @@ TEST_F(ExperimentUTest,MeasurementEndToEnd) {
 
 	EXPECT_THROW({
 			//We are not allowed to add a measurement with an inexisting Type
-			e->SetMeasurement(std::make_shared<Measurement>("foo.0000",
+			e->SetMeasurement(std::make_shared<Measurement>("nest.0000",
 			                                                Measurement::HEAD_TAIL_TYPE+1,
 			                                                Eigen::Vector2d(12,1),
 			                                                Eigen::Vector2d(1,12),
@@ -181,8 +180,8 @@ TEST_F(ExperimentUTest,MeasurementEndToEnd) {
 		});
 
 
-	auto tcuPath = fs::path(foo0->URI()) / "frames" / std::to_string(foo0->StartFrame()) / "closeups/0x015";
-	auto badPath = fs::path("bar.0000") / "frames" / std::to_string(foo0->StartFrame()) / "closeups/0x015";
+	auto tcuPath = fs::path("nest.0000") / "frames" / std::to_string(nest0->StartFrame()) / "closeups/0x015";
+	auto badPath = fs::path("bar.0000") / "frames" / std::to_string(nest0->StartFrame()) / "closeups/0x015";
 
 	auto goodCustom = std::make_shared<Measurement>(tcuPath.generic_string(),
 	                                                Measurement::HEAD_TAIL_TYPE+1,
@@ -213,9 +212,9 @@ TEST_F(ExperimentUTest,MeasurementEndToEnd) {
 		});
 
 	//we cannot remove a directory that have a measurement
-	EXPECT_FALSE(e->TrackingDataDirectoryIsDeletable(foo0->URI()));
+	EXPECT_FALSE(e->TrackingDataDirectoryIsDeletable(nest0->URI()));
 	EXPECT_THROW({
-			e->DeleteTrackingDataDirectory(foo0->URI());
+			e->DeleteTrackingDataDirectory(nest0->URI());
 		},std::runtime_error);
 
 	EXPECT_THROW({
@@ -246,13 +245,13 @@ TEST_F(ExperimentUTest,MeasurementEndToEnd) {
 	                                                  antBefore->AntID(),
 	                                                  1,
 	                                                  Time::SinceEver(),
-	                                                  foo0->End());
+	                                                  nest0->End());
 	identBefore1->SetTagSize(2.0);
 
 	auto identBefore2 = Identifier::AddIdentification(e->Identifier(),
 	                                                  antBefore->AntID(),
 	                                                  0,
-	                                                  foo1->Start(),
+	                                                  nest1->Start(),
 	                                                  Time::Forever());
 	identBefore2->SetTagSize(2.0);
 
@@ -265,22 +264,22 @@ TEST_F(ExperimentUTest,MeasurementEndToEnd) {
 	};
 	std::vector<MData> mData =
 		{
-		 {foo0,0,0,1},
-		 {foo0,0,0,2},
-		 {foo0,0,1,1},
-		 {foo0,0,1,2},
-		 {foo0,1,0,1},
-		 {foo0,1,0,2},
-		 {foo0,1,1,1},
-		 {foo0,1,1,2},
-		 {foo1,0,0,1},
-		 {foo1,0,0,2},
-		 {foo1,0,1,1},
-		 {foo1,0,1,2},
-		 {foo1,1,0,1},
-		 {foo1,1,0,2},
-		 {foo1,1,1,1},
-		 {foo1,1,1,2}
+		 {nest0,0,0,1},
+		 {nest0,0,0,2},
+		 {nest0,0,1,1},
+		 {nest0,0,1,2},
+		 {nest0,1,0,1},
+		 {nest0,1,0,2},
+		 {nest0,1,1,1},
+		 {nest0,1,1,2},
+		 {nest1,0,0,1},
+		 {nest1,0,0,2},
+		 {nest1,0,1,1},
+		 {nest1,0,1,2},
+		 {nest1,1,0,1},
+		 {nest1,1,0,2},
+		 {nest1,1,1,1},
+		 {nest1,1,1,2}
 		};
 	std::vector<std::string> paths;
 	paths.reserve(mData.size());
@@ -309,14 +308,14 @@ TEST_F(ExperimentUTest,MeasurementEndToEnd) {
 	                                                 antAfter->AntID(),
 	                                                 0,
 	                                                 Time::SinceEver(),
-	                                                 foo0->End());
+	                                                 nest0->End());
 
 
 
 	auto identAfter2 = Identifier::AddIdentification(e->Identifier(),
 	                                                 antAfter->AntID(),
 	                                                 1,
-	                                                 foo1->Start(),
+	                                                 nest1->Start(),
 	                                                 Time::Forever());
 	e->SetDefaultTagSize(1.0);
 	EXPECT_TRUE(VectorAlmostEqual(identAfter1->AntPosition(),
@@ -400,11 +399,11 @@ TEST_F(ExperimentUTest,MeasurementEndToEnd) {
 		},std::invalid_argument);
 
 	EXPECT_THROW({
-			e->DeleteMeasurement("foo.0000/frames/0/closeups/0x01a/measurements/1");
+			e->DeleteMeasurement("nest.0000/frames/1/closeups/0x01a/measurements/1");
 		},std::runtime_error);
 
 	EXPECT_THROW({
-			e->DeleteMeasurement("foo.0000/frames/0/closeups/0x015/measurements/34");
+			e->DeleteMeasurement("nest.0000/frames/1/closeups/0x015/measurements/34");
 		},std::runtime_error);
 
 	EXPECT_NO_THROW({
@@ -419,7 +418,7 @@ TEST_F(ExperimentUTest,MeasurementEndToEnd) {
 
 	EXPECT_THROW({
 			// contains 2 measurements
-			e->DeleteTrackingDataDirectory(foo0->URI());
+			e->DeleteTrackingDataDirectory(nest0->URI());
 		},std::runtime_error);
 
 
@@ -447,8 +446,8 @@ TEST_F(ExperimentUTest,MeasurementEndToEnd) {
 	EXPECT_EQ(list.size(),0);
 
 	EXPECT_NO_THROW({
-			e->DeleteTrackingDataDirectory(foo0->URI());
-			e->DeleteTrackingDataDirectory(foo1->URI());
+			e->DeleteTrackingDataDirectory(nest0->URI());
+			e->DeleteTrackingDataDirectory(nest1->URI());
 		});
 
 	EXPECT_NO_THROW({
@@ -460,14 +459,15 @@ TEST_F(ExperimentUTest,MeasurementEndToEnd) {
 }
 
 TEST_F(ExperimentUTest,TooSmallHeadTailMeasurementAreNotPermitted) {
-	TrackingDataDirectory::Ptr foo0;
+	TrackingDataDirectory::Ptr nest0;
 	Space::Ptr s;
 	ASSERT_NO_THROW({
-			e = Experiment::Create(TestSetup::Basedir() / "small-head-tail-measurement-failure.myrmidon");
-			e->Save(TestSetup::Basedir() / "small-head-tail-measurement-failure.myrmidon");
-			foo0 = TrackingDataDirectory::Open(TestSetup::Basedir() / "foo.0000",TestSetup::Basedir());
-			s = e->CreateSpace("box");
-			e->AddTrackingDataDirectory(s,foo0);
+			e = Experiment::Create(TestSetup::UTestData().Basedir() / "small-head-tail-measurement-failure.myrmidon");
+			e->Save(TestSetup::UTestData().Basedir() / "small-head-tail-measurement-failure.myrmidon");
+			nest0 = TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
+			                                    TestSetup::UTestData().Basedir());
+			s = e->CreateSpace("nest");
+			e->AddTrackingDataDirectory(s,nest0);
 			e->SetDefaultTagSize(1.0);
 		});
 
@@ -479,9 +479,9 @@ TEST_F(ExperimentUTest,TooSmallHeadTailMeasurementAreNotPermitted) {
 	                                           Time::Forever());
 
 
-	auto tcuPath = fs::path(foo0->URI())
+	auto tcuPath = fs::path(nest0->URI())
 			/ "frames"
-			/ std::to_string(foo0->StartFrame() + 42)
+			/ std::to_string(nest0->StartFrame() + 1)
 			/ "closeups"
 			/ FormatTagID(1);
 	// this measurement is subpixel value, it should throw an exception when set to an experiment
@@ -642,20 +642,21 @@ TEST_F(ExperimentUTest,AntMetadataManipulation) {
 
 
 TEST_F(ExperimentUTest,AntCloning) {
-	auto foo0 = TrackingDataDirectory::Open(TestSetup::Basedir() / "foo.0000",TestSetup::Basedir());
+	auto nest0 = TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
+	                                         TestSetup::UTestData().Basedir());
 	auto s = e->CreateSpace("nest");
-	e->AddTrackingDataDirectory(s,foo0);
+	e->AddTrackingDataDirectory(s,nest0);
 
 	std::vector<Ant::Ptr> ants =
 		{ e->CreateAnt(),e->CreateAnt(),e->CreateAnt() };
 
-	e->SetMeasurement(std::make_shared<Measurement>(fs::path(foo0->URI()) / "frames" / std::to_string(foo0->StartFrame()) / "closeups/0x001",
+	e->SetMeasurement(std::make_shared<Measurement>(fs::path(nest0->URI()) / "frames" / std::to_string(nest0->StartFrame()) / "closeups/0x001",
 	                                                Measurement::HEAD_TAIL_TYPE,
 	                                                Eigen::Vector2d(12,12),
 	                                                Eigen::Vector2d(0,12),
 	                                                12.0));
 
-	e->SetMeasurement(std::make_shared<Measurement>(fs::path(foo0->URI()) / "frames" / std::to_string(foo0->StartFrame()) / "closeups/0x002",
+	e->SetMeasurement(std::make_shared<Measurement>(fs::path(nest0->URI()) / "frames" / std::to_string(nest0->StartFrame()) / "closeups/0x002",
 	                                                Measurement::HEAD_TAIL_TYPE,
 	                                                Eigen::Vector2d(12,12),
 	                                                Eigen::Vector2d(0,12),
@@ -708,22 +709,25 @@ TEST_F(ExperimentUTest,AntCloning) {
 
 
 TEST_F(ExperimentUTest,OldFilesAreOpenable) {
-	EXPECT_NO_THROW({
-			Experiment::Open(TestSetup::Basedir() / "test-0.1.myrmidon");
-		});
+	for ( const auto & eInfo : TestSetup::UTestData().OldVersionFiles() ) {
+		EXPECT_NO_THROW({
+				Experiment::Open(eInfo.AbsoluteFilePath);
+			});
+	}
 }
 
 TEST_F(ExperimentUTest,WillNotOpenFileWhichAreTooRecent) {
-	auto path = TestSetup::Basedir() / "test-future.myrmidon";
-
+	auto path = TestSetup::UTestData().FutureExperimentFile().AbsoluteFilePath;
 	try {
 		Experiment::Open(path);
 		ADD_FAILURE() << "Opening " << path << " should have thrown a std::runtime_error";
 	} catch ( const std::runtime_error & e) {
 		std::ostringstream expected;
-		expected << "Unexpected myrmidon file version 42.42.0 in "
+		expected << "Unexpected myrmidon file version "
+		         << TestSetup::UTestData().FutureExperimentFile().Version
+		         << " in "
 		         << path
-		         << ": can only works with version below or equal to 0.3.0";
+		         << ": can only works with versions below or equal to 0.3.0";
 		EXPECT_EQ(expected.str(),e.what());
 
 	}
@@ -731,7 +735,7 @@ TEST_F(ExperimentUTest,WillNotOpenFileWhichAreTooRecent) {
 
 TEST_F(ExperimentUTest,CannotChangeDirectory) {
 	EXPECT_THROW({
-			e->Save(TestSetup::Basedir()/"foo"/"bar"/"exp.myrmidon");
+			e->Save(TestSetup::UTestData().Basedir()/"foo"/"bar"/"exp.myrmidon");
 		},std::invalid_argument);
 }
 

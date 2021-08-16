@@ -121,7 +121,7 @@ TEST_F(MatchersUTest,IDMatcher) {
 TEST_F(MatchersUTest,ColumnMatcher) {
 	auto columnMatcher = Matcher::AntColumnMatcher("bar",42);
 
-	auto experiment = Experiment::Create(TestSetup::Basedir() / "matcher.myrmidon");
+	auto experiment = Experiment::Create(TestSetup::UTestData().Basedir() / "matcher.myrmidon");
 	auto bar = experiment->SetMetaDataKey("bar",int(0));
 	ASSERT_EQ(bar->Type(),AntMetaDataType::INT);
 

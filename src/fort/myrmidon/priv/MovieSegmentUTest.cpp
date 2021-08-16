@@ -2,11 +2,22 @@
 
 #include "MovieSegment.hpp"
 
-#include "../TestSetup.hpp"
+#include <fort/myrmidon/TestSetup.hpp>
 
 #include <fstream>
 
 using namespace fort::myrmidon::priv;
+
+fs::path MovieSegmentUTest::s_basedir;
+
+void MovieSegmentUTest::SetUpTestSuite() {
+	s_basedir = TestSetup::UTestData().Basedir() / "movie-segment-utests";
+	ASSERT_NO_THROW({fs::create_directories(s_basedir);});
+}
+void MovieSegmentUTest::TearDownTestSuite() {
+
+}
+
 
 TEST_F(MovieSegmentUTest,CanResolveFrameMatching) {
 
@@ -82,11 +93,11 @@ TEST_F(MovieSegmentUTest,CanBeParsed) {
 
 	std::sort(offsets.begin(),offsets.end());
 
-	fs::path movieFile = TestSetup::Basedir() / "stream.mp4";
+	fs::path movieFile = s_basedir / "stream.mp4";
 	do {
 		std::ofstream movie(movieFile.c_str());
 	} while(0);
-	fs::path matchFile = TestSetup::Basedir() / "frame-matching.txt";
+	fs::path matchFile = s_basedir / "frame-matching.txt";
 	std::ofstream f(matchFile.c_str());
 	MovieSegment::ListOfOffset::const_iterator it = offsets.begin();
 	MovieSegment::ListOfOffset::const_iterator next = offsets.begin() + 1;
@@ -111,7 +122,7 @@ TEST_F(MovieSegmentUTest,CanBeParsed) {
 	}
 
 	EXPECT_THROW({
-			fs::path badMatchFile = TestSetup::Basedir() / "frame-matching-bad.txt";
+			fs::path badMatchFile = s_basedir / "frame-matching-bad.txt";
 			std::ofstream f(badMatchFile.c_str());
 			f << "a 1234" << std::endl;
 			MovieSegment::Open(0,movieFile,badMatchFile,"bar");
@@ -119,18 +130,18 @@ TEST_F(MovieSegmentUTest,CanBeParsed) {
 
 
 	EXPECT_THROW({
-			fs::path badMatchFile = TestSetup::Basedir() / "frame-matching-bad.txt";
+			fs::path badMatchFile = s_basedir / "frame-matching-bad.txt";
 			std::ofstream f(badMatchFile.c_str());
 			f << "23 b" << std::endl;
 			MovieSegment::Open(0,movieFile,badMatchFile,"bar");
 		},std::runtime_error);
 
 	EXPECT_THROW({
-			MovieSegment::Open(0,movieFile,TestSetup::Basedir() / "does-not-exist.txt","bar");
+			MovieSegment::Open(0,movieFile,s_basedir / "does-not-exist.txt","bar");
 		},std::invalid_argument);
 
 	EXPECT_THROW({
-			MovieSegment::Open(0,TestSetup::Basedir() / "does-not-exist.mp4",matchFile,"bar");
+			MovieSegment::Open(0,s_basedir / "does-not-exist.mp4",matchFile,"bar");
 		},std::invalid_argument);
 
 }

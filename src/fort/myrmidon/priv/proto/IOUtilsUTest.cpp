@@ -109,7 +109,7 @@ TEST_F(IOUtilsUTest,IdentificationIO) {
 		   },
 	};
 
-	auto e = Experiment::Create(TestSetup::Basedir()/ "test.myrmidon");
+	auto e = Experiment::Create(TestSetup::UTestData().Basedir()/ "test-identification-io.myrmidon");
 	auto a = e->CreateAnt();
 	for ( const auto & d : data ) {
 		auto ident = Identifier::AddIdentification(e->Identifier(),a->AntID(), d.Value, d.Start, d.End);
@@ -395,7 +395,7 @@ TEST_F(IOUtilsUTest,AntIO) {
 		   },
 	};
 
-	auto e = Experiment::Create(TestSetup::Basedir() / "test-ant-io.myrmidon");
+	auto e = Experiment::Create(TestSetup::UTestData().Basedir() / "test-ant-io.myrmidon");
 	auto alive = e->SetMetaDataKey("alive",true);
 	auto group = e->SetMetaDataKey("group",std::string());
 	ASSERT_EQ(alive->Type(),AntMetaDataType::BOOL);
@@ -560,8 +560,8 @@ TEST_F(IOUtilsUTest,MeasurementIO) {
 }
 
 TEST_F(IOUtilsUTest,ExperimentIO) {
-	auto e = Experiment::Create(TestSetup::Basedir() / "experiment-io.myrmidon");
-	auto res = Experiment::Create(TestSetup::Basedir() / "experiment-io-res.myrmidon");
+	auto e = Experiment::Create(TestSetup::UTestData().Basedir() / "experiment-io.myrmidon");
+	auto res = Experiment::Create(TestSetup::UTestData().Basedir() / "experiment-io-res.myrmidon");
 	pb::Experiment ePb,expected;
 
 	TrackingDataDirectory::Ptr tdd;
@@ -575,7 +575,9 @@ TEST_F(IOUtilsUTest,ExperimentIO) {
 			expected.set_comment("Some comment");
 			e->SetDefaultTagSize(1.6);
 			expected.set_tagsize(1.6);
-			tdd = TrackingDataDirectory::Open(TestSetup::Basedir() / "foo.0000",TestSetup::Basedir());
+
+			tdd = TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
+			                                  TestSetup::UTestData().Basedir());
 			auto s = e->CreateSpace("box");
 			e->AddTrackingDataDirectory(s,tdd);
 
@@ -645,7 +647,7 @@ TEST_F(IOUtilsUTest,ExperimentIO) {
 }
 
 TEST_F(IOUtilsUTest,ZoneIO) {
-	auto e = Experiment::Create(TestSetup::Basedir()/ "zone-io.myrmidon");
+	auto e = Experiment::Create(TestSetup::UTestData().Basedir()/ "zone-io.myrmidon");
 	auto s1 = e->CreateSpace("foo");
 
 	auto dZ = s1->CreateZone("hole");
@@ -670,7 +672,7 @@ TEST_F(IOUtilsUTest,ZoneIO) {
 
 	IOUtils::SaveZone(&z,dZ);
 	EXPECT_TRUE(MessageEqual(z,expected));
-	auto e2 = Experiment::Create(TestSetup::Basedir()/ "zone-io.myrmidon");
+	auto e2 = Experiment::Create(TestSetup::UTestData().Basedir()/ "zone-io.myrmidon");
 	auto s2 = e2->CreateSpace("foo");
 	IOUtils::LoadZone(s2,z);
 	ASSERT_FALSE(s2->Zones().empty());
@@ -700,16 +702,18 @@ TEST_F(IOUtilsUTest,ZoneIO) {
 
 
 TEST_F(IOUtilsUTest,SpaceIO) {
-	auto e = Experiment::Create(TestSetup::Basedir() / "space-io.myrmidon");
-	auto e2 = Experiment::Create(TestSetup::Basedir() / "space2-io.myrmidon");
+	auto e = Experiment::Create(TestSetup::UTestData().Basedir() / "space-io.myrmidon");
+	auto e2 = Experiment::Create(TestSetup::UTestData().Basedir() / "space2-io.myrmidon");
 	auto dS = e->CreateSpace("foo");
-	auto tdd = TrackingDataDirectory::Open(TestSetup::Basedir() / "foo.0000", TestSetup::Basedir() );
+	auto tddPath = TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath;
+	auto tdd = TrackingDataDirectory::Open(tddPath,
+	                                       TestSetup::UTestData().Basedir() );
 	e->AddTrackingDataDirectory(dS,tdd);
 	auto z =dS->CreateZone("bar");
 	pb::Space expected,s;
 	expected.set_id(dS->ID());
 	expected.set_name(dS->Name());
-	expected.add_trackingdatadirectories("foo.0000");
+	expected.add_trackingdatadirectories(tddPath.filename());
 	IOUtils::SaveZone(expected.add_zones(),z);
 
 	IOUtils::SaveSpace(&s,dS);
@@ -720,7 +724,7 @@ TEST_F(IOUtilsUTest,SpaceIO) {
 	EXPECT_EQ(res->ID(),dS->ID());
 	EXPECT_EQ(res->Name(),dS->Name());
 	ASSERT_EQ(res->TrackingDataDirectories().size(),1);
-	EXPECT_EQ(res->TrackingDataDirectories().front()->URI(),"foo.0000");
+	EXPECT_EQ(res->TrackingDataDirectories().front()->URI(),tddPath.filename());
 	ASSERT_EQ(res->Zones().size(),1);
 	ASSERT_EQ(res->Zones().begin()->second->ID(),z->ID());
 	ASSERT_EQ(res->Zones().begin()->second->Name(),z->Name());
@@ -796,9 +800,10 @@ TEST_F(IOUtilsUTest,MovieSegmentIO) {
 	std::sort(offsets.begin(),offsets.end());
 	std::reverse(offsets.begin(),offsets.end());
 
+	auto tddPath  = TestSetup::UTestData().WithVideoDataDir().AbsoluteFilePath;
 	ms = std::make_shared<MovieSegment>(0,
-	                                    TestSetup::Basedir() / "foo.0000" / "stream.0000.mp4",
-	                                    "foo.0000",
+	                                    tddPath / "stream.0000.mp4",
+	                                    tddPath.filename(),
 	                                    1234,
 	                                    1234+100+2,
 	                                    0,
@@ -816,10 +821,12 @@ TEST_F(IOUtilsUTest,MovieSegmentIO) {
 		pbo->set_offset(o.second);
 	}
 
-	IOUtils::SaveMovieSegment(&pbRes,ms,TestSetup::Basedir() / "foo.0000");
+	IOUtils::SaveMovieSegment(&pbRes,ms,tddPath);
 	EXPECT_TRUE(MessageEqual(pbRes,expected));
 
-	res = IOUtils::LoadMovieSegment(pbRes, TestSetup::Basedir() / "foo.0000" , "foo.0000");
+	res = IOUtils::LoadMovieSegment(pbRes,
+	                                tddPath ,
+	                                tddPath.filename());
 
 	EXPECT_EQ(res->AbsoluteFilePath().string(), ms->AbsoluteFilePath().string());
 	EXPECT_EQ(res->StartFrame(),ms->StartFrame());
@@ -836,10 +843,10 @@ TEST_F(IOUtilsUTest,MovieSegmentIO) {
 
 	//not using an absolute path as arguments
 	EXPECT_THROW({
-			IOUtils::SaveMovieSegment(&pbRes,ms, "foo.0000");
+			IOUtils::SaveMovieSegment(&pbRes,ms, "nest.0000");
 		},std::invalid_argument);
 	EXPECT_THROW({
-			IOUtils::LoadMovieSegment(pbRes, "foo.0000","foo.0000");
+			IOUtils::LoadMovieSegment(pbRes, "nest.0000","nest.0000");
 		},std::invalid_argument);
 }
 
@@ -870,7 +877,8 @@ TEST_F(IOUtilsUTest,FamilyIO) {
 }
 
 TEST_F(IOUtilsUTest,TagCloseUpIO) {
-	auto basedir = TestSetup::Basedir() / "foo.0000" / "ants";
+	auto tddPath = TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath;
+	auto basedir =  tddPath / "ants";
 	struct TestData {
 		EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 		Eigen::Vector2d Position;
@@ -886,7 +894,7 @@ TEST_F(IOUtilsUTest,TagCloseUpIO) {
 		 {
 		  Eigen::Vector2d(23.0,-3.0),
 		  "ant_123_frame_21.png",
-		  FrameReference("foo.0000",21,Time::FromTimeT(2)),
+		  FrameReference(tddPath.filename(),21,Time::FromTimeT(2)),
 		  123,
 		  -M_PI/ 5.0,
 		  {

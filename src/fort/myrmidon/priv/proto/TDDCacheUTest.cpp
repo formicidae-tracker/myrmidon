@@ -13,26 +13,28 @@ namespace priv {
 namespace proto {
 
 
-TEST_F(TDDCacheUTest,CahceIO) {
+TEST_F(TDDCacheUTest,CacheIO) {
 
-	fs::path cacheURI = "cache-test.0000";
-
+	fs::path cacheURI = TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath;
+	fs::path basedir = TestSetup::UTestData().Basedir();
 	EXPECT_THROW({
 			// Should be an absolute path as first argument
-			TDDCache::Load("foo.0000","foo.0000");
+			TDDCache::Load("nest.0000","nest.0000");
 		},std::invalid_argument);
+
+	UTestData::ClearCachedData(cacheURI);
 
 	EXPECT_THROW({
 			//Was never opened, so there is no cache
-			TDDCache::Load(TestSetup::Basedir() / cacheURI ,cacheURI.generic_string());
+			TDDCache::Load(cacheURI ,basedir);
 		},std::runtime_error);
 
 	TrackingDataDirectory::Ptr opened,cached;
 	ASSERT_NO_THROW({
 			//will open it one first, and saving the cache
-			opened = TrackingDataDirectory::Open(TestSetup::Basedir() / cacheURI,
-			                            TestSetup::Basedir());
-			cached = TDDCache::Load(TestSetup::Basedir() / cacheURI, cacheURI.generic_string());
+			opened = TrackingDataDirectory::Open(cacheURI,
+			                                     basedir);
+			cached = TDDCache::Load(cacheURI, basedir);
 		});
 
 
@@ -55,7 +57,7 @@ TEST_F(TDDCacheUTest,CahceIO) {
 			                           cached->AbsoluteFilePath());
 		 },
 		};
-	auto cacheFilepath = TestSetup::Basedir() / cacheURI / TDDCache::CACHE_FILENAME;
+	auto cacheFilepath = cacheURI / TDDCache::CACHE_FILENAME;
 	ASSERT_NO_THROW({
 			TDDCache::ReadWriter::Write(cacheFilepath,
 			                            h,
@@ -63,7 +65,7 @@ TEST_F(TDDCacheUTest,CahceIO) {
 		});
 
 	EXPECT_THROW({
-			TDDCache::Load(TestSetup::Basedir() / cacheURI, cacheURI.generic_string());
+			TDDCache::Load(cacheURI, basedir);
 		},std::runtime_error);
 
 

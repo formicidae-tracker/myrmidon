@@ -13,8 +13,10 @@ namespace fort {
 namespace myrmidon {
 namespace priv {
 
-void ExperimentDataLessUTest::SetUp() {
-	experimentPath = TestSetup::Basedir() / "data-less.myrmidon";
+fs::path ExperimentDataLessUTest::experimentPath;
+
+void ExperimentDataLessUTest::SetUpTestSuite() {
+	experimentPath = TestSetup::UTestData().Basedir() / "data-less.myrmidon";
 	auto experiment = Experiment::Create(experimentPath);
 
 	// First we add some space and tracking data directories
@@ -22,10 +24,20 @@ void ExperimentDataLessUTest::SetUp() {
 	auto nest = experiment->CreateSpace("nest");
 	auto foraging = experiment->CreateSpace("foraging");
 
-	auto foo0 = TrackingDataDirectory::Open(TestSetup::Basedir() / "foo.0000",TestSetup::Basedir());
+	for ( const auto & tddInfo : TestSetup::UTestData().NestDataDirs() ) {
+		auto tdd = TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,
+		                                       TestSetup::UTestData().Basedir());
+		experiment->AddTrackingDataDirectory(nest,tdd);
 
-	experiment->AddTrackingDataDirectory(nest,foo0);
-	experiment->AddTrackingDataDirectory(foraging,TrackingDataDirectory::Open(TestSetup::Basedir() / "foo.0001",TestSetup::Basedir()));
+	}
+	auto nest0 = nest->TrackingDataDirectories().front();
+
+
+	for ( const auto & tddInfo : TestSetup::UTestData().ForagingDataDirs() ) {
+		auto tdd = TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,
+		                                       TestSetup::UTestData().Basedir());
+		experiment->AddTrackingDataDirectory(foraging,tdd);
+	}
 
 	auto ant = experiment->CreateAnt();
 
@@ -33,7 +45,7 @@ void ExperimentDataLessUTest::SetUp() {
 	                                           ant->AntID(),
 	                                           1,Time::SinceEver(),Time::Forever());
 
-	auto tcuPath = fs::path(foo0->URI()) / "frames" / std::to_string(foo0->StartFrame()) / "closeups/0x001";
+	auto tcuPath = fs::path(nest0->URI()) / "frames" / std::to_string(nest0->StartFrame()) / "closeups/0x001";
 
 	auto mtype = experiment->CreateMeasurementType("antennas");
 
@@ -59,14 +71,14 @@ void ExperimentDataLessUTest::SetUp() {
 	experiment->Save(experimentPath);
 }
 
-void ExperimentDataLessUTest::TearDown() {
+void ExperimentDataLessUTest::TearDownTestSuite() {
 }
 
 
 TEST_F(ExperimentDataLessUTest,DataLessSupports) {
 
 	try {
-		Experiment::OpenDataLess(TestSetup::Basedir() / "test-0.1.myrmidon");
+		Experiment::OpenDataLess(TestSetup::UTestData().V0_1_File().AbsoluteFilePath);
 		ADD_FAILURE() << "No exception thrown when opening outdated myrmidon file";
 	} catch ( const std::runtime_error & e ) {
 		EXPECT_STREQ("Uncorrect myrmidon file version 0.1.0: data-less opening is only supported for myrmidon file version above 0.2.0",e.what());

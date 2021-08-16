@@ -15,13 +15,13 @@ TEST_F(FileReadWriterUTest,TestBadIO) {
 	pb::FileHeader h;
 
 	EXPECT_THROW({
-			RW::Write(TestSetup::Basedir() / "does-no-exist-dir"/ "foo.myrmidon",
+			RW::Write(TestSetup::UTestData().Basedir() / "does-no-exist-dir"/ "foo.myrmidon",
 			          h,{
 			          });
 		},std::runtime_error);
 
 	EXPECT_THROW({
-			RW::Read(TestSetup::Basedir() / "does-no-exist-dir"/ "foo.myrmidon",
+			RW::Read(TestSetup::UTestData().Basedir() / "does-no-exist-dir"/ "foo.myrmidon",
 			         [](const pb::FileHeader & h) {
 			         },
 			         [](const pb::FileLine & line) {

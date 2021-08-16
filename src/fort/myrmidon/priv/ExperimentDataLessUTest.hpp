@@ -10,10 +10,10 @@ namespace priv {
 
 class ExperimentDataLessUTest : public ::testing::Test {
 protected:
-	void SetUp();
-	void TearDown();
+	static void SetUpTestSuite();
+	static void TearDownTestSuite();
 
-	fs::path experimentPath;
+	static fs::path experimentPath;
 };
 
 } // namespace priv

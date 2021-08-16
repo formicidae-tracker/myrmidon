@@ -34,7 +34,7 @@ Experiment::Ptr ExperimentReadWriter::DoOpen(const fs::path & filename, bool dat
 			                 std::ostringstream os;
 			                 os << "Unexpected myrmidon file version " << fileVersion
 			                    << " in " << filename
-			                    << ": can only works with version below or equal to 0.3.0";
+			                    << ": can only works with versions below or equal to 0.3.0";
 			                 throw std::runtime_error(os.str());
 		                 }
 		                 if ( dataLess == true && fileVersion < dataLessSupportBoundaryVersion ) {

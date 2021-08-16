@@ -14,13 +14,13 @@ namespace priv {
 
 void QueryUTest::SetUp() {
 	ASSERT_NO_THROW({
-			experiment = Experiment::Create(TestSetup::Basedir() / "query.myrmidon");
-			auto space = experiment->CreateSpace("box");
-			experiment->AddTrackingDataDirectory(space,TrackingDataDirectory::Open(TestSetup::Basedir() / "foo.0000",TestSetup::Basedir()));
-			experiment->AddTrackingDataDirectory(space,TrackingDataDirectory::Open(TestSetup::Basedir() / "foo.0001",TestSetup::Basedir()));
-			experiment->AddTrackingDataDirectory(space,TrackingDataDirectory::Open(TestSetup::Basedir() / "foo.0002",TestSetup::Basedir()));
+			experiment = Experiment::Create(TestSetup::UTestData().Basedir() / "query.myrmidon");
+			auto space = experiment->CreateSpace("nest");
+			for ( const auto & tddInfo : TestSetup::UTestData().NestDataDirs()) {
+				auto tdd = TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,TestSetup::UTestData().Basedir() );
+				experiment->AddTrackingDataDirectory(space,tdd);
+			}
 		});
-
 }
 
 TEST_F(QueryUTest,TagStatistics) {

@@ -9,21 +9,22 @@ namespace fort {
 namespace myrmidon {
 namespace priv {
 
-TrackingDataDirectory::Ptr SpaceUTest::s_foo[3];
+std::vector<TrackingDataDirectory::Ptr> SpaceUTest::s_nest;
 
 void SpaceUTest::SetUpTestSuite() {
-	s_foo[0] = TrackingDataDirectory::Open(TestSetup::Basedir() / "foo.0000",
-	                                       TestSetup::Basedir());
-	s_foo[1] = TrackingDataDirectory::Open(TestSetup::Basedir() / "foo.0001",
-	                                       TestSetup::Basedir());
-	s_foo[2] = TrackingDataDirectory::Open(TestSetup::Basedir() / "foo.0002",
-	                                       TestSetup::Basedir());
+	for ( const auto & tddInfo : TestSetup::UTestData().NestDataDirs()) {
+		EXPECT_NO_THROW({
+				auto tdd = TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,
+				                                       TestSetup::UTestData().Basedir());
+				s_nest.push_back(tdd);
+			});
+	}
+
+	ASSERT_TRUE(s_nest.size() >= 3 );
 }
 
 void SpaceUTest::TearDownTestSuite() {
-	for (auto & tdd : s_foo) {
-		tdd.reset();
-	}
+	s_nest.clear();
 }
 
 
@@ -89,33 +90,33 @@ TEST_F(SpaceUTest,CanHoldTDD) {
 	auto universe = std::make_shared<Space::Universe>();
 	auto foo = Space::Universe::CreateSpace(universe,0,"foo");
 	EXPECT_NO_THROW({
-			foo->AddTrackingDataDirectory(s_foo[2]);
-			foo->AddTrackingDataDirectory(s_foo[1]);
-			foo->AddTrackingDataDirectory(s_foo[0]);
+			foo->AddTrackingDataDirectory(s_nest[2]);
+			foo->AddTrackingDataDirectory(s_nest[1]);
+			foo->AddTrackingDataDirectory(s_nest[0]);
 		});
 	ASSERT_EQ(foo->TrackingDataDirectories().size(),3);
 
 	// now they are sorted
-	EXPECT_EQ(foo->TrackingDataDirectories()[0],s_foo[0]);
-	EXPECT_EQ(foo->TrackingDataDirectories()[1],s_foo[1]);
-	EXPECT_EQ(foo->TrackingDataDirectories()[2],s_foo[2]);
+	EXPECT_EQ(foo->TrackingDataDirectories()[0],s_nest[0]);
+	EXPECT_EQ(foo->TrackingDataDirectories()[1],s_nest[1]);
+	EXPECT_EQ(foo->TrackingDataDirectories()[2],s_nest[2]);
 
 	try {
-		foo->AddTrackingDataDirectory(s_foo[0]);
+		foo->AddTrackingDataDirectory(s_nest[0]);
 		ADD_FAILURE() << "Should have thrown Space::TDDOverlap but nothing is thrown";
 	} catch (const Space::TDDOverlap & e) {
-		EXPECT_EQ(e.A(),s_foo[0]);
-		EXPECT_EQ(e.B(),s_foo[0]);
+		EXPECT_EQ(e.A(),s_nest[0]);
+		EXPECT_EQ(e.B(),s_nest[0]);
 	} catch (...) {
 		ADD_FAILURE() << "It have thrown something else";
 	}
 
 	EXPECT_NO_THROW({
-			universe->DeleteTrackingDataDirectory(s_foo[0]->URI());
+			universe->DeleteTrackingDataDirectory(s_nest[0]->URI());
 		});
 
 	EXPECT_THROW({
-			universe->DeleteTrackingDataDirectory(s_foo[0]->URI());
+			universe->DeleteTrackingDataDirectory(s_nest[0]->URI());
 		},Space::UnmanagedTrackingDataDirectory);
 
 	EXPECT_THROW({
@@ -131,19 +132,19 @@ TEST_F(SpaceUTest,CanHoldTDD) {
 
 	EXPECT_NO_THROW({
 			//not used by any other zone
-			bar->AddTrackingDataDirectory(s_foo[0]);
+			bar->AddTrackingDataDirectory(s_nest[0]);
 		});
 
 
 	EXPECT_THROW({
 			//used by foo
-			bar->AddTrackingDataDirectory(s_foo[2]);
+			bar->AddTrackingDataDirectory(s_nest[2]);
 		},Space::TDDAlreadyInUse);
 
 
 	EXPECT_NO_THROW({
 			// removes data that is associated with foo
-			universe->DeleteTrackingDataDirectory(s_foo[0]->URI());
+			universe->DeleteTrackingDataDirectory(s_nest[0]->URI());
 			// removes the zone is OK now
 			universe->DeleteSpace(bar->ID());
 		});
@@ -162,15 +163,23 @@ TEST_F(SpaceUTest,ExceptionFormatting) {
 	ASSERT_NO_THROW({
 			universe = std::make_shared<Space::Universe>();
 			z = Space::Universe::CreateSpace(universe,0,"z");
-			z->AddTrackingDataDirectory(s_foo[1]);
-			z->AddTrackingDataDirectory(s_foo[0]);
+			z->AddTrackingDataDirectory(s_nest[1]);
+			z->AddTrackingDataDirectory(s_nest[0]);
 		});
 
 	std::vector<TestData> testdata =
 		{
 		 {
-		  Space::TDDOverlap(s_foo[0],s_foo[0]),
-		  "TDD{URI:'foo.0000', start:2019-11-02T09:00:20.021Z, end:2019-11-02T09:00:40.024014001Z} and TDD{URI:'foo.0000', start:2019-11-02T09:00:20.021Z, end:2019-11-02T09:00:40.024014001Z} overlaps in time",
+		  Space::TDDOverlap(s_nest[0],s_nest[0]),
+		  "TDD{URI:'nest.0000', start:"
+		  + s_nest[0]->Start().Format()
+		  + ", end:"
+		  + s_nest[0]->End().Format()
+		  + "} and TDD{URI:'nest.0000', start:"
+		  + s_nest[0]->Start().Format()
+		  + ", end:"
+		  + s_nest[0]->End().Format()
+		  + "} overlaps in time",
 		 },
 		 {
 		  Space::UnmanagedTrackingDataDirectory("doo"),
@@ -186,11 +195,11 @@ TEST_F(SpaceUTest,ExceptionFormatting) {
 		 },
 		 {
 		  Space::SpaceNotEmpty(*z),
-		  "Space:'z' is not empty (contains:{foo.0000,foo.0001})",
+		  "Space:'z' is not empty (contains:{nest.0000,nest.0001})",
 		 },
 		 {
-		  Space::TDDAlreadyInUse("foo.0000","z"),
-		  "TDD:'foo.0000' is in use in Space:'z'",
+		  Space::TDDAlreadyInUse("nest.0000","z"),
+		  "TDD:'nest.0000' is in use in Space:'z'",
 		 },
 		};
 	for (const auto & d: testdata) {
