@@ -9,6 +9,10 @@
 #include <fort/myrmidon/priv/Measurement.hpp>
 #include <fort/myrmidon/priv/AntShapeType.hpp>
 #include <fort/myrmidon/UtilsUTest.hpp>
+
+#include <fort/myrmidon/priv/proto/FileReadWriter.hpp>
+#include <fort/myrmidon/ExperimentFile.pb.h>
+
 #include <fstream>
 
 namespace fort {
@@ -88,15 +92,32 @@ TEST_F(ExperimentUTest,IOTest) {
 	} catch (const std::exception & e) {
 		ADD_FAILURE() << "Got unexpected exception: " << e.what();
 	}
-
+	auto PrintFile =
+		[=](const std::string & path) {
+			typedef priv::proto::FileReadWriter<pb::FileHeader,pb::FileLine> RW;
+			RW::Read(path,
+			         [](const pb::FileHeader & header) {
+				         std::cerr << header.DebugString() << std::endl;
+			         },
+			         [](const pb::FileLine & line) {
+				         std::cerr << line.DebugString() << std::endl;
+			         });
+		};
 	try {
 		std::vector<uint8_t> originalData,newData;
 		ReadAll( experimentPath,originalData);
 		ReadAll( binaryResPath,newData);
 		ASSERT_EQ(newData.size(),originalData.size());
 		for(size_t i = 0; i < newData.size(); ++i) {
-			ASSERT_EQ(newData[i],originalData[i]) << "At byte " << i << " over " << originalData.size();
+			if ( newData[i] != originalData[i] ) {
+				throw std::make_tuple((size_t)i,(uint8_t)newData[i],(uint8_t)originalData[i]);
+			}
 		}
+	} catch ( std::tuple<size_t,uint8_t,uint8_t> t) {
+		ADD_FAILURE() << "Wrong byte read at " << std::get<0>(t) << " got " << std::get<1>(t) << " expected " << std::get<2>(t);
+		PrintFile(binaryResPath);
+		PrintFile(experimentPath);
+		return;
 	} catch ( const std::exception & e) {
 		ADD_FAILURE() << "Got unexpected exception: " << e.what();
 	}

@@ -37,8 +37,6 @@ TEST_F(TrackingDataDirectoryUTest,ExtractInfoFromTrackingDatadirectories) {
 		EXPECT_TRUE(TimeEqual(tdd->End().Round(1),//strips monotonic data
 		                      tddInfo.End));
 
-		std::cerr << "coucoud" << std::endl;
-
 		ASSERT_EQ(tddInfo.Segments.size(),tdd->TrackingSegments().Segments().size());
 
 		for(size_t i = 0;  i < tddInfo.Segments.size(); ++i) {
@@ -49,8 +47,6 @@ TEST_F(TrackingDataDirectoryUTest,ExtractInfoFromTrackingDatadirectories) {
 			EXPECT_TRUE(TimeEqual(tddInfo.Segments[i].Time,tdd->TrackingSegments().Segments()[i].first.Time().Round(1)));
 			EXPECT_EQ(tddInfo.Segments[i].RelativePath,tdd->TrackingSegments().Segments()[i].second);
 		}
-
-		std::cerr << "coucoud" << std::endl;
 
 		uint64_t i  = tdd->StartFrame();
 		auto iterStart = Time::Now();

@@ -4,7 +4,6 @@
 #include <functional>
 #include <vector>
 
-
 namespace fort {
 namespace myrmidon {
 namespace priv {
