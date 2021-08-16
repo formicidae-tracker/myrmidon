@@ -1,10 +1,10 @@
 #include "HermesFileWriter.hpp"
 
 
-#include <sys/types.h>
+//#include <sys/types.h>
 #include <fcntl.h>
-#include <unistd.h>
-#include <sys/stat.h>
+//#include <unistd.h>
+//#include <sys/stat.h>
 
 #include <google/protobuf/util/delimited_message_util.h>
 #include <google/protobuf/io/gzip_stream.h>

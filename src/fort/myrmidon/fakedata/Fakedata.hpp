@@ -89,11 +89,14 @@ private:
 	                        SpaceID spaceID,
 	                        const SegmentedDataWriterList & writers);
 
+	void WriteExperimentFile(const ExperimentInfo & expInfo);
+
 
 	fs::path d_basedir;
 	Config   d_config;
 
 	std::vector<TDDInfo> d_nestTDDs,d_forageTDDs;
+	std::vector<ExperimentInfo> d_experiments;
 
 	std::vector<ExpectedResult> d_results;
 	FrameList                   d_frames;
