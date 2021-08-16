@@ -19,7 +19,7 @@ std::vector<Time> GeneratedData::DrawFrameTicks(const Config & config) {
 		if ( current > config.Start && u(gen) < 0.05 ) { // 5% uniform framedrop
 			continue;
 		}
-		res.push_back(current);
+		res.push_back(current.Round(Duration::Microsecond));
 	}
 	return res;
 }

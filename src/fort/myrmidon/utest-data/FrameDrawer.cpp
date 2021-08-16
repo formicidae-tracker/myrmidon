@@ -11,8 +11,9 @@ namespace fort {
 namespace myrmidon {
 
 
-FrameDrawer::FrameDrawer(const Config & config) {
-	auto [create,destroy]  = fort::tags::GetFamily(fort::tags::Family::Tag36h11);
+FrameDrawer::FrameDrawer(fort::tags::Family family,
+                         const Config & config) {
+	auto [create,destroy]  = fort::tags::GetFamily(family);
 	d_family = std::shared_ptr<apriltag_family_t>(create(),destroy);
 
 	for ( const auto & [antID,ant] : config.Ants ) {

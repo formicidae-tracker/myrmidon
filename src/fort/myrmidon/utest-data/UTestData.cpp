@@ -1,4 +1,4 @@
-#include "Fakedata.hpp"
+#include "UTestData.hpp"
 
 #include <fstream>
 
@@ -16,6 +16,10 @@
 #include <fort/myrmidon/ExperimentFile.pb.h>
 #include <fcntl.h>
 
+#include <fort/myrmidon/priv/proto/TagStatisticsCache.hpp>
+#include <fort/myrmidon/priv/proto/TDDCache.hpp>
+#include <fort/myrmidon/priv/proto/TagCloseUpCache.hpp>
+
 #ifndef O_BINARY
 #define O_BINARY 0
 #endif
@@ -23,7 +27,7 @@
 namespace fort {
 namespace myrmidon {
 
-Fakedata::Fakedata(const fs::path & basedir) {
+UTestData::UTestData(const fs::path & basedir) {
 	try {
 		BuildFakeData(basedir);
 	} catch (const std::exception & e) {
@@ -32,20 +36,66 @@ Fakedata::Fakedata(const fs::path & basedir) {
 	}
 }
 
-Fakedata::~Fakedata() {
-	//	CleanUpFilesystem();
+UTestData::~UTestData() {
+	CleanUpFilesystem();
+}
+
+const fs::path & UTestData::Basedir() const {
+	return d_basedir;
+}
+
+
+const std::vector<UTestData::TDDInfo> & UTestData::NestDataDirs() const {
+	return d_nestTDDs;
+}
+
+const std::vector<UTestData::TDDInfo> & UTestData::ForagingDataDirs() const {
+	return d_foragingTDDs;
+}
+
+const UTestData::TDDInfo & UTestData::NoConfigDataDir() const {
+	return d_noConfigDir;
+}
+
+const UTestData::TDDInfo & UTestData::ARTagDataDir() const {
+	return d_ARTagDir;
+}
+
+const UTestData::TDDInfo & UTestData::WithVideoDataDir() const {
+	return d_nestTDDs.front();
+}
+
+
+const UTestData::ExperimentInfo & UTestData::CurrentVersionFile() const {
+	return d_experiments[2];
+}
+
+const UTestData::ExperimentInfo & UTestData::V0_1_File() const {
+	return d_experiments[0];
+}
+
+const std::vector<UTestData::ExperimentInfo> & UTestData::ExperimentFiles() const {
+	return d_experiments;
+}
+
+std::vector<UTestData::ExperimentInfo> UTestData::OldVersionFiles() const {
+	return {d_experiments[0],d_experiments[1]};
+}
+
+const UTestData::ExperimentInfo & UTestData::FutureExperimentFile() const {
+	return d_experiments.back();
 }
 
 
 
-void Fakedata::CleanUpFilesystem() {
+void UTestData::CleanUpFilesystem() {
 	if (d_basedir.empty()) {
 		return;
 	}
 	fs::remove_all(d_basedir);
 };
 
-void Fakedata::BuildFakeData(const fs::path & basedir) {
+void UTestData::BuildFakeData(const fs::path & basedir) {
 	auto start = Time::Now();
 	d_basedir = basedir;
 	GenerateFakedata();
@@ -54,14 +104,15 @@ void Fakedata::BuildFakeData(const fs::path & basedir) {
 }
 
 
-void Fakedata::GenerateFakedata() {
+void UTestData::GenerateFakedata() {
 	GeneratedData gen(d_config);
 	SaveFullExpectedResult(gen);
 	GenerateTruncatedResults();
 	GenerateTDDStructure();
+	GenerateExperimentStructure();
 }
 
-void Fakedata::SaveFullExpectedResult(const GeneratedData & gen) {
+void UTestData::SaveFullExpectedResult(const GeneratedData & gen) {
 	ExpectedResult full;
 	full.Start = Time::SinceEver();
 	full.End = Time::Forever();
@@ -72,15 +123,16 @@ void Fakedata::SaveFullExpectedResult(const GeneratedData & gen) {
 	d_frames = gen.Frames;
 }
 
-void Fakedata::GenerateTruncatedResults() {
+void UTestData::GenerateTruncatedResults() {
 }
 
 
-void Fakedata::GenerateTDDStructure() {
+void UTestData::GenerateTDDStructure() {
 	d_nestTDDs =
 		{
 		 {
-		  .AbsoluteFilePath = (d_basedir / "nest.0000").string(),
+		  .AbsoluteFilePath = d_basedir / "nest.0000",
+		  .Family = fort::tags::Family::Tag36h11,
 		  .HasFullFrame = false,
 		  .HasMovie = true,
 		  .HasConfig = true,
@@ -88,7 +140,8 @@ void Fakedata::GenerateTDDStructure() {
 		  .End = d_config.Start.Add(10*Duration::Second),
 		 },
 		 {
-		  .AbsoluteFilePath = (d_basedir / "nest.0001").string(),
+		  .AbsoluteFilePath = d_basedir / "nest.0001",
+		  .Family = fort::tags::Family::Tag36h11,
 		  .HasFullFrame = true,
 		  .HasMovie = false,
 		  .HasConfig = true,
@@ -96,7 +149,8 @@ void Fakedata::GenerateTDDStructure() {
 		  .End = d_config.Start.Add(3*Duration::Minute),
 		 },
 		 {
-		  .AbsoluteFilePath = (d_basedir / "nest.0002").string(),
+		  .AbsoluteFilePath = d_basedir / "nest.0002",
+		  .Family = fort::tags::Family::Tag36h11,
 		  .HasFullFrame = true,
 		  .HasMovie = false,
 		  .HasConfig = true,
@@ -105,10 +159,11 @@ void Fakedata::GenerateTDDStructure() {
 		  },
 		};
 
-		d_forageTDDs =
+		d_foragingTDDs =
 		{
 		 {
-		  .AbsoluteFilePath = (d_basedir / "forage.0000").string(),
+		  .AbsoluteFilePath = d_basedir / "forage.0000",
+		  .Family = fort::tags::Family::Tag36h11,
 		  .HasFullFrame = true,
 		  .HasMovie = false,
 		  .HasConfig = true,
@@ -116,9 +171,52 @@ void Fakedata::GenerateTDDStructure() {
 		  .End = d_config.End,
 		 },
 		};
+		d_noConfigDir =
+			{
+			 .AbsoluteFilePath =  d_basedir / "no-config.0000",
+			 .Family = fort::tags::Family::Tag36h11,
+			 .HasFullFrame = false,
+			 .HasMovie = false,
+			 .HasConfig = false,
+			 .Start = d_config.Start,
+			 .End = d_config.Start.Add(10*Duration::Second),
+			};
+		d_ARTagDir =
+			{
+			 .AbsoluteFilePath =  d_basedir / "ARTag.0000",
+			 .Family = fort::tags::Family::Tag36ARTag,
+			 .HasFullFrame = false,
+			 .HasMovie = false,
+			 .HasConfig = true,
+			 .Start = d_config.Start,
+			 .End = d_config.Start.Add(10*Duration::Second),
+			};
 }
 
-void Fakedata::WriteFakedata() {
+void UTestData::GenerateExperimentStructure() {
+	d_experiments =
+		{
+		 {
+		  .AbsoluteFilePath = d_basedir / "test-v0.1.0.myrmidon",
+		  .Version = semver::version("0.1.0"),
+		 },
+		 {
+		  .AbsoluteFilePath = d_basedir / "test-v0.2.0.myrmidon",
+		  .Version = semver::version("0.2.0"),
+		 },
+		 {
+		  .AbsoluteFilePath = d_basedir / "test.myrmidon",
+		  .Version = semver::version("0.3.0"),
+		 },
+		 {
+		  .AbsoluteFilePath = d_basedir / "test-future.myrmidon",
+		  .Version = semver::version("42.42.0"),
+		 },
+		};
+}
+
+void UTestData::WriteFakedata() {
+	fs::create_directories(d_basedir);
 	WriteTDDs();
 	for ( const auto & e : d_experiments ) {
 		WriteExperimentFile(e);
@@ -126,39 +224,93 @@ void Fakedata::WriteFakedata() {
 }
 
 
-void Fakedata::WriteTDDs() {
-	for ( const auto & tddInfo : d_nestTDDs ) {
+void UTestData::WriteTDDs() {
+	for ( auto & tddInfo : d_nestTDDs ) {
 		WriteTDD(tddInfo,1);
 	}
-	for ( const auto & tddInfo : d_forageTDDs ) {
+	for ( auto & tddInfo : d_foragingTDDs ) {
 		WriteTDD(tddInfo,2);
 	}
+	WriteTDD(d_noConfigDir,2);
+	WriteTDD(d_ARTagDir,2);
 }
 
-void Fakedata::WriteTDD(const TDDInfo & tddInfo,SpaceID spaceID) {
+
+class SegmentInfoWriter : public SegmentedDataWriter {
+public:
+	SegmentInfoWriter(UTestData::TDDInfo & tddInfo)
+		: d_tddInfo(tddInfo) {
+	}
+
+	void Prepare(size_t index) override {
+		d_currentIndex = index;
+
+		d_saved = false;
+	}
+	void WriteFrom(const IdentifiedFrame & data,
+	               uint64_t frameID) override {
+		d_last = data.FrameTime;
+		d_lastFrame = frameID;
+		if ( d_saved ) {
+			return;
+		}
+		d_saved = true;
+		if ( d_currentIndex == 0 ) {
+			d_tddInfo.Start = data.FrameTime;
+			d_tddInfo.StartFrame = frameID;
+		}
+
+		std::ostringstream relpath;
+		relpath << "tracking." << std::setw(4) << std::setfill('0') << d_currentIndex << ".hermes";
+		d_tddInfo.Segments.push_back({
+		                              .URI = d_tddInfo.AbsoluteFilePath.filename() / "frames" / std::to_string(frameID),
+		                              .FrameID = frameID,
+		                              .Time = data.FrameTime,
+		                              .RelativePath = relpath.str(),
+			});
+	}
+
+	void Finalize(size_t index,bool last) override {
+		if ( last == false ) {
+			return;
+		}
+		d_tddInfo.End = d_last.Add(1);
+		d_tddInfo.EndFrame = d_lastFrame;
+	}
+
+
+private:
+	UTestData::TDDInfo & d_tddInfo;
+	bool     d_saved;
+	size_t   d_currentIndex;
+	uint64_t d_lastFrame;
+	Time     d_last;
+};
+
+void UTestData::WriteTDD(TDDInfo & tddInfo,SpaceID spaceID) {
 	fs::create_directories(tddInfo.AbsoluteFilePath);
 	if ( tddInfo.HasConfig ) {
 		WriteTDDConfig(tddInfo);
 	}
-	auto drawer = std::make_shared<FrameDrawer>(d_config);
+
+	auto drawer = DrawerFactory(tddInfo.Family);
 
 	SegmentedDataWriter::List writers
 		= {
 		   std::make_shared<HermesFileWriter>(tddInfo.AbsoluteFilePath,d_config),
-		   std::make_shared<CloseUpWriter>(tddInfo.AbsoluteFilePath,
-		                                   tddInfo.HasFullFrame,
+		   std::make_shared<CloseUpWriter>(tddInfo,
 		                                   drawer),
+		   std::make_shared<SegmentInfoWriter>(tddInfo),
 	};
 	if ( tddInfo.HasMovie ) {
 		writers.push_back(std::make_shared<MovieWriter>(tddInfo.AbsoluteFilePath,d_config,drawer));
 	}
 	WriteSegmentedData(tddInfo,spaceID,writers);
-
 }
 
-void Fakedata::WriteSegmentedData(const TDDInfo & tddInfo,
-                                  SpaceID spaceID,
-                                  const SegmentedDataWriter::List & writers ) {
+void UTestData::WriteSegmentedData(const TDDInfo & tddInfo,
+                                   SpaceID spaceID,
+                                   const SegmentedDataWriter::List & writers ) {
 	size_t i = 0;
 	uint64_t frameID = 0;
 	for ( Time current = tddInfo.Start;
@@ -199,7 +351,7 @@ void Fakedata::WriteSegmentedData(const TDDInfo & tddInfo,
 
 
 
-void Fakedata::WriteTDDConfig(const TDDInfo & info) {
+void UTestData::WriteTDDConfig(const TDDInfo & info) {
 	fs::path tddPath(info.AbsoluteFilePath);
 	std::ofstream config((tddPath / "leto-final-config.yml").c_str());
 	config << "experiment: " << tddPath.stem() << std::endl
@@ -218,7 +370,7 @@ void Fakedata::WriteTDDConfig(const TDDInfo & info) {
 	       << "  fps: " << int(std::round(Duration::Second.Seconds()/d_config.Framerate.Seconds())) << std::endl
 	       << "  stub-path: \"\"" << std::endl
 	       << "apriltag:" << std::endl
-	       << "  family: " << "36h11" <<  std::endl
+	       << "  family: " << fort::tags::GetFamilyName(info.Family) <<  std::endl
 	       << "  quad:" << std::endl
 	       << "    decimate: 1" << std::endl
 	       << "    sigma: 0" << std::endl
@@ -232,7 +384,7 @@ void Fakedata::WriteTDDConfig(const TDDInfo & info) {
 	       << "highlights: []" << std::endl;
 }
 
-void Fakedata::WriteExperimentFile(const ExperimentInfo & info) {
+void UTestData::WriteExperimentFile(const ExperimentInfo & info) {
 	pb::Experiment e;
 
 	e.set_author("myrmidon-tests");
@@ -258,7 +410,7 @@ void Fakedata::WriteExperimentFile(const ExperimentInfo & info) {
 
 	int fd = open(info.AbsoluteFilePath.c_str(),O_CREAT | O_TRUNC | O_RDWR | O_BINARY,0644 );
 	if ( fd <= 0 ) {
-		throw std::runtime_error("open('" + info.AbsoluteFilePath + "',O_RDONLY | O_BINARY): " + std::to_string(errno));
+		throw std::runtime_error("open('" + info.AbsoluteFilePath.string() + "',O_RDONLY | O_BINARY): " + std::to_string(errno));
 	}
 	auto file = std::make_shared<google::protobuf::io::FileOutputStream>(fd);
 	file->SetCloseOnDelete(true);
@@ -290,7 +442,7 @@ void Fakedata::WriteExperimentFile(const ExperimentInfo & info) {
 	s.set_id(2);
 	s.set_name("forage-area");
 	s.clear_trackingdatadirectories();
-	for ( const auto & tddInfo : d_forageTDDs ) {
+	for ( const auto & tddInfo : d_foragingTDDs ) {
 		s.add_trackingdatadirectories(fs::path(tddInfo.AbsoluteFilePath).filename());
 	}
 
@@ -331,6 +483,24 @@ void Fakedata::WriteExperimentFile(const ExperimentInfo & info) {
 		l.release_antdescription();
 	}
 }
+
+void UTestData::ClearCachedData(const fs::path & tddPath) {
+	fs::remove_all(tddPath / priv::proto::TDDCache::CACHE_FILENAME);
+	fs::remove_all(tddPath / priv::proto::TagStatisticsCache::CACHE_PATH);
+	fs::remove_all(tddPath / priv::proto::TagCloseUpCache::CACHE_PATH);
+	fs::remove_all(tddPath / "ants/computed");
+
+}
+
+const std::shared_ptr<FrameDrawer> & UTestData::DrawerFactory(fort::tags::Family family) {
+	if ( d_drawers.count(family) == 0 ) {
+		auto d = std::make_shared<FrameDrawer>(family,d_config);
+		d_drawers.insert({family,d});
+	}
+	return d_drawers.at(family);
+}
+
+
 
 } // namespace myrmidon
 } // namespace fort

@@ -1,5 +1,9 @@
 #pragma once
 
+#include <map>
+
+#include <fort/tags/fort-tags.hpp>
+
 #include <fort/myrmidon/Types.hpp>
 #include <fort/myrmidon/Matchers.hpp>
 #include <fort/myrmidon/utils/FileSystem.hpp>
@@ -7,34 +11,53 @@
 
 #include "Config.hpp"
 
+
+
 namespace fort {
 namespace hermes {
 class FrameReadout;
 }
 namespace myrmidon {
 
+namespace priv {
+class TagCloseUp;
+}
+
 struct GeneratedData;
 class SegmentedDataWriter;
 typedef std::shared_ptr<SegmentedDataWriter> SegmentedDataWriterPtr;
 typedef std::vector<SegmentedDataWriterPtr> SegmentedDataWriterList;
 
-class Fakedata {
+class FrameDrawer;
+
+class UTestData {
 public:
-	static fs::path GenerateTempDir();
 
-	static void ClearCacheData(const std::string & tddPath);
+	static void ClearCachedData(const fs::path & tddPath);
 
+	struct SegmentInfo {
+		std::string URI;
+		uint64_t    FrameID;
+		fort::Time  Time;
+		std::string RelativePath;
+	};
 
 	struct TDDInfo {
-		std::string AbsoluteFilePath;
-		bool        HasFullFrame;
-		bool        HasMovie;
-		bool        HasConfig;
-		Time        Start,End;
+		fs::path           AbsoluteFilePath;
+		fort::tags::Family Family;
+		bool               HasFullFrame;
+		bool               HasMovie;
+		bool               HasConfig;
+		Time               Start,End;
+		uint64_t           StartFrame,EndFrame;
+
+		std::multimap<uint64_t,std::pair<fs::path,std::shared_ptr<TagID>>> TagCloseUpFiles;
+		std::vector<std::shared_ptr<const priv::TagCloseUp>>               TagCloseUps;
+		std::vector<SegmentInfo>                                           Segments;
 	};
 
 	struct ExperimentInfo {
-		std::string AbsoluteFilePath;
+		fs::path        AbsoluteFilePath;
 		semver::version Version;
 	};
 
@@ -46,20 +69,31 @@ public:
 		std::vector<AntInteraction::Ptr> Interactions;
 	};
 
-	Fakedata(const fs::path & basedir);
-	~Fakedata();
 
 
-	std::vector<TDDInfo> NestDataDirs() const;
+	UTestData(const fs::path & basedir);
+	~UTestData();
 
-	std::vector<TDDInfo> ForagingDataDirs() const;
+	const fs::path & Basedir() const;
 
-	TDDInfo WithVideoDataDir() const;
+	const std::vector<TDDInfo> & NestDataDirs() const;
+
+	const std::vector<TDDInfo> & ForagingDataDirs() const;
+
+	const TDDInfo & NoConfigDataDir() const;
+
+	const TDDInfo & ARTagDataDir() const;
+
+	const TDDInfo & WithVideoDataDir() const;
 
 
-	ExperimentInfo ExperimentFile() const;
+	const ExperimentInfo & CurrentVersionFile() const;
+	const ExperimentInfo & V0_1_File() const;
+
+	const std::vector<ExperimentInfo> & ExperimentFiles() const;
 	std::vector<ExperimentInfo> OldVersionFiles() const;
-	ExperimentInfo FutureExperimentFile() const;
+
+	const ExperimentInfo & FutureExperimentFile() const;
 
 
 
@@ -73,7 +107,7 @@ private:
 	void CleanUpFilesystem();
 
 	void GenerateFakedata();
-
+	void GenerateExperimentStructure();
 
 	void SaveFullExpectedResult(const GeneratedData & gen);
 	void GenerateTruncatedResults();
@@ -81,7 +115,7 @@ private:
 
 	void WriteFakedata();
 	void WriteTDDs();
-	void WriteTDD(const TDDInfo & info,SpaceID spaceID);
+	void WriteTDD(TDDInfo & info,SpaceID spaceID);
 	void WriteTDDConfig(const TDDInfo & info);
 
 
@@ -92,14 +126,20 @@ private:
 	void WriteExperimentFile(const ExperimentInfo & expInfo);
 
 
+	const std::shared_ptr<FrameDrawer> & DrawerFactory(fort::tags::Family family);
+
+
 	fs::path d_basedir;
 	Config   d_config;
 
-	std::vector<TDDInfo> d_nestTDDs,d_forageTDDs;
+	std::vector<TDDInfo> d_nestTDDs,d_foragingTDDs;
+	TDDInfo              d_noConfigDir,d_ARTagDir;
 	std::vector<ExperimentInfo> d_experiments;
 
 	std::vector<ExpectedResult> d_results;
 	FrameList                   d_frames;
+
+	std::map<fort::tags::Family,std::shared_ptr<FrameDrawer>> d_drawers;
 };
 
 } // namespace myrmidon

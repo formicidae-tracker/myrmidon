@@ -6,19 +6,17 @@ namespace fort {
 namespace myrmidon {
 
 
-CloseUpWriter::CloseUpWriter(const fs::path & tddPath,
-                             bool writeFullFrame,
+CloseUpWriter::CloseUpWriter(UTestData::TDDInfo & tddInfo,
                              const FrameDrawer::Ptr & drawer)
-	: d_drawer(drawer)
-	, d_basepath(tddPath/"ants")
-	, d_writeFullFrame(writeFullFrame) {
-	fs::create_directories(d_basepath);
+	: d_tddInfo(tddInfo)
+	, d_drawer(drawer) {
+	fs::create_directories(d_tddInfo.AbsoluteFilePath / "ants");
 }
 
 CloseUpWriter::~CloseUpWriter() = default;
 
 void CloseUpWriter::Prepare(size_t index) {
-	d_fullFrameNeeded = d_writeFullFrame;
+	d_fullFrameNeeded = d_tddInfo.HasFullFrame;
 	d_seen.clear();
 }
 void CloseUpWriter::WriteFrom(const IdentifiedFrame & data,
@@ -42,11 +40,13 @@ void CloseUpWriter::WriteFrom(const IdentifiedFrame & data,
 	if(d_fullFrameNeeded == true ) {
 		d_fullFrameNeeded = false;
 		SaveFullFrame(d_frameBuffer,frameID);
+		SaveExpectedFullFrame(data,frameID);
 	}
 
 	for ( const auto & [antID,position] : neededCloseUp )  {
 		d_seen.insert(antID);
 		SaveCloseUp(d_frameBuffer,frameID,antID,position);
+		SaveExpectedCloseUp(data,frameID,antID);
 	}
 
 
@@ -55,30 +55,52 @@ void CloseUpWriter::WriteFrom(const IdentifiedFrame & data,
 void CloseUpWriter::Finalize(size_t index,bool last) {
 }
 
+std::string CloseUpWriter::FullFramePath(uint64_t frameID) const {
+	return d_tddInfo.AbsoluteFilePath / "ants" / ( "frame_" + std::to_string(frameID) + ".png") ;
+}
+
+std::string CloseUpWriter::CloseUpPath(uint64_t frameID, AntID antID) const {
+	return d_tddInfo.AbsoluteFilePath
+		/ "ants"
+		/ ( "ant_"
+		    + std::to_string(antID)
+		    + "_frame_"
+		    + std::to_string(frameID)
+		    + ".png") ;
+}
+
 
 void CloseUpWriter::SaveFullFrame(const cv::Mat & frame,
                                   uint64_t frameID)  {
-	auto filename = d_basepath / ( "frame_" + std::to_string(frameID) + ".png") ;
-	cv::imwrite(filename.string(),frame);
+	cv::imwrite(FullFramePath(frameID),frame);
 }
 
 void CloseUpWriter::SaveCloseUp(const cv::Mat & frame,
                                 uint64_t frameID,
                                 AntID antID,
                                 const cv::Point2f & position) {
-	auto filename = d_basepath / ( "ant_"
-	                               + std::to_string(antID)
-	                               + "_frame_"
-	                               + std::to_string(frameID)
-	                               + ".png") ;
 
 	auto roi = cv::Rect_<float>(position-cv::Point2f(150,150),cv::Size(300,300));
 	roi.x = std::clamp(roi.x,0.0f,float(frame.cols-300));
 	roi.y = std::clamp(roi.y,0.0f,float(frame.rows-300));
 
-	cv::imwrite(filename.string(),frame(roi));
+	cv::imwrite(CloseUpPath(frameID,antID),frame(roi));
+}
+
+void CloseUpWriter::SaveExpectedFullFrame(const IdentifiedFrame & data,
+                                          uint64_t frameID) {
+	d_tddInfo.TagCloseUpFiles.insert({frameID,{fs::relative(FullFramePath(frameID),d_tddInfo.AbsoluteFilePath),
+	                                           nullptr}});
+}
+
+void CloseUpWriter::SaveExpectedCloseUp(const IdentifiedFrame & data,
+                                        uint64_t frameID,
+                                        AntID antID) {
+	d_tddInfo.TagCloseUpFiles.insert({frameID,{fs::relative(CloseUpPath(frameID,antID),d_tddInfo.AbsoluteFilePath),
+	                                           std::make_shared<AntID>(antID)}});
 
 }
+
 
 
 } // namespace myrmidon

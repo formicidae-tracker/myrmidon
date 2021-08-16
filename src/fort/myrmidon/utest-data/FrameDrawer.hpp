@@ -25,7 +25,8 @@ class FrameDrawer {
 public :
 	typedef std::shared_ptr<FrameDrawer> Ptr;
 
-	FrameDrawer(const Config & config);
+	FrameDrawer(fort::tags::Family family,
+	            const Config & config);
 
 	void Draw(cv::Mat & dest,
 	          const IdentifiedFrame & frame) const;

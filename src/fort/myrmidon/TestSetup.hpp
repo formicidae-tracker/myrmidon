@@ -1,30 +1,20 @@
 #pragma once
 
+#include <memory>
+
 #include <gtest/gtest.h>
 
-#include <fort/myrmidon/utils/FileSystem.hpp>
 
-#include <fort/time/Time.hpp>
-
-#include "semver.hpp"
+namespace fort {
+namespace myrmidon {
+class UTestData;
+} // namespace myrmidon
+} // namespace fort
 
 class TestSetup : public ::testing::EmptyTestEventListener {
 public:
-	inline static const fs::path & Basedir() {
-		return s_testdir;
-	}
 
-	inline static const fort::Time StartTime(const fs::path & fs) {
-		return s_times[fs].first;
-	}
-
-	inline static const fort::Time EndTime(const fs::path & fs) {
-		return s_times[fs].second;
-	}
-
-	inline static const std::map<fs::path,std::shared_ptr<uint32_t> > CloseUpFilesForPath(const fs::path & p ) {
-		return s_closeUpFiles[p];
-	}
+	static const fort::myrmidon::UTestData & UTestData();
 
 private:
 
@@ -40,12 +30,6 @@ private:
 	// Called after a test ends.
 	void OnTestEnd(const ::testing::TestInfo& test_info) override;
 
-	static void CreateSnapshotFiles(std::vector<uint64_t> bounds,
-	                                const fs::path & basedir);
-	static void CreateMyrmidonFile(const std::string & name, const semver::version & version );
 
-
-	static fs::path                                                          s_testdir;
-	static std::map<fs::path,std::pair<fort::Time,fort::Time> >              s_times;
-	static std::map<fs::path,std::map<fs::path,std::shared_ptr<uint32_t> > > s_closeUpFiles;
+	static std::unique_ptr<fort::myrmidon::UTestData> s_utestdata;
 };  // class TestSetup
