@@ -399,11 +399,98 @@ AssertIdentifiedFrameEqual(const char * aExpr,
 	return ::testing::AssertionSuccess();
 }
 
+std::ostream & operator<<(std::ostream & out,
+                        const fort::myrmidon::InteractionID & v) {
+	return out << fort::myrmidon::FormatAntID(v.first)
+	           << " - "
+	           << fort::myrmidon::FormatAntID(v.second);
+}
+
+::testing::AssertionResult
+AssertInteractionTypesEqual(const char * aExpr,
+                            const char * bExpr,
+                            const fort::myrmidon::InteractionTypes & a,
+                            const fort::myrmidon::InteractionTypes & b) {
+	if ( a.rows() != b.rows() ) {
+		return failure_helper(aExpr,bExpr,a,b,rows());
+	}
+
+	for ( size_t i = 0; i < b.rows(); ++i) {
+		size_t j = 0;
+		for ( ; j < a.rows(); ++j ) {
+			if ( b.row(i) == a.row(j) ) {
+				break;
+			}
+		}
+		if ( j == a.rows() ) {
+			return ::testing::AssertionFailure()
+				<< "Could not found InteractionType("
+				<< b(i,0) << "," << b(i,1) << ")"
+				<< " in " << aExpr;
+		}
+	}
+	return ::testing::AssertionSuccess();
+}
+
+::testing::AssertionResult
+AssertCollisionEqual(const char * aExpr,
+                     const char * bExpr,
+                     const fort::myrmidon::Collision & a,
+                     const fort::myrmidon::Collision & b) {
+	if ( a.IDs != b.IDs ) {
+		return failure_helper(aExpr,bExpr,a,b,IDs);
+	}
+
+	if ( a.Zone != b.Zone ) {
+		return failure_helper(aExpr,bExpr,a,b,Zone);
+	}
+
+	return AssertInteractionTypesEqual((std::string(aExpr)+".Types").c_str(),
+	                                   (std::string(bExpr)+".Types").c_str(),
+	                                   a.Types,
+	                                   b.Types);
+}
+
+
 ::testing::AssertionResult
 AssertCollisionFrameEqual(const char * aExpr,
                           const char * bExpr,
                           const fort::myrmidon::CollisionFrame & a,
                           const fort::myrmidon::CollisionFrame & b) {
+	auto tmp = AssertTimeEqual((std::string(aExpr) + ".FrameTime").c_str(),
+	                           (std::string(bExpr) + ".FrameTime").c_str(),
+	                           a.FrameTime,
+	                           b.FrameTime);
+	if ( !tmp ) {
+		return tmp;
+	}
+	if ( a.Space != b.Space ) {
+		return failure_helper(aExpr,bExpr,a,b,Space);
+	}
+	if (a.Collisions.size() != b.Collisions.size() ) {
+		return failure_helper(aExpr,bExpr,a,b,Collisions.size());
+	}
+	for ( size_t i = 0; i < b.Collisions.size(); ++i ) {
+		size_t j = 0;
+		for ( ; j < a.Collisions.size(); ++j ) {
+			if ( a.Collisions[j].IDs == b.Collisions[i].IDs ) {
+				break;
+			}
+		}
+		if ( j == a.Collisions.size() ) {
+			return ::testing::AssertionFailure()
+				<< "Could not found collision "
+				<< b.Collisions[i].IDs
+				<< " in " << aExpr << ".Collisions";
+		}
+		tmp = AssertCollisionEqual((std::string(aExpr)+".Collision[" + std::to_string(j) + "]").c_str(),
+		                           (std::string(bExpr)+".Collision[" + std::to_string(i) + "]").c_str(),
+		                           a.Collisions[j],
+		                           b.Collisions[i]);
+		if ( !tmp ) {
+			return tmp;
+		}
+	}
 	return ::testing::AssertionSuccess();
 }
 

@@ -385,6 +385,7 @@ void UTestData::WriteSegmentedData(TDDInfo & tddInfo,
 						              Time::FromTimestampAndMonotonic(iter->first->FrameTime.ToTimestamp(),
 						                                              iter->first->FrameTime.Sub(d_config.Start).Nanoseconds()+2000,
 						                                              monoID);
+					              iter->second->FrameTime = iter->first->FrameTime;
 				              }
 				              w->WriteFrom(*iter->first,frameID);
 			              });
