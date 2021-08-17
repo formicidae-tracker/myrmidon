@@ -34,12 +34,12 @@ Config::Config() {
 		{
 		 {1,{ // 1 is a static Queen
 		     .Shape = {
-		               {1,std::make_shared<Capsule>(Eigen::Vector2d(-50,0),
-		                                            Eigen::Vector2d(0,0),
+		               {1,std::make_shared<Capsule>(Eigen::Vector2d(-120,0),
+		                                            Eigen::Vector2d(-50,0),
 		                                            40.0,
 		                                            40.0)},
 		               {2,std::make_shared<Capsule>(Eigen::Vector2d(50,0),
-		                                            Eigen::Vector2d(0,0),
+		                                            Eigen::Vector2d(120,0),
 		                                            40.0,
 		                                            40.0)},
 		               },
@@ -55,11 +55,11 @@ Config::Config() {
 		 {2,{ // 2 is kind of a Nurse
 		     .Shape = {
 		               {1,std::make_shared<Capsule>(Eigen::Vector2d(-20,0),
-		                                            Eigen::Vector2d(0,0),
+		                                            Eigen::Vector2d(-65,0),
 		                                            15.0,
 		                                            15.0)},
 		               {2,std::make_shared<Capsule>(Eigen::Vector2d(20,0),
-		                                            Eigen::Vector2d(0,0),
+		                                            Eigen::Vector2d(65,0),
 		                                            15.0,
 		                                            15.0)},
 		               },
@@ -94,11 +94,11 @@ Config::Config() {
 		 {3,{ // 3 is a kind of forager
 		     .Shape = {
 		               {1,std::make_shared<Capsule>(Eigen::Vector2d(-20,0),
-		                                            Eigen::Vector2d(0,0),
+		                                            Eigen::Vector2d(-65,0),
 		                                            15.0,
 		                                            15.0)},
 		               {2,std::make_shared<Capsule>(Eigen::Vector2d(20,0),
-		                                            Eigen::Vector2d(0,0),
+		                                            Eigen::Vector2d(65,0),
 		                                            15.0,
 		                                            15.0)},
 		               },
