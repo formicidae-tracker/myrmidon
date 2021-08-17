@@ -380,7 +380,7 @@ void UTestData::WriteSegmentedData(TDDInfo & tddInfo,
 				              if ( iter->first->FrameTime.HasMono() == false ) {
 					              iter->first->FrameTime =
 						              Time::FromTimestampAndMonotonic(iter->first->FrameTime.ToTimestamp(),
-						                                              iter->first->FrameTime.Sub(d_config.Start).Nanoseconds(),
+						                                              iter->first->FrameTime.Sub(d_config.Start).Nanoseconds()+2000,
 						                                              monoID);
 				              }
 				              w->WriteFrom(*iter->first,frameID);
