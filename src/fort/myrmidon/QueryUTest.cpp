@@ -212,8 +212,14 @@ TEST_F(QueryUTest,FrameSelection) {
 	                             },
 	                             args);
 
-	ASSERT_EQ(frames.size(),1);
-	ASSERT_EQ(frames[0]->FrameTime,firstDate);
+	ASSERT_TRUE(frames.size() >  0);
+	ASSERT_TRUE(frames.size() <= 2);
+
+	EXPECT_EQ(frames[0]->FrameTime,firstDate);
+	if ( frames.size() > 1 ) {
+		EXPECT_EQ(frames[1]->FrameTime,firstDate);
+		EXPECT_TRUE(frames[1]->Space != frames[0]->Space);
+	}
 
 	frames.clear();
 	// won't access any
