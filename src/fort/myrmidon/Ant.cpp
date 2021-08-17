@@ -17,8 +17,6 @@ TagID Ant::IdentifiedAt(const Time & time) const {
 	return d_p->Get().IdentifiedAt(time);
 }
 
-
-
 const IdentificationList & Ant::Identifications() const{
 	return d_p->Identifications();
 }

@@ -6,15 +6,14 @@
 
 namespace fort {
 namespace myrmidon {
-namespace priv {
 
 class QueryUTest : public ::testing::Test {
 protected:
 	Experiment::Ptr experiment;
 	void SetUp();
+	void TearDown();
 };
 
 
-} // namespace priv
 } // namespace myrmidon
 } // namespace fort

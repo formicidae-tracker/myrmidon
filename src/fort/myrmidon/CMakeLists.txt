@@ -208,8 +208,8 @@ set(SRC_UTEST_FILES main-check.cpp
                     priv/CollisionSolverUTest.cpp
                     priv/TagStatisticsUTest.cpp
                     priv/MatchersUTest.cpp
-                    priv/QueryUTest.cpp
                     priv/LocatableTypesUTest.cpp
+                    QueryUTest.cpp
                     )
 
 
@@ -248,8 +248,8 @@ set(HDR_UTEST_FILES utils/NotYetImplementedUTest.hpp
                     priv/CollisionSolverUTest.hpp
                     priv/TagStatisticsUTest.hpp
                     priv/MatchersUTest.hpp
-                    priv/QueryUTest.hpp
                     priv/LocatableTypesUTest.hpp
+                    QueryUTest.hpp
                     )
 
 set(UTESTDATA_SRC_FILES utest-data/UTestData.hpp
