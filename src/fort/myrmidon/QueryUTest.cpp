@@ -5,7 +5,7 @@
 
 #include <fort/myrmidon/TestSetup.hpp>
 
-#include <fort/myrmidon/UtilsUTest.hpp>
+#include "UtilsUTest.hpp"
 
 namespace fort {
 namespace myrmidon {
@@ -26,34 +26,14 @@ TEST_F(QueryUTest,TagStatistics) {
 	ASSERT_NO_THROW({
 			tagStats = Query::ComputeTagStatistics(*experiment);
 		});
-
-	EXPECT_EQ(tagStats.size(),2);
-	ASSERT_EQ(tagStats.count(123),1);
-	ASSERT_EQ(tagStats.count(124),1);
-	EXPECT_TRUE(TimeEqual(tagStats.at(123).FirstSeen,
-	                      Time::Parse("2019-11-02T09:00:20.021Z")));
-
-	EXPECT_TRUE(TimeEqual(tagStats.at(123).LastSeen,
-	                      Time::Parse("2019-11-02T09:01:46.436070Z")));
-
-	EXPECT_EQ(tagStats.at(123).ID,123);
-
-	EXPECT_EQ(tagStats.at(123).Counts(TagStatistics::TOTAL_SEEN),600);
-	EXPECT_EQ(tagStats.at(123).Counts(TagStatistics::MULTIPLE_SEEN),0);
-	EXPECT_EQ(tagStats.at(123).Counts(TagStatistics::GAP_500MS),0);
-	EXPECT_EQ(tagStats.at(123).Counts(TagStatistics::GAP_1S),0);
-	EXPECT_EQ(tagStats.at(123).Counts(TagStatistics::GAP_10S),0);
-	EXPECT_EQ(tagStats.at(123).Counts(TagStatistics::GAP_1M),0);
-	EXPECT_EQ(tagStats.at(123).Counts(TagStatistics::GAP_10M),0);
-	EXPECT_EQ(tagStats.at(123).Counts(TagStatistics::GAP_1H),0);
-	EXPECT_EQ(tagStats.at(123).Counts(TagStatistics::GAP_10H),0);
-	EXPECT_EQ(tagStats.at(123).Counts(TagStatistics::GAP_MORE),0);
+	ASSERT_TRUE(TagStatisticsEqual(tagStats,TestSetup::UTestData().ExpectedTagStatistics()));
 }
 
 
 TEST_F(QueryUTest,IdentifyFrames) {
 
 	std::vector<IdentifiedFrame::Ptr> identifieds;
+	const auto & expected = TestSetup::UTestData().ExpectedFrames();
 	ASSERT_NO_THROW({
 			myrmidon::Query::IdentifyFramesArgs args;
 			Query::IdentifyFramesFunctor(*experiment,
@@ -61,25 +41,25 @@ TEST_F(QueryUTest,IdentifyFrames) {
 				                             identifieds.push_back(i);
 			                             },args);
 		});
-	ASSERT_EQ(identifieds.size(),600);
-	for ( const auto & frame : identifieds ) {
-		EXPECT_EQ(frame->Space,1);
-		ASSERT_EQ(frame->Positions.size(),5);
-		ASSERT_EQ(AntID(frame->Positions(0,0)),1);
+	ASSERT_EQ(identifieds.size(),expected.size());
+	for ( size_t i = 0; i < expected.size(); ++i) {
+		EXPECT_TRUE(IdentifiedFrameEqual(*identifieds[i],*expected[i].first));
 	}
-
 	auto t = TestSetup::UTestData().NestDataDirs().front().End;
+	size_t expectedNumber = std::find_if(expected.begin(),
+	                                     expected.end(),
+	                                     [&t](const std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr> & it ) {
+		                                     return it.first->FrameTime > t;
+	                                     }) - expected.begin();
 	identifieds.clear();
 	ASSERT_NO_THROW({
 			myrmidon::Query::IdentifyFramesArgs args;
 			args.End = t;
-			Query::IdentifyFramesFunctor(*experiment,
-			                             [&identifieds] (const IdentifiedFrame::Ptr & i) {
-				                             identifieds.push_back(i);
-			                             },
-			                             args);
+			Query::IdentifyFrames(*experiment,
+			                      identifieds,
+			                      args);
 		});
-	EXPECT_EQ(identifieds.size(),1);
+	EXPECT_EQ(identifieds.size(),expectedNumber);
 
 	identifieds.clear();
 	try {
@@ -95,7 +75,7 @@ TEST_F(QueryUTest,IdentifyFrames) {
 		return;
 	}
 	// we just have removed the first frame
-	EXPECT_EQ(identifieds.size(),599);
+	EXPECT_EQ(identifieds.size(),expected.size()-expectedNumber);
 }
 
 TEST_F(QueryUTest,CollideFrames) {

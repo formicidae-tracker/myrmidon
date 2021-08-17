@@ -52,7 +52,7 @@
 
 
 ::testing::AssertionResult VectorAlmostEqual(const Eigen::Vector2d & a,
-                             const Eigen::Vector2d & b) {
+                                             const Eigen::Vector2d & b) {
 	auto xAssertion = ::testing::internal::CmpHelperFloatingPointEQ<double>("a.x","b.x",a.x(),b.x());
 	if ( xAssertion == false ) {
 		return ::testing::AssertionFailure() << "a:{" << a.transpose()
@@ -215,4 +215,70 @@ AABBAlmostEqual(const fort::myrmidon::AABB & a,
 		return min;
 	}
 	return VectorAlmostEqual(a.max(),b.max());
+}
+
+
+::testing::AssertionResult
+SingleStatsEqual(const fort::myrmidon::TagStatistics & a,
+                 const fort::myrmidon::TagStatistics & b) {
+		if ( a.ID != b.ID ) {
+			return ::testing::AssertionFailure() << "a.ID: " << a.ID
+			                                     << " and b.ID: " << b.ID
+			                                     << " differs";
+
+		}
+
+		auto intermediary = TimeEqual(a.FirstSeen,b.FirstSeen);
+		if ( !intermediary ) {
+			return intermediary << " for FirstSeen";
+		}
+		intermediary = TimeEqual(a.LastSeen,b.LastSeen);
+		if ( !intermediary ) {
+			return intermediary << " for LastSeen";
+		}
+
+		if ( a.Counts.rows() != b.Counts.rows() ) {
+			return ::testing::AssertionFailure() << "a.Counts.rows(): " << a.Counts.rows()
+			                                     << " and b.Counts.rows(): " << b.Counts.rows()
+			                                     << " differs";
+		}
+
+		for ( size_t i = 0; i < a.Counts.rows(); ++i) {
+			if ( a.Counts(i) != b.Counts(i) ) {
+				return ::testing::AssertionFailure() << "a.Counts("<< i << "): " << a.Counts(i)
+				                                     << "and b.Counts("<< i << "): " << b.Counts(i)
+				                                     << " differs";
+			}
+		}
+
+		return ::testing::AssertionSuccess();
+}
+
+
+::testing::AssertionResult
+TagStatisticsEqual(const fort::myrmidon::TagStatistics::ByTagID & a,
+                   const fort::myrmidon::TagStatistics::ByTagID & b) {
+	if ( a.size() != b.size() ) {
+		return ::testing::AssertionFailure() << "a.size(): " << a.size()
+		                                     << " and b.size(): " << b.size()
+		                                     << " differs";
+	}
+	for ( const auto & [tagID,aStats] : a ) {
+		if ( b.count(tagID) == 0 ) {
+			return ::testing::AssertionFailure() << "b is missing TagID " << tagID;
+		}
+		const auto & bStats = b.at(tagID);
+
+		auto intermediary = SingleStatsEqual(aStats,bStats);
+		if ( !intermediary ) {
+			return intermediary << " for TagID " << fort::myrmidon::FormatTagID(tagID);
+		}
+	}
+	return ::testing::AssertionSuccess();
+}
+
+::testing::AssertionResult
+IdentifiedFrameEqual(const fort::myrmidon::IdentifiedFrame & a,
+                     const fort::myrmidon::IdentifiedFrame & b) {
+	return ::testing::AssertionSuccess();
 }

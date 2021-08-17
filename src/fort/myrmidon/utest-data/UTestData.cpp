@@ -91,6 +91,15 @@ const UTestData::ExperimentInfo & UTestData::FutureExperimentFile() const {
 	return d_experiments.back();
 }
 
+const TagStatistics::ByTagID & UTestData::ExpectedTagStatistics() const {
+	return d_statistics;
+}
+
+const std::vector<std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr>> &
+UTestData::ExpectedFrames() const {
+	return d_frames;
+}
+
 
 
 void UTestData::CleanUpFilesystem() {
@@ -126,6 +135,7 @@ void UTestData::SaveFullExpectedResult(const GeneratedData & gen) {
 	full.Interactions = gen.Interactions;
 	d_results.push_back(full);
 	d_frames = gen.Frames;
+	d_statistics = gen.Statistics;
 }
 
 void UTestData::GenerateTruncatedResults() {

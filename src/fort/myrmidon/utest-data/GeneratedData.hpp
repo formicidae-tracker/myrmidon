@@ -17,6 +17,8 @@ struct GeneratedData {
 
 	std::vector<std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr>> Frames;
 
+	TagStatistics::ByTagID Statistics;
+
 	static std::vector<Time> DrawFrameTicks(const Config & config);
 
 	GeneratedData(const Config & config);
@@ -25,10 +27,12 @@ struct GeneratedData {
 	void GenerateTrajectories(const Config & config);
 	void GenerateInteractions(const Config & config);
 	void GenerateFrames(const Config & config);
+	void GenerateTagStatistics(const Config & config);
 
 
 	void GenerateTrajectoriesFor(AntID antID, const AntData & ant);
 	void GenerateInteractionsFor(AntID antID, const AntData & ant);
+	void GenerateTagStatisticsFor(uint32_t tagID,const AntData & ant);
 
 	std::tuple<AntTrajectorySegment,Time,Time>
 	FindTrajectorySegment(AntID antID,

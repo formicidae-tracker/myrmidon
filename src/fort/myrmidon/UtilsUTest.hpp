@@ -38,3 +38,9 @@
 
 ::testing::AssertionResult AABBAlmostEqual(const fort::myrmidon::AABB & a,
                                            const fort::myrmidon::AABB & B);
+
+::testing::AssertionResult TagStatisticsEqual(const fort::myrmidon::TagStatistics::ByTagID & a,
+                                              const fort::myrmidon::TagStatistics::ByTagID & b);
+
+::testing::AssertionResult IdentifiedFrameEqual(const fort::myrmidon::IdentifiedFrame & a,
+                                                const fort::myrmidon::IdentifiedFrame & b);

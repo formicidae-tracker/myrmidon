@@ -2,6 +2,7 @@
 
 #include <random>
 
+#include <fort/myrmidon/priv/TagStatistics.hpp>
 
 namespace fort {
 namespace myrmidon {
@@ -30,6 +31,7 @@ GeneratedData::GeneratedData(const Config & config) {
 	GenerateTrajectories(config);
 	GenerateInteractions(config);
 	GenerateFrames(config);
+	GenerateTagStatistics(config);
 }
 
 void CheckFrameDrop(const std::vector<Time> & ticks,
@@ -368,6 +370,84 @@ void GeneratedData::GenerateFrames(const Config & config) {
 			collision->Collisions.push_back(c);
 		}
 		Frames.push_back({identified,collision});
+	}
+}
+
+
+void GeneratedData::GenerateTagStatistics(const Config & config) {
+	for ( const auto & [antID,ant] : config.Ants ) {
+		GenerateTagStatisticsFor(antID-1,ant);
+	}
+	// for ( const auto & [tagID,stats] : Statistics ) {
+	// 	std::cerr << " + TagID: " << FormatTagID(tagID) << std::endl
+	// 	          << " +--+ FirstSeen: " << stats.FirstSeen << std::endl
+	// 	          << " +--+ LastSeen: " << stats.LastSeen << std::endl
+	// 	          << " +--+ Counts: " << stats.Counts.transpose() << std::endl;
+	// }
+}
+
+void GeneratedData::GenerateTagStatisticsFor(uint32_t tagID,const AntData & ant) {
+	struct DetectionSegment {
+		SpaceID Space;
+		Time    Start,End;
+	};
+	std::vector<DetectionSegment> segments;
+
+	std::shared_ptr<DetectionSegment> current;
+	for ( const auto & k : ant.Keypoints ) {
+		if ( current && current->Space != k.Space ) {
+			segments.push_back(*current);
+			current.reset();
+		}
+
+		if ( !current ) {
+			current = std::make_shared<DetectionSegment>();
+			current->Space = k.Space;
+			current->Start = k.At;
+			continue;
+		}
+		current->End = k.At;
+	}
+	if (current) {
+		segments.push_back(*current);
+	}
+
+	auto countFrames =
+		[this](const Time & start,const Time & end,SpaceID space) {
+			size_t found(0);
+			Time lastSeen,firstSeen(Time::SinceEver());
+			for ( const auto & [identified,collision] : Frames ) {
+				if ( identified->FrameTime < start ) {
+					continue;
+				}
+				if ( identified->FrameTime > end ) {
+					break;
+				}
+				if (identified->Space != space ) {
+					continue;
+				}
+				lastSeen = identified->FrameTime;
+				if ( firstSeen.IsSinceEver() ) {
+					firstSeen = identified->FrameTime;
+				}
+				++found;
+			}
+			return std::make_tuple(found,firstSeen,lastSeen);
+		};
+	Statistics[tagID].ID = tagID;
+	Statistics[tagID].Counts.resize(10);
+	Statistics[tagID].Counts.setZero();
+
+	for ( size_t i =  0; i < segments.size(); ++i ) {
+		const auto & s = segments[i];
+		const auto & [found,firstSeen,lastSeen]  = countFrames(s.Start,s.End,s.Space);
+		Statistics[tagID].Counts(TagStatistics::TOTAL_SEEN) += found;
+		Statistics[tagID].LastSeen = lastSeen;
+		if ( i > 0 ) {
+			Statistics[tagID].Counts(priv::TagStatisticsHelper::ComputeGap(segments[i-1].End,s.Start)) += 1;
+		} else {
+			Statistics[tagID].FirstSeen = firstSeen;
+		}
 	}
 }
 

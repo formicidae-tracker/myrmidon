@@ -97,11 +97,11 @@ public:
 
 	const ExperimentInfo & FutureExperimentFile() const;
 
+	const TagStatistics::ByTagID & ExpectedTagStatistics() const;
 
+	const std::vector<std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr>> & ExpectedFrames() const;
 
-	const std::vector<std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr>> & PunctualResult() const;
-
-	const std::vector<ExpectedResult> & QueryResult() const;
+	const std::vector<ExpectedResult> & QueryResults() const;
 private:
 	typedef std::vector<std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr>> FrameList;
 
@@ -140,6 +140,7 @@ private:
 
 	std::vector<ExpectedResult> d_results;
 	FrameList                   d_frames;
+	TagStatistics::ByTagID      d_statistics;
 
 	std::map<fort::tags::Family,std::shared_ptr<FrameDrawer>> d_drawers;
 };
