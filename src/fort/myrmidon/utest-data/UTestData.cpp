@@ -152,7 +152,7 @@ void UTestData::GenerateTDDStructure() {
 		  .HasMovie = true,
 		  .HasConfig = true,
 		  .Start = d_config.Start,
-		  .End = d_config.Start.Add(10*Duration::Second),
+		  .End = d_config.Start.Add(15*Duration::Second),
 		 },
 		 {
 		  .AbsoluteFilePath = d_basedir / "nest.0001",
@@ -160,7 +160,7 @@ void UTestData::GenerateTDDStructure() {
 		  .HasFullFrame = true,
 		  .HasMovie = false,
 		  .HasConfig = true,
-		  .Start = d_config.Start.Add(10*Duration::Second),
+		  .Start = d_config.Start.Add(15*Duration::Second),
 		  .End = d_config.Start.Add(3*Duration::Minute),
 		 },
 		 {
@@ -266,26 +266,28 @@ void UTestData::WriteTDDs() {
 class SegmentInfoWriter : public SegmentedDataWriter {
 public:
 	SegmentInfoWriter(UTestData::TDDInfo & tddInfo)
-		: d_tddInfo(tddInfo) {
+		: d_tddInfo(tddInfo)
+		, d_start(Time::SinceEver()) {
+
 	}
 
 	void Prepare(size_t index) override {
 		d_currentIndex = index;
-
 		d_saved = false;
+
 	}
 	void WriteFrom(const IdentifiedFrame & data,
 	               uint64_t frameID) override {
-		d_last = data.FrameTime;
-		d_lastFrame = frameID;
+		if ( d_start.IsSinceEver() ) {
+			d_start = data.FrameTime;
+			d_startFrame = frameID;
+		}
+		d_endFrame = frameID;
+		d_end = data.FrameTime;
 		if ( d_saved ) {
 			return;
 		}
 		d_saved = true;
-		if ( d_currentIndex == 0 ) {
-			d_tddInfo.Start = data.FrameTime;
-			d_tddInfo.StartFrame = frameID;
-		}
 
 		std::ostringstream relpath;
 		relpath << "tracking." << std::setw(4) << std::setfill('0') << d_currentIndex << ".hermes";
@@ -301,17 +303,19 @@ public:
 		if ( last == false ) {
 			return;
 		}
-		d_tddInfo.End = d_last.Add(1);
-		d_tddInfo.EndFrame = d_lastFrame;
-	}
 
+		d_tddInfo.Start = d_start;
+		d_tddInfo.End = d_end.Add(1);
+		d_tddInfo.StartFrame = d_startFrame;
+		d_tddInfo.EndFrame = d_endFrame;
+	}
 
 private:
 	UTestData::TDDInfo & d_tddInfo;
 	bool     d_saved;
 	size_t   d_currentIndex;
-	uint64_t d_lastFrame;
-	Time     d_last;
+	Time     d_start,d_end;
+	uint64_t d_startFrame,d_endFrame;
 };
 
 void UTestData::WriteTDD(TDDInfo & tddInfo,SpaceID spaceID) {
@@ -338,13 +342,16 @@ void UTestData::WriteTDD(TDDInfo & tddInfo,SpaceID spaceID) {
 	writers.push_back(std::make_shared<SegmentInfoWriter>(tddInfo));
 
 	WriteSegmentedData(tddInfo,spaceID,writers);
+
 }
 
-void UTestData::WriteSegmentedData(const TDDInfo & tddInfo,
+void UTestData::WriteSegmentedData(TDDInfo & tddInfo,
                                    SpaceID spaceID,
-                                   const SegmentedDataWriter::List & writers ) {
+                                   const SegmentedDataWriter::List & writers) {
+	auto monoID = priv::TrackingDataDirectory::GetUID(tddInfo.AbsoluteFilePath);
 	size_t i = 0;
-	uint64_t frameID = 0;
+	uint64_t frameID(0);
+
 	for ( Time current = tddInfo.Start;
 	      current.Before(tddInfo.End);
 	      current = current.Add(d_config.Segment) ) {
@@ -354,7 +361,7 @@ void UTestData::WriteSegmentedData(const TDDInfo & tddInfo,
 		                          [&](const std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr> & it ) {
 			                          return it.first->FrameTime >= current;
 		                          });
-		auto end = std::find_if(d_frames.begin(),
+		auto end = std::find_if(begin,
 		                        d_frames.end(),
 		                        [&](const std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr> & it ) {
 			                        return it.first->FrameTime >= endTime;
@@ -370,7 +377,13 @@ void UTestData::WriteSegmentedData(const TDDInfo & tddInfo,
 			++frameID;
 			std::for_each(writers.begin(),writers.end(),
 			              [&](const SegmentedDataWriter::Ptr & w) {
-				             w->WriteFrom(*iter->first,frameID);
+				              if ( iter->first->FrameTime.HasMono() == false ) {
+					              iter->first->FrameTime =
+						              Time::FromTimestampAndMonotonic(iter->first->FrameTime.ToTimestamp(),
+						                                              iter->first->FrameTime.Sub(d_config.Start).Nanoseconds(),
+						                                              monoID);
+				              }
+				              w->WriteFrom(*iter->first,frameID);
 			              });
 		}
 		std::for_each(writers.begin(),writers.end(),

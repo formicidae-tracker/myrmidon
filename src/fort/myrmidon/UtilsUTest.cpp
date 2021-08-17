@@ -4,46 +4,48 @@
 
 #include <Eigen/Geometry>
 
-::testing::AssertionResult TimeEqual(const fort::Time & a,
-                                     const fort::Time & b) {
+#define failure_helper(aExpr,bExpr,a,b,field) \
+	::testing::AssertionFailure() \
+	<< "Value of: " << aExpr << "." << #field << std::endl \
+	<< "  Actual: " << a.field << std::endl \
+	<< "Expected: " << bExpr << "." << #field << std::endl \
+	<< "Which is: " << b.field
+
+::testing::AssertionResult AssertTimeEqual(const char * aExpr,
+                                           const char * bExpr,
+                                           const fort::Time & a,
+                                           const fort::Time & b) {
 	if ( a.Equals(b) == false ) {
-		return ::testing::AssertionFailure() << "a: " << a.DebugString()
-		                                     << "b: " << b.DebugString()
-		                                     << " and a.Equals(b) returns false";
+		return ::testing::AssertionFailure() << "Value of: " << aExpr <<".Equals(" << bExpr << ")" << std::endl
+		                                     << "  Actual: false" << std::endl
+		                                     << "Expected: true";
 	}
 
 	if ( google::protobuf::util::MessageDifferencer::Equals(a.ToTimestamp(),b.ToTimestamp()) == false ) {
-		return ::testing::AssertionFailure() << "a: " << a.DebugString()
-		                                     << "b: " << b.DebugString()
-		                                     << " and a.Timestamp() and b.Timestamp() yield different results";
+		return ::testing::AssertionFailure() << "Value of: " << aExpr << ".Timestamp()" << std::endl
+		                                     << "  Actual: " << a.ToTimestamp().DebugString() << std::endl
+		                                     << "Expected: " << bExpr << ".Timestamp()" << std::endl
+		                                     << "Which is: " << b.ToTimestamp().DebugString();
+	}
+
+	if ( a.HasMono() != b.HasMono() ) {
+		return ::testing::AssertionFailure() << "Value of: " << aExpr << ".HasMono()" << std::endl
+		                                     << "  Actual: " << std::boolalpha << a.HasMono() << std::endl
+		                                     << "Expected: " << bExpr << ".HasMono()" << std::endl
+		                                     << "Which is: " << std::boolalpha << b.HasMono();
 	}
 
 	if ( a.HasMono() == false ) {
-		if (b.HasMono() == true ) {
-			return ::testing::AssertionFailure() << "a: " << a.DebugString()
-			                                     << "b: " << b.DebugString()
-			                                     << " a has no monotonic time but b has one";
-		} else {
-			return ::testing::AssertionSuccess();
-		}
+		return ::testing::AssertionSuccess();
 	}
 
-	if ( b.HasMono() ==  false ) {
-		return ::testing::AssertionFailure() << "a: " << a.DebugString()
-		                                     << "b: " << b.DebugString()
-		                                     << " a has monotonic time but b hasn't";
-	}
 
 	if ( a.MonoID() != b.MonoID() ) {
-		return ::testing::AssertionFailure() << "a: " << a.DebugString()
-		                                     << "b: " << b.DebugString()
-		                                     << " a and b have different monotonic ID";
+		return failure_helper(aExpr,bExpr,a,b,MonoID());
 	}
 
 	if ( a.MonotonicValue() != b.MonotonicValue() ) {
-		return ::testing::AssertionFailure() << "a: " << a.DebugString()
-		                                     << "b: " << b.DebugString()
-		                                     << " a and b have different monotonic value";
+		return failure_helper(aExpr,bExpr,a,b,MonotonicValue());
 	}
 
 	return ::testing::AssertionSuccess();
@@ -51,27 +53,30 @@
 
 
 
-::testing::AssertionResult VectorAlmostEqual(const Eigen::Vector2d & a,
-                                             const Eigen::Vector2d & b) {
-	auto xAssertion = ::testing::internal::CmpHelperFloatingPointEQ<double>("a.x","b.x",a.x(),b.x());
-	if ( xAssertion == false ) {
-		return ::testing::AssertionFailure() << "a:{" << a.transpose()
-		                                     << "} b: {" << b.transpose()
-		                                     << "}: " << xAssertion.message();
+::testing::AssertionResult AssertVectorAlmostEqual(const char * aExpr,
+                                                   const char * bExpr,
+                                                   const Eigen::Vector2d & a,
+                                                   const Eigen::Vector2d & b) {
+
+
+
+	auto xAssertion = ::testing::internal::CmpHelperFloatingPointEQ<double>((std::string(aExpr)+".x()").c_str(),
+		  (std::string(bExpr)+".x()").c_str(),
+		  a.x(),
+		  b.x());
+	if ( !xAssertion ) {
+		return xAssertion;
 	}
-	auto yAssertion = ::testing::internal::CmpHelperFloatingPointEQ<double>("a.y","b.y",a.y(),b.y());
-	if ( yAssertion == false ) {
-		return ::testing::AssertionFailure() << "a:{" << a.transpose()
-		                                     << "} b: {" << b.transpose()
-		                                     << "}: " << yAssertion.message();
+	return  ::testing::internal::CmpHelperFloatingPointEQ<double>((std::string(aExpr)+".y()").c_str(),
+		  (std::string(bExpr)+".y()").c_str(),
+		  a.y(),
+		  b.y());
+  }
 
-	}
-	return ::testing::AssertionSuccess();
-}
-
-
-::testing::AssertionResult MessageEqual(const google::protobuf::Message &a,
-                                        const google::protobuf::Message &b) {
+::testing::AssertionResult AssertMessageEqual(const char * aExpr,
+                                              const char * bExpr,
+                                              const google::protobuf::Message &a,
+                                              const google::protobuf::Message &b) {
 	std::string differences;
 
 	google::protobuf::util::MessageDifferencer diff;
@@ -80,125 +85,172 @@
 	if ( diff.Compare(b,a) == true ) {
 		return ::testing::AssertionSuccess();
 	}
-	return ::testing::AssertionFailure() << "a:{" << a.ShortDebugString()
-	                                     << "}, b:{" << b.ShortDebugString()
-	                                     << "} differs: " << differences;
+	return ::testing::AssertionFailure() << "Value Of: " << aExpr << std::endl
+	                                     << "  Actual: " << a.DebugString() << std::endl
+	                                     << "Expected: " << bExpr << std::endl
+	                                     << "Which is: " << b.DebugString();
 }
 
 
-::testing::AssertionResult PolygonEqual(const fort::myrmidon::Polygon &a,
-                                        const fort::myrmidon::Polygon &b) {
+::testing::AssertionResult AssertPolygonEqual(const char * aExpr,
+                                              const char * bExpr,
+                                              const fort::myrmidon::Polygon &a,
+                                              const fort::myrmidon::Polygon &b) {
 	if ( a.Size() != b.Size() ) {
-		return ::testing::AssertionFailure() << "Polygon a and b have a different number of vertices a:"
-		                                     << a.Size()
-		                                     << " b:"
-		                                     << b.Size();
+		return failure_helper(aExpr,bExpr,a,b,Size());
 	}
 	for ( size_t i = 0; i < a.Size(); ++i ) {
-		auto inter = VectorAlmostEqual(a.Vertex(i),b.Vertex(i));
+		std::ostringstream as,bs;
+		as << aExpr << ".Vertex(" << i << ")";
+		bs << bExpr << ".Vertex(" << i << ")";
+		auto inter = AssertVectorAlmostEqual(as.str().c_str(),
+		                                     bs.str().c_str(),
+		                                     a.Vertex(i),
+		                                     b.Vertex(i));
 		if ( !inter ) {
-			return inter << "Vertex " << i << " differs";
+			return inter;
 		}
 	}
 	return ::testing::AssertionSuccess();
 }
 
 
-testing::AssertionResult CapsuleEqual(const fort::myrmidon::Capsule &a,
-                                      const fort::myrmidon::Capsule &b) {
-	auto inter = VectorAlmostEqual(a.C1(),b.C1());
-	if ( !inter ) {
-		return inter << "Center 1 differs";
-	}
-	inter = VectorAlmostEqual(a.C2(),b.C2());
-	if ( !inter ) {
-		return inter << "Center 2 differs";
-	}
-	inter = ::testing::internal::CmpHelperFloatingPointEQ<double>("a.C1.radius","a.C1.radius",a.R1(),b.R1());
+testing::AssertionResult AssertCapsuleEqual(const char * aExpr,
+                                            const char * bExpr,
+                                            const fort::myrmidon::Capsule &a,
+                                            const fort::myrmidon::Capsule &b) {
+	auto inter = AssertVectorAlmostEqual((std::string(aExpr)+".C1()").c_str(),
+	                                     (std::string(bExpr)+".C1()").c_str(),
+	                                     a.C1(),
+	                                     b.C1());
 	if ( !inter ) {
 		return inter;
 	}
-	return ::testing::internal::CmpHelperFloatingPointEQ<double>("a.C2.radius","b.C2.radius",a.R2(),b.R2());
-}
-
-
-testing::AssertionResult CircleEqual(const fort::myrmidon::Circle &a,
-                                     const fort::myrmidon::Circle &b) {
-	auto inter = VectorAlmostEqual(a.Center(),b.Center());
+	inter = AssertVectorAlmostEqual((std::string(aExpr)+".C2()").c_str(),
+	                                (std::string(bExpr)+".C2()").c_str(),
+	                                a.C2(),
+	                                b.C2());
 	if ( !inter ) {
-		return inter << "Center differs";
+		return inter;
 	}
-	return ::testing::internal::CmpHelperFloatingPointEQ<double>("a.Radius","b.Radius",a.Radius(),b.Radius());
+	inter = ::testing::internal::CmpHelperFloatingPointEQ<double>((std::string(aExpr)+".R1()").c_str(),
+	                                                              (std::string(bExpr)+".R1()").c_str(),
+	                                                              a.R1(),
+	                                                              b.R1());
+	if ( !inter ) {
+		return inter;
+	}
+	return ::testing::internal::CmpHelperFloatingPointEQ<double>((std::string(aExpr)+".R2()").c_str(),
+	                                                             (std::string(bExpr)+".R2()").c_str(),
+	                                                             a.R2(),
+	                                                             b.R2());
+}
+
+
+testing::AssertionResult AssertCircleEqual(const char * aExpr,
+                                           const char * bExpr,
+                                           const fort::myrmidon::Circle &a,
+                                           const fort::myrmidon::Circle &b) {
+	auto inter = AssertVectorAlmostEqual((std::string(aExpr)+".Center()").c_str(),
+	                                     (std::string(bExpr)+".Center()").c_str(),
+	                                     a.Center(),
+	                                     b.Center());
+	if ( !inter ) {
+		return inter;
+	}
+	return ::testing::internal::CmpHelperFloatingPointEQ<double>((std::string(aExpr)+".Radius()").c_str(),
+	                                                             (std::string(bExpr)+".Radius()").c_str(),
+	                                                             a.Radius(),
+	                                                             b.Radius());
 }
 
 
 
-testing::AssertionResult ShapeEqual(const fort::myrmidon::Shape & a,
-                                    const fort::myrmidon::Shape & b) {
+testing::AssertionResult AssertShapeEqual(const char * aExpr,
+                                          const char * bExpr,
+                                          const fort::myrmidon::Shape & a,
+                                          const fort::myrmidon::Shape & b) {
 	if ( a.ShapeType() != b.ShapeType() ) {
-		return ::testing::AssertionFailure() << "Shape types differs";
+		return ::testing::AssertionFailure() << "Value Of: " << aExpr << ".ShapeType()" << std::endl
+		                                     << "  Actual: " << int(a.ShapeType()) << std::endl
+		                                     << "Expected: " << bExpr << ".ShapeType()" << std::endl
+		                                     << "Which is: " << int(b.ShapeType());
 	}
 
 	switch(a.ShapeType()) {
 	case fort::myrmidon::Shape::Type::CAPSULE: {
-		return CapsuleEqual(static_cast<const fort::myrmidon::Capsule &>(a),
-		                    static_cast<const fort::myrmidon::Capsule &>(b));
+		return AssertCapsuleEqual(aExpr,
+		                          bExpr,
+		                          static_cast<const fort::myrmidon::Capsule &>(a),
+		                          static_cast<const fort::myrmidon::Capsule &>(b));
 
 	}
 	case fort::myrmidon::Shape::Type::CIRCLE: {
-		return CircleEqual(static_cast<const fort::myrmidon::Circle &>(a),
-		                   static_cast<const fort::myrmidon::Circle &>(b));
+		return AssertCircleEqual(aExpr,
+		                         bExpr,
+		                         static_cast<const fort::myrmidon::Circle &>(a),
+		                         static_cast<const fort::myrmidon::Circle &>(b));
 	}
 	case fort::myrmidon::Shape::Type::POLYGON: {
-		return PolygonEqual(static_cast<const fort::myrmidon::Polygon &>(a),
-		                    static_cast<const fort::myrmidon::Polygon &>(b));
+		return AssertPolygonEqual(aExpr,
+		                          bExpr,
+		                          static_cast<const fort::myrmidon::Polygon &>(a),
+		                          static_cast<const fort::myrmidon::Polygon &>(b));
 	}
 	}
 	return ::testing::AssertionFailure() << "unsupported shape type";
 }
 
-::testing::AssertionResult AntStaticValueEqual(const fort::myrmidon::AntStaticValue &a,
-                                               const fort::myrmidon::AntStaticValue &b) {
+::testing::AssertionResult AssertAntStaticValueEqual(const char * aExpr,
+                                                     const char * bExpr,
+                                                     const fort::myrmidon::AntStaticValue &a,
+                                                     const fort::myrmidon::AntStaticValue &b) {
 	if ( a.index() != b.index() ) {
-		return ::testing::AssertionFailure() << "StaticValue Type differs a:" << a.index()
-		                                     << " b:" <<b.index();
+		return failure_helper(aExpr,bExpr,a,b,index());
 	}
 
 	switch( a.index() ) {
 	case 0:
 		if ( std::get<bool>(a) != std::get<bool>(b) ) {
-			return ::testing::AssertionFailure() << "a: " << std::boolalpha
-			                                     << std::get<bool>(a)
-			                                     << " b: " << std::get<bool>(b)
-			                                     << " differs!";
+			return ::testing::AssertionFailure() << "Value Of: std::get<bool>(" << aExpr << ")" << std::endl
+			                                     << "  Actual: " << std::boolalpha << std::get<bool>(a) << std::endl
+			                                     << "Expected: std::get<bool>(" << bExpr << ")" << std::endl
+			                                     << "Which is: " << std::get<bool>(b);
 		}
 		break;
 	case 1:
 		if ( std::get<int>(a) != std::get<int>(b) ) {
-			return ::testing::AssertionFailure() << "a:" <<  std::get<int>(a)
-			                                     << " b:" << std::get<int>(b)
-			                                     << " differs!";
+			return ::testing::AssertionFailure() << "Value Of: std::get<int>(" << aExpr << ")" << std::endl
+			                                     << "  Actual: "  << std::get<int>(a) << std::endl
+			                                     << "Expected: std::get<int>(" << bExpr << ")" << std::endl
+			                                     << "Which is: " << std::get<int>(b);
+
 		}
 		break;
 	case 2:
 		if ( std::get<double>(a) != std::get<double>(b) ) {
-			return ::testing::AssertionFailure() << "a:" <<  std::get<double>(a)
-			                                     << " b:" << std::get<double>(b)
-			                                     << " differs!";
+			return ::testing::AssertionFailure() << "Value Of: std::get<double>(" << aExpr << ")" << std::endl
+			                                     << "  Actual: " << std::get<double>(a) << std::endl
+			                                     << "Expected: std::get<double>(" << bExpr << ")" << std::endl
+			                                     << "Which is: " << std::get<double>(b);
 		}
 		break;
 	case 3:
 		if ( std::get<std::string>(a) != std::get<std::string>(b) ) {
-			return ::testing::AssertionFailure() << "a:" <<  std::get<std::string>(a)
-			                                     << " b:" << std::get<std::string>(b)
-			                                     << " differs!";
+			return ::testing::AssertionFailure() << "Value Of: std::get<std::string>(" << aExpr << ")" << std::endl
+			                                     << "  Actual: " << std::get<std::string>(a) << std::endl
+			                                     << "Expected: std::get<std::string>(" << bExpr << ")" << std::endl
+			                                     << "Which is: " << std::get<std::string>(b);
+
 		}
 		break;
 	case 4:
 		if ( std::get<fort::Time>(a).Equals(std::get<fort::Time>(b)) == false ) {
-			return ::testing::AssertionFailure() << "a:" <<  std::get<fort::Time>(a)
-			                                     << " b:" << std::get<fort::Time>(b)
-			                                     << " differs!";
+			return ::testing::AssertionFailure() << "Value Of: std::get<fort::Time>(" << aExpr << ")" << std::endl
+			                                     << "  Actual: " << std::get<fort::Time>(a) << std::endl
+			                                     << "Expected: std::get<fort::Time>(" << bExpr << ")" << std::endl
+			                                     << "Which is: " << std::get<fort::Time>(b);
+
 		}
 		break;
 	default:
@@ -208,46 +260,60 @@ testing::AssertionResult ShapeEqual(const fort::myrmidon::Shape & a,
 }
 
 ::testing::AssertionResult
-AABBAlmostEqual(const fort::myrmidon::AABB & a,
-                const fort::myrmidon::AABB & b) {
-	auto min = VectorAlmostEqual(a.min(),b.min());
+AssertAABBAlmostEqual(const char * aExpr,
+                      const char * bExpr,
+                      const fort::myrmidon::AABB & a,
+                      const fort::myrmidon::AABB & b) {
+	auto min = AssertVectorAlmostEqual((std::string(aExpr)+".min()").c_str(),
+	                                   (std::string(bExpr)+".min()").c_str(),
+	                                   a.min(),
+	                                   b.min());
 	if ( !min == true ) {
 		return min;
 	}
-	return VectorAlmostEqual(a.max(),b.max());
+	return AssertVectorAlmostEqual((std::string(aExpr)+".max()").c_str(),
+	                               (std::string(bExpr)+".max()").c_str(),
+	                               a.max(),
+	                               b.max());
 }
 
 
 ::testing::AssertionResult
-SingleStatsEqual(const fort::myrmidon::TagStatistics & a,
-                 const fort::myrmidon::TagStatistics & b) {
+AssertSingleStatsEqual(const char * aExpr,
+                       const char * bExpr,
+                       const fort::myrmidon::TagStatistics & a,
+                       const fort::myrmidon::TagStatistics & b) {
 		if ( a.ID != b.ID ) {
-			return ::testing::AssertionFailure() << "a.ID: " << a.ID
-			                                     << " and b.ID: " << b.ID
-			                                     << " differs";
-
+			return failure_helper(aExpr,bExpr,a,b,ID);
 		}
 
-		auto intermediary = TimeEqual(a.FirstSeen,b.FirstSeen);
+		auto intermediary = AssertTimeEqual((std::string(aExpr)+".FirstSeen").c_str(),
+		                                    (std::string(bExpr)+".FirstSeen").c_str(),
+		                                    a.FirstSeen,
+		                                    b.FirstSeen);
 		if ( !intermediary ) {
-			return intermediary << " for FirstSeen";
+			return intermediary;
 		}
-		intermediary = TimeEqual(a.LastSeen,b.LastSeen);
+		intermediary = AssertTimeEqual((std::string(aExpr)+".LastSeen").c_str(),
+		                               (std::string(bExpr)+".LastSeen").c_str(),
+		                               a.LastSeen,
+		                               b.LastSeen);
 		if ( !intermediary ) {
-			return intermediary << " for LastSeen";
+			return intermediary;
 		}
 
 		if ( a.Counts.rows() != b.Counts.rows() ) {
-			return ::testing::AssertionFailure() << "a.Counts.rows(): " << a.Counts.rows()
-			                                     << " and b.Counts.rows(): " << b.Counts.rows()
-			                                     << " differs";
+			return failure_helper(aExpr,bExpr,a,b,Counts.rows());
 		}
 
 		for ( size_t i = 0; i < a.Counts.rows(); ++i) {
 			if ( a.Counts(i) != b.Counts(i) ) {
-				return ::testing::AssertionFailure() << "a.Counts("<< i << "): " << a.Counts(i)
-				                                     << "and b.Counts("<< i << "): " << b.Counts(i)
-				                                     << " differs";
+				return ::testing::AssertionFailure() << "Value Of: " << aExpr << ".Counts" << std::endl
+				                                     << "  Actual: " << a.Counts.transpose() << std::endl
+				                                     << "Expected: " << bExpr << ".Counts" << std::endl
+				                                     << "Which is: " << b.Counts.transpose() << std::endl
+				                                     << "   Index: " << i;
+
 			}
 		}
 
@@ -256,29 +322,79 @@ SingleStatsEqual(const fort::myrmidon::TagStatistics & a,
 
 
 ::testing::AssertionResult
-TagStatisticsEqual(const fort::myrmidon::TagStatistics::ByTagID & a,
-                   const fort::myrmidon::TagStatistics::ByTagID & b) {
+AssertTagStatisticsEqual(const char * aExpr,
+                         const char * bExpr,
+                         const fort::myrmidon::TagStatistics::ByTagID & a,
+                         const fort::myrmidon::TagStatistics::ByTagID & b) {
 	if ( a.size() != b.size() ) {
-		return ::testing::AssertionFailure() << "a.size(): " << a.size()
-		                                     << " and b.size(): " << b.size()
-		                                     << " differs";
+		return failure_helper(aExpr,bExpr,a,b,size());
 	}
 	for ( const auto & [tagID,aStats] : a ) {
 		if ( b.count(tagID) == 0 ) {
-			return ::testing::AssertionFailure() << "b is missing TagID " << tagID;
+			return ::testing::AssertionFailure() << bExpr << " is missing TagID " << tagID;
 		}
 		const auto & bStats = b.at(tagID);
 
-		auto intermediary = SingleStatsEqual(aStats,bStats);
+		auto intermediary = AssertSingleStatsEqual((std::string(aExpr)+"["+fort::myrmidon::FormatTagID(tagID)+"]").c_str(),
+		                                           (std::string(bExpr)+"["+fort::myrmidon::FormatTagID(tagID)+"]").c_str(),
+		                                            aStats,
+		                                            bStats);
 		if ( !intermediary ) {
-			return intermediary << " for TagID " << fort::myrmidon::FormatTagID(tagID);
+			return intermediary;
 		}
 	}
 	return ::testing::AssertionSuccess();
 }
 
 ::testing::AssertionResult
-IdentifiedFrameEqual(const fort::myrmidon::IdentifiedFrame & a,
-                     const fort::myrmidon::IdentifiedFrame & b) {
+AssertIdentifiedFrameEqual(const char * aExpr,
+                           const char * bExpr,
+                           const fort::myrmidon::IdentifiedFrame & a,
+                           const fort::myrmidon::IdentifiedFrame & b) {
+	auto intermediary = AssertTimeEqual((std::string(aExpr)+".FrameTime").c_str(),
+	                                    (std::string(bExpr)+".FrameTime").c_str(),
+	                                    a.FrameTime,
+	                                    b.FrameTime);
+	if ( !intermediary ) {
+		return intermediary;
+	}
+	if ( a.Space != b.Space ) {
+		return failure_helper(aExpr,bExpr,a,b,Space);
+	}
+	if ( a.Height != b.Height ) {
+		return failure_helper(aExpr,bExpr,a,b,Height);
+	}
+
+	if ( a.Width != b.Width ) {
+		return failure_helper(aExpr,bExpr,a,b,Width);
+	}
+
+	if ( a.Positions.rows() != b.Positions.rows() ) {
+		return failure_helper(aExpr,bExpr,a,b,Positions.rows());
+	}
+
+	for ( size_t i = 0; i < b.Positions.rows(); ++i ) {
+		fort::myrmidon::AntID antID = b.Positions(i,0);
+		size_t j = 0;
+		for ( ; j < a.Positions.rows(); ++j) {
+			if (a.Positions(j,0) == antID) {
+				break;
+			}
+		}
+		if ( j == a.Positions.rows() ) {
+			return ::testing::AssertionFailure() << "Could not find expected AntID " << antID << " in frame";
+		}
+		for ( const auto & c : {1,2,3,4}) {
+			if ( std::abs(a.Positions(j,c) - b.Positions(i,c)) > 1e-3 ) {
+				return ::testing::AssertionFailure()
+					<< "Value of: " << aExpr << ".Positions(" << j << "," << c << ")" << std::endl
+					<< "  Actual: " << a.Positions(j,c) << std::endl
+					<< "  Within: " << 1e-3 << std::endl
+					<< "      of: " << bExpr << ".Positions(" << i << "," << c << ")" << std::endl
+					<< "Which is: " << b.Positions(j,c);
+			}
+		}
+	}
+
 	return ::testing::AssertionSuccess();
 }

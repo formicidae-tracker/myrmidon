@@ -26,7 +26,7 @@ TEST_F(QueryUTest,TagStatistics) {
 	ASSERT_NO_THROW({
 			tagStats = Query::ComputeTagStatistics(*experiment);
 		});
-	ASSERT_TRUE(TagStatisticsEqual(tagStats,TestSetup::UTestData().ExpectedTagStatistics()));
+	EXPECT_TAG_STATISTICS_EQ(tagStats,TestSetup::UTestData().ExpectedTagStatistics());
 }
 
 
@@ -43,7 +43,7 @@ TEST_F(QueryUTest,IdentifyFrames) {
 		});
 	ASSERT_EQ(identifieds.size(),expected.size());
 	for ( size_t i = 0; i < expected.size(); ++i) {
-		EXPECT_TRUE(IdentifiedFrameEqual(*identifieds[i],*expected[i].first));
+		EXPECT_IDENTIFIED_FRAME_EQ(*identifieds[i],*expected[i].first) << "  With i: " << i;
 	}
 	auto t = TestSetup::UTestData().NestDataDirs().front().End;
 	size_t expectedNumber = std::find_if(expected.begin(),

@@ -216,8 +216,8 @@ TEST_F(CollisionSolverUTest,TestE2E) {
 			                       return i.IDs == inter.IDs;
 		                       });
 		if ( fi == res->Collisions.end() ) {
-			ADD_FAILURE() << "Missing collision between " << Ant::FormatID(inter.IDs.first)
-			              << " and " << Ant::FormatID(inter.IDs.second);
+			ADD_FAILURE() << "Missing collision between " << FormatAntID(inter.IDs.first)
+			              << " and " << FormatAntID(inter.IDs.second);
 			continue;
 		}
 
@@ -233,8 +233,8 @@ TEST_F(CollisionSolverUTest,TestE2E) {
 			if ( good == false ) {
 				auto aName = inter.Types(i,0) == 1 ? "body" : "antennas";
 				auto bName = inter.Types(i,1) == 1 ? "body" : "antennas";
-				ADD_FAILURE() << "Collision between " << Ant::FormatID(inter.IDs.first)
-				              << " and " << Ant::FormatID(inter.IDs.second)
+				ADD_FAILURE() << "Collision between " << FormatAntID(inter.IDs.first)
+				              << " and " << FormatAntID(inter.IDs.second)
 				              << " is missing collision " << aName << "-" << bName;
 			}
 		}

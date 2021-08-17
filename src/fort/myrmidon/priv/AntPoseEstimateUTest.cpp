@@ -81,8 +81,8 @@ TEST_F(AntPoseEstimateUTest,CanBeComputedFromPoints) {
 		                    123,
 		                    d.Head,
 		                    d.Tail);
-		EXPECT_TRUE(VectorAlmostEqual(res.PositionFromTag(),
-		                              d.Result));
+		EXPECT_VECTOR2D_EQ(res.PositionFromTag(),
+		                   d.Result);
 
 		EXPECT_DOUBLE_EQ(res.AngleFromTag(),d.Angle);
 
@@ -148,7 +148,7 @@ TEST_F(AntPoseEstimateUTest,CanComputeMeanPose) {
 		                                                 d.Poses.begin(),
 		                                                 d.Poses.end()));
 
-		EXPECT_TRUE(VectorAlmostEqual(res,d.ExpectedPosition)) << "Testing " << idx;
+		EXPECT_VECTOR2D_EQ(res,d.ExpectedPosition) << "Testing " << idx;
 		EXPECT_NEAR(angle,d.ExpectedAngle,1.0e-8) << "Testing " << idx;
 		++idx;
 	}

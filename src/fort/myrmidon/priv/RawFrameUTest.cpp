@@ -59,7 +59,7 @@ TEST_F(RawFrameUTest,ExtractsDataFromHermes) {
 			// strip monotonic values on errored frame, has timestamp is always null
 			expectedTime = Time::FromTimestamp(time.ToTimestamp());
 		}
-		EXPECT_TRUE(TimeEqual(res->Frame().Time(),expectedTime));
+		EXPECT_TIME_EQ(res->Frame().Time(),expectedTime);
 		EXPECT_EQ(res->Width(),width);
 		EXPECT_EQ(res->Height(),height);
 		results.push_back(res);

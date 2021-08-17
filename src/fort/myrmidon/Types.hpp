@@ -554,13 +554,22 @@ struct ExperimentDataInfo {
 	 */
 	std::map<SpaceID,SpaceDataInfo> Spaces;
 };
+
 /**
- * Formats a TagID to convention format
+ * Formats a TagID to conventional format
  * @param tagID the TagID to format
  *
  * @return tagID formatted to the myrmidon convetion for TagID.
  */
 std::string FormatTagID(TagID tagID);
+
+/**
+ * Formats a AntID to conventional format
+ * @param antID the TagID to format
+ *
+ * @return antID formatted to the myrmidon convention for AntID.
+ */
+std::string FormatAntID(AntID tagID);
 
 
 /** \cond PRIVATE */

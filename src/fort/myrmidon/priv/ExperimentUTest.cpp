@@ -339,18 +339,18 @@ TEST_F(ExperimentUTest,MeasurementEndToEnd) {
 	                                                 nest1->Start(),
 	                                                 Time::Forever());
 	e->SetDefaultTagSize(1.0);
-	EXPECT_TRUE(VectorAlmostEqual(identAfter1->AntPosition(),
-	                              Eigen::Vector2d(6.0,0.0)));
+	EXPECT_VECTOR2D_EQ(identAfter1->AntPosition(),
+	                   Eigen::Vector2d(6.0,0.0));
 
 	EXPECT_FALSE(identAfter1->HasUserDefinedAntPose());
 	identAfter1->SetUserDefinedAntPose(Eigen::Vector2d(2,3),0.13);
 	EXPECT_TRUE(identAfter1->HasUserDefinedAntPose());
-	EXPECT_TRUE(VectorAlmostEqual(identAfter1->AntPosition(),
-	                        Eigen::Vector2d(2,3)));
+	EXPECT_VECTOR2D_EQ(identAfter1->AntPosition(),
+	                   Eigen::Vector2d(2,3));
 	EXPECT_EQ(identAfter1->AntAngle(),0.13);
 	identAfter1->ClearUserDefinedAntPose();
-	EXPECT_TRUE(VectorAlmostEqual(identAfter1->AntPosition(),
-	                              Eigen::Vector2d(6.0,0.0)));
+	EXPECT_VECTOR2D_EQ(identAfter1->AntPosition(),
+	                   Eigen::Vector2d(6.0,0.0));
 
 	EXPECT_FALSE(identAfter1->HasUserDefinedAntPose());
 
@@ -366,8 +366,8 @@ TEST_F(ExperimentUTest,MeasurementEndToEnd) {
 		EXPECT_DOUBLE_EQ(9.6,m.LengthMM);
 	}
 
-	EXPECT_TRUE(VectorAlmostEqual(identBefore1->AntPosition(),
-	                              Eigen::Vector2d(6.0,0.0)));
+	EXPECT_VECTOR2D_EQ(identBefore1->AntPosition(),
+	                   Eigen::Vector2d(6.0,0.0));
 
 
 
@@ -410,10 +410,10 @@ TEST_F(ExperimentUTest,MeasurementEndToEnd) {
 	}
 	//deleting all measurements set the position to 0
 
-	EXPECT_TRUE(VectorAlmostEqual(identBefore1->AntPosition(),
-	                              Eigen::Vector2d(0.0,0.0)));
-	EXPECT_TRUE(VectorAlmostEqual(identAfter1->AntPosition(),
-	                              Eigen::Vector2d(0.0,0.0)));
+	EXPECT_VECTOR2D_EQ(identBefore1->AntPosition(),
+	                   Eigen::Vector2d(0.0,0.0));
+	EXPECT_VECTOR2D_EQ(identAfter1->AntPosition(),
+	                   Eigen::Vector2d(0.0,0.0));
 
 	EXPECT_THROW({
 			e->DeleteMeasurement("none/frames/23/closeups/0x01a/measurements/1");
@@ -701,30 +701,30 @@ TEST_F(ExperimentUTest,AntCloning) {
 	EXPECT_NO_THROW(e->CloneAntShape(1,false,false));
 	ASSERT_EQ(ants[1]->Capsules().size(),1);
 	ASSERT_EQ(ants[2]->Capsules().size(),1);
-	EXPECT_TRUE(CapsuleEqual(*ants[1]->Capsules().front().second,
-	                         *ants[0]->Capsules().front().second));
+	EXPECT_CAPSULE_EQ(*ants[1]->Capsules().front().second,
+	                  *ants[0]->Capsules().front().second);
 
-	EXPECT_TRUE(CapsuleEqual(*ants[2]->Capsules().front().second,
-	                         *ants[0]->Capsules().front().second));
+	EXPECT_CAPSULE_EQ(*ants[2]->Capsules().front().second,
+	                  *ants[0]->Capsules().front().second);
 
 	ants[2]->ClearCapsules();
 	EXPECT_NO_THROW(e->CloneAntShape(1,true,false));
 	ASSERT_EQ(ants[1]->Capsules().size(),1);
 	ASSERT_EQ(ants[2]->Capsules().size(),1);
-	EXPECT_TRUE(CapsuleEqual(*ants[1]->Capsules().front().second,
-	                         *ants[0]->Capsules().front().second));
+	EXPECT_CAPSULE_EQ(*ants[1]->Capsules().front().second,
+	                  *ants[0]->Capsules().front().second);
 
-	EXPECT_TRUE(CapsuleEqual(*ants[2]->Capsules().front().second,
-	                         *ants[0]->Capsules().front().second));
+	EXPECT_CAPSULE_EQ(*ants[2]->Capsules().front().second,
+	                  *ants[0]->Capsules().front().second);
 
 	EXPECT_NO_THROW(e->CloneAntShape(1,true,true));
-	EXPECT_TRUE(CapsuleEqual(*ants[1]->Capsules().front().second,
-	                         Capsule(Eigen::Vector2d(0,0),
-	                                 Eigen::Vector2d(2,2),
-	                                 2.0,2.0)));
+	EXPECT_CAPSULE_EQ(*ants[1]->Capsules().front().second,
+	                  Capsule(Eigen::Vector2d(0,0),
+	                          Eigen::Vector2d(2,2),
+	                          2.0,2.0));
 
-	EXPECT_TRUE(CapsuleEqual(*ants[2]->Capsules().front().second,
-	                         *ants[0]->Capsules().front().second));
+	EXPECT_CAPSULE_EQ(*ants[2]->Capsules().front().second,
+	                  *ants[0]->Capsules().front().second);
 
 }
 

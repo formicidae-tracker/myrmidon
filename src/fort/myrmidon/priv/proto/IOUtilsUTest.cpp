@@ -58,11 +58,11 @@ TEST_F(IOUtilsUTest,TimeIO) {
 		expected.set_monotonic(d.Mono);
 		IOUtils::SaveTime(&t, d.T);
 
-		EXPECT_TRUE(MessageEqual(t,expected));
+		EXPECT_MESSAGE_EQ(t,expected);
 
 		auto res = IOUtils::LoadTime(t, 42);
 
-		EXPECT_TRUE(TimeEqual(res,d.T));
+		EXPECT_TIME_EQ(res,d.T);
 	}
 
 }
@@ -140,7 +140,7 @@ TEST_F(IOUtilsUTest,IdentificationIO) {
 		expected.set_tagsize(d.TagSize);
 
 		IOUtils::SaveIdentification(&identPb, ident);
-		EXPECT_TRUE(MessageEqual(identPb,expected));
+		EXPECT_MESSAGE_EQ(identPb,expected);
 
 		e->Identifier()->DeleteIdentification(ident);
 		ASSERT_TRUE(a->Identifications().empty());
@@ -153,15 +153,15 @@ TEST_F(IOUtilsUTest,IdentificationIO) {
 		}
 		auto finalIdent = a->Identifications()[0];
 		EXPECT_EQ(finalIdent->TagValue(),d.Value);
-		EXPECT_TRUE(TimeEqual(finalIdent->Start(),d.Start));
-		EXPECT_TRUE(TimeEqual(finalIdent->End(),d.End));
+		EXPECT_TIME_EQ(finalIdent->Start(),d.Start);
+		EXPECT_TIME_EQ(finalIdent->End(),d.End);
 		if ( d.HasPose == false ) {
 			EXPECT_FLOAT_EQ(finalIdent->AntPosition().x(),d.Pose.x());
 			EXPECT_FLOAT_EQ(finalIdent->AntPosition().y(),d.Pose.y());
 			EXPECT_FLOAT_EQ(finalIdent->AntAngle(),d.Pose.z());
 		} else {
-			EXPECT_TRUE(VectorAlmostEqual(finalIdent->AntPosition(),
-			                              d.Pose.block<2,1>(0,0)));
+			EXPECT_VECTOR2D_EQ(finalIdent->AntPosition(),
+			                   (d.Pose.block<2,1>(0,0)));
 			EXPECT_DOUBLE_EQ(finalIdent->AntAngle(),d.Pose.z());
 		}
 
@@ -195,10 +195,10 @@ TEST_F(IOUtilsUTest,VectorIO) {
 		expected.set_y(dV.y());
 
 		IOUtils::SaveVector(&v,dV);
-		EXPECT_TRUE(MessageEqual(v,expected));
+		EXPECT_MESSAGE_EQ(v,expected);
 
 		IOUtils::LoadVector(res,v);
-		EXPECT_TRUE(VectorAlmostEqual(res,dV));
+		EXPECT_VECTOR2D_EQ(res,dV);
 	}
 }
 
@@ -226,10 +226,10 @@ TEST_F(IOUtilsUTest,CapsuleIO) {
 		expected.set_r2(d.BR);
 
 		IOUtils::SaveCapsule(&c,dC);
-		EXPECT_TRUE(MessageEqual(c,expected));
+		EXPECT_MESSAGE_EQ(c,expected);
 
 		auto res = IOUtils::LoadCapsule(c);
-		EXPECT_TRUE(CapsuleEqual(*res,dC));
+		EXPECT_CAPSULE_EQ(*res,dC);
 	}
 
 }
@@ -256,10 +256,10 @@ TEST_F(IOUtilsUTest,CircleIO) {
 		expected.set_radius(d.R);
 
 		IOUtils::SaveCircle(&c,*dC);
-		EXPECT_TRUE(MessageEqual(c,expected));
+		EXPECT_MESSAGE_EQ(c,expected);
 
 		auto res = IOUtils::LoadCircle(c);
-		EXPECT_TRUE(CircleEqual(*res,*dC));
+		EXPECT_CIRCLE_EQ(*res,*dC);
 	}
 }
 
@@ -281,10 +281,10 @@ TEST_F(IOUtilsUTest,PolygonIO) {
 		}
 
 		IOUtils::SavePolygon(&p,*dP);
-		EXPECT_TRUE(MessageEqual(p,expected));
+		EXPECT_MESSAGE_EQ(p,expected);
 
 		auto res = IOUtils::LoadPolygon(p);
-		EXPECT_TRUE(PolygonEqual(*res,*dP));
+		EXPECT_POLYGON_EQ(*res,*dP);
 	}
 }
 
@@ -305,7 +305,7 @@ TEST_F(IOUtilsUTest,ShapeIO) {
 		if ( s.has_polygon() ) { ++i; }
 		EXPECT_EQ(i,1);
 		auto res = IOUtils::LoadShape(s);
-		EXPECT_TRUE(ShapeEqual(*res,*dS));
+		EXPECT_SHAPE_EQ(*res,*dS);
 	}
 }
 
@@ -331,7 +331,7 @@ TEST_F(IOUtilsUTest,AntStaticValueIO) {
 		IOUtils::SaveAntStaticValue(&pb,d);
 		EXPECT_EQ(pb.type(),expected.type());
 		auto res = IOUtils::LoadAntStaticValue(pb);
-		EXPECT_TRUE(AntStaticValueEqual(res,d));
+		EXPECT_ANT_STATIC_VALUE_EQ(res,d);
 	}
 
 }
@@ -451,7 +451,7 @@ TEST_F(IOUtilsUTest,AntIO) {
 		IOUtils::SaveAnt(&a,dA);
 		std::string differences;
 
-		EXPECT_TRUE(MessageEqual(a,expected));
+		EXPECT_MESSAGE_EQ(a,expected);
 
 		EXPECT_THROW({
 				IOUtils::LoadAnt(e,a);
@@ -479,9 +479,9 @@ TEST_F(IOUtilsUTest,AntIO) {
 			auto ii = res->CIdentifications()[i];
 			auto ie = dIdents[i];
 			EXPECT_EQ(ii->TagValue(),ie->TagValue());
-			EXPECT_TRUE(TimeEqual(ii->Start(),ie->Start()));
-			EXPECT_TRUE(TimeEqual(ii->End(),ie->End()));
-			EXPECT_TRUE(VectorAlmostEqual(ii->AntPosition(),ie->AntPosition()));
+			EXPECT_TIME_EQ(ii->Start(),ie->Start());
+			EXPECT_TIME_EQ(ii->End(),ie->End());
+			EXPECT_VECTOR2D_EQ(ii->AntPosition(),ie->AntPosition());
 			EXPECT_NEAR(ii->AntAngle(),ie->AntAngle(),M_PI/100000.0);
 			EXPECT_EQ(ii->Target()->AntID(),ie->Target()->AntID());
 
@@ -495,7 +495,7 @@ TEST_F(IOUtilsUTest,AntIO) {
 			auto c = res->Capsules()[i].second;
 			auto ce = d.Capsules[i];
 			EXPECT_EQ(res->Capsules()[i].first,shapeType->TypeID());
-			EXPECT_TRUE(CapsuleEqual(*c,*ce));
+			EXPECT_CAPSULE_EQ(*c,*ce);
 		}
 
 		EXPECT_EQ(res->DisplayColor(),
@@ -542,7 +542,7 @@ TEST_F(IOUtilsUTest,MeasurementIO) {
 		expected.set_tagsizepx(d.TagSizePx);
 
 		IOUtils::SaveMeasurement(&pbRes,dM);
-		EXPECT_TRUE(MessageEqual(pbRes,expected));
+		EXPECT_MESSAGE_EQ(pbRes,expected);
 
 		auto res = IOUtils::LoadMeasurement(pbRes);
 		EXPECT_EQ(res->URI(),
@@ -552,8 +552,8 @@ TEST_F(IOUtilsUTest,MeasurementIO) {
 		          dM->TagCloseUpURI());
 
 		EXPECT_EQ(res->Type(),dM->Type());
-		EXPECT_TRUE(VectorAlmostEqual(res->StartFromTag(),dM->StartFromTag()));
-		EXPECT_TRUE(VectorAlmostEqual(res->EndFromTag(),dM->EndFromTag()));
+		EXPECT_VECTOR2D_EQ(res->StartFromTag(),dM->StartFromTag());
+		EXPECT_VECTOR2D_EQ(res->EndFromTag(),dM->EndFromTag());
 		EXPECT_DOUBLE_EQ(res->TagSizePx(),dM->TagSizePx());
 
 	}
@@ -620,7 +620,7 @@ TEST_F(IOUtilsUTest,ExperimentIO) {
 	ePb.Clear();
 
 	IOUtils::SaveExperiment(&ePb,*e);
-	EXPECT_TRUE(MessageEqual(ePb,expected));
+	EXPECT_MESSAGE_EQ(ePb,expected);
 
 	IOUtils::LoadExperiment(res,ePb);
 	EXPECT_EQ(res->Author(),e->Author());
@@ -671,7 +671,7 @@ TEST_F(IOUtilsUTest,ZoneIO) {
 	IOUtils::SaveShape(pbDef2->add_shapes(),*def2->Shapes().front());
 
 	IOUtils::SaveZone(&z,dZ);
-	EXPECT_TRUE(MessageEqual(z,expected));
+	EXPECT_MESSAGE_EQ(z,expected);
 	auto e2 = Experiment::Create(TestSetup::UTestData().Basedir()/ "zone-io.myrmidon");
 	auto s2 = e2->CreateSpace("foo");
 	IOUtils::LoadZone(s2,z);
@@ -683,8 +683,8 @@ TEST_F(IOUtilsUTest,ZoneIO) {
 	for(size_t i = 0; i < std::min(dZ->Definitions().size(),res->Definitions().size()); ++i ) {
 		const auto & expectedDefinition = dZ->Definitions()[i];
 		const auto & definition = res->Definitions()[i];
-		EXPECT_TRUE(TimeEqual(definition->Start(),expectedDefinition->Start()));
-		EXPECT_TRUE(TimeEqual(definition->End(),expectedDefinition->End()));
+		EXPECT_TIME_EQ(definition->Start(),expectedDefinition->Start());
+		EXPECT_TIME_EQ(definition->End(),expectedDefinition->End());
 		ASSERT_FALSE(expectedDefinition->Shapes().empty());
 		ASSERT_FALSE(definition->Shapes().empty());
 		EXPECT_EQ(definition->Shapes().size(),
@@ -694,7 +694,7 @@ TEST_F(IOUtilsUTest,ZoneIO) {
 			const auto & shape =  definition->Shapes()[j];
 			const auto & expectedShape =  expectedDefinition->Shapes()[j];
 			EXPECT_EQ(shape->ShapeType(),expectedShape->ShapeType());
-			EXPECT_TRUE(ShapeEqual(*shape,*expectedShape));
+			EXPECT_SHAPE_EQ(*shape,*expectedShape);
 		}
 	}
 
@@ -717,7 +717,7 @@ TEST_F(IOUtilsUTest,SpaceIO) {
 	IOUtils::SaveZone(expected.add_zones(),z);
 
 	IOUtils::SaveSpace(&s,dS);
-	EXPECT_TRUE(MessageEqual(s,expected));
+	EXPECT_MESSAGE_EQ(s,expected);
 	IOUtils::LoadSpace(e2,s);
 	ASSERT_EQ(e2->Spaces().size(),1);
 	auto res = e2->Spaces().begin()->second;
@@ -761,7 +761,7 @@ TEST_F(IOUtilsUTest,TrackingIndexIO) {
 
 	ASSERT_EQ(pbRes.size(),expected.size());
 	for(size_t i = 0; i < pbRes.size(); ++i) {
-		EXPECT_TRUE(MessageEqual(pbRes.Get(i),expected.Get(i)));
+		EXPECT_MESSAGE_EQ(pbRes.Get(i),expected.Get(i));
 	}
 	for (const auto & pb : pbRes ) {
 		auto s = IOUtils::LoadTrackingIndexSegment(pb, parentURI,monoID);
@@ -776,7 +776,7 @@ TEST_F(IOUtilsUTest,TrackingIndexIO) {
 		auto & ifilename = ress[i].second;
 
 		EXPECT_EQ(iref.ParentURI(),parentURI);
-		EXPECT_TRUE(TimeEqual(iref.Time(),expecteds[i].first.Time()));
+		EXPECT_TIME_EQ(iref.Time(),expecteds[i].first.Time());
 		EXPECT_EQ(ifilename,expecteds[i].second);
 	}
 
@@ -822,7 +822,7 @@ TEST_F(IOUtilsUTest,MovieSegmentIO) {
 	}
 
 	IOUtils::SaveMovieSegment(&pbRes,ms,tddPath);
-	EXPECT_TRUE(MessageEqual(pbRes,expected));
+	EXPECT_MESSAGE_EQ(pbRes,expected);
 
 	res = IOUtils::LoadMovieSegment(pbRes,
 	                                tddPath ,
@@ -934,18 +934,18 @@ TEST_F(IOUtilsUTest,TagCloseUpIO) {
 		expected.set_imagepath(d.Filepath.generic_string());
 
 		IOUtils::SaveTagCloseUp(&pbRes,dTCU,basedir);
-		EXPECT_TRUE(MessageEqual(pbRes,expected));
+		EXPECT_MESSAGE_EQ(pbRes,expected);
 		auto res = IOUtils::LoadTagCloseUp(pbRes,basedir,resolver);
 
 		EXPECT_EQ(res->Frame().URI(),dTCU->Frame().URI());
-		EXPECT_TRUE(TimeEqual(res->Frame().Time(),dTCU->Frame().Time()));
+		EXPECT_TIME_EQ(res->Frame().Time(),dTCU->Frame().Time());
 		EXPECT_EQ(res->URI(),dTCU->URI());
 		EXPECT_EQ(res->AbsoluteFilePath(),dTCU->AbsoluteFilePath());
-		EXPECT_TRUE(VectorAlmostEqual(res->TagPosition(),dTCU->TagPosition()));
+		EXPECT_VECTOR2D_EQ(res->TagPosition(),dTCU->TagPosition());
 		EXPECT_DOUBLE_EQ(res->TagAngle(),dTCU->TagAngle());
 		ASSERT_EQ(4,res->Corners().size());
 		for(size_t i = 0; i < 4 ; ++i ) {
-			EXPECT_TRUE(VectorAlmostEqual(res->Corners()[i],dTCU->Corners()[i]));
+			EXPECT_VECTOR2D_EQ(res->Corners()[i],dTCU->Corners()[i]);
 		}
 
 		EXPECT_THROW({

@@ -157,8 +157,8 @@ TEST_F(TimeValidUTest,CanGiveBoundaries) {
 				auto t = fort::Time::FromTimeT(d.T);
 				auto lower = priv::TimeValid::LowerUnvalidBound(t,list.begin(),list.end());
 				auto upper = priv::TimeValid::UpperUnvalidBound(t,list.begin(),list.end());
-				EXPECT_TRUE(TimeEqual(upper,d.ExpectedUpper));
-				EXPECT_TRUE(TimeEqual(lower,d.ExpectedLower));
+				EXPECT_TIME_EQ(upper,d.ExpectedUpper);
+				EXPECT_TIME_EQ(lower,d.ExpectedLower);
 			});
 
 	}

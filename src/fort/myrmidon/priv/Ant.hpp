@@ -97,13 +97,9 @@ public:
 	//
 	// @return a string in the format "0xabcd"
 	inline std::string FormattedID() const {
-		return FormatID(d_ID);
+		return FormatAntID(d_ID);
 	}
 
-	// Formats an AntID to "0xabcd"
-	//
-	// @return the <myrmidon::Ant::ID> formatted in hexadecimal "0xabcd"
-	static std::string FormatID(fort::myrmidon::AntID ID);
 
 	void AddCapsule(AntShapeTypeID typeID,
 	                const std::shared_ptr<Capsule> & capsule);

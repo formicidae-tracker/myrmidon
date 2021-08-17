@@ -121,7 +121,7 @@ private:
 	void WriteTDDConfig(const TDDInfo & info);
 
 
-	void WriteSegmentedData(const TDDInfo & info,
+	void WriteSegmentedData(TDDInfo & info,
 	                        SpaceID spaceID,
 	                        const SegmentedDataWriterList & writers);
 

@@ -10,7 +10,7 @@
 
 namespace fort {
 namespace myrmidon {
-
+\
 class AntHandle;
 
 /**
@@ -172,25 +172,6 @@ public:
 	 */
 	fort::myrmidon::AntID ID() const;
 
-	/**
-	 * Gets the ID of the Ant formatted as a string.
-	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Ant.FormattedID(self) -> str
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmAntFormattedID <- function(ant) # returns a character
-	 * ```
-	 *
-	 * By Convention ::AntID are formatted using decimal notation with
-	 * at least two `0` prefix (as opposed to ::TagID that are
-	 * formatted using hexadecimal).
-	 *
-	 * @return a string with the formatted ID
-	 */
-	std::string FormattedID() const;
 
 	/**
 	 *  Gets the Display Color of an Ant.

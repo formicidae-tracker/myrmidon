@@ -9,38 +9,82 @@
 
 #include <google/protobuf/message.h>
 
-::testing::AssertionResult TimeEqual(const fort::Time & a,
-                                     const fort::Time & b);
+::testing::AssertionResult AssertTimeEqual(const char * aExpr,
+                                           const char * bExpr,
+                                           const fort::Time & a,
+                                           const fort::Time & b);
 
-::testing::AssertionResult VectorAlmostEqual(const Eigen::Vector2d & a,
-                                             const Eigen::Vector2d & b);
+#define EXPECT_TIME_EQ(a,b) EXPECT_PRED_FORMAT2(AssertTimeEqual,a,b)
 
-::testing::AssertionResult MessageEqual(const google::protobuf::Message &a,
-                                        const google::protobuf::Message &b);
+::testing::AssertionResult AssertVectorAlmostEqual(const char * aExpr,
+                                                   const char * bExpr,
+                                                   const Eigen::Vector2d & a,
+                                                   const Eigen::Vector2d & b);
 
-::testing::AssertionResult PolygonEqual(const fort::myrmidon::Polygon &a,
-                                        const fort::myrmidon::Polygon &b);
+#define EXPECT_VECTOR2D_EQ(a,b) EXPECT_PRED_FORMAT2(AssertVectorAlmostEqual,a,b)
+
+::testing::AssertionResult AssertMessageEqual(const char * aExpr,
+                                              const char * bExpr,
+                                              const google::protobuf::Message &a,
+                                              const google::protobuf::Message &b);
+
+#define EXPECT_MESSAGE_EQ(a,b) EXPECT_PRED_FORMAT2(AssertMessageEqual,a,b)
+
+::testing::AssertionResult AssertPolygonEqual(const char * aExpr,
+                                              const char * bExpr,
+                                              const fort::myrmidon::Polygon &a,
+                                              const fort::myrmidon::Polygon &b);
+
+#define EXPECT_POLYGON_EQ(a,b) EXPECT_PRED_FORMAT2(AssertPolygonEqual,a,b)
+
+::testing::AssertionResult AssertCapsuleEqual(const char * aExpr,
+                                              const char * bExpr,
+                                              const fort::myrmidon::Capsule &a,
+                                              const fort::myrmidon::Capsule &b);
+
+#define EXPECT_CAPSULE_EQ(a,b) EXPECT_PRED_FORMAT2(AssertCapsuleEqual,a,b)
 
 
-::testing::AssertionResult CapsuleEqual(const fort::myrmidon::Capsule &a,
-                                        const fort::myrmidon::Capsule &b);
+::testing::AssertionResult AssertCircleEqual(const char * aExpr,
+                                             const char * bExpr,
+                                             const fort::myrmidon::Circle &a,
+                                             const fort::myrmidon::Circle &b);
+
+#define EXPECT_CIRCLE_EQ(a,b) EXPECT_PRED_FORMAT2(AssertCircleEqual,a,b)
+
+::testing::AssertionResult AssertShapeEqual(const char * aExpr,
+                                            const char * bExpr,
+                                            const fort::myrmidon::Shape &a,
+                                            const fort::myrmidon::Shape &b);
+
+#define EXPECT_SHAPE_EQ(a,b) EXPECT_PRED_FORMAT2(AssertShapeEqual,a,b)
 
 
-::testing::AssertionResult CircleEqual(const fort::myrmidon::Circle &a,
-                                       const fort::myrmidon::Circle &b);
+::testing::AssertionResult AssertAntStaticValueEqual(const char * aExpr,
+                                                     const char * bExpr,
+                                                     const fort::myrmidon::AntStaticValue &a,
+                                                     const fort::myrmidon::AntStaticValue &b);
+
+#define EXPECT_ANT_STATIC_VALUE_EQ(a,b) EXPECT_PRED_FORMAT2(AssertAntStaticValueEqual,a,b)
+
+::testing::AssertionResult AssertAABBAlmostEqual(const char * aExpr,
+                                                 const char * bExpr,
+                                                 const fort::myrmidon::AABB & a,
+                                                 const fort::myrmidon::AABB & B);
+
+#define EXPECT_AABB_EQ(a,b) EXPECT_PRED_FORMAT2(AssertAABBAlmostEqual,a,b)
+
+::testing::AssertionResult AssertTagStatisticsEqual(const char * aExpr,
+                                                    const char * bExpr,
+                                                    const fort::myrmidon::TagStatistics::ByTagID & a,
+                                                    const fort::myrmidon::TagStatistics::ByTagID & b);
+
+#define EXPECT_TAG_STATISTICS_EQ(a,b) EXPECT_PRED_FORMAT2(AssertTagStatisticsEqual,a,b)
 
 
-::testing::AssertionResult ShapeEqual(const fort::myrmidon::Shape &a,
-                                      const fort::myrmidon::Shape &b);
+::testing::AssertionResult AssertIdentifiedFrameEqual(const char * aExpr,
+                                                      const char * bExpr,
+                                                      const fort::myrmidon::IdentifiedFrame & a,
+                                                      const fort::myrmidon::IdentifiedFrame & b);
 
-::testing::AssertionResult AntStaticValueEqual(const fort::myrmidon::AntStaticValue &a,
-                                               const fort::myrmidon::AntStaticValue &b);
-
-::testing::AssertionResult AABBAlmostEqual(const fort::myrmidon::AABB & a,
-                                           const fort::myrmidon::AABB & B);
-
-::testing::AssertionResult TagStatisticsEqual(const fort::myrmidon::TagStatistics::ByTagID & a,
-                                              const fort::myrmidon::TagStatistics::ByTagID & b);
-
-::testing::AssertionResult IdentifiedFrameEqual(const fort::myrmidon::IdentifiedFrame & a,
-                                                const fort::myrmidon::IdentifiedFrame & b);
+#define EXPECT_IDENTIFIED_FRAME_EQ(a,b) EXPECT_PRED_FORMAT2(AssertIdentifiedFrameEqual,a,b)

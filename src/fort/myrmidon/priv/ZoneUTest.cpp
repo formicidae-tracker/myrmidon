@@ -22,11 +22,11 @@ void ZoneUTest::TearDown() {
 TEST_F(ZoneUTest,GeometryHaveAABB) {
 
 	Zone::Geometry g(std::move(shapes));
-	EXPECT_TRUE(AABBAlmostEqual(g.GlobalAABB(),shapes.front()->ComputeAABB()));
+	EXPECT_AABB_EQ(g.GlobalAABB(),shapes.front()->ComputeAABB());
 	ASSERT_EQ(shapes.size(), g.IndividualAABB().size());
 	for( int i = 0; i < shapes.size(); ++i) {
-		EXPECT_TRUE(AABBAlmostEqual(shapes[i]->ComputeAABB(),
-		                            g.IndividualAABB()[i]));
+		EXPECT_AABB_EQ(shapes[i]->ComputeAABB(),
+		               g.IndividualAABB()[i]);
 	}
 }
 
@@ -58,13 +58,11 @@ TEST_F(ZoneUTest,DefinitionAreTimeValidObject) {
 	auto start = Time::SinceEver();
 	auto end = Time::Forever();
 	EXPECT_TRUE(zone->NextFreeTimeRegion(start,end));
-	EXPECT_TRUE(TimeEqual(start,Time::SinceEver()));
-	EXPECT_TRUE(TimeEqual(end,Time::Forever()));
+	EXPECT_TIME_EQ(start,Time::SinceEver());
+	EXPECT_TIME_EQ(end,Time::Forever());
 
 
 	auto definition = zone->AddDefinition(shapes,Time::SinceEver(),Time::Forever());
-
-
 
 	EXPECT_THROW({
 			zone->AddDefinition(shapes,
@@ -91,21 +89,21 @@ TEST_F(ZoneUTest,DefinitionAreTimeValidObject) {
 
 
 	EXPECT_TRUE(zone->NextFreeTimeRegion(start,end));
-	EXPECT_TRUE(TimeEqual(start,Time::SinceEver()));
-	EXPECT_TRUE(TimeEqual(end,Time::FromTimeT(1)));
+	EXPECT_TIME_EQ(start,Time::SinceEver());
+	EXPECT_TIME_EQ(end,Time::FromTimeT(1));
 	EXPECT_NO_THROW({
 			zone->AddDefinition(shapes,start,end);
 		});
 
 	EXPECT_TRUE(zone->NextFreeTimeRegion(start,end));
-	EXPECT_TRUE(TimeEqual(start,Time::FromTimeT(2)));
-	EXPECT_TRUE(TimeEqual(end,Time::FromTimeT(3)));
+	EXPECT_TIME_EQ(start,Time::FromTimeT(2));
+	EXPECT_TIME_EQ(end,Time::FromTimeT(3));
 	EXPECT_NO_THROW({
 			zone->AddDefinition(shapes,start,end);
 		});
 	EXPECT_TRUE(zone->NextFreeTimeRegion(start,end));
-	EXPECT_TRUE(TimeEqual(start,Time::FromTimeT(4)));
-	EXPECT_TRUE(TimeEqual(end,Time::Forever()));
+	EXPECT_TIME_EQ(start,Time::FromTimeT(4));
+	EXPECT_TIME_EQ(end,Time::Forever());
 	EXPECT_NO_THROW({
 			zone->AddDefinition(shapes,start,end);
 		});

@@ -33,6 +33,13 @@ std::string FormatTagID(TagID tagID) {
 	return oss.str();
 }
 
+std::string FormatAntID(fort::myrmidon::AntID ID) {
+	std::ostringstream os;
+	os << std::setw(3) << std::setfill('0') << ID;
+	return os.str();
+}
+
+
 } // namespace myrmidon
 } // namespace fort
 

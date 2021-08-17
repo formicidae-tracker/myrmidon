@@ -126,7 +126,7 @@ Matcher::Ptr Matcher::AntIDMatcher(AntID ID) {
 		}
 
 		void Format(std::ostream & out ) const override {
-			out << "Ant.ID == " << Ant::FormatID(d_id);
+			out << "Ant.ID == " << FormatAntID(d_id);
 		}
 
 	};

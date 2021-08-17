@@ -32,10 +32,10 @@ TEST_F(TrackingDataDirectoryUTest,ExtractInfoFromTrackingDatadirectories) {
 		EXPECT_EQ(tdd->URI(),tddInfo.AbsoluteFilePath.filename());
 		EXPECT_EQ(tdd->StartFrame(),tddInfo.StartFrame);
 		EXPECT_EQ(tdd->EndFrame(),tddInfo.EndFrame);
-		EXPECT_TRUE(TimeEqual(tdd->Start().Round(1),//strips monotonic data
-		                      tddInfo.Start));
-		EXPECT_TRUE(TimeEqual(tdd->End().Round(1),//strips monotonic data
-		                      tddInfo.End));
+		EXPECT_TIME_EQ(tdd->Start(),
+		               tddInfo.Start);
+		EXPECT_TIME_EQ(tdd->End(),
+		               tddInfo.End);
 
 		ASSERT_EQ(tddInfo.Segments.size(),tdd->TrackingSegments().Segments().size());
 
@@ -43,9 +43,9 @@ TEST_F(TrackingDataDirectoryUTest,ExtractInfoFromTrackingDatadirectories) {
 			// Can make mistakes about path extraction quite easily
 			EXPECT_EQ(tddInfo.Segments[i].URI,
 			          tdd->TrackingSegments().Segments()[i].first.URI());
-			EXPECT_EQ(tddInfo.Segments[i].FrameID,tdd->TrackingSegments().Segments()[i].first.FrameID());
-			EXPECT_TRUE(TimeEqual(tddInfo.Segments[i].Time,tdd->TrackingSegments().Segments()[i].first.Time().Round(1)));
-			EXPECT_EQ(tddInfo.Segments[i].RelativePath,tdd->TrackingSegments().Segments()[i].second);
+			EXPECT_EQ(tddInfo.Segments[i].FrameID,tdd->TrackingSegments().Segments()[i].first.FrameID()) << " With i: " << i;
+		 	EXPECT_TIME_EQ(tddInfo.Segments[i].Time,tdd->TrackingSegments().Segments()[i].first.Time()) << " With i: " << i;
+			EXPECT_EQ(tddInfo.Segments[i].RelativePath,tdd->TrackingSegments().Segments()[i].second) << " With i: " << i;
 		}
 
 		uint64_t i  = tdd->StartFrame();
@@ -324,7 +324,7 @@ TEST_F(TrackingDataDirectoryUTest,ComputesAndCacheTagStatistics) {
 			cachedStats = tdd->TagStatistics();
 		});
 	EXPECT_TRUE(tdd->TagStatisticsComputed());
-	EXPECT_TRUE(TimedEqual(cachedStats,computedStats));
+	EXPECT_PRED_FORMAT2(AssertTimedEqual,cachedStats,computedStats);
 
 }
 

@@ -41,12 +41,6 @@ void BindAnt(py::module_ & m) {
 		.def_property_readonly("ID",
 		                       &Ant::ID,
 		                       " (int): the AntID for this Ant")
-		.def("FormattedID",
-		     &Ant::FormattedID,
-		     R"pydoc(
-    Returns:
-        str: the AntID formatted as a string as in `fort-studio`
-)pydoc")
 		.def_property("DisplayColor",
 		              &Ant::DisplayColor,
 		              &Ant::SetDisplayColor,

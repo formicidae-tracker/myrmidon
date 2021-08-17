@@ -12,8 +12,10 @@ class TagStatisticsUTest : public ::testing::Test {
 protected:
 };
 
-::testing::AssertionResult TimedEqual(const TagStatisticsHelper::Timed & a,
-                                      const TagStatisticsHelper::Timed & b);
+::testing::AssertionResult AssertTimedEqual(const char * aExpr,
+                                            const char * bExpr,
+                                            const TagStatisticsHelper::Timed & a,
+                                            const TagStatisticsHelper::Timed & b);
 
 
 } // namespace priv

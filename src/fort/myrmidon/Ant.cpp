@@ -25,10 +25,6 @@ AntID Ant::ID() const {
 	return d_p->Get().AntID();
 }
 
-std::string Ant::FormattedID() const {
-	return d_p->Get().FormattedID();
-}
-
 const Color & Ant::DisplayColor() const {
 	return d_p->Get().DisplayColor();
 }

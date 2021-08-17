@@ -534,7 +534,7 @@ void Experiment::DeleteAntShapeType(AntShapeTypeID typeID) {
 				throw std::runtime_error("Could not delete shape type "
 				                         + std::to_string(fi->first)
 				                         + ":'" + fi->second->Name()
-				                         + "': Ant " + Ant::FormatID(aID)
+				                         + "': Ant " + FormatAntID(aID)
 				                         + " has a capsule of this type");
 			}
 		}
@@ -570,7 +570,7 @@ void Experiment::DeleteMetaDataKey(const std::string & key) {
 			throw std::runtime_error("Cannot remove meta data key  '"
 			                         + key
 			                         + "': Ant "
-			                         + Ant::FormatID(aID)
+			                         + FormatAntID(aID)
 			                         + " contains timed data");
 		}
 	}
@@ -596,7 +596,7 @@ void Experiment::CloneAntShape(fort::myrmidon::AntID sourceAntID,
                                bool overwriteShapes) {
 	auto sourceIt = d_identifier->Ants().find(sourceAntID);
 	if ( sourceIt == d_identifier->Ants().cend() ) {
-		throw std::out_of_range("Cannot find ant " + Ant::FormatID(sourceAntID) );
+		throw std::out_of_range("Cannot find ant " + FormatAntID(sourceAntID) );
 	}
 
 	auto source = sourceIt->second;
@@ -621,7 +621,7 @@ void Experiment::CloneAntShape(fort::myrmidon::AntID sourceAntID,
 
 	double baseSize = computeSize(sourceAntID);
 	if ( baseSize == 0.0 && scaleToSize == true ) {
-		throw std::runtime_error("Ant " + Ant::FormatID(sourceAntID) + " has a size of zero");
+		throw std::runtime_error("Ant " + FormatAntID(sourceAntID) + " has a size of zero");
 	}
 	for ( const auto & [aID,ant] : d_identifier->Ants() ) {
 		if ( aID == sourceAntID

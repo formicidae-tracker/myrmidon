@@ -98,7 +98,7 @@ TEST_F(AntUTest,IDFormatting) {
 	};
 
 	for( const auto & d : testdata ) {
-		EXPECT_EQ(Ant::FormatID(d.first),d.second);
+		EXPECT_EQ(FormatAntID(d.first),d.second);
 	}
 
 }

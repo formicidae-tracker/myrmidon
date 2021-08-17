@@ -150,12 +150,12 @@ TEST_F(IdentifierUTest,CanIdentifyAntByTag) {
 
 	Time freeStart,freeEnd;
 	EXPECT_FALSE(i->FreeRangeContaining(freeStart,freeEnd,123,start));
-	EXPECT_TRUE(TimeEqual(freeStart,Time()));
-	EXPECT_TRUE(TimeEqual(freeEnd,Time()));
+	EXPECT_TIME_EQ(freeStart,Time());
+	EXPECT_TIME_EQ(freeEnd,Time());
 
 	EXPECT_TRUE(i->FreeRangeContaining(freeStart,freeEnd,123,end));
-	EXPECT_TRUE(TimeEqual(freeStart,end));
-	EXPECT_TRUE(TimeEqual(freeEnd,secondStart));
+	EXPECT_TIME_EQ(freeStart,end);
+	EXPECT_TIME_EQ(freeEnd,secondStart);
 
 	EXPECT_THROW(Identifier::Accessor::IdentificationsForTag(*i,1),Identifier::UnmanagedTag);
 	i->SetAntPositionUpdateCallback([](const Identification::Ptr & , const std::vector<AntPoseEstimateConstPtr> &){

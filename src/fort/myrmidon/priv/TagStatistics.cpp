@@ -29,18 +29,19 @@ TagStatistics TagStatisticsHelper::Create(TagID tagID,const Time & firstTime) {
 
 TagStatistics::CountHeader TagStatisticsHelper::ComputeGap(const Time & lastSeen, const Time & currentTime) {
 
-	static std::map<int64_t,TagStatistics::CountHeader> gapBounds
+	const static std::map<int64_t,TagStatistics::CountHeader> gapBounds
 		= {
 		   {0,TagStatistics::CountHeader(0)},
 		   {(500 * Duration::Millisecond).Nanoseconds(),TagStatistics::GAP_500MS},
-		   {(1 * Duration::Second).Nanoseconds(), TagStatistics::GAP_1S},
-		   {(10 * Duration::Second).Nanoseconds(), TagStatistics::GAP_10S},
-		   {(1 * Duration::Minute).Nanoseconds(), TagStatistics::GAP_1M},
-		   { (10 * Duration::Minute).Nanoseconds(), TagStatistics::GAP_10M},
-		   { (1 * Duration::Hour).Nanoseconds(), TagStatistics::GAP_1H},
-		   { (10 * Duration::Hour).Nanoseconds(), TagStatistics::GAP_10H},
+		   {(  1 * Duration::Second).Nanoseconds(), TagStatistics::GAP_1S},
+		   {( 10 * Duration::Second).Nanoseconds(), TagStatistics::GAP_10S},
+		   {(  1 * Duration::Minute).Nanoseconds(), TagStatistics::GAP_1M},
+		   {( 10 * Duration::Minute).Nanoseconds(), TagStatistics::GAP_10M},
+		   {(  1 * Duration::Hour).Nanoseconds(), TagStatistics::GAP_1H},
+		   {( 10 * Duration::Hour).Nanoseconds(), TagStatistics::GAP_10H},
 	};
-	auto fi = gapBounds.upper_bound(currentTime.Sub(lastSeen).Nanoseconds());
+	Duration gap = currentTime.Sub(lastSeen);
+	auto fi = gapBounds.upper_bound(gap.Nanoseconds());
 	if ( fi == gapBounds.end() ) {
 		return TagStatistics::GAP_MORE;
 	}
@@ -82,7 +83,7 @@ TagStatisticsHelper::Timed TagStatisticsHelper::BuildStats(const std::string & h
 		FrameID current = ro.frameid();
 
 		// current time stripped from any monotonic data
-		auto currentTime = TimeFromFrameReadout(ro,1).Round(-1);
+		auto currentTime = TimeFromFrameReadout(ro,1).Round(1);
 		if ( hasStart == false ) {
 			hasStart = true;
 			res.Start = currentTime;

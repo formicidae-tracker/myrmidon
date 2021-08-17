@@ -55,64 +55,26 @@ TEST_F(TagStatisticsUTest,ComputeAndUpdatesGap) {
 
 }
 
-::testing::AssertionResult StatsEqual(const TagStatistics & a,
-                                      const TagStatistics & b) {
-
-	if ( a.ID != b.ID ) {
-		return ::testing::AssertionFailure() << "Mismatching a.ID=" << a.ID
-		                                     << " and b.ID=" << b.ID;
-	}
-	auto firstSeenAssertion = TimeEqual(a.FirstSeen,b.FirstSeen);
-	if ( !firstSeenAssertion ) {
-		return firstSeenAssertion;
-	}
-
-	auto lastSeenAssertion = TimeEqual(a.LastSeen,b.LastSeen);
-	if ( !lastSeenAssertion ) {
-		return lastSeenAssertion;
-	}
-
-	if ( a.Counts != b.Counts ) {
-		return ::testing::AssertionFailure() << "Counts mismatch: a=" <<a.Counts.transpose()
-		                                     << " and b=" << b.Counts.transpose();
-	}
-
-	return ::testing::AssertionSuccess();
-}
-
-::testing::AssertionResult StatsByIDEqual(const TagStatistics::ByTagID & a,
-                                          const TagStatistics::ByTagID & b) {
-
-	if ( a.size() != b.size() ) {
-		return ::testing::AssertionFailure() << "stats dimension mismatch a.size=" << a.size()
-		                                     << " and b.size=" << b.size();
-	}
-
-	for ( const auto & [tagID,stats] : a ) {
-		auto fi = b.find(tagID);
-		if ( fi == b.end() ) {
-			return ::testing::AssertionFailure() << "b is missing stats for " << tagID;
-		}
-		auto statAssertion = StatsEqual(stats,fi->second);
-		if ( !statAssertion ) {
-			return statAssertion;
-		}
-	}
-
-	return ::testing::AssertionSuccess();
-}
-
-::testing::AssertionResult TimedEqual(const TagStatisticsHelper::Timed & a,
-                                      const TagStatisticsHelper::Timed & b) {
-	auto startAssertion = TimeEqual(a.Start,b.Start);
+::testing::AssertionResult AssertTimedEqual(const char * aExpr,
+                                            const char * bExpr,
+                                            const TagStatisticsHelper::Timed & a,
+                                            const TagStatisticsHelper::Timed & b) {
+	auto startAssertion = AssertTimeEqual((std::string(aExpr)+".Start").c_str(),
+	                                      (std::string(bExpr)+".Start").c_str(),
+	                                      a.Start,b.Start);
 	if ( !startAssertion ) {
 		return startAssertion;
 	}
-	auto endAssertion = TimeEqual(a.End,b.End);
+	auto endAssertion = AssertTimeEqual((std::string(aExpr)+".End").c_str(),
+	                                    (std::string(bExpr)+".End").c_str(),
+	                                    a.End,b.End);
 	if ( !endAssertion ) {
 		return endAssertion;
 	}
-	return StatsByIDEqual(a.TagStats,b.TagStats);
+
+	return AssertTagStatisticsEqual((std::string(aExpr)+".TagStats").c_str(),
+	                                (std::string(bExpr)+".TagStats").c_str(),
+	                                a.TagStats,b.TagStats);
 }
 
 

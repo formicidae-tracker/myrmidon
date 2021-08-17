@@ -130,7 +130,7 @@ TEST_F(AntMetadataUTest,DataTypeStringConversion) {
 
 	EXPECT_NO_THROW({
 			auto dateStr = "2019-11-02T23:46:23.000Z";
-			EXPECT_TRUE(TimeEqual(std::get<Time>(AntMetadata::FromString(AntMetaDataType::TIME,dateStr)),Time::Parse(dateStr)));
+			EXPECT_TIME_EQ(std::get<Time>(AntMetadata::FromString(AntMetaDataType::TIME,dateStr)),Time::Parse(dateStr));
 		});
 	EXPECT_THROW({AntMetadata::FromString(AntMetaDataType::DOUBLE,"foo");},std::invalid_argument);
 

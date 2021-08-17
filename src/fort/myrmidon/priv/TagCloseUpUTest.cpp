@@ -98,8 +98,8 @@ TEST_F(TagCloseUpUTest,CanComputeGeometricValues) {
 
 		auto expectedImageToTag = Isometry2Dd(a,trans * center).inverse();
 		EXPECT_DOUBLE_EQ(expectedImageToTag.angle(),tcu.ImageToTag().angle());
-		EXPECT_TRUE(VectorAlmostEqual(expectedImageToTag.translation(),
-		                              tcu.ImageToTag().translation()));
+		EXPECT_VECTOR2D_EQ(expectedImageToTag.translation(),
+		                   tcu.ImageToTag().translation());
 
 	}
 

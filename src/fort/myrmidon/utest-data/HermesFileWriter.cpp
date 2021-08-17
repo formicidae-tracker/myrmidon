@@ -92,7 +92,7 @@ void HermesFileWriter::FillReadout(hermes::FrameReadout * ro,
                                    uint64_t frameID,
                                    const IdentifiedFrame & identified) {
 	ro->Clear();
-	ro->set_timestamp(identified.FrameTime.Sub(d_config.Start).Microseconds());
+	ro->set_timestamp(identified.FrameTime.MonotonicValue()/1000);
 	identified.FrameTime.ToTimestamp(ro->mutable_time());
 	ro->set_frameid(frameID);
 	ro->set_quads(identified.Positions.rows());

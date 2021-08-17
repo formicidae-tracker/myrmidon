@@ -174,6 +174,12 @@ void GeneratedData::GenerateTrajectoriesFor(AntID antID,
 		current->Positions(points,0) = (t.Sub(current->Start)).Seconds();
 		current->Positions(points,4) = 0;
 		current->Positions.block<1,3>(points,1) = (prevPosition + ratio * (nextPosition - prevPosition)).transpose();
+		while ( current->Positions(points,3) < M_PI ) {
+			current->Positions(points,3) += 2 * M_PI;
+		}
+		while ( current->Positions(points,3) >= M_PI ) {
+			current->Positions(points,3) -= 2 * M_PI;
+		}
 		++points;
 	}
 
@@ -434,6 +440,7 @@ void GeneratedData::GenerateTagStatisticsFor(uint32_t tagID,const AntData & ant)
 			}
 			return std::make_tuple(found,firstSeen,lastSeen);
 		};
+
 	Statistics[tagID].ID = tagID;
 	Statistics[tagID].Counts.resize(10);
 	Statistics[tagID].Counts.setZero();

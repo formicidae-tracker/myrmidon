@@ -11,11 +11,6 @@ namespace fort {
 namespace myrmidon {
 namespace priv {
 
-std::string Ant::FormatID(fort::myrmidon::AntID ID) {
-	std::ostringstream os;
-	os << std::setw(3) << std::setfill('0') << ID;
-	return os.str();
-}
 
 Ant::Ant(const AntShapeTypeContainerConstPtr & shapeTypeContainer,
          const AntMetadataConstPtr & metadata,

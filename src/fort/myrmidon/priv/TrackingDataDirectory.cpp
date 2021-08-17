@@ -149,7 +149,6 @@ TrackingDataDirectory::UID TrackingDataDirectory::GetUID(const fs::path & filepa
 	return fi->second;
 }
 
-
 const tags::ApriltagOptions & TrackingDataDirectory::DetectionSettings() const  {
 	return d_detectionSettings;
 }
