@@ -101,7 +101,7 @@ public:
 
 	const std::vector<std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr>> & ExpectedFrames() const;
 
-	const std::vector<ExpectedResult> & QueryResults() const;
+	const std::vector<ExpectedResult> & ExpectedResults() const;
 private:
 	typedef std::vector<std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr>> FrameList;
 

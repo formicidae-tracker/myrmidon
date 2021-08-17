@@ -100,6 +100,9 @@ UTestData::ExpectedFrames() const {
 	return d_frames;
 }
 
+const std::vector<UTestData::ExpectedResult> & UTestData::ExpectedResults() const {
+	return d_results;
+}
 
 
 void UTestData::CleanUpFilesystem() {

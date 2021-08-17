@@ -88,3 +88,26 @@
                                                       const fort::myrmidon::IdentifiedFrame & b);
 
 #define EXPECT_IDENTIFIED_FRAME_EQ(a,b) EXPECT_PRED_FORMAT2(AssertIdentifiedFrameEqual,a,b)
+
+::testing::AssertionResult AssertCollisionFrameEqual(const char * aExpr,
+                                                      const char * bExpr,
+                                                      const fort::myrmidon::CollisionFrame & a,
+                                                      const fort::myrmidon::CollisionFrame & b);
+
+#define EXPECT_COLLISION_FRAME_EQ(a,b) EXPECT_PRED_FORMAT2(AssertCollisionFrameEqual,a,b)
+
+
+::testing::AssertionResult AssertAntTrajectoryEqual(const char * aExpr,
+                                                    const char * bExpr,
+                                                    const fort::myrmidon::AntTrajectory & a,
+                                                    const fort::myrmidon::AntTrajectory & b);
+
+#define EXPECT_ANT_TRAJECTORY_EQ(a,b) EXPECT_PRED_FORMAT2(AssertAntTrajectoryEqual,a,b)
+
+
+::testing::AssertionResult AssertAntInteractionEqual(const char * aExpr,
+                                                     const char * bExpr,
+                                                     const fort::myrmidon::AntInteraction & a,
+                                                     const fort::myrmidon::AntInteraction & b);
+
+#define EXPECT_ANT_INTERACTION_EQ(a,b) EXPECT_PRED_FORMAT2(AssertAntInteractionEqual,a,b)

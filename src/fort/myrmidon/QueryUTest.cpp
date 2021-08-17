@@ -42,7 +42,7 @@ TEST_F(QueryUTest,IdentifyFrames) {
 			                             },args);
 		});
 	ASSERT_EQ(identifieds.size(),expected.size());
-	for ( size_t i = 0; i < expected.size(); ++i) {
+	for ( size_t i = 0; i < std::min(identifieds.size(),expected.size()); ++i) {
 		EXPECT_IDENTIFIED_FRAME_EQ(*identifieds[i],*expected[i].first) << "  With i: " << i;
 	}
 	auto t = TestSetup::UTestData().NestDataDirs().front().End;
@@ -79,8 +79,7 @@ TEST_F(QueryUTest,IdentifyFrames) {
 }
 
 TEST_F(QueryUTest,CollideFrames) {
-	ASSERT_NO_THROW({
-		});
+	const auto & expected = TestSetup::UTestData().ExpectedFrames();
 
 	std::vector<Query::CollisionData> collisionData;
 
@@ -93,90 +92,101 @@ TEST_F(QueryUTest,CollideFrames) {
 			                            args);
 		});
 
-	ASSERT_EQ(collisionData.size(),600);
-
-	size_t nonEmptyFrame(0);
-	for ( const auto & [positions,collisions] : collisionData ) {
-		EXPECT_EQ(positions->Space,1);
-		EXPECT_EQ(collisions->Space,1);
-		if ( collisions->Collisions.empty() == false ) {
-			++nonEmptyFrame;
-		}
+	ASSERT_EQ(collisionData.size(),expected.size());
+	for ( size_t i = 0; i < std::min(collisionData.size(),expected.size()); ++i ) {
+		EXPECT_IDENTIFIED_FRAME_EQ(*collisionData[i].first,
+		                           *expected[i].first) << "  With i: " << i;
+		EXPECT_COLLISION_FRAME_EQ(*collisionData[i].second,
+		                          *expected[i].second) << "  With i: " << i;
 	}
-	EXPECT_EQ(nonEmptyFrame,156);
 
 }
 
 
 TEST_F(QueryUTest,ComputeAntTrajectories) {
-	std::vector<AntTrajectory::Ptr> trajectories;
+	size_t i = 0;
+	for ( const auto & expected : TestSetup::UTestData().ExpectedResults() ) {
 
-	ASSERT_NO_THROW({
-			myrmidon::Query::ComputeAntTrajectoriesArgs args;
-			args.MaximumGap = 20000 * Duration::Millisecond;
-			Query::ComputeAntTrajectoriesFunctor(*experiment,
-			                                     [&trajectories]( const AntTrajectory::Ptr & t) {
-				                                     trajectories.push_back(t);
-			                                     },
-			                                     args);
-		});
+		std::vector<AntTrajectory::Ptr> trajectories;
 
-	ASSERT_EQ(trajectories.size(),3);
+		ASSERT_NO_THROW({
+				myrmidon::Query::ComputeAntTrajectoriesArgs args;
+				args.Start = expected.Start;
+				args.End = expected.End;
+				args.MaximumGap = expected.MaximumGap;
+				args.Matcher = expected.Matches;
+				if ( ++i % 2 == 0 ) {
+					Query::ComputeAntTrajectoriesFunctor(*experiment,
+					                                     [&trajectories]( const AntTrajectory::Ptr & t) {
+						                                     trajectories.push_back(t);
+					                                     },
+					                                     args);
+				} else {
+					Query::ComputeAntTrajectories(*experiment,
+					                              trajectories,
+					                              args);
+				}
+			});
 
-	for( const auto & trajectory : trajectories ) {
-		EXPECT_EQ(trajectory->Ant,1);
-		EXPECT_EQ(trajectory->Space,1);
-		ASSERT_EQ(trajectory->Positions.rows(),200);
-		EXPECT_EQ(trajectory->Positions(0,0),0);
+		EXPECT_EQ(trajectories.size(),expected.Trajectories.size());
+		for ( size_t i = 0; i < std::min(trajectories.size(),expected.Trajectories.size()); ++i ) {
+			EXPECT_ANT_TRAJECTORY_EQ(*trajectories[i],
+			                         *expected.Trajectories[i])
+				<< "  With i: " << i;
+		}
 	}
-
 }
 
 TEST_F(QueryUTest,ComputeAntInteractions) {
+	size_t i = 0;
+	for ( const auto & expected : TestSetup::UTestData().ExpectedResults() ) {
 
-	std::vector<AntTrajectory::Ptr> trajectories;
-	std::vector<AntInteraction::Ptr> interactions;
-	ASSERT_NO_THROW({
-			myrmidon::Query::ComputeAntInteractionsArgs args;
-			args.MaximumGap = 220 * Duration::Millisecond;
-
-			Query::ComputeAntInteractionsFunctor(*experiment,
-			                                     [&trajectories]( const AntTrajectory::Ptr & t) {
-				                                     trajectories.push_back(t);
-			                                     },
-			                                     [&interactions]( const AntInteraction::Ptr & i) {
-				                                     interactions.push_back(i);
-			                                     },
-			                                     args);
-		});
-
-
-	EXPECT_EQ(trajectories.size(),6);
-	EXPECT_EQ(interactions.size(),15);
-	for (const auto & interaction : interactions ) {
-		EXPECT_EQ(interaction->IDs.first,1);
-		EXPECT_EQ(interaction->IDs.second,2);
-		EXPECT_EQ(interaction->Types.rows(),1);
-		EXPECT_EQ(interaction->Types(0,0),1U);
-		EXPECT_EQ(interaction->Types(0,1),1U);
-
-		auto segmentStart =
-			[](const AntTrajectorySegment &s) {
-				Duration ellapsed = s.Trajectory->Positions(s.Begin,0) * double(Duration::Second.Nanoseconds());
-				return s.Trajectory->Start.Add(ellapsed);
-			};
+		std::vector<AntTrajectory::Ptr> trajectories;
+		std::vector<AntInteraction::Ptr> interactions;
+		ASSERT_NO_THROW({
+				myrmidon::Query::ComputeAntInteractionsArgs args;
+				args.Start = expected.Start;
+				args.End = expected.End;
+				args.MaximumGap = expected.MaximumGap;
+				args.Matcher = expected.Matches;
+				if ( ++i % 2 == 0 ) {
+					Query::ComputeAntInteractionsFunctor(*experiment,
+					                                     [&trajectories]( const AntTrajectory::Ptr & t) {
+						                                     trajectories.push_back(t);
+					                                     },
+					                                     [&interactions]( const AntInteraction::Ptr & i) {
+						                                     interactions.push_back(i);
+					                                     },
+					                                     args);
+				} else {
+					Query::ComputeAntInteractions(*experiment,
+					                              trajectories,
+					                              interactions,
+					                              args);
+				}
+			});
 
 
-		EXPECT_EQ(segmentStart(interaction->Trajectories.first),
-		          interaction->Start);
-		EXPECT_EQ(segmentStart(interaction->Trajectories.second),
-		          interaction->Start);
+		EXPECT_EQ(trajectories.size(),expected.Trajectories.size());
+		EXPECT_EQ(interactions.size(),expected.Interactions.size());
+		for ( size_t i = 0; i < std::min(trajectories.size(),expected.Trajectories.size()); ++i ) {
+			EXPECT_ANT_TRAJECTORY_EQ(*trajectories[i],
+			                         *expected.Trajectories[i])
+				<< "  With i: " << i;
+		}
+
+		for ( size_t i = 0; i < std::min(expected.Interactions.size(),expected.Interactions.size()); ++i ) {
+			EXPECT_ANT_INTERACTION_EQ(*interactions[i],
+			                          *expected.Interactions[i])
+				<< "  With i: " << i;
+		}
 	}
 }
 
 
 TEST_F(QueryUTest,FrameSelection) {
-	auto firstDate = TestSetup::UTestData().NestDataDirs().front().Start;
+	auto firstDate = std::min(TestSetup::UTestData().NestDataDirs().front().Start,
+	                          TestSetup::UTestData().ForagingDataDirs().front().Start);
 
 	std::vector<IdentifiedFrame::Ptr> frames;
 
@@ -190,7 +200,7 @@ TEST_F(QueryUTest,FrameSelection) {
 	                             },
 	                             args);
 
-	EXPECT_FALSE(frames.empty());
+	EXPECT_EQ(frames.size(),TestSetup::UTestData().ExpectedFrames().size());
 	frames.clear();
 
 	//selects the first frame

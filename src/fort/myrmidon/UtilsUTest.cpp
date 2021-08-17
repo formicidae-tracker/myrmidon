@@ -398,3 +398,29 @@ AssertIdentifiedFrameEqual(const char * aExpr,
 
 	return ::testing::AssertionSuccess();
 }
+
+::testing::AssertionResult
+AssertCollisionFrameEqual(const char * aExpr,
+                          const char * bExpr,
+                          const fort::myrmidon::CollisionFrame & a,
+                          const fort::myrmidon::CollisionFrame & b) {
+	return ::testing::AssertionSuccess();
+}
+
+::testing::AssertionResult
+AssertAntTrajectoryEqual(const char * aExpr,
+                         const char * bExpr,
+                         const fort::myrmidon::AntTrajectory & a,
+                         const fort::myrmidon::AntTrajectory & b) {
+	return ::testing::AssertionSuccess();
+}
+
+
+
+::testing::AssertionResult
+AssertAntInteractionEqual(const char * aExpr,
+                          const char * bExpr,
+                          const fort::myrmidon::AntInteraction & a,
+                          const fort::myrmidon::AntInteraction & b){
+	return ::testing::AssertionSuccess();
+}
