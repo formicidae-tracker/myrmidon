@@ -70,7 +70,6 @@ public:
 	};
 
 
-
 	UTestData(const fs::path & basedir);
 	~UTestData();
 
@@ -112,6 +111,14 @@ private:
 	void GenerateExperimentStructure();
 
 	void SaveFullExpectedResult(const GeneratedData & gen);
+	void SetMonotonicTimeToResults();
+
+	void SplitFullResultsWithTDDs();
+
+	void SplitTrajectoryWithTDDs(const AntTrajectory::Ptr & t,
+	                             std::vector<AntTrajectory::Ptr> & trajectories,
+	                             const std::vector<TDDInfo> & tdds);
+
 	void GenerateTruncatedResults();
 	void GenerateTDDStructure();
 

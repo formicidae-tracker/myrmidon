@@ -499,9 +499,111 @@ AssertAntTrajectoryEqual(const char * aExpr,
                          const char * bExpr,
                          const fort::myrmidon::AntTrajectory & a,
                          const fort::myrmidon::AntTrajectory & b) {
+	if ( a.Ant != b.Ant ) {
+		return failure_helper(aExpr,bExpr,a,b,Ant);
+	}
+	if ( a.Space != b.Space ) {
+		return failure_helper(aExpr,bExpr,a,b,Space);
+	}
+
+	auto tmp = AssertTimeEqual((std::string(aExpr)+".Start").c_str(),
+	                           (std::string(bExpr)+".Start").c_str(),
+	                           a.Start,b.Start);
+	if (!tmp) {
+		return tmp;
+	}
+	if ( a.Positions.rows() != b.Positions.rows() ) {
+		return failure_helper(aExpr,bExpr,a,b,Positions.rows());
+	}
+	for ( size_t i = 0; i < b.Positions.rows(); ++i ) {
+		for ( size_t j = 0; j < b.Positions.cols(); ++j ) {
+			if ( std::abs(a.Positions(i,j) - b.Positions(i,j)) > 1.0e-3 ) {
+				return ::testing::AssertionFailure()
+					<< "Value of: " << aExpr << ".Positions(" << i << "," << j << ")" << std::endl
+					<< "  Actual: " << a.Positions(i,j) << std::endl
+					<< "  Within: " << 1.0e-3 << std::endl
+					<< "      Of: " << bExpr << ".Positions(" << i << "," << j << ")" << std::endl
+					<< "Which is: " << b.Positions(i,j);
+			}
+		}
+	}
 	return ::testing::AssertionSuccess();
 }
 
+
+
+::testing::AssertionResult
+AssertTrajectorySegmentEqual(const char * aExpr,
+                             const char * bExpr,
+                             const fort::myrmidon::AntTrajectorySegment & a,
+                             const fort::myrmidon::AntTrajectorySegment & b) {
+	if ( !a.Trajectory != !b.Trajectory ) {
+		return ::testing::AssertionFailure()
+			<< std::boolalpha
+			<< "Value of: !" << aExpr << ".Trajectory" << std::endl
+			<< "  Actual: "  << !a.Trajectory << std::endl
+			<< "Expected: !" << bExpr << ".Trajectory" << std::endl
+			<< "Which is: " << !b.Trajectory ;
+	}
+	if ( !a.Trajectory ) {
+		if (!b.Mean) {
+			return ::testing::AssertionFailure()
+				<< std::boolalpha
+				<< "Value of: !" << bExpr << ".Mean" << std::endl
+				<< "  Actual: " << !b.Mean << std::endl
+				<< "Expected: false";
+		}
+		if (!a.Mean) {
+			return ::testing::AssertionFailure()
+				<< std::boolalpha
+				<< "Value of: !" << aExpr << ".Mean" << std::endl
+				<< "  Actual: " << !a.Mean << std::endl
+				<< "Expected: false";
+		}
+		for ( size_t i = 0; i < 3; ++i ) {
+			if ( std::abs((*a.Mean)(i) - (*b.Mean)(i)) > 1.0e-3 ) {
+			return ::testing::AssertionFailure()
+				<< "Value of: (*" << aExpr << ".Mean)(" << i << ")" <<std::endl
+				<< "  Actual: " << (*a.Mean)(i) << std::endl
+				<< "  Within: " << 1.0e-3 << std::endl
+				<< "      Of: (*" << bExpr << ".Mean)(" << i << ")" <<std::endl
+				<< "Which is: " << (*b.Mean)(i);
+			}
+		}
+		return ::testing::AssertionSuccess();
+	}
+	if (b.Mean) {
+		return ::testing::AssertionFailure()
+			<< std::boolalpha
+			<< "Value of: !" << bExpr << ".Mean" << std::endl
+			<< "  Actual: " << !b.Mean << std::endl
+			<< "Expected: true";
+	}
+	if (a.Mean) {
+		return ::testing::AssertionFailure()
+			<< std::boolalpha
+			<< "Value of: !" << aExpr << ".Mean" << std::endl
+			<< "  Actual: " << !a.Mean << std::endl
+			<< "Expected: true";
+	}
+
+	if( a.Trajectory->Ant != b.Trajectory->Ant ) {
+		return failure_helper(aExpr,bExpr,a,b,Trajectory->Ant);
+	}
+
+	if( a.Trajectory->Start.Equals(b.Trajectory->Start) == false ) {
+		return failure_helper(aExpr,bExpr,a,b,Trajectory->Start);
+	}
+
+	if (a.Begin != b.Begin ) {
+		return failure_helper(aExpr,bExpr,a,b,Begin);
+	}
+	if (a.End != b.End ) {
+		return failure_helper(aExpr,bExpr,a,b,End);
+	}
+
+	return ::testing::AssertionSuccess();
+}
 
 
 ::testing::AssertionResult
@@ -509,5 +611,48 @@ AssertAntInteractionEqual(const char * aExpr,
                           const char * bExpr,
                           const fort::myrmidon::AntInteraction & a,
                           const fort::myrmidon::AntInteraction & b){
-	return ::testing::AssertionSuccess();
+	if ( a.IDs != a.IDs ) {
+		return failure_helper(aExpr,bExpr,a,b,IDs);
+	}
+	if ( a.Space != a.Space ) {
+		return failure_helper(aExpr,bExpr,a,b,Space);
+	}
+
+	auto tmp = AssertInteractionTypesEqual((std::string(aExpr) + ".Types").c_str(),
+	                                       (std::string(bExpr) + ".Types").c_str(),
+	                                       a.Types,
+	                                       b.Types);
+	if (!tmp) {
+		return tmp;
+	}
+
+	tmp = AssertTimeEqual((std::string(aExpr) + ".Start").c_str(),
+	                      (std::string(bExpr) + ".Start").c_str(),
+	                      a.Start,
+	                      b.Start);
+	if (!tmp) {
+		return tmp;
+	}
+
+	tmp = AssertTimeEqual((std::string(aExpr) + ".End").c_str(),
+	                      (std::string(bExpr) + ".End").c_str(),
+	                      a.End,
+	                      b.End);
+	if (!tmp) {
+		return tmp;
+	}
+
+	tmp = AssertTrajectorySegmentEqual((std::string(aExpr) + ".Trajectories.first").c_str(),
+	                                   (std::string(bExpr) + ".Trajectories.first").c_str(),
+	                                   a.Trajectories.first,
+	                                   b.Trajectories.first);
+
+	if (!tmp) {
+		return tmp;
+	}
+
+	return AssertTrajectorySegmentEqual((std::string(aExpr) + ".Trajectories.second").c_str(),
+	                                   (std::string(bExpr) + ".Trajectories.second").c_str(),
+	                                   a.Trajectories.second,
+	                                   b.Trajectories.second);
 }

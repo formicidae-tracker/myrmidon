@@ -117,6 +117,11 @@ void UTestData::BuildFakeData(const fs::path & basedir) {
 	d_basedir = basedir;
 	GenerateFakedata();
 	WriteFakedata();
+
+	SplitFullResultsWithTDDs();
+	SetMonotonicTimeToResults();
+	GenerateTruncatedResults();
+
 	std::cerr << "Generated data in " << Time::Now().Sub(start) << std::endl;
 }
 
@@ -124,7 +129,6 @@ void UTestData::BuildFakeData(const fs::path & basedir) {
 void UTestData::GenerateFakedata() {
 	GeneratedData gen(d_config);
 	SaveFullExpectedResult(gen);
-	GenerateTruncatedResults();
 	GenerateTDDStructure();
 	GenerateExperimentStructure();
 }
@@ -139,6 +143,65 @@ void UTestData::SaveFullExpectedResult(const GeneratedData & gen) {
 	d_results.push_back(full);
 	d_frames = gen.Frames;
 	d_statistics = gen.Statistics;
+}
+
+void UTestData::SplitFullResultsWithTDDs() {
+	for ( size_t i = 0; i < d_results.front().Trajectories.size(); ++i ) {
+		const auto & t = d_results.front().Trajectories[i];
+		SplitTrajectoryWithTDDs(t,d_results.front().Trajectories,t->Space == 1 ? d_nestTDDs : d_foragingTDDs);
+		if ( i > 100 ) {
+			throw std::logic_error("hey garcon");
+		}
+	}
+
+	std::sort(d_results.front().Trajectories.begin(),
+	          d_results.front().Trajectories.end(),
+	          [](const AntTrajectory::Ptr & a,
+	             const AntTrajectory::Ptr & b) -> bool {
+		          auto aEnd = a->End();
+		          auto bEnd = b->End();
+		          if ( aEnd == bEnd ) {
+			          return a->Ant < b->Ant;
+		          }
+		          return aEnd < bEnd;
+	          });
+
+	std::sort(d_results.front().Interactions.begin(),
+	          d_results.front().Interactions.end(),
+	          [](const AntInteraction::Ptr & a,
+	             const AntInteraction::Ptr & b) {
+		          return a->End < b->End;
+	          });
+}
+
+
+void UTestData::SplitTrajectoryWithTDDs(const AntTrajectory::Ptr & t,
+                                        std::vector<AntTrajectory::Ptr> & trajectories,
+                                        const std::vector<TDDInfo> & tdds) {
+	for ( const auto & tddInfo : tdds ) {
+		if ( t->Start >= tddInfo.End
+		     || tddInfo.Start > t->End()
+		     || tddInfo.End >= t->End() ) {
+			continue;
+		}
+		auto nt = std::make_shared<AntTrajectory>();
+		nt->Ant = t->Ant;
+		nt->Space = t->Space;
+		size_t idx = 0;
+		for(; idx < t->Positions.rows(); ++idx ) {
+			nt->Start = t->Start.Add(t->Positions(idx,0) * Duration::Second.Nanoseconds());
+			if ( nt->Start >= tddInfo.End ) {
+				break;
+			}
+		}
+		double offset = nt->Start.Sub(t->Start).Seconds();
+		nt->Positions.resize(t->Positions.rows()-idx,5);
+		nt->Positions = t->Positions.block(idx,0,t->Positions.rows()-idx,5);
+		nt->Positions.col(0).array() -= offset;
+		t->Positions.conservativeResize(idx,5);
+		trajectories.push_back(nt);
+		return;
+	}
 }
 
 void UTestData::GenerateTruncatedResults() {
@@ -551,6 +614,24 @@ const std::shared_ptr<FrameDrawer> & UTestData::DrawerFactory(fort::tags::Family
 	return d_drawers.at(family);
 }
 
+void UTestData::SetMonotonicTimeToResults() {
+	auto findTime
+		= [&](const fort::Time & t, SpaceID spaceID) {
+			  return std::find_if(d_frames.begin(),
+			                      d_frames.end(),
+			                      [&](const std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr> & it) {
+				                      return it.first->Space == spaceID && it.first->FrameTime >= t;
+			                      })->first->FrameTime;
+		  };
+
+	for ( const auto & t : d_results.front().Trajectories ) {
+		t->Start = findTime(t->Start,t->Space);
+	}
+	for ( const auto & i : d_results.front().Interactions ) {
+		i->Start = findTime(i->Start,i->Space);
+		i->End = findTime(i->End,i->Space);
+	}
+}
 
 
 } // namespace myrmidon
