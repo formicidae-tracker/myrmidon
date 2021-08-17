@@ -21,22 +21,23 @@ public:
 	}
 
 	void ReflectPrivateIdentifications() {
-		const auto & identifications = Get().Identifications();
+		const auto & pIdentifications = Get().Identifications();
 		auto isNotInPrivateList
-			= [&identifications] (const Identification::Ptr & i) {
-				  return std::find_if(identifications.begin(),
-				                      identifications.end(),
+			= [&pIdentifications] (const Identification::Ptr & i) {
+				  return std::find_if(pIdentifications.begin(),
+				                      pIdentifications.end(),
 				                      [&i] (const priv::Identification::Ptr & pi) -> bool {
 					                      return i->d_p->Ptr() == pi;
-				                      }) != identifications.end();
+				                      }) == pIdentifications.end();
 			  };
 
 		d_identifications.erase(std::remove_if(d_identifications.begin(),
 		                                       d_identifications.end(),
-		                                       isNotInPrivateList));
+		                                       isNotInPrivateList),
+		                        d_identifications.end());
 
 
-		for ( const auto & pi : identifications) {
+		for ( const auto & pi : pIdentifications) {
 			if ( FindPrivateIdentification(pi) == d_identifications.end() ) {
 				d_identifications.push_back(MakeIdentificationPtr(pi));
 			}
