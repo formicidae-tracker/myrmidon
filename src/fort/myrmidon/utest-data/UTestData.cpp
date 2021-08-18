@@ -136,7 +136,7 @@ void UTestData::SaveFullExpectedResult(const GeneratedData & gen) {
 	ExpectedResult full;
 	full.Start = Time::SinceEver();
 	full.End = Time::Forever();
-	full.MaximumGap = Duration::Hour;
+	full.MaximumGap = 10*Duration::Second;
 	full.Trajectories = gen.Trajectories;
 	full.Interactions = gen.Interactions;
 	d_results.push_back(full);
