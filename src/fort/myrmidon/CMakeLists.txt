@@ -209,6 +209,8 @@ set(SRC_UTEST_FILES main-check.cpp
                     priv/TagStatisticsUTest.cpp
                     priv/MatchersUTest.cpp
                     priv/LocatableTypesUTest.cpp
+                    AntUTest.cpp
+                    ColorUTest.cpp
                     QueryUTest.cpp
                     )
 
@@ -249,6 +251,8 @@ set(HDR_UTEST_FILES utils/NotYetImplementedUTest.hpp
                     priv/TagStatisticsUTest.hpp
                     priv/MatchersUTest.hpp
                     priv/LocatableTypesUTest.hpp
+                    AntUTest.hpp
+                    ColorUTest.hpp
                     QueryUTest.hpp
                     )
 

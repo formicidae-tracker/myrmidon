@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <iostream>
+#include <iomanip>
 
 namespace fort {
 namespace myrmidon {
@@ -21,7 +22,7 @@ const Palette & DefaultPalette(){
 
 const Color & DefaultPaletteColor(size_t index) {
 	const auto & palette = DefaultPalette();
-	return palette.at(index & palette.size());
+	return palette.at(index % palette.size());
 }
 
 
@@ -33,10 +34,10 @@ const Color & DefaultPaletteColor(size_t index) {
 std::ostream & operator<<(std::ostream & out,
                           const fort::myrmidon::Color & color) {
 	auto flags = out.flags();
-	out << "#"
-	    << std::hex << int(std::get<0>(color))
-	    << std::hex << int(std::get<1>(color))
-	    << std::hex << int(std::get<2>(color));
+	out << "#" << std::hex << std::setfill('0')
+	    << std::setw(2) << int(std::get<0>(color))
+	    << std::setw(2) << int(std::get<1>(color))
+	    << std::setw(2) << int(std::get<2>(color));
 	out.flags(flags);
 	return out;
 }

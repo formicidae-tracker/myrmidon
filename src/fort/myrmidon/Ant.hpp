@@ -292,7 +292,7 @@ public:
 	 *
 	 * @throws std::out_of_range if name is not a defined key in Experiment
 	 * @throws std::invalid_argument if time is Time::Forever()
-	 * @throws std::invalid_argument if value is not of the right type for key
+	 * @throws std::bad_variant_access if value is not of the right type for key
 	 *
 	 */
 	void SetValue(const std::string & name,
@@ -341,7 +341,7 @@ public:
 	 * Adds a Capsule to the Ant virtual shape, associated with the
 	 * shapeTypeID body part.
 	 *
-	 * @throws std::out_of_range if shapeTypeID is not defined in Experiment
+	 * @throws std::invalid_argument if shapeTypeID is not defined in Experiment
 	 */
 	void AddCapsule(AntShapeTypeID shapeTypeID,
 	                const std::shared_ptr<Capsule> & capsule);
