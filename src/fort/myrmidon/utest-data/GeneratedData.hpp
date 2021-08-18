@@ -3,13 +3,14 @@
 #include "Config.hpp"
 
 #include <fort/hermes/FrameReadout.pb.h>
+#include <fort/myrmidon/utils/FileSystem.hpp>
 
 
 namespace fort {
 namespace myrmidon {
 
 struct GeneratedData {
-	std::vector<Time> NestTicks,ForageTicks;
+	std::vector<Time> NestTicks,ForagingTicks;
 	std::vector<std::pair<SpaceID,Time>> Ticks;
 
 	std::vector<AntTrajectory::Ptr> Trajectories;
@@ -21,9 +22,18 @@ struct GeneratedData {
 
 	static std::vector<Time> DrawFrameTicks(const Config & config);
 
-	GeneratedData(const Config & config);
+	GeneratedData(const Config & config,
+	              const fs::path & basepath);
 
-	void GenerateFrameTicks(const Config & config);
+	void GenerateFrameTicks(const Config & config,
+	                        const fs::path & basepath);
+
+	void AssignTicks(const std::vector<Time> & ticks,
+	                 SpaceID spaceID,
+	                 const std::vector<TDDData> & TDDs,
+	                 const fs::path & basepath);
+
+
 	void GenerateTrajectories(const Config & config);
 	void GenerateInteractions(const Config & config);
 	void GenerateFrames(const Config & config);

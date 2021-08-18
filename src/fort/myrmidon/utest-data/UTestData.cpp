@@ -116,21 +116,20 @@ void UTestData::BuildFakeData(const fs::path & basedir) {
 	auto start = Time::Now();
 	d_basedir = basedir;
 	GenerateFakedata();
+
 	WriteFakedata();
 
-	SplitFullResultsWithTDDs();
-	SetMonotonicTimeToResults();
-	GenerateTruncatedResults();
 
 	std::cerr << "Generated data in " << Time::Now().Sub(start) << std::endl;
 }
 
 
 void UTestData::GenerateFakedata() {
-	GeneratedData gen(d_config);
+	GeneratedData gen(d_config,d_basedir);
 	SaveFullExpectedResult(gen);
 	GenerateTDDStructure();
 	GenerateExperimentStructure();
+	GenerateTruncatedResults();
 }
 
 void UTestData::SaveFullExpectedResult(const GeneratedData & gen) {
@@ -209,80 +208,62 @@ void UTestData::GenerateTruncatedResults() {
 
 
 void UTestData::GenerateTDDStructure() {
-	d_nestTDDs =
+	for ( const auto & tdd : d_config.NestTDDs ) {
+		d_nestTDDs.push_back({
+		                      .AbsoluteFilePath = d_basedir / tdd.RelativeFilePath,
+		                      .Family = fort::tags::Family::Tag36h11,
+		                      .HasFullFrame = tdd.HasFullFrame,
+		                      .HasMovie = tdd.HasMovie,
+		                      .HasConfig = tdd.HasConfig,
+		                      .Start = tdd.Start,
+		                      .End = tdd.End,
+			});
+	}
+
+	for ( const auto & tdd : d_config.ForagingTDDs ) {
+		d_foragingTDDs.push_back({
+		                          .AbsoluteFilePath = d_basedir / tdd.RelativeFilePath,
+		                          .Family = fort::tags::Family::Tag36h11,
+		                          .HasFullFrame = tdd.HasFullFrame,
+		                          .HasMovie = tdd.HasMovie,
+		                          .HasConfig = tdd.HasConfig,
+		                          .Start = tdd.Start,
+		                          .End = tdd.End,
+			});
+	}
+
+
+	d_noConfigDir =
 		{
-		 {
-		  .AbsoluteFilePath = d_basedir / "nest.0000",
-		  .Family = fort::tags::Family::Tag36h11,
-		  .HasFullFrame = false,
-		  .HasMovie = true,
-		  .HasConfig = true,
-		  .Start = d_config.Start,
-		  .End = d_config.Start.Add(15*Duration::Second),
-		 },
-		 {
-		  .AbsoluteFilePath = d_basedir / "nest.0001",
-		  .Family = fort::tags::Family::Tag36h11,
-		  .HasFullFrame = true,
-		  .HasMovie = false,
-		  .HasConfig = true,
-		  .Start = d_config.Start.Add(15*Duration::Second),
-		  .End = d_config.Start.Add(3*Duration::Minute),
-		 },
-		 {
-		  .AbsoluteFilePath = d_basedir / "nest.0002",
-		  .Family = fort::tags::Family::Tag36h11,
-		  .HasFullFrame = true,
-		  .HasMovie = false,
-		  .HasConfig = true,
-		  .Start = d_config.Start.Add(3*Duration::Minute),
-		  .End = d_config.End,
-		  },
+		 .AbsoluteFilePath =  d_basedir / "no-config.0000",
+		 .Family = fort::tags::Family::Tag36h11,
+		 .HasFullFrame = false,
+		 .HasMovie = false,
+		 .HasConfig = false,
+		 .Start = d_config.Start,
+		 .End = d_config.Start.Add(10*Duration::Second),
+		};
+	d_noFamilyDir =
+		{
+		 .AbsoluteFilePath =  d_basedir / "no-family.0000",
+		 .Family = fort::tags::Family::Undefined,
+		 .HasFullFrame = false,
+		 .HasMovie = false,
+		 .HasConfig = true,
+		 .Start = d_config.Start,
+		 .End = d_config.Start.Add(10*Duration::Second),
 		};
 
-		d_foragingTDDs =
+	d_ARTagDir =
 		{
-		 {
-		  .AbsoluteFilePath = d_basedir / "foraging.0000",
-		  .Family = fort::tags::Family::Tag36h11,
-		  .HasFullFrame = true,
-		  .HasMovie = false,
-		  .HasConfig = true,
-		  .Start = d_config.Start,
-		  .End = d_config.End,
-		 },
+		 .AbsoluteFilePath =  d_basedir / "ARTag.0000",
+		 .Family = fort::tags::Family::Tag36ARTag,
+		 .HasFullFrame = false,
+		 .HasMovie = false,
+		 .HasConfig = true,
+		 .Start = d_config.Start,
+		 .End = d_config.Start.Add(10*Duration::Second),
 		};
-		d_noConfigDir =
-			{
-			 .AbsoluteFilePath =  d_basedir / "no-config.0000",
-			 .Family = fort::tags::Family::Tag36h11,
-			 .HasFullFrame = false,
-			 .HasMovie = false,
-			 .HasConfig = false,
-			 .Start = d_config.Start,
-			 .End = d_config.Start.Add(10*Duration::Second),
-			};
-		d_noFamilyDir =
-			{
-			 .AbsoluteFilePath =  d_basedir / "no-family.0000",
-			 .Family = fort::tags::Family::Undefined,
-			 .HasFullFrame = false,
-			 .HasMovie = false,
-			 .HasConfig = true,
-			 .Start = d_config.Start,
-			 .End = d_config.Start.Add(10*Duration::Second),
-			};
-
-		d_ARTagDir =
-			{
-			 .AbsoluteFilePath =  d_basedir / "ARTag.0000",
-			 .Family = fort::tags::Family::Tag36ARTag,
-			 .HasFullFrame = false,
-			 .HasMovie = false,
-			 .HasConfig = true,
-			 .Start = d_config.Start,
-			 .End = d_config.Start.Add(10*Duration::Second),
-			};
 }
 
 void UTestData::GenerateExperimentStructure() {

@@ -50,7 +50,7 @@ Config::Config() {
 		     .Interactions = {},
 		     .AntPose = Eigen::Vector3d(0,0,0),
 		     .AntSize = 160,
-		     .TagSize = 30,
+		     .TagSize = 50,
 			 }},
 		 {2,{ // 2 is kind of a Nurse
 		     .Shape = {
@@ -89,7 +89,7 @@ Config::Config() {
 		                      },
 		     .AntPose = Eigen::Vector3d(0,7,M_PI/6),
 		     .AntSize = 80,
-		     .TagSize = 30,
+		     .TagSize = 50,
 			 }},
 		 {3,{ // 3 is a kind of forager
 		     .Shape = {
@@ -116,9 +116,49 @@ Config::Config() {
 		     .Interactions = {},
 		     .AntPose = Eigen::Vector3d(-7,-7,M_PI*9.0/10.0),
 		     .AntSize = 80,
-		     .TagSize = 30,
+		     .TagSize = 50,
 			 }},
 		};
+	NestTDDs =
+		{
+		 {
+		  .RelativeFilePath = "nest.0000",
+		  .HasFullFrame = false,
+		  .HasMovie = true,
+		  .HasConfig = true,
+		  .Start = Start,
+		  .End = Start.Add(15*Duration::Second),
+		 },
+		 {
+		  .RelativeFilePath = "nest.0001",
+		  .HasFullFrame = true,
+		  .HasMovie = false,
+		  .HasConfig = true,
+		  .Start = Start.Add(15*Duration::Second),
+		  .End = Start.Add(3*Duration::Minute),
+		 },
+		 {
+		  .RelativeFilePath = "nest.0002",
+		  .HasFullFrame = true,
+		  .HasMovie = false,
+		  .HasConfig = true,
+		  .Start = Start.Add(3*Duration::Minute),
+		  .End = End,
+		  },
+		};
+	ForagingTDDs =
+		{
+		 {
+		  .RelativeFilePath = "foraging.0000",
+		  .HasFullFrame = true,
+		  .HasMovie = false,
+		  .HasConfig = true,
+		  .Start = Start,
+		  .End = End,
+		 },
+		};
+
+
 }
 
 

@@ -6,6 +6,12 @@
 namespace fort {
 namespace myrmidon {
 
+struct TDDData {
+	std::string RelativeFilePath;
+	bool HasFullFrame,HasMovie,HasConfig;
+	Time Start,End;
+};
+
 struct Keypoint {
 	SpaceID Space;
 	double  X,Y,Angle;
@@ -44,6 +50,8 @@ struct Config {
 	Duration  Framerate,Segment;
 	float     Jitter;
 	size_t    Width,Height;
+
+	std::vector<TDDData> NestTDDs,ForagingTDDs;
 
 	std::map<AntID,AntData> Ants;
 	Config();

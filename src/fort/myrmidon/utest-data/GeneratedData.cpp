@@ -3,6 +3,7 @@
 #include <random>
 
 #include <fort/myrmidon/priv/TagStatistics.hpp>
+#include <fort/myrmidon/priv/TrackingDataDirectory.hpp>
 
 namespace fort {
 namespace myrmidon {
@@ -26,8 +27,9 @@ std::vector<Time> GeneratedData::DrawFrameTicks(const Config & config) {
 }
 
 
-GeneratedData::GeneratedData(const Config & config) {
-	GenerateFrameTicks(config);
+GeneratedData::GeneratedData(const Config & config,
+                             const fs::path & path) {
+	GenerateFrameTicks(config,path);
 	GenerateTrajectories(config);
 	GenerateInteractions(config);
 	GenerateFrames(config);
@@ -75,27 +77,47 @@ void DrawHistogram(const std::vector<Time> & time ) {
 	std::cerr << std::endl;
 }
 
+void GeneratedData::AssignTicks(const std::vector<Time> & ticks,
+                                SpaceID spaceID,
+                                const std::vector<TDDData> & TDDs,
+                                const fs::path & basepath) {
+	auto current = TDDs.begin();
+	auto monoID = priv::TrackingDataDirectory::GetUID(basepath/current->RelativeFilePath);
+	for ( const auto & t : ticks ) {
+		Ticks.push_back({spaceID,t});
+		if ( t > current->End ) {
+			++current;
+			if ( current != TDDs.end() ) {
+				monoID = priv::TrackingDataDirectory::GetUID(basepath/current->RelativeFilePath);
+			}
+		}
+		if ( current != TDDs.end() ) {
+			auto monoValue = Ticks.back().second.Sub(current->Start).Nanoseconds() + 2000;
+			Ticks.back().second =
+				Time::FromTimestampAndMonotonic(Ticks.back().second.ToTimestamp(),
+				                                monoValue,
+				                                monoID);
+		}
+	}
+}
 
-void GeneratedData::GenerateFrameTicks(const Config & config) {
+void GeneratedData::GenerateFrameTicks(const Config & config,
+                                       const fs::path & basepath) {
 	NestTicks = DrawFrameTicks(config);
-	ForageTicks = DrawFrameTicks(config);
+	ForagingTicks = DrawFrameTicks(config);
 
 #ifndef NDEBUG
 	DrawHistogram(NestTicks);
-	DrawHistogram(ForageTicks);
+	DrawHistogram(ForagingTicks);
 #endif
 	CheckFrameDrop(NestTicks, config.Framerate);
-	CheckFrameDrop(ForageTicks, config.Framerate);
+	CheckFrameDrop(ForagingTicks, config.Framerate);
 
 	Ticks.clear();
-	Ticks.reserve(NestTicks.size()+ForageTicks.size());
-	for ( const auto & t : NestTicks ) {
-		Ticks.push_back({1,t});
-	}
+	Ticks.reserve(NestTicks.size()+ForagingTicks.size());
 
-	for ( const auto & t : ForageTicks ) {
-		Ticks.push_back({2,t});
-	}
+	AssignTicks(NestTicks,1,config.NestTDDs,basepath);
+	AssignTicks(ForagingTicks,2,config.ForagingTDDs,basepath);
 
 	std::sort(Ticks.begin(),Ticks.end(),
 	          [](const std::pair<SpaceID,Time> & a,
@@ -155,8 +177,13 @@ void GeneratedData::GenerateTrajectoriesFor(AntID antID,
 			continue;
 		}
 
-		// now we are in the right space, ant t is bounded by prevKey and nextKey
+		if (current && t.MonotonicValue() != current->Start.MonotonicValue() ) {
+			current->Positions.conservativeResize(points,5);
+			Trajectories.push_back(current);
+			current.reset();
+		}
 
+		// now we are in the right space, ant t is bounded by prevKey and nextKey
 		//create trajectory as needed
 		if ( !current ) {
 			current = std::make_shared<AntTrajectory>();
@@ -449,11 +476,11 @@ void GeneratedData::GenerateTagStatisticsFor(uint32_t tagID,const AntData & ant)
 		const auto & s = segments[i];
 		const auto & [found,firstSeen,lastSeen]  = countFrames(s.Start,s.End,s.Space);
 		Statistics[tagID].Counts(TagStatistics::TOTAL_SEEN) += found;
-		Statistics[tagID].LastSeen = lastSeen;
+		Statistics[tagID].LastSeen = lastSeen.Round(1);
 		if ( i > 0 ) {
 			Statistics[tagID].Counts(priv::TagStatisticsHelper::ComputeGap(segments[i-1].End,s.Start)) += 1;
 		} else {
-			Statistics[tagID].FirstSeen = firstSeen;
+			Statistics[tagID].FirstSeen = firstSeen.Round(1);
 		}
 	}
 }
