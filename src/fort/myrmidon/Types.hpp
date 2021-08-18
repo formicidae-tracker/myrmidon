@@ -425,6 +425,9 @@ struct AntTrajectorySegment {
 	 */
 	std::unique_ptr<Eigen::Vector3d> Mean;
 
+	Time StartTime() const;
+	Time EndTime() const;
+
 };
 
 

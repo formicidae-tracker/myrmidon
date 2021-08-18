@@ -19,10 +19,12 @@ struct Keypoint {
 };
 
 struct InteractionData {
-	AntID Other;
-	Time Start,End;
+	AntID   Other;
+	Time    Start,End;
+	SpaceID Space;
 	InteractionTypes Types;
 	InteractionData(AntID other,
+	                SpaceID spaceID,
 	                const Time & start,
 	                const Time & end,
 	                const std::vector<uint32_t> & types);
@@ -36,7 +38,7 @@ struct AntData {
 
 	Eigen::Vector3d              AntPose;
 	size_t                       AntSize,TagSize;
-
+	uint8_t                      Color;
 
 	void ComputeTagPosition(double & xTag,
 	                        double & yTag,

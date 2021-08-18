@@ -145,6 +145,13 @@ void GeneratedData::GenerateTrajectories(const Config & config) {
 		          }
 		          return aEnd < bEnd;
 	          });
+
+	for ( const auto & t : Trajectories ) {
+		std::cerr << "AntTrajectory{ Ant:" << t->Ant
+		          << " , Space: " << t->Space
+		          << " , Start: " << t->Start.Sub(config.Start)
+		          << " , End: " << t->End().Sub(config.Start) << std::endl;
+	}
 }
 
 void GeneratedData::GenerateTrajectoriesFor(AntID antID,
@@ -177,7 +184,7 @@ void GeneratedData::GenerateTrajectoriesFor(AntID antID,
 			continue;
 		}
 
-		if (current && t.MonotonicValue() != current->Start.MonotonicValue() ) {
+		if (current && t.MonoID() != current->Start.MonoID() ) {
 			current->Positions.conservativeResize(points,5);
 			Trajectories.push_back(current);
 			current.reset();
@@ -219,6 +226,7 @@ void GeneratedData::GenerateTrajectoriesFor(AntID antID,
 
 void GeneratedData::GenerateInteractions(const Config & config) {
 	Interactions.clear();
+
 	for( const auto & [antID,ant] : config.Ants ) {
 		GenerateInteractionsFor(antID,ant);
 	}
@@ -228,89 +236,79 @@ void GeneratedData::GenerateInteractions(const Config & config) {
 	             const AntInteraction::Ptr & b) {
 		          return a->End < b->End;
 	          });
-	// for ( const auto & i : Interactions ) {
-	// 	auto & a = i->Trajectories.first;
-	// 	auto & b = i->Trajectories.second;
-
-	// 	std::cerr << "Interaction between "
-	// 	          << i->IDs.first
-	// 	          << " and "
-	// 	          << i->IDs.second
-	// 	          << std::endl
-	// 	          << " + from "
-	// 	          << i->Start
-	// 	          << std::endl
-	// 	          << " + a st "
-	// 	          << a.Trajectory->Start.Add(a.Trajectory->Positions(a.Begin,0) * Duration::Second.Nanoseconds())
-	// 	          << std::endl
-	// 	          << " + b st "
-	// 	          << b.Trajectory->Start.Add(b.Trajectory->Positions(b.Begin,0) * Duration::Second.Nanoseconds())
-	// 	          << std::endl
-	// 	          << " +   to "
-	// 	          << i->End
-	// 	          << std::endl
-	// 	          << " + a ed "
-	// 	          << a.Trajectory->Start.Add(a.Trajectory->Positions(a.End-1,0) * Duration::Second.Nanoseconds())
-	// 	          << std::endl
-	// 	          << " + b ed "
-	// 	          << b.Trajectory->Start.Add(b.Trajectory->Positions(b.End-1,0) * Duration::Second.Nanoseconds())
-	// 	          << std::endl
-	// 	          << " + a range: " << a.Begin << " - " << a.End << std::endl
-	// 	          << " + a Traj size " << a.Trajectory->Positions.rows() << std::endl
-	// 	          << " + b range: " << b.Begin << " - " << b.End << std::endl
-	// 	          << " + b Traj size " << b.Trajectory->Positions.rows() << std::endl
-	// 	          << std::endl;
-	// }
+	for ( const auto & i : Interactions ) {
+		std::cerr << "AntInteraction{ IDs:{" << i->IDs.first
+		          << "," << i->IDs.second
+		          << "}, Start: " << i->Start.Sub(config.Start)
+		          << ", End:" << i->End.Sub(config.Start)
+		          << "}" << std::endl;
+	}
 }
+
 
 void GeneratedData::GenerateInteractionsFor(AntID antID,const AntData & ant) {
 	for ( const auto & i : ant.Interactions ) {
-		auto [aSegment,aStart,aEnd] = FindTrajectorySegment(i.Other,i.Start,i.End);
-		auto [bSegment,bStart,bEnd] = FindTrajectorySegment(antID,i.Start,i.End);
-		auto res = std::make_shared<AntInteraction>();
-		res->IDs = {i.Other,antID};
-		res->Types = i.Types;
-		res->Space = bSegment.Trajectory->Space;
-		res->Start = std::min(aStart,bStart);
-		res->End = std::max(aEnd,bEnd);
-		res->Trajectories.first = std::move(aSegment);
-		res->Trajectories.second = std::move(bSegment);
-		Interactions.push_back(res);
+		auto aSegments = FindTrajectorySegments(i.Other,i.Start,i.End);
+		auto bSegments = FindTrajectorySegments(antID,i.Start,i.End);
+		if ( aSegments.size() != bSegments.size() ) {
+			throw std::logic_error("Interactions does not have the same segments size");\
+		}
+		for ( size_t ii = 0; ii < aSegments.size(); ++ii) {
+			auto res = std::make_shared<AntInteraction>();
+			res->IDs = {i.Other,antID};
+			res->Types = i.Types;
+			res->Space = bSegments[ii].Trajectory->Space;
+			res->Start = std::min(aSegments[ii].StartTime(),bSegments[ii].StartTime());
+			res->End = std::max(aSegments[ii].EndTime(),bSegments[ii].EndTime());
+			res->Trajectories.first = std::move(aSegments[ii]);
+			res->Trajectories.second = std::move(bSegments[ii]);
+			Interactions.push_back(res);
+		}
 	}
 }
 
-std::tuple<AntTrajectorySegment,Time,Time>
-GeneratedData::FindTrajectorySegment(AntID antID,
-                                     const Time & start,
-                                     const Time & end) {
-	auto fi = std::find_if(Trajectories.begin(),
-	                       Trajectories.end(),
-	                       [&](const AntTrajectory::Ptr & t) {
-		                       return t->Ant == antID
-			                       && t->Start <= start
-			                       && t->End() >= end;
-	                       });
-	if ( fi == Trajectories.end() ) {
-		throw std::runtime_error("could not find any suitable trajectory");
-	}
-	AntTrajectorySegment res;
-	res.Trajectory = *fi;
-	Duration offsetStart,offsetEnd;
-	for(res.Begin = 0 ;res.Begin < res.Trajectory->Positions.rows();++res.Begin) {
-		offsetStart = res.Trajectory->Positions(res.Begin,0) * Duration::Second.Nanoseconds();
-		if ( res.Trajectory->Start.Add(offsetStart) >= start ) {
+std::vector<AntTrajectorySegment>
+GeneratedData::FindTrajectorySegments(AntID antID,
+                                      const Time & start,
+                                      const Time & end) {
+	std::vector<AntTrajectorySegment> results;
+	auto fi = Trajectories.begin();
+	Time current = start;
+	while ( true ) {
+		fi = std::find_if(fi,
+		                  Trajectories.end(),
+		                  [&](const AntTrajectory::Ptr & t) {
+			                  bool matches =  t->Ant == antID
+				                  && t->End() > current;
+			                  return matches;
+		                  });
+
+		if ( fi == Trajectories.end() ) {
+			throw std::runtime_error("could not find any suitable trajectory");
+		}
+		AntTrajectorySegment s;
+		s.Trajectory = *fi;
+		Duration offsetStart,offsetEnd;
+		for(s.Begin = 0 ;s.Begin < s.Trajectory->Positions.rows();++s.Begin) {
+			offsetStart = s.Trajectory->Positions(s.Begin,0) * Duration::Second.Nanoseconds();
+			if ( s.Trajectory->Start.Add(offsetStart) >= current ) {
+				break;
+			}
+		}
+		for ( s.End = s.Begin; s.End < s.Trajectory->Positions.rows(); ++s.End) {
+			offsetEnd = s.Trajectory->Positions(s.End,0) * Duration::Second.Nanoseconds();
+			if ( s.Trajectory->Start.Add(offsetEnd) > end ) {
+				break;
+			}
+		}
+		results.push_back(std::move(s));
+		if ( results.back().End >= results.back().Trajectory->Positions.rows() ) {
+			current = results.back().EndTime().Add(1);
+		} else {
 			break;
 		}
 	}
-	for ( res.End = res.Begin; res.End < res.Trajectory->Positions.rows(); ++res.End) {
-		offsetEnd = res.Trajectory->Positions(res.End,0) * Duration::Second.Nanoseconds();
-		if ( res.Trajectory->Start.Add(offsetEnd) > end ) {
-			break;
-		}
-	}
-	Time resStart = res.Trajectory->Start.Add(offsetStart);
-	Time resEnd = res.Trajectory->Start.Add(res.Trajectory->Positions(res.End-1,0) * Duration::Second.Nanoseconds());
-	return std::make_tuple(std::move(res),resStart,resEnd);
+	return results;
 }
 
 

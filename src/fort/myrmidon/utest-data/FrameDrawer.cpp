@@ -52,6 +52,7 @@ void FrameDrawer::Draw(cv::Mat & dest,
 
 
 void FrameDrawer::WriteAnt(ColoredShape & shape,
+                           uint8_t gray,
                            size_t antSize) const {
 	std::vector<Vector2dList> polys =
 		{
@@ -76,7 +77,7 @@ void FrameDrawer::WriteAnt(ColoredShape & shape,
 		};
 
 	for (  auto & poly : polys ) {
-		shape.push_back({0,Vector2dList()});
+		shape.push_back({gray,Vector2dList()});
 		shape.back().second.reserve(poly.size());
 		for ( const auto & p : poly ) {
 			shape.back().second.push_back(p*antSize);
@@ -134,7 +135,7 @@ void FrameDrawer::WriteTag(ColoredShape & shape,
 FrameDrawer::ColoredShape FrameDrawer::BuildAntShape(AntID antID,
                                                      const AntData & ant) const {
 	ColoredShape res;
-	WriteAnt(res,ant.AntSize);
+	WriteAnt(res,ant.Color,ant.AntSize);
 
 	auto tagToAnt = priv::Isometry2Dd(ant.AntPose.z(),ant.AntPose.block<2,1>(0,0)).inverse();
 	WriteTag(res,

@@ -39,15 +39,14 @@ struct GeneratedData {
 	void GenerateFrames(const Config & config);
 	void GenerateTagStatistics(const Config & config);
 
-
 	void GenerateTrajectoriesFor(AntID antID, const AntData & ant);
 	void GenerateInteractionsFor(AntID antID, const AntData & ant);
 	void GenerateTagStatisticsFor(uint32_t tagID,const AntData & ant);
 
-	std::tuple<AntTrajectorySegment,Time,Time>
-	FindTrajectorySegment(AntID antID,
-	                      const Time & start,
-	                      const Time & end);
+	std::vector<AntTrajectorySegment>
+	FindTrajectorySegments(AntID antID,
+	                       const Time & start,
+	                       const Time & end);
 };
 
 } // namespace myrmidon

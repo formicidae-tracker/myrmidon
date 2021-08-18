@@ -57,6 +57,7 @@ private :
 	              size_t pixelSize) const;
 
 	void WriteAnt(ColoredShape & shape,
+	              uint8_t gray,
 	              size_t antSize) const;
 
 

@@ -7,10 +7,12 @@ namespace myrmidon {
 
 
 InteractionData::InteractionData(AntID other,
+                                 SpaceID spaceID,
                                  const Time & start,
                                  const Time & end,
                                  const std::vector<uint32_t> & types)
 	: Other(other)
+	, Space(spaceID)
 	, Start(start)
 	, End(end) {
 	Types.resize(types.size()/2,2);
@@ -48,9 +50,10 @@ Config::Config() {
 		                   {1,99,101,0.0,End},
 		                   },
 		     .Interactions = {},
-		     .AntPose = Eigen::Vector3d(0,0,0),
-		     .AntSize = 160,
-		     .TagSize = 50,
+		     .AntPose = Eigen::Vector3d(60,10,0),
+		     .AntSize = 180,
+		     .TagSize = 40,
+		     .Color = 0,
 			 }},
 		 {2,{ // 2 is kind of a Nurse
 		     .Shape = {
@@ -79,17 +82,20 @@ Config::Config() {
 		                   },
 		     .Interactions = {
 		                      InteractionData(1,
+		                                      1,
 		                                      Start.Add(1*Duration::Minute),
 		                                      Start.Add(1*Duration::Minute+10*Duration::Second),
 		                                      {1,1,2,2}),
 		                      InteractionData(1,
+		                                      1,
 		                                      Start.Add(3*Duration::Minute+10*Duration::Second),
 		                                      Start.Add(3*Duration::Minute+40*Duration::Second),
 		                                      {1,2,2,1}),
 		                      },
 		     .AntPose = Eigen::Vector3d(0,7,M_PI/6),
-		     .AntSize = 80,
-		     .TagSize = 50,
+		     .AntSize = 120,
+		     .TagSize = 40,
+		     .Color = 30,
 			 }},
 		 {3,{ // 3 is a kind of forager
 		     .Shape = {
@@ -115,8 +121,9 @@ Config::Config() {
 		                   },
 		     .Interactions = {},
 		     .AntPose = Eigen::Vector3d(-7,-7,M_PI*9.0/10.0),
-		     .AntSize = 80,
-		     .TagSize = 50,
+		     .AntSize = 120,
+		     .TagSize = 40,
+		     .Color = 30,
 			 }},
 		};
 	NestTDDs =
@@ -135,14 +142,14 @@ Config::Config() {
 		  .HasMovie = false,
 		  .HasConfig = true,
 		  .Start = Start.Add(15*Duration::Second),
-		  .End = Start.Add(3*Duration::Minute),
+		  .End = Start.Add(3*Duration::Minute + 15*Duration::Second),
 		 },
 		 {
 		  .RelativeFilePath = "nest.0002",
 		  .HasFullFrame = true,
 		  .HasMovie = false,
 		  .HasConfig = true,
-		  .Start = Start.Add(3*Duration::Minute),
+		  .Start = Start.Add(3*Duration::Minute + 15*Duration::Second),
 		  .End = End,
 		  },
 		};
