@@ -6,6 +6,7 @@
 #include <fort/myrmidon/Query.hpp>
 
 #include "Matchers.hpp"
+#include <set>
 
 namespace fort {
 namespace myrmidon {
@@ -27,6 +28,7 @@ public:
 
 	void operator()(const myrmidon::Query::CollisionData & data);
 private:
+	struct BuildingInteraction;
 	struct BuildingTrajectory {
 		typedef std::shared_ptr<BuildingTrajectory> Ptr;
 		std::shared_ptr<AntTrajectory> Trajectory;
@@ -34,6 +36,8 @@ private:
 		Time                  Last;
 		std::vector<double>   DataPoints;
 		bool                  ForceKeep;
+
+		std::set<BuildingInteraction*> Interactions;
 
 		BuildingTrajectory(const IdentifiedFrame & frame,
 		                   const PositionedAntConstRef & ant);
@@ -44,7 +48,7 @@ private:
 		size_t Size() const;
 
 
-		AntTrajectory::Ptr Terminate() const;
+		AntTrajectory::Ptr Terminate();
 	};
 
 
@@ -52,10 +56,12 @@ private:
 		InteractionID IDs;
 		Time          Start,Last;
 
-		std::pair<size_t,size_t>                                   SegmentStarts;
+		std::pair<size_t,size_t>                                   SegmentStarts,SegmentEnds;
 		std::pair<BuildingTrajectory::Ptr,BuildingTrajectory::Ptr> Trajectories;
 
 		std::set<std::pair<AntShapeTypeID,AntShapeTypeID>> Types;
+
+		~BuildingInteraction();
 
 		BuildingInteraction(const Collision & collision,
 		                    const Time & curTime,
@@ -64,12 +70,14 @@ private:
 		void Append(const Collision & collision,
 		            const Time & curTime);
 
-
+		static size_t TimeIncrement(const Time & current,
+		                            size_t currentIndex,
+		                            BuildingTrajectory & trajectory);
 
 
 		static void SummarizeTrajectorySegment(AntTrajectorySegment & s);
 
-		AntInteraction::Ptr Terminate(bool summarize) const;
+		AntInteraction::Ptr Terminate(bool summarize);
 	};
 
 
@@ -82,7 +90,7 @@ private:
 
 
 
-	std::map<uint32_t,BuildingTrajectory::Ptr>  d_trajectories;
+	std::map<AntID,BuildingTrajectory::Ptr>     d_trajectories;
 	std::map<InteractionID,BuildingInteraction> d_interactions;
 	Args                                        d_args;
 };

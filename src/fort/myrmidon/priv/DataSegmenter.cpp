@@ -28,7 +28,7 @@ void DataSegmenter::BuildingTrajectory::Append(const IdentifiedFrame & frame,
 }
 
 
-AntTrajectory::Ptr DataSegmenter::BuildingTrajectory::Terminate() const {
+AntTrajectory::Ptr DataSegmenter::BuildingTrajectory::Terminate() {
 	if ( Size() < 2 ) {
 		return AntTrajectory::Ptr();
 	}
@@ -43,8 +43,10 @@ DataSegmenter::BuildingInteraction::BuildingInteraction(const Collision & collis
 	, Start(curTime)
 	, Last(curTime)
 	, Trajectories(trajectories) {
-	SegmentStarts.first = trajectories.first->Size()-1;
-	SegmentStarts.second = trajectories.second->Size()-1;
+	Trajectories.first->Interactions.insert(this);
+	Trajectories.second->Interactions.insert(this);
+	SegmentStarts = {trajectories.first->Size()-1,trajectories.second->Size()-1};
+	SegmentEnds = {trajectories.first->Size(),trajectories.second->Size()};
 	trajectories.first->ForceKeep = true;
 	trajectories.second->ForceKeep = true;
 	for ( size_t i = 0; i < collision.Types.rows(); ++i ) {
@@ -60,7 +62,22 @@ void DataSegmenter::BuildingInteraction::Append(const Collision & collision,
 		Types.insert(std::make_pair(collision.Types(i,0),
 		                            collision.Types(i,1)));
 	}
+	SegmentEnds.first = TimeIncrement(curTime,SegmentEnds.first,*Trajectories.first);
+	SegmentEnds.second = TimeIncrement(curTime,SegmentEnds.second,*Trajectories.second);
 }
+
+size_t DataSegmenter::BuildingInteraction::TimeIncrement(const Time & current,
+                                                         size_t currentIndex,
+                                                         BuildingTrajectory & trajectory) {
+	for ( ;5*currentIndex < trajectory.DataPoints.size(); ++currentIndex ) {
+		auto tTime = trajectory.Trajectory->Start.Add(trajectory.DataPoints[5*currentIndex] * Duration::Second.Nanoseconds());
+		if (tTime > current) {
+			return currentIndex;
+		}
+	}
+	return currentIndex;
+}
+
 
 
 void DataSegmenter::BuildingInteraction::SummarizeTrajectorySegment(AntTrajectorySegment & s) {
@@ -73,7 +90,16 @@ void DataSegmenter::BuildingInteraction::SummarizeTrajectorySegment(AntTrajector
 	s.End = 0;
 }
 
-AntInteraction::Ptr DataSegmenter::BuildingInteraction::Terminate(bool summarize) const {
+DataSegmenter::BuildingInteraction::~BuildingInteraction() {
+	if ( Trajectories.first ) {
+		Trajectories.first->Interactions.erase(this);
+	}
+	if ( Trajectories.second ) {
+		Trajectories.second->Interactions.erase(this);
+	}
+}
+
+AntInteraction::Ptr DataSegmenter::BuildingInteraction::Terminate(bool summarize) {
 	if (Start == Last ) {
 		return AntInteraction::Ptr();
 	}
@@ -91,13 +117,13 @@ AntInteraction::Ptr DataSegmenter::BuildingInteraction::Terminate(bool summarize
 	res->Trajectories.first = {
 							   .Trajectory = Trajectories.first->Trajectory,
 							   .Begin = SegmentStarts.first,
-							   .End = Trajectories.first->Size(),
+							   .End = SegmentEnds.first,
 	};
 
 	res->Trajectories.second = {
 							   .Trajectory = Trajectories.second->Trajectory,
 							   .Begin = SegmentStarts.second,
-							   .End = Trajectories.second->Size(),
+							   .End = SegmentEnds.second,
 	};
 
 	if ( summarize == true ) {
@@ -105,9 +131,14 @@ AntInteraction::Ptr DataSegmenter::BuildingInteraction::Terminate(bool summarize
 		SummarizeTrajectorySegment(res->Trajectories.second);
 	}
 
+
 	res->Start = Start;
 	res->End = Last;
 
+	Trajectories.first->Interactions.erase(this);
+	Trajectories.second->Interactions.erase(this);
+	Trajectories.first.reset();
+	Trajectories.second.reset();
 	return res;
 }
 
@@ -181,9 +212,13 @@ void DataSegmenter::BuildTrajectories(const IdentifiedFrame::Ptr & identified,
 			continue;
 		}
 
+		bool maximumGapReached = identified->FrameTime.Sub(fi->second->Last) > d_args.MaximumGap;
+		bool spaceChanged =  identified->Space != fi->second->Trajectory->Space;
 		if ( MonoIDMismatch(identified->FrameTime,fi->second->Last)
-			 || identified->FrameTime.Sub(fi->second->Last) > d_args.MaximumGap
-			 || identified->Space != fi->second->Trajectory->Space ) {
+			 || maximumGapReached
+			 || spaceChanged ) {
+
+
 			TerminateTrajectory(fi->second);
 			fi->second = std::make_shared<BuildingTrajectory>(*identified,
 			                                                  identified->Positions.row(i));
@@ -211,12 +246,9 @@ void DataSegmenter::BuildTrajectories(const IdentifiedFrame::Ptr & identified,
 void DataSegmenter::TerminateTrajectory(const BuildingTrajectory::Ptr & trajectory) {
 	auto antID = trajectory->Trajectory->Ant;
 	std::vector<InteractionID> toRemove;
-	for ( const auto & [IDs,interaction] : d_interactions ) {
-		if ( IDs.first != antID && IDs.second != antID) {
-			continue;
-		}
-		toRemove.push_back(IDs);
-		auto i = interaction.Terminate(d_args.SummarizeSegment);
+	for ( const auto & interaction : trajectory->Interactions ) {
+		toRemove.push_back(interaction->IDs);
+		auto i = interaction->Terminate(d_args.SummarizeSegment);
 		if ( i == nullptr ) {
 			continue;
 		}
@@ -284,7 +316,7 @@ void DataSegmenter::BuildInteractions(const CollisionFrame::Ptr & collisions) {
 		}
 	}
 	std::vector<InteractionID> terminated;
-	for ( const auto & [IDs,interaction] : d_interactions ) {
+	for ( auto & [IDs,interaction] : d_interactions ) {
 		if ( collisions->FrameTime.Sub(interaction.Last) <= d_args.MaximumGap ) {
 			continue;
 		}
