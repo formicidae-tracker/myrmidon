@@ -62,21 +62,21 @@ fmp::Identification::Ptr IdentifierBridge::addIdentification(fm::AntID antID,
                                                              const fort::Time & end) {
 
 	if ( !d_experiment) {
-		qWarning() << "Not Adding Identification to Ant " << fmp::Ant::FormatID(antID).c_str();
+		qWarning() << "Not Adding Identification to Ant " << fm::FormatAntID(antID).c_str();
 		return fmp::Identification::Ptr();
 	}
 
 	fmp::Identification::Ptr identification;
 	try {
 		qDebug() << "[IdentifierBridge]: Calling fort::myrmidon::priv::Identifider::AddIdentification( "
-		         << fmp::Ant::FormatID(antID).c_str()
+		         << fm::FormatAntID(antID).c_str()
 		         << "," << fmp::FormatTagID(tagID).c_str()
 		         <<  "," << ToQString(start)
 		         << "," << ToQString(end) << ")";
 		identification = fmp::Identifier::AddIdentification(d_experiment->Identifier(),
 		                                                    antID,tagID,start,end);
 	} catch (const std::exception & e) {
-		qCritical() << "Could not create Identification " << fmp::Ant::FormatID(antID).c_str()
+		qCritical() << "Could not create Identification " << fm::FormatAntID(antID).c_str()
 		            << " ↤ " << fmp::FormatTagID(tagID).c_str()
 		            << " [" << ToQString(start)
 		            << ";" << ToQString(end)

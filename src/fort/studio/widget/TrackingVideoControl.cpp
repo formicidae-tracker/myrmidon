@@ -207,7 +207,7 @@ void TrackingVideoControl::onPlayerPlaybackRateChanged(qreal rate) {
 
 void TrackingVideoControl::onAntSelection(quint32  antID) {
 	if ( antID == 0 ) {
-		d_ui->zoomCheckBox->setText(tr("Zoom on Ant %1").arg(ToQString(fmp::Ant::FormatID(0))));
+		d_ui->zoomCheckBox->setText(tr("Zoom on Ant %1").arg(ToQString(fm::FormatAntID(0))));
 		d_ui->zoomCheckBox->setEnabled(false);
 		d_ui->zoomSlider->setEnabled(false);
 		d_ui->skipForwardButton->setEnabled(false);
@@ -215,7 +215,7 @@ void TrackingVideoControl::onAntSelection(quint32  antID) {
 		emit zoomFocusChanged(0,1.0);
 	} else {
 		d_ui->zoomCheckBox->setEnabled(true);
-		d_ui->zoomCheckBox->setText(tr("Zoom on Ant %1").arg(ToQString(fmp::Ant::FormatID(antID))));
+		d_ui->zoomCheckBox->setText(tr("Zoom on Ant %1").arg(ToQString(fm::FormatAntID(antID))));
 		d_ui->zoomSlider->setEnabled(true);
 		d_ui->skipForwardButton->setEnabled(true);
 		d_ui->skipBackwardButton->setEnabled(true);

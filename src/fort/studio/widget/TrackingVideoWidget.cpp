@@ -216,7 +216,7 @@ void TrackingVideoWidget::paintIdentifiedAnt(QPainter * painter, const QRectF & 
 
 		if ( d_showID == true ) {
 
-			QString idStr = fmp::Ant::FormatID(antID).c_str();
+			QString idStr = fm::FormatAntID(antID).c_str();
 			auto bRect = metrics.boundingRect(idStr);
 
 			bRect.translate((correctedPos + QPointF(-bRect.width()/2,bRect.height() + ANT_HALF_SIZE)).toPoint());

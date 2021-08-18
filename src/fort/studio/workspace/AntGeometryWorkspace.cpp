@@ -231,7 +231,7 @@ void AntGeometryWorkspace::setColorFromType(quint32 typeID) {
 void AntGeometryWorkspace::updateAntLabel(quint32 antID) {
 	QString formattedID = tr("N.A.");
 	if ( antID != 0 ) {
-		formattedID = fmp::Ant::FormatID(antID).c_str();
+		formattedID = fm::FormatAntID(antID).c_str();
 	}
 	d_ui->antLabel->setText(tr("AntID: %1").arg(formattedID));
 }

@@ -229,7 +229,7 @@ void IdentificationWorkspace::addIdentification() {
 
 	QStringList items;
 	for ( const auto & antID : d_experiment->identifier()->unidentifiedAntAt(d_tcu->Frame().Time()) ) {
-		items.push_back(fmp::Ant::FormatID(antID).c_str());
+		items.push_back(fm::FormatAntID(antID).c_str());
 	}
 	if ( items.empty() ) {
 		qCritical() << "There are no unidentified ants, abording";

@@ -322,7 +322,7 @@ void AntMetadataBridge::rebuildDataModel() {
 	for ( const auto & [antID,ant] : ants ) {
 		auto antData = QVariant::fromValue(ant);
 
-		auto antLabel = new QStandardItem(ToQString(fmp::Ant::FormatID(antID)));
+		auto antLabel = new QStandardItem(ToQString(fm::FormatAntID(antID)));
 		antLabel->setEditable(false);
 		antLabel->setData(antData);
 		size_t count = 0;
@@ -506,7 +506,7 @@ void AntMetadataBridge::addTimedChange(quint32 antID,const QString & name) {
 	if ( !d_experiment ) {
 		return;
 	}
-	auto antLabel = ToQString(fmp::Ant::FormatID(antID));
+	auto antLabel = ToQString(fm::FormatAntID(antID));
 	auto items = d_dataModel->findItems(antLabel);
 	if ( items.isEmpty() == true ) {
 		qWarning() << "Could not found ant " << antLabel;

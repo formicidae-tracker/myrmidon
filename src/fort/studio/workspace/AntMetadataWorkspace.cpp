@@ -79,7 +79,7 @@ void AntMetadataWorkspace::onSelectedAntID(quint32 ID) {
 	}
 	d_ui->addButton->setEnabled(true);
 	d_ui->comboBox->setEnabled(true);
-	d_ui->timeBox->setTitle(tr("Timed Changes for Ant %1").arg(ToQString(fmp::Ant::FormatID(ID))));
+	d_ui->timeBox->setTitle(tr("Timed Changes for Ant %1").arg(ToQString(fm::FormatAntID(ID))));
 }
 
 

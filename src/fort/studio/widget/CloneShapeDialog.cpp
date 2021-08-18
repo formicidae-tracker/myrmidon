@@ -17,7 +17,7 @@ CloneShapeDialog::CloneShapeDialog(ExperimentBridge * experiment,
 	, d_ui(new Ui::CloneShapeDialog) {
 	d_ui->setupUi(this);
 	auto ant = experiment->ant(sourceID);
-	auto antIDStr = fmp::Ant::FormatID(sourceID).c_str();
+	auto antIDStr = fm::FormatAntID(sourceID).c_str();
 
 	if ( ant == nullptr ) {
 		throw std::runtime_error("Could not find ant " + std::string(antIDStr) );

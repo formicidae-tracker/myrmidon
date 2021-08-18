@@ -266,21 +266,21 @@ fmp::Ant::Ptr ExperimentBridge::createAnt() {
 
 void ExperimentBridge::deleteAnt(fm::AntID antID) {
 	if ( !d_experiment ) {
-		qWarning() << "Not removing Ant " << fmp::Ant::FormatID(antID).c_str();
+		qWarning() << "Not removing Ant " << fm::FormatAntID(antID).c_str();
 		return;
 	}
 
 	try {
 		qDebug() << "[ExperimentBridge]: Calling fort::myrmidon::priv::Identifier::DeleteAnt("
-		         << fmp::Ant::FormatID(antID).c_str() << ")";
+		         << fm::FormatAntID(antID).c_str() << ")";
 		d_experiment->Identifier()->DeleteAnt(antID);
 	} catch (const std::exception & e) {
-		qCritical() << "Could not delete Ant '" <<  fmp::Ant::FormatID(antID).c_str()
+		qCritical() << "Could not delete Ant '" <<  fm::FormatAntID(antID).c_str()
 		            << "': " << e.what();
 		return;
 	}
 
-	qInfo() << "Deleted Ant " << fmp::Ant::FormatID(antID).c_str();
+	qInfo() << "Deleted Ant " << fm::FormatAntID(antID).c_str();
 
 	setModified(true);
 	emit antDeleted(antID);
