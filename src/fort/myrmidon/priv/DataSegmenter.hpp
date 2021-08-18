@@ -47,6 +47,8 @@ private:
 
 		size_t Size() const;
 
+		Time TimeAt(size_t index) const;
+
 		size_t FindIndexFor(const Time & time,
 		                    size_t low,
 		                    size_t high);
@@ -56,6 +58,7 @@ private:
 
 
 	struct BuildingInteraction {
+		typedef std::unique_ptr<BuildingInteraction> Ptr;
 		InteractionID IDs;
 		Time          Start,Last;
 
@@ -90,7 +93,7 @@ private:
 
 
 	std::map<AntID,BuildingTrajectory::Ptr>     d_trajectories;
-	std::map<InteractionID,BuildingInteraction> d_interactions;
+	std::map<InteractionID,BuildingInteraction::Ptr> d_interactions;
 	Args                                        d_args;
 };
 

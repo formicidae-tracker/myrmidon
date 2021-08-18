@@ -28,7 +28,7 @@ void DataSegmenter::BuildingTrajectory::Append(const IdentifiedFrame & frame,
 
 	// MaxEnd is an over-estimation as it may be incremented after the
 	// moment the Interaction should be Terminated.
-	for ( const auto & i : Interactions ) {
+	for ( BuildingInteraction* i : this->Interactions ) {
 		if ( i->Trajectories.first.get() == this ) {
 			i->MaxEnd.first += 1;
 		}
@@ -68,6 +68,16 @@ DataSegmenter::BuildingInteraction::BuildingInteraction(const Collision & collis
 	}
 }
 
+DataSegmenter::BuildingInteraction::~BuildingInteraction() {
+	if ( Trajectories.first ) {
+		Trajectories.first->Interactions.erase(this);
+	}
+	if ( Trajectories.second ) {
+		Trajectories.second->Interactions.erase(this);
+	}
+}
+
+
 void DataSegmenter::BuildingInteraction::Append(const Collision & collision,
 												const Time & curTime) {
 	Last = curTime;
@@ -80,16 +90,22 @@ void DataSegmenter::BuildingInteraction::Append(const Collision & collision,
 	MinEnd.first++;
 	MinEnd.second++;
 }
+Time DataSegmenter::BuildingTrajectory::TimeAt(size_t index) const {
+	return Trajectory->Start.Add(DataPoints[5*index] * Duration::Second.Nanoseconds());
+}
 
 size_t DataSegmenter::BuildingTrajectory::FindIndexFor(const Time & time,
                                                        size_t min,
                                                        size_t max) {
 	min = std::min(min,Size()-1);
 	max = std::min(max,Size()-1);
+	if ( TimeAt(min) >= time ) {
+		return min;
+	}
+	++min;
 	while(min < max) {
 		auto m = (min+max)/2;
-		auto t = Trajectory->Start.Add(DataPoints[5*m] * Duration::Second.Seconds());
-		std::cerr << " +++ testing " << t << " against " << time;
+		auto t = TimeAt(m);
 		if ( t == time ) {
 			return m;
 		}
@@ -113,14 +129,6 @@ void DataSegmenter::BuildingInteraction::SummarizeTrajectorySegment(AntTrajector
 	s.End = 0;
 }
 
-DataSegmenter::BuildingInteraction::~BuildingInteraction() {
-	if ( Trajectories.first ) {
-		Trajectories.first->Interactions.erase(this);
-	}
-	if ( Trajectories.second ) {
-		Trajectories.second->Interactions.erase(this);
-	}
-}
 
 AntInteraction::Ptr DataSegmenter::BuildingInteraction::Terminate(bool summarize) {
 	if (Start == Last ) {
@@ -171,7 +179,7 @@ DataSegmenter::DataSegmenter(const Args & args)
 
 DataSegmenter::~DataSegmenter() {
 	for ( auto & [id,interaction] : d_interactions ) {
-		auto i = interaction.Terminate(d_args.SummarizeSegment);
+		auto i = interaction->Terminate(d_args.SummarizeSegment);
 		if ( i == nullptr ) {
 			continue;
 		}
@@ -311,40 +319,40 @@ void DataSegmenter::BuildInteractions(const CollisionFrame::Ptr & collisions) {
 				auto trajectories = std::make_pair(d_trajectories.at(collision.IDs.first),
 												   d_trajectories.at(collision.IDs.second));
 				d_interactions.insert(std::make_pair(collision.IDs,
-													 BuildingInteraction(collision,
-																		 collisions->FrameTime,
-																		 trajectories)));
+				                                     std::make_unique<BuildingInteraction>(collision,
+					     collisions->FrameTime,
+					     trajectories)));
 			} catch ( const std::exception & e ) {
 			}
 			continue;
 		}
 
-		if ( MonoIDMismatch(collisions->FrameTime,fi->second.Last) == true
-			 || collisions->FrameTime.Sub(fi->second.Last) > d_args.MaximumGap ) {
-			auto i = fi->second.Terminate(d_args.SummarizeSegment);
+		if ( MonoIDMismatch(collisions->FrameTime,fi->second->Last) == true
+			 || collisions->FrameTime.Sub(fi->second->Last) > d_args.MaximumGap ) {
+			auto i = fi->second->Terminate(d_args.SummarizeSegment);
 			if ( i != nullptr ) {
 				d_args.StoreInteraction(i);
 			}
 			try {
 				auto trajectories = std::make_pair(d_trajectories.at(collision.IDs.first),
 												   d_trajectories.at(collision.IDs.second));
-				fi->second = BuildingInteraction(collision,
-												 collisions->FrameTime,
-												 trajectories);
+				fi->second = std::make_unique<BuildingInteraction>(collision,
+				                                                   collisions->FrameTime,
+				                                                   trajectories);
 			} catch ( const std::exception & e ) {
 				d_interactions.erase(fi);
 			}
 		} else {
-			fi->second.Append(collision,collisions->FrameTime);
+			fi->second->Append(collision,collisions->FrameTime);
 		}
 	}
 	std::vector<InteractionID> terminated;
 	for ( auto & [IDs,interaction] : d_interactions ) {
-		if ( collisions->FrameTime.Sub(interaction.Last) <= d_args.MaximumGap ) {
+		if ( collisions->FrameTime.Sub(interaction->Last) <= d_args.MaximumGap ) {
 			continue;
 		}
 		terminated.push_back(IDs);
-		auto i = interaction.Terminate(d_args.SummarizeSegment);
+		auto i = interaction->Terminate(d_args.SummarizeSegment);
 		if ( i != nullptr ) {
 			d_args.StoreInteraction(i);
 		}
