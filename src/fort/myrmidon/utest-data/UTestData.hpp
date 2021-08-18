@@ -11,8 +11,6 @@
 
 #include "Config.hpp"
 
-
-
 namespace fort {
 namespace hermes {
 class FrameReadout;

@@ -129,6 +129,18 @@ TEST_F(QueryUTest,ComputeAntTrajectories) {
 			});
 
 		EXPECT_EQ(trajectories.size(),expected.Trajectories.size());
+		// trajectories, due to TDD boundaries may not be sorted
+		std::sort(trajectories.begin(),
+		          trajectories.end(),
+		          [](const AntTrajectory::Ptr & a,
+		             const AntTrajectory::Ptr & b) {
+			          if ( a->End() == b->End() ) {
+				          return a->Space < b->Space;
+			          }
+			          return a->End() < b->End();
+		          });
+
+
 		for ( size_t i = 0; i < std::min(trajectories.size(),expected.Trajectories.size()); ++i ) {
 			EXPECT_ANT_TRAJECTORY_EQ(*trajectories[i],
 			                         *expected.Trajectories[i])
@@ -169,6 +181,19 @@ TEST_F(QueryUTest,ComputeAntInteractions) {
 
 		EXPECT_EQ(trajectories.size(),expected.Trajectories.size());
 		EXPECT_EQ(interactions.size(),expected.Interactions.size());
+
+		// trajectories, due to TDD boundaries may not be sorted
+		std::sort(trajectories.begin(),
+		          trajectories.end(),
+		          [](const AntTrajectory::Ptr & a,
+		             const AntTrajectory::Ptr & b) {
+			          if ( a->End() == b->End() ) {
+				          return a->Space < b->Space;
+			          }
+			          return a->End() < b->End();
+		          });
+
+
 		for ( size_t i = 0; i < std::min(trajectories.size(),expected.Trajectories.size()); ++i ) {
 			EXPECT_ANT_TRAJECTORY_EQ(*trajectories[i],
 			                         *expected.Trajectories[i])
