@@ -9,6 +9,7 @@
 #include <fort/myrmidon/Experiment.pb.h>
 #include <fort/myrmidon/TrackingDataDirectory.pb.h>
 #include <fort/myrmidon/TagCloseUpCache.pb.h>
+#include <fort/myrmidon/TagFamily.pb.h>
 #include <fort/myrmidon/Shapes.pb.h>
 #include <fort/myrmidon/Zone.pb.h>
 #include <fort/myrmidon/Space.pb.h>

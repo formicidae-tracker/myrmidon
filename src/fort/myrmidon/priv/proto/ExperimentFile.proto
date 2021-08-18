@@ -3,7 +3,6 @@ syntax = "proto3";
 package fort.myrmidon.pb;
 
 import "Experiment.proto";
-import "TrackingDataDirectory.proto";
 import "AntDescription.proto";
 import "Measurement.proto";
 import "Space.proto";

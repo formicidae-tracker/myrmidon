@@ -4,7 +4,6 @@ syntax = "proto3";
 package fort.myrmidon.pb;
 
 import "Vector2d.proto";
-import "TagFamily.proto";
 
 message TagCloseUpCacheHeader {
 	reserved 1,2;

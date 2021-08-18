@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package fort.myrmidon.pb;
 
-import "google/protobuf/timestamp.proto";
-import "TagFamily.proto";
 import "Measurement.proto";
 import "AntMetadata.proto";
 
