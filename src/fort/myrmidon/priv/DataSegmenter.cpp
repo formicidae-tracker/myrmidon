@@ -25,6 +25,18 @@ void DataSegmenter::BuildingTrajectory::Append(const IdentifiedFrame & frame,
 	double t = frame.FrameTime.Sub(Trajectory->Start).Seconds();
 	DataPoints.insert(DataPoints.end(),
 	                  {t,ant(0,1),ant(0,2),ant(0,3),ant(0,4)});
+
+	// MaxEnd is an over-estimation as it may be incremented after the
+	// moment the Interaction should be Terminated.
+	for ( const auto & i : Interactions ) {
+		if ( i->Trajectories.first.get() == this ) {
+			i->MaxEnd.first += 1;
+		}
+		if ( i->Trajectories.second.get() == this ) {
+			i->MaxEnd.second += 1;
+		}
+	}
+
 }
 
 
@@ -46,7 +58,8 @@ DataSegmenter::BuildingInteraction::BuildingInteraction(const Collision & collis
 	Trajectories.first->Interactions.insert(this);
 	Trajectories.second->Interactions.insert(this);
 	SegmentStarts = {trajectories.first->Size()-1,trajectories.second->Size()-1};
-	SegmentEnds = {trajectories.first->Size(),trajectories.second->Size()};
+	MinEnd = SegmentStarts;
+	MaxEnd = SegmentStarts;
 	trajectories.first->ForceKeep = true;
 	trajectories.second->ForceKeep = true;
 	for ( size_t i = 0; i < collision.Types.rows(); ++i ) {
@@ -62,22 +75,32 @@ void DataSegmenter::BuildingInteraction::Append(const Collision & collision,
 		Types.insert(std::make_pair(collision.Types(i,0),
 		                            collision.Types(i,1)));
 	}
-	SegmentEnds.first = TimeIncrement(curTime,SegmentEnds.first,*Trajectories.first);
-	SegmentEnds.second = TimeIncrement(curTime,SegmentEnds.second,*Trajectories.second);
+	// MinEnd is a lower estimation, as we may have no collision for
+	// some frame in an Interaction.
+	MinEnd.first++;
+	MinEnd.second++;
 }
 
-size_t DataSegmenter::BuildingInteraction::TimeIncrement(const Time & current,
-                                                         size_t currentIndex,
-                                                         BuildingTrajectory & trajectory) {
-	for ( ;5*currentIndex < trajectory.DataPoints.size(); ++currentIndex ) {
-		auto tTime = trajectory.Trajectory->Start.Add(trajectory.DataPoints[5*currentIndex] * Duration::Second.Nanoseconds());
-		if (tTime > current) {
-			return currentIndex;
+size_t DataSegmenter::BuildingTrajectory::FindIndexFor(const Time & time,
+                                                       size_t min,
+                                                       size_t max) {
+	min = std::min(min,Size()-1);
+	max = std::min(max,Size()-1);
+	while(min < max) {
+		auto m = (min+max)/2;
+		auto t = Trajectory->Start.Add(DataPoints[5*m] * Duration::Second.Seconds());
+		std::cerr << " +++ testing " << t << " against " << time;
+		if ( t == time ) {
+			return m;
+		}
+		if ( t < time ) {
+			min = m + 1;
+		} else {
+			max = m -1;
 		}
 	}
-	return currentIndex;
+	return min;
 }
-
 
 
 void DataSegmenter::BuildingInteraction::SummarizeTrajectorySegment(AntTrajectorySegment & s) {
@@ -117,13 +140,13 @@ AntInteraction::Ptr DataSegmenter::BuildingInteraction::Terminate(bool summarize
 	res->Trajectories.first = {
 							   .Trajectory = Trajectories.first->Trajectory,
 							   .Begin = SegmentStarts.first,
-							   .End = SegmentEnds.first,
+							   .End = Trajectories.first->FindIndexFor(Last,MinEnd.first,MaxEnd.first)+1,
 	};
 
 	res->Trajectories.second = {
 							   .Trajectory = Trajectories.second->Trajectory,
 							   .Begin = SegmentStarts.second,
-							   .End = SegmentEnds.second,
+							   .End = Trajectories.second->FindIndexFor(Last,MinEnd.second,MaxEnd.second)+1,
 	};
 
 	if ( summarize == true ) {

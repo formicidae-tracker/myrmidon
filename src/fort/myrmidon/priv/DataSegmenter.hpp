@@ -47,6 +47,9 @@ private:
 
 		size_t Size() const;
 
+		size_t FindIndexFor(const Time & time,
+		                    size_t low,
+		                    size_t high);
 
 		AntTrajectory::Ptr Terminate();
 	};
@@ -56,7 +59,7 @@ private:
 		InteractionID IDs;
 		Time          Start,Last;
 
-		std::pair<size_t,size_t>                                   SegmentStarts,SegmentEnds;
+		std::pair<size_t,size_t>                                   SegmentStarts,MinEnd,MaxEnd;
 		std::pair<BuildingTrajectory::Ptr,BuildingTrajectory::Ptr> Trajectories;
 
 		std::set<std::pair<AntShapeTypeID,AntShapeTypeID>> Types;
@@ -69,10 +72,6 @@ private:
 
 		void Append(const Collision & collision,
 		            const Time & curTime);
-
-		static size_t TimeIncrement(const Time & current,
-		                            size_t currentIndex,
-		                            BuildingTrajectory & trajectory);
 
 
 		static void SummarizeTrajectorySegment(AntTrajectorySegment & s);
