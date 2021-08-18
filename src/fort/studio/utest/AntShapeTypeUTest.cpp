@@ -13,7 +13,7 @@
 #include <QAbstractItemModel>
 
 void AntShapeTypeUTest::SetUp() {
-	experiment = fmp::Experiment::Create(TestSetup::Basedir() / "ant-shape-types.myrmidon");
+	experiment = fmp::Experiment::Create(TestSetup::UTestData().Basedir() / "ant-shape-types.myrmidon");
 	shapeTypes = new AntShapeTypeBridge(nullptr);
 }
 

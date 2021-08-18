@@ -6,6 +6,7 @@
 
 #include <fort/studio/bridge/ExperimentBridge.hpp>
 
+#include <fort/myrmidon/utest-data/UTestData.hpp>
 
 class AntMeasurementUTest : public ::testing::Test {
 protected:
@@ -13,5 +14,5 @@ protected:
 	void TearDown();
 
 	ExperimentBridge d_experiment;
-	fmp::TagCloseUp::ConstPtr d_closeUps[4];
+	std::map<fm::TagID,std::vector<fmp::TagCloseUp::ConstPtr>> d_closeUps;
 };

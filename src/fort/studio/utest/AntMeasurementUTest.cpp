@@ -11,54 +11,26 @@
 #include <QAbstractItemModel>
 
 void AntMeasurementUTest::SetUp() {
-	auto experiment = fmp::Experiment::Create(TestSetup::Basedir() / "ant-measurement-bridge.myrmidon");
-	auto s = experiment->CreateSpace("foo");
-	auto tdd = fmp::TrackingDataDirectory::Open(TestSetup::Basedir() / "foo.0000",
-	                                            TestSetup::Basedir());
-	if ( tdd->TagCloseUpsComputed() == false ) {
-		for (const auto & l : tdd->PrepareTagCloseUpsLoaders() ) {
-			try {
-				l();
-			} catch ( const std::exception & ) {
+	ASSERT_NO_THROW({
+			auto experiment = fmp::Experiment::Create(TestSetup::UTestData().Basedir() / "ant-measurement-bridge.myrmidon");
+			auto s = experiment->CreateSpace("foo");
+			auto & tddInfo = TestSetup::UTestData().NestDataDirs().back();
+			auto tdd = fmp::TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,
+			                                            TestSetup::UTestData().Basedir());
+			if ( tdd->TagCloseUpsComputed() == false ) {
+				for (const auto & l : tdd->PrepareTagCloseUpsLoaders() ) {
+					l();
+				}
 			}
-		}
-	}
+			experiment->AddTrackingDataDirectory(s,tdd);
+			d_experiment.setExperiment(experiment);
 
-	fmp::Vector2dList corners = {Eigen::Vector2d(1,1),
-	                             Eigen::Vector2d(-1,1),
-	                             Eigen::Vector2d(-1,-1),
-	                             Eigen::Vector2d(1,-1)};
-
-	d_closeUps[0] = std::make_shared<fmp::TagCloseUp>(TestSetup::Basedir() / "foo.0000/ants/ant_0_frame_0.png",
-	                                                  tdd->FrameReferenceAt(tdd->StartFrame()),
-	                                                  0,
-	                                                  Eigen::Vector2d(0,0),
-	                                                  0.0,
-	                                                  corners);
-
-	d_closeUps[1] = std::make_shared<fmp::TagCloseUp>(TestSetup::Basedir() / "foo.0000/ants/ant_1_frame_0.png",
-	                                                  tdd->FrameReferenceAt(tdd->StartFrame()),
-	                                                  1,
-	                                                  Eigen::Vector2d(0,0),
-	                                                  0.0,
-	                                                  corners);
-
-	d_closeUps[2] = std::make_shared<fmp::TagCloseUp>(TestSetup::Basedir() / "foo.0000/ants/ant_0_frame_100.png",
-	                                                  tdd->FrameReferenceAt(tdd->EndFrame()),
-	                                                  0,
-	                                                  Eigen::Vector2d(0,0),
-	                                                  0.0,
-	                                                  corners);
-
-	d_closeUps[3] = std::make_shared<fmp::TagCloseUp>(TestSetup::Basedir() / "foo.0000/ants/ant_1_frame_100.png",
-	                                                  tdd->FrameReferenceAt(tdd->EndFrame()),
-	                                                  1,
-	                                                  Eigen::Vector2d(0,0),
-	                                                  0.0,
-	                                                  corners);
-
-	experiment->AddTrackingDataDirectory(s,tdd);
-	d_experiment.setExperiment(experiment);
+			for ( const auto & tcu : tddInfo.TagCloseUps ) {
+				d_closeUps[tcu->TagValue()].push_back(tcu);
+			}
+		});
+	ASSERT_TRUE(d_closeUps[0].size() >= 2);
+	ASSERT_TRUE(d_closeUps[1].size() >= 2);
 }
 
 void AntMeasurementUTest::TearDown() {
@@ -87,7 +59,7 @@ TEST_F(AntMeasurementUTest,EndToEnd) {
 	EXPECT_EQ(std::string(m->data(m->index(0,1)).toString().toUtf8().constData()),
 	          "0");
 
-	d_experiment.measurements()->setMeasurement(d_closeUps[0],
+	d_experiment.measurements()->setMeasurement(d_closeUps[0][0],
 	                                            1,
 	                                            QPointF(10,0),
 	                                            QPointF(-10,0));
@@ -95,7 +67,7 @@ TEST_F(AntMeasurementUTest,EndToEnd) {
 	EXPECT_EQ(std::string(m->data(m->index(0,1)).toString().toUtf8().constData()),
 	          "1");
 
-	d_experiment.measurements()->setMeasurement(d_closeUps[2],
+	d_experiment.measurements()->setMeasurement(d_closeUps[0][1],
 	                                            1,
 	                                            QPointF(10,0),
 	                                            QPointF(-10,0));
@@ -115,7 +87,7 @@ TEST_F(AntMeasurementUTest,EndToEnd) {
 	EXPECT_EQ(std::string(m->data(m->index(0,1)).toString().toUtf8().constData()),
 	          "2");
 
-	auto lastM = d_experiment.measurements()->measurementForCloseUp(d_closeUps[2]->URI(),
+	auto lastM = d_experiment.measurements()->measurementForCloseUp(d_closeUps[0][1]->URI(),
 	                                                                1);
 	d_experiment.measurements()->deleteMeasurement(lastM);
 

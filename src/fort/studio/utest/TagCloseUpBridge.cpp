@@ -10,7 +10,7 @@
 
 
 void TagCloseUpUTest::SetUp() {
-	experiment = fmp::Experiment::Create(TestSetup::Basedir() / "tag-close-up.myrmidon");
+	experiment = fmp::Experiment::Create(TestSetup::UTestData().Basedir() / "tag-close-up.myrmidon");
 	bridge = new ExperimentBridge();
 	bridge->setExperiment(experiment);
 	bridge->universe()->addSpace("foo");
@@ -26,18 +26,28 @@ TEST_F(TagCloseUpUTest,ListTagsForNewFolder) {
 
 	EXPECT_EQ(model->rowCount(),0);
 
+	auto tddInfo = TestSetup::UTestData().NestDataDirs().back();
 
-	auto foo = fmp::TrackingDataDirectory::Open(TestSetup::Basedir() / "foo.0000",TestSetup::Basedir());
+	auto foo = fmp::TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,
+	                                            TestSetup::UTestData().Basedir());
 	auto loaders = foo->PrepareTagCloseUpsLoaders();
 	for ( const auto & l : loaders ) {
-		try {
-			l();
-		} catch ( const std::exception &  ) {
-		}
+		EXPECT_NO_THROW({
+				l();
+			});
 	}
+	std::map<fm::TagID,size_t> tagCounts;
+	for ( const auto & tcu : tddInfo.TagCloseUps ) {
+		auto tagID = tcu->TagValue();
+		tagCounts.insert({tagID,0});
+		tagCounts[tagID]++;
+	}
+
 	bridge->universe()->addTrackingDataDirectoryToSpace("foo",foo);
 
-	ASSERT_EQ(model->rowCount(),1);
-	EXPECT_EQ(model->data(model->index(0,1)).toInt(),1);
+	ASSERT_EQ(model->rowCount(),tagCounts.size());
+	for ( const auto & [tagID,count] : tagCounts ) {
+		EXPECT_EQ(model->data(model->index(tagID,1)).toInt(),count);
+	}
 
 }

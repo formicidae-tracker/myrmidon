@@ -11,29 +11,29 @@
 #include <QSignalSpy>
 #include <QTest>
 
-fort::myrmidon::priv::TrackingDataDirectory::Ptr UniverseUTest::s_foo[3];
+std::vector<fort::myrmidon::priv::TrackingDataDirectory::Ptr> UniverseUTest::s_nest;
 
 
 void UniverseUTest::SetUpTestSuite() {
-	EXPECT_NO_THROW({
-			s_foo[0] = fmp::priv::TrackingDataDirectory::Open(TestSetup::Basedir() / "foo.0000",
-			                                                  TestSetup::Basedir());
-			s_foo[1] = fmp::priv::TrackingDataDirectory::Open(TestSetup::Basedir() / "foo.0001",
-			                                                  TestSetup::Basedir());
-			s_foo[2] = fmp::priv::TrackingDataDirectory::Open(TestSetup::Basedir() / "foo.0002",
-			                                                  TestSetup::Basedir());
-		});
+	for ( const auto & tddInfo : TestSetup::UTestData().NestDataDirs() ) {
+		ASSERT_NO_THROW({
+				auto tdd = fmp::priv::TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,
+				                                                  TestSetup::UTestData().Basedir());
+				s_nest.push_back(tdd);
+			});
+	}
+	ASSERT_TRUE(s_nest.size() >= 3);
 }
 
 void UniverseUTest::SetUp() {
-	EXPECT_NO_THROW({
-			experiment = fmp::Experiment::Create(TestSetup::Basedir() / "universe.myrmidon");
-			experiment->Save(TestSetup::Basedir() / "universe.myrmidon");
+	ASSERT_NO_THROW({
+			experiment = fmp::Experiment::Create(TestSetup::UTestData().Basedir() / "universe.myrmidon");
+			experiment->Save(TestSetup::UTestData().Basedir() / "universe.myrmidon");
 			auto foo = experiment->CreateSpace("foo");
 			auto bar = experiment->CreateSpace("bar");
-			experiment->AddTrackingDataDirectory(foo,s_foo[0]);
-			experiment->AddTrackingDataDirectory(foo,s_foo[1]);
-			experiment->AddTrackingDataDirectory(bar,s_foo[2]);
+			experiment->AddTrackingDataDirectory(foo,s_nest[0]);
+			experiment->AddTrackingDataDirectory(foo,s_nest[1]);
+			experiment->AddTrackingDataDirectory(bar,s_nest[2]);
 		});
 	universe = new UniverseBridge(NULL);
 }
@@ -90,9 +90,9 @@ TEST_F(UniverseUTest,AdditionAndDeletion) {
 	EXPECT_EQ(m->rowCount(m->index(1,0)),1);
 	EXPECT_EQ(ToStdString(m->data(m->index(0,0)).toString()),"foo");
 	EXPECT_EQ(ToStdString(m->data(m->index(1,0)).toString()),"bar");
-	EXPECT_EQ(ToStdString(m->data(m->index(0,0,m->index(0,0))).toString()),"foo.0000");
-	EXPECT_EQ(ToStdString(m->data(m->index(1,0,m->index(0,0))).toString()),"foo.0001");
-	EXPECT_EQ(ToStdString(m->data(m->index(0,0,m->index(1,0))).toString()),"foo.0002");
+	EXPECT_EQ(ToStdString(m->data(m->index(0,0,m->index(0,0))).toString()),"nest.0000");
+	EXPECT_EQ(ToStdString(m->data(m->index(1,0,m->index(0,0))).toString()),"nest.0001");
+	EXPECT_EQ(ToStdString(m->data(m->index(0,0,m->index(1,0))).toString()),"nest.0002");
 
 
 	universe->addSpace("wuhu");
@@ -119,13 +119,13 @@ TEST_F(UniverseUTest,AdditionAndDeletion) {
 	ASSERT_EQ(modifiedSignal.count(),2);
 	EXPECT_FALSE(modifiedSignal.at(1).at(0).toBool());
 
-	universe->deleteTrackingDataDirectory("foo.0001");
+	universe->deleteTrackingDataDirectory("nest.0001");
 	EXPECT_TRUE(universe->isModified());
 	ASSERT_EQ(modifiedSignal.count(),3);
 	EXPECT_TRUE(modifiedSignal.at(2).at(0).toBool());
 	ASSERT_EQ(spaceChangedSignal.count(),1);
 	ASSERT_EQ(tddDeleted.count(),1);
-	EXPECT_EQ(tddDeleted.at(0).at(0).toString(),"foo.0001");
+	EXPECT_EQ(tddDeleted.at(0).at(0).toString(),"nest.0001");
 	EXPECT_EQ(spaceChangedSignal.at(0).at(0).value<fmp::Space::Ptr>()->URI(),
 	          "spaces/1");
 
@@ -134,13 +134,13 @@ TEST_F(UniverseUTest,AdditionAndDeletion) {
 	ASSERT_EQ(modifiedSignal.count(),4);
 	EXPECT_FALSE(modifiedSignal.at(3).at(0).toBool());
 
-	universe->addTrackingDataDirectoryToSpace("wuhu",s_foo[1]);
+	universe->addTrackingDataDirectoryToSpace("wuhu",s_nest[1]);
 	EXPECT_TRUE(universe->isModified());
 	ASSERT_EQ(modifiedSignal.count(),5);
 	EXPECT_TRUE(modifiedSignal.at(4).at(0).toBool());
 	ASSERT_EQ(spaceChangedSignal.count(),2);
 	ASSERT_EQ(tddAdded.count(),1);
-	EXPECT_EQ(tddAdded.at(0).at(0).value<fmp::TrackingDataDirectory::Ptr>()->URI(),"foo.0001");
+	EXPECT_EQ(tddAdded.at(0).at(0).value<fmp::TrackingDataDirectory::Ptr>()->URI(),"nest.0001");
 	EXPECT_EQ(spaceChangedSignal.at(1).at(0).value<fmp::Space::Ptr>()->URI(),
 	          "spaces/3");
 
@@ -156,7 +156,7 @@ TEST_F(UniverseUTest,AdditionAndDeletion) {
 	EXPECT_TRUE(modifiedSignal.at(6).at(0).toBool());
 	ASSERT_EQ(spaceDeletedSignal.count(),1);
 	ASSERT_EQ(tddDeleted.count(),2);
-	EXPECT_EQ(ToStdString(tddDeleted.at(1).at(0).toString()),"foo.0001");
+	EXPECT_EQ(ToStdString(tddDeleted.at(1).at(0).toString()),"nest.0001");
 	EXPECT_EQ(ToStdString(spaceDeletedSignal.at(0).at(0).toString()),
 	          "wuhu");
 
@@ -210,7 +210,7 @@ TEST_F(UniverseUTest,WidgetTest) {
 	QTest::mouseClick(ui->deleteButton,Qt::LeftButton);
 	EXPECT_FALSE(ui->deleteButton->isEnabled());
 	ASSERT_EQ(tddDeleted.count(),1);
-	EXPECT_EQ(tddDeleted.at(0).at(0),"foo.0002");
+	EXPECT_EQ(tddDeleted.at(0).at(0),"nest.0002");
 	selection->select(model->index(2,0),QItemSelectionModel::Select);
 	ASSERT_TRUE(ui->deleteButton->isEnabled());
 	QTest::mouseClick(ui->deleteButton,Qt::LeftButton);
@@ -227,6 +227,6 @@ TEST_F(UniverseUTest,WidgetTest) {
 	ASSERT_EQ(spaceDeleted.count(),2);
 	EXPECT_EQ(spaceDeleted.at(1).at(0),"foo");
 	ASSERT_EQ(tddDeleted.count(),3);
-	EXPECT_EQ(tddDeleted.at(1).at(0),"foo.0000");
-	EXPECT_EQ(tddDeleted.at(2).at(0),"foo.0001");
+	EXPECT_EQ(tddDeleted.at(1).at(0),"nest.0000");
+	EXPECT_EQ(tddDeleted.at(2).at(0),"nest.0001");
 }

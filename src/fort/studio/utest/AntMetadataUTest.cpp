@@ -11,7 +11,7 @@
 #include <QSignalSpy>
 
 void AntMetadataUTest::SetUp() {
-	experiment = fmp::Experiment::Create(TestSetup::Basedir() / "antmetadata-utest.myrmidon");
+	experiment = fmp::Experiment::Create(TestSetup::UTestData().Basedir() / "antmetadata-utest.myrmidon");
 	metadata = new AntMetadataBridge(nullptr);
 }
 

@@ -11,8 +11,8 @@
 
 void MeasurementUTest::SetUp() {
 	ASSERT_NO_THROW({
-			experiment = fmp::Experiment::Create(TestSetup::Basedir() / "measurementUTest.myrmidon");
-			experiment->Save(TestSetup::Basedir() / "measurementUTest.myrmidon");
+			experiment = fmp::Experiment::Create(TestSetup::UTestData().Basedir() / "measurementUTest.myrmidon");
+			experiment->Save(TestSetup::UTestData().Basedir() / "measurementUTest.myrmidon");
 		});
 	measurements = new MeasurementBridge(NULL);
 }

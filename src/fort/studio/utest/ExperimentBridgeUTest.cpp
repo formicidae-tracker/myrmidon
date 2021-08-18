@@ -12,7 +12,7 @@
 
 void ExperimentBridgeUTest::SetUp() {
 	try {
-		pathExisting = TestSetup::Basedir() / "ExperimentBridge.myrmidon";
+		pathExisting = TestSetup::UTestData().Basedir() / "ExperimentBridge.myrmidon";
 		auto experiment = fmp::Experiment::Create(pathExisting);
 		experiment->Save(pathExisting);
 	} catch ( const std::exception & e) {
@@ -23,7 +23,7 @@ void ExperimentBridgeUTest::SetUp() {
 
 
 TEST_F(ExperimentBridgeUTest,ActiveModifiedState) {
-	auto pathCreated = TestSetup::Basedir() / "ExperimentBridge.2.myrmidon";
+	auto pathCreated = TestSetup::UTestData().Basedir() / "ExperimentBridge.2.myrmidon";
 	ExperimentBridge controller;
 	QSignalSpy modifiedSpy(&controller,SIGNAL(modified(bool)));
 	QSignalSpy activatedSpy(&controller,SIGNAL(activated(bool)));

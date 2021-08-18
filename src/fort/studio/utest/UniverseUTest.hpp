@@ -15,7 +15,7 @@ protected:
 	void SetUp();
 	void TearDown();
 
-	static fort::myrmidon::priv::TrackingDataDirectory::Ptr s_foo[3];
+	static std::vector<fort::myrmidon::priv::TrackingDataDirectory::Ptr> s_nest;
 
 	fort::myrmidon::priv::Experiment::Ptr experiment;
 	UniverseBridge                      * universe;

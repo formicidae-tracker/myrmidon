@@ -21,8 +21,8 @@ TEST_F(GlobalPropertyUTest,SignalStateTest) {
 	fmp::Experiment::Ptr experiment;
 	GlobalPropertyBridge globalProperties(NULL);
 	ASSERT_NO_THROW({
-			experiment = fmp::priv::Experiment::Create(TestSetup::Basedir() / "globalProperty.myrmidon");
-			experiment->Save(TestSetup::Basedir() / "globalProperty.myrmidon");
+			experiment = fmp::priv::Experiment::Create(TestSetup::UTestData().Basedir() / "globalProperty.myrmidon");
+			experiment->Save(TestSetup::UTestData().Basedir() / "globalProperty.myrmidon");
 		});
 
 	QSignalSpy activatedSignal(&globalProperties,SIGNAL(activated(bool)));
@@ -106,7 +106,8 @@ TEST_F(GlobalPropertyUTest,SignalStateTest) {
 	ASSERT_EQ(tagFamilySignal.count(),5);
 	ASSERT_NO_THROW({
 			auto s = experiment->CreateSpace("foo");
-			auto tdd = fmp::TrackingDataDirectory::Open(TestSetup::Basedir() / "foo.0000",TestSetup::Basedir() );
+			auto tdd = fmp::TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
+			                                            TestSetup::UTestData().Basedir() );
 			experiment->AddTrackingDataDirectory(s,tdd);
 		});
 	globalProperties.onTDDModified();
@@ -124,8 +125,8 @@ TEST_F(GlobalPropertyUTest,WidgetTest) {
 	GlobalPropertyWidget globalPropertiesWidget(NULL);
 	auto globalProperties = experimentBridge.globalProperties();
 	ASSERT_NO_THROW({
-			experiment = fmp::priv::Experiment::Create(TestSetup::Basedir() / "globalProperty.myrmidon");
-			experiment->Save(TestSetup::Basedir() / "globalProperty.myrmidon");
+			experiment = fmp::priv::Experiment::Create(TestSetup::UTestData().Basedir() / "globalProperty.myrmidon");
+			experiment->Save(TestSetup::UTestData().Basedir() / "globalProperty.myrmidon");
 			globalPropertiesWidget.setup(&experimentBridge);
 		});
 
@@ -181,7 +182,8 @@ TEST_F(GlobalPropertyUTest,WidgetTest) {
 	          "undefined");
 	ASSERT_NO_THROW({
 			auto s = experiment->CreateSpace("foo");
-			auto tdd = fmp::TrackingDataDirectory::Open(TestSetup::Basedir() / "foo.0000",TestSetup::Basedir() );
+			auto tdd = fmp::TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
+			                                            TestSetup::UTestData().Basedir() );
 			experiment->AddTrackingDataDirectory(s,tdd);
 		});
 	globalProperties->onTDDModified();

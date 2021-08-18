@@ -13,7 +13,7 @@
 #include <QSignalSpy>
 
 void AntShapeUTest::SetUp() {
-	auto experiment = fmp::Experiment::Create(TestSetup::Basedir() / "ant-measurement-bridge.myrmidon");
+	auto experiment = fmp::Experiment::Create(TestSetup::UTestData().Basedir() / "ant-measurement-bridge.myrmidon");
 
 	d_experiment.setExperiment(experiment);
 }

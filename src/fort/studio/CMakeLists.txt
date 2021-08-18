@@ -238,7 +238,9 @@ target_link_libraries(fort-studio-common Qt5::Widgets
 
 add_executable(fort-studio main.cpp ${RCC_FILES})
 
-target_link_libraries(fort-studio fort-studio-common)
+target_link_libraries(fort-studio ${GLOG_LIBRARIES}
+                                  fort-studio-common
+                                  )
 
 set_target_properties(fort-studio PROPERTIES VERSION ${PROJECT_VERSION}
                                              SOVERSION ${PROJECT_VERSION_ABI})

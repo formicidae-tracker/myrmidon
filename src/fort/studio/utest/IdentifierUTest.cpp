@@ -17,8 +17,8 @@
 
 void IdentifierUTest::SetUp() {
 	ASSERT_NO_THROW({
-			experiment = fmp::Experiment::Create(TestSetup::Basedir() / "identifierUTest.myrmidon");
-			experiment->Save(TestSetup::Basedir() / "identifierUTest.myrmidon");
+			experiment = fmp::Experiment::Create(TestSetup::UTestData().Basedir() / "identifierUTest.myrmidon");
+			experiment->Save(TestSetup::UTestData().Basedir() / "identifierUTest.myrmidon");
 			identifier = new IdentifierBridge(NULL);
 		});
 }

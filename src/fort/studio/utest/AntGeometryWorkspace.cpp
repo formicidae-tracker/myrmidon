@@ -13,7 +13,7 @@
 
 
 void WorkspaceUTest::SetUp(const std::string & name) {
-	experiment = fmp::Experiment::Create(TestSetup::Basedir() / name);
+	experiment = fmp::Experiment::Create(TestSetup::UTestData().Basedir() / name);
 
 	bridge = new ExperimentBridge();
 	mainWindow = new QMainWindow();
@@ -37,7 +37,7 @@ void AntShapeWorkspaceUTest::SetUp() {
 
 	bridge->antShapeTypes()->addType("foo");
 
-	shapeWs->setTagCloseUp(std::make_shared<fmp::TagCloseUp>(TestSetup::Basedir() / "",
+	shapeWs->setTagCloseUp(std::make_shared<fmp::TagCloseUp>(TestSetup::UTestData().Basedir() / "",
 	                                                         fmp::FrameReference("foo.0000",1,fort::Time()),
 	                                                         1,
 	                                                         Eigen::Vector2d::Zero(),
