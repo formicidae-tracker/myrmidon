@@ -1,9 +1,11 @@
-#include "ColorUTest.hpp"
+#include <gtest/gtest.h>
 
 #include "Color.hpp"
 
 namespace fort {
 namespace myrmidon {
+
+class ColorUTest : public ::testing::Test {};
 
 TEST_F(ColorUTest,HaveADefaultPalette) {
 

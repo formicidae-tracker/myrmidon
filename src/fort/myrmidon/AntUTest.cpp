@@ -1,17 +1,24 @@
-#include "AntUTest.hpp"
+#include <gtest/gtest.h>
 
+#include "Experiment.hpp"
 #include "UtilsUTest.hpp"
 
 namespace fort {
 namespace myrmidon {
 
-void PublicAntUTest::SetUp() {
-	e = Experiment::Create("test.myrmidon");
-}
+class PublicAntUTest : public ::testing::Test {
+protected:
 
-void PublicAntUTest::TearDown() {
-	e.reset();
-}
+	void SetUp() {
+		e = Experiment::Create("test.myrmidon");
+	}
+
+	void TearDown() {
+		e.reset();
+	}
+
+	Experiment::Ptr e;
+};
 
 
 TEST_F(PublicAntUTest,AntHaveUniqueID) {

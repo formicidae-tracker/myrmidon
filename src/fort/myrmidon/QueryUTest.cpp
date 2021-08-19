@@ -1,14 +1,21 @@
-#include "QueryUTest.hpp"
+#include <gtest/gtest.h>
 
+#include "Experiment.hpp"
 #include "Query.hpp"
 #include "Ant.hpp"
 
-#include <fort/myrmidon/TestSetup.hpp>
-
+#include "TestSetup.hpp"
 #include "UtilsUTest.hpp"
 
 namespace fort {
 namespace myrmidon {
+
+class QueryUTest : public ::testing::Test {
+protected:
+	Experiment::Ptr experiment;
+	void SetUp();
+	void TearDown();
+};
 
 void QueryUTest::SetUp() {
 	ASSERT_NO_THROW({

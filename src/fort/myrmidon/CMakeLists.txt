@@ -253,11 +253,6 @@ set(HDR_UTEST_FILES utils/NotYetImplementedUTest.hpp
                     priv/TagStatisticsUTest.hpp
                     priv/MatchersUTest.hpp
                     priv/LocatableTypesUTest.hpp
-                    AntUTest.hpp
-                    ColorUTest.hpp
-                    ExperimentUTest.hpp
-                    IdentificationUTest.hpp
-                    QueryUTest.hpp
                     )
 
 set(UTESTDATA_SRC_FILES utest-data/UTestData.hpp

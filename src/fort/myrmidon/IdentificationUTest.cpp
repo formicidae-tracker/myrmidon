@@ -1,4 +1,6 @@
-#include "IdentificationUTest.hpp"
+#include <gtest/gtest.h>
+
+#include "Experiment.hpp"
 
 #include "TestSetup.hpp"
 #include "UtilsUTest.hpp"
@@ -6,22 +8,30 @@
 namespace fort {
 namespace myrmidon {
 
-void PublicIdentificationUTest::SetUp() {
-	ASSERT_NO_THROW({
-			experiment = Experiment::Create(TestSetup::UTestData().Basedir() / "identification-utest.myrmidon");
-			ant = experiment->CreateAnt();
-			i = experiment->AddIdentification(ant->ID(),
-			                                  123,
-			                                  Time::SinceEver(),
-			                                  Time::Forever());
-		});
-}
+class PublicIdentificationUTest : public ::testing::Test {
+protected:
+	void SetUp() {
+		ASSERT_NO_THROW({
+				experiment = Experiment::Create(TestSetup::UTestData().Basedir() / "identification-utest.myrmidon");
+				ant = experiment->CreateAnt();
+				i = experiment->AddIdentification(ant->ID(),
+				                                  123,
+				                                  Time::SinceEver(),
+				                                  Time::Forever());
+			});
+	}
 
-void PublicIdentificationUTest::TearDown() {
-	i.reset();
-	ant.reset();
-	experiment.reset();
-}
+	void TearDown() {
+		i.reset();
+		ant.reset();
+		experiment.reset();
+	}
+
+	Experiment::Ptr     experiment;
+	Ant::Ptr            ant;
+	Identification::Ptr i;
+};
+
 
 TEST_F(PublicIdentificationUTest,HasTargetValues) {
 	EXPECT_EQ(i->TagValue(),123);
