@@ -49,7 +49,7 @@ void Identifier::DeleteAnt(fort::myrmidon::AntID ID) {
 	if ( fi != Ants().end() && fi->second->Identifications().empty() == false ) {
 		std::ostringstream os;
 		os <<"Ant:" <<fi->second->FormattedID() << " has Identification, delete them first";
-		throw std::logic_error(os.str());
+		throw std::runtime_error(os.str());
 	}
 
 	DeleteObject(ID);

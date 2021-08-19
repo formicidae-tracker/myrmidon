@@ -73,7 +73,7 @@ TEST_F(IdentifierUTest,AntsCanBeDeleted) {
 
 	EXPECT_THROW({
 			i->DeleteAnt(a->AntID());
-		}, std::logic_error);
+		}, std::runtime_error);
 
 
 	EXPECT_NO_THROW({

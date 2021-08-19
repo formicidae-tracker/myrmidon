@@ -58,7 +58,12 @@ std::string Experiment::AddTrackingDataDirectory(SpaceID spaceID,
 	if ( fi == d_p->Get().Spaces().end() ) {
 		throw std::out_of_range("Unknown Space::ID " + std::to_string(spaceID));
 	}
-	auto tdd = priv::TrackingDataDirectory::Open(filepath,d_p->Get().Basedir());
+	priv::TrackingDataDirectory::Ptr tdd;
+	try {
+		tdd = priv::TrackingDataDirectory::Open(filepath,d_p->Get().Basedir());
+	} catch ( const std::exception & e ) {
+		throw std::runtime_error(e.what());
+	}
 	d_p->Get().AddTrackingDataDirectory(fi->second,tdd);
 	return tdd->URI();
 }
@@ -89,7 +94,11 @@ Identification::Ptr Experiment::AddIdentification(AntID antID,
 }
 
 void Experiment::DeleteIdentification(const Identification::Ptr & identification) {
-	d_p->DeleteIdentification(identification);
+	try {
+		d_p->DeleteIdentification(identification);
+	} catch ( const priv::Identifier::UnmanagedIdentification & e) {
+		throw std::invalid_argument(e.what());
+	}
 }
 
 
@@ -154,7 +163,7 @@ void Experiment::SetMeasurementTypeName(MeasurementTypeID mTypeID,
                                         const std::string & name) {
 	auto fi = d_p->Get().MeasurementTypes().find(mTypeID);
 	if ( fi == d_p->Get().MeasurementTypes().end() ) {
-		throw std::invalid_argument("Unknwon measurement type " + std::to_string(mTypeID));
+		throw std::out_of_range("Unknwon measurement type " + std::to_string(mTypeID));
 	}
 	fi->second->SetName(name);
 }
@@ -184,7 +193,7 @@ void Experiment::SetAntShapeTypeName(AntShapeTypeID antShapeTypeID,
                                      const std::string & name) {
 	auto fi = d_p->Get().AntShapeTypes().find(antShapeTypeID);
 	if ( fi == d_p->Get().AntShapeTypes().end() ) {
-		throw std::invalid_argument("unknow AntShapeTypeID " + std::to_string(antShapeTypeID));
+		throw std::out_of_range("unknow AntShapeTypeID " + std::to_string(antShapeTypeID));
 	}
 	fi->second->SetName(name);
 }

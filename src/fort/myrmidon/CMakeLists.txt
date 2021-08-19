@@ -211,6 +211,7 @@ set(SRC_UTEST_FILES main-check.cpp
                     priv/LocatableTypesUTest.cpp
                     AntUTest.cpp
                     ColorUTest.cpp
+                    ExperimentUTest.cpp
                     QueryUTest.cpp
                     )
 
@@ -253,6 +254,7 @@ set(HDR_UTEST_FILES utils/NotYetImplementedUTest.hpp
                     priv/LocatableTypesUTest.hpp
                     AntUTest.hpp
                     ColorUTest.hpp
+                    ExperimentUTest.hpp
                     QueryUTest.hpp
                     )
 

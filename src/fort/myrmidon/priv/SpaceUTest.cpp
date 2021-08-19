@@ -155,7 +155,7 @@ TEST_F(SpaceUTest,CanHoldTDD) {
 
 TEST_F(SpaceUTest,ExceptionFormatting) {
 	struct TestData {
-		std::runtime_error E;
+		std::shared_ptr<std::exception> E;
 		std::string What;
 	};
 
@@ -172,7 +172,7 @@ TEST_F(SpaceUTest,ExceptionFormatting) {
 	std::vector<TestData> testdata =
 		{
 		 {
-		  Space::TDDOverlap(s_nest[0],s_nest[0]),
+		  std::make_shared<Space::TDDOverlap>(s_nest[0],s_nest[0]),
 		  "TDD{URI:'nest.0000', start:"
 		  + s_nest[0]->Start().Format()
 		  + ", end:"
@@ -184,28 +184,28 @@ TEST_F(SpaceUTest,ExceptionFormatting) {
 		  + "} overlaps in time",
 		 },
 		 {
-		  Space::UnmanagedTrackingDataDirectory("doo"),
+		  std::make_shared<Space::UnmanagedTrackingDataDirectory>("doo"),
 		  "TDD:'doo' is not managed by this Space or Universe",
 		 },
 		 {
-		  Space::UnmanagedSpace("doo"),
+		  std::make_shared<Space::UnmanagedSpace>("doo"),
 		  "Space:'doo' is not managed by this Universe",
 		 },
 		 {
-		  Space::InvalidName("doh","it is 'doh'! Doh!"),
+		  std::make_shared<Space::InvalidName>("doh","it is 'doh'! Doh!"),
 		  "Invalid Space name 'doh': it is 'doh'! Doh!",
 		 },
 		 {
-		  Space::SpaceNotEmpty(*z),
+		  std::make_shared<Space::SpaceNotEmpty>(*z),
 		  "Space:'z' is not empty (contains:{nest.0000,nest.0001})",
 		 },
 		 {
-		  Space::TDDAlreadyInUse("nest.0000","z"),
+		  std::make_shared<Space::TDDAlreadyInUse>("nest.0000","z"),
 		  "TDD:'nest.0000' is in use in Space:'z'",
 		 },
 		};
 	for (const auto & d: testdata) {
-		EXPECT_EQ(std::string(d.E.what()),
+		EXPECT_EQ(std::string(d.E->what()),
 		          d.What);
 	}
 

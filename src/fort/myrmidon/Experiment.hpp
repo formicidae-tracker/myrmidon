@@ -187,8 +187,9 @@ public:
 	 *
 	 * @param spaceID the SpaceID of the Space we want to delete.
 	 *
-	 * @throws std::invalid_argument if spaceID is not a valid ID for
+	 * @throws std::out_of_range if spaceID is not a valid ID for
 	 *         one of this Experiment Space.
+	 * @throws std::runtime_error if spaceID still contains TrackingDataDirectories.
 	 */
 	void DeleteSpace(SpaceID spaceID);
 
@@ -232,9 +233,11 @@ public:
 	 *         Experiment
 	 * @throws std::runtime_error if filepath is not a valid Tracking
 	 *         Data Directory
-	 * @throws std::invalid_argument if the Tracking Data Directory
+	 * @throws std::domain_error if the Tracking Data Directory
 	 *         contains data that would overlap in time with other
 	 *         Tracking Data Directory associated with the same space.
+	 * @throws std::invalid_argument if the Tracking Data Directory
+	 *         is already in use in this experiment.
 	 */
 	std::string AddTrackingDataDirectory(SpaceID spaceID,
 	                                     const std::string & filepath);
@@ -550,9 +553,12 @@ public:
 	 *
 	 * @param measurementTypeID the MeasurementTypeID to delete
 	 *
-	 * @throws std::invalid_argument if measurementTypeID is not valid
+	 * @throws std::out_of_range if measurementTypeID is not valid
 	 *         for this Experiment.
-	 * @throws
+	 * @throws std::invalid_argument if measurementTypeID is
+	 *         HEAD_TAIL_MEASUREMENT_TYPE_ID.
+	 * @throws std::runtime_error if some measurement for
+	 *         measurementTypeID are still in the Experiment.
 	 */
 	void DeleteMeasurementType(MeasurementTypeID measurementTypeID);
 
@@ -573,8 +579,6 @@ public:
 	 *
 	 * @throws std::out_of_range if measurementTypeID is not valid
 	 *         for this Experiment.
-	 * @throws std::invalid_argument if measurementTypeID is
-	 *         HEAD_TAIL_MEASUREMENT_TYPE_ID.
 	 */
 	void SetMeasurementTypeName(MeasurementTypeID measurementTypeID,
 	                            const std::string & name);
@@ -644,7 +648,7 @@ public:
 	 * @param shapeTypeID the AntShapeTypeID of the shape type to rename
 	 * @param name param the new name for the Ant shape type
 	 *
-	 * @throws std::invalid_argument if shapeTypeID is not valid for
+	 * @throws std::out_of_range if shapeTypeID is not valid for
 	 *         this Experiment.
 	 */
 	void SetAntShapeTypeName(AntShapeTypeID shapeTypeID,
@@ -664,8 +668,10 @@ public:
 	 *
 	 * @param shapeTypeID the AntShapeTypeID of the shape type to remove
 	 *
-	 * @throws std::invalid_argument if shapeTypeID is not valid for
+	 * @throws std::out_of_range if shapeTypeID is not valid for
 	 *         this Experiment.
+	 * @throws std::runtime_error if one Ant still have a Capsule for
+	 *         shapeTypeID
 	 */
 	void DeleteAntShapeType(AntShapeTypeID shapeTypeID);
 
@@ -688,6 +694,10 @@ public:
 	 * Adds a non-tracking data key with the given name, type and
 	 * defaultValue.
 	 *
+	 * @throws std::runtime_error if the following conditions are met:
+	 *         * key is already registered
+	 *         * defaultValue would change the type of key
+	 *         * at least one Ant has a value registered for key
 	 */
 	void SetMetaDataKey(const std::string & key,
 	                    AntStaticValue defaultValue);

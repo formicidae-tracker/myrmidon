@@ -9,7 +9,7 @@ namespace priv {
 
 Space::TDDOverlap::TDDOverlap(const TrackingDataDirectory::Ptr & a,
                              const TrackingDataDirectory::Ptr & b) noexcept
-	: std::runtime_error(BuildWhat(a,b))
+	: std::domain_error(BuildWhat(a,b))
 	, d_a(a)
 	, d_b(b) {
 }
@@ -32,16 +32,16 @@ std::string Space::TDDOverlap::BuildWhat(const TrackingDataDirectory::Ptr & a,
 }
 
 Space::UnmanagedTrackingDataDirectory::UnmanagedTrackingDataDirectory(const std::string & URI) noexcept
-	: std::runtime_error("TDD:'" + URI + "' is not managed by this Space or Universe") {
+	: std::invalid_argument("TDD:'" + URI + "' is not managed by this Space or Universe") {
 }
 
 Space::UnmanagedSpace::UnmanagedSpace(const std::string & URI) noexcept
-	: std::runtime_error("Space:'" + URI + "' is not managed by this Universe") {
+	: std::out_of_range("Space:'" + URI + "' is not managed by this Universe") {
 }
 
 Space::InvalidName::InvalidName(const std::string & name,
                                 const std::string & reason) noexcept
-	: std::runtime_error("Invalid Space name '" + name + "': " + reason) {
+	: std::invalid_argument("Invalid Space name '" + name + "': " + reason) {
 }
 
 Space::SpaceNotEmpty::SpaceNotEmpty(const Space & z)
@@ -62,7 +62,7 @@ std::string Space::SpaceNotEmpty::BuildReason(const Space & z) {
 }
 
 Space::TDDAlreadyInUse::TDDAlreadyInUse(const std::string & tddURI, const std::string & spaceURI)
-	: std::runtime_error("TDD:'"
+	: std::invalid_argument("TDD:'"
 	                     + tddURI
 	                     + "' is in use in Space:'"
 	                     + spaceURI + "'") {

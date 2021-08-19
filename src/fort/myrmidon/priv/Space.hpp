@@ -29,7 +29,7 @@ public:
 	typedef std::shared_ptr<const Space> ConstPtr;
 
 	// Exception sent when two TrackingDataDirectory overlaps in time.
-	class TDDOverlap : public std::runtime_error {
+	class TDDOverlap : public std::domain_error {
 	public:
 		// Constructor from two TrackingDataDirectory
 		TDDOverlap(const TrackingDataDirectoryPtr & a,
@@ -51,21 +51,21 @@ public:
 	};
 
 	// Exception sent when the desired TrackingDataDirectory is unknown.
-	class UnmanagedTrackingDataDirectory : public std::runtime_error {
+	class UnmanagedTrackingDataDirectory : public std::invalid_argument {
 	public:
 		// Constructor
 		UnmanagedTrackingDataDirectory(const std::string & URI) noexcept;
 	};
 
 	// Exception sent when the desired Space is unknown
-	class UnmanagedSpace : public std::runtime_error {
+	class UnmanagedSpace : public std::out_of_range {
 	public:
 		// Constructor
 		UnmanagedSpace(const std::string & URI) noexcept;
 	};
 
 	// Exception sent when the chosen name is invalid
-	class InvalidName : public std::runtime_error {
+	class InvalidName : public std::invalid_argument {
 	public:
 		// Constructor
 		InvalidName(const std::string & name,
@@ -83,7 +83,7 @@ public:
 
 	// Exception sent when the TrackingDataDirectory is used in
 	// another space
-	class TDDAlreadyInUse : public std::runtime_error {
+	class TDDAlreadyInUse : public std::invalid_argument {
 	public:
 		TDDAlreadyInUse(const std::string & tddURI, const std::string & spaceURI);
 	};
