@@ -805,7 +805,7 @@ public:
 	 *
 	 * @return a TrackingSolver for the Experiment.
 	 */
-	TrackingSolver CompileTrackingSolver() const;
+	TrackingSolver::Ptr CompileTrackingSolver() const;
 
 
 	~Experiment();

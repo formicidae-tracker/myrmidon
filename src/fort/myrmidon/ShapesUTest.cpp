@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 
-#include <fort/myrmidon/Shapes.hpp>
+#include "Shapes.hpp"
+
+#include "UtilsUTest.hpp"
 
 namespace fort {
 namespace myrmidon {
@@ -18,6 +20,20 @@ TEST_F(ShapesUTest,Type) {
 	EXPECT_EQ(polygon->ShapeType(),fort::myrmidon::Shape::Type::POLYGON);
 }
 
+TEST_F(ShapesUTest,CircleFieldsManipulation) {
+	auto circle = std::make_unique<Circle>(Eigen::Vector2d(0,0),0);
+	EXPECT_VECTOR2D_EQ(circle->Center(),Eigen::Vector2d(0,0));
+	EXPECT_DOUBLE_EQ(circle->Radius(),0.0);
+	Eigen::Vector2d c(1,2);
+	double r(3);
+	EXPECT_NO_THROW({
+			circle->SetCenter(c);
+			circle->SetRadius(r);
+		});
+	EXPECT_VECTOR2D_EQ(circle->Center(),c);
+	EXPECT_DOUBLE_EQ(circle->Radius(),r);
+
+}
 
 
 TEST_F(ShapesUTest,CirclePointCollision) {
@@ -56,6 +72,43 @@ TEST_F(ShapesUTest,CirclePointCollision) {
 	}
 
 }
+
+TEST_F(ShapesUTest,CapsuleFieldsManipulation) {
+	auto capsule = std::make_unique<Capsule>();
+	EXPECT_VECTOR2D_EQ(capsule->C1(),Eigen::Vector2d(0,0));
+	EXPECT_VECTOR2D_EQ(capsule->C2(),Eigen::Vector2d(0,0));
+	EXPECT_DOUBLE_EQ(capsule->R1(),0.0);
+	EXPECT_DOUBLE_EQ(capsule->R2(),0.0);
+	Eigen::Vector2d c1(-1,0),c2(3,4);
+	double r1(1),r2(2);
+	EXPECT_NO_THROW({
+			capsule->SetC1(c1);
+			capsule->SetR1(r1);
+			capsule->SetC2(c2);
+			capsule->SetR2(r2);
+
+		});
+	EXPECT_VECTOR2D_EQ(capsule->C1(),c1);
+	EXPECT_VECTOR2D_EQ(capsule->C2(),c2);
+	EXPECT_DOUBLE_EQ(capsule->R1(),r1);
+	EXPECT_DOUBLE_EQ(capsule->R2(),r2);
+}
+
+TEST_F(ShapesUTest,CapsuleClone) {
+	Eigen::Vector2d c1(-1,0),c2(3,4);
+	double r1(1),r2(2);
+	auto capsule = std::make_unique<Capsule>(c1,c2,r1,r2);
+
+	auto clonedPtr = capsule->Clone();
+	auto cloned = dynamic_cast<Capsule*>(clonedPtr.get());
+	ASSERT_TRUE(cloned != nullptr);
+	EXPECT_TRUE(cloned != capsule.get());
+	EXPECT_VECTOR2D_EQ(cloned->C1(),c1);
+	EXPECT_VECTOR2D_EQ(cloned->C2(),c2);
+	EXPECT_DOUBLE_EQ(cloned->R1(),r1);
+	EXPECT_DOUBLE_EQ(cloned->R2(),r2);
+}
+
 
 
 TEST_F(ShapesUTest,CapsulePointCollision) {
@@ -153,6 +206,24 @@ TEST_F(ShapesUTest,TestCaspuleCollision) {
 		EXPECT_EQ(res,d.Expected) << " Intersecting " << a << " and " << b;
 	}
 }
+
+TEST_F(ShapesUTest,PolygonVerticesManipulation) {
+	Polygon p({{-1,-1},{1,-1},{-1,1},{1,1}});
+	EXPECT_VECTOR2D_EQ(p.Vertex(0),Eigen::Vector2d(-1,-1));
+	EXPECT_THROW({
+			p.Vertex(4);
+		},std::out_of_range);
+
+	EXPECT_THROW({
+			p.SetVertex(4,Eigen::Vector2d(3,3));
+		},std::out_of_range);
+
+	EXPECT_NO_THROW({
+			p.SetVertex(1,Eigen::Vector2d(0,0));
+		});
+	EXPECT_VECTOR2D_EQ(p.Vertex(1),Eigen::Vector2d(0,0));
+}
+
 
 TEST_F(ShapesUTest,PolygonPointCollision) {
 	struct TestData {

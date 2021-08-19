@@ -11,13 +11,15 @@ TrackingSolver::TrackingSolver(const PPtr & pTracker)
 	: d_p(pTracker) {
 }
 
-IdentifiedFrame::Ptr TrackingSolver::IdentifyFrame(const fort::hermes::FrameReadout & frame,
+void TrackingSolver::IdentifyFrame(IdentifiedFrame & identified,
+                                                   const fort::hermes::FrameReadout & frame,
                                                    SpaceID spaceID) const {
-	return d_p->IdentifyFrame(frame,spaceID);
+	d_p->IdentifyFrame(identified,frame,spaceID);
 }
 
-CollisionFrame::Ptr TrackingSolver::CollideFrame(const IdentifiedFrame::Ptr & identified) const {
-	return d_p->CollideFrame(identified);
+void TrackingSolver::CollideFrame(CollisionFrame & collision,
+                                  IdentifiedFrame & identified) const {
+	d_p->CollideFrame(collision,identified);
 }
 
 AntID TrackingSolver::IdentifyAnt(TagID tagID, const Time & time) {

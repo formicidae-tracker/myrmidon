@@ -28,7 +28,7 @@ class TrackingSolver;
 
 class TrackingSolver {
 public :
-
+	typedef std::unique_ptr<TrackingSolver> Ptr;
 	/**
 	 *  Identifies a single ant
 	 *
@@ -65,8 +65,9 @@ public :
 	 *
 	 * @return an IdentifiedFrame with all identified ant without their zone
 	 */
-	IdentifiedFrame::Ptr IdentifyFrame(const fort::hermes::FrameReadout & frame,
-	                                   SpaceID spaceID) const;
+	void IdentifyFrame(IdentifiedFrame & identified,
+	                   const fort::hermes::FrameReadout & frame,
+	                   SpaceID spaceID) const;
 
 	/**
 	 * Collides Ants from an IdentifiedFrame
@@ -87,7 +88,8 @@ public :
 	 *
 	 * @return a CollisionFrame with all current Ant collisions.
 	 */
-	CollisionFrame::Ptr CollideFrame(const IdentifiedFrame::Ptr & identified) const;
+	void CollideFrame(CollisionFrame & collision,
+	                  IdentifiedFrame & identified) const;
 
 private:
 	friend class Experiment;

@@ -319,7 +319,7 @@ TEST_F(PublicExperimentUTest,IdentificationManipulation) {
 }
 
 
-TEST_F(PublicExperimentUTest,ConstantManipulation) {
+TEST_F(PublicExperimentUTest,FieldsManipulation) {
 	EXPECT_EQ(experiment->Name(),"");
 	EXPECT_NO_THROW(experiment->SetName("foo"));
 	EXPECT_EQ(experiment->Name(),"foo");
