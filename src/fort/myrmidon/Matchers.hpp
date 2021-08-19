@@ -299,6 +299,8 @@ public:
 private:
 	friend class Query;
 	friend class fort::myrmidon::priv::Query;
+	friend class PublicMatchersUTest_RightMatcher_Test;
+
 	friend std::ostream & ::operator<<(std::ostream & out,
 	                                   const fort::myrmidon::Matcher & m);
 

@@ -53,7 +53,7 @@ Matcher::Ptr Matcher::InteractionType(AntShapeTypeID type1,
 Matcher::Ptr Matcher::AntDisplacement(double under,
                                       Duration minimumGap) {
 
-	throw std::runtime_error("Not yet implemented");
+	return Matcher::Ptr(new Matcher(priv::Matcher::AntDisplacement(under,minimumGap)));
 }
 
 

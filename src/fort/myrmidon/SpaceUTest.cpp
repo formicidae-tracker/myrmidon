@@ -65,5 +65,13 @@ TEST_F(PublicSpaceUTest,CanLocateMovieFrame) {
 
 
 
+TEST_F(PublicSpaceUTest,ScopeValidity) {
+	experiment.reset();
+	// Creating a zone requires the knowledges of all the zone to
+	// generate a UID.
+	EXPECT_NO_THROW(space->CreateZone("food"));
+}
+
+
 } // namespace myrmidon
 } // namespace fort

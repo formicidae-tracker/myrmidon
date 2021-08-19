@@ -32,6 +32,9 @@ public:
 	static Ptr InteractionType(AntShapeTypeID type1,
 	                           AntShapeTypeID type2);
 
+	static Ptr AntDisplacement(double under,
+	                           Duration minimumGap);
+
 	virtual void SetUpOnce(const AntByID & ants) = 0;
 
 	virtual void SetUp(const IdentifiedFrame::Ptr & identifiedFrame,

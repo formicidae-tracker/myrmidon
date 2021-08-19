@@ -332,12 +332,12 @@ TEST_F(MatchersUTest,Formatting) {
 		   },
 		   {
 		    Matcher::InteractionType(4,2),
-		    "InteractionType (2 - 4)",
+		    "InteractionType(2 - 4)",
 		   },
 
 		   {
 		    Matcher::InteractionType(5,5),
-		    "InteractionType (5 - 5)",
+		    "InteractionType(5 - 5)",
 		   },
 
 	};

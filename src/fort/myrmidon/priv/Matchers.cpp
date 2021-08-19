@@ -308,7 +308,7 @@ public:
 	}
 
 	void Format(std::ostream & out ) const override {
-		out << "InteractionType (" << d_type << " - " << d_type << ")";
+		out << "InteractionType(" << d_type << " - " << d_type << ")";
 	}
 };
 
@@ -350,7 +350,7 @@ public:
 	}
 
 	void Format(std::ostream & out ) const override {
-		out << "InteractionType (" << d_type1 << " - " << d_type2 << ")";
+		out << "InteractionType(" << d_type1 << " - " << d_type2 << ")";
 	}
 };
 
@@ -377,6 +377,42 @@ Matcher::Ptr Matcher::InteractionType(AntShapeTypeID type1,
 		return std::make_shared<InteractionTypeDualMatcher>(type1,type2);
 	}
 	return std::make_shared<InteractionTypeSingleMatcher>(type1);
+}
+
+class AntDisplacementMatcher : public Matcher {
+public :
+	AntDisplacementMatcher(double under,Duration minimumGap)
+		: d_under(under)
+		, d_minimumGap(minimumGap) {
+	}
+	virtual ~AntDisplacementMatcher() {}
+
+	void SetUpOnce(const AntByID & ants) override {
+	}
+
+	void SetUp(const IdentifiedFrame::Ptr & identifiedFrame,
+	           const CollisionFrame::Ptr & collisionFrame) override {
+	}
+
+	bool Match(fort::myrmidon::AntID ant1,
+	           fort::myrmidon::AntID ant2,
+	           const fort::myrmidon::InteractionTypes & types) override {
+		return true;
+	}
+
+	void Format(std::ostream & out) const override {
+		out << "AntDisplacement(under: " << d_under
+		    << ", minimumGap: " << d_minimumGap << ")";
+	}
+
+private:
+	double   d_under;
+	Duration d_minimumGap;
+};
+
+Matcher::Ptr Matcher::AntDisplacement(double under,
+                             Duration minimumGap) {
+	return std::make_shared<AntDisplacementMatcher>(under,minimumGap);
 }
 
 } // namespace priv

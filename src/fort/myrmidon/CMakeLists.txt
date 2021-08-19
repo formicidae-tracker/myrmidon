@@ -210,6 +210,7 @@ set(SRC_UTEST_FILES main-check.cpp
                     ColorUTest.cpp
                     ExperimentUTest.cpp
                     IdentificationUTest.cpp
+                    MatchersUTest.cpp
                     QueryUTest.cpp
                     ShapesUTest.cpp
                     SpaceUTest.cpp
