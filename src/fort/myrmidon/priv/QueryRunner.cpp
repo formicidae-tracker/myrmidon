@@ -199,14 +199,18 @@ QueryRunner::computeData(const Experiment & experiment,
 	auto identifier = experiment.Identifier()->Compile();
 	if ( args.Collide == false && args.Localize == false ) {
 		return [identifier](const RawData & raw) {
-				   auto identified = std::get<1>(raw)->IdentifyFrom(*identifier,std::get<0>(raw));
+			       // TODO optimize memory allocation here
+			       auto identified = std::make_shared<IdentifiedFrame>();
+			       std::get<1>(raw)->IdentifyFrom(*identified,*identifier,std::get<0>(raw));
 				   return std::make_pair(identified,nullptr);
 			   };
 	}
 	auto collider = experiment.CompileCollisionSolver();
 	if ( args.Collide == false ) {
 		return [identifier,collider] (const RawData & raw) {
-				   auto identified = std::get<1>(raw)->IdentifyFrom(*identifier,std::get<0>(raw));
+			       // TODO optimize memory allocation here
+			       auto identified = std::make_shared<IdentifiedFrame>();
+			       std::get<1>(raw)->IdentifyFrom(*identified,*identifier,std::get<0>(raw));
 				   auto zoner = collider->ZonerFor(*identified);
 				   for ( size_t i = 0; i < identified->Positions.rows(); ++i ) {
 					   zoner->LocateAnt(identified->Positions.row(i));
@@ -216,8 +220,12 @@ QueryRunner::computeData(const Experiment & experiment,
 	}
 
 	return [identifier,collider] (const RawData & raw) {
-			   auto identified = std::get<1>(raw)->IdentifyFrom(*identifier,std::get<0>(raw));
-			   auto collided = collider->ComputeCollisions(identified);
+		       // TODO optimize memory allocation here
+			   auto identified = std::make_shared<IdentifiedFrame>();
+			   std::get<1>(raw)->IdentifyFrom(*identified,*identifier,std::get<0>(raw));
+			   // TODO optimize memory allocation here
+			   auto collided = std::make_shared<CollisionFrame>();
+			   collider->ComputeCollisions(*collided,*identified);
 			   return std::make_pair(identified,collided);
 		   };
 }

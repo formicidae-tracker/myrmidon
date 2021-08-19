@@ -166,8 +166,12 @@ void IdentifiedFrameConcurrentLoader::loadMovieSegment(quint32 spaceID,
 							CONC_LOADER_DEBUG(std::cerr << "Processing " << rawFrame->Frame().FID() << std::endl);
 							try {
 								auto movieID = segment->ToMovieFrameID(frameID);
-								auto identified = rawFrame->IdentifyFrom(*identifier,spaceID);
-								auto collisions = solver->ComputeCollisions(identified);
+								// TODO optimize memory allocation here
+								auto identified = std::make_shared<fm::IdentifiedFrame>();
+								rawFrame->IdentifyFrom(*identified,*identifier,spaceID);
+								// TODO optimize memory allocation here
+								auto collisions = std::make_shared<fm::CollisionFrame>();
+								solver->ComputeCollisions(*collisions,*identified);
 								return std::make_tuple(movieID,
 								                       identified,
 								                       collisions);

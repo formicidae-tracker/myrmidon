@@ -30,8 +30,9 @@ public :
 	// @spaceID the spaceID the frame correspond to
 	//
 	// @return an <IdentifiedFrame> with all identified ant (without zone)
-	IdentifiedFrame::Ptr IdentifyFrame(const fort::hermes::FrameReadout & frame,
-	                                   SpaceID spaceID) const;
+	void IdentifyFrame(IdentifiedFrame & identified,
+	                   const fort::hermes::FrameReadout & frame,
+	                   SpaceID spaceID) const;
 
 	// Collides Ants from an IdentifiedFrame
 	// @identified the <IdentifiedFrame> with the ant position data.
@@ -40,7 +41,8 @@ public :
 	// modified to contains for each Ant its current zone.
 	//
 	// @return a <CollisionFrame> with all current Ant collisions.
-	CollisionFrame::Ptr CollideFrame(const IdentifiedFrame::Ptr & identified) const;
+	void CollideFrame(CollisionFrame & c,
+	                  IdentifiedFrame & identified) const;
 private :
 	std::shared_ptr<const Identifier> d_rawIdentifier;
 	Identifier::Compiled::ConstPtr    d_identifier;

@@ -216,14 +216,14 @@ CollisionFrame::Ptr CollisionSolverUTest::NaiveCollisions() {
 TEST_F(CollisionSolverUTest,TestE2E) {
 	auto solver = std::make_shared<CollisionSolver>(universe->Spaces(),
 	                                                  ants);
-	CollisionFrame::Ptr res;
+	auto res = std::make_shared<CollisionFrame>();
 	EXPECT_THROW({
 			frame->Space = 2;
-			res = solver->ComputeCollisions(frame);
+			solver->ComputeCollisions(*res,*frame);
 		},std::invalid_argument);
 	EXPECT_NO_THROW({
 			frame->Space = 1;
-			res = solver->ComputeCollisions(frame);
+			solver->ComputeCollisions(*res,*frame);
 		});
 	for ( const auto & inter : collisions->Collisions ) {
 		auto fi = std::find_if(res->Collisions.begin(),

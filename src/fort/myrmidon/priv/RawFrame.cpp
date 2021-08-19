@@ -61,34 +61,32 @@ const FrameReference & RawFrame::Frame() const {
 	return d_frame;
 }
 
-IdentifiedFrame::Ptr RawFrame::IdentifyFrom(const IdentifierIF & identifier,SpaceID spaceID ) const {
-	auto res = std::make_shared<IdentifiedFrame>();
-	res->Space = spaceID;
-	res->FrameTime = Frame().Time();
-	res->Width = d_width;
-	res->Height = d_height;
+void RawFrame::IdentifyFrom(IdentifiedFrame & frame,const IdentifierIF & identifier,SpaceID spaceID ) const {
+	frame.Space = spaceID;
+	frame.FrameTime = Frame().Time();
+	frame.Width = d_width;
+	frame.Height = d_height;
 
 
-	res->Positions.resize(d_tags.size(),5);
+	frame.Positions.resize(d_tags.size(),5);
 	size_t index = 0;
 	for ( const auto & t : d_tags ) {
-		auto identification = identifier.Identify(t.id(),res->FrameTime);
+		auto identification = identifier.Identify(t.id(),frame.FrameTime);
 		if ( !identification ) {
 			continue;
 		}
 		double angle;
-		res->Positions(index,0) = identification->Target()->AntID();
-		res->Positions(index,4) = 0;
+		frame.Positions(index,0) = identification->Target()->AntID();
+		frame.Positions(index,4) = 0;
 
-		identification->ComputePositionFromTag(res->Positions(index,1),
-		                                       res->Positions(index,2),
-		                                       res->Positions(index,3),
+		identification->ComputePositionFromTag(frame.Positions(index,1),
+		                                       frame.Positions(index,2),
+		                                       frame.Positions(index,3),
 		                                       Eigen::Vector2d(t.x(),t.y()),
 		                                       t.theta());
 		++index;
 	}
-	res->Positions.conservativeResize(index,5);
-	return res;
+	frame.Positions.conservativeResize(index,5);
 }
 
 

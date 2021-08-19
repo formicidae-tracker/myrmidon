@@ -37,17 +37,17 @@ CollisionSolver::CollisionSolver(const SpaceByID & spaces,
 	}
 }
 
-CollisionFrame::Ptr
-CollisionSolver::ComputeCollisions(const IdentifiedFrame::Ptr & frame) const {
+
+void CollisionSolver::ComputeCollisions(CollisionFrame & collision,
+                                        IdentifiedFrame & frame) const {
 	LocatedAnts locatedAnts;
 	LocateAnts(locatedAnts,frame);
-	auto res = std::make_shared<CollisionFrame>();
-	res->FrameTime = frame->FrameTime;
-	res->Space = frame->Space;
+	collision.FrameTime = frame.FrameTime;
+	collision.Space = frame.Space;
+	collision.Collisions.clear();
 	for ( const auto & [zID,ants] : locatedAnts ) {
-		ComputeCollisions(res->Collisions,ants,zID);
+		ComputeCollisions(collision.Collisions,ants,zID);
 	}
-	return res;
 }
 
 
@@ -90,14 +90,14 @@ ZoneID AntZoner::LocateAnt(PositionedAntRef ant) const {
 
 
 void CollisionSolver::LocateAnts(LocatedAnts & locatedAnts,
-                                 const IdentifiedFrame::Ptr & frame) const {
+                                 IdentifiedFrame & frame) const {
 
-	auto zoner = ZonerFor(*frame);
+	auto zoner = ZonerFor(frame);
 
 	// now for each geometry. we test if the ants is in the zone
-	for ( size_t i = 0; i < frame->Positions.rows(); ++i ) {
-		ZoneID zoneID = zoner->LocateAnt(frame->Positions.row(i));
-		locatedAnts[zoneID].push_back(frame->Positions.row(i));
+	for ( size_t i = 0; i < frame.Positions.rows(); ++i ) {
+		ZoneID zoneID = zoner->LocateAnt(frame.Positions.row(i));
+		locatedAnts[zoneID].push_back(frame.Positions.row(i));
 	}
 }
 

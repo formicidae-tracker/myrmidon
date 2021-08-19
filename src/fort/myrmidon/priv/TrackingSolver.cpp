@@ -13,36 +13,36 @@ TrackingSolver::TrackingSolver(const std::shared_ptr<const Identifier> & identif
 	d_identifier = d_rawIdentifier->Compile();
 }
 
-IdentifiedFrame::Ptr TrackingSolver::IdentifyFrame(const fort::hermes::FrameReadout & frame,
-                                                   SpaceID spaceID) const {
+void TrackingSolver::IdentifyFrame(IdentifiedFrame & identified,
+                                   const fort::hermes::FrameReadout & frame,
+                                   SpaceID spaceID) const {
 
-	auto res = std::make_shared<IdentifiedFrame>();
-	res->Space = spaceID;
-	res->FrameTime = Time::FromTimestamp(frame.time());
-	res->Width = frame.width();
-	res->Height = frame.height();
-	res->Positions.resize(frame.tags().size(),5);
+	identified.Space = spaceID;
+	identified.FrameTime = Time::FromTimestamp(frame.time());
+	identified.Width = frame.width();
+	identified.Height = frame.height();
+	identified.Positions.resize(frame.tags().size(),5);
 	size_t index = 0;
 	for ( const auto & t : frame.tags() ) {
-		auto identification = d_identifier->Identify(t.id(),res->FrameTime);
+		auto identification = d_identifier->Identify(t.id(),identified.FrameTime);
 		if ( !identification == true ) {
 			continue;
 		}
-		res->Positions(index,0) = identification->Target()->AntID();
-		res->Positions(index,4) = 0;
-		identification->ComputePositionFromTag(res->Positions(index,1),
-		                                       res->Positions(index,2),
-		                                       res->Positions(index,3),
+		identified.Positions(index,0) = identification->Target()->AntID();
+		identified.Positions(index,4) = 0;
+		identification->ComputePositionFromTag(identified.Positions(index,1),
+		                                       identified.Positions(index,2),
+		                                       identified.Positions(index,3),
 		                                       Eigen::Vector2d(t.x(),t.y()),
 		                                       t.theta());
 		++index;
 	}
-	res->Positions.conservativeResize(index,5);
-	return res;
+	identified.Positions.conservativeResize(index,5);
 }
 
-CollisionFrame::Ptr TrackingSolver::CollideFrame(const IdentifiedFrame::Ptr & identified) const {
-	return d_solver->ComputeCollisions(identified);
+void TrackingSolver::CollideFrame(CollisionFrame & collision,
+                                  IdentifiedFrame & identified) const {
+	d_solver->ComputeCollisions(collision,identified);
 }
 
 AntID TrackingSolver::IdentifyTag(TagID tagID, const Time & time) {

@@ -35,8 +35,8 @@ public:
 
 	AntZoner::ConstPtr ZonerFor(const IdentifiedFrame & frame) const;
 
-	CollisionFrame::Ptr
-	ComputeCollisions(const IdentifiedFrame::Ptr & frame) const;
+	void ComputeCollisions(CollisionFrame & collision,
+	                       IdentifiedFrame & frame) const;
 private:
 	typedef DenseMap<AntID,TypedCapsuleList>                                AntGeometriesByID;
 	typedef TimeMap<ZoneID,ZoneGeometry::ConstPtr>                          ZoneGeometriesByTime;
@@ -45,7 +45,7 @@ private:
 	typedef std::unordered_map<ZoneID,std::vector<PositionedAntConstRef>>   LocatedAnts;
 
 	void LocateAnts(LocatedAnts & locatedAnts,
-	                const IdentifiedFrame::Ptr & frame) const;
+	                IdentifiedFrame & frame) const;
 
 	void ComputeCollisions(std::vector<Collision> &  result,
 	                       const std::vector<PositionedAntConstRef> & positions,
