@@ -276,18 +276,18 @@ void DataSegmenter::BuildTrajectories(const IdentifiedFrame::Ptr & identified,
 
 void DataSegmenter::TerminateTrajectory(const BuildingTrajectory::Ptr & trajectory) {
 	auto antID = trajectory->Trajectory->Ant;
-	std::vector<InteractionID> toRemove;
+	std::vector<BuildingInteraction*> toRemove;
 	for ( const auto & interaction : trajectory->Interactions ) {
-		toRemove.push_back(interaction->IDs);
+		toRemove.push_back(interaction);
+	}
+
+	for ( const auto & interaction : toRemove ) {
 		auto i = interaction->Terminate(d_args.SummarizeSegment);
 		if ( i == nullptr ) {
 			continue;
 		}
 		d_args.StoreInteraction(i);
-	}
-
-	for ( const auto & IDs : toRemove ) {
-		d_interactions.erase(IDs);
+		d_interactions.erase(interaction->IDs);
 	}
 
 	if ( d_args.Matcher
