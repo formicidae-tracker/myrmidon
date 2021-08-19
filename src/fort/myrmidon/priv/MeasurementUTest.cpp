@@ -1,10 +1,13 @@
-#include "MeasurementUTest.hpp"
+#include <gtest/gtest.h>
 
 #include "Measurement.hpp"
 
 namespace fort {
 namespace myrmidon {
 namespace priv {
+
+class MeasurementUTest : public ::testing::Test {};
+
 
 TEST_F(MeasurementUTest,CanDecomposeURI) {
 

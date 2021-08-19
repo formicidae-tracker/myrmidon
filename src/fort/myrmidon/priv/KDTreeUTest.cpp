@@ -1,5 +1,6 @@
-#include "KDTreeUTest.hpp"
+#include <gtest/gtest.h>
 
+#include <fort/time/Time.hpp>
 #include "KDTreePrinter.hpp"
 #include <opencv2/imgcodecs.hpp>
 
@@ -10,6 +11,19 @@
 namespace fort {
 namespace myrmidon {
 namespace priv {
+
+class KDTreeUTest : public ::testing::Test {
+protected:
+	typedef KDTree<int,double,2> KDT;
+
+	static void SetUpTestSuite();
+	static void TearDownTestSuite();
+
+	static std::vector<KDT::Element> elements;
+	static std::set<std::pair<int,int>> collisions;
+	static Duration N2Duration;
+};
+
 
 std::vector<KDTreeUTest::KDT::Element> KDTreeUTest::elements;
 std::set<std::pair<int,int>> KDTreeUTest::collisions;

@@ -1,10 +1,13 @@
-#include "TimeUtilsUTest.hpp"
+#include <gtest/gtest.h>
 
 #include "TimeUtils.hpp"
 
 namespace fort {
 namespace myrmidon {
 namespace priv {
+
+class TimeUtilsUTest : public ::testing::Test {};
+
 
 TEST_F(TimeUtilsUTest,TimeConversion) {
 	int timestampUS = 1234;

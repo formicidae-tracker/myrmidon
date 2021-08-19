@@ -6,8 +6,6 @@ namespace fort {
 namespace myrmidon {
 namespace priv {
 
-class FrameReferenceUTest : public ::testing::Test {
-};
 
 
 } // namespace priv

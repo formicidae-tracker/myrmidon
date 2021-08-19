@@ -1,4 +1,4 @@
-#include "AntUTest.hpp"
+#include <gtest/gtest.h>
 
 #include <fort/myrmidon/Shapes.hpp>
 
@@ -12,27 +12,36 @@ namespace fort {
 namespace myrmidon {
 namespace priv {
 
-void AntUTest::SetUp() {
-	shapeTypes = std::make_shared<AntShapeTypeContainer>();
-	shapeTypes->Create("body",1);
-	shapeTypes->Create("antennas",2);
+class AntUTest : public ::testing::Test {
+protected:
+	void SetUp() {
+		shapeTypes = std::make_shared<AntShapeTypeContainer>();
+		shapeTypes->Create("body",1);
+		shapeTypes->Create("antennas",2);
 
-	antMetadata = std::make_shared<AntMetadata>();
-	auto dead = AntMetadata::SetKey(antMetadata,"dead",false);
-	auto group = AntMetadata::SetKey(antMetadata,"group",std::string());
-	ASSERT_EQ(dead->Type(),AntMetaDataType::BOOL);
-	ASSERT_EQ(group->Type(),AntMetaDataType::STRING);
-	ant = std::make_shared<Ant>(shapeTypes,
-	                            antMetadata,
-	                            1);
+		antMetadata = std::make_shared<AntMetadata>();
+		auto dead = AntMetadata::SetKey(antMetadata,"dead",false);
+		auto group = AntMetadata::SetKey(antMetadata,"group",std::string());
+		ASSERT_EQ(dead->Type(),AntMetaDataType::BOOL);
+		ASSERT_EQ(group->Type(),AntMetaDataType::STRING);
+		ant = std::make_shared<Ant>(shapeTypes,
+		                            antMetadata,
+		                            1);
 
 
-}
-void AntUTest::TearDown() {
-	ant.reset();
-	antMetadata.reset();
-	shapeTypes.reset();
-}
+	}
+	void TearDown() {
+		ant.reset();
+		antMetadata.reset();
+		shapeTypes.reset();
+	}
+
+	AntShapeTypeContainerPtr shapeTypes;
+	AntMetadataPtr           antMetadata;
+	AntPtr                   ant;
+};
+
+
 
 
 TEST_F(AntUTest,CapsuleEdition) {

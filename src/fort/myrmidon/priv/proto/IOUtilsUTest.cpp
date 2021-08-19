@@ -1,4 +1,4 @@
-#include "IOUtilsUTest.hpp"
+#include <gtest/gtest.h>
 
 #include "IOUtils.hpp"
 
@@ -21,6 +21,8 @@ namespace fort {
 namespace myrmidon {
 namespace priv {
 namespace proto {
+
+class IOUtilsUTest : public ::testing::Test {};
 
 TEST_F(IOUtilsUTest,TimeIO) {
 	google::protobuf::Timestamp pbt;

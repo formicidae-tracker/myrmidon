@@ -1,10 +1,12 @@
-#include "LocatableTypesUTest.hpp"
+#include <gtest/gtest.h>
+
 #include "LocatableTypes.hpp"
 
 namespace fort {
 namespace myrmidon {
 namespace priv {
 
+class LocatableTypesUTest : public ::testing::Test {};
 
 class A : public Identifiable {
 public:

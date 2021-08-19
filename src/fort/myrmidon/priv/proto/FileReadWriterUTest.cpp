@@ -1,4 +1,4 @@
-#include "FileReadWriterUTest.hpp"
+#include <gtest/gtest.h>
 
 
 #include <fort/myrmidon/ExperimentFile.pb.h>
@@ -8,6 +8,9 @@ namespace fort {
 namespace myrmidon {
 namespace priv {
 namespace proto {
+
+class FileReadWriterUTest : public ::testing::Test {};
+
 
 TEST_F(FileReadWriterUTest,TestBadIO) {
 	typedef FileReadWriter<pb::FileHeader,pb::FileLine> RW;

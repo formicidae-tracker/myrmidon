@@ -1,4 +1,4 @@
-#include "ExperimentUTest.hpp"
+#include <gtest/gtest.h>
 
 #include "Experiment.hpp"
 #include "Ant.hpp"
@@ -19,14 +19,20 @@ namespace fort {
 namespace myrmidon {
 namespace priv {
 
-void ExperimentUTest::SetUp() {
-	e = Experiment::Create(TestSetup::UTestData().Basedir() / "experiment-utest.myrmidon");
-}
+class ExperimentUTest : public ::testing::Test {
+protected:
 
-void ExperimentUTest::TearDown() {
-	fs::remove_all(e->AbsoluteFilePath());
-	e.reset();
-}
+	void SetUp() {
+		e = Experiment::Create(TestSetup::UTestData().Basedir() / "experiment-utest.myrmidon");
+	}
+
+	void TearDown() {
+		fs::remove_all(e->AbsoluteFilePath());
+		e.reset();
+	}
+
+	ExperimentPtr e;
+};
 
 
 typedef AlmostContiguousIDContainer<fort::myrmidon::AntID,Ant> Container;

@@ -1,4 +1,4 @@
-#include "NotYetImplementedUTest.hpp"
+#include <gtest/gtest.h>
 
 #include "NotYetImplemented.hpp"
 
@@ -11,6 +11,9 @@ bool baz(int v) {
 
 } // namespace foo
 } // namespace bar
+
+class NotYetImplementedUTest : public ::testing::Test {
+};
 
 
 

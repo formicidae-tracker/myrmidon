@@ -1,5 +1,7 @@
-#include "IdentificationUTest.hpp"
+#include <gtest/gtest.h>
 
+#include "Identifier.hpp"
+#include "Ant.hpp"
 #include "Identification.hpp"
 #include "AntShapeType.hpp"
 #include "AntMetadata.hpp"
@@ -7,6 +9,19 @@
 namespace fort {
 namespace myrmidon {
 namespace priv {
+
+class IdentificationUTest : public ::testing::Test {
+protected:
+
+	void SetUp();
+
+	fort::myrmidon::priv::Identifier::Ptr      d_identifier;
+	fort::myrmidon::priv::Ant::Ptr             d_ant;
+	fort::myrmidon::priv::Identification::List d_list;
+	AntShapeTypeContainerConstPtr              d_shapeTypes;
+	AntMetadataConstPtr                        d_metadata;
+};
+
 
 void IdentificationUTest::SetUp() {
 	d_identifier = std::make_shared<Identifier>();

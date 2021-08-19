@@ -1,4 +1,4 @@
-#include "TDDCacheUTest.hpp"
+#include <gtest/gtest.h>
 
 #include "TDDCache.hpp"
 
@@ -11,6 +11,8 @@ namespace fort {
 namespace myrmidon {
 namespace priv {
 namespace proto {
+
+class TDDCacheUTest : public ::testing::Test {};
 
 
 TEST_F(TDDCacheUTest,CacheIO) {

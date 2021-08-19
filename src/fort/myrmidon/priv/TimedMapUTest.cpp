@@ -1,4 +1,4 @@
-#include "TimedMapUTest.hpp"
+#include <gtest/gtest.h>
 
 #include "TimeMap.hpp"
 
@@ -6,6 +6,9 @@
 namespace fort {
 namespace myrmidon {
 namespace priv {
+
+class TimedMapUTest : public ::testing::Test {};
+
 
 TEST_F(TimedMapUTest,E2ETest) {
 	typedef TimeMap<std::string,int> TM;

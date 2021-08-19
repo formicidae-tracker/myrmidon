@@ -1,16 +1,28 @@
 #include <iostream>
 
+namespace fort {
+namespace myrmidon {
+namespace priv {
+
 class TestObject;
-std::ostream & operator<<(std::ostream & out, const TestObject & o );
+
+} // namespace priv
+} // namespace myrmidon
+} // namespace fort
+
+std::ostream & operator<<(std::ostream & out, const fort::myrmidon::priv::TestObject & o );
 
 #include "TimeValid.hpp"
 
-#include "TimeValidUTest.hpp"
+#include <gtest/gtest.h>
 
+#include <fort/myrmidon/UtilsUTest.hpp>
 
-#include "../UtilsUTest.hpp"
+namespace fort {
+namespace myrmidon {
+namespace priv {
 
-using namespace fort::myrmidon;
+class TimeValidUTest : public ::testing::Test {};
 
 class TestObject : public priv::TimeValid {
 public:
@@ -168,12 +180,16 @@ TEST_F(TimeValidUTest,CanGiveBoundaries) {
 	for(const auto & tt : invalidTimes) {
 		auto t = fort::Time::FromTimeT(tt);
 		EXPECT_THROW({
-				::priv::TimeValid::LowerUnvalidBound(t,list.begin(),list.end());
+				TimeValid::LowerUnvalidBound(t,list.begin(),list.end());
 			},std::invalid_argument) << " for time " << t;
 		EXPECT_THROW({
-				::priv::TimeValid::UpperUnvalidBound(t,list.begin(),list.end());
+				TimeValid::UpperUnvalidBound(t,list.begin(),list.end());
 			},std::invalid_argument) << " for time " << t;
 
 	}
 
 }
+
+} // namespace priv
+} // namespace myrmidon
+} // namespace fort

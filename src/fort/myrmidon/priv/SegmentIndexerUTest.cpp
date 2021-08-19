@@ -1,25 +1,31 @@
-#include "SegmentIndexerUTest.hpp"
+#include <gtest/gtest.h>
 
+#include "SegmentIndexer.hpp"
 
 namespace fort {
 namespace myrmidon {
 namespace priv {
 
+class SegmentIndexerUTest : public ::testing::Test {
+protected:
+	void SetUp() {
+		for(size_t i = 0; i < 10; ++i) {
+			std::ostringstream os;
+			os << i;
+			d_testdata.push_back(std::make_pair(FrameReference("",10*i+1,Time::FromTimeT(10*i+1)),os.str()));
+		}
 
-void SegmentIndexerUTest::SetUp() {
-	for(size_t i = 0; i < 10; ++i) {
-		std::ostringstream os;
-		os << i;
-		d_testdata.push_back(std::make_pair(FrameReference("",10*i+1,Time::FromTimeT(10*i+1)),os.str()));
+		EXPECT_NO_THROW({
+				for(const auto & d : d_testdata) {
+					d_si.Insert(d.first,d.second);
+				}
+			});
+
 	}
+	std::vector<fort::myrmidon::priv::SegmentIndexer<std::string>::Segment> d_testdata;
+	fort::myrmidon::priv::SegmentIndexer<std::string> d_si;
+};
 
-	EXPECT_NO_THROW({
-			for(const auto & d : d_testdata) {
-				d_si.Insert(d.first,d.second);
-			}
-		});
-
-}
 
 TEST_F(SegmentIndexerUTest,CanStoreAnIndex) {
 

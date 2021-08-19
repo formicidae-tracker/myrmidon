@@ -1,4 +1,4 @@
-#include "ExperimentDataLessUTest.hpp"
+#include <gtest/gtest.h>
 
 #include <fort/myrmidon/priv/Experiment.hpp>
 #include <fort/myrmidon/priv/Identifier.hpp>
@@ -12,6 +12,15 @@
 namespace fort {
 namespace myrmidon {
 namespace priv {
+
+
+class ExperimentDataLessUTest : public ::testing::Test {
+protected:
+	static void SetUpTestSuite();
+	static void TearDownTestSuite();
+
+	static fs::path experimentPath;
+};
 
 fs::path ExperimentDataLessUTest::experimentPath;
 

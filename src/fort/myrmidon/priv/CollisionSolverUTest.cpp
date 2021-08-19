@@ -1,12 +1,15 @@
-#include "CollisionSolverUTest.hpp"
+#include <gtest/gtest.h>
 
 #include <random>
 
 #include <fort/myrmidon/Shapes.hpp>
 
+#include "Ant.hpp"
 #include "AntShapeType.hpp"
 #include "AntMetadata.hpp"
 #include "Space.hpp"
+#include "Isometry2D.hpp"
+#include "CollisionSolver.hpp"
 
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
@@ -14,6 +17,19 @@
 namespace fort {
 namespace myrmidon {
 namespace priv {
+
+class CollisionSolverUTest : public ::testing::Test {
+protected:
+	static void SetUpTestSuite();
+
+	static CollisionFrame::Ptr NaiveCollisions();
+
+	static IdentifiedFrame::Ptr      frame;
+	static Space::Universe::Ptr      universe;
+	static AntByID                   ants;
+	static CollisionFrame::Ptr       collisions;
+};
+
 
 IdentifiedFrame::Ptr     CollisionSolverUTest::frame;
 Space::Universe::Ptr     CollisionSolverUTest::universe;

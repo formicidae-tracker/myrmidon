@@ -1,4 +1,4 @@
-#include "ObjectPoolUTest.hpp"
+#include <gtest/gtest.h>
 
 #include "ObjectPool.hpp"
 
@@ -6,6 +6,10 @@
 namespace fort {
 namespace myrmidon {
 namespace utils {
+
+class ObjectPoolUTest : public ::testing::Test {
+};
+
 
 class Object {
 public:

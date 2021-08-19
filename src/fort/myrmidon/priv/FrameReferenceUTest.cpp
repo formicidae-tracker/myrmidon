@@ -1,10 +1,13 @@
-#include "FrameReferenceUTest.hpp"
+#include <gtest/gtest.h>
 
 #include "FrameReference.hpp"
 
 namespace fort {
 namespace myrmidon {
 namespace priv {
+
+class FrameReferenceUTest : public ::testing::Test {};
+
 
 TEST_F(FrameReferenceUTest,CanBeFormatted) {
 

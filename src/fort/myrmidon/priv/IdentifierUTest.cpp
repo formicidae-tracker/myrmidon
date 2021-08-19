@@ -1,4 +1,4 @@
-#include "IdentifierUTest.hpp"
+#include <gtest/gtest.h>
 
 #include "Identifier.hpp"
 #include "Ant.hpp"
@@ -14,6 +14,9 @@
 namespace fort {
 namespace myrmidon {
 namespace priv {
+
+class IdentifierUTest : public ::testing::Test {};
+
 
 typedef AlmostContiguousIDContainer<fort::myrmidon::AntID,Ant> Container;
 

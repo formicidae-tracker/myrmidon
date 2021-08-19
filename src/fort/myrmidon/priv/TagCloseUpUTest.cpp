@@ -1,4 +1,4 @@
-#include "TagCloseUpUTest.hpp"
+#include <gtest/gtest.h>
 
 #include "TagCloseUp.hpp"
 
@@ -8,6 +8,8 @@
 namespace fort {
 namespace myrmidon {
 namespace priv {
+
+class TagCloseUpUTest : public ::testing::Test {};
 
 
 TEST_F(TagCloseUpUTest,CanBeFormatted) {

@@ -1,3 +1,4 @@
+
 #include "Isometry2DUTest.hpp"
 
 #include "Isometry2D.hpp"
@@ -6,6 +7,8 @@
 namespace fort {
 namespace myrmidon {
 namespace priv {
+
+class Isometry2DUTest : public ::testing::Test {};
 
 TEST_F(Isometry2DUTest,TestInverse) {
 	struct TestData {

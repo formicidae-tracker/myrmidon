@@ -1,14 +1,10 @@
-#pragma once
-
 #include <gtest/gtest.h>
+
 
 namespace fort {
 namespace myrmidon {
-namespace priv {
 
-class MeasurementUTest : public ::testing::Test {
-};
+class PublicMatchersUTest : public ::testing::Test {};
 
-} // namespace priv
 } // namespace myrmidon
 } // namespace fort

@@ -1,4 +1,4 @@
-#include "RawFrameUTest.hpp"
+#include <gtest/gtest.h>
 
 #include "RawFrame.hpp"
 
@@ -10,6 +10,9 @@
 namespace fort {
 namespace myrmidon {
 namespace priv {
+
+class RawFrameUTest : public ::testing::Test {};
+
 
 google::protobuf::Timestamp fromEpoch(uint64_t sec) {
 	time_t v = sec;

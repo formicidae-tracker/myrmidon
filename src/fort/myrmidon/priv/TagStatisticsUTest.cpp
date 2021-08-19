@@ -1,6 +1,6 @@
-#include <fort/time/Time.hpp>
+#include <gtest/gtest.h>
 
-#include "TagStatisticsUTest.hpp"
+#include <fort/time/Time.hpp>
 
 #include "TagStatistics.hpp"
 
@@ -13,7 +13,12 @@ namespace fort {
 namespace myrmidon {
 namespace priv {
 
+class TagStatisticsUTest : public ::testing::Test {};
+
+
 TEST_F(TagStatisticsUTest,ComputeAndUpdatesGap) {
+
+
 
 	struct TestData {
 		Duration D;
@@ -54,30 +59,6 @@ TEST_F(TagStatisticsUTest,ComputeAndUpdatesGap) {
 	}
 
 }
-
-::testing::AssertionResult AssertTimedEqual(const char * aExpr,
-                                            const char * bExpr,
-                                            const TagStatisticsHelper::Timed & a,
-                                            const TagStatisticsHelper::Timed & b) {
-	auto startAssertion = AssertTimeEqual((std::string(aExpr)+".Start").c_str(),
-	                                      (std::string(bExpr)+".Start").c_str(),
-	                                      a.Start,b.Start);
-	if ( !startAssertion ) {
-		return startAssertion;
-	}
-	auto endAssertion = AssertTimeEqual((std::string(aExpr)+".End").c_str(),
-	                                    (std::string(bExpr)+".End").c_str(),
-	                                    a.End,b.End);
-	if ( !endAssertion ) {
-		return endAssertion;
-	}
-
-	return AssertTagStatisticsEqual((std::string(aExpr)+".TagStats").c_str(),
-	                                (std::string(bExpr)+".TagStats").c_str(),
-	                                a.TagStats,b.TagStats);
-}
-
-
 
 } // namespace priv
 } // namespace myrmidon

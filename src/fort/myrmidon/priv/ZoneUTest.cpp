@@ -1,5 +1,6 @@
-#include "ZoneUTest.hpp"
+#include <gtest/gtest.h>
 
+#include "Zone.hpp"
 
 #include <fort/myrmidon/UtilsUTest.hpp>
 
@@ -8,16 +9,25 @@ namespace myrmidon {
 namespace priv {
 
 
-void ZoneUTest::SetUp() {
-	zone = Zone::Create(1,"foo","bar");
-	shapes.emplace_back(std::unique_ptr<Shape>(new Circle(Eigen::Vector2d(0,0),2.0)));
-	shapes.emplace_back(std::unique_ptr<Shape>(new Polygon(Vector2dList({{-1,-1},{1,-1},{1,1},{-1,1}}))));
-}
+class ZoneUTest : public ::testing::Test {
+protected:
+	void SetUp() {
+		zone = Zone::Create(1,"foo","bar");
+		shapes.emplace_back(std::unique_ptr<Shape>(new Circle(Eigen::Vector2d(0,0),2.0)));
+		shapes.emplace_back(std::unique_ptr<Shape>(new Polygon(Vector2dList({{-1,-1},{1,-1},{1,1},{-1,1}}))));
+	}
 
-void ZoneUTest::TearDown() {
-	zone.reset();
-	shapes.clear();
-}
+	void TearDown() {
+		zone.reset();
+		shapes.clear();
+	}
+
+	std::vector<Shape::Ptr> shapes;
+	Zone::Ptr               zone;
+
+};
+
+
 
 TEST_F(ZoneUTest,GeometryHaveAABB) {
 

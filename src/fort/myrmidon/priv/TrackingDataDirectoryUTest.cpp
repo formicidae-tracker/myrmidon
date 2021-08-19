@@ -1,4 +1,4 @@
-#include "TrackingDataDirectoryUTest.hpp"
+#include <gtest/gtest.h>
 
 
 #include "TrackingDataDirectory.hpp"
@@ -12,13 +12,17 @@
 #include <fort/myrmidon/utils/NotYetImplemented.hpp>
 
 #include "RawFrame.hpp"
-#include "TagStatisticsUTest.hpp"
+#include "UtilsUTest.hpp"
+
 
 #include <yaml-cpp/yaml.h>
 
 namespace fort {
 namespace myrmidon {
 namespace priv {
+
+class TrackingDataDirectoryUTest : public ::testing::Test {};
+
 
 TEST_F(TrackingDataDirectoryUTest,ExtractInfoFromTrackingDatadirectories) {
 
@@ -324,7 +328,7 @@ TEST_F(TrackingDataDirectoryUTest,ComputesAndCacheTagStatistics) {
 			cachedStats = tdd->TagStatistics();
 		});
 	EXPECT_TRUE(tdd->TagStatisticsComputed());
-	EXPECT_PRED_FORMAT2(AssertTimedEqual,cachedStats,computedStats);
+	EXPECT_PRED_FORMAT2(AssertTimedStatsEqual,cachedStats,computedStats);
 
 }
 

@@ -1,4 +1,4 @@
-#include "DenseMapUTest.hpp"
+#include <gtest/gtest.h>
 
 #include "DenseMap.hpp"
 
@@ -10,6 +10,9 @@
 namespace fort {
 namespace myrmidon {
 namespace priv {
+
+class DenseMapUTest : public::testing::Test {};
+
 
 typedef DenseMap<uint32_t,uint32_t> DM;
 typedef DenseMap<uint32_t,std::shared_ptr<uint32_t>> DMOfPtr;

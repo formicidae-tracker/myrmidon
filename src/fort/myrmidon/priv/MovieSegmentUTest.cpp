@@ -1,4 +1,4 @@
-#include "MovieSegmentUTest.hpp"
+#include <gtest/gtest.h>
 
 #include "MovieSegment.hpp"
 
@@ -6,9 +6,21 @@
 
 #include <fstream>
 
-using namespace fort::myrmidon::priv;
+namespace fort {
+namespace myrmidon {
+namespace priv {
+
+
+class MovieSegmentUTest : public ::testing::Test {
+protected:
+	static void SetUpTestSuite();
+	static void TearDownTestSuite();
+
+	static fs::path s_basedir;
+};
 
 fs::path MovieSegmentUTest::s_basedir;
+
 
 void MovieSegmentUTest::SetUpTestSuite() {
 	s_basedir = TestSetup::UTestData().Basedir() / "movie-segment-utests";
@@ -145,3 +157,9 @@ TEST_F(MovieSegmentUTest,CanBeParsed) {
 		},std::invalid_argument);
 
 }
+
+
+
+} // namespace priv
+} // namespace myrmidon
+} // namespace fort

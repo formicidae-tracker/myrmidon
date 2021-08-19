@@ -199,60 +199,28 @@ set(SRC_UTEST_FILES main-check.cpp
                     priv/proto/TDDCacheUTest.cpp
                     priv/AntPoseEstimateUTest.cpp
                     priv/MeasurementUTest.cpp
-                    priv/ShapeUTest.cpp
-                    priv/CircleUTest.cpp
-                    priv/CapsuleUTest.cpp
-                    priv/PolygonUTest.cpp
                     priv/KDTreeUTest.cpp
                     priv/AntMetadataUTest.cpp
                     priv/CollisionSolverUTest.cpp
                     priv/TagStatisticsUTest.cpp
                     priv/MatchersUTest.cpp
                     priv/LocatableTypesUTest.cpp
+                    priv/UtilsUTest.cpp
                     AntUTest.cpp
                     ColorUTest.cpp
                     ExperimentUTest.cpp
                     IdentificationUTest.cpp
                     QueryUTest.cpp
+                    ShapesUTest.cpp
+                    SpaceUTest.cpp
+                    TrackingSolverUTest.cpp
+                    TypesUTest.cpp
+                    ZoneUTest.cpp
                     )
 
 
-set(HDR_UTEST_FILES utils/NotYetImplementedUTest.hpp
-                    utils/ObjectPoolUTest.cpp
-                    priv/DenseMapUTest.hpp
-                    priv/TimedMapUTest.hpp
-                    priv/SpaceUTest.hpp
-                    priv/ZoneUTest.hpp
-                    priv/ExperimentUTest.hpp
-                    priv/ExperimentDataLessUTest.hpp
-                    priv/TimeUtilsUTest.hpp
-                    priv/TrackingDataDirectoryUTest.hpp
-                    priv/AntUTest.hpp
-                    priv/IdentifierUTest.hpp
-                    priv/IdentificationUTest.hpp
-                    priv/RawFrameUTest.hpp
-                    priv/Isometry2DUTest.hpp
-                    priv/SegmentIndexerUTest.hpp
-                    priv/TimeValidUTest.hpp
-                    priv/MovieSegmentUTest.hpp
-                    priv/FrameReferenceUTest.hpp
-                    priv/TagCloseUpUTest.hpp
-                    priv/proto/IOUtilsUTest.hpp
-                    priv/proto/FileReadWriterUTest.hpp
-                    priv/proto/ExperimentReadWriterUTest.hpp
-                    priv/proto/TDDCacheUTest.hpp
-                    priv/AntPoseEstimateUTest.hpp
-                    priv/MeasurementUTest.hpp
-                    priv/ShapeUTest.hpp
-                    priv/CircleUTest.hpp
-                    priv/CapsuleUTest.hpp
-                    priv/PolygonUTest.hpp
-                    priv/KDTreeUTest.hpp
-                    priv/AntMetadataUTest.hpp
-                    priv/CollisionSolverUTest.hpp
-                    priv/TagStatisticsUTest.hpp
-                    priv/MatchersUTest.hpp
-                    priv/LocatableTypesUTest.hpp
+set(HDR_UTEST_FILES priv/UtilsUTest.hpp
+                    UtilsUTest.hpp
                     )
 
 set(UTESTDATA_SRC_FILES utest-data/UTestData.hpp

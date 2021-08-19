@@ -1,4 +1,4 @@
-#include "AntPoseEstimateUTest.hpp"
+#include <gtest/gtest.h>
 
 #include "AntPoseEstimate.hpp"
 
@@ -7,6 +7,9 @@
 namespace fort {
 namespace myrmidon {
 namespace priv {
+
+class AntPoseEstimateUTest : public ::testing::Test {};
+
 
 TEST_F(AntPoseEstimateUTest,HaveAnURI) {
 	struct TestData {

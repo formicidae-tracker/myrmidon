@@ -1,6 +1,7 @@
-#include "AntMetadataUTest.hpp"
-
+#include <gtest/gtest.h>
 #include <gmock/gmock.h>
+
+#include "AntMetadata.hpp"
 
 #include <fort/myrmidon/UtilsUTest.hpp>
 #include <fort/myrmidon/priv/DeletedReference.hpp>
@@ -11,13 +12,18 @@ namespace fort {
 namespace myrmidon {
 namespace priv {
 
-void AntMetadataUTest::SetUp() {
-	metadata =  std::make_shared<AntMetadata>();
-}
-void AntMetadataUTest::TearDown() {
-	metadata.reset();
-}
 
+class AntMetadataUTest : public ::testing::Test {
+protected:
+	void SetUp() {
+		metadata =  std::make_shared<AntMetadata>();
+	}
+	void TearDown() {
+		metadata.reset();
+	}
+
+	AntMetadata::Ptr metadata;
+};
 
 TEST_F(AntMetadataUTest,KeyHaveUniqueName) {
 	AntMetadata::Key::Ptr foo,bar,baz;

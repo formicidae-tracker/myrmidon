@@ -1,4 +1,4 @@
-#include "MatchersUTest.hpp"
+#include <gtest/gtest.h>
 
 #include "Matchers.hpp"
 #include "Experiment.hpp"
@@ -13,6 +13,9 @@ using ::testing::_;
 namespace fort {
 namespace myrmidon {
 namespace priv {
+
+class MatchersUTest : public ::testing::Test {};
+
 
 class StaticMatcher : public Matcher {
 private:
