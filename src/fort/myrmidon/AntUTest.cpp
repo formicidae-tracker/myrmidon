@@ -157,6 +157,15 @@ TEST_F(PublicAntUTest,AntHaveVirtualShape) {
 }
 
 
+TEST_F(PublicAntUTest,ScopeValidity) {
+	auto a = e->CreateAnt();
+	e->SetMetaDataKey("alive",true);
+	e.reset();
+	// setting a value require access to the global experiment, if no
+	// handle mechanic, a DeletedReference would be thrown.
+	EXPECT_NO_THROW(a->SetValue("alive",false,Time()));
+}
+
 
 } // namespace myrmidon
 } // namespace fort
