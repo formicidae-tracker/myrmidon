@@ -96,7 +96,7 @@ class AntTestCase(unittest.TestCase):
         self.experiment.CreateAntShapeType("body")
         self.experiment.CreateAntShapeType("antenna")
         a = self.experiment.CreateAnt();
-        self.assertEquals(len(a.Capsules),0)
+        self.assertEqual(len(a.Capsules),0)
         c1 = m.Capsule((0,0),(1,1),1,1)
         c2 = m.Capsule((0,0),(-1,-1),1,1)
         with self.assertRaises(ValueError):
