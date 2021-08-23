@@ -230,3 +230,14 @@ TEST_F(UniverseUTest,WidgetTest) {
 	EXPECT_EQ(tddDeleted.at(1).at(0),"foo.0000");
 	EXPECT_EQ(tddDeleted.at(2).at(0),"foo.0001");
 }
+
+
+TEST_F(UniverseUTest,WidgetDoesNotSegfaultOnBadTDD) {
+	UniverseEditorWidget widget;
+	widget.setup(universe);
+
+	widget.addTrackingDataDirectory((TestSetup::Basedir()/"no-config.0000").c_str());
+
+
+
+}

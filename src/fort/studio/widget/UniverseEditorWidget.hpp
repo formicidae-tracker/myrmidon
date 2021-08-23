@@ -28,6 +28,8 @@ public slots:
 
 	void onSelectionChanged(const QItemSelection &);
 
+	void addTrackingDataDirectory(const QString & filepath);
+
 
 private:
 	friend class UniverseUTest_WidgetTest_Test;
