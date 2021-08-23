@@ -728,7 +728,7 @@ public:
 	 *
 	 * * Python:
 	 * ```python
-	 * py_fort_myrmidon.Experiment.MetaDataKeys(self) -> Dict[str,Tuple[py_fort_myrmidon.AntMetaDataType,py_fort_myrmidon.AntStaticValue]]
+	 * py_fort_myrmidon.Experiment.MetaDataKeys(self) -> Dict[strpy_fort_myrmidon.AntStaticValue]
 	 * ```
 	 * * R :
 	 * ```R
@@ -738,7 +738,7 @@ public:
 	 * @return a pairs of AntMetadataType and AntStaticValue
 	 *          indexed by key
 	 */
-	std::map<std::string,std::pair<AntMetaDataType,AntStaticValue> > MetaDataKeys() const;
+	std::map<std::string,AntStaticValue > MetaDataKeys() const;
 
 	/**
 	 * Renames a meta data key

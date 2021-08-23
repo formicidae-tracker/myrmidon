@@ -213,11 +213,11 @@ void Experiment::DeleteMetaDataKey(const std::string & key) {
 }
 
 
-std::map<std::string,std::pair<AntMetaDataType,AntStaticValue>>
+std::map<std::string,AntStaticValue>
 Experiment::MetaDataKeys() const {
-	std::map<std::string,std::pair<AntMetaDataType,AntStaticValue>> res;
+	std::map<std::string,AntStaticValue> res;
 	for ( const auto & [name,key] : d_p->Get().AntMetadataPtr()->Keys() ) {
-		res.insert(std::make_pair(name,std::make_pair(key->Type(),key->DefaultValue())));
+		res.insert(std::make_pair(name,key->DefaultValue()));
 	}
 	return res;
 }

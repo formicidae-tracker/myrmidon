@@ -413,10 +413,8 @@ TEST_F(PublicExperimentUTest,MetaDataKeyManipulation) {
 	experiment->SetMetaDataKey("alive",true);
 	experiment->SetMetaDataKey("group",std::string("worker"));
 	EXPECT_EQ(experiment->MetaDataKeys().size(),2);
-	EXPECT_EQ(experiment->MetaDataKeys()["alive"].first,AntMetaDataType::BOOL);
-	EXPECT_ANT_STATIC_VALUE_EQ(experiment->MetaDataKeys()["alive"].second,true);
-	EXPECT_EQ(experiment->MetaDataKeys()["group"].first,AntMetaDataType::STRING);
-	EXPECT_ANT_STATIC_VALUE_EQ(experiment->MetaDataKeys()["group"].second,std::string("worker"));
+	EXPECT_ANT_STATIC_VALUE_EQ(experiment->MetaDataKeys()["alive"],true);
+	EXPECT_ANT_STATIC_VALUE_EQ(experiment->MetaDataKeys()["group"],std::string("worker"));
 
 	Ant::Ptr a;
 	EXPECT_NO_THROW({

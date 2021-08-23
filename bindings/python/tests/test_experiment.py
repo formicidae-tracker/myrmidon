@@ -218,3 +218,54 @@ class ExperimentTestCase(unittest.TestCase,assertions.CustomAssertion):
         self.assertEqual(self.experiment.DefaultTagSize,1.0)
         self.experiment.DefaultTagSize = 2.5
         self.assertEqual(self.experiment.DefaultTagSize,2.5)
+
+    def test_measurement_type_manipulation(self):
+        mtID = self.experiment.CreateMeasurementType("antennas")
+        self.assertEqual(len(self.experiment.MeasurementTypeNames),2)
+        self.assertEqual(self.experiment.MeasurementTypeNames[mtID],"antennas")
+        self.assertEqual(self.experiment.MeasurementTypeNames[1],"head-tail")
+        with self.assertRaises(IndexError):
+            self.experiment.SetMeasurementTypeName(42,"foo")
+
+        self.experiment.SetMeasurementTypeName(1,"foo")
+
+        with self.assertRaises(IndexError):
+            self.experiment.DeleteMeasurementType(42)
+
+        with self.assertRaises(ValueError):
+            self.experiment.DeleteMeasurementType(1)
+
+        self.experiment.DeleteMeasurementType(mtID);
+
+    def test_ant_shape_type_manipulation(self):
+        bodyID = self.experiment.CreateAntShapeType("body")
+        headID = self.experiment.CreateAntShapeType("head")
+        self.assertTrue(bodyID in self.experiment.AntShapeTypeNames)
+        self.assertTrue(headID in self.experiment.AntShapeTypeNames)
+        self.assertEqual(self.experiment.AntShapeTypeNames[bodyID],"body")
+        self.assertEqual(self.experiment.AntShapeTypeNames[headID],"head")
+
+        with self.assertRaises(IndexError):
+            self.experiment.SetAntShapeTypeName(42,"foo")
+
+        self.experiment.SetAntShapeTypeName(bodyID,"foo")
+
+        with self.assertRaises(IndexError):
+            self.experiment.DeleteAntShapeType(42)
+
+        a = self.experiment.CreateAnt()
+        a.AddCapsule(bodyID,m.Capsule([0,0],[1,1],1,1))
+
+        with self.assertRaises(RuntimeError):
+            self.experiment.DeleteAntShapeType(bodyID)
+
+        self.experiment.DeleteAntShapeType(headID)
+
+    def test_meta_data_key_manipulation(self):
+        self.experiment.SetMetaDataKey("alive",True)
+        self.experiment.SetMetaDataKey("group","worker")
+        self.assertEqual(len(self.experiment.MetaDataKeys),2)
+        self.assertTrue("alive" in self.experiment.MetaDataKeys)
+        self.assertTrue("group" in self.experiment.MetaDataKeys)
+        self.assertEqual(self.experiment.MetaDataKeys["alive"],True)
+        self.assertEqual(self.experiment.MetaDataKeys["group"],"worker")

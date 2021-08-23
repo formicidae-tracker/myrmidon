@@ -333,7 +333,7 @@ void BindExperiment(py::module_ & m) {
             Experiment
 )pydoc")
 		.def("DeleteAntShapeType",
-		     &Experiment::DeleteMeasurementType,
+		     &Experiment::DeleteAntShapeType,
 		     py::arg("antShapeTypeID"),
 		     R"pydoc(
     Deletes an Ant shape type

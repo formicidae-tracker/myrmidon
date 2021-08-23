@@ -188,6 +188,8 @@ enum class AntMetaDataType {
                             TIME,
 };
 
+AntMetaDataType TypeForAntStaticValue(const AntStaticValue & value);
+
 /**
  * Represents a Measurement in millimeters at a given Time.
  *
