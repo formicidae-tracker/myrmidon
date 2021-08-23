@@ -44,3 +44,28 @@ class AntTestCase(unittest.TestCase):
         self.assertEqual(a.IdentifiedAt(t2),2);
         with self.assertRaises(RuntimeError):
             self.assertEqual(a.IdentifiedAt(t1.Add(-1)),2);
+
+
+    def test_have_display_status(self):
+        a = self.experiment.CreateAnt()
+        self.assertEqual(a.DisplayColor,m.DefaultPaletteColor(0))
+        a.DisplayColor = m.DefaultPaletteColor(42)
+        self.assertEqual(a.DisplayColor,m.DefaultPaletteColor(42))
+
+        self.assertEqual(a.DisplayStatus,m.Ant.DisplayState.VISIBLE)
+        a.DisplayStatus = m.Ant.DisplayState.HIDDEN
+        self.assertEqual(a.DisplayStatus,m.Ant.DisplayState.HIDDEN)
+
+    def test_have_static_value(self):
+        a = self.experiment.CreateAnt()
+        t = m.Time.Now()
+
+        self.experiment.SetMetaDataKey("alive",True)
+        with self.assertRaises(IndexError):
+            a.GetValue(key = "isDead",time = t)
+        with self.assertRaises(IndexError):
+            a.SetValue(key = "isDead", value = True, time = t)
+        with self.AssertRaises(TypeError):
+            a.SetValue(key = "alive", value = 42, time = t)
+        with self.AssertRaises(ValueError):
+            a.SetValue(key = "alive", value = False, time = m.Time.Forever())

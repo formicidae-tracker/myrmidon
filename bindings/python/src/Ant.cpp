@@ -4,6 +4,7 @@
 
 namespace py = pybind11;
 
+
 void BindAnt(py::module_ & m) {
 	using namespace fort::myrmidon;
 	py::class_<Ant,Ant::Ptr> ant(m,
@@ -46,7 +47,7 @@ void BindAnt(py::module_ & m) {
 		              &Ant::DisplayColor,
 		              &Ant::SetDisplayColor,
 		              " (py_fort_myrmidon.DisplayColor): the color used to display the Ant in `fort-studio`")
-		.def_property("DisplayState",
+		.def_property("DisplayStatus",
 		              &Ant::DisplayStatus,
 		              &Ant::SetDisplayStatus,
 		              " (py_fort_myrmidon.Ant.DisplayState): the DisplayState in `fort-studio` for this Ant")

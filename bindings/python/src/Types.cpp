@@ -325,16 +325,30 @@ void BindExperimentDataInfo(py::module_ & m) {
 }
 
 void BindTypes(py::module_ & m) {
-	py::class_<fort::myrmidon::AntStaticValue>(m,"AntStaticValue");
-	py::enum_<fort::myrmidon::AntMetaDataType>(m,"AntMetaDataType")
-		.value("BOOL",fort::myrmidon::AntMetaDataType::BOOL)
-		.value("INT",fort::myrmidon::AntMetaDataType::INT)
-		.value("DOUBLE",fort::myrmidon::AntMetaDataType::DOUBLE)
-		.value("STRING",fort::myrmidon::AntMetaDataType::STRING)
-		.value("TIME",fort::myrmidon::AntMetaDataType::TIME)
+	BindTime(m);
+
+	using namespace fort::myrmidon;
+	py::class_<AntStaticValue>(m,"AntStaticValue")
+		.def(py::init<bool>())
+		.def(py::init<int>())
+		.def(py::init<double>())
+		.def(py::init<std::string>())
+		.def(py::init<fort::Time>())
+		;
+	py::implicitly_convertible<bool,AntStaticValue>();
+	py::implicitly_convertible<int,AntStaticValue>();
+	py::implicitly_convertible<double,AntStaticValue>();
+	py::implicitly_convertible<std::string,AntStaticValue>();
+	py::implicitly_convertible<fort::Time,AntStaticValue>();
+	py::enum_<AntMetaDataType>(m,"AntMetaDataType")
+		.value("BOOL",AntMetaDataType::BOOL)
+		.value("INT",AntMetaDataType::INT)
+		.value("DOUBLE",AntMetaDataType::DOUBLE)
+		.value("STRING",AntMetaDataType::STRING)
+		.value("TIME",AntMetaDataType::TIME)
 		;
 	BindColor(m);
-	BindTime(m);
+
 	BindTagStatistics(m);
 	BindComputedMeasurement(m);
 	BindIdentifiedFrame(m);
