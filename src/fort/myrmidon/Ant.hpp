@@ -142,7 +142,7 @@ public:
 	/**
 	 * Gets the Identification targetting this Ant.
 	 *
-	 * * Python: `Identificationn :list[py_fort.myrmidon.Identification]`
+	 * * Python: `Identifications :list[py_fort.myrmidon.Identification]`
 	 *   read-only property of `py_fort_myrmidon.Ant` objects
 	 * * R:
 	 * ```R
@@ -349,10 +349,8 @@ public:
 	/**
 	 * Gets all capsules for this Ant
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Ant.Capsules(self) -> list((int,py_fort_myrmidon.Capsule))
-	 * ```
+	 * * Python: `Capsules :List[Tuple[int,py_fort_myrmidon.Capsule]]`
+	 *           read-only property of `py_fort_myrmidon.Ant` objects
 	 * * R:
 	 * ```R
 	 * fmAntCapsules <- function(ant) # return a slist of Rcpp_fmCapsule

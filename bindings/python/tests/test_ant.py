@@ -65,7 +65,64 @@ class AntTestCase(unittest.TestCase):
             a.GetValue(key = "isDead",time = t)
         with self.assertRaises(IndexError):
             a.SetValue(key = "isDead", value = True, time = t)
-        with self.AssertRaises(TypeError):
+        with self.assertRaises(RuntimeError):
             a.SetValue(key = "alive", value = 42, time = t)
-        with self.AssertRaises(ValueError):
+        with self.assertRaises(ValueError):
             a.SetValue(key = "alive", value = False, time = m.Time.Forever())
+
+        a.SetValue(key = "alive", value = False, time = t)
+        self.assertEqual(a.GetValue(key = "alive", time = m.Time.SinceEver()),True)
+        self.assertEqual(a.GetValue(key = "alive", time = t.Add(-1)),True)
+        self.assertEqual(a.GetValue(key = "alive", time = t),False)
+        self.assertEqual(a.GetValue(key = "alive", time = m.Time.Forever()),False)
+
+        with self.assertRaises(IndexError):
+            a.DeleteValue(key = "isDead",time = t);
+
+        with self.assertRaises(IndexError):
+            a.DeleteValue(key = "alive", time = t.Add(1))
+
+        a.DeleteValue(key = "alive", time = t)
+        self.assertEqual(a.GetValue(key = "alive", time = t),True)
+        self.assertEqual(a.GetValue(key = "alive", time = m.Time.Forever()),True)
+
+        self.experiment.SetMetaDataKey("alive",False)
+        self.assertEqual(a.GetValue(key = "alive", time = m.Time.SinceEver()),False)
+        self.assertEqual(a.GetValue(key = "alive", time = t.Add(-1)),False)
+        self.assertEqual(a.GetValue(key = "alive", time = t),False)
+        self.assertEqual(a.GetValue(key = "alive", time = m.Time.Forever()),False)
+
+    def test_have_virtual_shape(self):
+        self.experiment.CreateAntShapeType("body")
+        self.experiment.CreateAntShapeType("antenna")
+        a = self.experiment.CreateAnt();
+        self.assertEquals(len(a.Capsules),0)
+        c1 = m.Capsule((0,0),(1,1),1,1)
+        c2 = m.Capsule((0,0),(-1,-1),1,1)
+        with self.assertRaises(ValueError):
+            a.AddCapsule(42,c1)
+        a.AddCapsule(1,c1)
+        a.AddCapsule(1,c2)
+        a.AddCapsule(2,c1)
+
+        self.assertEqual(len(a.Capsules),3)
+        self.assertEqual(a.Capsules[0][1],c1)
+        self.assertEqual(a.Capsules[1][1],c2)
+        self.assertEqual(a.Capsules[2][1],c1)
+
+        with self.assertRaises(IndexError):
+            a.DeleteCapsule(42)
+
+        a.DeleteCapsule(1)
+        self.assertEqual(len(a.Capsules),2)
+        self.assertEqual(a.Capsules[0][1],c1)
+        self.assertEqual(a.Capsules[1][1],c1)
+
+        a.ClearCapsules()
+        self.assertEqual(len(a.Capsules),0)
+
+    def test_scope_vailidity(self):
+        a = self.experiment.CreateAnt()
+        self.experiment.SetMetaDataKey("alive",True)
+        self.experiment = None
+        a.SetValue("alive",False,m.Time())

@@ -112,15 +112,9 @@ void BindAnt(py::module_ & m) {
         shapeTypeID (int): the AntShapeTypeID associated with the capsule
         capsule (py_fort_myrmidon.Capsule): the capsule to add
 )pydoc")
-		.def("Capsules",
-		     &Ant::Capsules,
-		     R"pydoc(
-    Gets the capsules for this Ant.
-
-    Returns:
-        List[Tuple[int,py_fort_myrmidon.Capsule]]: a list of capsules
-            and their type
-)pydoc")
+		.def_property_readonly("Capsules",
+		                       &Ant::Capsules,
+		                       " (List[Tuple[int,py_fort_myrmidon.Capsule]]): a list of capsules and their type")
 		.def("DeleteCapsule",
 		     &Ant::DeleteCapsule,
 		     py::arg("index"),

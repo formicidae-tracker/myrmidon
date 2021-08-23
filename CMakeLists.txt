@@ -163,5 +163,4 @@ if(BUILD_PYTHON)
 
 	add_dependencies(check py_fort_myrmidon)
 
-
 endif(BUILD_PYTHON)
