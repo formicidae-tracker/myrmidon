@@ -24,7 +24,13 @@ void BindTrackingSolver(py::module_ & m) {
             no ant is identified by tagID at time.
 )pydoc")
 		.def("IdentifyFrame",
-		     &TrackingSolver::IdentifyFrame,
+		     [](const TrackingSolver & self,
+		        const fort::hermes::FrameReadout & frame,
+		        SpaceID spaceID) {
+			     auto res = std::make_shared<IdentifiedFrame>();
+			     self.IdentifyFrame(*res,frame,spaceID);
+			     return res;
+		     },
 		     py::arg("frame"),
 		     py::arg("spaceID"),
 		     R"pydoc(
@@ -40,7 +46,12 @@ void BindTrackingSolver(py::module_ & m) {
             without zone detection.
 )pydoc")
 		.def("CollideFrame",
-		     &TrackingSolver::CollideFrame,
+		     [](const TrackingSolver & self,
+		        IdentifiedFrame & frame) {
+			     auto res = std::make_shared<CollisionFrame>();
+			     self.CollideFrame(*res,frame);
+			     return res;
+		     },
 		     py::arg("frame"),
 		     R"pydoc(
     Runs Ant zone detection and collision detection on an IdentifiedFrame
