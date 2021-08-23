@@ -26,6 +26,8 @@ public:
 
 	const fmp::Space::Universe::TrackingDataDirectoryByURI & trackingDataDirectories() const;
 
+	bool spaceExists(const QString & spaceName) const;
+
 	std::map<quint32,QString> spaceNamesByID() const;
 
 	void initialize(ExperimentBridge * experiment) override;
