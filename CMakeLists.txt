@@ -152,6 +152,8 @@ if(BUILD_PYTHON)
 	find_package(pybind11 REQUIRED)
 	include_directories(${PROJECT_SOURCE_DIR}/src ${PROJECT_BINARY_DIR}/src)
 	set(FORT_MYRMIDON_LIBRARIES fort-myrmidon)
+	set(FORT_MYRMIDON_UTESTDATA_LIBRARIES fort-myrmidon-utestdata)
+
 	add_subdirectory(bindings/python/src)
 
 	add_test(NAME py_fort_myrmidon-tests

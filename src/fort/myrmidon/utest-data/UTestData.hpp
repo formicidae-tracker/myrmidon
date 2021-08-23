@@ -1,15 +1,17 @@
 #pragma once
 
 #include <map>
+#include <filesystem>
 
 #include <fort/tags/fort-tags.hpp>
 
 #include <fort/myrmidon/Types.hpp>
 #include <fort/myrmidon/Matchers.hpp>
-#include <fort/myrmidon/utils/FileSystem.hpp>
 #include <semver.hpp>
 
 #include "Config.hpp"
+
+namespace fs = std::filesystem;
 
 namespace fort {
 namespace hermes {

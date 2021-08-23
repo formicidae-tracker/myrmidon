@@ -12,3 +12,5 @@ add_subdirectory(src)
 # EXAMPLE_VERSION_INFO is defined by setup.py and passed into the C++ code as a
 # define (VERSION_INFO) here.
 target_compile_definitions(py_fort_myrmidon PRIVATE VERSION_INFO=${PY_FORT_MYRMIDON_VERSION_INFO})
+
+target_compile_definitions(py_fort_myrmidon_utestdata PRIVATE VERSION_INFO=${PY_FORT_MYRMIDON_VERSION_INFO})

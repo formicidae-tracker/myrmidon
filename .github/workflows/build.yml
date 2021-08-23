@@ -30,6 +30,5 @@ jobs:
         - name: Sends coverage
           uses: coverallsapp/github-action@v1.1.2
           with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
             path-to-lcov: ${{github.workspace}}/build/coverage/lcov.info
             base-path: ${{github.workspace}}
