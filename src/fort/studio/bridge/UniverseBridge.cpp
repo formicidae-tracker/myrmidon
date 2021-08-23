@@ -376,3 +376,7 @@ const fmp::Space::Universe::TrackingDataDirectoryByURI & UniverseBridge::trackin
 	}
 	return d_experiment->TrackingDataDirectories();
 }
+
+bool UniverseBridge::spaceExists(const QString & spaceName) const {
+	return d_experiment->LocateSpace(ToStdString(spaceName)) != nullptr;
+}

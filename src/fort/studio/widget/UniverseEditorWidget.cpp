@@ -142,9 +142,10 @@ void UniverseEditorWidget::addTrackingDataDirectory(const QString & filepath) {
 		qDebug() << "[UniverseEditorWidget]: TDD addition aborded by user";
 		return;
 	}
-	// Will log errors, but who cares
-	d_universe->addSpace(space);
 
+	if ( d_universe->spaceExists(space) == false ) {
+		d_universe->addSpace(space);
+	}
 
 	d_universe->addTrackingDataDirectoryToSpace(space,tdd);
 }
