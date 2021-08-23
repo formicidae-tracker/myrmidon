@@ -6,9 +6,9 @@ namespace py = pybind11;
 
 void BindSpace(py::module_ & m) {
 	using namespace fort::myrmidon;
-	py::class_<Space>(m,
-	                  "Space",
-	                  R"pydoc(
+	py::class_<Space,Space::Ptr>(m,
+	                             "Space",
+	                             R"pydoc(
     A Space represents an homogenous coordinate system for tracking
     data. I.e. coordinate from two difference Space cannot be
     compared.

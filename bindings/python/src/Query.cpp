@@ -130,6 +130,9 @@ void BindQuery(py::module_ & m) {
         List[py_fort_myrmidon.Measurement]: the list of measurement
             for antID and measurementTypeID
 )pydoc")
+		.def_static("GetDataInformations",
+		            &fort::myrmidon::Query::GetDataInformations,
+		            "experiment"_a)
 		.def_static("ComputeTagStatistics",
 		            &fort::myrmidon::Query::ComputeTagStatistics,
 		            "experiment"_a,
@@ -168,7 +171,7 @@ void BindQuery(py::module_ & m) {
         List[py_fort_myrmidon.IdentifiedFrame]: the detected position
             of the Ant in video frames in [start;end[
 )pydoc")
-		.def_static("CollideFrames+",
+		.def_static("CollideFrames",
 		            &QueryCollideFrames,
 		            "experiment"_a,
 		            py::kw_only(),

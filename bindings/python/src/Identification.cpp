@@ -7,7 +7,7 @@ namespace py = pybind11;
 void BindIdentification(py::module_ & m) {
 	using namespace fort::myrmidon;
 	py::class_<Identification,Identification::Ptr>(m,
-	                                               "Identification"
+	                                               "Identification",
 	                                               R"pydoc(
     Identification relates TagID with Ant with time validity and
     geometric data.
@@ -89,4 +89,6 @@ void BindIdentification(py::module_ & m) {
 			               return oss.str();
 		               });
 		;
+
+		py::register_exception<OverlappingIdentification>(m,"OverlappingIdentification",PyExc_RuntimeError);
 }

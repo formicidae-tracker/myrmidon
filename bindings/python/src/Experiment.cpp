@@ -1,4 +1,5 @@
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
 #include <fort/myrmidon/Experiment.hpp>
 
@@ -194,10 +195,9 @@ void BindExperiment(py::module_ & m) {
 
     Raises:
         IndexError: if antID is not valid for the Experiment
-
-        RuntimeError: if this identification would overlap in time
-                      with another one, either for a given antID or
-                      tagID.
+        py_fort_myrmidon.OverlappingIdentification: if this
+            identification would overlap in time with another one,
+            either for a given antID or tagID.
 )pydoc")
 		.def("DeleteIdentification",
 		     &Experiment::DeleteIdentification,
