@@ -28,13 +28,19 @@ void BindUTestData(py::module_ & m) {
 		.def_property_readonly("AbsoluteFilePath",
 		                       [=](const UTestData::ExperimentInfo & i) {
 			                       return PurePath(i.AbsoluteFilePath.string());
-		                       });
+		                       })
+		;
 
 	py::class_<UTestData::TDDInfo>(utestdata,"TDDInfo")
 		.def_property_readonly("AbsoluteFilePath",
 		                       [=](const UTestData::TDDInfo & i) {
 			                       return PurePath(i.AbsoluteFilePath.string());
-		                       });
+		                       })
+		.def_property_readonly("Family",
+		                       [=](const UTestData::TDDInfo & i) {
+			                       return i.Family;
+		                       })
+		;
 
 
 	utestdata.def(py::init<std::string>());

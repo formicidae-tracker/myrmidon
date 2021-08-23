@@ -192,3 +192,29 @@ class ExperimentTestCase(unittest.TestCase,assertions.CustomAssertion):
         self.assertEqual(len(identifications),2)
         self.assertEqual(identifications[ants[0].ID],2**32-1)
         self.assertEqual(identifications[ants[1].ID],1)
+
+    def test_fields_manipulation(self):
+        self.assertEqual(self.experiment.Name, "")
+        self.experiment.Name = "foo"
+        self.assertEqual(self.experiment.Name, "foo")
+
+        self.assertEqual(self.experiment.Author, "")
+        self.experiment.Author = "bar"
+        self.assertEqual(self.experiment.Author, "bar")
+
+        self.assertEqual(self.experiment.Comment, "")
+        self.experiment.Comment = "baz"
+        self.assertEqual(self.experiment.Comment, "baz")
+
+        self.assertEqual(self.experiment.Family,
+                         m.TagFamily.Undefined)
+        spaceID = self.experiment.CreateSpace("foraging").ID
+        tddInfo = ud.UData().ForagingDataDirs[0]
+        self.experiment.AddTrackingDataDirectory(spaceID,
+                                                 str(tddInfo.AbsoluteFilePath))
+        self.assertEqual(self.experiment.Family,
+                         tddInfo.Family)
+
+        self.assertEqual(self.experiment.DefaultTagSize,1.0)
+        self.experiment.DefaultTagSize = 2.5
+        self.assertEqual(self.experiment.DefaultTagSize,2.5)
