@@ -13,6 +13,8 @@ jobs:
     steps:
         - name: Checkout
           uses: actions/checkout@v2.0.0
+        - name: Updates apt
+          run: sudo apt update
         - name: Install dependencies
           run: sudo apt install build-essential git cmake libopencv-dev libasio-dev libboost-dev libgoogle-glog-dev libyaml-cpp-dev qtbase5-dev libqt5charts5-dev libeigen3-dev libprotobuf-dev protobuf-compiler lcov
         - name: Uses ccache
