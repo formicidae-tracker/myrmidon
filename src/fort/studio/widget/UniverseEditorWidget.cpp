@@ -115,8 +115,21 @@ void UniverseEditorWidget::on_addButton_clicked() {
 	auto tddFilePath = QFileDialog::getExistingDirectory(this, tr("Open Tracking Data Directory"),
 	                                                     d_universe->basepath(),
 	                                                     QFileDialog::ShowDirsOnly);
-	fmp::TrackingDataDirectory::Ptr tdd = openTDD(tddFilePath);
 
+	if ( tddFilePath.isEmpty() ) {
+		return;
+	}
+
+	addTrackingDataDirectory(tddFilePath);
+}
+
+
+void UniverseEditorWidget::addTrackingDataDirectory(const QString & filepath) {
+
+	fmp::TrackingDataDirectory::Ptr tdd = openTDD(filepath);
+	if ( !tdd == true ) {
+		return;
+	}
 	try {
 		TrackingDataDirectoryLoader::EnsureLoaded({tdd},this);
 	} catch ( const std::exception & e ) {
