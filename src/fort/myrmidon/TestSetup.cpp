@@ -9,9 +9,9 @@
 void TestSetup::OnTestProgramStart(const ::testing::UnitTest& /* unit_test */)  {
 	std::ostringstream oss;
 	oss << "myrmidon-test-" << getpid();
-	auto tmppath = fs::temp_directory_path() / oss.str();
-	fs::remove_all("/tmp/test/foo");
-	s_utestdata = std::make_unique<fort::myrmidon::UTestData>("/tmp/test/foo");
+	auto tmppath = fort::myrmidon::UTestData::TempDirName();
+	fs::remove_all(tmppath);
+	s_utestdata = std::make_unique<fort::myrmidon::UTestData>(tmppath);
 }
 
 // Called after all test activities have ended.

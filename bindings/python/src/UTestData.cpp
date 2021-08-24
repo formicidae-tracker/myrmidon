@@ -13,14 +13,14 @@ namespace py = pybind11;
 #endif
 
 
-static std::shared_ptr<fort::myrmidon::UTestData> s_utestdata;
+static std::unique_ptr<fort::myrmidon::UTestData> s_utestdata;
 
 void BindUTestData(py::module_ & m) {
 	using namespace fort::myrmidon;
 
 	py::object PurePath = py::module_::import("pathlib").attr("PurePath");
 
-	py::class_<UTestData,std::shared_ptr<fort::myrmidon::UTestData>> utestdata(m,"UTestData");
+	py::class_<UTestData> utestdata(m,"UTestData");
 
 
 
@@ -55,6 +55,8 @@ void BindUTestData(py::module_ & m) {
 	utestdata.def_property_readonly("ForagingDataDirs",
 	                                &UTestData::ForagingDataDirs);
 
+	utestdata.def_property_readonly("ExpectedTagStatistics",
+	                                &UTestData::ExpectedTagStatistics);
 
 }
 
@@ -68,11 +70,18 @@ PYBIND11_MODULE(py_fort_myrmidon_utestdata, m) {
 
 	m.def("UData",
 	      []() {
-		      if ( s_utestdata == nullptr ) {
-			      s_utestdata = std::make_shared<fort::myrmidon::UTestData>("/tmp/test/foo");
+		      if ( !s_utestdata ) {
+			      auto tmpPath = fort::myrmidon::UTestData::TempDirName();
+			      s_utestdata = std::make_unique<fort::myrmidon::UTestData>(tmpPath);
 		      }
-		      return s_utestdata;
-	      });
+		      return s_utestdata.get();
+	      },
+	      py::return_value_policy::reference);
+
+	m.add_object("_cleanup",
+	             py::capsule([]() {
+		                         s_utestdata.reset();
+	                         }));
 
 
 #ifdef VERSION_INFO

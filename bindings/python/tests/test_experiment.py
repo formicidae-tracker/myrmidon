@@ -68,7 +68,10 @@ class ExperimentTestCase(unittest.TestCase,assertions.CustomAssertion):
         dirs = [ud.UData().Basedir / "test-manipulation",
                 ud.UData().Basedir / "test-manipulation-new"]
         for d in dirs:
-            os.makedirs(d)
+            try:
+                os.makedirs(d)
+            except FileExistsError:
+                pass
 
         filepath    = str(dirs[0] / "test.myrmidon")
         goodNewPath = str(dirs[0] / "test2.myrmidon")

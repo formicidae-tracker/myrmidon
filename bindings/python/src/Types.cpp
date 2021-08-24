@@ -37,7 +37,7 @@ void BindTagStatistics(py::module_ & m) {
 	py::class_<TagStatistics>(m,
 	                          "TagStatistics",
 	                          "Tag detection statistics for a given TagID")
-		.def_readonly("TagID",
+		.def_readonly("ID",
 		              &TagStatistics::ID,
 		              "(int): the TagID it refers to")
 		.def_readonly("FirstSeen",

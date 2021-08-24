@@ -32,7 +32,7 @@ void MovieWriter::Prepare(size_t index) {
 	auto matchPath = d_basepath / ("stream.frame-matching" + NumberSuffix(index) + ".txt");
 
 	d_videoWriter = std::make_unique<cv::VideoWriter>(moviePath.string(),
-	                                                  cv::VideoWriter::fourcc('H','2','6','4'),
+	                                                  cv::VideoWriter::fourcc('a','v','c','1'),
 	                                                  d_fps,
 	                                                  d_size,
 	                                                  false);

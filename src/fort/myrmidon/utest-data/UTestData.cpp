@@ -27,6 +27,13 @@
 namespace fort {
 namespace myrmidon {
 
+fs::path UTestData::TempDirName() {
+	std::ostringstream oss;
+	oss << "fort-myrmidon-utestdata-" << getpid();
+	return fs::temp_directory_path() / oss.str();
+}
+
+
 UTestData::UTestData(const fs::path & basedir) {
 	try {
 		BuildFakeData(basedir);
@@ -37,7 +44,7 @@ UTestData::UTestData(const fs::path & basedir) {
 }
 
 UTestData::~UTestData() {
-	//	CleanUpFilesystem();
+	CleanUpFilesystem();
 }
 
 const fs::path & UTestData::Basedir() const {
@@ -109,18 +116,31 @@ void UTestData::CleanUpFilesystem() {
 	if (d_basedir.empty()) {
 		return;
 	}
+#ifndef NDEBUG
+	std::cerr << "Cleanup files in " << d_basedir << std::endl;
+#endif
 	fs::remove_all(d_basedir);
+	d_basedir = "";
+
 };
 
 void UTestData::BuildFakeData(const fs::path & basedir) {
-	auto start = Time::Now();
 	d_basedir = basedir;
+
+#ifndef NDEBUG
+	auto start = Time::Now();
+	std::cerr << std::endl
+	          << "Generating UTestData in " << d_basedir << std::endl;
+#endif
+
+
 	GenerateFakedata();
 
 	WriteFakedata();
 
-
+#ifndef NDEBUG
 	std::cerr << "Generated data in " << Time::Now().Sub(start) << std::endl;
+#endif
 }
 
 

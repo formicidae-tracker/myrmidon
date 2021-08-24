@@ -70,6 +70,8 @@ public:
 	};
 
 
+	static fs::path TempDirName();
+
 	UTestData(const fs::path & basedir);
 	~UTestData();
 

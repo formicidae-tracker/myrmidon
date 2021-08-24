@@ -145,13 +145,14 @@ void GeneratedData::GenerateTrajectories(const Config & config) {
 		          }
 		          return aEnd < bEnd;
 	          });
-
+#ifndef NDEBUG
 	for ( const auto & t : Trajectories ) {
 		std::cerr << "AntTrajectory{ Ant:" << t->Ant
 		          << " , Space: " << t->Space
 		          << " , Start: " << t->Start.Sub(config.Start)
 		          << " , End: " << t->End().Sub(config.Start) << std::endl;
 	}
+#endif
 }
 
 void GeneratedData::GenerateTrajectoriesFor(AntID antID,
@@ -236,6 +237,7 @@ void GeneratedData::GenerateInteractions(const Config & config) {
 	             const AntInteraction::Ptr & b) {
 		          return a->End < b->End;
 	          });
+#ifndef NDEBUG
 	for ( const auto & i : Interactions ) {
 		std::cerr << "AntInteraction{ IDs:{" << i->IDs.first
 		          << "," << i->IDs.second
@@ -243,6 +245,7 @@ void GeneratedData::GenerateInteractions(const Config & config) {
 		          << ", End:" << i->End.Sub(config.Start)
 		          << "}" << std::endl;
 	}
+#endif
 }
 
 
