@@ -59,7 +59,7 @@ void BindMatchers(py::module_ & m) {
         py_fort_myrmidon.Matcher: a Matcher that matches Ant who
             current `key` meta data value matches `value`.
 )pydoc")
-		.def_static("AntDistanceSmallerThen",
+		.def_static("AntDistanceSmallerThan",
 		            &Matcher::AntDistanceSmallerThan,
 		            py::arg("distance"),
 		            R"pydoc(
