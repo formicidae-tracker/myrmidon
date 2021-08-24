@@ -36,10 +36,27 @@ void BindUTestData(py::module_ & m) {
 		                       [=](const UTestData::TDDInfo & i) {
 			                       return PurePath(i.AbsoluteFilePath.string());
 		                       })
-		.def_property_readonly("Family",
-		                       [=](const UTestData::TDDInfo & i) {
-			                       return i.Family;
-		                       })
+		.def_readonly("Family",
+		              &UTestData::TDDInfo::Family)
+		.def_readonly("Start",
+		              &UTestData::TDDInfo::Start)
+		.def_readonly("End",
+		              &UTestData::TDDInfo::End)
+		;
+
+	py::class_<UTestData::ExpectedResult>(utestdata,"ExpectedResult")
+		.def_readonly("Start",
+		              &UTestData::ExpectedResult::Start)
+		.def_readonly("End",
+		              &UTestData::ExpectedResult::End)
+		.def_readonly("MaximumGap",
+		              &UTestData::ExpectedResult::MaximumGap)
+		.def_readonly("Matches",
+		              &UTestData::ExpectedResult::Matches)
+		.def_readonly("Trajectories",
+		              &UTestData::ExpectedResult::Trajectories)
+		.def_readonly("Interactions",
+		              &UTestData::ExpectedResult::Interactions)
 		;
 
 
@@ -49,14 +66,27 @@ void BindUTestData(py::module_ & m) {
 		                                return PurePath(ud.Basedir().string());
 	                                });
 	utestdata.def_property_readonly("CurrentVersionFile",
-	                                &UTestData::CurrentVersionFile);
+	                                &UTestData::CurrentVersionFile,
+	                                py::return_value_policy::reference);
 	utestdata.def_property_readonly("NestDataDirs",
-	                                &UTestData::NestDataDirs);
+	                                &UTestData::NestDataDirs,
+	                                py::return_value_policy::reference);
 	utestdata.def_property_readonly("ForagingDataDirs",
-	                                &UTestData::ForagingDataDirs);
+	                                &UTestData::ForagingDataDirs,
+	                                py::return_value_policy::reference);
 
 	utestdata.def_property_readonly("ExpectedTagStatistics",
-	                                &UTestData::ExpectedTagStatistics);
+	                                &UTestData::ExpectedTagStatistics,
+	                                py::return_value_policy::reference);
+
+	utestdata.def_property_readonly("ExpectedFrames",
+	                                &UTestData::ExpectedFrames,
+	                                py::return_value_policy::reference);
+
+	utestdata.def_property_readonly("ExpectedResults",
+	                                &UTestData::ExpectedResults,
+	                                py::return_value_policy::reference);
+
 
 }
 

@@ -147,7 +147,7 @@ void BindQuery(py::module_ & m) {
         Dict[int,py_fort_myrmidon.TagStatistics]: the list of
             TagStatistics indexed by TagID.
 )pydoc")
-		.def_static("IdentifyFrame",&QueryIdentifyFrames,
+		.def_static("IdentifyFrames",&QueryIdentifyFrames,
 		            "experiment"_a,
 		            py::kw_only(),
 		            "start"_a = identifyArgs.Start,

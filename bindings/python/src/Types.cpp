@@ -169,6 +169,15 @@ void BindAntTrajectory(py::module_ & m) {
 		.def_readonly("Start",
 		              &AntTrajectory::Start,
 		              "(py_fort_myrmidon.Time): the starting time of this trajectory.")
+		.def("End",
+		     &AntTrajectory::End,
+		     R"pydoc(
+    Computes the End time of the AntTrajectory.
+
+    Returns:
+        py_fort_myrmidon.Time: the last Time found in this trajectory
+
+)pydoc")
 		.def_property_readonly("Positions",
 		                       [](const AntTrajectory & t) -> const Eigen::Matrix<double,Eigen::Dynamic,5> & {
 			                       return t.Positions;
@@ -211,7 +220,7 @@ R)pydoc")
 		              "(int): the last index+1 in Trajectory this segment refers to.")
 		.def_property_readonly("Mean",
 		                       [](const AntTrajectorySegment & ts) -> const Eigen::Vector3d & {
-			                       if ( !ts.Mean) {
+			                       if ( !ts.Mean ) {
 				                       throw std::runtime_error("py_fort_myrmidon.AntTrajectorySegment.Mean is not computed");
 			                       }
 			                       return *ts.Mean;
@@ -356,4 +365,28 @@ void BindTypes(py::module_ & m) {
 	BindAntTrajectory(m);
 	BindAntInteraction(m);
 	BindExperimentDataInfo(m);
+
+	m.def("FormatAntID",
+	      &fort::myrmidon::FormatAntID,
+	      py::arg("antID"),
+	      R"pydoc(
+    Formats an AntID to the conventional format.
+
+    Args:
+        antID (int): the AntID to format
+    Returns:
+        str: antID formatted in a string
+)pydoc");
+	m.def("FormatTagID",
+	      &fort::myrmidon::FormatTagID,
+	      py::arg("tagID"),
+	      R"pydoc(
+    Formats a TagID to the conventional format.
+
+    Args:
+        tagID (int): the TagID to format
+    Returns:
+        str: tagID formatted in a string
+)pydoc");
+
 }
