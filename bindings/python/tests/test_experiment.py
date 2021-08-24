@@ -269,3 +269,33 @@ class ExperimentTestCase(unittest.TestCase,assertions.CustomAssertion):
         self.assertTrue("group" in self.experiment.MetaDataKeys)
         self.assertEqual(self.experiment.MetaDataKeys["alive"],True)
         self.assertEqual(self.experiment.MetaDataKeys["group"],"worker")
+
+        a = self.experiment.CreateAnt()
+        a.SetValue(key = "group", value = "nurse", time = m.Time.SinceEver())
+
+        with self.assertRaises(IndexError):
+            self.experiment.DeleteMetaDataKey("foo")
+
+        with self.assertRaises(RuntimeError):
+            self.experiment.DeleteMetaDataKey("group")
+
+        with self.assertRaises(IndexError):
+            self.experiment.RenameMetaDataKey(oldKey = "foo",
+                                              newKey = "bar")
+
+        with self.assertRaises(ValueError):
+            self.experiment.RenameMetaDataKey(oldKey = "alive",
+                                              newKey = "group")
+
+        self.experiment.RenameMetaDataKey(oldKey = "alive",
+                                          newKey = "death-date")
+        self.experiment.SetMetaDataKey("death-date",m.Time.Forever())
+        self.experiment.DeleteMetaDataKey("death-date")
+        self.experiment.SetMetaDataKey("group","nurse")
+
+        with self.assertRaises(RuntimeError):
+            self.experiment.SetMetaDataKey("group",42)
+
+        a.DeleteValue("group",m.Time.SinceEver())
+        self.experiment.SetMetaDataKey("group",42)
+        self.assertEqual(self.experiment.MetaDataKeys["group"],42)
