@@ -79,13 +79,35 @@ class CustomAssertion:
         self.assertEqual(a.Ant,b.Ant)
         self.assertEqual(a.Space,b.Space)
         self.assertTimeEqual(a.Start,b.Start)
- #       npt.assert_almost_equal(a.Positions,b.Positions)
+        npt.assert_almost_equal(a.Positions,b.Positions)
 
     def assertAntTrajectorySegmentEqual(self,a,b):
         if ( b.Trajectory is None):
             npt.assert_almost_equal(a.Mean,b.Mean)
-        else:
-            with self.assertRaises(RuntimeError):
-                a.Mean
-            with self.assertRaises(RuntimeError):
-                b.Mean
+            self.assertTrue(a.Trajectory is None)
+            self.assertEqual(a.Begin,0)
+            self.assertEqual(b.Begin,0)
+            self.assertEqual(a.End,0)
+            self.assertEqual(b.End,0)
+            return
+
+        with self.assertRaises(RuntimeError):
+            a.Mean
+        with self.assertRaises(RuntimeError):
+            b.Mean
+
+        self.assertAntTrajectoryEqual(a.Trajectory,b.Trajectory)
+        self.assertEqual(a.Begin,b.Begin)
+        self.assertEqual(a.End,b.End)
+
+
+
+    def assertAntInteractionEqual(self,a,b):
+        self.assertEqual(a.IDs,b.IDs)
+        self.assertEqual(a.Space,b.Space)
+        self.assertInteractionTypesEqual(a.Types,b.Types)
+        self.assertTimeEqual(a.Start,b.Start)
+        self.assertTimeEqual(a.End,b.End)
+        for i in range(2):
+            self.assertAntTrajectorySegmentEqual(a.Trajectories[i],
+                                                 b.Trajectories[i])

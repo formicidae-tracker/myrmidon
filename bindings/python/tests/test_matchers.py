@@ -10,7 +10,7 @@ class MatchersTestCase(unittest.TestCase):
 		 ( m.Matcher.Or(m.Matcher.AntID(1),m.Matcher.AntID(2)),
                    "( Ant.ID == 001 || Ant.ID == 002 )" ),
 		 ( m.Matcher.AntID(1),"Ant.ID == 001" ),
-		 ( m.Matcher.AntMetaData("group","nurse"),"Ant.'group' == nurse" ),
+		 #( m.Matcher.AntMetaData(key = "group",value = "nurse"),"Ant.'group' == nurse" ),
 		 ( m.Matcher.AntDistanceSmallerThan(10.0),"Distance(Ant1, Ant2) < 10" ),
 		 ( m.Matcher.AntDistanceGreaterThan(10.0),"Distance(Ant1, Ant2) > 10" ),
 		 ( m.Matcher.AntAngleSmallerThan(1.0),"Angle(Ant1, Ant2) < 1" ),

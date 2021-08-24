@@ -233,12 +233,12 @@ void BindQuery(py::module_ & m) {
 		            &QueryComputeAntInteractions,
 		            "experiment"_a,
 		            py::kw_only(),
-		            "start"_a = trajectoryArgs.Start,
-		            "end"_a = trajectoryArgs.End,
-		            "maximumGap"_a = trajectoryArgs.MaximumGap,
-		            "matcher"_a = trajectoryArgs.Matcher,
-		            "reportFullTrajectories"_a = trajectoryArgs.ComputeZones,
-		            "singleThreaded"_a = trajectoryArgs.SingleThreaded,
+		            "start"_a = interactionArgs.Start,
+		            "end"_a = interactionArgs.End,
+		            "maximumGap"_a = interactionArgs.MaximumGap,
+		            "matcher"_a = interactionArgs.Matcher,
+		            "reportFullTrajectories"_a = interactionArgs.ReportFullTrajectories,
+		            "singleThreaded"_a = interactionArgs.SingleThreaded,
 		            R"pydoc(
     Conputes Ant Interctions between two times.
 
