@@ -2,9 +2,9 @@
 
 #include <memory>
 
-#include <fort/myrmidon/Ant.hpp>
 #include <fort/myrmidon/Color.hpp>
 #include <fort/myrmidon/Shapes.hpp>
+#include <fort/myrmidon/Ant.hpp>
 
 #include <fort/myrmidon/utils/FileSystem.hpp>
 

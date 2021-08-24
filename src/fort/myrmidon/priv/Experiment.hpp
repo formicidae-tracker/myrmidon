@@ -5,8 +5,6 @@
 #include <fort/tags/fort-tags.hpp>
 
 #include <fort/time/Time.hpp>
-#include <fort/myrmidon/Space.hpp>
-#include <fort/myrmidon/Ant.hpp>
 #include <fort/myrmidon/utils/FileSystem.hpp>
 
 
