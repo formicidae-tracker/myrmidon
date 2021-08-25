@@ -13,6 +13,9 @@ void BindDuration(py::module_ & m) {
 Represents an amount of nanoseconds as signed 64-bit integer
 )pydoc")
 		.def(py::init<int64_t>(),"Initialize a Duration from an amount of nanoseconds")
+		.def(py::init([](double ns){
+			              return fort::Duration(int64_t(ns));
+		              }),"Initialize a Duration from an amount of nanoseconds")
 		.def(py::init<>(),"Initialize a zero second Duration")
 		.def("__str__",[](const fort::Duration & d) -> std::string {
 			               std::ostringstream oss;
@@ -128,6 +131,7 @@ Represents an amount of nanoseconds as signed 64-bit integer
 		;
 
 	py::implicitly_convertible<int64_t,fort::Duration>();
+	py::implicitly_convertible<double,fort::Duration>();
 }
 
 fort::Time timeFromPythonTimestamp(const double & t) {

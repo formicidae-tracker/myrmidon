@@ -231,7 +231,27 @@ R)pydoc")
     numpy.ndarray(numpy.float64(3,1)): the average position and angle
         in this Trajectory sub-segment.
 )pydoc")
-		;
+		.def("StartTime",
+		     &AntTrajectorySegment::StartTime,
+		     R"pydoc(
+    Computes the starting Time of the AntTrajectorySegment
+
+    Returns:
+        py_fort_myrmidon.Time: the starting Time of the
+            AntTrajectorySegment if not summarized or
+            py_fort_myrmidon.Time.SinceEver() otherwise.
+)pydoc")
+		.def("EndTime",
+		     &AntTrajectorySegment::EndTime,
+		     R"pydoc(
+    Computes the ending Time of the AntTrajectorySegment
+
+    Returns:
+        py_fort_myrmidon.Time: the ending Time of the
+            AntTrajectorySegment if not summarized or
+            py_fort_myrmidon.Time.Forever() otherwise.
+)pydoc")
+;
 
 	py::class_<AntInteraction,std::shared_ptr<AntInteraction>>(m,
 	                                                           "AntInteraction",
