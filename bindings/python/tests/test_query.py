@@ -8,12 +8,10 @@ import time
 class QueryTestCase(unittest.TestCase,assertions.CustomAssertion):
     def setUp(self):
         self.experiment = m.Experiment.Open(str(ud.UData().CurrentVersionFile.AbsoluteFilePath))
-        self.startTime = time.time()
 
     def tearDown(self):
         self.experiment = None
-        t = time.time() - self.startTime
-        print("%.3fms" % (t * 1000))
+
 
     def test_tag_statistics(self):
         tagStats = m.Query.ComputeTagStatistics(self.experiment)

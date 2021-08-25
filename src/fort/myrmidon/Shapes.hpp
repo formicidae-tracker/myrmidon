@@ -70,9 +70,7 @@ public:
 	/**
 	 *  Gets the Shape Type
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Shape.ShapeType(self) -> py_fort_myrmidon.Shape.Type
+	 * * Python: `ShapeType (py_fort_myrmidon.Shape.Type)` read-only property of `Shape` objects
 	 * ```
 	 * * R:
 	 * ```R
