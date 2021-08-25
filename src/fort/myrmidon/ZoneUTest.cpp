@@ -35,6 +35,10 @@ TEST_F(PublicZoneUTest,ZoneDefinitionManipulation) {
 		 zone->AddDefinition({},Time::SinceEver(),Time()),
 		};
 
+	EXPECT_THROW({
+			zone->AddDefinition({},Time().Add(-1),Time().Add(1));
+		},std::runtime_error);
+
 	// it should be the same objects, but ordered
 	ASSERT_EQ(zone->Definitions().size(),2);
 	EXPECT_EQ(zone->Definitions()[0],definitions[1]);
