@@ -87,6 +87,10 @@ void BindUTestData(py::module_ & m) {
 	                                &UTestData::ExpectedResults,
 	                                py::return_value_policy::reference);
 
+	utestdata.def_property_readonly("WithVideoDataDir",
+	                                &UTestData::WithVideoDataDir,
+	                                py::return_value_policy::reference);
+
 
 }
 
