@@ -6,7 +6,7 @@
 
 #include <google/protobuf/util/time_util.h>
 
-#include <fort/hermes/FileContext.h>
+#include <fort/hermes/FileContext.hpp>
 #include <fort/tags/options.hpp>
 
 #include "LocatableTypes.hpp"

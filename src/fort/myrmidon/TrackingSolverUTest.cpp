@@ -3,7 +3,7 @@
 #include "Experiment.hpp"
 #include "TestSetup.hpp"
 
-#include <fort/hermes/FileContext.h>
+#include <fort/hermes/FileContext.hpp>
 
 namespace fort {
 namespace myrmidon {

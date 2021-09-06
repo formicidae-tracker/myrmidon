@@ -29,15 +29,16 @@ include(FetchGoogleTest)
 
 fetch_google_test(VERSION release-1.10.0)
 fetch_fort_tags(VERSION v1.4.0)
-fetch_fort_hermes(VERSION v0.5.0-rc2)
-fetch_fort_time(VERSION v1.0.3)
+fetch_fort_hermes(VERSION v0.5.2)
+fetch_fort_time(VERSION v1.0.5)
 fetch_semver(VERSION v0.2.2)
 
 include(GoogleTest)
-include(EnableMakeCheck)
 enable_testing()
-enable_make_check()
-
+set(MAKE_CHECK_TEST_COMMAND ${CMAKE_CTEST_COMMAND} -V)
+if(NOT TARGET check)
+	add_custom_target(check COMMAND ${MAKE_CHECK_TEST_COMMAND})
+endif(NOT TARGET check)
 
 
 
@@ -95,13 +96,12 @@ if ( NOT HAS_STD_VARIANT )
 endif ( NOT HAS_STD_VARIANT )
 
 
-option(ENABLE_COVERAGE "Enables coverage generation" Off)
+option(FORT_MYRMIDON_ENABLE_COVERAGE "Enables coverage generation" Off)
 
-if(ENABLE_COVERAGE)
+if(FORT_MYRMIDON_ENABLE_COVERAGE)
 	include(CodeCoverage)
-
 	enable_coverage()
-endif(ENABLE_COVERAGE)
+endif(FORT_MYRMIDON_ENABLE_COVERAGE)
 
 
 option(UNIT_TEST_CHECK_TIMING "Test timing improvements during unit tests. May fails due to kernel scheduling, disable for automation" Off)

@@ -12,8 +12,8 @@
 
 #include <yaml-cpp/yaml.h>
 
-#include <fort/hermes/Error.h>
-#include <fort/hermes/FileContext.h>
+#include <fort/hermes/Error.hpp>
+#include <fort/hermes/FileContext.hpp>
 
 #include <fort/myrmidon/utils/NotYetImplemented.hpp>
 #include <fort/myrmidon/utils/Checker.hpp>

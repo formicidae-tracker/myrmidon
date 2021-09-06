@@ -1,7 +1,7 @@
 #include "TagStatistics.hpp"
 
-#include <fort/hermes/FileContext.h>
-#include <fort/hermes/Error.h>
+#include <fort/hermes/FileContext.hpp>
+#include <fort/hermes/Error.hpp>
 
 #include <fort/myrmidon/priv/proto/FileReadWriter.hpp>
 
