@@ -17,11 +17,11 @@ build:
 requirements:
   build:
     - cmake =3.16.3
-    - make [unix]
+    - make =4.3 [unix]
     - git
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - libopencv
+    - libopencv =4.5.1
     - {{ cdt('mesa-libgl-devel') }}  [linux]
     - {{ cdt('mesa-libegl-devel') }} [linux]
     - {{ cdt('mesa-dri-drivers') }}  [linux]
@@ -30,12 +30,13 @@ requirements:
     - {{ cdt('libxfixes') }}         [linux]
     - {{ cdt('libxxf86vm') }}        [linux]
   host:
+    - eigen =3.4.0
     - tbb-devel =2020.2
-    - libprotobuf
-    - yaml-cpp
-    - asio
-    - glog
-    - libopencv
+    - libprotobuf =3.17.2
+    - yaml-cpp =0.6.3
+    - asio =1.14.1
+    - glog =0.5.0
+    - libopencv =4.5.1
 
 outputs:
   - name: libfort-myrmidon
@@ -43,75 +44,103 @@ outputs:
       - lib/FortMyrmidon
       - lib/FortTags
       - lib/FortHermesCpp
+      - lib/FortTime
       - lib/pkgconfig/fort-*.pc
       - lib/libfort-*
       - include/fort
       - include/apriltag
     requirements:
       run:
-        - eigen
-        - libprotobuf
-        - libopencv
-        - yaml-cpp
+        - eigen =3.4.0
+        - libprotobuf =3.17.2
+        - libopencv =4.5.1
+        - yaml-cpp =0.6.3
         - tbb =2020.2
     test:
       script: test-libfort-myrmidon.sh
       requires:
         - cmake =3.16.3
-        - make [unix]
+        - make =4.3 [unix]
       files:
         - cross-linux.cmake
         - hello-world-myrmidon/main.cpp
         - hello-world-myrmidon/CMakeLists.txt
 
-  - name: fort-studio
-    files:
-      - bin/fort-studio*
-    requirements:
-      run:
-        - glog
-        - {{ pin_subpackage('libfort-myrmidon', exact=True) }}
-        - libprotobuf
-        - libopencv
-        - yaml-cpp
+  # - name: fort-studio
+  #   files:
+  #     - bin/fort-studio*
+  #   requirements:
+  #     run:
+  #       - glog =0.5.0
+  #       - {{ pin_subpackage('libfort-myrmidon', exact=True) }}
+  #       - libprotobuf =3.17.2
+  #       - libopencv =4.5.1
+  #       - yaml-cpp =0.6.3
+  #   test:
+  #     script: test-fort-studio.sh
+  #   app:
+  #     entry: fort-studio
+  #     icon: fort-studio.svg
+  #     summary: "FORmicidae Tracker post-processing GUI"
 
-    test:
-      script: test-fort-studio.sh
 
-  - name: r-fort-myrmidon
-    script: install-r-fort-myrmidon.sh
-    build:
-      rpaths:
-        - lib/R/lib
+  # - name: r-fort-myrmidon
+  #   script: install-r-fort-myrmidon.sh
+  #   build:
+  #     rpaths:
+  #       - lib/R/lib
+  #   requirements:
+  #     build:
+  #       - {{ compiler('c') }}
+  #       - {{ compiler('cxx') }}
+  #       - make
+  #     host:
+  #       - r-base {{ r_base }}
+  #       - r-rcpp
+  #       - {{ pin_subpackage('libfort-myrmidon', exact=True) }}
+  #       - libprotobuf
+  #       - libopencv
+  #       - yaml-cpp
+  #     run:
+  #       - r-base {{ r_base }}
+  #       - r-rcpp
+  #       - libfort-myrmidon
+  #       - libprotobuf
+  #       - libopencv
+  #       - yaml-cpp
+  #   test:
+  #     files:
+  #       - test-r-fort-myrmidon.r
+  #     commands:
+  #       - Rscript test-r-fort-myrmidon.r
+  #   app:
+  #     entry: fort-studio
+  #     icon: fort-studio.svg
+  #     summary: "FORmicidae Tracker post-processing GUI"
+
+  - name: py-fort-myrmidon
+    script: install-py-fort-myrmidon.sh
     requirements:
       build:
-        - {{ compiler('c') }}
-        - {{ compiler('cxx') }}
-        - make
+        - python {{python}}
       host:
-        - r-base {{ r_base }}
-        - r-rcpp
-        - {{ pin_subpackage('libfort-myrmidon', exact=True) }}
-        - libprotobuf
-        - libopencv
-        - yaml-cpp
+        - python {{python}}
+        - {{ pin_subpackage('libfort-myrmidon',exact=True) }}
+        - pybind11 =2.7.1
+        - libprotobuf =3.17.2
+        - numpy =1.21.2
       run:
-        - r-base {{ r_base }}
-        - r-rcpp
-        - libfort-myrmidon
-        - libprotobuf
-        - libopencv
-        - yaml-cpp
+        - python {{python}}
+        - {{ pin_subpackage('libfort-myrmidon',exact=True) }}
+        - libprotobuf =3.17.2
+        - libopencv =4.5.1
+        - yaml-cpp =0.6.3
+        - numpy =1.21.2
     test:
       files:
-        - test-r-fort-myrmidon.r
+        - test-py-fort-myrmidon.py
       commands:
-        - Rscript test-r-fort-myrmidon.r
-    app:
-      entry: fort-studio
-      icon: fort-studio.svg
-      summary: "FORmicidae Tracker post-processing GUI"
-
+        - python test-py-fort-myrmidon.py
 
 about:
   home: https://github.com/formicidae-tracker/myrmidon

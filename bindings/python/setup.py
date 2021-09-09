@@ -6,8 +6,6 @@ import subprocess
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 
-from version import get_git_version
-
 # Convert distutils Windows platform specifiers to CMake -A arguments
 PLAT_TO_CMAKE = {
     "win32": "Win32",
@@ -15,6 +13,9 @@ PLAT_TO_CMAKE = {
     "win-arm32": "ARM",
     "win-arm64": "ARM64",
 }
+
+with open("./README.rst", "r", encoding="utf-8") as fh:
+    long_description = fh.read()
 
 
 # A CMakeExtension needs a sourcedir instead of a file list.
@@ -28,13 +29,16 @@ class CMakeExtension(Extension):
 
 class CMakeBuild(build_ext):
     def build_extension(self, ext):
-        extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
+        extdir = os.path.abspath(os.path.dirname(
+            self.get_ext_fullpath(ext.name)))
 
         # required for auto-detection of auxiliary "native" libs
         if not extdir.endswith(os.path.sep):
             extdir += os.path.sep
 
-        cfg = "Debug" if self.debug else "RelWithDebInfo"
+        cfg = os.environ.get('CMAKE_BUILD_TYPE')
+        if cfg is None:
+            cfg = "Debug" if self.debug else "RelWithDebInfo"
 
         # CMake lets you override the generator - we need to check this.
         # Can be set with Conda-Build, for example.
@@ -46,14 +50,22 @@ class CMakeBuild(build_ext):
         cmake_args = [
             "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={}".format(extdir),
             "-DPYTHON_EXECUTABLE={}".format(sys.executable),
-            "-DPY_FORT_MYRMIDON_VERSION_INFO={}".format(self.distribution.get_version()),
-            "-DCMAKE_BUILD_TYPE={}".format(cfg),  # not used on MSVC, but no harm
+            "-DPY_FORT_MYRMIDON_VERSION_INFO={}".format(
+                self.distribution.get_version()),
+            # not used on MSVC, but no harm
+            "-DCMAKE_BUILD_TYPE={}".format(cfg),
         ]
+
+        platformFlags = os.environ.get('CMAKE_PLATFORM_FLAGS', None)
+        if platformFlags is not None:
+            cmake_args.extend(platformFlags.split(' '))
+
         build_args = []
 
         if self.compiler.compiler_type == "msvc":
             # Single config generators are handled "normally"
-            single_config = any(x in cmake_generator for x in {"NMake", "Ninja"})
+            single_config = any(
+                x in cmake_generator for x in {"NMake", "Ninja"})
 
             # CMake allows an arch-in-generator style for backward compatibility
             contains_arch = any(x in cmake_generator for x in {"ARM", "Win64"})
@@ -67,7 +79,8 @@ class CMakeBuild(build_ext):
             # Multi-config generators have a different way to specify configs
             if not single_config:
                 cmake_args += [
-                    "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}".format(cfg.upper(), extdir)
+                    "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}".format(
+                        cfg.upper(), extdir)
                 ]
                 build_args += ["--config", cfg]
 
@@ -95,12 +108,21 @@ class CMakeBuild(build_ext):
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
     name="py_fort_myrmidon",
-    version= get_git_version(),
+    version_config={
+        "dev_template": "{tag}.post{ccount}",
+    },
     author="Alexandre Tuleu",
     author_email="alexandre.tuleu.2005@polytechnique.org",
     description="Python bindings for libfort-myrmidon",
-    long_description="",
+    long_description=long_description,
+    url="https://github.com/formicidae-tracker/myrmidon",
+    project_urls={
+        "Bug Tracker": "https://github.com/formicidae-tracker/myrmidon/issues",
+    },
     ext_modules=[CMakeExtension("py_fort_myrmidon")],
     cmdclass={"build_ext": CMakeBuild},
+    setup_requires=['setuptools-git-versioning'],
     zip_safe=False,
+
+
 )

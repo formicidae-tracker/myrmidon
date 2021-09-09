@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 set -x -e
 
 declare -a CMAKE_PLATFORM_FLAGS
@@ -11,30 +12,17 @@ else
 	CMAKE_PLATFORM_FLAGS+=(-DCMAKE_TOOLCHAIN_FILE="${RECIPE_DIR}/cross-linux.cmake")
 fi
 
-
 if [[ ${DEBUG_C} == yes ]]; then
   CMAKE_BUILD_TYPE=Debug
 else
   CMAKE_BUILD_TYPE=RelWithDebInfo
 fi
 
-mkdir -p build
 
-pushd build
 
-cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} \
-      -DCMAKE_INSTALL_LIBDIR="lib" \
-      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
-      -DCMAKE_C_FLAGS_RELEASE="${CFLAGS}" \
-      -DCMAKE_C_FLAGS_DEBUG="${CFLAGS}" \
-	  -DBUILD_STUDIO=Off \
-	  -DBUILD_PYTHON=Off \
-	  -DBUILD_DOCS=Off \
-      ${CMAKE_PLATFORM_FLAGS[@]} \
-      ${SRC_DIR}
+pushd bindings/python
 
-make -j${CPU_COUNT} ${VERBOSE_CM} all check
-
-make install -j${CPU_COUNT}
+CMAKE_PLATFORM_FLAGS="${CMAKE_PLATFORM_FLAGS[@]}" CMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE ${PYTHON} setup.py install
+${PYTHON} -m unittest discover -v -s tests
 
 popd

@@ -20,4 +20,6 @@ make
 
 cd ..
 
+export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$CONDA_PREFIX/share/pkgconfig
+
 g++ -o hello-world-pkg-config main.cpp --std=c++17 $(pkg-config --cflags --libs fort-myrmidon)

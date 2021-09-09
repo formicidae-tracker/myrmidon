@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.4...3.18)
 
 project(py-fort-myrmidon)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_C_STANDARD 11)
+
 find_package(pybind11 REQUIRED)
 find_package(FortMyrmidon REQUIRED)
 

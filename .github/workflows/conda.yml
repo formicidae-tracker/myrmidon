@@ -1,0 +1,46 @@
+name: Conda
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+  release:
+    types: published
+
+
+jobs:
+  build-conda-package:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Fetches all tags
+        run: git fetch --prune --unshallow --tags
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          python-version: 3.8
+          activate-environment: dev
+          channels: conda-forge,defaults
+          channel-priority: strict
+      - name: Conda info
+        run: |
+          conda info
+          conda list
+      - name: Install tools
+        run: conda install -y conda-build conda-verify anaconda-client
+      - name: Build packages
+        run: conda build conda --output-folder build/conda-packages
+      - name: Upload package (main)
+        if: ${{ github.event_name == 'release' }}
+        run: anaconda -t ${{ secrets.ANACONDA_TOKEN }} upload -u formicidae-tracker build/conda-packages/**/*.tar.bz2
+      - name: Upload package (test)
+        if: ${{ github.event_name == 'push' }}
+        run: anaconda -t ${{ secrets.ANACONDA_TOKEN }} upload -u formicidae-tracker build/conda-packages/**/*.tar.bz2 --label test
+      - name: Upload package (dev)
+        if: ${{ github.event_name == 'pull_request' }}
+        run: anaconda -t ${{ secrets.ANACONDA_TOKEN }} upload -u formicidae-tracker build/conda-packages/**/*.tar.bz2 --label dev

@@ -274,7 +274,7 @@ target_link_libraries(fort-myrmidon-utestdata fort-myrmidon)
 
 install(TARGETS fort-myrmidon-utestdata DESTINATION lib)
 install(FILES utest-data/UTestData.hpp utest-data/Config.hpp
-        DESTINATION include/fort/myrmidon)
+        DESTINATION include/fort/myrmidon/utest-data/)
 
 add_library(fort-myrmidon-utest-common STATIC ${COMMON_UTEST_SRC_FILES}
                                               ${COMMON_UTEST_HDR_FILES}
