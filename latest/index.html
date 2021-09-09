@@ -1,0 +1,341 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>fort-myrmidon and fort-studio — Post-processing API and User Interface &mdash; fort-myrmidon  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/../version_dropdown.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Python" href="api/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home"> fort-myrmidon
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                placeholder
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">API References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html#c">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html#r">R</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">fort-myrmidon</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><code class="docutils literal notranslate"><span class="pre">fort-myrmidon</span></code> and <code class="docutils literal notranslate"><span class="pre">fort-studio</span></code> — Post-processing API and User Interface</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/index.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <p align="center"><img src="https://github.com/formicidae-tracker/myrmidon/raw/master/resources/icons/fort-studio.svg" width="200px" alt="fort-studio logo"></p><div class="section" id="fort-myrmidon-and-fort-studio-post-processing-api-and-user-interface">
+<h1><code class="docutils literal notranslate"><span class="pre">fort-myrmidon</span></code> and <code class="docutils literal notranslate"><span class="pre">fort-studio</span></code> — Post-processing API and User Interface<a class="headerlink" href="#fort-myrmidon-and-fort-studio-post-processing-api-and-user-interface" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/formicidae-tracker/myrmidon/actions/workflows/build.yml"><img alt="Build Status" src="https://github.com/formicidae-tracker/myrmidon/actions/workflows/build.yml/badge.svg" /></a> <a class="reference external" href="https://codecov.io/gh/formicidae-tracker/myrmidon"><img alt="Coverage Status" src="https://codecov.io/gh/formicidae-tracker/myrmidon/branch/master/graph/badge.svg" /></a> <a class="reference external" href="https://formicidae-tracker.github.io/myrmidon/latest"><img alt="Stable Documentation Status" src="https://github.com/formicidae-tracker/myrmidon/actions/workflows/docs.yml/badge.svg" /></a> <a class="reference external" href="https://github.com/formicidae-tracker/myrmidon/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/github/license/formicidae-tracker/myrmidon.svg" /></a></p>
+<p><a class="reference external" href="https://github.com/formicidae-tracker/documentation/wiki">FORT Project Wiki</a>
+• <a class="reference external" href="https://github.com/fortmicidae-tracker/myrmidon/issues/new">Report a Bug</a>
+• <a class="reference external" href="https://github.com/formicidae-tracker/myrmidon/issues/new">Request a Feature</a></p>
+<p><strong>fort-myrmidon</strong> is an API to facilitate access and analyzis of
+manage and visualize large Ant tracking datasets. It is used to
+manipulate metadata files (.myrmidon). Those files catalogs ant
+identifications with the help of fiducial tags, and other properties
+such as size and shapes and user-defined metadata. It proposes python
+and R bindings with <strong>py_fort_myrmidon</strong> and <strong>r-fort-myrmidon</strong>
+packages.</p>
+<p><strong>fort-studio</strong> is a graphical interface that helps manual creation and
+editing of <strong>.myrmidon</strong> files, and to provide basic visualization of
+tracking datasets.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p><strong>fort-myrmidon</strong> and all the supported bindings (R,python) is primarly
+distributed with
+[conda](<a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/">https://docs.conda.io/projects/conda/en/latest/</a>).</p>
+<p><strong>fort-studio</strong> is principally distributed using <strong>snap</strong>. However it is
+also distributed with <strong>conda</strong> to allow to pinpoint a perticular
+release.</p>
+<div class="section" id="install-fort-myrmidon-from-conda">
+<h3>Install <strong>fort-myrmidon</strong> from <strong>conda</strong><a class="headerlink" href="#install-fort-myrmidon-from-conda" title="Permalink to this headline">¶</a></h3>
+<p>The following packages are available from the anaconda channel
+<a class="reference external" href="https://anaconda.org/formicidae-tracker">formicidae-tracker</a>:</p>
+<ul class="simple">
+<li><p><strong>libfort-myrmidon</strong>: C++ library and development files</p></li>
+<li><p><strong>r-fort-myrmidon</strong>: R bindings for <strong>libfort-myrmidon</strong>. R 3.6 and 4.0 are currently supported</p></li>
+<li><p><strong>py-fort-myrmidon</strong>: Python bindings for <strong>libfort-myrmidon</strong></p></li>
+<li><p><strong>fort-studio</strong>: conda distibution of <strong>fort-studio</strong>. It is provided to
+allow pinpointing a perticular version. The snap distribution should
+be preferred in most use case. Please remind that care must be taken
+if you install this conda package, as the command line executable
+<strong>fort-studio</strong> may not match anymore the application <strong>FORT Studio</strong>
+available through the <strong>snap</strong> package.</p></li>
+</ul>
+</div>
+<div class="section" id="install-fort-studio-from-snap">
+<h3>Install <strong>fort-studio</strong> from snap<a class="headerlink" href="#install-fort-studio-from-snap" title="Permalink to this headline">¶</a></h3>
+<p><strong>fort-studio</strong> is available through its own snap. It comes with its own
+bundled version of <strong>libfort-myrmidon</strong>. It can be installed using the
+following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo snap install fort-studio
+</pre></div>
+</div>
+<p>If your tracking data is not in your home but on a removable media,
+you must allow <strong>fort-studio</strong> the access to removable media using the
+following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo connect fort-studio:removable-media :removable-media
+</pre></div>
+</div>
+</div>
+<div class="section" id="installation-from-sources">
+<h3>Installation from sources<a class="headerlink" href="#installation-from-sources" title="Permalink to this headline">¶</a></h3>
+<p>This project uses CMake as a build system. It requires a minimum
+version of 3.11 at least as it needs to fetch some external
+dependencies using <strong>fetch_content</strong>. It also requires the following
+dependencies:</p>
+<ul class="simple">
+<li><p>OpenCV 3 or 4</p></li>
+<li><p>cmake (&gt;=3.11)</p></li>
+<li><p>Eigen 3</p></li>
+<li><p>Asio Library</p></li>
+<li><p>Qt 5</p></li>
+<li><p>Google Protobuf (&gt;=3.3.0)</p></li>
+<li><p>Google glog</p></li>
+<li><p>yaml-cpp</p></li>
+<li><p>TBB (==2020.02)</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="versioning">
+<h2>Versioning<a class="headerlink" href="#versioning" title="Permalink to this headline">¶</a></h2>
+<p>We use <a class="reference external" href="http://semver.org/">SemVer</a> for versioning. For the versions
+available, see the <a class="reference external" href="https://github.com/formicidae-tracker/myrmidon/releases">releases</a>.</p>
+</div>
+<div class="section" id="authors">
+<h2>Authors<a class="headerlink" href="#authors" title="Permalink to this headline">¶</a></h2>
+<p>The file <a class="reference external" href="https://github.com/formicidae-tracker/myrmidon/blob/master/AUTHORS">AUTHORS</a>
+lists all copyright holders (physical or moral person) for this
+repository.</p>
+<p>See also the list of <a class="reference external" href="https://github.com/formicidae-tracker/myrmidon/contributors">contributors</a> who
+participated in this project.</p>
+</div>
+<div class="section" id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p>This project is licensed under the GNU Lesser General Public License
+v3.0 or later - see the <a class="reference external" href="https://github.com/formicidae-tracker/myrmidon/blob/master/LICENSE">LICENSE</a>
+file for details</p>
+</div>
+<div class="section" id="table-of-contents">
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">API References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">Python</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html#c">C++</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/ant.html">Ant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/identification.html">Identification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/experiment.html">Experiment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/time.html">Time</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/shapes.html">Shapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/typedef.html">API generic types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html#r">R</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="api/index.html" class="btn btn-neutral float-right" title="Python" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Université de Lausanne.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
