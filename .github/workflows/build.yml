@@ -66,6 +66,7 @@ jobs:
             directory: ${{github.workspace}}/build/coverage
         - name: Build documentation
           run: make fort-myrmidon-docs
+          working-directory: ${{github.workspace}}/build/
         - name: Uploads documentation
           uses: actions/upload-artifact@v2
           with:
@@ -90,11 +91,11 @@ jobs:
           set -x
           rsync -avh --exclude _static _build/ latest --delete
           ln -sf ../_static latest/_static
-          rsync -avh _build/_static _static
-          ./linkVersions.sh
+          rsync -avh _build/_static/ _static
+          ./linkVersion.sh
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.5
-#        if: ${{ github.event_name == 'push' }}
+        if: ${{ github.event_name == 'push' }}
         with:
           branch: gh-pages
           folder: .

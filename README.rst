@@ -9,8 +9,8 @@
 
 
 `FORT Project Wiki <https://github.com/formicidae-tracker/documentation/wiki>`_
-• `Report a Bug <https://github.com/fortmicidae-tracker/myrmidon/issues/new>`_
-• `Request a Feature <https://github.com/formicidae-tracker/myrmidon/issues/new>`_
+• `Report a Bug <https://github.com/formicidae-tracker/myrmidon/issues/new?template=bug_report.md>`_
+• `Request a Feature <https://github.com/formicidae-tracker/myrmidon/issues/new?template=feature_request.md>`_
 
 
 **fort-myrmidon** is an API to facilitate access and analyzis of
