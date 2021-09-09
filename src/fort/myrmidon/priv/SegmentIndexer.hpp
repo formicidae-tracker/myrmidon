@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Time.hpp"
+#include <fort/time/Time.hpp>
 #include "Types.hpp"
 #include "FrameReference.hpp"
 

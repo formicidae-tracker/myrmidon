@@ -4,6 +4,26 @@ project(fort-studio LANGUAGES C CXX)
 
 cmake_minimum_required(VERSION 3.11)
 
+if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+	set(IS_MAIN TRUE)
+else(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+	set(IS_MAIN FALSE)
+endif(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+
+
+option(ENABLE_COVERAGE "Enables coverage generation" Off)
+option(UNIT_TEST_CHECK_TIMING "Test timing improvements during unit tests. May fails due to kernel scheduling, disable for automation" Off)
+option(BUILD_DOCS "Builds the documentation" Off)
+option(BUILD_PYTHON "Build python bindings" Off)
+
+
+if(IS_MAIN)
+	include(GoogleTest)
+	enable_testing()
+	set(MAKE_CHECK_TEST_COMMAND ${CMAKE_CTEST_COMMAND} -V)
+	add_custom_target(check COMMAND ${MAKE_CHECK_TEST_COMMAND})
+endif(IS_MAIN)
+
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
@@ -29,16 +49,9 @@ include(FetchGoogleTest)
 
 fetch_google_test(VERSION release-1.10.0)
 fetch_fort_tags(VERSION v1.4.0)
-fetch_fort_hermes(VERSION v0.5.2)
-fetch_fort_time(VERSION v1.0.5)
+fetch_fort_hermes(VERSION v0.5.3)
+fetch_fort_time(VERSION v1.0.6)
 fetch_semver(VERSION v0.2.2)
-
-include(GoogleTest)
-enable_testing()
-set(MAKE_CHECK_TEST_COMMAND ${CMAKE_CTEST_COMMAND} -V)
-if(NOT TARGET check)
-	add_custom_target(check COMMAND ${MAKE_CHECK_TEST_COMMAND})
-endif(NOT TARGET check)
 
 
 
@@ -96,15 +109,14 @@ if ( NOT HAS_STD_VARIANT )
 endif ( NOT HAS_STD_VARIANT )
 
 
-option(FORT_MYRMIDON_ENABLE_COVERAGE "Enables coverage generation" Off)
 
-if(FORT_MYRMIDON_ENABLE_COVERAGE)
+if(IS_MAIN AND ENABLE_COVERAGE)
 	include(CodeCoverage)
 	enable_coverage()
-endif(FORT_MYRMIDON_ENABLE_COVERAGE)
+endif(IS_MAIN AND ENABLE_COVERAGE)
 
 
-option(UNIT_TEST_CHECK_TIMING "Test timing improvements during unit tests. May fails due to kernel scheduling, disable for automation" Off)
+
 if(UNIT_TEST_CHECK_TIMING)
 	add_definitions("-DMYRMIDON_TEST_TIMING")
 endif(UNIT_TEST_CHECK_TIMING)
@@ -130,39 +142,38 @@ add_subdirectory(pkgconfig)
 
 add_subdirectory(src)
 
-if(ENABLE_COVERAGE)
+if(IS_MAIN AND ENABLE_COVERAGE)
 	setup_target_for_coverage(NAME coverage
 	                          DEPENDENCIES check
 	                          LCOV_OPTIONS --exclude "'*UTest.*'"
 	                                       --exclude "main-check.cpp"
 										   --include "'${PROJECT_SOURCE_DIR}/src/fort/myrmidon/*'"
 	                          )
-endif(ENABLE_COVERAGE)
+endif(IS_MAIN AND ENABLE_COVERAGE)
 
-option(BUILD_DOCS "Builds the documentation" Off)
-if(BUILD_DOCS)
-	add_subdirectory(docs)
-endif(BUILD_DOCS)
 
 add_subdirectory(misc)
 
-option(BUILD_PYTHON "Build python bindings" Off)
-
-if(BUILD_PYTHON)
+if(BUILD_PYTHON OR BUILD_DOCS)
 	find_package(pybind11 REQUIRED)
 	include_directories(${PROJECT_SOURCE_DIR}/src ${PROJECT_BINARY_DIR}/src)
 	set(FORT_MYRMIDON_LIBRARIES fort-myrmidon)
 	set(FORT_MYRMIDON_UTESTDATA_LIBRARIES fort-myrmidon-utestdata)
 
 	add_subdirectory(bindings/python/src)
-
-	add_test(NAME py_fort_myrmidon-tests
-             COMMAND ${CMAKE_COMMAND} -E env
-                     PYTHONPATH=${PROJECT_BINARY_DIR}/bindings/python/src
-                     ${PYTHON_EXECUTABLE} -m unittest discover -s tests -v
-             WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/bindings/python
-             )
+	if(IS_MAIN)
+		add_test(NAME py_fort_myrmidon-tests
+                 COMMAND ${CMAKE_COMMAND} -E env
+                         PYTHONPATH=${PROJECT_BINARY_DIR}/bindings/python/src
+                         ${PYTHON_EXECUTABLE} -m unittest discover -s tests -v
+                 WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/bindings/python
+                 )
 
 	add_dependencies(check py_fort_myrmidon)
+	endif(IS_MAIN)
+endif(BUILD_PYTHON OR BUILD_DOCS)
 
-endif(BUILD_PYTHON)
+
+if(BUILD_DOCS)
+	add_subdirectory(docs)
+endif(BUILD_DOCS)
