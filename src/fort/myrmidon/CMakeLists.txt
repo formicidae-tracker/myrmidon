@@ -267,7 +267,7 @@ set_target_properties(fort-myrmidon PROPERTIES
 install(TARGETS fort-myrmidon DESTINATION lib)
 install(FILES ${HDR_PUBLIC_FILES} DESTINATION include/fort/myrmidon)
 
-add_library(fort-myrmidon-utestdata STATIC ${UTESTDATA_SRC_FILES}
+add_library(fort-myrmidon-utestdata SHARED ${UTESTDATA_SRC_FILES}
 	                                       ${UTESTDATA_HDR_FILES})
 
 target_link_libraries(fort-myrmidon-utestdata fort-myrmidon)

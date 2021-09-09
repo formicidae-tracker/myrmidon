@@ -13,6 +13,8 @@ jobs:
     steps:
         - name: Checkout
           uses: actions/checkout@v2.0.0
+        - name: Get all git tags
+          run: git fetch --prune --unshallow --tags
         - name: Install dependencies
           run: |
               sudo apt install build-essential \
@@ -28,21 +30,25 @@ jobs:
                                libeigen3-dev \
                                libprotobuf-dev \
                                protobuf-compiler \
-                               lcov
+                               lcov \
+                               doxygen \
+                               ccache
               pip install sphinx_rtd_theme==0.5.2 \
-                               breathe
+                          breathe \
+                          numpy \
+                          pybind11
         - name: Uses ccache
           uses: hendrikmuhs/ccache-action@v1
         - name: Configure
           run: |
               export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
               cmake -B ${{github.workspace}}/build \
+                    -Dpybind11_DIR=$(pip show pybind11 | grep Location | cut -d " " -f 2)/pybind11/share/cmake/pybind11 \
                     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
                     -DBUILD_STUDIO=On \
                     -DENABLE_COVERAGE=On \
                     -DBUILD_DOCS=On \
-                    -DBUILD_PYTHON=On \
-                    ..
+                    -DBUILD_PYTHON=On
         - name: Build
           working-directory: ${{github.workspace}}/build
           run: |

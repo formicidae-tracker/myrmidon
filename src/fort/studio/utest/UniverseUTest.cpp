@@ -236,7 +236,7 @@ TEST_F(UniverseUTest,WidgetDoesNotSegfaultOnBadTDD) {
 	UniverseEditorWidget widget;
 	widget.setup(universe);
 
-	widget.addTrackingDataDirectory((TestSetup::Basedir()/"no-config.0000").c_str());
+	widget.addTrackingDataDirectory(TestSetup::UTestData().NoConfigDataDir().AbsoluteFilePath.c_str());
 
 
 
