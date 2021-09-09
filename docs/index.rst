@@ -1,21 +1,28 @@
-.. fort-myrmidon documentation master file, created by
-   sphinx-quickstart on Wed Jun  9 09:43:10 2021.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. include:: ../README.rst
 
-Welcome to fort-myrmidon's documentation!
-=========================================
+Table of Contents
+-----------------
+
+.. toctree::
+   :maxdepth: 1
+
+   introduction
+
+.. toctree::
+   :maxdepth: 1
+   :caption: **fort-myrmidon** Basics
+
+.. toctree::
+   :maxdepth: 1
+   :caption: **fort-studio** Manual
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Advanced features of **fort-myrmidon**
+
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: API References
 
-
-Table of Contents
-^^^^^^^^^^^^^^^^^
-
-.. toctree::
-   :maxdepth: 5
-
-   self
    api/index

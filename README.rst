@@ -1,6 +1,6 @@
 .. raw:: html
 
-    <p align="center"><img src="https://github.com/formicidae-tracker/hermes/raw/master/resources/icons/fort-hermes.svg" width="200px" alt="fort-hermes logo"></p>
+    <p align="center"><img src="https://github.com/formicidae-tracker/myrmidon/raw/master/resources/icons/fort-studio.svg" width="200px" alt="fort-studio logo"></p>
 
 ``fort-myrmidon`` and ``fort-studio`` — Post-processing API and User Interface
 ******************************************************************************
@@ -75,7 +75,10 @@ following command:
 Installation from sources
 =========================
 
-This project uses CMake as a build system. It requires a minimum version of 3.11 at least as it needs to fetch some external dependencies using **fetch_content**. It also requires the following dependencies:
+This project uses CMake as a build system. It requires a minimum
+version of 3.11 at least as it needs to fetch some external
+dependencies using **fetch_content**. It also requires the following
+dependencies:
 
 * OpenCV 3 or 4
 * cmake (>=3.11)
@@ -85,7 +88,7 @@ This project uses CMake as a build system. It requires a minimum version of 3.11
 * Google Protobuf (>=3.3.0)
 * Google glog
 * yaml-cpp
-* TBB
+* TBB (==2020.02)
 
 
 Versioning
