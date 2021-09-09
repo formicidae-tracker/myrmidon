@@ -1,0 +1,24 @@
+name: Documentation
+on:
+  release:
+    types: published
+
+jobs:
+  pins-documentation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout pages branch
+        uses: actions/checkout@v2
+        with:
+          ref: gh-pages
+      - name: Release new version
+        run: |
+          set -x
+          RELEASE=${GITHUB_REF#"refs/tags/"}
+          rsync -avh latest/ $RELEASE --delete
+          ./linkVersion.sh
+      - name: Deploys
+        uses: JamesIves/github-pages-deploy-action@4.1.5
+        with:
+          branch: gh-pages
+          folder: .

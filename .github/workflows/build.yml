@@ -1,4 +1,4 @@
-name: build
+name: Building
 on:
   pull_request:
     branches:
@@ -8,34 +8,87 @@ on:
       - master
 
 jobs:
-  run-tests-and-coverage:
+  run-tests-coverage-docs:
     runs-on: ubuntu-20.04
     steps:
         - name: Checkout
           uses: actions/checkout@v2.0.0
-        - name: Updates apt
-          run: sudo apt update
         - name: Install dependencies
-          run: sudo apt install build-essential git cmake libopencv-dev libasio-dev libboost-dev libgoogle-glog-dev libyaml-cpp-dev qtbase5-dev libqt5charts5-dev libeigen3-dev libprotobuf-dev protobuf-compiler lcov
+          run: |
+              sudo apt install build-essential \
+                               git \
+                               cmake \
+                               libopencv-dev \
+                               libasio-dev \
+                               libboost-dev \
+                               libgoogle-glog-dev \
+                               libyaml-cpp-dev \
+                               qtbase5-dev \
+                               libqt5charts5-dev \
+                               libeigen3-dev \
+                               libprotobuf-dev \
+                               protobuf-compiler \
+                               lcov
+              pip install sphinx_rtd_theme==0.5.2 \
+                               breathe
         - name: Uses ccache
           uses: hendrikmuhs/ccache-action@v1
         - name: Configure
           run: |
-            export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
-            cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_STUDIO=On -DENABLE_COVERAGE=On
+              export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
+              cmake -B ${{github.workspace}}/build \
+                    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+                    -DBUILD_STUDIO=On \
+                    -DENABLE_COVERAGE=On \
+                    -DBUILD_DOCS=On \
+                    -DBUILD_PYTHON=On \
+                    ..
         - name: Build
           working-directory: ${{github.workspace}}/build
           run: |
-            export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
-            make all
+              export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
+              make all
         - name: Test
           uses: GabrielBB/xvfb-action@v1
           with:
             run: make coverage
             working-directory: ${{github.workspace}}/build
         - name: Sends coverage
-          uses: coverallsapp/github-action@v1.1.2
+          uses: codecov/codecov-action@v2
+          id: send-coverage
           with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
-            path-to-lcov: ${{github.workspace}}/build/coverage/lcov.info
-#            base-path: ${{github.workspace}}
+            directory: ${{github.workspace}}/build/coverage
+        - name: Build documentation
+          run: make fort-myrmidon-docs
+        - name: Uploads documentation
+          uses: actions/upload-artifact@v2
+          with:
+            name: sphinx-documentation
+            path: ${{github.workspace}}/build/docs/sphinx
+
+  deploys-documentation:
+    runs-on: ubuntu-latest
+    needs: run-tests-coverage-docs
+    steps:
+      - name: Checkout pages branch
+        uses: actions/checkout@v2
+        with:
+          ref: gh-pages
+      - name: Download build documentation
+        uses: actions/download-artifact@v2
+        with:
+          name: sphinx-documentation
+          path: _build
+      - name: Copy new build
+        run: |
+          set -x
+          rsync -avh --exclude _static _build/ latest --delete
+          ln -sf ../_static latest/_static
+          rsync -avh _build/_static _static
+          ./linkVersions.sh
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.5
+#        if: ${{ github.event_name == 'push' }}
+        with:
+          branch: gh-pages
+          folder: .
