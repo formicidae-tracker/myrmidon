@@ -21,7 +21,7 @@ add_custom_command(OUTPUT ${DOXYGEN_INDEX_FILE}
 
 set(SPHINX_SOURCE ${CMAKE_CURRENT_SOURCE_DIR})
 set(SPHINX_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sphinx)
-add_custom_target(myrmidon-docs
+add_custom_target(fort-myrmidon-docs
                   COMMAND ${SPHINX_BUILD_EXECUTABLE} -b html
                           -Dbreathe_projects.fort-myrmidon=${DOXYGEN_OUTPUT_DIR}/xml
                           ${SPHINX_SOURCE} ${SPHINX_OUTPUT}
