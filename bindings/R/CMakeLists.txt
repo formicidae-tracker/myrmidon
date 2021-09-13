@@ -18,8 +18,8 @@ add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/localenv/${CMAKE_INSTALL_PREFIX}
 add_custom_command(OUTPUT ${R_FORT_MYRMIDON_PACKAGE}
                    COMMAND ${CMAKE_COMMAND} ARGS -E env PKG_CONFIG_SYSROOT_DIR=${PROJECT_BINARY_DIR}/localenv
                                                         PKG_CONFIG_PATH=${PROJECT_BINARY_DIR}/localenv/${CMAKE_INSTALL_PREFIX}/lib/pkgconfig
-                                                        CFLAGS=${EIGEN3_INCLUDE_DIRS}
-                                            ${R_EXECUTABLE} CMD INSTALL -l ${CMAKE_CURRENT_BINARY_DIR} --build FortMyrmidon
+                                                        LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/localenv/${CMAKE_INSTALL_PREFIX}/lib
+                                            ${R_EXECUTABLE} CMD INSTALL -l ${CMAKE_CURRENT_BINARY_DIR} --preclean --build FortMyrmidon
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                    DEPENDS ${PROJECT_BINARY_DIR}/localenv/${CMAKE_INSTALL_PREFIX}/lib/libfort-myrmidon.so
                    )
@@ -30,6 +30,7 @@ if(IS_MAIN)
 	add_custom_target(r-fort-myrmidon-check
 	                  COMMAND ${CMAKE_COMMAND} -E env PKG_CONFIG_SYSROOT_DIR=${PROJECT_BINARY_DIR}/localenv
 	                                                  PKG_CONFIG_PATH=${PROJECT_BINARY_DIR}/localenv/${CMAKE_INSTALL_PREFIX}/lib/pkgconfig
+	                                                  LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/localenv/${CMAKE_INSTALL_PREFIX}/lib
 	                                                  ${R_EXECUTABLE} CMD check FortMyrmidon
 	                  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 	                  DEPENDS ${PROJECT_BINARY_DIR}/localenv/${CMAKE_INSTALL_PREFIX}/lib/libfort-myrmidon.so
