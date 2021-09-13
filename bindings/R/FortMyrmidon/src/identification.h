@@ -3,12 +3,10 @@
 #include "RcppCommon.h"
 
 RCPP_EXPOSED_CLASS_NODECL(fort::myrmidon::Identification)
-RCPP_EXPOSED_CLASS_NODECL(fort::myrmidon::CIdentification)
 
 namespace Rcpp {
 
 template <> SEXP wrap(const fort::myrmidon::Identification::List &);
-template <> SEXP wrap(const fort::myrmidon::Identification::ConstList &);
 
 }
 

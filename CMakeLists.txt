@@ -15,7 +15,7 @@ option(ENABLE_COVERAGE "Enables coverage generation" Off)
 option(UNIT_TEST_CHECK_TIMING "Test timing improvements during unit tests. May fails due to kernel scheduling, disable for automation" Off)
 option(BUILD_DOCS "Builds the documentation" Off)
 option(BUILD_PYTHON "Build python bindings" Off)
-
+option(BUILD_R "Build R packages" Off)
 
 if(IS_MAIN)
 	include(GoogleTest)
@@ -172,6 +172,11 @@ if(BUILD_PYTHON OR BUILD_DOCS)
 	add_dependencies(check py_fort_myrmidon)
 	endif(IS_MAIN)
 endif(BUILD_PYTHON OR BUILD_DOCS)
+
+if(BUILD_R OR BUILD_DOCS)
+	add_subdirectory(bindings/R)
+endif(BUILD_R OR BUILD_DOCS)
+
 
 
 if(BUILD_DOCS)

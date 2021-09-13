@@ -1,7 +1,7 @@
 Package: FortMyrmidon
 Type: Package
 Title: R Bindings to the FORT myrmidon C++ API
-Version: 0.7.2
+Version: @PROJECT_VERSION@
 Date: 2020-07-08
 Author: Alexandre Tuleu
 Maintainer: Alexandre Tuleu <alexandre.tuleu.2005@polytechnique.org>
@@ -14,7 +14,7 @@ Description: This package are R Bindings to the FORT myrmidon C++ API,
  collision with other individual, construct their trajectories and
  finally estimate their timed intercation with other individuals.
 License: LGPL-3
-Imports: Rcpp (>= 1.0.4), methods
-LinkingTo: Rcpp
+Imports: Rcpp (>= 1.0.4), RcppEigen, methods
+LinkingTo: Rcpp, RcppEigen
 RoxygenNote: 7.1.0
 Encoding: UTF-8
