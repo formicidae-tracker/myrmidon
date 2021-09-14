@@ -20,8 +20,6 @@ then
 	FORT_MYRMIDON_LDFLAGS=$(pkg-config fort-myrmidon --libs)
 fi
 
-echo "FORT_MYRMIDON_CXXFLAGS: '${FORT_MYRMIDON_CXXFLAGS}'"
-echo "FORT_MYRMIDON_LDFLAGS: '${FORT_MYRMIDON_LDFLAGS}'"
 
 echo "
 PKG_CPPFLAGS = ${FORT_MYRMIDON_CXXFLAGS} --std=c++17 -I../inst/include/ -Wno-ignored-attributes
@@ -31,3 +29,10 @@ CXX_STD= CXX17
 " > src/Makevars
 
 ${R_HOME}/bin/Rscript -e 'library(Rcpp); Rcpp::compileAttributes();'
+
+echo "
+export FORT_MYRMIDON_CXXFLAGS=\"${FORT_MYRMIDON_CXXFLAGS}\"
+export FORT_MYRMIDON_LDFLAGS=\"${FORT_MYRMIDON_LDFLAGS}\"
+export LD_LIBRARY_PATH=\"${LD_LIBRARY_PATH}\"
+" > prefixEnv.sh
+chmod a+x prefixEnv.sh

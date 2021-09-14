@@ -4,6 +4,7 @@
 .Rproj.user
 .Rhistory
 .Rdata
+.RData
 FortMyrmidon.Rcheck/
 test.R
 FortMyrmidon/DESCRIPTION

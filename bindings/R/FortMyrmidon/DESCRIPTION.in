@@ -15,6 +15,5 @@ Description: This package are R Bindings to the FORT myrmidon C++ API,
  finally estimate their timed intercation with other individuals.
 License: LGPL-3
 Imports: Rcpp (>= 1.0.7)
-LinkingTo: Rcpp, RcppEigen
-RoxygenNodet: 7.1.0
+LinkingTo: Rcpp
 Encoding: UTF-8
