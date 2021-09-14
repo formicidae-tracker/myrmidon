@@ -21,8 +21,11 @@ BEGIN_RCPP
 END_RCPP
 }
 
+RcppExport SEXP _rcpp_module_boot_time();
+
 static const R_CallMethodDef CallEntries[] = {
     {"_FortMyrmidon_rcpp_hello_world", (DL_FUNC) &_FortMyrmidon_rcpp_hello_world, 0},
+    {"_rcpp_module_boot_time", (DL_FUNC) &_rcpp_module_boot_time, 0},
     {NULL, NULL, 0}
 };
 

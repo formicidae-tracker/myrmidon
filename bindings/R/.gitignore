@@ -8,3 +8,5 @@ FortMyrmidon.Rcheck/
 test.R
 FortMyrmidon/DESCRIPTION
 FortMyrmidon/src/Makevars
+FortMyrmidon/prefixEnv.sh
+FortMyrmidon/src/symbols.rds
