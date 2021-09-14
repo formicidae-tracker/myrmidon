@@ -3,7 +3,7 @@ if(NOT R_EXECUTABLE)
 	message(FATAL_ERROR "Could not find R")
 endif(NOT R_EXECUTABLE)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/FortMyrmidon/DESCRIPTION.in
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/DESCRIPTION.in
                ${CMAKE_CURRENT_SOURCE_DIR}/FortMyrmidon/DESCRIPTION
                @ONLY)
 
@@ -36,7 +36,7 @@ add_custom_target(r-fort-myrmidon ALL
 if(IS_MAIN)
 	add_custom_target(r-fort-myrmidon-check
 	                  COMMAND ${CMAKE_COMMAND} -E env ${ENV_VARIABLES}
-	                                           ${R_EXECUTABLE} CMD check FortMyrmidon
+	                                           ${R_EXECUTABLE} CMD check FortMyrmidon --no-manual
 	                  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 	                  DEPENDS fort-myrmidon fort-myrmidon-utestdata
 	                  )

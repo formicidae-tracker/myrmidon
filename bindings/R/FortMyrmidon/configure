@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 set -e
 
@@ -22,7 +22,7 @@ fi
 
 
 echo "
-PKG_CPPFLAGS = ${FORT_MYRMIDON_CXXFLAGS} --std=c++17 -I../inst/include/ -Wno-ignored-attributes
+PKG_CPPFLAGS = ${FORT_MYRMIDON_CXXFLAGS} --std=c++17 -I../inst/include/
 PKG_LIBS = ${FORT_MYRMIDON_LDFLAGS}
 
 CXX_STD= CXX17

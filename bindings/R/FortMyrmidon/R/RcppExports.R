@@ -8,3 +8,129 @@ rcpp_hello_world <- function() {
     .Call(`_FortMyrmidon_rcpp_hello_world`)
 }
 
+#' Creates a fmTime from an offset in second from the system's epoch
+#'
+#' @param offset the offset
+#' @return the \code{\link{fmTime}} offseted by offset seconds from
+#'   the system's epoch
+#' @family fmTime methods
+fmTimeCreate <- function(offset = 0.0) {
+    .Call(`_FortMyrmidon_fmTimeCreate`, offset)
+}
+
+#' Returns current time as a fmTime
+#'
+#' @return the current time as a \code{\link{fmTime}}
+#' @family fmTime methods
+fmTimeNow <- function() {
+    .Call(`_FortMyrmidon_fmTimeNow`)
+}
+
+#' The +∞ time
+#'
+#' @return a \code{\link{fmTime}} representing +∞.
+#' @family fmTime methods
+fmTimeForever <- function() {
+    .Call(`_FortMyrmidon_fmTimeForever`)
+}
+
+#' The -∞ time
+#'
+#' @return a \code{\link{fmTime}} representing -∞.
+#' @family fmTime methods
+fmTimeSinceEver <- function() {
+    .Call(`_FortMyrmidon_fmTimeSinceEver`)
+}
+
+#' Parses a time from a RFC3339 string representation
+#' @description Parses a time from a RFC3339 (
+#'   i.e. '1970-01-01T00:00:00.000Z' for UNIX epoch) string
+#'   representation to a fmTime
+#' @param input the string to parse
+#' @examples
+#' fmTimeParse('1970-01-01T00:00:00.000Z')$equals(fmTimeCreate()) # will be TRUE on UNIX systems
+#' @return a \code{\link{fmTime}} representing \code{input}.
+#' @family fmTime methods
+fmTimeParse <- function(input) {
+    .Call(`_FortMyrmidon_fmTimeParse`, input)
+}
+
+#' Parses a string to a fmDuration
+#' @param input a string in the format `[amount][unit]` as a
+#'   duration. Valid units are 'h','m','s','ms','us','ns'. The
+#'   pattern can be repeated (i.e. '4m32s' is valid).
+#' @examples
+#' fmDurationParse("1m2s")$show() == '1m2s'
+#' @return a \code{\link{fmDuration}} that is equal to input
+#' @family fmDuration methods
+fmDurationParse <- function(input) {
+    .Call(`_FortMyrmidon_fmDurationParse`, input)
+}
+
+#' A fmDuration in hours
+#' @param h an amount of hours
+#' @examples
+#' fmHour(1.32)
+#' fmHour(-3.2) # fmDuration can be negative
+#' @return a \code{\link{fmDuration}} that is equal to \code{h} hours
+#' @family fmDuration methods
+fmHour <- function(h) {
+    .Call(`_FortMyrmidon_fmHour`, h)
+}
+
+#' A fmDuration in minutes
+#' @param m an amount of minutes
+#' @examples
+#' fmMinute(1.32)
+#' fmMinute(-3.2) # fmDuration can be negative
+#' @return a \code{\link{fmDuration}} that is equal to \code{m} minutes
+#' @family fmDuration methods
+fmMinute <- function(m) {
+    .Call(`_FortMyrmidon_fmMinute`, m)
+}
+
+#' A fmDuration in seconds
+#' @param s an amount of seconds
+#' @examples
+#' fmSecond(1.32)
+#' fmSecond(-3.2) # fmDuration can be negative
+#' @return a \code{\link{fmDuration}} that is equal to \code{s} seconds
+#' @family fmDuration methods
+fmSecond <- function(s) {
+    .Call(`_FortMyrmidon_fmSecond`, s)
+}
+
+#' A fmDuration in milliseconds
+#' @param ms an amount of milliseconds
+#' @examples
+#' fmMillisecond(1.32)
+#' fmMillisecond(-3.2) # fmDuration can be negative
+#' @return a \code{\link{fmDuration}} that is equal to \code{ms} milliseconds
+#' @family fmDuration methods
+fmMillisecond <- function(ms) {
+    .Call(`_FortMyrmidon_fmMillisecond`, ms)
+}
+
+#' A fmDuration in microseconds
+#' @param us an amount of microseconds
+#' @examples
+#' fmMicrosecond(1.32)
+#' fmMicrosecond(-3.2) # fmDuration can be negative
+#' @return a \code{\link{fmDuration}} that is equal to \code{us} microsecond
+#' @family fmDuration methods
+fmMicrosecond <- function(us) {
+    .Call(`_FortMyrmidon_fmMicrosecond`, us)
+}
+
+#' A fmDuration in nanosecond
+#' @description the smallest fmDuration representation. can only take integer values
+#' @param ns an INTEGER amount of nanoseconds
+#' @examples
+#' fmNanosecond(1)
+#' fmNanosecond(-3) # fmDuration can be negative
+#' @return a \code{\link{fmDuration}} that is equal to \code{ns} nanosecond
+#' @family fmDuration methods
+fmNanosecond <- function(ns) {
+    .Call(`_FortMyrmidon_fmNanosecond`, ns)
+}
+
