@@ -1,7 +1,0 @@
-FM_CFLAGS = $(shell pkg-config --cflags fort-myrmidon)
-FM_LIBS = $(shell pkg-config --libs fort-myrmidon)
-
-PKG_CPPFLAGS = $(FM_CFLAGS) --std=c++17 -I../inst/include/ -Wno-ignored-attributes
-PKG_LIBS = $(FM_LIBS)
-
-CXX_STD= CXX17

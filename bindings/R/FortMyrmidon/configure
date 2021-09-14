@@ -1,0 +1,33 @@
+#!/bin/bash
+
+set -e
+
+if test -z "${R_HOME}"; then
+  echo "could not determine R_HOME"
+  exit 1
+fi
+
+CC=$("${R_HOME}/bin/R" CMD config CC)
+CFLAGS=$("${R_HOME}/bin/R" CMD config CFLAGS)
+CPPFLAGS=$("${R_HOME}/bin/R" CMD config CPPFLAGS)
+
+LDFLAGS=$("${R_HOME}/bin/R" CMD config LDFLAGS)
+
+
+if [ -z "${FORT_MYRMIDON_CXXFLAGS}" ] || [ -z "${FORT_MYRMIDON_LDFLAGS}" ]
+then
+	FORT_MYRMIDON_CXXFLAGS=$(pkg-config fort-myrmidon --cflags)
+	FORT_MYRMIDON_LDFLAGS=$(pkg-config fort-myrmidon --libs)
+fi
+
+echo "FORT_MYRMIDON_CXXFLAGS: '${FORT_MYRMIDON_CXXFLAGS}'"
+echo "FORT_MYRMIDON_LDFLAGS: '${FORT_MYRMIDON_LDFLAGS}'"
+
+echo "
+PKG_CPPFLAGS = ${FORT_MYRMIDON_CXXFLAGS} --std=c++17 -I../inst/include/ -Wno-ignored-attributes
+PKG_LIBS = ${FORT_MYRMIDON_LDFLAGS}
+
+CXX_STD= CXX17
+" > src/Makevars
+
+${R_HOME}/bin/Rscript -e 'library(Rcpp); Rcpp::compileAttributes();'

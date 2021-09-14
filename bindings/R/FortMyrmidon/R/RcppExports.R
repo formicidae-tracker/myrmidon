@@ -5,15 +5,3 @@ rcppeigen_hello_world <- function() {
     .Call('_FortMyrmidon_rcppeigen_hello_world', PACKAGE = 'FortMyrmidon')
 }
 
-rcppeigen_outerproduct <- function(x) {
-    .Call('_FortMyrmidon_rcppeigen_outerproduct', PACKAGE = 'FortMyrmidon', x)
-}
-
-rcppeigen_innerproduct <- function(x) {
-    .Call('_FortMyrmidon_rcppeigen_innerproduct', PACKAGE = 'FortMyrmidon', x)
-}
-
-rcppeigen_bothproducts <- function(x) {
-    .Call('_FortMyrmidon_rcppeigen_bothproducts', PACKAGE = 'FortMyrmidon', x)
-}
-
