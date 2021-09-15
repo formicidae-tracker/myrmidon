@@ -11,13 +11,20 @@ test_that("arithmetic is nanosecond exact" ,{
 
 
 test_that("it could be formatted properly" ,{
-    expect_output(str(fmNanosecond(0)),"0s")
-    expect_output(str(fmHour(1)),"1h0m0s")
-    expect_output(str(fmMinute(1)),"1m0s")
-    expect_output(str(fmSecond(1)),"1s")
-    expect_output(str(fmMillisecond(34)),"34ms")
-    expect_output(str(fmSecond(1) + fmMicrosecond(100)),"1.0001s")
+    expect_output((fmNanosecond(0))$show(),"0s")
+    expect_output((fmHour(1))$show(),"1h0m0s")
+    expect_output((fmMinute(1))$show(),"1m0s")
+    expect_output((fmSecond(1))$show(),"1s")
+    expect_output((fmMillisecond(34))$show(),"34ms")
+    expect_output((fmNanosecond(30))$show(),"30ns")
+    expect_output((fmSecond(1) + fmMicrosecond(100))$show(),"1.0001s")
+})
 
-
-
+test_that("creator functions provides the righ values",{
+    expect_equal(fmHour(1)$nanoseconds(),3600 * 1e9)
+    expect_equal(fmMinute(1)$nanoseconds(),60 * 1e9)
+    expect_equal(fmSecond(1)$nanoseconds(),1e9)
+    expect_equal(fmMillisecond(1)$nanoseconds(),1e6)
+    expect_equal(fmMicrosecond(1)$nanoseconds(),1e3)
+    expect_equal(fmNanosecond(1)$nanoseconds(),1)
 })

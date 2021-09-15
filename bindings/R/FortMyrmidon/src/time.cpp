@@ -42,31 +42,68 @@ RCPP_MODULE(time) {
 	class_<fort::Duration>("fmDuration")
 		.constructor()
 		.constructor<int64_t>()
-		.const_method("show",&fmDuration_show,"shows a fmDuration")
-		.const_method("hours",&fort::Duration::Hours,"the amount of hours represented by this duration")
-		.const_method("minutes",&fort::Duration::Hours,"the amount of minutes represented by this duration")
-		.const_method("seconds",&fort::Duration::Hours,"the amount of seconds represented by this duration")
-		.const_method("milliseconds",&fort::Duration::Hours,"the amount of milliseconds represented by this duration")
-		.const_method("microseconds",&fort::Duration::Hours,"the amount of microseconds represented by this duration")
-		.const_method("nanoseconds",&fort::Duration::Hours,"the amount of nanoseconds represented by this duration")
-		.const_method("add",&fmDuration_add)
-		.const_method("sub",&fmDuration_sub)
-		.const_method("-",&fmDuration_sub)
-		.const_method("lower",&fmDuration_lower)
-		.const_method("lowerEqual",&fmDuration_lowerEqual)
-		.const_method("equals",&fmDuration_equals)
+		.const_method("show",
+		              &fmDuration_show,
+		              "shows a fmDuration")
+		.const_method("hours",
+		              &fort::Duration::Hours,
+		              "the amount of hours represented by this duration")
+		.const_method("minutes",
+		              &fort::Duration::Minutes,
+		              "the amount of minutes represented by this duration")
+		.const_method("seconds",
+		              &fort::Duration::Seconds,
+		              "the amount of seconds represented by this duration")
+		.const_method("milliseconds",
+		              &fort::Duration::Milliseconds,
+		              "the amount of milliseconds represented by this duration")
+		.const_method("microseconds",
+		              &fort::Duration::Microseconds,
+		              "the amount of microseconds represented by this duration")
+		.const_method("nanoseconds",
+		              &fort::Duration::Nanoseconds,
+		              "the amount of nanoseconds represented by this duration")
+		.const_method("add",
+		              &fmDuration_add,
+		              "adds two fmDuration")
+		.const_method("sub",
+		              &fmDuration_sub,
+		              "substracts two fmDurations")
+		.const_method("lower",
+		              &fmDuration_lower,
+		              "compares two fmDurations")
+		.const_method("lowerEqual",
+		              &fmDuration_lowerEqual,
+		              "compares two fmDurations")
+		.const_method("equals",
+		              &fmDuration_equals,
+		              "compares two fmDuration")
 		;
 
 
 	class_<fort::Time>("fmTime")
 		.constructor()
-		.const_method("show",&fmTime_show,"shows a fmTime")
-		.const_method("after",&fort::Time::After,"checks if this fmTime is after another")
-		.const_method("before",&fort::Time::Before,"checks if this fmTime is before another")
-		.const_method("equals",&fort::Time::Equals,"checks if this fmTime is equal to another")
-		.const_method("add",&fort::Time::Add,"adds a fmDuration to this fmTime")
-		.const_method("sub",&fort::Time::Sub,"computes the fmDuration between this fmTime and another")
-		.const_method("round",&fort::Time::Round,"rounds this fmTime to a fmDuration")
+		.const_method("show",
+		              &fmTime_show,
+		              "shows a fmTime")
+		.const_method("after",
+		              &fort::Time::After,
+		              "Checks if this fmTime is after another")
+		.const_method("before",
+		              &fort::Time::Before,
+		              "Checks if this fmTime is before another")
+		.const_method("equals",
+		              &fort::Time::Equals,
+		              "Checks if this fmTime is equal to another")
+		.const_method("add",
+		              &fort::Time::Add,
+		              "adds a fmDuration to this fmTime")
+		.const_method("sub",
+		              &fort::Time::Sub,
+		              "Computes the fmDuration between this fmTime and another")
+		.const_method("round",
+		              &fort::Time::Round,
+		              "Rounds this fmTime to a fmDuration")
 		;
 }
 
