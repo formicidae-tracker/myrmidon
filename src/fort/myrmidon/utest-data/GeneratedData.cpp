@@ -419,7 +419,7 @@ void GeneratedData::GenerateTagStatistics(const Config & config) {
 		          << " +--+ LastSeen: " << stats.LastSeen << std::endl
 		          << " +--+ Counts: " << stats.Counts.transpose() << std::endl;
 	}
-#endif NDEBUG
+#endif //NDEBUG
 }
 
 void GeneratedData::GenerateTagStatisticsFor(uint32_t tagID,const AntData & ant) {

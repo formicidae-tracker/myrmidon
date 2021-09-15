@@ -13,6 +13,13 @@ class TimeTestCase(unittest.TestCase):
         self.assertEqual(m.Time.Forever().ToTimestamp(), float('inf'))
         self.assertEqual(m.Time(float('-inf')), m.Time.SinceEver())
         self.assertEqual(m.Time(float('inf')), m.Time.Forever())
+        self.assertTrue(m.Time.Forever().IsInfinite())
+        self.assertTrue(m.Time.Forever().IsForever())
+        self.assertFalse(m.Time.Forever().IsSinceEver())
+        self.assertTrue(m.Time.SinceEver().IsInfinite())
+        self.assertFalse(m.Time.SinceEver().IsForever())
+        self.assertTrue(m.Time.SinceEver().IsSinceEver())
+
 
     def test_has_math_support(self):
         t = m.Time.Now().Round(m.Duration.Second)

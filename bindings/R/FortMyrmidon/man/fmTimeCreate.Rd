@@ -7,7 +7,8 @@
 fmTimeCreate(offset = 0)
 }
 \arguments{
-\item{offset}{the offset}
+\item{offset}{the offset in second, Inf and -Inf are valid and
+respectively represents fmTimeForever() and fmTimeSinceEver().}
 }
 \value{
 the \code{\link{fmTime}} offseted by offset seconds from
@@ -25,8 +26,12 @@ Other fmTime methods:
 \code{\link{'>=.Rcpp_fmTime'}},
 \code{\link{fmTime$add}},
 \code{\link{fmTime$after}},
+\code{\link{fmTime$asPOSIXct}},
 \code{\link{fmTime$before}},
 \code{\link{fmTime$equals}},
+\code{\link{fmTime$isForever}},
+\code{\link{fmTime$isInfinite}},
+\code{\link{fmTime$isSinceEver}},
 \code{\link{fmTime$round}},
 \code{\link{fmTime$sub}},
 \code{\link{fmTimeForever}()},

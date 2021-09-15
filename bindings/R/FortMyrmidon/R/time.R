@@ -60,6 +60,35 @@ NULL
 #' @return a new \code{\link{fmTime}} which this time rounded to duration
 NULL
 
+#' @name fmTime$asPOSIXct
+#' @title Converts to a R datetime object
+#' @examples fmTimeNow()$asPOSIXct # equivalent to Sys.time()
+#' @family fmTime methods
+#' @return a datetime object representing this time this value can be
+#'     Inf or -Inf if this isInfinite()
+NULL
+
+#' @name fmTime$isInfinite
+#' @title Tests if it is an infinite time
+#' @examples fmTimeNow()$isInfinite() # should be FALSE
+#' @family fmTime methods
+#' @return TRUE if this time is fmTimeForever() or fmTimeSinceEver()
+NULL
+
+#' @name fmTime$isForever
+#' @title Tests if this fmTime is fmTimeForever()
+#' @examples fmTimeForever()$isForever() # is always TRUE
+#' @family fmTime methods
+#' @return TRUE if this time is fmTimeForever()
+NULL
+
+#' @name fmTime$isSinceEver
+#' @title Tests if this fmTime is fmTimeSinceEver()
+#' @examples fmTimeForever()$isSinceEver() # is always TRUE
+#' @family fmTime methods
+#' @return TRUE if this time is fmTimeSinceEver()
+NULL
+
 
 #' @name '<.Rcpp_fmTime'
 #' @title Comparison operator for fmTime

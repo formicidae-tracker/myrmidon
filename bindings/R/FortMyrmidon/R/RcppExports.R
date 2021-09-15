@@ -3,7 +3,8 @@
 
 #' Creates a fmTime from an offset in second from the system's epoch
 #'
-#' @param offset the offset
+#' @param offset the offset in second, Inf and -Inf are valid and
+#'   respectively represents fmTimeForever() and fmTimeSinceEver().
 #' @return the \code{\link{fmTime}} offseted by offset seconds from
 #'   the system's epoch
 #' @family fmTime methods

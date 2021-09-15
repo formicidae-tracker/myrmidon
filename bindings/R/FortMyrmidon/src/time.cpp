@@ -36,6 +36,15 @@ bool fmDuration_equals(const fort::Duration * a,
 	return *a == *b;
 }
 
+SEXP fmTime_asPOSIXCt(const fort::Time * t) {
+	if ( t->IsForever() ) {
+		return Rcpp::wrap(R_PosInf);
+	}
+	if ( t->IsSinceEver() ) {
+		return Rcpp::wrap(R_NegInf);
+	}
+	return Rcpp::wrap(Rcpp::Datetime(t->Sub(fort::Time()).Seconds()));
+}
 
 RCPP_MODULE(time) {
 	using namespace Rcpp;
@@ -104,19 +113,39 @@ RCPP_MODULE(time) {
 		.const_method("round",
 		              &fort::Time::Round,
 		              "Rounds this fmTime to a fmDuration")
+		.const_method("isInfinite",
+		              &fort::Time::IsInfinite,
+		              "Tests if this fmTime is infinite")
+		.const_method("isForever",
+		              &fort::Time::IsForever,
+		              "Tests if this fmTime is infinite")
+		.const_method("isSinceEver",
+		              &fort::Time::IsSinceEver,
+		              "Tests if this fmTime is infinite")
+		.const_method("asPOSIXct",
+		              &fmTime_asPOSIXCt,
+		              "converts this time to a posixct")
 		;
 }
 
 //' Creates a fmTime from an offset in second from the system's epoch
 //'
-//' @param offset the offset
+//' @param offset the offset in second, Inf and -Inf are valid and
+//'   respectively represents fmTimeForever() and fmTimeSinceEver().
 //' @return the \code{\link{fmTime}} offseted by offset seconds from
 //'   the system's epoch
 //' @family fmTime methods
 // [[Rcpp::export]]
 fort::Time fmTimeCreate(double offset = 0.0) {
+	if ( offset == std::numeric_limits<double>::infinity() ) {
+		return fort::Time::Forever();
+	} else if (offset == -std::numeric_limits<double>::infinity() ) {
+		return fort::Time::SinceEver();
+	}
+
 	return fort::Time().Add(offset * fort::Duration::Second.Nanoseconds());
 }
+
 
 //' Returns current time as a fmTime
 //'
