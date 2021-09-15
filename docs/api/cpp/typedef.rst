@@ -3,11 +3,8 @@
 API generic types
 =================
 
-
-
-Simple type definitions
------------------------
-
+Simple typedefs
++++++++++++++++
 
 .. doxygentypedef:: fort::myrmidon::TagID
 
@@ -23,10 +20,6 @@ Simple type definitions
 
 .. doxygenvariable:: fort::myrmidon::HEAD_TAIL_MEASUREMENT_TYPE
 
-
-Complex type definitions
-------------------------
-
 .. doxygentypedef:: fort::myrmidon::Vector2dList
 
 .. doxygenenum:: fort::myrmidon::AntMetaDataType
@@ -40,18 +33,13 @@ Complex type definitions
 .. doxygentypedef:: fort::myrmidon::InteractionTypes
 
 Structures
-----------
+++++++++++
 
-.. note:: To simplify R data manipulation, there are no structure
-   associated with this type. Indeed most
-   :cpp:class:`fort::myrmidon::Query` returns list of these
-   objects. In R these queries does not return a ``slist`` of ``S3
-   objects`` as it would be quite unpratical. Instead, they returns
-   several values, with at least one summary ``data.frame`` which
-   refers to index in one or several ``slist`` of ``data.frame``.
+These structure are the results returned by
+:cpp:class:`fort::myrmidon::Query`
 
 General Information queries
-+++++++++++++++++++++++++++
+***************************
 
 .. doxygenstruct:: fort::myrmidon::ComputedMeasurement
    :members:
@@ -69,7 +57,7 @@ General Information queries
    :members:
 
 Snapshot Queries
-++++++++++++++++
+****************
 
 .. doxygenstruct:: fort::myrmidon::IdentifiedFrame
    :members:
@@ -82,16 +70,13 @@ Snapshot Queries
 
 
 Time-spanning Queries
-+++++++++++++++++++++
-
+*********************
 
 .. doxygenstruct:: fort::myrmidon::AntTrajectory
    :members:
 
-
 .. doxygenstruct:: fort::myrmidon::AntTrajectorySegment
    :members:
-
 
 .. doxygenstruct:: fort::myrmidon::AntInteraction
    :members:

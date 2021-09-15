@@ -1,7 +1,7 @@
 .. api_experiment:
 
-Experiment
-==========
+fort::myrmidon::Experiment
+==========================
 
 .. doxygenclass:: fort::myrmidon::Experiment
    :members:

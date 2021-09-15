@@ -1,26 +1,28 @@
 .. _api:
 
 Python
-======
+------
 .. toctree::
 
    python/time
 
 
 C++
-===
+---
 
 .. toctree::
 
-   ant
-   identification
-   experiment
-   time
-   shapes
-   typedef
+   cpp/time
+   cpp/ant
+   cpp/identification
+   cpp/experiment
+   cpp/shapes
+   cpp/typedef
 
 
 R
-===
+---
 
 .. toctree::
+
+   R

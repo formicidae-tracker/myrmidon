@@ -1,7 +1,7 @@
 .. api_identification:
 
-Identification
-==============
+fort::myrmidon::Identification
+==============================
 
 .. doxygenclass:: fort::myrmidon::Identification
    :members:

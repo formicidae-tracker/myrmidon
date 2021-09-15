@@ -1,26 +1,26 @@
 .. api_shapes:
 
-Shapes
-++++++
+fort::myrmidon::Shape
+=====================
 
 .. doxygenclass:: fort::myrmidon::Shape
    :members:
 
-Capsule
-=======
+fort::myrmidon::Capsule
++++++++++++++++++++++++
 
 .. doxygenclass:: fort::myrmidon::Capsule
    :members:
 
-Circle
-=======
+fort::myrmidon::Circle
+++++++++++++++++++++++
 
 .. doxygenclass:: fort::myrmidon::Circle
    :members:
 
 
-Polygon
-=======
+fort::myrmidon::Polygon
++++++++++++++++++++++++
 
 .. doxygenclass:: fort::myrmidon::Polygon
    :members:

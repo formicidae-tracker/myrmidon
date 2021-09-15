@@ -1,7 +1,7 @@
 .. api_ant:
 
-Ant
-+++
+fort::myrmidon::Ant
+===================
 
 .. doxygenclass:: fort::myrmidon::Ant
    :members:
