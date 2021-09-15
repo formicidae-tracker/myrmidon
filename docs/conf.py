@@ -1,3 +1,5 @@
+import os
+import sys
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
@@ -31,7 +33,9 @@ extensions = [
     "breathe",
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
+    "sphinx.ext.intersphinx",
 ]
+intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
 
 breathe_default_project = "fort-myrmidon"
 
@@ -70,3 +74,8 @@ if ci_build:
     html_context['version'] = 'placeholder'
     html_context['theme_display_version'] = True
     html_js_files = ['../version_dropdown.js']
+
+
+rootpath = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+sys.path.append(os.path.join(rootpath, 'build/bindings/python/src'))
+sys.path.append(os.path.join(rootpath, 'bindings/python/src'))

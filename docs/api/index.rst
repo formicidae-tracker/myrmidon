@@ -4,6 +4,7 @@ Python
 ======
 .. toctree::
 
+   python/time
 
 
 C++

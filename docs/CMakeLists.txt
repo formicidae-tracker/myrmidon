@@ -25,6 +25,6 @@ add_custom_target(fort-myrmidon-docs
                   COMMAND ${SPHINX_BUILD_EXECUTABLE} -b html
                           -Dbreathe_projects.fort-myrmidon=${DOXYGEN_OUTPUT_DIR}/xml
                           ${SPHINX_SOURCE} ${SPHINX_OUTPUT}
-                  DEPENDS ${DOXYGEN_INDEX_FILE}
+                  DEPENDS ${DOXYGEN_INDEX_FILE} py_fort_myrmidon
                   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
                   COMMENT "Generating documentation with Sphinx")

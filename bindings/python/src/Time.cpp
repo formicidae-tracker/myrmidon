@@ -10,13 +10,41 @@ void BindDuration(py::module_ & m) {
 	py::class_<fort::Duration>(m,
 	                           "Duration",
 	                           R"pydoc(
-Represents an amount of nanoseconds as signed 64-bit integer
+    Represents an amount of nanoseconds as a signed 64-bit integer
+
+    Note:
+        The notion of 64-bit interger does not exist natively in
+        python, but since the mapped c++ object is, it will works like
+        a 64-bit integer.
+
+    Class Variables:
+        * Hour (py_fort_myrmidon.Duration): the value for an hour
+        * Minute (py_fort_myrmidon.Duration): the value for a minute
+        * Second (py_fort_myrmidon.Duration): the value for a second
+        * Millisecond (py_fort_myrmidon.Duration): the value for a millisecond
+        * Microsecond (py_fort_myrmidon.Duration): the value for a microsecond
+
 )pydoc")
-		.def(py::init<int64_t>(),"Initialize a Duration from an amount of nanoseconds")
+		.def(py::init<int64_t>(),
+		     py::arg("ns"),
+		     R"pydoc(
+Initialize a Duration from an amount of nanoseconds
+
+Args:
+    ns (int): the number of nanosecond to represent
+)pydoc")
 		.def(py::init([](double ns){
 			              return fort::Duration(int64_t(ns));
-		              }),"Initialize a Duration from an amount of nanoseconds")
-		.def(py::init<>(),"Initialize a zero second Duration")
+		              }),
+			py::arg("ns"),
+			R"pydoc(
+Initialize a Duration from an amount of nanoseconds
+
+Args:
+    ns (float): the number of nanosecond to represent
+)pydoc")
+		.def(py::init<>(),
+		     "Initialize a zero second Duration.")
 		.def("__str__",[](const fort::Duration & d) -> std::string {
 			               std::ostringstream oss;
 			               oss << d;
@@ -24,19 +52,19 @@ Represents an amount of nanoseconds as signed 64-bit integer
 		               })
 		.def_readonly_static("Hour",
 		                     &fort::Duration::Hour,
-		                     "(py_fort_myrmidon.Duration): An hour as a Duration")
+		                     "py_fort_myrmidon.Duration : the value for one hour.")
 		.def_readonly_static("Minute",
 		                     &fort::Duration::Minute,
-		                     "(py_fort_myrmidon.Duration); A minute as a Duration")
+		                     "py_fort_myrmidon.Duration: A minute as a Duration")
 		.def_readonly_static("Second",
 		                     &fort::Duration::Second,
-		                     "(py_fort_myrmidon.Duration); A second as a Duration")
+		                     "py_fort_myrmidon.Duration: A second as a Duration")
 		.def_readonly_static("Millisecond",
 		                     &fort::Duration::Millisecond,
-		                     "(py_fort_myrmidon.Duration); A millisecond as a Duration")
+		                     "py_fort_myrmidon.Duration: A millisecond as a Duration")
 		.def_readonly_static("Microsecond",
 		                     &fort::Duration::Microsecond,
-		                     "(py_fort_myrmidon.Duration); A microsecond as a Duration")
+		                     "py_fort_myrmidon.Duration: A microsecond as a Duration")
 		.def_static("Parse",
 		            &fort::Duration::Parse,
 		            py::arg("d"),
@@ -44,17 +72,18 @@ Represents an amount of nanoseconds as signed 64-bit integer
     Parses a string to a Duration.
 
     Args:
-       d (str): a string in the format `[amount][unit]` as a
-                duration. Valid units are
-                'h','m','s','ms','us','ns'. The pattern can be
-                repeated (i.e. '4m32s' is valid).
+        d (str): a string in the format `[amount][unit]` as a
+            duration. `[amout]` is a value that may contain a decimal
+            point, and `[units]` could be any of
+            'h','m','s','ms','us','ns'. The pattern can be repeated
+            (i.e. '4m32s' is valid).
 
     Returns:
-       py_fort_myrmidon.Duration: the parsed value
+        py_fort_myrmidon.Duration: the parsed value
 
     Raises:
-       Error: when the parsed amount will not hold in a 64-bit signed
-       integer
+        RuntimeError: when the parsed amount will not hold in a 64-bit
+            signed integer
 )pydoc")
 		.def("Hours",
 		     &fort::Duration::Hours,
@@ -170,64 +199,72 @@ void BindTime(py::module_ & m) {
     features operation to compare or measure a Duration between two
     Time.
 
-    The operation manipulating Time object never modifies the original
+    The operation manipulating Time objects never modifies the original
     objects, and always return new allocated object, so Time object
     can be considered immuable.
 
     It also provides methods to convert to and from
-    `datetime.datetime` object. In that case these objects are
-    considered naïve: expressed in localtime, and ignoring any
+    :class:`datetime.datetime` object. In that case these objects
+    are considered naïve: expressed in localtime, and ignoring any
     associated timezone information.
 
 
-    It provides methods to convert to and from `time` and
-    `datetime.timestamp()` float values. However for time around 2020,
-    these only ensure a 10us precision, but Time objects are precise
-    to the nanosecond.
+    It provides methods to convert to and from :func:`time.time` and
+    :meth:`datetime.datetime.timestamp` float values. However for time around
+    2020, these only ensure a 10us precision, but Time objects are
+    precise to the nanosecond.
+
 )pydoc")
-		.def(py::init<>(),"initialize a Time as the epoch")
+		.def(py::init<>(),R"pydoc(
+    Initialize a Time as the epoch.
+)pydoc")
 		.def(py::init(&timeFromPythonTimestamp),
 		     py::arg("timestamp"),
 		     R"pydoc(
+Creates a Time from a float as returned by :func:`time.time` or
+:meth:`datetime.datetime.timestamp`.
 
-    Creates a Time from a float as returned by time.time() or
-    datetime.timestamp()
+Args:
+    timestamp (float): an amount of second since the epoch. Could be
+        ``float('inf')`` or ``float('-inf')``.
 
-    Note: timestamp are only guaranted to be precise to 10us for Time
-    around year 2020.
-
-    Args:
-        timestamp (float): an amount of second since the epoch. Could
-                           be `float('inf')` or `float('-inf')`.
-`)pydoc")
+Note:
+    timestamp are only guaranted to be precise to 10us for Time around
+    year 2020.
+)pydoc")
 		.def(py::init(&timeFromPythonDatetime),
 		     py::arg("dt"),
 		     R"pydoc(
-    Constructor from a datetime.datetime object
+Initialize from a :class:`datetime.datetime` object.
 
-    Creates a Time from a `datetime.datetime object`. The object will
-    be treated as a local naive datetime, i.e. expressed in localtime
-    and ignoring any time information.
+Creates a Time from a :class:`datetime.datetime`. The object will be
+treated as a local naive datetime, i.e. expressed in localtime and
+ignoring any time information.
 
-    By default `fort-myrmidon` and `fort-studio` express Time in UTC.
+Args:
+    dt (datetime.datetime): a naïve :class:`datetime.datetime`.
 
-    Args:
-        dt (datetime.datetime): a naïve datetime. Please convert it to
-                                localtime with `dt.astimezone(None)`
-                                before passing it to this initializer
-                                or some time offset could be
-                                introduced.
-
+Warning:
+    The dt parameter will be treated as a naïve object, disregarding any
+    associated timezone information. Therefore one must call
+    :meth:`datetime.datetime.astimezone` with ``tz =None`` to convert the
+    object in localtime so it would be correctly converted to UTC
+    internally, which is the default representation in
+    **fort-myrmidon** and **fort-studio**.
 )pydoc")
 		.def_static("SinceEver",
 		            &fort::Time::SinceEver,
 		            R"pydoc(
+    The negative infinite time.
+
     Returns:
         py_fort_myrmidon.Time: A Time representing -∞
 )pydoc")
 		.def_static("Forever",
 		            &fort::Time::Forever,
-		            		            R"pydoc(
+		            R"pydoc(
+    The positive infinitie time.
+
     Returns:
         py_fort_myrmidon.Time: A Time representing +∞
 )pydoc")
@@ -243,8 +280,8 @@ void BindTime(py::module_ & m) {
 		            R"pydoc(
     Parses a RFC3339 string to a Time.
 
-    Parses a RFC3339 string (i.e. '1970-01-01T00:00:00.000Z') to a
-    Time
+    Parses a `RFC3339 <https://www.ietf.org/rfc/rfc3339.txt>`_ string
+    (i.e. '1970-01-01T00:00:00.000Z') to a Time.
 
     Args:
         input (str): the string to parse
@@ -254,7 +291,6 @@ void BindTime(py::module_ & m) {
 
     Raises:
         Error: if input is a Time that is not representable.
-
 )pydoc")
 		.def("ToTimestamp",
 		     [](const fort::Time & t) -> double{
@@ -267,8 +303,11 @@ void BindTime(py::module_ & m) {
 			     return res;
 		     },
 		     R"pydoc(
+    Converts to a float as returned by :func:`time.time` or
+    :meth:`datetime.datetime.timestamp`
+
     Returns:
-        float: an amount of second since the epoch
+        float: an amount of second since the system's epoch
 )pydoc")
 		.def("ToDateTime",
 		     [](const fort::Time & t) -> std::chrono::system_clock::time_point {
@@ -279,6 +318,11 @@ void BindTime(py::module_ & m) {
 			     return std::chrono::system_clock::time_point(std::chrono::seconds(ts.seconds()) + std::chrono::nanoseconds(ts.nanos()));
 		     },
 		     R"pydoc(
+    Converts to a :class:`datetime.datetime`
+
+    The returned object will be a naïve datetime, i.e. expressed in
+    localtime without any timezone information.
+
     Returns:
         datetime.datetime: a naive datetime.datetime object.
 )pydoc")
@@ -408,7 +452,6 @@ and power of 10 of Nanosecond smaller than a second are supported.
     Raises:
         Error: if the result would not fit in a Duration (i.e. if one
             of the Time.IsInfinite())
-
 )pydoc")
 		.def("__str__",&fort::Time::Format)
 		.def("__repr__",&fort::Time::DebugString)
