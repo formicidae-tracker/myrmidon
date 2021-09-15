@@ -3,7 +3,9 @@
 
 pushd bindings/R/FortMyrmidon
 
-sed -i "s/Version: .*/Version: ${PKG_VERSION}/" DESCRIPTION
+sed "s/Version: .*/Version: ${PKG_VERSION}/" ../DESCRIPTION.in > DESCRIPTION
+
+${R} CMD check .
 ${R} CMD INSTALL --preclean --build .
 
 popd
