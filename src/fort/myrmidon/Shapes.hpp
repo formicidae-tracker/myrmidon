@@ -34,30 +34,18 @@ public:
 
 	/**
 	 *  The type of a Shape.
-	 *
-	 * * Python: `py_fort_myrmidon.Shape.Type`
-	 * * R : `fmShapeType` named list.
 	 */
 	enum class Type {
 	                 /**
 	                  * A Capsule
-	                  *
-	                  * * Python: `py_fort_myrmidon.Shape.Type.CAPSULE`
-	                  * * R: `fmShapeType$CAPSULE`
 	                  */
 	                 CAPSULE = 0,
 	                 /**
 	                  * A Circle
-	                  *
-	                  * * Python: `py_fort_myrmidon.Shape.Type.CIRCLE`
-	                  * * R: `fmShapeType$CIRCLE`
 	                  */
 	                 CIRCLE  = 1,
 	                 /**
 	                  * A Polygon
-	                  *
-	                  * * Python: `py_fort_myrmidon.Shape.Type.POLYGON`
-	                  * * R: `fmShapeType$POLYGON`
 	                  */
 	                 POLYGON = 2
 	};
@@ -69,13 +57,6 @@ public:
 
 	/**
 	 *  Gets the Shape Type
-	 *
-	 * * Python: `ShapeType (py_fort_myrmidon.Shape.Type)` read-only property of `Shape` objects
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmShapeGetType <- function(shape) # return one of the value of the named list fmShapeType
-	 * ```
 	 *
 	 * @return the Type of the Shape
 	 */
@@ -107,15 +88,6 @@ public:
 	/**
 	 *  public constructor
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Circle.init(self,center: numpy.ndarray[numpy.float64[2,1]])
-	 * ```
-	 * * R:
-	 * ```
-	 * fmCircle <- function(center = c(0,0), radius = 0 ) # returns a Rcpp_fmCircle
-	 * ```
-	 *
 	 * @param center the center of the circle
 	 * @param radius the radius of the circle
 	 */
@@ -126,28 +98,12 @@ public:
 	/**
 	 *  Sets the center of the circle
 	 *
-	 * * Python: `py_fort_myrmidon.Circle.Center
-	 *           (numpy.ndarray[numpy.float64[2,1]])` read-write
-	 *           property of `py_fort_myrmidon.Circle` objects.
-	 * * R:
-	 * ```R
-	 * fmCircleSetCenter <- function(circle, center = c(0.0,0.0) )
-	 * ```
-	 *
 	 * @param center the center of the circle
 	 */
 	void SetCenter( const Eigen::Vector2d & center);
 
 	/**
 	 *  Gets the center of the circle
-	 *
-	 * * Python: `py_fort_myrmidon.Circle.Center
-	 *           (numpy.ndarray[numpy.float64[2,1]])` read-write
-	 *           property of `py_fort_myrmidon.Circle` objects.
-	 * * R:
-	 * ```R
-	 * fmCircleCenter <- function(circle) # returns a numerical vector
-	 * ```
 	 *
 	 * @return the circle center
 	 */
@@ -157,26 +113,12 @@ public:
 	/**
 	 *  Sets the radius of the circle
 	 *
-	 * * Python: `py_fort_myrmidon.Circle.Radius (float)` read-write
-	 *           property of `py_fort_myrmidon.Circle` objects.
-	 * * R:
-	 * ```R
-	 * fmCircleSetRadius <- function(circle, radius = 0.0 )
-	 * ```
-	 *
 	 * @param radius the radius of the circle
 	 */
 	void SetRadius(double radius);
 
 	/**
 	 *  Gets the radius of the circle
-	 *
-	 * * Python: `py_fort_myrmidon.Circle.Radius (float)` read-write
-	 *           property of `py_fort_myrmidon.Circle` objects.
-	 * * R:
-	 * ```R
-	 * fmCircleRadius <- function(circle) # returns a numerical
-	 * ```
 	 *
 	 * @param radius the radius of the circle
 	 */
@@ -219,15 +161,6 @@ public:
 	/**
 	 * Public constructor
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Capsule.__init__(self,c1: numpy.ndarray[numpy.float64[2,1]], c2:numpy.ndarray[numpy.float64[2,1]], r1: float, r2: float)
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmCapsule <- function(c1 = c(0.0,0.0), c2 = c(0.0,0.0), r1 = 0.0, r2 = 0.0) # returns a Rcpp_fmCapsule
-	 * ```
-	 *
 	 * @param c1 the first center
 	 * @param c2 the second center
 	 * @param r1 the radius at c1
@@ -243,43 +176,19 @@ public:
 	/**
 	 *  Sets the first circle's center
 	 *
-	 * * Python: `py_fort_myrmidon.Capsule.C1
-	 *           (numpy.ndarray[numpy.float64[2,1]])` read-write
-	 *           property of `py_fort_myrmidon.Circle` objects.
-	 * * R:
-	 * ```R
-	 * fmCapsuleSetC1 <- function(capsule, c1 = c(0.0,0.0) )
-	 * ```
-	 *
 	 * @param c1 the center of the first circle
 	 */
 	void SetC1(const Eigen::Vector2d & c1);
 
 	/**
-	 *  Sets the second circle's center
-	 *
-	 * * Python: `py_fort_myrmidon.Capsule.C2
-	 *           (numpy.ndarray[numpy.float64[2,1]])` read-write
-	 *           property of `py_fort_myrmidon.Circle` objects.
-	 * * R:
-	 * ```R
-	 * fmCapsuleSetC2 <- function(capsule, c2 = c(0.0,0.0) )
-	 * ```
+	 * Sets the second circle's center
 	 *
 	 * @param c2 the center of the second circle
 	 */
 	void SetC2(const Eigen::Vector2d & c2);
 
 	/**
-	 *  Gets the first circle's center
-	 *
-	 * * Python: `py_fort_myrmidon.Capsule.C1
-	 *           (numpy.ndarray[numpy.float64[2,1]])` read-write
-	 *           property of `py_fort_myrmidon.Circle` objects.
-	 * * R:
-	 * ```R
-	 * fmCapsuleC1 <- function(capsule) # returns a numerical vector
-	 * ```
+	 * Gets the first circle's center
 	 *
 	 * @return the center of the first circle
 	 */
@@ -290,14 +199,6 @@ public:
 	/**
 	 *  Gets the second circle's center
 	 *
-	 * * Python: `py_fort_myrmidon.Capsule.C2
-	 *           (numpy.ndarray[numpy.float64[2,1]])` read-write
-	 *           property of `py_fort_myrmidon.Circle` objects.
-	 * * R:
-	 * ```R
-	 * fmCapsuleC2 <- function(capsule) # returns a numerical vector
-	 * ```
-	 *
 	 * @return the center of the second circle
 	 */
 	inline const Eigen::Vector2d & C2() const {
@@ -307,13 +208,6 @@ public:
 	/**
 	 *  Sets the first circle's radius
 	 *
-	 * * Python: `py_fort_myrmidon.Capsule.R1 (float)` read-write
-	 *           property of `py_fort_myrmidon.Circle` objects.
-	 * * R:
-	 * ```R
-	 * fmCapsuleSetR1 <- function(capsule, r1 = 0.0 )
-	 * ```
-	 *
 	 * @param r1 the radius of the first circle
 	 */
 
@@ -322,26 +216,12 @@ public:
 	/**
 	 *  Sets the second circle's radius
 	 *
-	 * * Python: `py_fort_myrmidon.Capsule.R2 (float)` read-write
-	 *           property of `py_fort_myrmidon.Circle` objects.
-	 * * R:
-	 * ```R
-	 * fmCapsuleSetR2 <- function(capsule, r2 = 0.0 )
-	 * ```
-	 *
 	 * @param r2 the radius of the first circle
 	 */
 	void SetR2(double r2);
 
 	/**
 	 *  Gets the first circle's radius
-	 *
-	 * * Python: `py_fort_myrmidon.Capsule.R1 (float)` read-write
-	 *           property of `py_fort_myrmidon.Circle` objects.
-	 * * R:
-	 * ```R
-	 * fmCapsuleR1 <- function(capsule) # returns a numerical
-	 * ```
 	 *
 	 * @return the radius of the first circle
 	 */
@@ -351,13 +231,6 @@ public:
 
 	/**
 	 *  Gets the second circle's radius
-	 *
-	 * * Python: `py_fort_myrmidon.Capsule.R2 (float)` read-write
-	 *           property of `py_fort_myrmidon.Circle` objects.
-	 * * R:
-	 * ```R
-	 * fmCapsuleR2 <- function(capsule) # returns a numerical
-	 * ```
 	 *
 	 * @return the radius of the second circle
 	 */
@@ -417,15 +290,6 @@ public:
 	/**
 	 * Public constructor
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Polygon.__init__(self,vertices: List[numpy.ndarray[numpy.float64[2,1]]])
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmPolygon <- function(vertices = list() ) # returns a Rcpp_fmPolygon
-	 * ```
-	 *
 	 * @param vertices the vertices of the polygon
 	 */
 	Polygon(const Vector2dList & vertices);
@@ -436,30 +300,12 @@ public:
 	/**
 	 * Gets the number of vertices in the polygon
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Polygon.Size(self) -> int
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmPolygonSize <- function(polygon) # returns an integer
-	 * ```
-	 *
 	 * @return the number of vertices in the Polygon
 	 */
 	size_t Size() const;
 
 	/**
 	 * Gets a polygon vertex
-	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Polygon.Vertex(self,index: int) -> numpy.ndarray[numpy.float64[2,1]]
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmPolygonVertex <- function(polygon, index=0) # returns a numerical vector WARNING index starts at 0
-	 * ```
 	 *
 	 * @param i the index of the wanted vertex in [0;Size()-1]
 	 *
@@ -469,15 +315,6 @@ public:
 
 	/**
 	 * Sets a Polygon vertex
-	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Polygon.SetVertex(self,index: int, v: numpy.ndarray[numpy.float64[2,1]])
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmPolygonVertex <- function(polygon, index=0, v = c(0.0,0.0) ) # WARNING index starts at 0
-	 * ```
 	 *
 	 * @param i the index of the wanted vertex in [0;Size()-1]
 	 * @param v the new value for the vertex

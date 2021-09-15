@@ -26,14 +26,6 @@ public:
 	/**
 	 * Gets the geometry of this ZoneDefinition
 	 *
-	 * * Python: `py_fort_myrmidon.ZoneDefinition.Shapes
-	 *           (List[py_fort_myrmidon.Shape])` read-write property
-	 *           of `py_fort_myrmidon.ZoneDefinition` objects.
-	 * * R:
-	 * ```R
-	 * fmZoneDefinitionShapes <- function(zoneDefinition) # returns a list of Rcpp_fmShape
-	 * ```
-	 *
 	 * @return a list of Shape that define the Shape of the Zone for
 	 *         [Start();End()[
 	 */
@@ -42,28 +34,12 @@ public:
 	/**
 	 * Sets the Shapes of this ZoneDefinition
 	 *
-	 * * Python: `py_fort_myrmidon.ZoneDefinition.Shapes
-	 *           (List[py_fort_myrmidon.Shape])` read-write property
-	 *           of `py_fort_myrmidon.ZoneDefinition` objects.
-	 * * R:
-	 * ```R
-	 * fmZoneDefinitionSetShapes <- function (zoneDefinition,shapes = list())
-	 * ```
-	 *
 	 * @param shapes a union of Shape defining the <Zone> shapes.
 	 */
 	void SetShapes(const Shape::List & shapes);
 
 	/**
 	 * Gets the first valid time of the ZoneDefinition
-	 *
-	 * * Python: `py_fort_myrmidon.ZoneDefinition.Start
-	 *           (py_fort_myrmidon.Time)` read-write property of
-	 *           `py_fort_myrmidon.ZoneDefinition` objects.
-	 * * R:
-	 * ```
-	 * fmZoneDefinitionStart <- function(zoneDefinition) # returns a Rcpp_fmTime
-	 * ```
 	 *
 	 * @return the first valid Time of this definition. It can be
 	 *         Time::SinceEver().
@@ -73,14 +49,6 @@ public:
 	/**
 	 * Gets the first invalid time of the ZoneDefinition
 	 *
-	 * * Python: `py_fort_myrmidon.ZoneDefinition.End
-	 *            (py_fort_myrmidon.Time)` read-write property of
-	 *            `py_fort_myrmidon.ZoneDefinition` objects.
-	 * * R:
-	 * ```
-	 * fmZoneDefinitionEnd <- function(zoneDefinition) # returns a Rcpp_fmTime
-	 * ```
-	 *
 	 * @return the first invalid Time of this definition. It can be
 	 *         Time::Forever().
 	 */
@@ -89,14 +57,6 @@ public:
 	/**
 	 * Sets the first valid time of the ZoneDefinition
 	 *
-	 * * Python: `py_fort_myrmidon.ZoneDefinition.Start
-	 *            (py_fort_myrmidon.Time)` read-write property of
-	 *            `py_fort_myrmidon.ZoneDefinition` objects.
-	 * * R:
-	 * ```
-	 * fmZoneDefinitionSetStart <- function(zoneDefinition,time = fmTimeSinceEver() )
-	 * ```
-	 *
 	 * @param start the first valid Time of this definition. It can be
 	 *        Time::SinceEver().
 	 */
@@ -104,14 +64,6 @@ public:
 
 	/**
 	 * Sets the first invalid time of the ZoneDefinition
-	 *
-	 * * Python: `py_fort_myrmidon.ZoneDefinition.Start
-	 *           (py_fort_myrmidon.Time)` read-write property of
-	 *           `py_fort_myrmidon.ZoneDefinition` objects.
-	 * * R:
-	 * ```
-	 * fmZoneDefinitionSetStart <- function(zoneDefinition,time = fmTimeSinceEver() )
-	 * ```
 	 *
 	 * @param start the first valid Time of this definition. It can be
 	 *        Time::SinceEver().
@@ -178,15 +130,6 @@ public:
 	/**
 	 * Adds a new timed ZoneDefinition
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Zone.AddDefinition(self,shapes: List[py_fort_myrmidon.Shape], start: py_fort_myrmidon.Time, end: py_fort_myrmidon.Time) -> py_fort_myrmidon.ZoneDefinition
-	 * ```
-	 * * R:
-	 * ```
-	 * fmZoneAddDefinition <- function(zone,shapes = list(), start = fmTimeSinceEver(), end = fmTimeForever()) # returns a Rcpp_fmZoneDefinition
-	 * ```
-	 *
 	 * Adds a new timed ZoneDefinition valid for [start,end[ to this Zone. It
 	 * accepts Time::SinceEver() and Time::Forever() for start or
 	 * end.
@@ -208,12 +151,6 @@ public:
 	/**
 	 * Gets the Zone's ZoneDefinition
 	 *
-	 * * Python: `py_fort_myrmidon.Zone.Definitions (List[py_fort_myrmidon.ZoneDefinition])` read-only property of `py_fort_myrmidon.Zone` objects.
-	 * * R:
-	 * ```R
-	 * fmZoneDefinitions <- function(zone) # returns a list of Rcpp_fmZoneDefinition
-	 * ```
-	 *
 	 * @return a ZoneDefinition::List of ZoneDefinition for this Zone
 	 *
 	 */
@@ -222,15 +159,6 @@ public:
 	/**
 	 *
 	 * Removes a ZoneDefinition
-	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Zone.DeleteDefinition(self,index)
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmZoneDeleteDefinition <- function(zone,index = 0) # warning index starts at zero
-	 * ```
 	 *
 	 * @index the index in Definitions() to remove.
 	 *
@@ -241,12 +169,6 @@ public:
 	/**
 	 * Gets the Zone name
 	 *
-	 * * Python: `py_fort_myrmidon.Zone.Name (str)` read-write property of `py_fort_myrmidon.Zone` objects
-	 * * R:
-	 * ```R
-	 * fmZoneName <- function(zone) # returns a character
-	 * ```
-	 *
 	 * @return the Zone name
 	 */
 	const std::string & Name() const;
@@ -254,24 +176,12 @@ public:
 	/**
 	 * Gets the Zone name
 	 *
-	 * * Python: `py_fort_myrmidon.Zone.Name (str)` read-write property of `py_fort_myrmidon.Zone` objects
-	 * * R:
-	 * ```R
-	 * fmZoneSetName <- function(zone,name = '')
-	 * ```
-	 *
 	 * @param name the wanted Name()
 	 */
 	void SetName(const std::string & name);
 
 	/**
 	 * Gets the Zone ID
-	 *
-	 * * Python: `py_fort_myrmidon.Zone.ID (int)` read-only property of `py_fort_myrmidon.Zone` objects
-	 * * R:
-	 * ```
-	 * fmZoneID <- function(zone) # returns an integer
-	 * ```
 	 *
 	 * @return the Zone ZoneID
 	 */
