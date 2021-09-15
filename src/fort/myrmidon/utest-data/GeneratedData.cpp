@@ -412,12 +412,14 @@ void GeneratedData::GenerateTagStatistics(const Config & config) {
 	for ( const auto & [antID,ant] : config.Ants ) {
 		GenerateTagStatisticsFor(antID-1,ant);
 	}
-	// for ( const auto & [tagID,stats] : Statistics ) {
-	// 	std::cerr << " + TagID: " << FormatTagID(tagID) << std::endl
-	// 	          << " +--+ FirstSeen: " << stats.FirstSeen << std::endl
-	// 	          << " +--+ LastSeen: " << stats.LastSeen << std::endl
-	// 	          << " +--+ Counts: " << stats.Counts.transpose() << std::endl;
-	// }
+#ifndef NDEBUG
+	for ( const auto & [tagID,stats] : Statistics ) {
+		std::cerr << " + TagID: " << FormatTagID(tagID) << std::endl
+		          << " +--+ FirstSeen: " << stats.FirstSeen << std::endl
+		          << " +--+ LastSeen: " << stats.LastSeen << std::endl
+		          << " +--+ Counts: " << stats.Counts.transpose() << std::endl;
+	}
+#endif NDEBUG
 }
 
 void GeneratedData::GenerateTagStatisticsFor(uint32_t tagID,const AntData & ant) {

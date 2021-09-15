@@ -159,13 +159,15 @@ if(BUILD_PYTHON OR BUILD_DOCS)
 	add_subdirectory(bindings/python/src)
 	if(IS_MAIN)
 		add_test(NAME py_fort_myrmidon-tests
-                 COMMAND ${CMAKE_COMMAND} -E env
-                         PYTHONPATH=${PROJECT_BINARY_DIR}/bindings/python/src
-                         ${PYTHON_EXECUTABLE} -m unittest discover -s tests -v
-                 WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/bindings/python
-                 )
+		         COMMAND ${CMAKE_COMMAND} -E env
+		                 PYTHONPATH=${PROJECT_BINARY_DIR}/bindings/python/src
+		                 ${PYTHON_EXECUTABLE} -m unittest discover -s tests -v
+		         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/bindings/python
+		         )
 
-	add_dependencies(check py_fort_myrmidon)
+		add_dependencies(check py_fort_myrmidon)
+		add_dependencies(py_fort_myrmidon fort-myrmidon)
+		add_dependencies(py_fort_myrmidon_utestdata fort-myrmidon-utestdata)
 	endif(IS_MAIN)
 endif(BUILD_PYTHON OR BUILD_DOCS)
 
