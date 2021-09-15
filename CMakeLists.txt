@@ -45,7 +45,10 @@ include(FetchGoogleTest)
 
 fetch_google_test(VERSION release-1.10.0)
 fetch_fort_tags(VERSION v1.4.1)
+set(OBUILD_PYTHON ${BUILD_PYTHON})
+set(BUILD_PYTHON Off)
 fetch_fort_hermes(VERSION v0.5.3)
+set(BUILD_PYTHON ${OBUILD_PYTHON})
 fetch_fort_time(VERSION v1.0.7)
 fetch_semver(VERSION v0.2.2)
 
