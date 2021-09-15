@@ -32,13 +32,9 @@ version_from_git()
 
 find_package(Eigen3 3.3.4 REQUIRED NO_MODULE)
 find_package(Protobuf 3.3.0 REQUIRED)
-
 find_package(TBB REQUIRED)
-
 find_package(OpenCV REQUIRED core imgcodecs imgproc highgui videoio)
-
 find_package(Qt5 COMPONENTS Widgets Concurrent Test Charts REQUIRED)
-
 find_package(yaml-cpp REQUIRED)
 
 include(FetchFortTags)
@@ -50,7 +46,7 @@ include(FetchGoogleTest)
 fetch_google_test(VERSION release-1.10.0)
 fetch_fort_tags(VERSION v1.4.1)
 fetch_fort_hermes(VERSION v0.5.3)
-fetch_fort_time(VERSION v1.0.6)
+fetch_fort_time(VERSION v1.0.7)
 fetch_semver(VERSION v0.2.2)
 
 
@@ -173,9 +169,9 @@ if(BUILD_PYTHON OR BUILD_DOCS)
 	endif(IS_MAIN)
 endif(BUILD_PYTHON OR BUILD_DOCS)
 
-if(BUILD_R OR BUILD_DOCS)
+if(BUILD_R)
 	add_subdirectory(bindings/R)
-endif(BUILD_R OR BUILD_DOCS)
+endif(BUILD_R)
 
 
 
