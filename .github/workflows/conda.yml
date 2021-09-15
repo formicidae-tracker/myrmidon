@@ -41,6 +41,3 @@ jobs:
       - name: Upload package (test)
         if: ${{ github.event_name == 'push' }}
         run: anaconda -t ${{ secrets.ANACONDA_TOKEN }} upload -u formicidae-tracker build/conda-packages/**/*.tar.bz2 --label test
-      - name: Upload package (dev)
-        if: ${{ github.event_name == 'pull_request' }}
-        run: anaconda -t ${{ secrets.ANACONDA_TOKEN }} upload -u formicidae-tracker build/conda-packages/**/*.tar.bz2 --label dev
