@@ -115,5 +115,14 @@ evalqOnLoad({
               function(x) {
                   x$as.list()
               })
-
+    setMethod("length",
+              signature='Rcpp_fmShapeList',
+              function(x) {
+                  x$size()
+              })
+    setMethod("as.list",
+              signature='Rcpp_fmShapeList',
+              function(x) {
+                  x$as.list()
+              })
 })

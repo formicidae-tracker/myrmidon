@@ -32,15 +32,25 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// fmPolygonCreate
-fort::myrmidon::Polygon fmPolygonCreate(const fort::myrmidon::Vector2dList& vertices);
-RcppExport SEXP _FortMyrmidon_fmPolygonCreate(SEXP verticesSEXP) {
+// fmShapeListCreate
+fort::myrmidon::Shape::List fmShapeListCreate(SEXP shapes);
+RcppExport SEXP _FortMyrmidon_fmShapeListCreate(SEXP shapesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const fort::myrmidon::Vector2dList& >::type vertices(verticesSEXP);
-    rcpp_result_gen = Rcpp::wrap(fmPolygonCreate(vertices));
+    Rcpp::traits::input_parameter< SEXP >::type shapes(shapesSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmShapeListCreate(shapes));
     return rcpp_result_gen;
+END_RCPP
+}
+// pfmIWantAShapeList
+void pfmIWantAShapeList(const fort::myrmidon::Shape::List& l);
+RcppExport SEXP _FortMyrmidon_pfmIWantAShapeList(SEXP lSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const fort::myrmidon::Shape::List& >::type l(lSEXP);
+    pfmIWantAShapeList(l);
+    return R_NilValue;
 END_RCPP
 }
 // fmTimeCreate
@@ -181,7 +191,8 @@ RcppExport SEXP _rcpp_module_boot_zone();
 static const R_CallMethodDef CallEntries[] = {
     {"_FortMyrmidon_fmVector2dListCreate", (DL_FUNC) &_FortMyrmidon_fmVector2dListCreate, 1},
     {"_FortMyrmidon_pfmIWantAVector2dList", (DL_FUNC) &_FortMyrmidon_pfmIWantAVector2dList, 1},
-    {"_FortMyrmidon_fmPolygonCreate", (DL_FUNC) &_FortMyrmidon_fmPolygonCreate, 1},
+    {"_FortMyrmidon_fmShapeListCreate", (DL_FUNC) &_FortMyrmidon_fmShapeListCreate, 1},
+    {"_FortMyrmidon_pfmIWantAShapeList", (DL_FUNC) &_FortMyrmidon_pfmIWantAShapeList, 1},
     {"_FortMyrmidon_fmTimeCreate", (DL_FUNC) &_FortMyrmidon_fmTimeCreate, 1},
     {"_FortMyrmidon_fmTimeNow", (DL_FUNC) &_FortMyrmidon_fmTimeNow, 0},
     {"_FortMyrmidon_fmTimeForever", (DL_FUNC) &_FortMyrmidon_fmTimeForever, 0},

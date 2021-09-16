@@ -21,6 +21,12 @@ Other fmShape methods and classes:
 \code{\link{fmCircleCreate}()},
 \code{\link{fmPolygonCreate}()},
 \code{\link{fmPolygon}},
+\code{\link{fmShapeList$[[<-}},
+\code{\link{fmShapeList$[[}},
+\code{\link{fmShapeList$as.list}},
+\code{\link{fmShapeList$size}},
+\code{\link{fmShapeListCreate}()},
+\code{\link{fmShapeList}},
 \code{\link{fmShapeTypes}},
 \code{\link{fmShape}}
 }

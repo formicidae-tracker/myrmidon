@@ -13,12 +13,17 @@ pfmIWantAVector2dList <- function(l) {
     invisible(.Call(`_FortMyrmidon_pfmIWantAVector2dList`, l))
 }
 
-#' Creates a fmPolygon
-#' @param vertices the polygon vertices
-#' @return a closed \code{\link{fmPolygon}} with the given vertices
+#' Creates a fmShapeList
+#' @param shapes the shape in the list. should be a list of fmCircle,
+#'   fmCapsule or fmPolygon.
+#' @return a closed \code{\link{fmShapeList}} with the given shapes
 #' @family fmShape methods and classes
-fmPolygonCreate <- function(vertices) {
-    .Call(`_FortMyrmidon_fmPolygonCreate`, vertices)
+fmShapeListCreate <- function(shapes = NULL) {
+    .Call(`_FortMyrmidon_fmShapeListCreate`, shapes)
+}
+
+pfmIWantAShapeList <- function(l) {
+    invisible(.Call(`_FortMyrmidon_pfmIWantAShapeList`, l))
 }
 
 #' Creates a fmTime from an offset in second from the system's epoch

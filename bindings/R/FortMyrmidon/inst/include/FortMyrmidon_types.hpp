@@ -11,6 +11,7 @@ namespace Rcpp {
 template <> Eigen::Vector2d as(SEXP);
 template <> SEXP wrap(const Eigen::Vector2d & v);
 template <> fort::myrmidon::Vector2dList as(SEXP);
+template <> fort::myrmidon::Shape::List as(SEXP);
 }
 
 
@@ -21,3 +22,4 @@ RCPP_EXPOSED_CLASS_NODECL(fort::myrmidon::Shape);
 RCPP_EXPOSED_CLASS_NODECL(fort::myrmidon::Circle);
 RCPP_EXPOSED_CLASS_NODECL(fort::myrmidon::Capsule);
 RCPP_EXPOSED_CLASS_NODECL(fort::myrmidon::Polygon);
+RCPP_EXPOSED_WRAP(fort::myrmidon::Shape::List);

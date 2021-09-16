@@ -106,7 +106,6 @@ A list of 2D point
 		.const_method("as.data.frame",&fmVector2dList_asDataFrame)
 		.const_method("as.list",&fmVector2dList_asList)
 		;
-
 }
 
 //' Creates a fmVector2dList from a list of numerical vector or a data.frame
