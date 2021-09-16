@@ -21,8 +21,11 @@ i.e. the region inside and between two circles
 
 \seealso{
 Other fmShape methods and classes: 
+\code{\link{fmCapsuleCreate}()},
 \code{\link{fmCircleCreate}()},
 \code{\link{fmCircle}},
+\code{\link{fmPolygonCreate}()},
+\code{\link{fmPolygon}},
 \code{\link{fmShapeTypes}},
 \code{\link{fmShape}}
 }

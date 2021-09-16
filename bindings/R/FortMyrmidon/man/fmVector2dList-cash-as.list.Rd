@@ -14,7 +14,7 @@ the \code{as.list} function
 }
 \examples{
     l <-fmVector2dListCreate(data.frame("x" = c(1,2,3), "y"= c(1,2,3)))
-    as.list(l)
+    \dontrun{as.list(l)}
     l$as.list()
 }
 \seealso{

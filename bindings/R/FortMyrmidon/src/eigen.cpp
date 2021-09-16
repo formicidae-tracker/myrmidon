@@ -143,5 +143,5 @@ fort::myrmidon::Vector2dList fmVector2dListCreate(SEXP points = R_NilValue) {
 
 
 //[[Rcpp::export]]
-void fmpIWantAVector2dList(const fort::myrmidon::Vector2dList & l) {
+void pfmIWantAVector2dList(const fort::myrmidon::Vector2dList & l) {
 }

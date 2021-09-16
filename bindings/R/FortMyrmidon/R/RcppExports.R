@@ -9,8 +9,16 @@ fmVector2dListCreate <- function(points = NULL) {
     .Call(`_FortMyrmidon_fmVector2dListCreate`, points)
 }
 
-fmpIWantAVector2dList <- function(l) {
-    invisible(.Call(`_FortMyrmidon_fmpIWantAVector2dList`, l))
+pfmIWantAVector2dList <- function(l) {
+    invisible(.Call(`_FortMyrmidon_pfmIWantAVector2dList`, l))
+}
+
+#' Creates a fmPolygon
+#' @param vertices the polygon vertices
+#' @return a closed \code{\link{fmPolygon}} with the given vertices
+#' @family fmShape methods and classes
+fmPolygonCreate <- function(vertices) {
+    .Call(`_FortMyrmidon_fmPolygonCreate`, vertices)
 }
 
 #' Creates a fmTime from an offset in second from the system's epoch

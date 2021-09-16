@@ -16,8 +16,11 @@ A \code{\link{fmShape}} that describe a circle
 
 \seealso{
 Other fmShape methods and classes: 
+\code{\link{fmCapsuleCreate}()},
 \code{\link{fmCapsule}},
 \code{\link{fmCircleCreate}()},
+\code{\link{fmPolygonCreate}()},
+\code{\link{fmPolygon}},
 \code{\link{fmShapeTypes}},
 \code{\link{fmShape}}
 }

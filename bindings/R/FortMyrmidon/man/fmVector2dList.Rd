@@ -12,8 +12,8 @@ will accept such list or data.frame as input.
 }
 \examples{
     l <-fmVector2dListCreate(data.frame("x" = c(1,2,3), "y"= c(1,2,3)))
-    as.list(l) # will give a list of numerical vector
-    as.data.frame(l) # will give a dataframe
+    \dontrun{as.list(l) # will give a list of numerical vector
+    as.data.frame(l) # will give a dataframe}
 }
 \seealso{
 Other fmVector2dList methods: 

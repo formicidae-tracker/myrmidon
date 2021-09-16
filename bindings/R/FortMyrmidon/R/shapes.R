@@ -24,7 +24,7 @@ NULL
 #' @return a \code{\link{fmCircle}}
 #' @family fmShape methods and classes
 fmCircleCreate <- function(center = c(0,0),radius = 1.0) {
-    fmpCircleCreate(center,radius)
+    pfmCircleCreate(center,radius)
 }
 
 #' @name fmCapsule
@@ -46,6 +46,18 @@ NULL
 #' @param r2 the second circle's radius
 #' @return a \code{\link{fmCapsule}}
 #' @family fmShape methods and classes
-fmCircleCreate <- function(c1 = c(0,0),c2 = c(1,1), r1 = 1.0,r2 = 1.0) {
-    fmpCapsuleCreate(c1,c2,r1,r2)
+fmCapsuleCreate <- function(c1 = c(0,0),c2 = c(1,1), r1 = 1.0, r2 = 1.0) {
+    pfmCapsuleCreate(c1,c2,r1,r2)
 }
+
+#' @name fmPolygon
+#' @title Represents a close polygon
+#' @description Represents a closed polygon. The polygon is always
+#'     considered closed. The order does matters as
+#'     `fmPolygonCreate(list(c(1,1),c(-1,1),c(-1,-1),c(1,-1)))` is a
+#'     square and
+#'     `fmPolygonCreate(list(c(1,1),c(-1,-1),c(1,-1),c(-1,1)))` is an
+#'     hourglass.
+#' @field vertices a \code{\link{fmVector2dList}} of the polygon vertices
+#' @family fmShape methods and classes
+NULL

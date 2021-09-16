@@ -5,13 +5,14 @@
 #' @description foo
 #' @import methods
 #' @useDynLib FortMyrmidon, .registration = TRUE
-#' @exportPattern '^[[:alpha:]]+'
+#' @exportPattern '^fm[[:alpha:]]+'
 #' @import Rcpp
 NULL
 
 
 Rcpp::loadModule("time",TRUE)
 Rcpp::loadModule("eigen",TRUE)
+Rcpp::loadModule("shapes",TRUE)
 
 evalqOnLoad({
     setMethod('+',

@@ -44,17 +44,21 @@ void fmPolygon_show(const fort::myrmidon::Polygon * p) {
 	Rcpp::Rcout << ")\n";
 }
 
-
-fort::myrmidon::Circle fmpCircleCreate(const Eigen::Vector2d & center = {0,0},
-                                      double radius = 1.0) {
+fort::myrmidon::Circle fmpCircleCreate(const Eigen::Vector2d & center,
+                                       double radius) {
 	return fort::myrmidon::Circle(center,radius);
 }
 
+fort::myrmidon::Capsule fmpCapsuleCreate(const Eigen::Vector2d & c1,
+                                         const Eigen::Vector2d & c2,
+                                         double r1,
+                                         double r2) {
+	return fort::myrmidon::Capsule(c1,c2,r1,r2);
+}
+
+
 
 RCPP_MODULE(shapes) {
-
-
-
 	using namespace Rcpp;
 	class_<fort::myrmidon::Shape>("fmShape")
 		.property("shapeType",&fort::myrmidon::Shape::ShapeType)
@@ -74,5 +78,45 @@ RCPP_MODULE(shapes) {
 		          "the circle radius")
 		;
 
-	function("fmpCircleCreate",&fmpCircleCreate);
+	class_<fort::myrmidon::Capsule>("fmCapsule")
+		.derives<fort::myrmidon::Shape>("fmShape")
+		.const_method("show",&fmCapsule_show)
+		.property("c1",
+		          &fort::myrmidon::Capsule::C1,
+		          &fort::myrmidon::Capsule::SetC1,
+		          "the first circle center")
+		.property("c2",
+		          &fort::myrmidon::Capsule::C2,
+		          &fort::myrmidon::Capsule::SetC2,
+		          "the second circle center")
+		.property("r1",
+		          &fort::myrmidon::Capsule::R1,
+		          &fort::myrmidon::Capsule::SetR1,
+		          "the first circle radius")
+		.property("r2",
+		          &fort::myrmidon::Capsule::R2,
+		          &fort::myrmidon::Capsule::SetR2,
+		          "the second circle radius")
+		;
+
+	class_<fort::myrmidon::Polygon>("fmPolygon")
+		.derives<fort::myrmidon::Shape>("fmShape")
+		.const_method("show",&fmPolygon_show)
+		.property("vertices",
+		          &fort::myrmidon::Polygon::Vertices,
+		          &fort::myrmidon::Polygon::SetVertices,
+		          "the polygon vertices")
+		;
+
+	function("pfmCircleCreate",&fmpCircleCreate);
+	function("pfmCapsuleCreate",&fmpCapsuleCreate);
+}
+
+//' Creates a fmPolygon
+//' @param vertices the polygon vertices
+//' @return a closed \code{\link{fmPolygon}} with the given vertices
+//' @family fmShape methods and classes
+//[[Rcpp::export]]
+fort::myrmidon::Polygon fmPolygonCreate(const fort::myrmidon::Vector2dList & vertices) {
+	return fort::myrmidon::Polygon(vertices);
 }

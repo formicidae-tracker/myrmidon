@@ -13,7 +13,7 @@ the \code{length} function
 \examples{
     l <-fmVector2dListCreate(data.frame("x" = c(1,2,3), "y"= c(1,2,3)))
     l$size()
-    length(l)
+    \dontrun{length(l)}
 }
 \seealso{
 Other fmVector2dList methods: 

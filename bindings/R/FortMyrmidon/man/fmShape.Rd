@@ -14,9 +14,12 @@ A fmShape describe a 2D geometric shape
 
 \seealso{
 Other fmShape methods and classes: 
+\code{\link{fmCapsuleCreate}()},
 \code{\link{fmCapsule}},
 \code{\link{fmCircleCreate}()},
 \code{\link{fmCircle}},
+\code{\link{fmPolygonCreate}()},
+\code{\link{fmPolygon}},
 \code{\link{fmShapeTypes}}
 }
 \concept{fmShape methods and classes}

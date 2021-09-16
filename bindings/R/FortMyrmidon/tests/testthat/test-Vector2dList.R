@@ -9,7 +9,7 @@ test_that("can be initialized",{
 
 
 test_that("it can be implicitly converted",{
-    expect_silent(fmpIWantAVector2dList(list(c(1,2))))
+    expect_silent(pfmIWantAVector2dList(list(c(1,2))))
 
     a <- fmVector2dListCreate(list(c(1,2),c(3,4)))
     expected <- data.frame("x"=c(1,3),"y"=c(2,4))

@@ -7,8 +7,8 @@
 #'     will accept such list or data.frame as input.
 #' @examples
 #'     l <-fmVector2dListCreate(data.frame("x" = c(1,2,3), "y"= c(1,2,3)))
-#'     as.list(l) # will give a list of numerical vector
-#'     as.data.frame(l) # will give a dataframe
+#'     \dontrun{as.list(l) # will give a list of numerical vector
+#'     as.data.frame(l) # will give a dataframe}
 #' @family fmVector2dList methods
 NULL
 
@@ -19,7 +19,7 @@ NULL
 #' @examples
 #'     l <-fmVector2dListCreate(data.frame("x" = c(1,2,3), "y"= c(1,2,3)))
 #'     l$size()
-#'     length(l)
+#'     \dontrun{length(l)}
 #' @return the number of points in the list
 #' @family fmVector2dList methods
 NULL
@@ -50,7 +50,7 @@ NULL
 #'     the \code{as.data.frame} function
 #' @examples
 #'     l <-fmVector2dListCreate(data.frame("x" = c(1,2,3), "y"= c(1,2,3)))
-#'     as.data.frame(l)
+#'     \dontrun{as.data.frame(l)}
 #'     l$as.data.frame()
 #' @return a copy of the list data organized in a data.frame
 #' @family fmVector2dList methods
@@ -62,7 +62,7 @@ NULL
 #'     the \code{as.list} function
 #' @examples
 #'     l <-fmVector2dListCreate(data.frame("x" = c(1,2,3), "y"= c(1,2,3)))
-#'     as.list(l)
+#'     \dontrun{as.list(l)}
 #'     l$as.list()
 #' @return a copy of the list data organized in a list
 #' @family fmVector2dList methods
