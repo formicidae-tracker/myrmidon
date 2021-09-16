@@ -2,9 +2,16 @@
 import os
 import sys
 import subprocess
+import warnings
 
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
+
+warnings.filterwarnings("ignore",
+                        message="Normalizing 'v.*' to '.*'",
+                        category=UserWarning,
+                        module='setuptools')
+
 
 # Convert distutils Windows platform specifiers to CMake -A arguments
 PLAT_TO_CMAKE = {
