@@ -225,6 +225,27 @@ void Polygon::SetVertex(size_t i, const Eigen::Vector2d & v) {
 	d_vertices.at(i) = v;
 }
 
+void Polygon::DeleteVertex(size_t i) {
+	if ( i >= d_vertices.size() ) {
+		throw std::out_of_range("index "
+		                        + std::to_string(i)
+		                        + " should be in [0;"
+		                        + std::to_string(d_vertices.size())
+		                        + "[");
+	}
+	d_vertices.erase(d_vertices.begin()+i);
+}
+
+
+const Vector2dList & Polygon::Vertices() const {
+	return d_vertices;
+}
+
+void Polygon::SetVertices(const Vector2dList & vertices) {
+	d_vertices = vertices;
+}
+
+
 AABB Polygon::ComputeAABB() const {
 	AABB res(d_vertices[0],d_vertices[1]);
 	for ( size_t i = 2; i < d_vertices.size(); ++i) {

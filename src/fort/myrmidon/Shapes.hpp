@@ -308,7 +308,7 @@ public:
 	 *
 	 * @param vertices a Vector2dList of the polygon vertices
 	 */
-	void SetVertices(const Vector2dList & vertices) const;
+	void SetVertices(const Vector2dList & vertices);
 
 	/**
 	 * Gets the number of vertices in the polygon
@@ -337,13 +337,12 @@ public:
 	void SetVertex(size_t i, const Eigen::Vector2d & v);
 
 	/**
-	 * Sets a Polygon vertex
+	 * Deletes a Polygon vertex
 	 *
 	 * @param i the index of the wanted vertex in [0;Size()-1]
-	 * @param v the new value for the vertex
 	 * @throws std::out_of_range if i is >= Size().
 	 */
-	void Delete(size_t i, const Eigen::Vector2d & v);
+	void DeleteVertex(size_t i);
 
 	/** \cond PRIVATE */
 	bool Contains(const Eigen::Vector2d & point) const override;

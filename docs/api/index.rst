@@ -5,7 +5,7 @@ Python
 .. toctree::
 
    python/time
-
+   python/shapes
 
 C++
 ---

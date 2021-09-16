@@ -35,7 +35,10 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.intersphinx",
 ]
-intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3', None),
+    'numpy': ('http://docs.scipy.org/doc/numpy/', None),
+}
 
 breathe_default_project = "fort-myrmidon"
 
