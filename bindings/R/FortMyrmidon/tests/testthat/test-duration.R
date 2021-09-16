@@ -1,5 +1,3 @@
-context("duration")
-
 test_that("arithmetic is nanosecond exact" ,{
     expect_true(fmSecond(1) + fmNanosecond(1) == fmNanosecond(1e9 + 1))
     expect_true(fmHour(1) + fmSecond(1) == fmNanosecond(3601 * 1e9))
@@ -100,5 +98,27 @@ test_that("it can be parsed",{
     for ( e in errors) {
         expect_error(fmDurationParse(!!e),"Could not parse '.*':.*")
     }
+})
+
+test_that("binary operation works as expected", {
+    a <- fmNanosecond(1)
+    b <- fmNanosecond(2)
+    expect_true(a == a)
+    expect_false(a == b)
+
+    expect_false(a != a)
+    expect_true(a != b)
+
+    expect_false(a < a)
+    expect_true(a < b)
+
+    expect_true(a <= a)
+    expect_true(a <= b)
+
+    expect_false(a > a)
+    expect_false(a > b)
+
+    expect_true(a >= a)
+    expect_false(a >= b)
 
 })

@@ -19,6 +19,17 @@ set(ENV_VARIABLES FORT_MYRMIDON_CXXFLAGS='${FORT_MYRMIDON_CXXFLAGS}'
 	              R_FORT_MYRMIDON_PATH=${R_FORT_MYRMIDON_PATH}
 	              )
 
+file(GLOB R_FORT_MYRMIDON_FILES
+	      CONFIGURE_DEPENDS
+	      RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+	      FortMyrmidon/src/*.h
+	      FortMyrmidon/src/*.cpp
+	      FortMyrmidon/R/*.R
+	      FortMyrmidon/inst/include/*.hpp
+	      )
+list(REMOVE_ITEM R_FORT_MYRMIDON_FILES
+	             FortMyrmidon/src/RcppExports.cpp
+	             FortMyrmidon/R/RcppExports.R)
 
 add_custom_command(OUTPUT ${R_FORT_MYRMIDON_PACKAGE}
                    COMMAND  ${CMAKE_COMMAND} -E env ${ENV_VARIABLES}
@@ -27,8 +38,11 @@ add_custom_command(OUTPUT ${R_FORT_MYRMIDON_PACKAGE}
                                                              --preclean
                                                              --build
                                                              FortMyrmidon
+                   COMMAND  ${CMAKE_COMMAND} -E env ${ENV_VARIABLES}
+                                             ${R_EXECUTABLE} CMD build
+                                                             FortMyrmidon
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                   DEPENDS fort-myrmidon fort-myrmidon-utestdata
+                   DEPENDS fort-myrmidon fort-myrmidon-utestdata ${R_FORT_MYRMIDON_FILES}
                    )
 add_custom_target(r-fort-myrmidon ALL
                   DEPENDS ${R_FORT_MYRMIDON_PACKAGE})

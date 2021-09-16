@@ -11,6 +11,27 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// fmVector2dListCreate
+fort::myrmidon::Vector2dList fmVector2dListCreate(SEXP points);
+RcppExport SEXP _FortMyrmidon_fmVector2dListCreate(SEXP pointsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type points(pointsSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmVector2dListCreate(points));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fmpIWantAVector2dList
+void fmpIWantAVector2dList(const fort::myrmidon::Vector2dList& l);
+RcppExport SEXP _FortMyrmidon_fmpIWantAVector2dList(SEXP lSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const fort::myrmidon::Vector2dList& >::type l(lSEXP);
+    fmpIWantAVector2dList(l);
+    return R_NilValue;
+END_RCPP
+}
 // fmTimeCreate
 fort::Time fmTimeCreate(double offset);
 RcppExport SEXP _FortMyrmidon_fmTimeCreate(SEXP offsetSEXP) {
@@ -141,11 +162,14 @@ BEGIN_RCPP
 END_RCPP
 }
 
+RcppExport SEXP _rcpp_module_boot_eigen();
 RcppExport SEXP _rcpp_module_boot_shapes();
 RcppExport SEXP _rcpp_module_boot_time();
 RcppExport SEXP _rcpp_module_boot_zone();
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_FortMyrmidon_fmVector2dListCreate", (DL_FUNC) &_FortMyrmidon_fmVector2dListCreate, 1},
+    {"_FortMyrmidon_fmpIWantAVector2dList", (DL_FUNC) &_FortMyrmidon_fmpIWantAVector2dList, 1},
     {"_FortMyrmidon_fmTimeCreate", (DL_FUNC) &_FortMyrmidon_fmTimeCreate, 1},
     {"_FortMyrmidon_fmTimeNow", (DL_FUNC) &_FortMyrmidon_fmTimeNow, 0},
     {"_FortMyrmidon_fmTimeForever", (DL_FUNC) &_FortMyrmidon_fmTimeForever, 0},
@@ -158,6 +182,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FortMyrmidon_fmMillisecond", (DL_FUNC) &_FortMyrmidon_fmMillisecond, 1},
     {"_FortMyrmidon_fmMicrosecond", (DL_FUNC) &_FortMyrmidon_fmMicrosecond, 1},
     {"_FortMyrmidon_fmNanosecond", (DL_FUNC) &_FortMyrmidon_fmNanosecond, 1},
+    {"_rcpp_module_boot_eigen", (DL_FUNC) &_rcpp_module_boot_eigen, 0},
     {"_rcpp_module_boot_shapes", (DL_FUNC) &_rcpp_module_boot_shapes, 0},
     {"_rcpp_module_boot_time", (DL_FUNC) &_rcpp_module_boot_time, 0},
     {"_rcpp_module_boot_zone", (DL_FUNC) &_rcpp_module_boot_zone, 0},

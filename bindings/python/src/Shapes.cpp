@@ -112,6 +112,11 @@ A capsule is the region inside and between two given circles.
 		     [](Vector2dList & list,int pos) -> Eigen::Vector2d &{
 			     return list.at(pos);
 		     })
+		.def("__setitem__",
+		     [](Vector2dList & list,int pos, const Eigen::Vector2d & v) {
+			     list.at(pos) = v;
+		     })
+
 		;
 
 	py::implicitly_convertible<py::list,Vector2dList>();

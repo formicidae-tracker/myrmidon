@@ -17,6 +17,8 @@ class Vector2dListTestCase(unittest.TestCase):
         self.assertEqual(len(p), 2)
         npt.assert_almost_equal(p[0], [1, 2])
         npt.assert_almost_equal(p[1], [3, 4])
+        p[0] = [0, 0]
+        npt.assert_almost_equal(p[0], [0, 0])
 
     def test_is_extendable(self):
         p = m.Vector2dList()

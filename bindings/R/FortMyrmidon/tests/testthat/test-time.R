@@ -1,7 +1,3 @@
-context("time")
-library(FortMyrmidon)
-
-
 test_that("can be created from seconds", {
     expect_true(fmTimeCreate(0.0) == fmTimeCreate())
 })

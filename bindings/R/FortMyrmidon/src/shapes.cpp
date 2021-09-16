@@ -52,6 +52,9 @@ fort::myrmidon::Circle fmpCircleCreate(const Eigen::Vector2d & center = {0,0},
 
 
 RCPP_MODULE(shapes) {
+
+
+
 	using namespace Rcpp;
 	class_<fort::myrmidon::Shape>("fmShape")
 		.property("shapeType",&fort::myrmidon::Shape::ShapeType)
