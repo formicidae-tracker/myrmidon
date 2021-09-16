@@ -142,12 +142,74 @@ Example:
         square = py_fort_myrmidon.Polygon(Vertices = [[1,1],[-1,1],[-1,-1],[1,-1]])
         hourglass = py_fort_myrmidon.Polygon(Vertices = [[1,1],[-1,-1],[1,-1],[-1,1]])
 )pydoc")
-		.def(py::init<Vector2dList>(),py::arg("Vertices"))
+		.def(py::init<Vector2dList>(),
+		     py::arg("Vertices"))
+		.def(py::init<>([]() {
+			                return Polygon(Vector2dList({Eigen::Vector2d(1,1),
+			                                             Eigen::Vector2d(-1,1),
+			                                             Eigen::Vector2d(-1,-1),
+			                                             Eigen::Vector2d(1,-1)}));
+		                }))
 		.def_property("Vertices",
 		              &Polygon::Vertices,
 		              &Polygon::SetVertices,
 		              ":obj:`list` of :obj:`numpy.ndarray`: a list of the polygon vertices (float64 , size [2,1])")
 		;
+
+
+	py::class_<Shape::List>(m,"ShapeList")
+		.def(py::init())
+		.def(py::init([](const py::list & shapes) {
+			              Shape::List l;
+			              l.reserve(shapes.size());
+			              for ( const auto & s : shapes ) {
+				              l.push_back(s.cast<Shape::Ptr>());
+			              }
+			              return l;
+		              }),
+			py::arg("points"))
+		.def("append",
+		     [](Shape::List & list,const Shape::Ptr & p) {
+			     list.push_back(p);
+		     })
+		.def("extend",
+		     [](Shape::List & list, const Shape::List & other) {
+			     list.reserve(list.size() + other.size());
+			     for ( const auto & v : other) {
+				     list.push_back(v);
+			     }
+		     })
+		.def("clear",&Shape::List::clear)
+		.def("pop",[](Shape::List & list,int pos) {
+			           if ( pos < 0 ) {
+				           pos = list.size() + pos;
+			           }
+			           if ( pos < 0 || pos >= list.size() ) {
+				           throw std::out_of_range(std::to_string(pos)
+				                                   + " should be in [0;"
+				                                   + std::to_string(list.size())
+				                                   + "[");
+			           }
+			           Shape::Ptr res = list[pos];
+			           list.erase(list.begin() + pos);
+			           return res;
+		           },py::arg("pos") = -1)
+		.def("__len__",&Shape::List::size)
+		.def("__iter__",
+		     [](const Shape::List & list) {
+			     return py::make_iterator(list.begin(),list.end());
+		     })
+		.def("__getitem__",
+		     [](Shape::List & list,int pos) -> Shape::Ptr &{
+			     return list.at(pos);
+		     })
+		.def("__setitem__",
+		     [](Shape::List & list,int pos, const Shape::Ptr & v) {
+			     list.at(pos) = v;
+		     })
+		;
+
+	py::implicitly_convertible<py::list,Shape::List>();
 
 
 }

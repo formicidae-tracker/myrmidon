@@ -109,3 +109,70 @@ class ShapeTestCase(unittest.TestCase):
         npt.assert_almost_equal(self.polygon.Vertices[1], [-1, -1])
         npt.assert_almost_equal(self.polygon.Vertices[2], [1, -1])
         npt.assert_almost_equal(self.polygon.Vertices[3], [2, 3])
+
+
+class ShapeListTestCase(unittest.TestCase):
+    def test_initialization(self):
+        p = m.ShapeList()
+        self.assertEqual(len(p), 0)
+        p = m.ShapeList([m.Circle()])
+        self.assertEqual(len(p), 1)
+        with self.assertRaises(RuntimeError):
+            p = m.ShapeList([1, 2, 3])
+
+    def test_is_subscribable(self):
+        p = m.ShapeList([m.Circle(), m.Capsule()])
+        self.assertEqual(len(p), 2)
+        npt.assert_almost_equal(p[0].Center, [0, 0])
+        npt.assert_almost_equal(p[1].C2, [1, 1])
+        p[0] = m.Capsule()
+        npt.assert_almost_equal(p[0].C2, [1, 1])
+
+    def test_is_extendable(self):
+        p = m.ShapeList()
+        self.assertEqual(len(p), 0)
+        p.append(m.Circle())
+        self.assertEqual(len(p), 1)
+        p.extend([m.Capsule(), m.Polygon()])
+        self.assertEqual(len(p), 3)
+        npt.assert_almost_equal(p[0].Center, [0, 0])
+        npt.assert_almost_equal(p[1].C2, [1, 1])
+        npt.assert_almost_equal(p[2].Vertices[0], [1, 1])
+
+    def test_is_clearable(self):
+        p = m.ShapeList([m.Circle()])
+        self.assertEqual(len(p), 1)
+        p.clear()
+        self.assertEqual(len(p), 0)
+
+    def test_is_popable(self):
+        p = m.ShapeList([m.Circle(), m.Capsule(), m.Polygon()])
+        self.assertEqual(type(p.pop()), m.Polygon)
+        self.assertEqual(len(p), 2)
+        self.assertEqual(type(p.pop(1)), m.Capsule)
+        self.assertEqual(len(p), 1)
+        self.assertEqual(type(p.pop(0)), m.Circle)
+        self.assertEqual(len(p), 0)
+        with self.assertRaises(IndexError):
+            p.pop()
+
+    def test_is_iterable(self):
+        p = m.ShapeList([m.Capsule(), m.Circle(), m.Polygon()])
+        for i, v in enumerate(p):
+            self.assertEqual(int(v.ShapeType), i)
+
+    def test_wrap_mutable_elements(self):
+        p = m.ShapeList([m.Circle(), m.Capsule(), m.Polygon()])
+        p[0].Center = [1, 2]
+        p[1].C2 = [3, 4]
+        p[2].Vertices[3] = [5, 6]
+        npt.assert_almost_equal(p[0].Center, [1, 2])
+        npt.assert_almost_equal(p[0].Radius, 1)
+        npt.assert_almost_equal(p[1].C1, [0, 0])
+        npt.assert_almost_equal(p[1].R1, 1)
+        npt.assert_almost_equal(p[1].C2, [3, 4])
+        npt.assert_almost_equal(p[1].R2, 1)
+        npt.assert_almost_equal(p[2].Vertices[0], [1, 1])
+        npt.assert_almost_equal(p[2].Vertices[1], [-1, 1])
+        npt.assert_almost_equal(p[2].Vertices[2], [-1, -1])
+        npt.assert_almost_equal(p[2].Vertices[3], [5, 6])
