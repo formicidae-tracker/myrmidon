@@ -14,6 +14,12 @@ Rcpp::loadModule("time",TRUE)
 Rcpp::loadModule("eigen",TRUE)
 Rcpp::loadModule("shapes",TRUE)
 
+Rcpp::loadModule("zone",TRUE)
+
+
+Rcpp::loadModule("space",TRUE)
+Rcpp::loadModule("experiment",TRUE)
+
 evalqOnLoad({
     setMethod('+',
               signature(e1 = "Rcpp_fmDuration",

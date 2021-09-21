@@ -13,6 +13,13 @@ pfmIWantAVector2dList <- function(l) {
     invisible(.Call(`_FortMyrmidon_pfmIWantAVector2dList`, l))
 }
 
+#' Creates an Experiement
+#' @param filepath the name for the newly created space
+#' @return a \link{\code{fmExperiment}} with name
+fmExperimentCreate <- function(filepath) {
+    .Call(`_FortMyrmidon_fmExperimentCreate`, filepath)
+}
+
 #' Creates a fmShapeList
 #' @param shapes the shape in the list. should be a list of fmCircle,
 #'   fmCapsule or fmPolygon.

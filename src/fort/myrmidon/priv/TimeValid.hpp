@@ -45,6 +45,15 @@ public:
 	static inline T & MaybeDeref(const std::unique_ptr<T> & x) { return *x;}
 
 
+	template <typename T>
+	void CheckRange(const T & o) {
+		if (MaybeDeref(o).Start()> MaybeDeref(o).End() ) {
+			std::ostringstream oss;
+			oss << "Invalid time range [" << MaybeDeref(o).Start() << ", " << MaybeDeref(o).End() << "[";
+			throw std::invalid_argument(oss.str());
+		}
+	}
+
 
 	// Sorts a collection and return first time-overlapping objects
 	// @InputIt the iterator type

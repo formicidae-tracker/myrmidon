@@ -88,6 +88,9 @@ TEST_F(PublicZoneUTest,ZoneDefinitionHaveAShape) {
 
 TEST_F(PublicZoneUTest,ZoneDefinitionHaveTimeValidity) {
 	auto zone =  space->CreateZone("food");
+	EXPECT_THROW(zone->AddDefinition({},Time::Forever(),Time::SinceEver()),std::invalid_argument);
+
+
 	ZoneDefinition::Ptr definitions[2] =
 		{
 		 zone->AddDefinition({},Time::SinceEver(),Time()),

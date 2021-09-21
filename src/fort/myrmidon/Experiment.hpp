@@ -66,7 +66,11 @@ public:
 	 *
 	 * @throws std::runtime_error if filepath is not a valid `.myrmidon` file.
 	 */
-	static Experiment::Ptr Open(const std::string & filepath);
+	static Experiment::Ptr Open(const std::string & filepath) {
+		return Ptr(new Experiment(OpenUnsafe(filepath)));
+	}
+
+	static Experiment OpenUnsafe(const std::string & filepath);
 
 	/**
      * Opens an Experiment without associated tracking data
@@ -95,7 +99,11 @@ public:
 	 * @throws std::runtime_error if filepath is not a valid
 	 *         `.myrmidon` file.
 	 */
-	static Experiment::Ptr OpenDataLess(const std::string & filepath);
+	static Experiment::Ptr OpenDataLess(const std::string & filepath) {
+		return Ptr(new Experiment(OpenDataLessUnsafe(filepath)));
+	}
+
+	static Experiment OpenDataLessUnsafe(const std::string & filepath);
 
 	/**
 	 * Creates a new Experiment associated with the given filepath.
@@ -118,7 +126,11 @@ public:
 	 *
 	 * @return the new empty Experiment
 	 */
-	static Experiment::Ptr Create(const std::string & filepath);
+	static Experiment::Ptr Create(const std::string & filepath) {
+		return Ptr(new Experiment(CreateUnsafe(filepath)));
+	}
+
+	static Experiment CreateUnsafe(const std::string & filepath);
 
 	/**
 	 * Saves the Experiment at the desired filepath
@@ -813,6 +825,7 @@ public:
 private:
 	friend class Query;
 
+
 	// Private implementation constructor
 	// @pExperiment opaque pointer to implementation
 	//
@@ -826,6 +839,7 @@ private:
 
 	std::unique_ptr<ExperimentHandle> d_p;
 };
+
 
 } // namespace mrymidon
 } // namespace fort

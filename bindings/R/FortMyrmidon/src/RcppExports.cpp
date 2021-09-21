@@ -32,6 +32,17 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// fmExperimentCreate
+ExperimentPtr fmExperimentCreate(const std::string& filepath);
+RcppExport SEXP _FortMyrmidon_fmExperimentCreate(SEXP filepathSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string& >::type filepath(filepathSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmExperimentCreate(filepath));
+    return rcpp_result_gen;
+END_RCPP
+}
 // fmShapeListCreate
 fort::myrmidon::Shape::List fmShapeListCreate(SEXP shapes);
 RcppExport SEXP _FortMyrmidon_fmShapeListCreate(SEXP shapesSEXP) {
@@ -184,13 +195,16 @@ END_RCPP
 }
 
 RcppExport SEXP _rcpp_module_boot_eigen();
+RcppExport SEXP _rcpp_module_boot_experiment();
 RcppExport SEXP _rcpp_module_boot_shapes();
+RcppExport SEXP _rcpp_module_boot_space();
 RcppExport SEXP _rcpp_module_boot_time();
 RcppExport SEXP _rcpp_module_boot_zone();
 
 static const R_CallMethodDef CallEntries[] = {
     {"_FortMyrmidon_fmVector2dListCreate", (DL_FUNC) &_FortMyrmidon_fmVector2dListCreate, 1},
     {"_FortMyrmidon_pfmIWantAVector2dList", (DL_FUNC) &_FortMyrmidon_pfmIWantAVector2dList, 1},
+    {"_FortMyrmidon_fmExperimentCreate", (DL_FUNC) &_FortMyrmidon_fmExperimentCreate, 1},
     {"_FortMyrmidon_fmShapeListCreate", (DL_FUNC) &_FortMyrmidon_fmShapeListCreate, 1},
     {"_FortMyrmidon_pfmIWantAShapeList", (DL_FUNC) &_FortMyrmidon_pfmIWantAShapeList, 1},
     {"_FortMyrmidon_fmTimeCreate", (DL_FUNC) &_FortMyrmidon_fmTimeCreate, 1},
@@ -206,7 +220,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FortMyrmidon_fmMicrosecond", (DL_FUNC) &_FortMyrmidon_fmMicrosecond, 1},
     {"_FortMyrmidon_fmNanosecond", (DL_FUNC) &_FortMyrmidon_fmNanosecond, 1},
     {"_rcpp_module_boot_eigen", (DL_FUNC) &_rcpp_module_boot_eigen, 0},
+    {"_rcpp_module_boot_experiment", (DL_FUNC) &_rcpp_module_boot_experiment, 0},
     {"_rcpp_module_boot_shapes", (DL_FUNC) &_rcpp_module_boot_shapes, 0},
+    {"_rcpp_module_boot_space", (DL_FUNC) &_rcpp_module_boot_space, 0},
     {"_rcpp_module_boot_time", (DL_FUNC) &_rcpp_module_boot_time, 0},
     {"_rcpp_module_boot_zone", (DL_FUNC) &_rcpp_module_boot_zone, 0},
     {NULL, NULL, 0}

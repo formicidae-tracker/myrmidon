@@ -14,22 +14,22 @@ namespace myrmidon {
 
 const MeasurementTypeID Experiment::HEAD_TAIL_MEASUREMENT_TYPE_ID = priv::Measurement::HEAD_TAIL_TYPE;
 
-
-Experiment::Ptr Experiment::Open(const std::string & filepath) {
+Experiment Experiment::OpenUnsafe(const std::string & filepath) {
 	priv::Experiment::Ptr e = priv::Experiment::Open(filepath);
-	return Experiment::Ptr(new Experiment(std::make_unique<ExperimentHandle>(e)));
+	return Experiment(std::make_unique<ExperimentHandle>(e));
 }
 
-Experiment::Ptr Experiment::OpenDataLess(const std::string & filepath) {
+Experiment Experiment::OpenDataLessUnsafe(const std::string & filepath) {
 	// its ok to const cast as we cast back as a const
 	priv::Experiment::Ptr e = priv::Experiment::OpenDataLess(filepath);
-	return Experiment::Ptr(new Experiment(std::make_unique<ExperimentHandle>(e)));
+	return Experiment(std::make_unique<ExperimentHandle>(e));
 }
 
-Experiment::Ptr Experiment::Create(const std::string & filepath) {
+Experiment Experiment::CreateUnsafe(const std::string & filepath) {
 	priv::Experiment::Ptr e = priv::Experiment::Create(filepath);
-	return Experiment::Ptr(new Experiment(std::make_unique<ExperimentHandle>(e)));
+	return Experiment(std::make_unique<ExperimentHandle>(e));
 }
+
 
 void Experiment::Save(const std::string & filepath) {
 	d_p->Get().Save(filepath);

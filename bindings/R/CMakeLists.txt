@@ -7,8 +7,18 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/DESCRIPTION.in
                ${CMAKE_CURRENT_SOURCE_DIR}/FortMyrmidon/DESCRIPTION
                @ONLY)
 
+
 set(R_FORT_MYRMIDON_PACKAGE ${CMAKE_CURRENT_SOURCE_DIR}/FortMyrmidon_${PROJECT_VERSION}.tar.gz)
-set(FORT_MYRMIDON_CXXFLAGS -I${PROJECT_BINARY_DIR}/src -I${PROJECT_SOURCE_DIR}/src -I${FORT_TIME_INCLUDE_DIRS} -I${EIGEN3_INCLUDE_DIRS})
+set(FORT_MYRMIDON_CXXFLAGS_ ${PROJECT_BINARY_DIR}/src
+                            ${PROJECT_SOURCE_DIR}/src
+                            ${FORT_TIME_INCLUDE_DIRS}
+                            ${EIGEN3_INCLUDE_DIRS}
+                            ${FORT_TAGS_INCLUDE_DIRS}
+                            ${FORT_HERMES_INCLUDE_DIRS})
+foreach(F ${FORT_MYRMIDON_CXXFLAGS_})
+	list(APPEND FORT_MYRMIDON_CXXFLAGS -I${F})
+endforeach(F ${FORT_TAGS_INCLUDE_DIRS_})
+
 set(FORT_MYRMIDON_LDFLAGS -L$<TARGET_FILE_DIR:fort-myrmidon> -lfort-myrmidon -L$<TARGET_FILE_DIR:fort-time> -lfort-time)
 set(FORT_MYRMIDON_LD_PATH $<TARGET_FILE_DIR:fort-myrmidon>:$<TARGET_FILE_DIR:fort-time>)
 set(R_FORT_MYRMIDON_PATH ${CMAKE_CURRENT_SOURCE_DIR}/FortMyrmidon)

@@ -1,41 +1,92 @@
 #include "zone.h"
 
+#include "helper.h"
+
 #include "Rcpp.h"
 
-void fmZoneDefinition_show(const fort::myrmidon::ZoneDefinition * zd) {
-	Rcpp::Rcout << "fmZoneDefinition($start = " << zd->Start()
-	            << ", $end = " << zd->End()
+
+IMPLEMENT_FIELD(ZoneDefinition,fort::myrmidon::Shape::List,Shapes);
+IMPLEMENT_FIELD(ZoneDefinition,fort::Time,Start);
+IMPLEMENT_FIELD(ZoneDefinition,fort::Time,End)
+
+
+inline void fmZoneDefinition_show(const fort::myrmidon::ZoneDefinition::Ptr * zd) {
+	Rcpp::Rcout << "fmZoneDefinition($start = " << (*zd)->Start()
+	            << ", $end = " << (*zd)->End()
 	            << ")";
 }
 
-void fmZone_show(const fort::myrmidon::Zone * zd) {
-	Rcpp::Rcout << "fmZone($id = " << zd->ID()
-	            << ", $name = " << zd->Name()
+inline uint64_t fmZoneDefinition_get(const fort::myrmidon::ZoneDefinition::Ptr * zd) {
+	return uint64_t(zd->get());
+}
+
+
+IMPLEMENT_FIELD(Zone,std::string,Name);
+IMPLEMENT_GETTER(Zone,fort::myrmidon::ZoneDefinitionList,Definitions);
+
+inline void fmZone_show(const fort::myrmidon::Zone::Ptr * z) {
+	Rcpp::Rcout << "fmZone($id = " << (*z)->ID()
+	            << ", $name = " << (*z)->Name()
 	            << ")";
 }
+
+
+
+
+inline uint32_t fmZone_ID(fort::myrmidon::Zone::Ptr * z) {
+	return (*z)->ID();
+}
+
+inline fort::myrmidon::ZoneDefinition::Ptr fmZone_AddDefinition(fort::myrmidon::Zone::Ptr * z,
+                                                                const fort::myrmidon::Shape::List & shapes,
+                                                                const fort::Time & start = fort::Time::SinceEver(),
+                                                                const fort::Time & end = fort::Time::Forever()) {
+	return (*z)->AddDefinition(shapes,start,end);
+}
+
+inline void fmZone_DeleteDefinition(fort::myrmidon::Zone::Ptr * z,
+                                                                   size_t index) {
+	(*z)->DeleteDefinition(index-1);
+}
+
+
 
 
 RCPP_MODULE(zone) {
 	using namespace Rcpp;
 
-	class_<fort::myrmidon::ZoneDefinition>("fmZoneDefinition")
+	class_<fort::myrmidon::ZoneDefinition::Ptr>("fmZoneDefinition")
 		.const_method("show",&fmZoneDefinition_show)
 		.property("shapes",
-		          &fort::myrmidon::ZoneDefinition::Shapes,
-		          &fort::myrmidon::ZoneDefinition::SetShapes)
+		          &fmZoneDefinition_Shapes,
+		          &fmZoneDefinition_SetShapes)
 		.property("start",
-		          &fort::myrmidon::ZoneDefinition::Start,
-		          &fort::myrmidon::ZoneDefinition::SetStart)
+		          &fmZoneDefinition_Start,
+		          &fmZoneDefinition_SetStart)
 		.property("end",
-		          &fort::myrmidon::ZoneDefinition::End,
-		          &fort::myrmidon::ZoneDefinition::SetEnd)
+		          &fmZoneDefinition_End,
+		          &fmZoneDefinition_SetEnd)
+		.const_method("get",
+		              &fmZoneDefinition_get)
 		;
 
-	class_<fort::myrmidon::Zone>("fmZone")
+	class_<fort::myrmidon::Zone::Ptr>("fmZone")
 		.const_method("show",&fmZone_show)
-		.property("ID",&fort::myrmidon::Zone::ID)
+		.property("ID",&fmZone_ID, "This fmZone ID")
+		.property("definitions",&fmZone_Definitions,"This fmZone Definitions")
 		.property("name",
-		          &fort::myrmidon::Zone::Name,
-		          &fort::myrmidon::Zone::SetName)
+		          &fmZone_Name,
+		          &fmZone_SetName)
+		.method("addDefinition",&fmZone_AddDefinition)
+		.method("deleteDefinition",&fmZone_DeleteDefinition)
 		;
+}
+
+
+namespace Rcpp {
+
+template <> SEXP wrap(const fort::myrmidon::ZoneDefinitionList & l) {
+	return Rcpp::wrap(l.begin(),l.end());
+}
+
 }

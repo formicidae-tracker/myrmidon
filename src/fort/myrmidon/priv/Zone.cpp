@@ -56,6 +56,7 @@ ZoneDefinition::ZoneDefinition(const Zone::Ptr & zone,
 	, d_shapes(shapes) {
 	d_start = start;
 	d_end = end;
+	TimeValid::CheckRange(this);
 }
 
 ZoneDefinition::~ZoneDefinition() {}

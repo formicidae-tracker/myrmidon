@@ -63,6 +63,11 @@ class ZoneTestCase(unittest.TestCase):
             zone.AddDefinition([], end=m.Time()),
             zone.AddDefinition([], start=m.Time()),
         ]
+        with self.assertRaises(ValueError):
+            zone.AddDefinition([],
+                               start=m.Time.Forever(),
+                               end=m.Time.SinceEver())
+        
         with self.assertRaises(RuntimeError):
             definitions[0].End = m.Time().Add(1)
 
