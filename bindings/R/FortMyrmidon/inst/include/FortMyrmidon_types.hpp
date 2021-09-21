@@ -1,6 +1,6 @@
 #include <fort/time/Time.hpp>
 #include <fort/myrmidon/Shapes.hpp>
-
+#include <fort/myrmidon/Zone.hpp>
 #include <RcppCommon.h>
 
 RCPP_EXPOSED_CLASS_NODECL(fort::Duration);
@@ -23,3 +23,5 @@ RCPP_EXPOSED_CLASS_NODECL(fort::myrmidon::Circle);
 RCPP_EXPOSED_CLASS_NODECL(fort::myrmidon::Capsule);
 RCPP_EXPOSED_CLASS_NODECL(fort::myrmidon::Polygon);
 RCPP_EXPOSED_WRAP(fort::myrmidon::Shape::List);
+RCPP_EXPOSED_CLASS_NODECL(fort::myrmidon::ZoneDefinition);
+RCPP_EXPOSED_CLASS_NODECL(fort::myrmidon::Zone);
