@@ -29,7 +29,9 @@ requirements:
     - {{ cdt('libxdamage') }}        [linux]
     - {{ cdt('libxfixes') }}         [linux]
     - {{ cdt('libxxf86vm') }}        [linux]
+    - libstdcxx-ng {{ c_compiler_version }} [linux]
   host:
+    - libstdcxx-ng {{ c_compiler_version }} [linux]
     - eigen =3.4.0
     - tbb-devel =2020.2
     - libprotobuf =3.17.2
@@ -55,6 +57,7 @@ outputs:
         - libopencv =4.5.1
         - yaml-cpp =0.6.3
         - tbb =2020.2
+        - libstdcxx-ng {{ c_compiler_version }} [linux]
     test:
       script: test-libfort-myrmidon.sh
       requires:
@@ -84,6 +87,7 @@ outputs:
         - libopencv =4.5.1
         - yaml-cpp =0.6.3
         - eigen =3.4.0
+        - libstdcxx-ng {{ c_compiler_version }} [linux]
       run:
         - r-base {{ r_base }}
         - r-rcpp
@@ -92,6 +96,7 @@ outputs:
         - libprotobuf =3.17.2
         - libopencv =4.5.1
         - yaml-cpp =0.6.3
+        - libstdcxx-ng {{ c_compiler_version }} [linux]
     test:
       files:
         - test-r-fort-myrmidon.r
@@ -109,6 +114,7 @@ outputs:
         - pybind11 =2.7.1
         - libprotobuf =3.17.2
         - numpy =1.21.2
+        - libstdcxx-ng {{ c_compiler_version }} [linux]
       run:
         - python {{python}}
         - {{ pin_subpackage('libfort-myrmidon',exact=True) }}
@@ -116,6 +122,7 @@ outputs:
         - libopencv =4.5.1
         - yaml-cpp =0.6.3
         - numpy =1.21.2
+        - libstdcxx-ng {{ c_compiler_version }} [linux]
     test:
       files:
         - test-py-fort-myrmidon.py

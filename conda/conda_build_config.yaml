@@ -4,6 +4,6 @@ r_base:
 python:
   - 3.8
 c_compiler_version:   # [linux]
-  - 9.3               # [linux]
+  - 9.4               # [linux]
 cxx_compiler_version: # [linux]
-  - 9.3               # [linux]
+  - 9.4               # [linux]
