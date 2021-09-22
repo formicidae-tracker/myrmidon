@@ -2,10 +2,7 @@
 
 #include "BindTypes.hpp"
 
-#include <pybind11/pybind11.h>
-
 namespace py = pybind11;
-
 
 void BindTime(py::module_ &);
 void BindColor(py::module_ &);

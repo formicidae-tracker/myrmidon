@@ -29,12 +29,6 @@ class Vector2dListTestCase(unittest.TestCase):
         npt.assert_almost_equal(p[1], [3, 4])
         npt.assert_almost_equal(p[2], [5, 6])
 
-    def test_is_copyable(self):
-        p = m.Vector2dList()
-        q = p.copy()
-        q.append([1, 1])
-        self.assertEqual(len(p), 0)
-
     def test_is_clearable(self):
         p = m.Vector2dList([[1, 1]])
         self.assertEqual(len(p), 1)

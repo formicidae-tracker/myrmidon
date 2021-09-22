@@ -1,6 +1,3 @@
-#include <pybind11/stl.h>
-#include <pybind11/eigen.h>
-
 #include "BindMethods.hpp"
 
 #include <fort/myrmidon/Types.hpp>

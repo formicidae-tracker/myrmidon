@@ -1,4 +1,4 @@
-#include <pybind11/stl.h>
+#include "BindTypes.hpp"
 
 namespace py = pybind11;
 
@@ -43,14 +43,10 @@ void BindZone(py::module_ & m) {
 		                       &Zone::Definitions,
 		                       py::return_value_policy::reference_internal,
 		                       " (List[py_fort_myrmidon.ZoneDefinition]): the definitions for this Zone")
-		.def("AddDefinition",
-		     [](Zone & zone, const Shape::List & shapes, const fort::Time & start, const fort::Time & end) -> ZoneDefinition & {
-			     return * zone.AddDefinition(shapes,start,end);
-		     },
-		     py::arg("shapes"),
+		.def("AddDefinition",&Zone::AddDefinition,
+		     py::arg("shapes") = py::list(),
 		     py::arg("start") = fort::Time::SinceEver(),
 		     py::arg("end") = fort::Time::Forever(),
-		     py::return_value_policy::reference_internal,
 		     R"pydoc(
     Adds a new ZoneDefinition to this Zone
 

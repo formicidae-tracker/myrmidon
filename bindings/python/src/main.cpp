@@ -1,5 +1,3 @@
-#include <pybind11/pybind11.h>
-
 #include "BindMethods.hpp"
 
 #ifndef VERSION_INFO

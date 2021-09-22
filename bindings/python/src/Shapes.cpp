@@ -1,9 +1,6 @@
-#include <pybind11/eigen.h>
-
-#include <fort/myrmidon/Shapes.hpp>
+#include "BindTypes.hpp"
 
 namespace py = pybind11;
-
 
 void BindShapes(py::module_ & m) {
 	using namespace fort::myrmidon;
@@ -11,7 +8,6 @@ void BindShapes(py::module_ & m) {
 	                                   R"pydoc(
 A Generic class for a Shape
 )pydoc");
-
 	shape.def_property_readonly("ShapeType",
 	                            &Shape::ShapeType,
 	                            "(py_fort_myrmidon.Shape.Type): the type of the shape");
@@ -59,68 +55,10 @@ A capsule is the region inside and between two given circles.
 		              "float: the radius of the first circle")
 		.def_property("R2",&Capsule::R2,&Capsule::SetR2,
 		              "float: the radius of the second circle")
-
 		;
 
-	py::class_<Vector2dList>(m,"Vector2dList")
-		.def(py::init())
-		.def(py::init([](const py::list & points) {
-			              Vector2dList l;
-			              l.reserve(points.size());
-			              for ( const auto & p : points ) {
-				              l.push_back(p.cast<Eigen::Vector2d>());
-			              }
-			              return l;
-		              }),
-			py::arg("points"))
-		.def("append",
-		     [](Vector2dList & list,const Eigen::Vector2d & p) {
-			     list.push_back(p);
-		     })
-		.def("extend",
-		     [](Vector2dList & list, const Vector2dList & other) {
-			     list.reserve(list.size() + other.size());
-			     for ( const auto & v : other) {
-				     list.push_back(v);
-			     }
-		     })
-		.def("copy",
-		     [](const Vector2dList & list) -> Vector2dList {
-			     return list;
-		     })
-		.def("clear",&Vector2dList::clear)
-		.def("pop",[](Vector2dList & list,int pos) {
-			           if ( pos < 0 ) {
-				           pos = list.size() + pos;
-			           }
-			           if ( pos < 0 || pos >= list.size() ) {
-				           throw std::out_of_range(std::to_string(pos)
-				                                   + " should be in [0;"
-				                                   + std::to_string(list.size())
-				                                   + "[");
-			           }
-			           Eigen::Vector2d res = list[pos];
-			           list.erase(list.begin() + pos);
-			           return res;
-		           },py::arg("pos") = -1)
-		.def("__len__",&Vector2dList::size)
-		.def("__iter__",
-		     [](const Vector2dList & list) {
-			     return py::make_iterator(list.begin(),list.end());
-		     })
-		.def("__getitem__",
-		     [](Vector2dList & list,int pos) -> Eigen::Vector2d &{
-			     return list.at(pos);
-		     })
-		.def("__setitem__",
-		     [](Vector2dList & list,int pos, const Eigen::Vector2d & v) {
-			     list.at(pos) = v;
-		     })
-
-		;
-
+	py::bind_vector<Vector2dList>(m,"Vector2dList");
 	py::implicitly_convertible<py::list,Vector2dList>();
-
 
 	py::class_<Polygon,Polygon::Ptr>(m,
 	                                 "Polygon",
@@ -157,58 +95,7 @@ Example:
 		;
 
 
-	py::class_<Shape::List>(m,"ShapeList")
-		.def(py::init())
-		.def(py::init([](const py::list & shapes) {
-			              Shape::List l;
-			              l.reserve(shapes.size());
-			              for ( const auto & s : shapes ) {
-				              l.push_back(s.cast<Shape::Ptr>());
-			              }
-			              return l;
-		              }),
-			py::arg("points"))
-		.def("append",
-		     [](Shape::List & list,const Shape::Ptr & p) {
-			     list.push_back(p);
-		     })
-		.def("extend",
-		     [](Shape::List & list, const Shape::List & other) {
-			     list.reserve(list.size() + other.size());
-			     for ( const auto & v : other) {
-				     list.push_back(v);
-			     }
-		     })
-		.def("clear",&Shape::List::clear)
-		.def("pop",[](Shape::List & list,int pos) {
-			           if ( pos < 0 ) {
-				           pos = list.size() + pos;
-			           }
-			           if ( pos < 0 || pos >= list.size() ) {
-				           throw std::out_of_range(std::to_string(pos)
-				                                   + " should be in [0;"
-				                                   + std::to_string(list.size())
-				                                   + "[");
-			           }
-			           Shape::Ptr res = list[pos];
-			           list.erase(list.begin() + pos);
-			           return res;
-		           },py::arg("pos") = -1)
-		.def("__len__",&Shape::List::size)
-		.def("__iter__",
-		     [](const Shape::List & list) {
-			     return py::make_iterator(list.begin(),list.end());
-		     })
-		.def("__getitem__",
-		     [](Shape::List & list,int pos) -> Shape::Ptr &{
-			     return list.at(pos);
-		     })
-		.def("__setitem__",
-		     [](Shape::List & list,int pos, const Shape::Ptr & v) {
-			     list.at(pos) = v;
-		     })
-		;
-
+	py::bind_vector<Shape::List>(m,"ShapeList");
 	py::implicitly_convertible<py::list,Shape::List>();
 
 

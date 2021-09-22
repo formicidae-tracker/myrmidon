@@ -1,5 +1,4 @@
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include "BindTypes.hpp"
 #include <fort/myrmidon/Ant.hpp>
 
 namespace py = pybind11;

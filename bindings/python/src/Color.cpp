@@ -1,8 +1,6 @@
 #include <sstream>
 #include <iomanip>
 
-#include <pybind11/stl.h>
-
 #include "BindMethods.hpp"
 
 #include <fort/myrmidon/Color.hpp>
