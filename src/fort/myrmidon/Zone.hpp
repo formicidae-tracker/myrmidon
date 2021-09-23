@@ -34,7 +34,7 @@ public:
 	/**
 	 * Sets the Shapes of this ZoneDefinition
 	 *
-	 * @param shapes a union of Shape defining the <Zone> shapes.
+	 * @param shapes a union of Shape defining the Zone shapes.
 	 */
 	void SetShapes(const Shape::List & shapes);
 
@@ -65,8 +65,8 @@ public:
 	/**
 	 * Sets the first invalid time of the ZoneDefinition
 	 *
-	 * @param start the first valid Time of this definition. It can be
-	 *        Time::SinceEver().
+	 * @param end the first invalid Time of this definition. It can be
+	 *        Time::Forever().
 	 */
 	void SetEnd(const Time & end);
 
@@ -129,13 +129,13 @@ public:
 	/**
 	 * Adds a new timed ZoneDefinition
 	 *
-	 * Adds a new timed ZoneDefinition valid for [start,end[ to this Zone. It
-	 * accepts Time::SinceEver() and Time::Forever() for start or
-	 * end.
+	 * Adds a new timed ZoneDefinition valid for [start,end[ to this
+	 * Zone. It accepts Time::SinceEver() and Time::Forever() for
+	 * start or end.
 	 *
 	 * @param shapes the shape of the Zone as a Shape::List
 	 * @param start the first valid Time for this definition.
-	 * @end the end valid Time for this definition
+	 * @param end the first invalid Time for this definition.
 	 *
 	 * @return the new ZoneDefinition
 	 *
@@ -156,10 +156,9 @@ public:
 	const ZoneDefinitionList & Definitions() const;
 
 	/**
-	 *
 	 * Removes a ZoneDefinition
 	 *
-	 * @index the index in Definitions() to remove.
+	 * @param index the index in Definitions() to remove.
 	 *
 	 * @throws std::out_of_range if index >= Definitions().size()
 	 */

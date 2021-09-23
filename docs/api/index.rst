@@ -4,18 +4,24 @@ Python
 ------
 .. toctree::
 
+   python/experiment
+   python/ant_identification
+   python/space_zone
+   python/queries_matchers
    python/time
    python/shapes
-   python/zone
+   python/misc
+
 C++
 ---
 
 .. toctree::
 
-   cpp/time
-   cpp/ant
-   cpp/identification
    cpp/experiment
+   cpp/ant_identification
+   cpp/space_zone
+   cpp/queries_matchers
+   cpp/time
    cpp/shapes
    cpp/typedef
 

@@ -27,9 +27,6 @@ namespace myrmidon {
 /**
  * The ID for a tag
  *
- * * Python: TagID translates to an `int`
- * * R: TagID translates to an `integer`
- *
  * The identifier for a tag, which relates to Ant using
  * Identification.
  */
@@ -39,9 +36,6 @@ typedef uint32_t TagID;
 /**
  * The ID for an Ant.
  *
- * * Python: AntID translates to an `int`
- * * R: AntID translates to an `integer`
- *
  * Ant are uniquely identified within an Experiment with an AntID,
  * which is at least `1`. `0` is an invalid AntID.
  */
@@ -49,9 +43,6 @@ typedef uint32_t AntID;
 
 /**
  * The ID for a Space.
- *
- * * Python: SpaceID translates to an `int`
- * * R: SpaceID translates to an `integer`
  *
  * Space are uniquely identified within an Experiment with a SpaceID,
  * which is at least `1`. `0` is an invalid SpaceID.
@@ -61,9 +52,6 @@ typedef uint32_t SpaceID;
 /**
  * The ID for a Zone.
  *
- * * Python: ZoneID translates to an `int`
- * * R: ZoneID translates to an `integer`
- *
  * Zone are uniquely identified within an Experiment with a ZoneID, which is
  * at least `1`. `0` is an invalid/undefined Zone.
  */
@@ -71,11 +59,6 @@ typedef uint32_t ZoneID;
 
 /**
  * C++ type for named values.
- *
- * * Python: any object that is either a `bool`, an `int`, a `float`,
- *           a `str` or a `py_fort_myrmidon.Time`.
- * * R: any S expression that is either a `logical`, an `integer`, a
- *      `numeric`, a `character` or a `fmTime`.
  *
  * A c++ type that can hold only one of any #AntMetaDataType.
  */
@@ -109,9 +92,6 @@ typedef std::vector<std::shared_ptr<Identification>> IdentificationList;
 /**
  * The ID for Ant virtual body parts
  *
- * * Python: AntShapeTypeID translates to an `int`
- * * R: AntShapeTypeID translates to an `integer`
- *
  * Uniquely identifies an Ant shape type in an Experiment, from
  * `1`. `0` is an invalid value.
  */
@@ -120,9 +100,6 @@ typedef uint32_t AntShapeTypeID;
 
 /**
  * The ID for Ant manual measurement types
- *
- * * Python: MeasurementTypeID translates to an `int`
- * * R: MeasurementTypeID translates to an `integer`
  *
  * Uniquely identifies an Ant measurement type in an Experiment, from
  * `1`. `0` is an invalid value. The value `1` always refers to the
@@ -140,50 +117,32 @@ const MeasurementTypeID HEAD_TAIL_MEASUREMENT_TYPE = 1;
 
 /** A list of Ant virtual shape part
  *
- * * Python: a `list` of `tuple` containing an `integer` and a `py_fort_myrmidon.Capsule`. For example:
- * ```Python
- * shapeList = [(1,py_fort_myrmidon.Capsule((0,0),(0,1),0.5,0.5))]
- * ```
- * * R: \todo define me
- *
  */
 typedef std::vector<std::pair<AntShapeTypeID,std::shared_ptr<Capsule>>> TypedCapsuleList;
 
 /**
  * AntMetaDataType enumerates possible type for AntStaticValue
  *
- * * Python: `py_fort_myrmidon.AntMetaDataType`
- * * R: `fnAntMetaDataType` a named list of integer
  */
 enum class AntMetaDataType {
                             /**
                              * A boolean
-                             * * Python: `py_fort_myrmidon.AntMetaDataType.BOOL`
-                             * * R: `fmAntMetaDataType$BOOL`
                              */
                             BOOL = 0,
                             /**
                              * An integer
-                             * * Python: `py_fort_myrmidon.AntMetaDataType.INT`
-                             * * R: `fmAntMetaDataType$INT`
                              */
                             INT,
                             /**
                              * a float
-                             * * Python: `py_fort_myrmidon.AntMetaDataType.DOUBLE`
-                             * * R: `fmAntMetaDataType$DOUBLE`
                              */
                             DOUBLE,
                             /**
                              * a std::string
-                             * * Python: `py_fort_myrmidon.AntMetaDataType.STRING`
-                             * * R: `fmAntMetaDataType$STRING`
                              */
                             STRING,
                             /**
                              * a Time
-                             * * Python: `py_fort_myrmidon.AntMetaDataType.TIME`
-                             * * R: `fmAntMetaDataType$TIME`
                              */
                             TIME,
 };
@@ -192,9 +151,6 @@ AntMetaDataType TypeForAntStaticValue(const AntStaticValue & value);
 
 /**
  * Represents a Measurement in millimeters at a given Time.
- *
- * * Python: a `py_fort_myrmidon.ComputedMeasurement` object with read-only properties `Time`, `LengthMM` and `LengthPixel`.
- * * R: see Query::ComputeMeasurementFor
  *
  * Measurement in myrmidon are automatically converted to MM given the
  * Experiment tag family and size, and the size of the tag measured
@@ -574,13 +530,10 @@ std::string FormatTagID(TagID tagID);
  *
  * @return antID formatted to the myrmidon convention for AntID.
  */
-std::string FormatAntID(AntID tagID);
+std::string FormatAntID(AntID antID);
 
 
-/** \cond PRIVATE */
-/** An Axis-Aligned Bounding Box */
 typedef Eigen::AlignedBox<double,2> AABB;
-/** \endcond */
 }
 }
 

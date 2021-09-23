@@ -18,8 +18,8 @@ typedef Isometry2D<double> Isometry2Dd;
  * Base class for  geometric Shape
  *
  * Base class for geometruc Shape such as Circle, Capsule and
- * Polygon. This class is only here to be able to construct
- * hereterogenous List of shape
+ * Polygon. This class allows to construct heterogenous Shape::List
+ * for ZoneDefinition
  */
 class Shape {
 public:

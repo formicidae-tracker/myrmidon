@@ -1,7 +1,7 @@
 .. api_python_zone
 
-Space and Zones
-===============
+Spaces and Zones
+================
 
 
 py_fort_myrmidon.Space

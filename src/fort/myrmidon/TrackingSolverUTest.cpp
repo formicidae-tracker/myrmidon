@@ -41,7 +41,7 @@ TEST_F(PublicTrackingSolverUTest,CanIdentifyAndCollideFrames) {
 	CollisionFrame collision;
 	EXPECT_NO_THROW(solver->IdentifyFrame(identified,readout,1));
 	EXPECT_EQ(identified.Positions.rows(),3);
-	EXPECT_NO_THROW(solver->CollideFrame(collision,identified));
+	EXPECT_NO_THROW(solver->CollideFrame(identified,collision));
 	EXPECT_TRUE(collision.Collisions.empty());
 }
 

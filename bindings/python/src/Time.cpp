@@ -344,16 +344,17 @@ Warning:
 		     &fort::Time::Round,
 		     py::arg("d"),
 		     R"pydoc(
-    Rounds a Time to the closest Duration
+Rounds a Time to the closest Duration
 
-    Rounds a Time to the closest Duration. Only multiple of seconds
-and power of 10 of Nanosecond smaller than a second are supported.
+Rounds a Time to the closest Duration. Only multiple of seconds and
+power of 10 of Nanosecond smaller than a second are supported.
 
-    Args:
-        d (py_fort_myrmidon.Duration): a multiple of a second or a power of 10 of a nanosecond.
+Args:
+    d (py_fort_myrmidon.Duration): a multiple of a second or a power
+        of 10 of a nanosecond.
 
-    Returns:
-        py_fort_myrmidon.Time: a new Time rounded to d
+Returns:
+    py_fort_myrmidon.Time: a new Time rounded to d
 )pydoc")
 		.def("Reminder",
 		     &fort::Time::Reminder,

@@ -51,15 +51,6 @@ public:
 	/**
 	 * Opens an existing Experiment.
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.Open(filepath: str) -> py_fort_myrmidon.Experiment
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentOpen <- function(filepath = '') # returns a Rcpp_fmExperiment
-	 * ```
-	 *
 	 * @param filepath the path to the wanted file
 	 *
 	 * @return a pointer to the Experiment
@@ -74,15 +65,6 @@ public:
 
 	/**
      * Opens an Experiment without associated tracking data
-	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.OpenDataLess(filpath: str) -> py_fort_myrmidon.Experiment
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentOpenDataLess <- function(filepath = '') # returns a Rcpp_fmExperiment
-	 * ```
 	 *
 	 * Opens an Experiment to a `.myrmidon` file without opening its
 	 * associated tracking data. This is useful, by example, identify
@@ -108,15 +90,6 @@ public:
 	/**
 	 * Creates a new Experiment associated with the given filepath.
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.Create(filepath: str) -> py_fort_myrmidon.Experiment
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentCreate <- function(filepath = '') # returns a Rcpp_fmExperiment
-	 * ```
-	 *
 	 * Creates a new Experiment virtually associated with the desired
 	 * filepath location. It will not create a new file on the
 	 * filesystem. The wanted location is required to compute relative
@@ -135,15 +108,6 @@ public:
 	/**
 	 * Saves the Experiment at the desired filepath
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.Save(self)
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentSave <- function(experiment)
-	 * ```
-	 *
 	 * Saves the Experiment to filepath. It is not possible to change
 	 * its parent directory (but file renaming is permitted).
 	 *
@@ -157,27 +121,12 @@ public:
 	/**
 	 * Path to the underlying `.myrmidon` file
 	 *
-	 * * Python: `AbsoluteFilePath (str)` read-only property of `py_fort_myrmidon.Experiment`.
-	 * R Version :
-	 * ```R
-	 * fmExperimentAbsoluteFilePath <- function(experiment)
-	 * ```
-	 *
 	 * @return the absolute filepath to the `.myrmidon` file
 	 */
 	std::string AbsoluteFilePath() const;
 
 	/**
 	 * Creates a new Space
-	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.CreateSpace(self, name: str) -> py_fort_myrmidon.Space
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentCreateSpace <- function(experiment, name = '') # returns a Rcpp_fmSpace
-	 * ```
 	 *
 	 * @param name wanted name for the new Space
 	 *
@@ -187,15 +136,6 @@ public:
 
 	/**
 	 * Deletes a Space
-	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.DeleteSpace(self, spaceID: int)
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentDeleteSpace <- function(experiment, spaceID = 0)
-	 * ```
 	 *
 	 * @param spaceID the SpaceID of the Space we want to delete.
 	 *
@@ -208,30 +148,12 @@ public:
 	/**
 	 * Gets Space defined in the Experiment
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.Spaces(self) -> Dict[int,py_fort_myrmidon.Space]
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentSpaces <- function(experiment) # returns a named vector of Rcpp_fmSpace
-	 * ```
-	 *
 	 * @return a map of the Experiment Space indexed by their SpaceID
 	 */
 	const SpaceByID & Spaces() const;
 
 	/**
 	 * Adds a tracking data directory to one of Experiment's Space
-	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.AddTrackingDataDirectory(self,spaceID: int, filepath: str) -> str
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentAddTrackingDataDirectory <- function(experiment,spaceID = 0, filepath = '') # returns a character
-	 * ```
 	 *
 	 * Adds a tracking data director acquired with the FORT to
 	 * the wanted Space.
@@ -256,15 +178,6 @@ public:
 	/**
 	 * Removes a Tracking Data Directory from the Experiment.
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.RemoveTrackingDataDirectory(self, URI: str)
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentRemoveTrackingDataDirectory <- function(experiment, URI = '')
-	 * ```
-	 *
 	 * @param URI the URI of the tracking data directory to remove
 	 *
 	 * @throws std::invalid_argument if URI does not designate a
@@ -275,30 +188,12 @@ public:
 	/**
 	 * Creates a new Ant in the Experiment.
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.CreateAnt(self) -> py_fort_myrmidon.Ant
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentCreateAnt <- function(experiment) # returns a Rcpp_fmAnt
-	 * ```
-	 *
 	 * @return the newly created Ant
 	 */
 	Ant::Ptr CreateAnt();
 
 	/**
 	 * Gets the Ant in the Experiment
-	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.Ants(self) -> Dict[int,py_fort_myrmidon.Ant]
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentAnts <- function(experiment) # returns a named vector of Rcpp_fmAnts
-	 * ```
 	 *
 	 * @return the Ant indexed by their AntID in the Experiment.
 	 */
@@ -307,14 +202,6 @@ public:
 	/**
 	 * Deletes an Ant
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.DeleteAnt(self,antID: int) -> None
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmExperimentDeleteAnt <- function(experiment, antID = 0)
-	 * ```
 	 * @param antID the AntID of the Ant to delete from the experiment
 	 *
 	 * @throws std::out_of_range if antID is not valid for this Experiment
@@ -325,15 +212,6 @@ public:
 
 	/**
 	 * Adds an Identification to the Experiment
-	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.AddIdentification(self,antID: int,tagID: int,start: py_fort_myrmidon.Time, end: py_fort_myrmidon.End) -> py_fort_myrmidon.Identification
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentAddIdentification <- function(experiment, antID = 0, tagID = 0, start = fmTimeSinceEver(), end = fmTimeForever() ) # returns a Rcpp_fmIdentification
-	 * ```
 	 *
 	 * Adds an Identification to the Experiment. Identification
 	 * are valid for [start,end[. One may obtain a valid time
@@ -359,15 +237,6 @@ public:
 	/**
 	 * Deletes an Identification
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.DeleteIdentification(self,identification: py_fort_myrmidon.Identification)
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentDeleteIdentification <- function(experiment, identification)
-	 * ```
-	 *
 	 * @param identification the Identification to delete
 	 *
 	 * @throws std::invalid_argument if identification is not an
@@ -377,15 +246,6 @@ public:
 
 	/**
 	 * Computes a valid time range for a tagID.
-	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.FreeIdentificationRangeAt(self,tagID: int, time: py_fort_myrmidon.Time) -> Tuple[py_fort_myrmidon.Time, py_fort_myrmidon.Time]
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentFreeIdentificationRangeAt <- function(experiment, tagID = 0, time = fmTimeSinceEver()) # returns a list of two Rcpp_fmTime.
-	 * ```
 	 *
 	 * @param tagID the TagID we want a range for
 	 * @param time the Time that must be included in the result time range
@@ -404,24 +264,12 @@ public:
 	/**
 	 * The name of the Experiment.
 	 *
-	 * * Python: `Name :str` read-write property of `py_fort_myrmidon.Experiment`
-	 * * R :
-	 * ```R
-	 * fmExperimentName <- function(experiment) # returns a character
-	 * ```
-	 *
 	 * @return a reference to the Experiment's name
 	 */
 	const std::string & Name() const;
 
 	/**
 	 * Sets the Experiment's name.
-	 *
-	 * * Python: `Name :str` read-write property of `py_fort_myrmidon.Experiment`
-	 * * R :
-	 * ```R
-	 * fmExperimentSetName <- function(experiment, name = '')
-	 * ```
 	 *
 	 * @param name the new Experiment name
 	 */
@@ -430,24 +278,12 @@ public:
 	/**
 	 * The author of the Experiment
 	 *
-	 * * Python: `Author :str` read-write property of `py_fort_myrmidon.Experiment`
-	 * * R :
-	 * ```R
-	 * fmExperimentAuthor <- function(experiment) # return a character
-	 * ```
-	 *
 	 * @return a reference to the Experiment's author name
 	 */
 	const std::string & Author() const;
 
 	/**
 	 * Sets the Experiment's author
-	 *
-	 * * Python: `Author :str` read-write property of `py_fort_myrmidon.Experiment`
-	 * * R :
-	 * ```R
-	 * fmExperimentSetAuthor <- function(experiment, author = '')
-	 * ```
 	 *
 	 * @param author the new value for the Experiment's author
 	 */
@@ -456,12 +292,6 @@ public:
 	/**
 	 * Comments about the experiment
 	 *
-	 * * Python: `Comment :str` read-write property of `py_fort_myrmidon.Experiment`
-	 * * R :
-	 * ```R
-	 * fmExperimentComment <- function(experiment) # return a character
-	 * ```
-	 *
 	 * @return a reference to the Experiment's comment
 	 */
 	const std::string & Comment() const;
@@ -469,24 +299,12 @@ public:
 	/**
 	 * Sets the comment of the Experiment
 	 *
-	 * * Python: `Comment :str` read-write property of `py_fort_myrmidon.Experiment`
-	 * * R :
-	 * ```R
-	 * fmExperimentSetComment <- function(experiment, comment = '')
-	 * ```
-	 *
 	 * @param comment the wanted Experiment's comment
 	 */
 	void SetComment(const std::string & comment);
 
 	/**
 	 * The kind of tag used in the Experiment
-	 *
-	 * * Python: `TagFamily :py_fort_myrmidon.TagFamily` read-only property of `py_fort_myrmidon.Experiment`
-	 * * R:
-	 * ```R
-	 * fmExperimentTagFamily <- function(experiment) # return an integer corresponding to one of the value of `fmTagFamily` named list
-	 * ```
 	 *
 	 * Gets the family of the tags used in this Experiment. It is
 	 * automatically determined from the information in
@@ -498,12 +316,6 @@ public:
 
 	/**
 	 * The default physical tag size
-	 *
-	 * * Python: `DefaultTagSize :float` read-write property of `py_fort_myrmidon.Experiment`
-	 * * R :
-	 * ```R
-	 * fmExperimentDefaultTagSize <- function(experiment) # returns a numerical
-	 * ```
 	 *
 	 * Usually an Ant colony are tagged with a majority of tag of a
 	 * given size in millimeters. Some individuals (like Queens) may
@@ -521,12 +333,6 @@ public:
 	/**
 	 * Sets the default tag siye in mm
 	 *
-	 * * Python: `DefaultTagSize :float` read-write property of `py_fort_myrmidon.Experiment`
-	 * * R :
-	 * ```R
-	 * fmExperimentSetDefaultTagSize <- function(experiment, tagSize = 1.0)
-	 * ```
-	 *
 	 * @param defaultTagSize the tag size in millimeter ( the one defined on the tag sheet )
 	 *
 	 */
@@ -534,15 +340,6 @@ public:
 
 	/**
 	 * Creates a measurement type
-	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.CreateMeasurementType(self,name: str) -> int
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentCreateMeasurementType <- function(experiment, name = '') # returns an integer
-	 * ```
 	 *
 	 * @param name the wanted name for the new measurement
 	 *
@@ -553,15 +350,6 @@ public:
 
 	/**
 	 * Deletes a measurement type
-	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.DeleteMeasurementType(self,measurementTypeID :int)
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentDeleteMeasurementType <- function(experiment, measurementTypeID = 0)
-	 * ```
 	 *
 	 * @param measurementTypeID the MeasurementTypeID to delete
 	 *
@@ -577,15 +365,6 @@ public:
 	/**
 	 * Sets the name of a measurement type
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.SetMeasurementTypeName(self,measurementTypeID :int, name :str)
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentSetMeasurementTypeName <- function(experiment, measurementTypeID = 0, name :str)
-	 * ```
-	 *
 	 * @param measurementTypeID the MeasurementTypeID to modify
 	 * @param name the wanted name
 	 *
@@ -598,30 +377,12 @@ public:
 	/**
 	 * Gets the Experiment defined measurement types
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.MeasurementTypeNames(self) -> Dict[int,str]
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentMeasurementTypeNames <- function(experiment) # returns a named vector of the measurement type names
-	 * ```
-	 *
 	 * @return a map of measurement type name by their MeasurementTypeID
 	 */
 	std::map<MeasurementTypeID,std::string> MeasurementTypeNames() const;
 
 	/**
 	 * Creates a new Ant shape type
-	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.CreateAntShapeType(self, name: str) -> int
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentCreateAntShapeType <- function(experiment, name = '') # returns an integer
-	 * ```
 	 *
 	 * @param name the user defined name for the Ant Shape Type
 	 *
@@ -632,30 +393,12 @@ public:
 	/**
 	 * Gets the defined Ant shape type
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.AntShapeTypeNames(self) -> Dict[int,str]
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentAntShapeTypeNames <- function(experiment) # returns a named vector of the ant shape type names
-	 * ```
-	 *
 	 * @return the Ant shape type name by their AntShapeTypeID
 	 */
 	std::map<AntShapeTypeID,std::string> AntShapeTypeNames() const;
 
 	/**
 	 * Changes the name of an Ant Shape type
-	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.SetAntShapeTypeName(self, shapeTypeID :int, name :str)
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentSetAntShapeTypeName <- function(experiment, shapeTypeID = 0, name = '')
-	 * ```
 	 *
 	 * @param shapeTypeID the AntShapeTypeID of the shape type to rename
 	 * @param name param the new name for the Ant shape type
@@ -669,15 +412,6 @@ public:
 	/**
 	 * Removes a virtual Ant shape type
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.RemoveAntShapeType(self, shapeTypeID :int)
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentRemoveAntShapeTypeName <- function(experiment, shapeTypeID = 0)
-	 * ```
-	 *
 	 * @param shapeTypeID the AntShapeTypeID of the shape type to remove
 	 *
 	 * @throws std::out_of_range if shapeTypeID is not valid for
@@ -689,15 +423,6 @@ public:
 
 	/**
 	 * Adds or modify a user-defined meta data key.
-	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.SetMetaDataKey(self, key :str, value: py_fort_myrmidon.AntStaticValue)
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentAddMetaDataKey <- function(experiment, key = '', value = fmAntStaticBool(FALSE) )
-	 * ```
 	 *
 	 * @param key the unique key to add or modify
 	 * @param defaultValue the default value for that key. It also
@@ -717,15 +442,6 @@ public:
 	/**
 	 * Removes a meta data key.
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.DeleteMetaDataKey(self, key :str)
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentDeleteMetaDataKey <- function(experiment, key = '')
-	 * ```
-	 *
 	 * @param key the key to remove
 	 *
 	 * @throws std::out_of_range if key is not valid for this
@@ -738,15 +454,6 @@ public:
 	/**
 	 * Gets the meta data keys for this Experiment
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.MetaDataKeys(self) -> Dict[strpy_fort_myrmidon.AntStaticValue]
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentMetaDataKeys <- function(experiment) # returns a named vector
-	 * ```
-	 *
 	 * @return a pairs of AntMetadataType and AntStaticValue
 	 *          indexed by key
 	 */
@@ -754,15 +461,6 @@ public:
 
 	/**
 	 * Renames a meta data key
-	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.RenameMetaDataKey(self, oldKey :str, newKey :str)
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentRenameMetaDataKey <- function(experiment, oldKey = '', newKey = '')
-	 * ```
 	 *
 	 * @param oldKey the key to rename
 	 * @param newKey the new key name
@@ -780,15 +478,6 @@ public:
 	/**
 	 * Gets AntID <- TagID correspondances at a given time
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.IdentificationsAt(self, time :py_fort_myrmidon.Time) -> Dict[int,int]
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentIdentificationsAt <- function(experiment, time = fmTimeNow()) # named vector of antID
-	 * ```
-	 *
 	 * @param time the wanted Time to query for the correspondances
 	 * @param removeUnidentifiedAnt if `true`, just do not report
 	 *        unidentified at this time. If `false`
@@ -802,15 +491,6 @@ public:
 
 	/**
 	 * Compiles a TrackingSolver
-	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Experiment.CompileTrackingSolver(self) -> py_fort_myrmidon.TrackingSolver
-	 * ```
-	 * * R :
-	 * ```R
-	 * fmExperimentCompileTrackingSolver <- function(experiment) # returns a Rcpp_fmTrackingSolver
-	 * ```
 	 *
 	 * Compiles a TrackingSolver, typically use to identify and
 	 * collide frame from online acquired tracking data.

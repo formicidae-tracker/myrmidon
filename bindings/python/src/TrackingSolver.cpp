@@ -49,7 +49,7 @@ void BindTrackingSolver(py::module_ & m) {
 		     [](const TrackingSolver & self,
 		        IdentifiedFrame & frame) {
 			     auto res = std::make_shared<CollisionFrame>();
-			     self.CollideFrame(*res,frame);
+			     self.CollideFrame(frame,*res);
 			     return res;
 		     },
 		     py::arg("frame"),

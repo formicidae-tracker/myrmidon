@@ -32,14 +32,6 @@ public :
 	/**
 	 *  Identifies a single ant
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.TrackingSolver(self,tagID: int,time: py_fort_myrmidon.Time) -> int
-	 * ```
-	 * * R:
-	 * fmTrackingSolverIdentifyAnt <- function(solver, tagID = 0, time = fmTimeNow()) # returns an integer
-	 * ```
-	 *
 	 * @param tagID the TagID to identify
 	 * @param time the time to consider to identify the tag
 	 *
@@ -51,19 +43,11 @@ public :
 	/**
 	 * Identifies Ants from a `fort::hermes::FrameReadout`
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Trackingsolver.IdentifyFrame(self,frame: py_fort_hermes.FrameReadout, spaceID: int) -> py_fort_myrmidon.IdentifiedFrame
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmTrackingSolverIdentifyFrame <- function(solver, frame, spaceID = 0)
-	 * ```
-	 *
+	 * @param identified an IdentifiedFrame that will hold the Ant
+	 *        positions
 	 * @param frame the `fort::hermes::FrameReadout` to identify
 	 * @param spaceID the spaceID the frame correspond to
 	 *
-	 * @return an IdentifiedFrame with all identified ant without their zone
 	 */
 	void IdentifyFrame(IdentifiedFrame & identified,
 	                   const fort::hermes::FrameReadout & frame,
@@ -72,24 +56,18 @@ public :
 	/**
 	 * Collides Ants from an IdentifiedFrame
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Trackingsolver.CollideFrame(self,identified: py_fort_myrmidon.IdentifiedFrame) -> py_fort_myrmidon.CollisionFrame
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmTrackingSolverCollideFrame <- function(solver, identified)
-	 * ```
-	 *
-	 * @param identified the IdentifiedFrame with the ant position data.
+	 * @param identified the IdentifiedFrame with the ant position
+	 *        data and to return ant location.
+	 * @param collision the CollisionFrame to return the collision.
 	 *
 	 * Collides Ants from an IdentifiedFrame. identified will be
-	 * modified to contains for each Ant its current zone.
+	 * modified to contains for each Ant its current zone. collision
+	 * frame will be set with all current collision found in
+	 * identified.
 	 *
-	 * @return a CollisionFrame with all current Ant collisions.
 	 */
-	void CollideFrame(CollisionFrame & collision,
-	                  IdentifiedFrame & identified) const;
+	void CollideFrame(IdentifiedFrame & identified,
+	                  CollisionFrame & collision) const;
 
 private:
 	friend class Experiment;

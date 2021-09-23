@@ -17,8 +17,8 @@ void TrackingSolver::IdentifyFrame(IdentifiedFrame & identified,
 	d_p->IdentifyFrame(identified,frame,spaceID);
 }
 
-void TrackingSolver::CollideFrame(CollisionFrame & collision,
-                                  IdentifiedFrame & identified) const {
+void TrackingSolver::CollideFrame(IdentifiedFrame & identified,
+                                  CollisionFrame & collision) const {
 	d_p->CollideFrame(collision,identified);
 }
 

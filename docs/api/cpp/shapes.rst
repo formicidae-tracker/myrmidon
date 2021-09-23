@@ -1,7 +1,10 @@
 .. api_shapes:
 
-fort::myrmidon::Shape
+2D Geometric Shapes
 =====================
+
+fort::myrmidon::Shape
++++++++++++++++++++++
 
 .. doxygenclass:: fort::myrmidon::Shape
    :members:
