@@ -6,15 +6,16 @@
 \arguments{
 \item{shapes}{the geometry}
 
-\item{start}{the first valid time for this definition.}
+\item{start}{the first valid \link{\code{fmTime}} for this definition.}
 
-\item{end}{the first invalid time for this definition.}
+\item{end}{the first invalid \link{\code{fmTime}} for this definition.}
 }
 \value{
 a \link{\code{fmZoneDefinition}}
 }
 \description{
-Adds a new fmZoneDefinition to the fmZone.
+Adds a new \link{\code{fmZoneDefinition}} to the
+fmZone.
 }
 \seealso{
 Other fmZone classes and methods: 

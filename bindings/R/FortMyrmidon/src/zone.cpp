@@ -46,11 +46,14 @@ fmZone_AddDefinition(fort::myrmidon::Zone::Ptr * z,
 }
 
 inline void fmZone_DeleteDefinition(fort::myrmidon::Zone::Ptr * z,
-                                                                   size_t index) {
+                                    size_t index) {
 	(*z)->DeleteDefinition(index-1);
 }
 
 
+inline uint64_t fmZone_get(const fort::myrmidon::Zone::Ptr * z) {
+	return uint64_t(z->get());
+}
 
 
 RCPP_MODULE(zone) {
@@ -85,6 +88,8 @@ RCPP_MODULE(zone) {
 		.method("deleteDefinition",
 		        &fmZone_DeleteDefinition,
 		        "Removes a definition in this zone.")
+		.const_method("get",
+		              &fmZone_get)
 		;
 }
 

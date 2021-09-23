@@ -15,6 +15,9 @@ class ZoneHandle;
  *
  * ZoneDefinition contains for a time range [Start(),End()[ the
  * Shapes() for a Zone.
+ *
+ * ZoneDefinition can only be created from a Zone with
+ * Zone::AddDefinition().
  */
 class ZoneDefinition {
 public:
@@ -95,6 +98,8 @@ private:
  * A Zone defines a tracked area region where collisions and
  * interactions can be computed. I.e. two Ant in different Zone won't
  * report any collisions or interactions.
+ *
+ * Zone can only be created from a Space with Space::CreateZone().
  *
  * Naming and Identification
  * =========================

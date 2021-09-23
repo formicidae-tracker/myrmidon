@@ -16,16 +16,20 @@ class SpaceHandle;
  * Camera. Coordinates in one Space cannot be compared with coordinate
  * from another Space.
  *
- * Space are uniquely identified with their SpaceID.
+ * Space are uniquely identified with their ID().
+ *
+ * Space can only be created from an Experiment with
+ * Experiment::CreateSpace()
  *
  * Zoning
  * ======
  *
- * Within a single Space, it could be relevant to defines Zone where
+ * Within a single Space, it could be relevant to define Zone where
  * interaction between Ant could be measured. I.e. Ant in different
  * Zone won't report interactions.
  *
  * Zone are manipulated with CreateZone() and DeleteZone().
+ *
  */
 class Space {
 public:
