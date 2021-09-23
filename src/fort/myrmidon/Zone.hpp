@@ -11,10 +11,10 @@ class ZoneDefinitionHandle;
 class ZoneHandle;
 
 /**
- * Defines the shape of a Zone in Time
+ * Defines the geometry of a Zone in Time
  *
- * ZoneDefinition contains for a time range [Start(),End()[ the Shapes()
- * for a Zone.
+ * ZoneDefinition contains for a time range [Start(),End()[ the
+ * Shapes() for a Zone.
  */
 class ZoneDefinition {
 public:
@@ -99,10 +99,9 @@ private:
  * Naming and Identification
  * =========================
  *
- * Zone are managed by Space, and have a unique ZoneID within that
- * space. However two Zone from different Space can share the same
- * ZoneID. Zone have a user definable Name() but internally only their
- * ZoneID is used.
+ * Zone are managed by Space, and have a unique ZoneID within an
+ * experiment. Zone have a user definable Name() but internally only
+ * their ZoneID is used.
  *
  * By default, any Ant is considered to be within the `null` Zone
  * with ZoneID 0, so all possible interactions are reported. User

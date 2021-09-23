@@ -37,10 +37,11 @@ inline uint32_t fmZone_ID(fort::myrmidon::Zone::Ptr * z) {
 	return (*z)->ID();
 }
 
-inline fort::myrmidon::ZoneDefinition::Ptr fmZone_AddDefinition(fort::myrmidon::Zone::Ptr * z,
-                                                                const fort::myrmidon::Shape::List & shapes,
-                                                                const fort::Time & start = fort::Time::SinceEver(),
-                                                                const fort::Time & end = fort::Time::Forever()) {
+inline fort::myrmidon::ZoneDefinition::Ptr
+fmZone_AddDefinition(fort::myrmidon::Zone::Ptr * z,
+                     const fort::myrmidon::Shape::List & shapes = {},
+                     const fort::Time & start = fort::Time::SinceEver(),
+                     const fort::Time & end = fort::Time::Forever()) {
 	return (*z)->AddDefinition(shapes,start,end);
 }
 
@@ -76,9 +77,14 @@ RCPP_MODULE(zone) {
 		.property("definitions",&fmZone_Definitions,"This fmZone Definitions")
 		.property("name",
 		          &fmZone_Name,
-		          &fmZone_SetName)
-		.method("addDefinition",&fmZone_AddDefinition)
-		.method("deleteDefinition",&fmZone_DeleteDefinition)
+		          &fmZone_SetName,
+		          "This zone name.")
+		.method("addDefinition",
+		        &fmZone_AddDefinition,
+		        "Adds a zone definition to this zone.")
+		.method("deleteDefinition",
+		        &fmZone_DeleteDefinition,
+		        "Removes a definition in this zone.")
 		;
 }
 
