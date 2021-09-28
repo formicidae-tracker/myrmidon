@@ -11,6 +11,27 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// fmDefaultPalette
+SEXP fmDefaultPalette();
+RcppExport SEXP _FortMyrmidon_fmDefaultPalette() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(fmDefaultPalette());
+    return rcpp_result_gen;
+END_RCPP
+}
+// fmDefaultPaletteColor
+fort::myrmidon::Color fmDefaultPaletteColor(int i);
+RcppExport SEXP _FortMyrmidon_fmDefaultPaletteColor(SEXP iSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type i(iSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmDefaultPaletteColor(i));
+    return rcpp_result_gen;
+END_RCPP
+}
 // fmVector2dListCreate
 fort::myrmidon::Vector2dList fmVector2dListCreate(SEXP points);
 RcppExport SEXP _FortMyrmidon_fmVector2dListCreate(SEXP pointsSEXP) {
@@ -205,8 +226,10 @@ BEGIN_RCPP
 END_RCPP
 }
 
+RcppExport SEXP _rcpp_module_boot_ant();
 RcppExport SEXP _rcpp_module_boot_eigen();
 RcppExport SEXP _rcpp_module_boot_experiment();
+RcppExport SEXP _rcpp_module_boot_identification();
 RcppExport SEXP _rcpp_module_boot_shapes();
 RcppExport SEXP _rcpp_module_boot_space();
 RcppExport SEXP _rcpp_module_boot_time();
@@ -214,6 +237,8 @@ RcppExport SEXP _rcpp_module_boot_utestdata();
 RcppExport SEXP _rcpp_module_boot_zone();
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_FortMyrmidon_fmDefaultPalette", (DL_FUNC) &_FortMyrmidon_fmDefaultPalette, 0},
+    {"_FortMyrmidon_fmDefaultPaletteColor", (DL_FUNC) &_FortMyrmidon_fmDefaultPaletteColor, 1},
     {"_FortMyrmidon_fmVector2dListCreate", (DL_FUNC) &_FortMyrmidon_fmVector2dListCreate, 1},
     {"_FortMyrmidon_pfmIWantAVector2dList", (DL_FUNC) &_FortMyrmidon_pfmIWantAVector2dList, 1},
     {"_FortMyrmidon_fmExperimentCreate", (DL_FUNC) &_FortMyrmidon_fmExperimentCreate, 1},
@@ -232,8 +257,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FortMyrmidon_fmMillisecond", (DL_FUNC) &_FortMyrmidon_fmMillisecond, 1},
     {"_FortMyrmidon_fmMicrosecond", (DL_FUNC) &_FortMyrmidon_fmMicrosecond, 1},
     {"_FortMyrmidon_fmNanosecond", (DL_FUNC) &_FortMyrmidon_fmNanosecond, 1},
+    {"_rcpp_module_boot_ant", (DL_FUNC) &_rcpp_module_boot_ant, 0},
     {"_rcpp_module_boot_eigen", (DL_FUNC) &_rcpp_module_boot_eigen, 0},
     {"_rcpp_module_boot_experiment", (DL_FUNC) &_rcpp_module_boot_experiment, 0},
+    {"_rcpp_module_boot_identification", (DL_FUNC) &_rcpp_module_boot_identification, 0},
     {"_rcpp_module_boot_shapes", (DL_FUNC) &_rcpp_module_boot_shapes, 0},
     {"_rcpp_module_boot_space", (DL_FUNC) &_rcpp_module_boot_space, 0},
     {"_rcpp_module_boot_time", (DL_FUNC) &_rcpp_module_boot_time, 0},

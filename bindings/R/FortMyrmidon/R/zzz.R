@@ -15,10 +15,14 @@ Rcpp::loadModule("eigen",TRUE)
 Rcpp::loadModule("shapes",TRUE)
 
 Rcpp::loadModule("zone",TRUE)
-
-
 Rcpp::loadModule("space",TRUE)
+
+Rcpp::loadModule("identification",TRUE)
+Rcpp::loadModule("ant",TRUE)
+
 Rcpp::loadModule("experiment",TRUE)
+
+
 
 
 Rcpp::loadModule("utestdata",TRUE)

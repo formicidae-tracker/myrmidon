@@ -2,16 +2,23 @@
 % Please edit documentation in R/RcppExports.R
 \name{fmExperimentCreate}
 \alias{fmExperimentCreate}
-\title{Creates an Experiement}
+\title{Creates an Experiement.}
 \usage{
 fmExperimentCreate(filepath)
 }
 \arguments{
-\item{filepath}{the name for the newly created space}
+\item{filepath}{to use for the experiment.}
 }
 \value{
-a \link{\code{fmExperiment}} with name
+a \link{\code{fmExperiment}} with the associated filepath
 }
 \description{
-Creates an Experiement
+No file will be created a filepath, but it is
+required to determine relative path to the eventual Tracking
+Data Directory that will be added to the experiment.
 }
+\seealso{
+Other fmExperiment methods: 
+\code{\link{fmExperimentOpen}()}
+}
+\concept{fmExperiment methods}

@@ -21,23 +21,25 @@ RCPP_MODULE(experiment) {
 		.property("spaces",&fmExperiment_Spaces,"Spaces in this experiment");
 }
 
-//' Creates an Experiement.
-//' @description Creates a new fmExperiment. No file will be created a
-//    filepath, but it is required to determine relative path to the
-//    eventual Tracking Data Directory that will be added to the
-//    experiment.
+
+
+//' @title Creates an Experiement.
+//' @description No file will be created a filepath, but it is
+//'   required to determine relative path to the eventual Tracking
+//'   Data Directory that will be added to the experiment.
 //' @param filepath to use for the experiment.
 //' @return a \link{\code{fmExperiment}} with the associated filepath
+//' @family fmExperiment methods
 //[[Rcpp::export]]
 ExperimentPtr fmExperimentCreate(const std::string & filepath) {
 	using namespace fort::myrmidon;
 	return ExperimentPtr(new Experiment(Experiment::CreateUnsafe(filepath)));
 }
 
-
 //' Opens an Experiment
 //' @param filepath the path to the '.myrmidon' file
 //' @return a \link{\code{fmExperiment}}
+//' @family fmExperiment methods
 //[[Rcpp::export]]
 ExperimentPtr fmExperimentOpen(const std::string & filepath) {
 	using namespace fort::myrmidon;
