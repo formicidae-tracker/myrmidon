@@ -35,10 +35,6 @@ void BindIdentification(py::module_ & m) {
 		              &Identification::End,
 		              &Identification::SetEnd,
 		              " (py_fort_myrmidon.Time): the first invalid Time fort this identification, it can be Time.Forever()")
-		.def_property("End",
-		              &Identification::End,
-		              &Identification::SetEnd,
-		              " (py_fort_myrmidon.Time): the first invalid Time fort this identification, it can be Time.Forever()")
 		.def_property("TagSize",
 		              &Identification::TagSize,
 		              &Identification::SetTagSize,

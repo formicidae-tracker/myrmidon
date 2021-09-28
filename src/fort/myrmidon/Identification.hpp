@@ -162,7 +162,7 @@ public:
 	 * @return the Time where where this Identification becomes
 	 *         valid. It can return Time::SinceEver()
 	 */
-	Time Start() const;
+	const Time & Start() const;
 
 	/**
 	 * Gets the ending validity time
@@ -177,7 +177,7 @@ public:
 	 * @return the first Time where this Identification becomes
 	 *         unvalid. It can return Time::Forever()
 	 */
-	Time End() const;
+	const Time & End() const;
 
 	/**
 	 * Gets the Ant center position relatively to the tag center.

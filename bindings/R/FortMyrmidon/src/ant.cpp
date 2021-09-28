@@ -14,13 +14,9 @@ inline uint32_t fmAnt_IdentifiedAt(const fort::myrmidon::Ant::Ptr * a,
 	return (*a)->IdentifiedAt(time);
 }
 
-IMPLEMENT_GETTER(Ant,fort::myrmidon::IdentificationList,Identifications)
-
-inline uint32_t fmAnt_ID(fort::myrmidon::Ant::Ptr *a) {
-	return (*a)->ID();
-}
-
-IMPLEMENT_FIELD(Ant,fort::myrmidon::Color,DisplayColor)
+IMPLEMENT_GETTER(Ant,const fort::myrmidon::IdentificationList &,Identifications)
+IMPLEMENT_GETTER(Ant,uint32_t,ID);
+IMPLEMENT_FIELD(Ant,const fort::myrmidon::Color &,DisplayColor)
 
 inline int fmAnt_DisplayStatus(fort::myrmidon::Ant::Ptr *a) {
 	return int((*a)->DisplayStatus());

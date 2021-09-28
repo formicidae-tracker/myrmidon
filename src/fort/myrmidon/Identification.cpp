@@ -33,11 +33,11 @@ void Identification::SetEnd(const Time & end) {
 	d_p->Get().SetEnd(end);
 }
 
-Time Identification::Start() const {
+const Time & Identification::Start() const {
 	return d_p->Get().Start();
 }
 
-Time Identification::End() const {
+const Time & Identification::End() const {
 	return d_p->Get().End();
 }
 

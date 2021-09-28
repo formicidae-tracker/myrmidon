@@ -1,23 +1,35 @@
 #include "experiment.h"
 
 #include "Rcpp.h"
+#include "helper.h"
 #include "wrapMap.h"
 
-inline fort::myrmidon::SpaceByID fmExperiment_Spaces(ExperimentPtr * e) {
-	return (*e)->Spaces();
-}
-
-
-inline fort::myrmidon::Space::Ptr fmExperiment_CreateSpace(ExperimentPtr * e,
-                                                           const std::string & name) {
-	return (*e)->CreateSpace(name);
-}
+IMPLEMENT_METHOD_X(fmExperiment,
+                   ExperimentPtr,
+                   fort::myrmidon::SpaceByID,
+                   Spaces);
+IMPLEMENT_METHOD_X(fmExperiment,ExperimentPtr,
+                   fort::myrmidon::Space::Ptr,
+                   CreateSpace,
+                   const std::string &,name);
+IMPLEMENT_METHOD_X(fmExperiment,ExperimentPtr,
+                   fort::myrmidon::Ant::Ptr,
+                   CreateAnt);
+IMPLEMENT_METHOD_X(fmExperiment,ExperimentPtr,
+                   fort::myrmidon::Identification::Ptr,
+                   AddIdentification,
+                   fort::myrmidon::AntID, antID,
+                   fort::myrmidon::TagID, tagID,
+                   const fort::Time &, start,
+                   const fort::Time &,  end);
 
 
 RCPP_MODULE(experiment) {
 	using namespace Rcpp;
 	class_<ExperimentPtr>("fmExperiment")
 		.method("createSpace",&fmExperiment_CreateSpace)
+		.method("createAnt",&fmExperiment_CreateAnt)
+		.method("addIdentification",&fmExperiment_AddIdentification)
 		.property("spaces",&fmExperiment_Spaces,"Spaces in this experiment");
 }
 

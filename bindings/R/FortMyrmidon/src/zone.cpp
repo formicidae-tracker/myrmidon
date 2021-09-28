@@ -5,9 +5,9 @@
 #include "Rcpp.h"
 
 
-IMPLEMENT_FIELD(ZoneDefinition,fort::myrmidon::Shape::List,Shapes);
-IMPLEMENT_FIELD(ZoneDefinition,fort::Time,Start);
-IMPLEMENT_FIELD(ZoneDefinition,fort::Time,End)
+IMPLEMENT_FIELD(ZoneDefinition,const fort::myrmidon::Shape::List &,Shapes);
+IMPLEMENT_FIELD(ZoneDefinition,const fort::Time &,Start);
+IMPLEMENT_FIELD(ZoneDefinition,const fort::Time &,End);
 
 
 inline void fmZoneDefinition_show(const fort::myrmidon::ZoneDefinition::Ptr * zd) {
@@ -21,8 +21,8 @@ inline uint64_t fmZoneDefinition_get(const fort::myrmidon::ZoneDefinition::Ptr *
 }
 
 
-IMPLEMENT_FIELD(Zone,std::string,Name);
-IMPLEMENT_GETTER(Zone,fort::myrmidon::ZoneDefinitionList,Definitions);
+IMPLEMENT_FIELD(Zone,const std::string &,Name);
+IMPLEMENT_GETTER(Zone,const fort::myrmidon::ZoneDefinitionList &,Definitions);
 
 inline void fmZone_show(const fort::myrmidon::Zone::Ptr * z) {
 	Rcpp::Rcout << "fmZone($id = " << (*z)->ID()
@@ -31,11 +31,7 @@ inline void fmZone_show(const fort::myrmidon::Zone::Ptr * z) {
 }
 
 
-
-
-inline uint32_t fmZone_ID(fort::myrmidon::Zone::Ptr * z) {
-	return (*z)->ID();
-}
+IMPLEMENT_GETTER(Zone,uint32_t,ID);
 
 inline fort::myrmidon::ZoneDefinition::Ptr
 fmZone_AddDefinition(fort::myrmidon::Zone::Ptr * z,
