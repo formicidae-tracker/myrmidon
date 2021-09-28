@@ -20,6 +20,8 @@
 #include <fort/myrmidon/priv/proto/TDDCache.hpp>
 #include <fort/myrmidon/priv/proto/TagCloseUpCache.hpp>
 
+#include <semver.hpp>
+
 #ifndef O_BINARY
 #define O_BINARY 0
 #endif
@@ -291,19 +293,20 @@ void UTestData::GenerateExperimentStructure() {
 		{
 		 {
 		  .AbsoluteFilePath = d_basedir / "test-v0.1.0.myrmidon",
-		  .Version = semver::version("0.1.0"),
+
+		  .Version = "0.1.0",
 		 },
 		 {
 		  .AbsoluteFilePath = d_basedir / "test-v0.2.0.myrmidon",
-		  .Version = semver::version("0.2.0"),
+		  .Version = "0.2.0",
 		 },
 		 {
 		  .AbsoluteFilePath = d_basedir / "test.myrmidon",
-		  .Version = semver::version("0.3.0"),
+		  .Version = "0.3.0",
 		 },
 		 {
 		  .AbsoluteFilePath = d_basedir / "test-future.myrmidon",
-		  .Version = semver::version("42.42.0"),
+		  .Version = "42.42.0",
 		 },
 		};
 }
@@ -519,8 +522,10 @@ void UTestData::WriteExperimentFile(const ExperimentInfo & info) {
 
 	pb::FileHeader header;
 
-	header.set_majorversion(info.Version.major);
-	header.set_minorversion(info.Version.minor);
+	semver::version version(info.Version);
+
+	header.set_majorversion(version.major);
+	header.set_minorversion(version.minor);
 	pb::FileLine l;
 
 	int fd = open(info.AbsoluteFilePath.c_str(),O_CREAT | O_TRUNC | O_RDWR | O_BINARY,0644 );

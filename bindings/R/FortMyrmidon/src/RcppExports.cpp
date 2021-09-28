@@ -193,6 +193,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// fmUTestDataCreate
+Rcpp::List fmUTestDataCreate();
+RcppExport SEXP _FortMyrmidon_fmUTestDataCreate() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(fmUTestDataCreate());
+    return rcpp_result_gen;
+END_RCPP
+}
 
 RcppExport SEXP _rcpp_module_boot_eigen();
 RcppExport SEXP _rcpp_module_boot_experiment();
@@ -219,6 +229,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FortMyrmidon_fmMillisecond", (DL_FUNC) &_FortMyrmidon_fmMillisecond, 1},
     {"_FortMyrmidon_fmMicrosecond", (DL_FUNC) &_FortMyrmidon_fmMicrosecond, 1},
     {"_FortMyrmidon_fmNanosecond", (DL_FUNC) &_FortMyrmidon_fmNanosecond, 1},
+    {"_FortMyrmidon_fmUTestDataCreate", (DL_FUNC) &_FortMyrmidon_fmUTestDataCreate, 0},
     {"_rcpp_module_boot_eigen", (DL_FUNC) &_rcpp_module_boot_eigen, 0},
     {"_rcpp_module_boot_experiment", (DL_FUNC) &_rcpp_module_boot_experiment, 0},
     {"_rcpp_module_boot_shapes", (DL_FUNC) &_rcpp_module_boot_shapes, 0},

@@ -23,7 +23,7 @@ fi
 
 echo "
 PKG_CPPFLAGS = ${FORT_MYRMIDON_CXXFLAGS} --std=c++17 -I../inst/include/
-PKG_LIBS = ${FORT_MYRMIDON_LDFLAGS}
+PKG_LIBS = ${FORT_MYRMIDON_LDFLAGS} -lfort-myrmidon-utestdata
 
 CXX_STD= CXX17
 " > src/Makevars

@@ -7,7 +7,6 @@
 
 #include <fort/myrmidon/Types.hpp>
 #include <fort/myrmidon/Matchers.hpp>
-#include <semver.hpp>
 
 #include "Config.hpp"
 
@@ -57,8 +56,8 @@ public:
 	};
 
 	struct ExperimentInfo {
-		fs::path        AbsoluteFilePath;
-		semver::version Version;
+		fs::path    AbsoluteFilePath;
+		std::string Version;
 	};
 
 	struct ExpectedResult {

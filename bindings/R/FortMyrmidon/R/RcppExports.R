@@ -160,3 +160,9 @@ fmNanosecond <- function(ns) {
     .Call(`_FortMyrmidon_fmNanosecond`, ns)
 }
 
+#' Creates data for unit test
+#' @return internal data structure for unit test
+fmUTestDataCreate <- function() {
+    .Call(`_FortMyrmidon_fmUTestDataCreate`)
+}
+
