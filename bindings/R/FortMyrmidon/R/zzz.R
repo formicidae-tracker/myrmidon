@@ -20,6 +20,9 @@ Rcpp::loadModule("zone",TRUE)
 Rcpp::loadModule("space",TRUE)
 Rcpp::loadModule("experiment",TRUE)
 
+
+Rcpp::loadModule("utestdata",TRUE)
+
 evalqOnLoad({
     setMethod('+',
               signature(e1 = "Rcpp_fmDuration",

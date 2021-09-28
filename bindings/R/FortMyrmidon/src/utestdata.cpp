@@ -6,12 +6,19 @@ namespace Rcpp {
 
 template <> SEXP wrap(const fort::myrmidon::UTestData::TDDInfo & tddInfo);
 template <> SEXP wrap(const fort::myrmidon::UTestData::ExperimentInfo & tddInfo);
-
+template <> SEXP wrap(const fs::path & path);
+template <> SEXP wrap(const std::vector<fort::myrmidon::UTestData::TDDInfo> & infos);
 }
+
+RCPP_EXPOSED_CLASS_NODECL(fort::myrmidon::UTestData);
 
 #include "Rcpp.h"
 
 namespace Rcpp {
+
+template <> SEXP wrap(const fs::path & path) {
+	return wrap(path.c_str());
+}
 
 template <> SEXP wrap(const fort::myrmidon::UTestData::TDDInfo & tddInfo) {
 	auto res = List::create( Named("AbsoluteFilePath") = tddInfo.AbsoluteFilePath.c_str(),
@@ -27,6 +34,10 @@ template <> SEXP wrap(const fort::myrmidon::UTestData::TDDInfo & tddInfo) {
 	return res;
 }
 
+template <> SEXP wrap(const std::vector<fort::myrmidon::UTestData::TDDInfo> & infos) {
+	return wrap(infos.begin(),infos.end());
+}
+
 template <> SEXP wrap(const fort::myrmidon::UTestData::ExperimentInfo & info) {
 	auto res = List::create( Named("AbsoluteFilePath") = info.AbsoluteFilePath.c_str(),
 	                         Named("Version") = info.Version.c_str());
@@ -36,38 +47,26 @@ template <> SEXP wrap(const fort::myrmidon::UTestData::ExperimentInfo & info) {
 
 }
 
+fort::myrmidon::UTestData* fmUTestDataCreate() {
+	auto path = fort::myrmidon::UTestData::TempDirName();
+	return new fort::myrmidon::UTestData(path);
+}
 
 
-
-
-
-//' Creates data for unit test
-//' @return internal data structure for unit test
-//[[Rcpp::export]]
-Rcpp::List fmUTestDataCreate() {
-	using namespace fort::myrmidon;
+RCPP_MODULE(utestdata) {
 	using namespace Rcpp;
-	auto path = UTestData::TempDirName();
-	UTestData udata(path);
+	using namespace fort::myrmidon;
 
-	Rcpp::List res;
-	res.push_back(udata.Basedir().c_str(),"Basedir");
-	Rcpp::List NestDataDirs,ForagingDataDirs;
-	for ( const auto & tddInfo : udata.NestDataDirs() ) {
-		NestDataDirs.push_back(wrap(tddInfo));
-	}
-	res.push_back(NestDataDirs,"NestDataDirs");
-	for ( const auto & tddInfo : udata.ForagingDataDirs() ) {
-		ForagingDataDirs.push_back(wrap(tddInfo));
-	}
-	res.push_back(ForagingDataDirs,"ForagingDataDirs");
-	res.push_back(wrap(udata.NoConfigDataDir()),"NoConfigDataDir");
-	res.push_back(wrap(udata.NoFamilyDataDir()),"NoFamilyDataDir");
-	res.push_back(wrap(udata.ARTagDataDir()),"ARTagDataDir");
-	res.push_back(wrap(udata.WithVideoDataDir()),"WithVideoDataDir");
+	class_<fort::myrmidon::UTestData>("fmUTestData")
+		.property("Basedir",&UTestData::Basedir,"")
+		.property("NestDataDirs",&UTestData::NestDataDirs,"")
+		.property("ForagingDataDirs",&UTestData::ForagingDataDirs,"")
+		.property("NoConfigDataDir",&UTestData::NoConfigDataDir,"")
+		.property("ARTagDataDir",&UTestData::ARTagDataDir,"")
+		.property("WithVideoDataDir",&UTestData::WithVideoDataDir,"")
+		.property("CurrentVersionFile",&UTestData::CurrentVersionFile,"")
+		.property("V0_1_File",&UTestData::V0_1_File,"")
+		;
 
-	res.push_back(wrap(udata.CurrentVersionFile()),"CurrentVersionFile");
-	res.push_back(wrap(udata.V0_1_File()),"V0_1_File");
-
-	return res;
+	function("fmUTestDataCreate",&fmUTestDataCreate);
 }

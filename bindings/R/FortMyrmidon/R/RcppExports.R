@@ -13,11 +13,21 @@ pfmIWantAVector2dList <- function(l) {
     invisible(.Call(`_FortMyrmidon_pfmIWantAVector2dList`, l))
 }
 
-#' Creates an Experiement
-#' @param filepath the name for the newly created space
-#' @return a \link{\code{fmExperiment}} with name
+#' Creates an Experiement.
+#' @description Creates a new fmExperiment. No file will be created a
+NULL
+
+#' @param filepath to use for the experiment.
+#' @return a \link{\code{fmExperiment}} with the associated filepath
 fmExperimentCreate <- function(filepath) {
     .Call(`_FortMyrmidon_fmExperimentCreate`, filepath)
+}
+
+#' Opens an Experiment
+#' @param filepath the path to the '.myrmidon' file
+#' @return a \link{\code{fmExperiment}}
+fmExperimentOpen <- function(filepath) {
+    .Call(`_FortMyrmidon_fmExperimentOpen`, filepath)
 }
 
 #' Creates a fmShapeList
@@ -158,11 +168,5 @@ fmMicrosecond <- function(us) {
 #' @family fmDuration methods
 fmNanosecond <- function(ns) {
     .Call(`_FortMyrmidon_fmNanosecond`, ns)
-}
-
-#' Creates data for unit test
-#' @return internal data structure for unit test
-fmUTestDataCreate <- function() {
-    .Call(`_FortMyrmidon_fmUTestDataCreate`)
 }
 

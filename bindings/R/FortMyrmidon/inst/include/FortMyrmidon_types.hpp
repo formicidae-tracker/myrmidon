@@ -16,6 +16,7 @@ template <> fort::myrmidon::Vector2dList as(SEXP);
 template <> fort::myrmidon::Shape::List as(SEXP);
 template <> SEXP wrap(const fort::myrmidon::ZoneDefinitionList &);
 template <> SEXP wrap(const fort::myrmidon::ZoneByID &);
+template <> SEXP wrap(const fort::myrmidon::SpaceByID & );
 }
 
 RCPP_EXPOSED_ENUM_NODECL(fort::myrmidon::Shape::Type)

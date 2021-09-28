@@ -1,3 +1,6 @@
 ud <- fmUTestDataCreate()
 
-withr::defer(unlink(ud$Basedir,recursive = TRUE),teardown_env())
+withr::defer({
+    rm(ud)
+    gc()
+},teardown_env())

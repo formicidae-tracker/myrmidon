@@ -4,6 +4,8 @@
 
 #include "Rcpp.h"
 
+#include "wrapMap.h"
+
 IMPLEMENT_FIELD(Space,std::string,Name)
 IMPLEMENT_GETTER(Space,fort::myrmidon::ZoneByID,Zones)
 
@@ -53,19 +55,7 @@ RCPP_MODULE(space) {
 namespace Rcpp {
 
 template <> SEXP wrap(const fort::myrmidon::ZoneByID & zones) {
-	List objects(zones.size());
-	CharacterVector names(zones.size());
-	IntegerVector ID(zones.size());
-	int i = 0;
-	for ( const auto & [zoneID,zone] : zones ) {
-		objects[i] = wrap<fort::myrmidon::Zone::Ptr>(zone);
-		names[i] = zone->Name();
-		ID[i] = zoneID;
-		++i;
-	}
-	return List::create(Named("summmary") = DataFrame::create(Named("name") = names,
-	                                                          Named("ID") = ID),
-	                    Named("objects") = objects);
+	return wrapMap(zones);
 }
 
 }
