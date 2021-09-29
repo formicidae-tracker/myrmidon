@@ -208,4 +208,56 @@ test_that("it can manipulate shape type",{
        d$experiment$deleteAntShapeType(42)
    },'Unknown AntShapeTypeID 42')
 
+   a <- d$experiment$createAnt()
+   a$addCapsule(bodyID,fmCapsuleCreate())
+
+   expect_error({
+       d$experiment$deleteAntShapeType(bodyID)
+   }, "Could not delete AntShapeType{ID:1, Name:'foo'}: Ant{ID:001} has a capsule of this type",fixed = TRUE)
+   d$experiment$deleteAntShapeType(headID)
+
+})
+
+test_that("it can manipulate meta data keys", {
+    d <- local_data()
+    d$experiment$setMetaDataKey("alive",TRUE)
+    d$experiment$setMetaDataKey("group","worker")
+    expect_length(d$experiment$metaDataKeys,2)
+    expect_false(is.null(d$experiment$metaDataKeys[['alive']]))
+    expect_false(is.null(d$experiment$metaDataKeys[['group']]))
+    expect_equal(d$experiment$metaDataKeys[['alive']],TRUE)
+    expect_equal(d$experiment$metaDataKeys[['group']],'worker')
+
+    a <- d$experiment$createAnt()
+    a$setValue("group","nurse",fmTimeSinceEver())
+
+    expect_error({
+        d$experiment$deleteMetaDataKey("foo")
+    }, "Unknown key 'foo'")
+
+    expect_error({
+        d$experiment$deleteMetaDataKey("group")
+    }, "Cannot remove metadata key 'group': Ant{ID:001} contains timed data",fixed = TRUE)
+
+    expect_error({
+        d$experiment$renameMetaDataKey("foo","bar")
+    }, "Unknown key 'foo'",fixed = TRUE)
+
+    expect_error({
+        d$experiment$renameMetaDataKey("alive","group")
+    }, "Key 'group' is already used",fixed = TRUE)
+
+    d$experiment$renameMetaDataKey("alive","death-date")
+    d$experiment$setMetaDataKey("death-date",fmTimeForever())
+    d$experiment$deleteMetaDataKey("death-date")
+    d$experiment$setMetaDataKey("group","nurse")
+
+    expect_error({
+        d$experiment$setMetaDataKey("group",42L)
+    },"Could not change type for key 'group': Ant{ID:001} contains timed data",fixed = TRUE)
+
+    a$deleteValue("group",fmTimeSinceEver())
+    d$experiment$setMetaDataKey("group",42L)
+    expect_equal(d$experiment$metaDataKeys[['group']],42L)
+
 })

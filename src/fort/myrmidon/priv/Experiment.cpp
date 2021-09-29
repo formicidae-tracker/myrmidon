@@ -61,7 +61,7 @@ Experiment::Experiment(const fs::path & filepath )
 			}
 			for ( const auto & [aID,a] : d_identifier->Ants() ) {
 				if ( a->DataMap().count(name) == 1 ) {
-					throw std::runtime_error("Could not change type for column '" + name + "': ant " + a->FormattedID() + " already contains data");
+					throw std::runtime_error("Could not change type for key '" + name + "': Ant{ID:" + a->FormattedID() + "} contains timed data");
 				}
 			}
 		};
@@ -533,11 +533,11 @@ void Experiment::DeleteAntShapeType(AntShapeTypeID typeID) {
 	for ( const auto & [aID,a] : d_identifier->Ants() ) {
 		for ( const auto & [type,c] : a->Capsules() ) {
 			if ( type == typeID ) {
-				throw std::runtime_error("Could not delete AntShapeTypeID  "
+				throw std::runtime_error("Could not delete AntShapeType{ID:"
 				                         + std::to_string(fi->first)
-				                         + ":'" + fi->second->Name()
-				                         + "': Ant " + FormatAntID(aID)
-				                         + " has a capsule of this type");
+				                         + ", Name:'" + fi->second->Name()
+				                         + "'}: Ant{ID:" + FormatAntID(aID)
+				                         + "} has a capsule of this type");
 			}
 		}
 	}
@@ -569,11 +569,11 @@ Experiment::SetMetaDataKey(const std::string & name,
 void Experiment::DeleteMetaDataKey(const std::string & key) {
 	for ( const auto & [aID,a] : d_identifier->Ants() ) {
 		if ( a->DataMap().count(key) != 0 ) {
-			throw std::runtime_error("Cannot remove meta data key  '"
+			throw std::runtime_error("Cannot remove metadata key '"
 			                         + key
-			                         + "': Ant "
+			                         + "': Ant{ID:"
 			                         + FormatAntID(aID)
-			                         + " contains timed data");
+			                         + "} contains timed data");
 		}
 	}
 
@@ -587,7 +587,7 @@ void Experiment::DeleteMetaDataKey(const std::string & key) {
 void Experiment::RenameMetaDataKey(const std::string & oldName, const std::string & newName) {
 	auto fi = d_antMetadata->Keys().find(oldName);
 	if (fi == d_antMetadata->Keys().end() ) {
-		throw std::out_of_range("Unknow meta data key '" + oldName + "'");
+		throw std::out_of_range("Unknown key '" + oldName + "'");
 	}
 	fi->second->SetName(newName);
 }
