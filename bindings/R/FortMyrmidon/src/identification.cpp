@@ -30,6 +30,12 @@ IMPLEMENT_VOID_METHOD(Identification,SetUserDefinedAntPose,
                       double, angle);
 IMPLEMENT_VOID_METHOD(Identification,ClearUserDefinedAntPose);
 
+inline uint64_t fmIdentification_get(const fort::myrmidon::Identification::Ptr * i) {
+	return uint64_t(i->get());
+}
+
+
+
 RCPP_MODULE(identification) {
 	Rcpp::class_<fort::myrmidon::Identification::Ptr>("fmIdentification")
 		.const_method("show",
@@ -71,6 +77,7 @@ RCPP_MODULE(identification) {
 		.method("clearUserDefinedAntPose",
 		        &fmIdentification_ClearUserDefinedAntPose,
 		        "Clears the user defined ant pose")
+		.const_method("get",&fmIdentification_get)
 		;
 
 }

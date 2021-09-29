@@ -25,7 +25,11 @@ template <> SEXP wrap(const fort::myrmidon::SpaceByID & );
 
 template <> SEXP wrap(const fort::myrmidon::IdentificationList &);
 
+template <> fort::myrmidon::AntStaticValue as(SEXP);
+template <> SEXP wrap(const fort::myrmidon::AntStaticValue & );
 
+
+template <> SEXP wrap(const fort::myrmidon::TypedCapsuleList & );
 
 }
 

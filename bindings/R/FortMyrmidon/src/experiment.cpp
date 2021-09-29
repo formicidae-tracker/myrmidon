@@ -23,6 +23,19 @@ IMPLEMENT_METHOD_X(fmExperiment,ExperimentPtr,
                    const fort::Time &, start,
                    const fort::Time &,  end);
 
+IMPLEMENT_VOID_METHOD_X(fmExperiment,ExperimentPtr,
+                        DeleteIdentification,
+                        const fort::myrmidon::Identification::Ptr &, identification);
+
+IMPLEMENT_VOID_METHOD_X(fmExperiment,ExperimentPtr,
+                        SetMetaDataKey,
+                        const std::string &, key,
+                        const fort::myrmidon::AntStaticValue &, value);
+
+IMPLEMENT_METHOD_X(fmExperiment,ExperimentPtr,
+                   uint32_t,
+                   CreateAntShapeType,
+                   const std::string &, name);
 
 RCPP_MODULE(experiment) {
 	using namespace Rcpp;
@@ -30,6 +43,9 @@ RCPP_MODULE(experiment) {
 		.method("createSpace",&fmExperiment_CreateSpace)
 		.method("createAnt",&fmExperiment_CreateAnt)
 		.method("addIdentification",&fmExperiment_AddIdentification)
+		.method("deleteIdentification",&fmExperiment_DeleteIdentification)
+		.method("setMetaDataKey",&fmExperiment_SetMetaDataKey)
+		.method("createAntShapeType",&fmExperiment_CreateAntShapeType)
 		.property("spaces",&fmExperiment_Spaces,"Spaces in this experiment");
 }
 

@@ -9,64 +9,97 @@ void BindAnt(py::module_ & m) {
 	py::class_<Ant,Ant::Ptr> ant(m,
 	                             "Ant",
 	                             R"pydoc(
-    Ant are the main object of interests of an Experiment , are
-    identified with TagID from Identification, holds a virtual shape
-    for collision detection, display information for visualization, or
-    time variable user-defined key-value metadata.
+
+Ant are the main object of interest of an :class:`Experiment`. They
+are identified from tags with :class:`Identification`, have a virtual
+shape to perform collision and interaction detection, and holds user
+defined metadata.
+
+Ant can only be created from an :class:`Experiment` with
+:meth:`Experiment.CreateAnt`.
+
+Ant are uniquely identified by an :attr:`ID`. By convention we use
+decimal notation with up to two ``0`` prefix to display these AntID, as
+returned by :func:`FormatAntID`.
+
+Instead of working directly with TagID **fort-myrmidon** uses
+:class:`Identification` to relate a tag value to an Ant. An Ant could
+have different Identifications, allowing us to use different tag ID to
+refer to the same individual. One would use :meth:`IdentifiedAt` to
+obtain the tag ID that identifies an Ant at a given :class:`Time`.
+
+Each Ant has an associated virtual shape that is used to compute
+instantaneous collision detection ( :func:`Query.CollideFrame` ), or
+timed ant interactions ( :func:`Query.ComputeAntInteraction` ). These
+shapes can be defined manually in **fort-studio** or programmatically
+accessed and modified with :attr:`Capsules`, :meth:`AddCaspule`,
+:meth:`DeleteCapsule` and :meth:`ClearCapsules`.
+
+Basic visualization of Experiment data can be done through
+**fort-studio**. Ants are displayed according to their
+:attr:`DisplayStatus` and :attr:`DisplayColor`.
+
+Ant can stores timed user defined metadata. These are modifiable
+using :meth:`SetValue` and :meth:`DeleteValue` and accesible through
+:meth:`GetValue`.
+
 )pydoc");
 
 	py::enum_<Ant::DisplayState>(ant,
 	                             "DisplayState",
-	                             "possible display state for an Ant")
+	                             "Enumerates the possible display state for an Ant")
 		.value("VISIBLE",Ant::DisplayState::VISIBLE,"the Ant is visible")
 		.value("HIDDEN",Ant::DisplayState::HIDDEN,"the Ant is hidden")
 		.value("SOLO",Ant::DisplayState::SOLO,"the Ant is visible and all other non-solo ant are hidden");
 
 
-	ant.def("IdentifiedAt",
-	        &Ant::IdentifiedAt,
-	        py::arg("time"),
-	        R"pydoc(
-    Gets the TagID identifiying this Ant at a given time
-
-    Args:
-        time (py_fort_myrmidon.Time): the time we want an identification for
-    Returns:
-        int : the TagID that identifies this Ant at time.
-    Raises:
-        Error: an error when no tag identifies this Ant at time.
-)pydoc")
-		.def_property_readonly("Identifications",
+	ant.def_property_readonly("Identifications",
 		                       &Ant::Identifications,
-		                       " (List[py_fort_myrmidon.Identification]): all Identification that target this Ant, ordered by validity time.")
+	                          ":obj:`list` of :obj:`Identification`: all Identification that target this Ant, ordered by validity time.")
 		.def_property_readonly("ID",
 		                       &Ant::ID,
-		                       " (int): the AntID for this Ant")
+		                       "int: the AntID for this Ant")
 		.def_property("DisplayColor",
 		              &Ant::DisplayColor,
 		              &Ant::SetDisplayColor,
-		              " (py_fort_myrmidon.DisplayColor): the color used to display the Ant in `fort-studio`")
+		              ":obj:`tuple` of 3 integer: the color used to display the Ant in **fort-studio**")
 		.def_property("DisplayStatus",
 		              &Ant::DisplayStatus,
 		              &Ant::SetDisplayStatus,
-		              " (py_fort_myrmidon.Ant.DisplayState): the DisplayState in `fort-studio` for this Ant")
+		              "Ant.DisplayState: the DisplayState in **fort-studio** for this Ant")
+		.def_property_readonly("Capsules",
+		                       &Ant::Capsules,
+		                       ":obj:`list` of :obj:`tuple` (int,Capsule)): a list of capsules and their type")
+		.def("IdentifiedAt",
+	        &Ant::IdentifiedAt,
+	        py::arg("time"),
+	        R"pydoc(
+Gets the TagID identifiying this Ant at a given time
+
+Args:
+    time (Time): the time we want an identification for
+Returns:
+    int: the TagID that identifies this Ant at time.
+Raises:
+    Error: if no tag identifies this Ant at **time**.
+)pydoc")
 		.def("GetValue",
 		     &Ant::GetValue,
 		     py::arg("key"),
 		     py::arg("time"),
 		     R"pydoc(
-    Gets user defined timed metadata.
+Gets user defined timed metadata.
 
-    Args:
-        key (str): the key to query
-        time (py_fort_myrmidon.Time): the time, possibly infinite to query for
-    Returns:
-        py_fort_myrmidon.AntStaticValue: either a bool, int, float,
-            str or Time that is the key value for Ant, or the
-            Experiment default value for key if the value is not
-            defined for this Ant.
-    Raises:
-        IndexError: if key is not a defined metadata key in Experiment
+Args:
+    key (str): the key to query
+    time (Time): the time, possibly infinite to query for
+
+Returns:
+    bool, int, float, str or Time: the value for **key** at **time**,
+    if defined, or the Experiment's default value.
+
+Raises:
+    IndexError: if **key** is not defined in :class:`Experiment`
 )pydoc")
 		.def("SetValue",
 		     &Ant::SetValue,
@@ -74,62 +107,67 @@ void BindAnt(py::module_ & m) {
 		     py::arg("value"),
 		     py::arg("time"),
 		     R"pydoc(
-    Sets a user defined timed metadata
+Sets a user defined timed metadata
 
-    Args:
-        key (str): the key to defined
-        value (object): a bool, int, float str or Time to define key to.
-        time (py_fort_myrmidon.Time): the first Time where key will be
-            set to value. It can be Time.SinceEver()
-     Raises:
-        IndexError: if key is not defined in the Experiment
-        ValueError: if time is Time.Forever()
-        RuntimeError: if value is not the right type for key
+Args:
+    key (str): the key to defined
+    value (bool, int, float, str or Time): the wanted
+        value.
+    time (Time): the first Time where **key** will be set to
+        **value**. It can be :meth:`Time.SinceEver`
+
+Raises:
+    IndexError: if **key** is not defined in the :class:`Experiment`
+    ValueError: if **time** is :meth:`Time.Forever`
+    RuntimeError: if **value** is not of the right type for **key**
 )pydoc")
 		.def("DeleteValue",
 		     &Ant::DeleteValue,
 		     py::arg("key"),
 		     py::arg("time"),
 		     R"pydoc(
-    Clears a user defined timed metadata
+Clears a user defined timed metadata.
 
-    Args:
-        key (str): the key to clear
-        time (py_fort_myrmidon.Time): the time to clear key
-     Raises:
-        IndexError: if key was not previously set for time with
-            SetValue.
+Args:
+    key (str): the key to clear
+    time (Time): the time to clear a value for key
+
+Raises:
+    IndexError: if **key** was not previously set for **time** with
+        :meth:`SetValue`.
 )pydoc")
 		.def("AddCapsule",
 		     &Ant::AddCapsule,
 		     py::arg("shapeTypeID"),
 		     py::arg("capsule"),
 		     R"pydoc(
-    Adds a Capsule to the Ant virtual shape.
+Adds a Capsule to the Ant virtual shape.
 
-    Args:
-        shapeTypeID (int): the AntShapeTypeID associated with the capsule
-        capsule (py_fort_myrmidon.Capsule): the capsule to add
+Args:
+    shapeTypeID (int): the AntShapeTypeID associated with the capsule
+    capsule (Capsule): the capsule to add
+
+Raises:
+    ValueError: if **shapeTypeID** is not defined in the
+        :class:`Experiment`
 )pydoc")
-		.def_property_readonly("Capsules",
-		                       &Ant::Capsules,
-		                       " (List[Tuple[int,py_fort_myrmidon.Capsule]]): a list of capsules and their type")
 		.def("DeleteCapsule",
 		     &Ant::DeleteCapsule,
 		     py::arg("index"),
 		     R"pydoc(
-    Removes one of the shape
+Removes one of the shape
 
-    Args:
-        index (int): the index to remove in self.Capsules()
-    Raises:
-        IndexError: if index >= len(self.Capsules())
+Args:
+    index (int): the index to remove in :attr:`Capsules`
+
+Raises:
+    IndexError: if ``index >= len(self.Capsules())``
 )pydoc")
 		.def("ClearCapsules",
 		     &Ant::ClearCapsules,
 		     R"pydoc(
-    Removes all capsules for this Ant
-p)pydoc")
+Removes all capsules for this Ant.
+)pydoc")
 		;
 
 }
