@@ -17,6 +17,7 @@ jobs:
           run: git fetch --prune --unshallow --tags
         - name: Install dependencies
           run: |
+              sudo apt update
               sudo apt install build-essential \
                                git \
                                cmake \
