@@ -35,10 +35,13 @@ class Identification;
 class IdentificationHandle;
 
 /**
- * Relates TagID to Ant
+ * Relates tags to Ant.
  *
  * An Identification relates a ::TagID to an Ant, with Time validity
  * data and geometric data.
+ *
+ * An Identification can only be created from an Experiment with
+ * Experiment::AddIdentification.
  *
  * Time validy
  * ===========
@@ -61,10 +64,10 @@ class IdentificationHandle;
  * detected tag is related to the observed Ant. These are the
  * translation and rotation of the Ant, in the tag coordinate reference.
  *
- * This information is either automatically generated from the manual
+ * Usually, this information is automatically generated from the manual
  * measurement #HEAD_TAIL_MEASUREMENT_TYPE made in
  * `fort-studio`. Alternatively, users can override this behavior by
- * setting themselves this pose using
+ * setting themselves the relative pose using
  * SetUserDefinedAntPose(). ClearUserDefinedAntPose() can be used to
  * revert to the internally computed pose.
  *
@@ -72,6 +75,17 @@ class IdentificationHandle;
  * mathematical convention. Since in image processing the y-axis is
  * pointing from the top of the image to the bottom, positive angles
  * appears clockwise.
+ *
+ * Tag Size
+ * ========
+ *
+ * Identifications also contains the information of the physical tag
+ * size used to identify the individual. It can be accessed and set
+ * with TagSize and SetTagSize. The value DEFAULT_TAG_SIZE (i.e. 0.0)
+ * indicates that the Experiment::DefaultTagSize should be
+ * used. Therefore, for most Ant, this field should be kept to
+ * DEFAULT_TAG_SIZE, appart for a few individuals, for examples,
+ * Queens.
  */
 class Identification {
 public:
@@ -80,12 +94,6 @@ public:
 
 	/**
 	 *  Gets the ::TagID of this Identification
-	 *
-	 * * Python: `TagValue: int` read-only property of `py_fort_myrmidon.Identification` objects
-	 * * R:
-	 * ```R
-	 * fmIdentificationTagID <- function(identification) # returns an integer
-	 * ```
 	 *
 	 * The associated TagID of an Identification is immuable.
 	 *
@@ -96,11 +104,6 @@ public:
 	/*
 	 * Gets the AntID of the targeted Ant
 	 *
-	 * * Python: `TargetAntID: int` read-only property of `py_fort_myrmidon.Identication` objects
-	 * * R:
-	 * ```R
-	 * fmIdentificationTargetAntID <- function(identification) # returns an integer
-	 * ```
 	 * The targeted Ant of an Identification is immuable.
 	 *
 	 * @return the ::AntID of the targetted Ant
@@ -110,12 +113,6 @@ public:
 	/*
 	 *  Sets the starting validity Time for this Identification
 	 *
-	 * * Python: `Start :py_fort_myrmidon.Time` property of `py_fort_myrmidon.Identification` objects
-	 * * R:
-	 * ```R
-	 * fmIdentificationSetStart <- function(identification, start= fmTimeSinceEver() )
-	 * ```
-	 *
 	 * @param start the starting Time. It can be Time::SinceEver().
 	 *
 	 * Sets the starting validity Time for this Identification,
@@ -123,18 +120,12 @@ public:
 	 * (Identification are valid for [Start(),End()[)
 	 *
 	 * @throws OverlappingIdentification if start will make two
-	 * Identification overlap in Time.
+	 *         Identification overlap in Time.
 	 */
 	void SetStart(const Time & start);
 
 	/**
 	 *  Sets the ending validity time for this Identification
-	 *
-	 * * Python: `End :py_fort_myrmidon.Time` property of `py_fort_myrmidon.Identification` objects
-	 * * R:
-	 * ```R
-	 * fmIdentificationSetEnd(identification, start = fmTimeForever())
-	 * ```
 	 *
 	 * @param end the ending Time. It can be Time::Forever().
 	 *
@@ -142,21 +133,14 @@ public:
 	 * first Time where this Identification becomes invalid
 	 * (Identification are valid for [Start(),End()[).
 	 *
-	 *
 	 * @throws OverlappingIdentification if end will make two
-	 * Identification overlap in Time.
+	 *         Identification overlap in Time.
 	 *
 	 */
 	void SetEnd(const Time & end);
 
 	/**
-	 *  Gets the starting validity time
-	 *
-	 * * Python: `Start :py_fort_myrmidon.Time` property of `py_fort_myrmidon.Identification` objects
-	 * * R:
-	 * ```R
-	 * fmIdentificationStart <- function(identification)# returns a Rcpp_fmTime
-	 * ```
+	 * Gets the starting validity time
 	 *
 	 * First Time where this Identification becomes valid.
 	 * @return the Time where where this Identification becomes
@@ -167,12 +151,6 @@ public:
 	/**
 	 * Gets the ending validity time
 	 *
-	 * * Python: `End :py_fort_myrmidon.Time` property of `py_fort_myrmidon.Identification` objects
-	 * * R:
-	 * ```R
-	 * fmIdentificationEnd <- function(identification)# returns a Rcpp_fmTime
-	 * ```
-	 *
 	 * First Time where this Identification becomes unvalid.
 	 * @return the first Time where this Identification becomes
 	 *         unvalid. It can return Time::Forever()
@@ -181,12 +159,6 @@ public:
 
 	/**
 	 * Gets the Ant center position relatively to the tag center.
-	 *
-	 * * Python: `AntPositon: numpy.ndarray(numpy.float64(2,1))` read-only property of `py_fort_myrmidon.Identification` objects.
-	 * * R:
-	 * ```R
-	 * fmIdentificationAntPosition<- function(identification) # returns a vector of two numerical
-	 * ```
 	 *
 	 * Gets the Ant center position relatively to the tag center. This offset
 	 * is expressed in the tag reference frame.
@@ -198,12 +170,6 @@ public:
 
 	/**
 	 * Gets the Ant angle relatively to the tag rotation
-	 *
-	 * * Python: `AntAngle :float` read-only property of `py_fort_myrmidon.Identification` objects.
-	 * * R:
-	 * ```R
-	 * fmIdentificationAntAngle<- function(identification) # returns a vector of two numerical
-	 * ```
 	 *
 	 * Gets the Ant position relatively to the tag center. This offset
 	 * is expressed in the tag reference frame.
@@ -223,31 +189,14 @@ public:
 	/**
 	 *  Indicates if Identification has a user defined pose.
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Identification.HasUserDefinedPose(self) -> bool
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmIdentificationHasUserDefinedPose <- function(identification) # returns a logical
-	 * ```
 	 *
 	 * @return `true` if the Identification has a user defined pose
-	 *         through SetUserDefinedAntPose()
+	 *         set with SetUserDefinedAntPose()
 	 */
 	bool HasUserDefinedAntPose() const;
 
 	/**
 	 *  Sets a user defined Ant pose.
-	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Identification.SetUserDefinedAntPose(self,antPosition: numpy.ndarray,antAngle: float)
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmIdentificationSetUserDefinedAntPose <- function(identification,antPosition = c(0.0,0.0),antAngle = 0.0)
-	 * ```
 	 *
 	 * @param antPosition the offset, from the tag center to the Ant
 	 *                    center, expressed in the tag reference frame.
@@ -259,15 +208,6 @@ public:
 	/**
 	 * Clears any user defined pose.
 	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Identification.ClearUserDefinedAntPose(self)
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmIdentificationClearUserDefinedAntPose <- function(identification)
-	 * ```
-	 *
 	 * Clears any user defined pose for this
 	 * Identification. `fort-myrmidon` will re-compute the Ant pose
 	 * from #HEAD_TAIL_MEASUREMENT_TYPE measurement made in
@@ -278,25 +218,11 @@ public:
 	/**
 	 * Value use to mark the Identification to use the Experiment::DefaultTagSize()
 	 *
-	 * * Python: `py_fort_myrmidon.Identification.DEFAULT_TAG_SIZE
-	 *           (float)` class variable of
-	 *           `py_fort_myrmidon.Identification` class
-	 * * R: `fmIdentificationDEFAULT_TAG_SIZE` # a numerical value`
-	 *
 	 */
 	const static double DEFAULT_TAG_SIZE;
 
 	/**
 	 * Sets the tag size for this Identification
-	 *
-	 *
-	 * * Python: `py_fort_myrmidon.Identification.TagSize (float)`
-	 *           read-write property of
-	 *           `py_fort_myrmidon.Identification` objects
-	 * * R:
-	 * ```R
-	 * fmIdentificationSetTagSize <- function(identification, size = 0)
-	 * ```
 	 *
 	 * @param size the tag size in millimeters for this
 	 *        Identification. Can be Identification::DEFAULT_TAG_SIZE
@@ -307,14 +233,6 @@ public:
 	/**
 	 * Gets the tag size for this Identification
 	 *
-	 * * Python: `py_fort_myrmidon.Identification.TagSize (float)`
-	 *           read-write property of
-	 *           `py_fort_myrmidon.Identification` objects
-	 * * R:
-	 * ```R
-	 * fmIdentificationTagSize <- function(identification) # returns a numerical
-	 * ```
-	 *
 	 * @return size the tag size in millimeters for this
 	 *        Identification. If equal to Identification::DEFAULT_TAG_SIZE
 	 *        the Experiment::DefaultTagSize() is used instead.
@@ -324,15 +242,6 @@ public:
 
 	/**
 	 * Checks if Experiment::DefaultTagSize() is used.
-	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Identification.HasDefaultTagSize(self) -> bool
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmIdentificationHasDefaultTagSize <- function(identification) # returns a logical
-	 * ```
 	 *
 	 * @return `true` if this Identification uses Experiment::DefaultTagSize()
 	 */
@@ -361,13 +270,15 @@ private:
 
 };
 
-// Exception when two <Identification> overlaps in time.
-//
-// Two <Identification> overlaps in time if they have overlapping
-// boundary and they either use the same <TagID> or targets the same
-// <Ant>. This is an invariant condition that should never happen and
-// modification that will break this invariant will throw this
-// exception.
+/**
+ *  Exception when two Identification overlaps in time.
+ *
+ * Two Identification overlaps in time if they have overlapping
+ * boundary and they either use the same TagID or targets the same
+ * Ant. This is an invariant condition that should never happen and
+ * modification that will break this invariant will throw this
+ * exception.
+ */
 class OverlappingIdentification : public std::runtime_error {
 public:
 	// Default constructor

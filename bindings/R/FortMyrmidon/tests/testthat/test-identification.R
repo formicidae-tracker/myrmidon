@@ -45,3 +45,35 @@ test_that("it can manipulate boundaries time", {
     expect_true(idents[[2]]$start == fmTimeCreate(1e-09))
 
 })
+
+test_that("it can manipulate tag size", {
+    d <- local_data()
+    expect_equal(d$i$hasDefaultTagSize(), TRUE)
+    expect_equal(d$i$tagSize,0)
+    d$i$tagSize = 2.4
+    expect_equal(d$i$hasDefaultTagSize(), FALSE)
+    expect_equal(d$i$tagSize,2.4)
+})
+
+test_that("it can manipulate Ant Poses", {
+    d <- local_data()
+    expect_equal(d$i$hasUserDefinedAntPose(), FALSE)
+    expect_equal(d$i$antPosition,c(0,0))
+    expect_equal(d$i$antAngle,0)
+    position <- c(1,2)
+    angle <- 3
+    d$i$setUserDefinedAntPose(position,angle)
+    expect_equal(d$i$hasUserDefinedAntPose(), TRUE)
+    expect_equal(d$i$antPosition,position)
+    expect_equal(d$i$antAngle,angle)
+
+    d$i$clearUserDefinedAntPose()
+    expect_equal(d$i$hasUserDefinedAntPose(), FALSE)
+    expect_equal(d$i$antPosition,c(0,0))
+    expect_equal(d$i$antAngle,0)
+})
+
+test_that("it can format itself", {
+    d <- local_data()
+    expect_output(print(d$i),'fmIdentification( $tagValue = 0x07b , $targetAntID = 001 , $start = -∞ , $end = +∞ )',fixed = TRUE)
+})

@@ -12,7 +12,7 @@ void fmIdentification_show(const fort::myrmidon::Identification::Ptr *i) {
 	            << fort::myrmidon::FormatAntID((*i)->TargetAntID())
 	            << " , $start = " << (*i)->Start()
 	            << " , $end = " << (*i)->End()
-	            << ")\n";
+	            << " )\n";
 }
 
 IMPLEMENT_GETTER(Identification,uint32_t,TagValue)
@@ -23,23 +23,12 @@ IMPLEMENT_GETTER(Identification,Eigen::Vector2d,AntPosition);
 IMPLEMENT_GETTER(Identification,double,AntAngle);
 IMPLEMENT_FIELD(Identification,double,TagSize);
 
-inline bool fmIdentification_HasDefaultTagSize(const fort::myrmidon::Identification::Ptr * i) {
-	return (*i)->HasDefaultTagSize();
-}
-
-inline bool fmIdentification_HasUserDefinedAntPose(const fort::myrmidon::Identification::Ptr * i) {
-	return (*i)->HasUserDefinedAntPose();
-}
-
-inline void fmIdentification_SetUserDefinedAntPose(fort::myrmidon::Identification::Ptr *i,
-                                                   const Eigen::Vector2d & position,
-                                                   double angle) {
-	(*i)->SetUserDefinedAntPose(position,angle);
-}
-
-inline void fmIdentification_ClearUserDefinedAntPose(fort::myrmidon::Identification::Ptr *i) {
-	(*i)->ClearUserDefinedAntPose();
-}
+IMPLEMENT_METHOD(Identification,bool,HasDefaultTagSize);
+IMPLEMENT_METHOD(Identification,bool,HasUserDefinedAntPose);
+IMPLEMENT_VOID_METHOD(Identification,SetUserDefinedAntPose,
+                      const Eigen::Vector2d &, position,
+                      double, angle);
+IMPLEMENT_VOID_METHOD(Identification,ClearUserDefinedAntPose);
 
 RCPP_MODULE(identification) {
 	Rcpp::class_<fort::myrmidon::Identification::Ptr>("fmIdentification")
@@ -70,10 +59,10 @@ RCPP_MODULE(identification) {
 		          &fmIdentification_TagSize,
 		          &fmIdentification_SetTagSize,
 		          "tag size in millimeter")
-		.const_method("hasDefaultTagSize",
+		.method("hasDefaultTagSize",
 		              &fmIdentification_HasDefaultTagSize,
 		              "Returns TRUE if this identification uses the experiment's default tag size")
-		.const_method("hasUserDefinedAntPose",
+		.method("hasUserDefinedAntPose",
 		              &fmIdentification_HasUserDefinedAntPose,
 		              "Returns TRUE if this identification has a user defined ant pose")
 		.method("setUserDefinedAntPose",
