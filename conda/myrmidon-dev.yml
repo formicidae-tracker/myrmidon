@@ -12,6 +12,7 @@ dependencies:
   - babel=2.9.1=pyh44b312d_0
   - binutils_impl_linux-64=2.36.1=h193b22a_2
   - binutils_linux-64=2.36=hf3e587d_1
+  - breathe=4.31.0=pyhd8ed1ab_0
   - brotlipy=0.7.0=py38h497a2fe_1001
   - bwidget=1.9.14=ha770c72_0
   - bzip2=1.0.8=h7f98852_4
