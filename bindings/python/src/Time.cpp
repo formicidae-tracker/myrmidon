@@ -7,20 +7,19 @@ void BindDuration(py::module_ & m) {
 	py::class_<fort::Duration>(m,
 	                           "Duration",
 	                           R"pydoc(
-    Represents an amount of nanoseconds as a signed 64-bit integer
+Represents an amount of nanoseconds as a signed 64-bit integer
 
-    Note:
-        The notion of 64-bit interger does not exist natively in
-        python, but since the mapped c++ object is, it will works like
-        a 64-bit integer.
+Note:
+    The notion of 64-bit integer does not exist natively in python,
+    but since the mapped c++ object is, it will works like a 64-bit
+    integer.
 
-    Class Variables:
-        * Hour (py_fort_myrmidon.Duration): the value for an hour
-        * Minute (py_fort_myrmidon.Duration): the value for a minute
-        * Second (py_fort_myrmidon.Duration): the value for a second
-        * Millisecond (py_fort_myrmidon.Duration): the value for a millisecond
-        * Microsecond (py_fort_myrmidon.Duration): the value for a microsecond
-
+Attributes:
+    Hour (Duration): the value for an hour
+    Minute (Duration): the value for a minute
+    Second (Duration): the value for a second
+    Millisecond (Duration): the value for a millisecond
+    Microsecond (Duration): the value for a microsecond
 )pydoc")
 		.def(py::init<int64_t>(),
 		     py::arg("ns"),
@@ -49,38 +48,38 @@ Args:
 		               })
 		.def_readonly_static("Hour",
 		                     &fort::Duration::Hour,
-		                     "py_fort_myrmidon.Duration : the value for one hour.")
+		                     "Duration : the value for one hour.")
 		.def_readonly_static("Minute",
 		                     &fort::Duration::Minute,
-		                     "py_fort_myrmidon.Duration: A minute as a Duration")
+		                     "Duration: A minute as a Duration")
 		.def_readonly_static("Second",
 		                     &fort::Duration::Second,
-		                     "py_fort_myrmidon.Duration: A second as a Duration")
+		                     "Duration: A second as a Duration")
 		.def_readonly_static("Millisecond",
 		                     &fort::Duration::Millisecond,
-		                     "py_fort_myrmidon.Duration: A millisecond as a Duration")
+		                     "Duration: A millisecond as a Duration")
 		.def_readonly_static("Microsecond",
 		                     &fort::Duration::Microsecond,
-		                     "py_fort_myrmidon.Duration: A microsecond as a Duration")
+		                     "Duration: A microsecond as a Duration")
 		.def_static("Parse",
 		            &fort::Duration::Parse,
 		            py::arg("d"),
 		            R"pydoc(
-    Parses a string to a Duration.
+Parses a string to a Duration.
 
-    Args:
-        d (str): a string in the format `[amount][unit]` as a
-            duration. `[amout]` is a value that may contain a decimal
-            point, and `[units]` could be any of
-            'h','m','s','ms','us','ns'. The pattern can be repeated
-            (i.e. '4m32s' is valid).
+Args:
+    d (str): a string in the format `[amount][unit]` as a
+        duration. `[amout]` is a value that may contain a decimal
+        point, and `[units]` could be any of
+        'h','m','s','ms','us','ns'. The pattern can be repeated
+        (i.e. '4m32s' is valid).
 
-    Returns:
-        py_fort_myrmidon.Duration: the parsed value
+Returns:
+    Duration: the parsed value
 
-    Raises:
-        RuntimeError: when the parsed amount will not hold in a 64-bit
-            signed integer
+Raises:
+    RuntimeError: when the parsed amount will not hold in a 64-bit
+        signed integer
 )pydoc")
 		.def("Hours",
 		     &fort::Duration::Hours,
@@ -93,42 +92,42 @@ Args:
 		.def("Minutes",
 		     &fort::Duration::Minutes,
 		     R"pydoc(
-    this Duration in minutes.
+This Duration in minutes.
 
-    Returns:
-        float: the duration as an amount of minutes
+Returns:
+    float: the duration as an amount of minutes
 )pydoc")
 		.def("Seconds",
 		     &fort::Duration::Seconds,
 		     R"pydoc(
-    this Duration in seconds.
+This Duration in seconds.
 
-    Returns:
-        float: the duration as an amount of seconds
+Returns:
+    float: the duration as an amount of seconds
 )pydoc")
 		.def("Milliseconds",
 		     &fort::Duration::Milliseconds,
 		     R"pydoc(
-    this Duration in milliseconds.
+This Duration in milliseconds.
 
-    Returns:
-        float: the duration as an amount of milliseconds
+Returns:
+    float: the duration as an amount of milliseconds
 )pydoc")
 		.def("Microseconds",
 		     &fort::Duration::Microseconds,
 		     R"pydoc(
-    this Duration in microseconds.
+This Duration in microseconds.
 
-    Returns:
-        float: the duration as an amount of microseconds
+Returns:
+    float: the duration as an amount of microseconds
 )pydoc")
 		.def("Nanoseconds",
 		     &fort::Duration::Nanoseconds,
 		     R"pydoc(
-    this Duration in nanoseconds.
+This Duration in nanoseconds.
 
-    Returns:
-        int: the duration as an amount of nanoseconds
+Returns:
+    int: the duration as an amount of nanoseconds
 )pydoc")
 		.def(py::self + py::self)
 		.def(py::self + int())
@@ -190,35 +189,35 @@ void BindTime(py::module_ & m) {
 	py::class_<fort::Time>(m,
 	                       "Time",
 	                       R"pydoc(
-    Represents a point in time.
+Represents a point in time.
 
-    This object represents a point in Time, potentially +/-∞. It
-    features operation to compare or measure a Duration between two
-    Time.
+This object represents a point in time, potentially +/-∞. It
+features operation to compare or measure a Duration between two
+Time.
 
-    The operation manipulating Time objects never modifies the original
-    objects, and always return new allocated object, so Time object
-    can be considered immuable.
+The operation manipulating Time objects never modifies the original
+objects, and always return new allocated object, so Time object
+can be considered immuable.
 
-    It also provides methods to convert to and from
-    :class:`datetime.datetime` object. In that case these objects
-    are considered naïve: expressed in localtime, and ignoring any
-    associated timezone information.
+It also provides methods to convert to and from
+:class:`datetime.datetime` object. In that case these objects
+are considered naïve: expressed in localtime, and ignoring any
+associated timezone information.
 
 
-    It provides methods to convert to and from :func:`time.time` and
-    :meth:`datetime.datetime.timestamp` float values. However for time around
-    2020, these only ensure a 10us precision, but Time objects are
-    precise to the nanosecond.
+It provides methods to convert to and from :func:`time.time` and
+:meth:`datetime.datetime.timestamp` float values. However for time around
+2020, these only ensure a 10us precision, but Time objects are
+precise to the nanosecond.
 
 )pydoc")
 		.def(py::init<>(),R"pydoc(
-    Initialize a Time as the epoch.
+Initialize a Time as the epoch.
 )pydoc")
 		.def(py::init(&timeFromPythonTimestamp),
 		     py::arg("timestamp"),
 		     R"pydoc(
-Creates a Time from a float as returned by :func:`time.time` or
+Initializes a Time from a float as returned by :func:`time.time` or
 :meth:`datetime.datetime.timestamp`.
 
 Args:
@@ -252,42 +251,44 @@ Warning:
 		.def_static("SinceEver",
 		            &fort::Time::SinceEver,
 		            R"pydoc(
-    The negative infinite time.
+The negative infinite time.
 
-    Returns:
-        py_fort_myrmidon.Time: A Time representing -∞
+Returns:
+    Time: A Time representing -∞
 )pydoc")
 		.def_static("Forever",
 		            &fort::Time::Forever,
 		            R"pydoc(
-    The positive infinitie time.
+The positive infinitie time.
 
-    Returns:
-        py_fort_myrmidon.Time: A Time representing +∞
+Returns:
+    Time: A Time representing +∞
 )pydoc")
 		.def_static("Now",
 		            &fort::Time::Now,
 		            R"pydoc(
-    Returns:
-        py_fort_myrmidon.Time: the current Time
+Gets the current Time
+
+Returns:
+    Time: the current Time
 )pydoc")
 		.def_static("Parse",
 		            &fort::Time::Parse,
 		            py::arg("input"),
 		            R"pydoc(
-    Parses a RFC3339 string to a Time.
+Parses a RFC3339 string to a Time.
 
-    Parses a `RFC3339 <https://www.ietf.org/rfc/rfc3339.txt>`_ string
-    (i.e. '1970-01-01T00:00:00.000Z') to a Time.
+Parses a `RFC3339 <https://www.ietf.org/rfc/rfc3339.txt>`_ string
+(i.e. '1970-01-01T00:00:00.000Z') to a Time.
 
-    Args:
-        input (str): the string to parse
+Args:
+    input (str): the string to parse
 
-    Returns:
-        py_fort_myrmidon.Time: a Time that represent input
+Returns:
+    py_fort_myrmidon.Time: a Time that represent input
 
-    Raises:
-        Error: if input is a Time that is not representable.
+Raises:
+    Error: if input is a Time that is not representable.
 )pydoc")
 		.def("ToTimestamp",
 		     [](const fort::Time & t) -> double{
@@ -300,11 +301,11 @@ Warning:
 			     return res;
 		     },
 		     R"pydoc(
-    Converts to a float as returned by :func:`time.time` or
-    :meth:`datetime.datetime.timestamp`
+Converts to a float as returned by :func:`time.time` or
+:meth:`datetime.datetime.timestamp`
 
-    Returns:
-        float: an amount of second since the system's epoch
+Returns:
+    float: an amount of second since the system's epoch
 )pydoc")
 		.def("ToDateTime",
 		     [](const fort::Time & t) -> std::chrono::system_clock::time_point {
@@ -315,30 +316,30 @@ Warning:
 			     return std::chrono::system_clock::time_point(std::chrono::seconds(ts.seconds()) + std::chrono::nanoseconds(ts.nanos()));
 		     },
 		     R"pydoc(
-    Converts to a :class:`datetime.datetime`
+Converts to a :class:`datetime.datetime`
 
-    The returned object will be a naïve datetime, i.e. expressed in
-    localtime without any timezone information.
+The returned object will be a naïve datetime, i.e. expressed in
+localtime without any timezone information.
 
-    Returns:
-        datetime.datetime: a naive datetime.datetime object.
+Returns:
+    datetime.datetime: a naive datetime.datetime object.
 )pydoc")
 		.def("Add",
 		     &fort::Time::Add,
 		     py::arg("d"),
 		     R"pydoc(
-    Adds a Duration to a Time
+Adds a Duration to a Time
 
-    Note: `self` remains unchanged.
+Note: `self` remains unchanged.
 
-    Args:
-        d (py_fort_myrmidon.Duration): the Duration to add
+Args:
+    d (Duration): the Duration to add
 
-    Returns:
-        py_fort_myrmidon.Time: a new Time representing `self + d`
+Returns:
+    Time: a new Time representing `self + d`
 
-    Raises:
-        Error: if the resulting Time is not representable.
+Raises:
+    RuntimeError: if the resulting Time is not representable.
 )pydoc")
 		.def("Round",
 		     &fort::Time::Round,
@@ -350,106 +351,110 @@ Rounds a Time to the closest Duration. Only multiple of seconds and
 power of 10 of Nanosecond smaller than a second are supported.
 
 Args:
-    d (py_fort_myrmidon.Duration): a multiple of a second or a power
-        of 10 of a nanosecond.
+    d (Duration): a multiple of a second or a power of 10 of a
+        nanosecond.
 
 Returns:
-    py_fort_myrmidon.Time: a new Time rounded to d
+    Time: a new Time rounded to d
+
+Raises:
+    ValueError: if d is incorrect
 )pydoc")
 		.def("Reminder",
 		     &fort::Time::Reminder,
 		     py::arg("d"),
 		     R"pydoc(
-    Gets the remaider Duration of self.Round(d)
+Gets the remaider Duration of self.Round(d)
 
-    Args:
-        d (py_fort_myrmidon.Duration): the duration to round to.
+Args:
+    d (Duration): the duration to round to.
 
-    Returns:
-        py_fort_myrmidon.Duration: the reminder of `self.Round(d)`
+Returns:
+    Duration: the reminder of :meth:`Round(d)`
 )pydoc")
 		.def("After",
 		     &fort::Time::After,
 		     py::arg("other"),
 		     R"pydoc(
-    Tests if this Time is after other
+Tests if this Time is after other
 
-    Similar to `self > other`. `__gt__` operator is also provided.
+Similar to `self > other`. `__gt__` operator is also provided.
 
-    Args:
-        other (py_fort_myrmidon.Time): the other Time to test.
+Args:
+    other (Time): the other Time to test.
 
-    Returns:
-        bool:  result of `self > other`
+Returns:
+    bool:  result of `self > other`
 )pydoc")
 		.def("Before",
 		     &fort::Time::Before,
 		     py::arg("other"),
 		     R"pydoc(
-    Tests if this Time is before other
+Tests if this Time is before other
 
-    Similar to `self < other`. `__lt__` operator is also provided.
+Similar to `self < other`. `__lt__` operator is also provided.
 
-    Args:
-        other (py_fort_myrmidon.Time): the other Time to test.
+Args:
+    other (Time): the other Time to test.
 
-    Returns:
-        bool:  result of `self < other`
+Returns:
+    bool:  result of `self < other`
 )pydoc")
 		.def("Equals",
 		     &fort::Time::Equals,
 		     py::arg("other"),
 		     R"pydoc(
-    Tests if this Time is exactly equal to other
+Tests if this Time is exactly equal to other
 
-    Similar to `self == other`. `__eq__` operator is also provided.
+Similar to `self == other`. `__eq__` operator is also provided.
 
-    Args:
-        other (py_fort_myrmidon.Time): the other Time to test.
+Args:
+    other (Time): the other Time to test.
 
-    Returns:
-        bool:  result of `self == other`
+Returns:
+    bool:  result of `self == other`
 )pydoc")
 		.def("IsForever",
 		     &fort::Time::IsForever,
 		     R"pydoc(
-    Tests if this Time is +∞
+Tests if this Time is +∞
 
-    Returns:
-        bool : `true` if this time is Time.Forever()
+Returns:
+    bool: ``True`` if this time is :meth:`Time.Forever`
 )pydoc")
 		.def("IsSinceEver",
 		     &fort::Time::IsSinceEver,
 		     R"pydoc(
-    Tests if this Time is -∞
+Tests if this Time is -∞
 
-    Returns:
-        bool : `true` if this time is Time.SinceEver()
+Returns:
+    bool: ``True`` if this time is :meth:`Time.SinceEver`
 )pydoc")
 		.def("IsInfinite",
 		     &fort::Time::IsInfinite,
 		     R"pydoc(
-    Tests if this Time is + or - ∞
+Tests if this Time is + or - ∞
 
-    Returns:
-        bool : `true` if this time is Time.SinceEver() or Time.Forever()
+Returns:
+    bool: ``True`` if this time is :meth:`Time.SinceEver` or
+    :meth:`Time.Forever`
 )pydoc")
 		.def("Sub",
 		     &fort::Time::Sub,
 		     R"pydoc(
-    Measure the Duration between two Time
+Measure the Duration between two Time
 
-    Similar to `self - other`. `__sub__` operator is also provided.
+Similar to `self - other`. `__sub__` operator is also provided.
 
-    Args:
-        other (py_fort_myrmidon.Time): the other Time to substract.
+Args:
+    other (Time): the other Time to substract.
 
-    Returns:
-        bool:  result of `self - other`
+Returns:
+    bool:  result of `self - other`
 
-    Raises:
-        Error: if the result would not fit in a Duration (i.e. if one
-            of the Time.IsInfinite())
+Raises:
+    Error: if the result would not fit in a Duration (i.e. if one
+        of the :meth:`Time.IsInfinite`)
 )pydoc")
 		.def("__str__",&fort::Time::Format)
 		.def("__repr__",&fort::Time::DebugString)

@@ -8,7 +8,7 @@ py_fort_myrmidon.Ant
 ++++++++++++++++++++
 
 
-.. autclass:: py_fort_myrmidon.Ant
+.. autoclass:: py_fort_myrmidon.Ant
    :members:
 
 

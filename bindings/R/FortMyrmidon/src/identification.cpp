@@ -72,6 +72,7 @@ RCPP_MODULE(identification) {
 		        &fmIdentification_ClearUserDefinedAntPose,
 		        "Clears the user defined ant pose")
 		;
+
 }
 
 namespace Rcpp {

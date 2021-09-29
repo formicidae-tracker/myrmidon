@@ -8,16 +8,15 @@ void BindIdentification(py::module_ & m) {
 	using namespace fort::myrmidon;
 	py::class_<Identification,Identification::Ptr>(m,
 	                                               "Identification",
-	                                               R"pydoc(Relates tag to Ant
-
-Identifications relates tag to :class:`Ant` with time and geometric
+	                                               R"pydoc(
+Identifications relates tag to :class:`Ant` with :class:`Time` and geometric
 data.
 
 Identification can only be created from an :class:`Experiment` with
 :meth:`Experiment.AddIdentification`.
 
 Identifications are bounded in :class:`Time` in the range
-[:attr:`Start`,:attr:`End`[. Those attributes can respectively be set
+[ :attr:`Start` , :attr:`End` [. These attributes can respectively be set
 to :meth:`Time.SinceEver` and :meth:`Time.Forever`. Internally
 **fort-myrmidon** ensure the validity of all Identifications. It means
 that:
@@ -26,17 +25,16 @@ that:
 * Two Identifications using targeting the same :class:`Ant` cannot overlap in Time.
 
 If any modification through
-:meth:`Experiment.AddIdentification`,ttr:`Start` or :attr:`End` would
-violate one of this condition, a :class:`OverlappingIdentification`
+:meth:`Experiment.AddIdentification`, :attr:`Start` or :attr:`End` would
+violate one of these conditions, an :class:`OverlappingIdentification`
 exception will be raised.
 
-
-Identifications also contains geometric information on how the
-detected tag is related to the observerd Ant. These are the
-translation and rotation of the Ant, in the tag coordinate
+Identifications also contains geometric informations on how the
+detected tag is related to the observed :class:`Ant`. These are the
+translation and rotation of the Ant, expressed in the tag coordinate
 reference. Usually, this information is automatically generated from
 the manual measurement of type
-:obj:`py_fort_myrmidon.HEAD_TAIL_MEASUREMENT_TYPE` made in
+:attr:`Experiment.HEAD_TAIL_MEASUREMENT_TYPE` made in
 **fort-studio**. Alternatively, users can override this behavior by
 setting themselves this pose using
 :meth:`SetUserDefinedAntPose`. :meth:`ClearUserDefinedAntPose` can be
@@ -50,11 +48,16 @@ Note:
 
 Identifications also contains the information of the physical tag size
 used to identify the individual. It can be accessed and set with
-:meth:`TagSize` and :meth:`SetTagSize`. The value
-:attr:`DEFAULT_TAG_SIZE` (i.e. 0.0) indicates that the
-:attr:`Experiment::DefaultTagSize` should be used. Therefore, for most
-Ant, this field should be kept to :attr:`DEFAULT_TAG_SIZE`, excepted
-for a few individuals, for examples, Queens.
+:attr:`TagSize`. The value :attr:`DEFAULT_TAG_SIZE` (i.e. ``0.0``)
+indicates that the :attr:`Experiment.DefaultTagSize` should be
+used. Therefore, for most Ant, this field should be kept to
+:attr:`DEFAULT_TAG_SIZE`, excepted for a few individuals, for
+examples, Queens.
+
+Attributes:
+    DEFAULT_TAG_SIZE (float): a value of ``0.0`` that indicates that the
+        :attr:`Experiment.DefaultTagSize` should be used.
+
 )pydoc")
 		.def_readonly_static("DEFAULT_TAG_SIZE",
 		                     &Identification::DEFAULT_TAG_SIZE,
@@ -74,54 +77,57 @@ for a few individuals, for examples, Queens.
 		.def_property("Start",
 		              &Identification::Start,
 		              &Identification::SetStart,
-		              "Time: the first valid Time fort this identification, it can be Time.SinceEver()")
+		              "Time: the first valid Time fort this identification, it can be :meth:`Time.SinceEver`")
 		.def_property("End",
 		              &Identification::End,
 		              &Identification::SetEnd,
-		              "Time: the first invalid Time fort this identification, it can be Time.Forever()")
+		              "Time: the first invalid Time fort this identification, it can be :meth:`Time.Forever`")
 		.def_property("TagSize",
 		              &Identification::TagSize,
 		              &Identification::SetTagSize,
-		              "float: the Identification tag size in millimeters, could be :attr`:`Identification.DEFAULT_TAG_SIZE` to use :attr:`Experiment.DefaultTagSize`")
+		              "float: the Identification tag size in millimeters, could be :attr:`DEFAULT_TAG_SIZE` to use :attr:`Experiment.DefaultTagSize`")
 		.def("HasDefaultTagSize",
 		     &Identification::HasDefaultTagSize,
 		     R"pydoc(
-    Returns:
-        bool: `true` if this Identification use
-            `Experiment.DefaultTagSize`, i.e. `self.TagSize ==
-            Identification.DEFAULT_TAG_SIZE`
+Indicates if the :attr:`Experiment.DefaultTagSize` is used
+
+Returns:
+    bool: ``True`` if this Identification uses
+    :attr:`Experiment.DefaultTagSize`, i.e. when :attr:`TagSize` ==
+    :attr:`DEFAULT_TAG_SIZE`
 )pydoc")
 		.def("HasUserDefinedAntPose",
 		     &Identification::HasUserDefinedAntPose,
 		     R"pydoc(
-    Returns:
-        bool: `true` if the ant position relatively by its tag has
-            been set by the user
+Indicates if the user overrided the computed pose.
+
+Returns:
+    bool: ``True`` if the ant position relatively to the tag has
+    been set by the user.
 )pydoc")
 		.def("SetUserDefinedAntPose",
 		     &Identification::SetUserDefinedAntPose,
 		     py::arg("antPosition"),
 		     py::arg("antAngle"),
 		     R"pydoc(
-    Sets an user defined ant position relatively to its tag, overiding
-    the one computed from manual measurements.
+Sets an user defined ant position relatively to the tag, overiding
+the one computed from manual measurements.
 
-    To revert to the automatically computed ones, use
-    `py_fort_myrmidon.Identification.ClearUserDefinedAntPose(self)`
+To revert to the automatically computed ones, use
+:meth:`ClearUserDefinedAntPose`
 
-    Args:
-        antPosition (numpy.ndarray(numpy.float64(2,1))): the position
-            of the ant relatively to the tag center, in the tag
-            reference frame
-        antAngle (float): the ant angle relatively to the tag angle,
-            in radians
- )pydoc")
+Args:
+    antPosition (numpy.ndarray[numpy.float64[2,1]]): the position
+        of the ant relatively to the tag center, in the tag
+        reference frame
+    antAngle (float): the ant angle relatively to the tag angle,
+        in radians
+)pydoc")
 		.def("ClearUserDefinedAntPose",
 		     &Identification::ClearUserDefinedAntPose,
 		     R"pydoc(
-    Removes any user-defined ant-tag relative geometry data and
-    re-enable the one computed from manual measurement in
-    `fort-studio`.
+Removes any user-defined ant-tag relative geometry data and re-enable
+the one computed from manual measurement made in **fort-studio**.
 )pydoc")
 		.def("__str__",[](const Identification::Ptr & i) -> std::string {
 			               std::ostringstream oss;
