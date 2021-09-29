@@ -35,7 +35,7 @@ jobs:
                                doxygen \
                                ccache
               pip install sphinx>=4.2.0 \
-                          sphinx_rtd_theme==0.5.2 \
+                          sphinx_rtd_theme>=1.0.0 \
                           breathe \
                           numpy \
                           pybind11
