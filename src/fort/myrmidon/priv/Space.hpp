@@ -61,7 +61,7 @@ public:
 	class UnmanagedSpace : public std::out_of_range {
 	public:
 		// Constructor
-		UnmanagedSpace(const std::string & URI) noexcept;
+		UnmanagedSpace(SpaceID spaceID) noexcept;
 	};
 
 	// Exception sent when the chosen name is invalid
@@ -85,7 +85,7 @@ public:
 	// another space
 	class TDDAlreadyInUse : public std::invalid_argument {
 	public:
-		TDDAlreadyInUse(const std::string & tddURI, const std::string & spaceURI);
+		TDDAlreadyInUse(const std::string & tddURI, SpaceID spaceID);
 	};
 
 

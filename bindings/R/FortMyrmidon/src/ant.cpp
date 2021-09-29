@@ -60,6 +60,10 @@ inline void fmAnt_SetDisplayStatus(fort::myrmidon::Ant::Ptr *a, int status) {
 	(*a)->SetDisplayStatus(fort::myrmidon::Ant::DisplayState(status));
 }
 
+inline uint64_t fmAnt_get(const fort::myrmidon::Ant::Ptr * a) {
+	return uint64_t(a->get());
+}
+
 RCPP_MODULE(ant) {
 	Rcpp::class_<fort::myrmidon::Ant::Ptr>("fmAnt")
 		.const_method("show",
@@ -103,6 +107,8 @@ RCPP_MODULE(ant) {
 		.method("clearCapsules",
 		        &fmAnt_ClearCapsules,
 		        "Deletes all ants capsules")
+		.const_method("get",
+		              &fmAnt_get)
 		;
 
 

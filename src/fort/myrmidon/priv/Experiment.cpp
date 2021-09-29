@@ -491,14 +491,17 @@ MeasurementType::Ptr Experiment::CreateMeasurementType(const std::string & name,
 void Experiment::DeleteMeasurementType(MeasurementType::ID MTID) {
 	auto fi = d_measurementTypes.Objects().find(MTID);
 	if ( d_measurements.count(MTID) != 0 ) {
-		throw std::runtime_error("Could not remove MeasurementType '" + fi->second->Name() + "' has experiment still contains measurement");
+		throw std::runtime_error("Could not remove MeasurementTypeID '" + fi->second->Name() + "' has experiment still contains measurement");
 	}
 
 	if (MTID == Measurement::HEAD_TAIL_TYPE ) {
 		throw std::invalid_argument("Could not remove default measurement type 'head-tail'");
 	}
-
-	d_measurementTypes.DeleteObject(MTID);
+	try {
+		d_measurementTypes.DeleteObject(MTID);
+	} catch ( const MeasurementTypeContainer::UnmanagedObject & ) {
+		throw std::out_of_range("Unknown MeasurementTypeID " + std::to_string(MTID));
+	}
 }
 
 const MeasurementTypeByID & Experiment::MeasurementTypes() const {
@@ -524,14 +527,13 @@ AntShapeType::Ptr Experiment::CreateAntShapeType(const std::string & name,
 void Experiment::DeleteAntShapeType(AntShapeTypeID typeID) {
 	auto fi = d_antShapeTypes->Find(typeID);
 	if ( fi == d_antShapeTypes->End() ) {
-		// will throw
-		d_antShapeTypes->Delete(typeID);
+		throw std::out_of_range("Unknown AntShapeTypeID " + std::to_string(typeID));
 	}
 
 	for ( const auto & [aID,a] : d_identifier->Ants() ) {
 		for ( const auto & [type,c] : a->Capsules() ) {
 			if ( type == typeID ) {
-				throw std::runtime_error("Could not delete shape type "
+				throw std::runtime_error("Could not delete AntShapeTypeID  "
 				                         + std::to_string(fi->first)
 				                         + ":'" + fi->second->Name()
 				                         + "': Ant " + FormatAntID(aID)

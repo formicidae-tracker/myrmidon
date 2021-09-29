@@ -23,7 +23,7 @@ test_that("it can manipulate zones",{
 
     expect_error({
         d$space$deleteZone(42)
-    },'42 is not managed')
+    },'Unknown ZoneID 42')
 
     d$space$deleteZone(1)
     expect_length(d$space$zones,0)

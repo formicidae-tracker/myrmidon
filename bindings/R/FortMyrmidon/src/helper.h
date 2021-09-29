@@ -47,10 +47,10 @@
 #define IMPLEMENT_SETTER(ClassName,TypeName,Name) \
 	IMPLEMENT_SETTER_X(fm ## ClassName,fort::myrmidon::ClassName::Ptr,TypeName,Name)
 
-#define IMPLEMENT_FIELD(ClassName,TypeName,Name) \
-	IMPLEMENT_GETTER(ClassName,TypeName,Name) \
-	IMPLEMENT_SETTER(ClassName,TypeName,Name)
 
 #define IMPLEMENT_FIELD_X(FmClassName,ClassType,TypeName,Name)	  \
 	IMPLEMENT_GETTER_X(FmClassName,ClassType,TypeName,Name) \
-	IMPLEMENT_SETTER_X(fmClassName,ClassType,TypeName,Name)
+	IMPLEMENT_SETTER_X(FmClassName,ClassType,TypeName,Name)
+
+#define IMPLEMENT_FIELD(ClassName,TypeName,Name) \
+	IMPLEMENT_FIELD_X(fm ## ClassName,fort::myrmidon::ClassName::Ptr,TypeName,Name)

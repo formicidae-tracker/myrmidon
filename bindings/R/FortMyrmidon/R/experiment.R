@@ -1,0 +1,11 @@
+fmTagFamily <- c("Tag36h11" = 0,
+                 "Tag36h10" = 1,
+                 "Tag36ARTag" = 2,
+                 "Tag16h5" = 3,
+                 "Tag25h9" = 4,
+                 "Circle21h7" = 5,
+                 "Circle49h12" = 6,
+                 "Custom48h12" = 7,
+                 "Standard41h12" = 8,
+                 "Standard52h13" = 9,
+                 "Undefined" = 10)

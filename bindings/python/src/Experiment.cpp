@@ -256,7 +256,6 @@ void BindExperiment(py::module_ & m) {
 		              &Experiment::SetDefaultTagSize,
 		              " (float): the default tag size in mm used in the Experiment")
 
-
 		.def_property_readonly("MeasurementTypeNames",
 		                       &Experiment::MeasurementTypeNames,
 		                       " (Dict[int,str]): the measurement type name by their MeasurementTypeID")

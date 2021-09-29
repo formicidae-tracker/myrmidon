@@ -32,11 +32,11 @@ std::string Space::TDDOverlap::BuildWhat(const TrackingDataDirectory::Ptr & a,
 }
 
 Space::UnmanagedTrackingDataDirectory::UnmanagedTrackingDataDirectory(const std::string & URI) noexcept
-	: std::invalid_argument("TDD:'" + URI + "' is not managed by this Space or Universe") {
+	: std::invalid_argument("Unknown TDD{URI:'" + URI + "'}") {
 }
 
-Space::UnmanagedSpace::UnmanagedSpace(const std::string & URI) noexcept
-	: std::out_of_range("Space:'" + URI + "' is not managed by this Universe") {
+Space::UnmanagedSpace::UnmanagedSpace(SpaceID spaceID) noexcept
+	: std::out_of_range("Unknown SpaceID " + std::to_string(spaceID)) {
 }
 
 Space::InvalidName::InvalidName(const std::string & name,
@@ -50,22 +50,22 @@ Space::SpaceNotEmpty::SpaceNotEmpty(const Space & z)
 
 std::string Space::SpaceNotEmpty::BuildReason(const Space & z) {
 	std::ostringstream oss;
-	oss << "Space:'" << z.Name()
-	    << "' is not empty (contains:";
-	std::string sep = "{";
+	oss << "Space{ID:" << z.ID() << ", Name:'" << z.Name()
+	    << "'} is not empty (contains:";
+	std::string sep = "{'";
 	for ( const auto & tdd : z.d_tdds ) {
 		oss << sep << tdd->URI();
-		sep = ",";
+		sep = "','";
 	}
-	oss << "})";
+	oss << "'})";
 	return oss.str();
 }
 
-Space::TDDAlreadyInUse::TDDAlreadyInUse(const std::string & tddURI, const std::string & spaceURI)
-	: std::invalid_argument("TDD:'"
+Space::TDDAlreadyInUse::TDDAlreadyInUse(const std::string & tddURI, SpaceID spaceID)
+	: std::invalid_argument("TDD{URI:'"
 	                     + tddURI
-	                     + "' is in use in Space:'"
-	                     + spaceURI + "'") {
+	                     + "'} is in use in Space{ID:"
+	                        + std::to_string(spaceID) + "}") {
 }
 
 Space::Ptr Space::Universe::CreateSpace(const Ptr & itself,
@@ -79,7 +79,7 @@ Space::Ptr Space::Universe::CreateSpace(const Ptr & itself,
 void Space::Universe::DeleteSpace(SpaceID spaceID) {
 	auto fi = d_spaces.Objects().find(spaceID);
 	if ( fi == d_spaces.Objects().end() ) {
-		throw UnmanagedSpace("spaces/" + std::to_string(spaceID));
+		throw UnmanagedSpace(spaceID);
 	}
 
 	if ( fi->second->d_tdds.empty() == false ) {
@@ -153,7 +153,7 @@ void Space::AddTrackingDataDirectory(const TrackingDataDirectory::Ptr & tdd) {
 			throw std::logic_error("Internal data error");
 		}
 
-		throw TDDAlreadyInUse(tdd->URI(),si->second->URI());
+		throw TDDAlreadyInUse(tdd->URI(),si->second->ID());
 	}
 
 	d_tdds = newList;
@@ -275,7 +275,11 @@ Zone::Ptr Space::Universe::CreateZone(ZoneID zoneID,
 }
 
 void Space::Universe::DeleteZone(ZoneID zoneID) {
-	d_zones.DeleteObject(zoneID);
+	try {
+		d_zones.DeleteObject(zoneID);
+	} catch ( const AlmostContiguousIDContainer<ZoneID, Zone>::UnmanagedObject &) {
+		throw std::out_of_range("Unknown ZoneID " + std::to_string(zoneID));
+	}
 }
 
 

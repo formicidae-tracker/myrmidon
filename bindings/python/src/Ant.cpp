@@ -78,8 +78,10 @@ Gets the TagID identifiying this Ant at a given time
 
 Args:
     time (Time): the time we want an identification for
+
 Returns:
     int: the TagID that identifies this Ant at time.
+
 Raises:
     Error: if no tag identifies this Ant at **time**.
 )pydoc")

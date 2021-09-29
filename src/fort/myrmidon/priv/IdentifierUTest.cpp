@@ -67,7 +67,7 @@ TEST_F(IdentifierUTest,AntsCanBeDeleted) {
 
 	EXPECT_THROW({
 			i->DeleteAnt(a->AntID()+1);
-		}, Container::UnmanagedObject);
+		}, std::out_of_range);
 
 	IdentificationPtr ident;
 	EXPECT_NO_THROW({
@@ -93,7 +93,7 @@ TEST_F(IdentifierUTest,AntCanBeAttachedToIdentification) {
 	auto a = i->CreateAnt(shapeTypes,metadata);
 	EXPECT_THROW({
 			Identifier::AddIdentification(i,a->AntID()+1,123,Time::SinceEver(),Time::Forever());
-		},Container::UnmanagedObject);
+		},std::out_of_range);
 
 	IdentificationPtr ident1,ident2;
 	EXPECT_NO_THROW(ident1 = Identifier::AddIdentification(i,a->AntID(),123,Time::SinceEver(),Time::Forever()));

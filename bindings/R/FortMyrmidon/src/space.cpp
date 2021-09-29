@@ -28,6 +28,10 @@ inline SEXP fmSpace_locateMovieFrame(const fort::myrmidon::Space::Ptr * space,
 	                          Rcpp::Named("frameID") = frameID);
 }
 
+inline uint64_t fmSpace_get(const fort::myrmidon::Space::Ptr * s) {
+	return uint64_t(s->get());
+}
+
 RCPP_MODULE(space) {
 	using namespace Rcpp;
 
@@ -39,6 +43,7 @@ RCPP_MODULE(space) {
 		.method("createZone",&fmSpace_CreateZone, "Creates a Zone in this Space")
 		.method("deleteZone",&fmSpace_DeleteZone, "Deletes a Zone in this Space")
 		.const_method("locateMovieFrame",&fmSpace_locateMovieFrame,"Locates a movie frame in this space")
+		.const_method("get",&fmSpace_get)
 		;
 
 }

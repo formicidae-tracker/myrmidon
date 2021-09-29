@@ -195,11 +195,11 @@ TEST_F(SpaceUTest,ExceptionFormatting) {
 		 },
 		 {
 		  std::make_shared<Space::UnmanagedTrackingDataDirectory>("doo"),
-		  "TDD:'doo' is not managed by this Space or Universe",
+		  "Unknown TDD{URI:'doo'}",
 		 },
 		 {
-		  std::make_shared<Space::UnmanagedSpace>("doo"),
-		  "Space:'doo' is not managed by this Universe",
+		  std::make_shared<Space::UnmanagedSpace>(42),
+		  "Unknown SpaceID 42",
 		 },
 		 {
 		  std::make_shared<Space::InvalidName>("doh","it is 'doh'! Doh!"),
@@ -207,11 +207,11 @@ TEST_F(SpaceUTest,ExceptionFormatting) {
 		 },
 		 {
 		  std::make_shared<Space::SpaceNotEmpty>(*z),
-		  "Space:'z' is not empty (contains:{nest.0000,nest.0001})",
+		  "Space{ID:1, Name:'z'} is not empty (contains:{'nest.0000','nest.0001'})",
 		 },
 		 {
-		  std::make_shared<Space::TDDAlreadyInUse>("nest.0000","z"),
-		  "TDD:'nest.0000' is in use in Space:'z'",
+		  std::make_shared<Space::TDDAlreadyInUse>("nest.0000",42),
+		  "TDD{URI:'nest.0000'} is in use in Space{ID:42}",
 		 },
 		};
 	for (const auto & d: testdata) {

@@ -22,6 +22,7 @@ template <> fort::myrmidon::Shape::List as(SEXP);
 template <> SEXP wrap(const fort::myrmidon::ZoneDefinitionList &);
 template <> SEXP wrap(const fort::myrmidon::ZoneByID &);
 template <> SEXP wrap(const fort::myrmidon::SpaceByID & );
+template <> SEXP wrap(const fort::myrmidon::AntByID & );
 
 template <> SEXP wrap(const fort::myrmidon::IdentificationList &);
 

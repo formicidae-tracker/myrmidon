@@ -17,14 +17,14 @@ IdentifierIF::~IdentifierIF() {}
 Identifier::UnmanagedIdentification::UnmanagedIdentification(const Identification & ident) noexcept
 	: std::runtime_error([&ident](){
 		                     std::ostringstream os;
-		                     os << "Identification:" << ident <<  " is not managed by this object";
+		                     os << ident <<  " is not managed by this Experiment";
 		                     return os.str();
 	                     }()) {}
 
 Identifier::UnmanagedTag::UnmanagedTag(TagID ID) noexcept
 	: std::runtime_error([ID](){
 		                     std::ostringstream os;
-		                     os << "Tag:" << ID <<  " is not managed by this object";
+		                     os << "Tag:" << FormatTagID(ID) <<  " is not used in this Experiment";
 		                     return os.str();
 	                     }()) {}
 
@@ -46,9 +46,12 @@ AntPtr Identifier::CreateAnt(const AntShapeTypeContainerConstPtr & shapeTypes,
 
 void Identifier::DeleteAnt(fort::myrmidon::AntID ID) {
 	auto fi = Ants().find(ID);
-	if ( fi != Ants().end() && fi->second->Identifications().empty() == false ) {
+	if ( fi == Ants().end()) {
+		throw std::out_of_range("Unknown AntID " + std::to_string(ID));
+	}
+	if ( fi->second->Identifications().empty() == false ) {
 		std::ostringstream os;
-		os <<"Ant:" <<fi->second->FormattedID() << " has Identification, delete them first";
+		os <<"Cannot remove Ant{ID:" <<fi->second->FormattedID() << "}: it has some identifications left";
 		throw std::runtime_error(os.str());
 	}
 
@@ -68,7 +71,7 @@ Identification::Ptr Identifier::AddIdentification(const Identifier::Ptr & itself
                                                   const Time & end) {
 	auto fi = itself->Ants().find(ID);
 	if ( fi == itself->Ants().end() ) {
-		throw UnmanagedObject(ID);
+		throw std::out_of_range("Unknown AntID " + std::to_string(ID));
 	}
 	auto ant = fi->second;
 

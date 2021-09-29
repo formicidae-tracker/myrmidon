@@ -56,7 +56,7 @@ std::string Experiment::AddTrackingDataDirectory(SpaceID spaceID,
                                                  const std::string & filepath) {
 	auto fi  = d_p->Get().Spaces().find(spaceID);
 	if ( fi == d_p->Get().Spaces().end() ) {
-		throw std::out_of_range("Unknown Space::ID " + std::to_string(spaceID));
+		throw std::out_of_range("Unknown SpaceID " + std::to_string(spaceID));
 	}
 	priv::TrackingDataDirectory::Ptr tdd;
 	try {
@@ -82,7 +82,11 @@ const AntByID & Experiment::Ants() const {
 }
 
 void Experiment::DeleteAnt(AntID antID) {
-	d_p->DeleteAnt(antID);
+	try {
+		d_p->DeleteAnt(antID);
+	} catch (  const priv::AlmostContiguousIDContainer<AntID,priv::Ant>::UnmanagedObject & ) {
+		throw std::out_of_range("Unknown AntID " + std::to_string(antID));
+	}
 }
 
 
@@ -96,7 +100,7 @@ Identification::Ptr Experiment::AddIdentification(AntID antID,
 void Experiment::DeleteIdentification(const Identification::Ptr & identification) {
 	try {
 		d_p->DeleteIdentification(identification);
-	} catch ( const priv::Identifier::UnmanagedIdentification & e) {
+	} catch ( const priv::Identifier::UnmanagedIdentification & e ) {
 		throw std::invalid_argument(e.what());
 	}
 }
@@ -163,7 +167,7 @@ void Experiment::SetMeasurementTypeName(MeasurementTypeID mTypeID,
                                         const std::string & name) {
 	auto fi = d_p->Get().MeasurementTypes().find(mTypeID);
 	if ( fi == d_p->Get().MeasurementTypes().end() ) {
-		throw std::out_of_range("Unknwon measurement type " + std::to_string(mTypeID));
+		throw std::out_of_range("Unknown MeasurementTypeID " + std::to_string(mTypeID));
 	}
 	fi->second->SetName(name);
 }
@@ -193,7 +197,7 @@ void Experiment::SetAntShapeTypeName(AntShapeTypeID antShapeTypeID,
                                      const std::string & name) {
 	auto fi = d_p->Get().AntShapeTypes().find(antShapeTypeID);
 	if ( fi == d_p->Get().AntShapeTypes().end() ) {
-		throw std::out_of_range("unknow AntShapeTypeID " + std::to_string(antShapeTypeID));
+		throw std::out_of_range("Unknown AntShapeTypeID " + std::to_string(antShapeTypeID));
 	}
 	fi->second->SetName(name);
 }
