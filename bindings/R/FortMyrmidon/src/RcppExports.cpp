@@ -281,6 +281,97 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// fmQueryComputeMeasurementFor
+DataFrame fmQueryComputeMeasurementFor(const ExperimentPtr& experiment, fort::myrmidon::AntID antID, fort::myrmidon::MeasurementTypeID typeID);
+RcppExport SEXP _FortMyrmidon_fmQueryComputeMeasurementFor(SEXP experimentSEXP, SEXP antIDSEXP, SEXP typeIDSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const ExperimentPtr& >::type experiment(experimentSEXP);
+    Rcpp::traits::input_parameter< fort::myrmidon::AntID >::type antID(antIDSEXP);
+    Rcpp::traits::input_parameter< fort::myrmidon::MeasurementTypeID >::type typeID(typeIDSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmQueryComputeMeasurementFor(experiment, antID, typeID));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fmQueryComputeTagStatistics
+fort::myrmidon::TagStatistics::ByTagID fmQueryComputeTagStatistics(const ExperimentPtr& experiment);
+RcppExport SEXP _FortMyrmidon_fmQueryComputeTagStatistics(SEXP experimentSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const ExperimentPtr& >::type experiment(experimentSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmQueryComputeTagStatistics(experiment));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pfmQueryIdentifyFrames
+SEXP pfmQueryIdentifyFrames(const ExperimentPtr& experiment, const fort::Time& start, const fort::Time& end, bool computeZones, bool showProgress, bool singleThreaded);
+RcppExport SEXP _FortMyrmidon_pfmQueryIdentifyFrames(SEXP experimentSEXP, SEXP startSEXP, SEXP endSEXP, SEXP computeZonesSEXP, SEXP showProgressSEXP, SEXP singleThreadedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const ExperimentPtr& >::type experiment(experimentSEXP);
+    Rcpp::traits::input_parameter< const fort::Time& >::type start(startSEXP);
+    Rcpp::traits::input_parameter< const fort::Time& >::type end(endSEXP);
+    Rcpp::traits::input_parameter< bool >::type computeZones(computeZonesSEXP);
+    Rcpp::traits::input_parameter< bool >::type showProgress(showProgressSEXP);
+    Rcpp::traits::input_parameter< bool >::type singleThreaded(singleThreadedSEXP);
+    rcpp_result_gen = Rcpp::wrap(pfmQueryIdentifyFrames(experiment, start, end, computeZones, showProgress, singleThreaded));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pfmQueryCollideFrames
+SEXP pfmQueryCollideFrames(const ExperimentPtr& experiment, const fort::Time& start, const fort::Time& end, bool showProgress, bool singleThreaded);
+RcppExport SEXP _FortMyrmidon_pfmQueryCollideFrames(SEXP experimentSEXP, SEXP startSEXP, SEXP endSEXP, SEXP showProgressSEXP, SEXP singleThreadedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const ExperimentPtr& >::type experiment(experimentSEXP);
+    Rcpp::traits::input_parameter< const fort::Time& >::type start(startSEXP);
+    Rcpp::traits::input_parameter< const fort::Time& >::type end(endSEXP);
+    Rcpp::traits::input_parameter< bool >::type showProgress(showProgressSEXP);
+    Rcpp::traits::input_parameter< bool >::type singleThreaded(singleThreadedSEXP);
+    rcpp_result_gen = Rcpp::wrap(pfmQueryCollideFrames(experiment, start, end, showProgress, singleThreaded));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pfmQueryComputeAntTrajectories
+SEXP pfmQueryComputeAntTrajectories(const ExperimentPtr& experiment, const fort::Time& start, const fort::Time& end, const fort::Duration& maximumGap, const fort::myrmidon::Matcher::Ptr& matcher, bool computeZones, bool showProgress, bool singleThreaded);
+RcppExport SEXP _FortMyrmidon_pfmQueryComputeAntTrajectories(SEXP experimentSEXP, SEXP startSEXP, SEXP endSEXP, SEXP maximumGapSEXP, SEXP matcherSEXP, SEXP computeZonesSEXP, SEXP showProgressSEXP, SEXP singleThreadedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const ExperimentPtr& >::type experiment(experimentSEXP);
+    Rcpp::traits::input_parameter< const fort::Time& >::type start(startSEXP);
+    Rcpp::traits::input_parameter< const fort::Time& >::type end(endSEXP);
+    Rcpp::traits::input_parameter< const fort::Duration& >::type maximumGap(maximumGapSEXP);
+    Rcpp::traits::input_parameter< const fort::myrmidon::Matcher::Ptr& >::type matcher(matcherSEXP);
+    Rcpp::traits::input_parameter< bool >::type computeZones(computeZonesSEXP);
+    Rcpp::traits::input_parameter< bool >::type showProgress(showProgressSEXP);
+    Rcpp::traits::input_parameter< bool >::type singleThreaded(singleThreadedSEXP);
+    rcpp_result_gen = Rcpp::wrap(pfmQueryComputeAntTrajectories(experiment, start, end, maximumGap, matcher, computeZones, showProgress, singleThreaded));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pfmQueryComputeAntInteractions
+SEXP pfmQueryComputeAntInteractions(const ExperimentPtr& experiment, const fort::Time& start, const fort::Time& end, const fort::Duration& maximumGap, const fort::myrmidon::Matcher::Ptr& matcher, bool reportFullTrajectories, bool showProgress, bool singleThreaded);
+RcppExport SEXP _FortMyrmidon_pfmQueryComputeAntInteractions(SEXP experimentSEXP, SEXP startSEXP, SEXP endSEXP, SEXP maximumGapSEXP, SEXP matcherSEXP, SEXP reportFullTrajectoriesSEXP, SEXP showProgressSEXP, SEXP singleThreadedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const ExperimentPtr& >::type experiment(experimentSEXP);
+    Rcpp::traits::input_parameter< const fort::Time& >::type start(startSEXP);
+    Rcpp::traits::input_parameter< const fort::Time& >::type end(endSEXP);
+    Rcpp::traits::input_parameter< const fort::Duration& >::type maximumGap(maximumGapSEXP);
+    Rcpp::traits::input_parameter< const fort::myrmidon::Matcher::Ptr& >::type matcher(matcherSEXP);
+    Rcpp::traits::input_parameter< bool >::type reportFullTrajectories(reportFullTrajectoriesSEXP);
+    Rcpp::traits::input_parameter< bool >::type showProgress(showProgressSEXP);
+    Rcpp::traits::input_parameter< bool >::type singleThreaded(singleThreadedSEXP);
+    rcpp_result_gen = Rcpp::wrap(pfmQueryComputeAntInteractions(experiment, start, end, maximumGap, matcher, reportFullTrajectories, showProgress, singleThreaded));
+    return rcpp_result_gen;
+END_RCPP
+}
 // fmShapeListCreate
 fort::myrmidon::Shape::List fmShapeListCreate(SEXP shapes);
 RcppExport SEXP _FortMyrmidon_fmShapeListCreate(SEXP shapesSEXP) {
@@ -469,6 +560,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FortMyrmidon_fmMatcherAntAngleGreaterThan", (DL_FUNC) &_FortMyrmidon_fmMatcherAntAngleGreaterThan, 1},
     {"_FortMyrmidon_fmMatcherInteractionType", (DL_FUNC) &_FortMyrmidon_fmMatcherInteractionType, 2},
     {"_FortMyrmidon_fmMatcherAntDisplacement", (DL_FUNC) &_FortMyrmidon_fmMatcherAntDisplacement, 2},
+    {"_FortMyrmidon_fmQueryComputeMeasurementFor", (DL_FUNC) &_FortMyrmidon_fmQueryComputeMeasurementFor, 3},
+    {"_FortMyrmidon_fmQueryComputeTagStatistics", (DL_FUNC) &_FortMyrmidon_fmQueryComputeTagStatistics, 1},
+    {"_FortMyrmidon_pfmQueryIdentifyFrames", (DL_FUNC) &_FortMyrmidon_pfmQueryIdentifyFrames, 6},
+    {"_FortMyrmidon_pfmQueryCollideFrames", (DL_FUNC) &_FortMyrmidon_pfmQueryCollideFrames, 5},
+    {"_FortMyrmidon_pfmQueryComputeAntTrajectories", (DL_FUNC) &_FortMyrmidon_pfmQueryComputeAntTrajectories, 8},
+    {"_FortMyrmidon_pfmQueryComputeAntInteractions", (DL_FUNC) &_FortMyrmidon_pfmQueryComputeAntInteractions, 8},
     {"_FortMyrmidon_fmShapeListCreate", (DL_FUNC) &_FortMyrmidon_fmShapeListCreate, 1},
     {"_FortMyrmidon_pfmIWantAShapeList", (DL_FUNC) &_FortMyrmidon_pfmIWantAShapeList, 1},
     {"_FortMyrmidon_fmTimeCreate", (DL_FUNC) &_FortMyrmidon_fmTimeCreate, 1},

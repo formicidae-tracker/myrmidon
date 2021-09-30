@@ -382,6 +382,10 @@ struct AntTrajectorySegment {
 	 * Optionally report the mean trajectory.
 	 */
 	std::unique_ptr<Eigen::Vector3d> Mean;
+	/**
+	 * Optionally report the zones traversed by the Ant
+	 */
+	std::unique_ptr<std::set<ZoneID>> Zones;
 
 	Time StartTime() const;
 	Time EndTime() const;

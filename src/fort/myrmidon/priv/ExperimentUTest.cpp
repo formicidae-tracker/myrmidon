@@ -390,7 +390,7 @@ TEST_F(ExperimentUTest,MeasurementEndToEnd) {
 			e->ComputeMeasurementsForAnt(measurements,
 			                             antAfter->AntID() + 100,
 			                             1);
-		},Container::UnmanagedObject);
+		},std::out_of_range);
 
 
 	auto antLast = e->CreateAnt();

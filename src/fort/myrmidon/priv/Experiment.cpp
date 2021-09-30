@@ -432,7 +432,7 @@ void Experiment::ComputeMeasurementsForAnt(std::vector<ComputedMeasurement> & re
                                            MeasurementType::ID typeID) const {
 	auto afi = d_identifier->Ants().find(antID);
 	if ( afi == d_identifier->Ants().cend() ) {
-		throw AlmostContiguousIDContainer<fort::myrmidon::AntID,Ant>::UnmanagedObject(antID);
+		throw std::out_of_range("Unknown AntID " + std::to_string(antID));
 	}
 	result.clear();
 	double cornerWidthRatio;

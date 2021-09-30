@@ -3,6 +3,11 @@
 #include "Rcpp.h"
 
 
+Rcpp::Datetime fmTime_asR(const fort::Time & t) {
+	return Rcpp::Datetime(t.Sub(fort::Time()).Seconds());
+}
+
+
 void fmTime_show(const fort::Time * t) {
 	Rcpp::Rcout << *t << "\n";
 }

@@ -200,6 +200,42 @@ fmMatcherAntDisplacement <- function(under, minimumGap) {
     .Call(`_FortMyrmidon_fmMatcherAntDisplacement`, under, minimumGap)
 }
 
+#' Queries manual measurements for an Ant
+#' @param experiment the \code{\link{fmExperiment}} to query
+#' @param antID the ant to compute for
+#' @param typeID the wanted measurement type
+#' @return a data.frame with the date of the measurement and
+#'   estimated size in millimeters and pixels.
+#' @family fmQuery methods
+fmQueryComputeMeasurementFor <- function(experiment, antID, typeID = 1L) {
+    .Call(`_FortMyrmidon_fmQueryComputeMeasurementFor`, experiment, antID, typeID)
+}
+
+#' Computes tag statistics for an experiment
+#' @param experiment the \code{\link{fmExperiment}} to query
+#' @return a \code{data.frame} with the detection statistics in
+#'   **experiment**
+#' @family fmQuery methods
+fmQueryComputeTagStatistics <- function(experiment) {
+    .Call(`_FortMyrmidon_fmQueryComputeTagStatistics`, experiment)
+}
+
+pfmQueryIdentifyFrames <- function(experiment, start, end, computeZones, showProgress, singleThreaded) {
+    .Call(`_FortMyrmidon_pfmQueryIdentifyFrames`, experiment, start, end, computeZones, showProgress, singleThreaded)
+}
+
+pfmQueryCollideFrames <- function(experiment, start, end, showProgress, singleThreaded) {
+    .Call(`_FortMyrmidon_pfmQueryCollideFrames`, experiment, start, end, showProgress, singleThreaded)
+}
+
+pfmQueryComputeAntTrajectories <- function(experiment, start, end, maximumGap, matcher, computeZones, showProgress, singleThreaded) {
+    .Call(`_FortMyrmidon_pfmQueryComputeAntTrajectories`, experiment, start, end, maximumGap, matcher, computeZones, showProgress, singleThreaded)
+}
+
+pfmQueryComputeAntInteractions <- function(experiment, start, end, maximumGap, matcher, reportFullTrajectories, showProgress, singleThreaded) {
+    .Call(`_FortMyrmidon_pfmQueryComputeAntInteractions`, experiment, start, end, maximumGap, matcher, reportFullTrajectories, showProgress, singleThreaded)
+}
+
 #' Creates a fmShapeList
 #' @param shapes the shape in the list. should be a list of fmCircle,
 #'   fmCapsule or fmPolygon.

@@ -121,9 +121,12 @@ size_t DataSegmenter::BuildingTrajectory::FindIndexFor(const Time & time,
 
 void DataSegmenter::BuildingInteraction::SummarizeTrajectorySegment(AntTrajectorySegment & s) {
 	s.Mean = std::make_unique<Eigen::Vector3d>(Eigen::Vector3d::Zero());
+	s.Zones = std::make_unique<std::set<ZoneID>>();
 	for ( int i = s.Begin; i < s.End; ++i ) {
 		*(s.Mean) += s.Trajectory->Positions.block<1,3>(i,1).transpose() / (s.End - s.Begin);
+		s.Zones->insert(s.Trajectory->Positions(i,4));
 	}
+
 	s.Trajectory.reset();
 	s.Begin = 0;
 	s.End = 0;

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <fort/time/Time.hpp>
 #include <fort/myrmidon/Shapes.hpp>
 #include <fort/myrmidon/Zone.hpp>
@@ -33,7 +35,10 @@ template <> SEXP wrap(const fort::myrmidon::AntStaticValue & );
 
 template <> SEXP wrap(const fort::myrmidon::TypedCapsuleList & );
 
-template <> std::vector<fort::myrmidon::Matcher::Ptr> as(SEXP exp);
+template <> std::vector<fort::myrmidon::Matcher::Ptr> as(SEXP);
+
+template <> SEXP wrap(const fort::myrmidon::TagStatistics::ByTagID &);
+
 }
 
 RCPP_EXPOSED_ENUM_NODECL(fort::myrmidon::Shape::Type)

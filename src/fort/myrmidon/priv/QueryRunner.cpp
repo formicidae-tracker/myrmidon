@@ -14,12 +14,19 @@ public:
 			   const QueryRunner::Args & args)
 		: d_dataRanges(std::make_shared<DataRangeBySpaceID>())
 		, d_rangeIterators(std::make_shared<RangesIteratorByID>())
-		, d_dataIterators(std::make_shared<DataIteratorByID>()) {
+		, d_dataIterators(std::make_shared<DataIteratorByID>())
+		, d_continue(std::make_shared<std::atomic<bool>>()) {
 		BuildRanges(experiment,args.Start,args.End,*d_dataRanges);
+		d_continue->store(true);
 		for ( const auto & [spaceID,ranges] : *d_dataRanges ) {
 			d_rangeIterators->insert(std::make_pair(spaceID,ranges.begin()));
 			d_dataIterators->insert(std::make_pair(spaceID,std::move(ranges.begin()->first)));
 		}
+	}
+
+
+	void Stop() {
+		d_continue->store(false);
 	}
 
 	QueryRunner::RawData operator()(tbb::flow_control & fc) const {
@@ -31,6 +38,9 @@ public:
 	}
 
 	QueryRunner::RawData operator()() const {
+		if ( d_continue->load() == false ) {
+			return std::make_pair(0,RawFrame::ConstPtr());
+		}
 		static int i = 0;
 		SpaceID next(0);
 		Time nextTime;
@@ -105,7 +115,7 @@ private:
 	std::shared_ptr<DataRangeBySpaceID>   d_dataRanges;
 	std::shared_ptr<RangesIteratorByID>   d_rangeIterators;
 	std::shared_ptr<DataIteratorByID>     d_dataIterators;
-
+	std::shared_ptr<std::atomic<bool>>    d_continue;
 };
 
 
@@ -154,14 +164,26 @@ void QueryRunner::RunMultithreadFinalizeInCurrent(const Experiment & experiment,
 	// we use a queue to retrieve all data in the main thread
 	tbb::concurrent_bounded_queue<myrmidon::Query::CollisionData> queue;
 
+	DataLoader loader(experiment,args);
+
+	tbb::filter_t<void,RawData>
+		loadData(tbb::filter::serial_in_order,loader);
+
+	tbb::filter_t<RawData,Query::CollisionData>
+		computeData(tbb::filter::parallel,
+					QueryRunner::computeData(experiment,args));
+
+	tbb::filter_t<Query::CollisionData,void>
+		finalizeData(tbb::filter::serial_in_order,
+		             [&queue](const myrmidon::Query::CollisionData & data){
+			             queue.push(data);
+		             });
+
 	// we spawn a child process that will feed and close the queue
 	auto process
-		= [&queue,&experiment,args]() {
-			  RunMultithread(experiment,
-							 args,
-							 [&queue](const myrmidon::Query::CollisionData & data) {
-								 queue.push(data);
-							 });
+		= [&]() {
+			  tbb::parallel_pipeline(std::thread::hardware_concurrency()*2,
+			                         loadData & computeData & finalizeData);
 			  queue.push(std::make_pair(nullptr,nullptr));
 		  };
 
@@ -174,7 +196,13 @@ void QueryRunner::RunMultithreadFinalizeInCurrent(const Experiment & experiment,
 		if ( v.first == nullptr && v.second == nullptr ) {
 			break;
 		}
-		finalizer(v);
+		try {
+			finalizer(v);
+		} catch(...) {
+			loader.Stop();
+			go.join();
+			throw;
+		}
 	}
 
 	// we wait for our thread to finish, should be the case as it is the one closing the queue
