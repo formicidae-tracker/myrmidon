@@ -88,7 +88,7 @@ class CustomAssertion:
         
     def assertAntTrajectorySummaryEqual(self,a,b):
         npt.assert_almost_equal(a.Mean,b.Mean)
-        npt.assert_almost_equal(a.Zones,b.Zones)
+        self.assertEqual(a.Zones,b.Zones)
 
     def assertAntInteractionEqual(self,a,b):
         self.assertEqual(a.IDs,b.IDs)

@@ -19,6 +19,7 @@
 #include <fort/myrmidon/priv/proto/TagStatisticsCache.hpp>
 #include <fort/myrmidon/priv/proto/TDDCache.hpp>
 #include <fort/myrmidon/priv/proto/TagCloseUpCache.hpp>
+#include <fort/myrmidon/priv/DataSegmenter.hpp>
 
 #include <semver.hpp>
 
@@ -637,6 +638,21 @@ void UTestData::SetMonotonicTimeToResults() {
 		i->Start = findTime(i->Start,i->Space);
 		i->End = findTime(i->End,i->Space);
 	}
+}
+
+
+
+std::vector<AntInteraction::Ptr> UTestData::ExpectedResult::Summarized() const {
+	std::vector<AntInteraction::Ptr> res;
+
+
+	for ( const auto & i : Interactions ) {
+		auto ii = std::make_shared<AntInteraction>(*i);
+		ii->Trajectories = std::make_pair(priv::DataSegmenter::SummarizeTrajectorySegment(std::get<0>(i->Trajectories).first),
+		                                  priv::DataSegmenter::SummarizeTrajectorySegment(std::get<0>(i->Trajectories).second));
+		res.push_back(ii);
+	}
+	return res;
 }
 
 

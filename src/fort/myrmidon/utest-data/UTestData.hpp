@@ -66,8 +66,8 @@ public:
 		Matcher::Ptr  Matches;
 		std::vector<AntTrajectory::Ptr> Trajectories;
 		std::vector<AntInteraction::Ptr> Interactions;
+		std::vector<AntInteraction::Ptr> Summarized() const;
 	};
-
 
 	static fs::path TempDirName();
 
@@ -87,7 +87,6 @@ public:
 	const TDDInfo & ARTagDataDir() const;
 
 	const TDDInfo & WithVideoDataDir() const;
-
 
 	const ExperimentInfo & CurrentVersionFile() const;
 	const ExperimentInfo & V0_1_File() const;

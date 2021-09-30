@@ -119,13 +119,28 @@ size_t DataSegmenter::BuildingTrajectory::FindIndexFor(const Time & time,
 }
 
 
-AntTrajectorySummary DataSegmenter::BuildingInteraction::SummarizeTrajectorySegment(AntTrajectorySegment & s) {
+AntTrajectorySummary DataSegmenter::SummarizeTrajectorySegment(AntTrajectorySegment & s) {
 
 	Eigen::Vector3d mean = Eigen::Vector3d::Zero();
 	std::set<ZoneID> zones;
 	for ( int i = s.Begin; i < s.End; ++i ) {
 		mean += s.Trajectory->Positions.block<1,3>(i,1).transpose() / (s.End - s.Begin);
 		zones.insert(s.Trajectory->Positions(i,4));
+	}
+	return AntTrajectorySummary{.Mean = mean,.Zones = zones};
+}
+
+
+AntTrajectorySummary
+DataSegmenter::BuildingInteraction::SummarizeBuildingTrajectory(BuildingTrajectory & trajectory,
+                                                                size_t begin,
+                                                                size_t end) {
+	Eigen::Vector3d mean = Eigen::Vector3d::Zero();
+	std::set<ZoneID> zones;
+	auto mapped = trajectory.Mapped();
+	for ( int i = begin; i < end; ++i ) {
+		mean += mapped.block<1,3>(i,1).transpose() / (end - begin);
+		zones.insert(mapped(i,4));
 	}
 	return AntTrajectorySummary{.Mean = mean,.Zones = zones};
 }
@@ -156,8 +171,12 @@ AntInteraction::Ptr DataSegmenter::BuildingInteraction::Terminate(bool summarize
 	};
 
 	if ( summarize == true ) {
-		res->Trajectories = std::make_pair(SummarizeTrajectorySegment(segment1),
-		                                   SummarizeTrajectorySegment(segment2));
+		res->Trajectories = std::make_pair(SummarizeBuildingTrajectory(*Trajectories.first,
+		                                                               segment1.Begin,
+		                                                               segment1.End),
+		                                   SummarizeBuildingTrajectory(*Trajectories.second,
+		                                                               segment2.Begin,
+		                                                               segment2.End));
 	} else {
 		res->Trajectories = std::make_pair(segment1,segment2);
 	}

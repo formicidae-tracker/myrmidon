@@ -26,6 +26,8 @@ public:
 	DataSegmenter(const Args & args);
 	~DataSegmenter();
 
+	static AntTrajectorySummary SummarizeTrajectorySegment(AntTrajectorySegment & s);
+
 	void operator()(const myrmidon::Query::CollisionData & data);
 private:
 	struct BuildingInteraction;
@@ -53,6 +55,10 @@ private:
 		                    size_t low,
 		                    size_t high);
 
+		inline Eigen::Map<const Eigen::Matrix<double,Eigen::Dynamic,5,Eigen::RowMajor>> Mapped() const {
+			return Eigen::Map<const Eigen::Matrix<double,Eigen::Dynamic,5,Eigen::RowMajor>>(&DataPoints[0],Size(),5);
+		}
+
 		AntTrajectory::Ptr Terminate();
 	};
 
@@ -76,8 +82,12 @@ private:
 		void Append(const Collision & collision,
 		            const Time & curTime);
 
+		static AntTrajectorySummary
+		SummarizeBuildingTrajectory(BuildingTrajectory & trajectory,
+		                            size_t begin,
+		                            size_t end);
 
-		static AntTrajectorySummary SummarizeTrajectorySegment(AntTrajectorySegment & s);
+
 
 		AntInteraction::Ptr Terminate(bool summarize);
 	};

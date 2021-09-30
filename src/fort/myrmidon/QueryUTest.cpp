@@ -221,6 +221,38 @@ TEST_F(QueryUTest,ComputeAntInteractions) {
 }
 
 
+TEST_F(QueryUTest,ComputeAntInteractionsSummarized) {
+	size_t i = 0;
+	for ( const auto & expected : TestSetup::UTestData().ExpectedResults() ) {
+		auto expectedInteractions = expected.Summarized();
+		std::vector<AntTrajectory::Ptr> trajectories;
+		std::vector<AntInteraction::Ptr> interactions;
+
+		ASSERT_NO_THROW({
+				myrmidon::Query::ComputeAntInteractionsArgs args;
+				args.Start = expected.Start;
+				args.End = expected.End;
+				args.MaximumGap = expected.MaximumGap;
+				args.Matcher = expected.Matches;
+				args.ReportFullTrajectories = false;
+				Query::ComputeAntInteractions(*experiment,
+				                              trajectories,
+				                              interactions,
+				                              args);
+			});
+
+		EXPECT_EQ(trajectories.size(),0);
+		EXPECT_EQ(interactions.size(),expectedInteractions.size());
+
+		for ( size_t i = 0; i < std::min(expected.Interactions.size(),expectedInteractions.size()); ++i ) {
+			EXPECT_ANT_INTERACTION_EQ(*interactions[i],
+			                          *expectedInteractions[i])
+				<< "  With i: " << i << std::endl;
+		}
+	}
+}
+
+
 TEST_F(QueryUTest,FrameSelection) {
 	auto firstDate = std::min(TestSetup::UTestData().NestDataDirs().front().Start,
 	                          TestSetup::UTestData().ForagingDataDirs().front().Start);

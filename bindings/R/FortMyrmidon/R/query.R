@@ -114,7 +114,7 @@ fmQueryComputeAntTrajectories <- function(experiment,
                                           computeZones = FALSE,
                                           showProgress = TRUE,
                                           singleThreaded = FALSE) {
-    pfmQueryComputeAntInteractions(experiment,
+    pfmQueryComputeAntTrajectories(experiment,
                                    start,
                                    end,
                                    maximumGap,

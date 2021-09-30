@@ -61,7 +61,7 @@ class QueryTestCase(unittest.TestCase,assertions.CustomAssertion):
             self.assertEqual(len(trajectories),len(expectedResult.Trajectories))
 
             trajectories = sorted(trajectories,
-                                 key = functools.cmp_to_key(QueryTestCase.compare_trajectories))
+                                  key = functools.cmp_to_key(QueryTestCase.compare_trajectories))
             for i,expected in enumerate(expectedResult.Trajectories):
                 self.assertAntTrajectoryEqual(trajectories[i],expected)
 
@@ -81,6 +81,18 @@ class QueryTestCase(unittest.TestCase,assertions.CustomAssertion):
                 self.assertAntTrajectoryEqual(trajectories[i],expected)
 
             for i,expected in enumerate(expectedResult.Interactions):
+                self.assertAntInteractionEqual(interactions[i],expected)
+
+            trajectories,interactions = m.Query.ComputeAntInteractions(self.experiment,
+                                                                       start = expectedResult.Start,
+                                                                       end = expectedResult.End,
+                                                                       maximumGap = expectedResult.MaximumGap,
+                                                                       matcher = expectedResult.Matches,
+                                                                       reportFullTrajectories = False)
+            expectedSummarized = expectedResult.Summarized()
+            self.assertEqual(len(trajectories),0)
+            self.assertEqual(len(interactions),len(expectedSummarized))
+            for i,expected in enumerate(expectedSummarized):
                 self.assertAntInteractionEqual(interactions[i],expected)
 
 

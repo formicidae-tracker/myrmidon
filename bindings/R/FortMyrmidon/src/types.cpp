@@ -54,3 +54,12 @@ Rcpp::DataFrame fmAntTrajectory_Positions(const fort::myrmidon::AntTrajectory & 
 	                         t.Positions.rows());
 	return df;
 }
+
+std::string fmInteraction_ZoneList(const std::set<fort::myrmidon::ZoneID> & zones) {
+	std::string delim,res;
+	for ( const auto & zoneID : zones) {
+		res += delim + std::to_string(zoneID);
+		delim = ",";
+	}
+	return res;
+}

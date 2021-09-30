@@ -130,7 +130,9 @@ public:
 		d_computeStart = fort::Time::Now();
 		d_lastShown = d_computeStart.Add(-DISPLAY_PERIOD);
 		d_last = d_start;
-		Rcpp::Rcerr << "\n\n";
+		if ( showProgress ) {
+			Rcpp::Rcerr << "\n\n";
+		}
 	}
 
 
@@ -223,7 +225,7 @@ SEXP pfmQueryIdentifyFrames(const ExperimentPtr & experiment,
 		                             },
 		                             args);
 	} catch ( const FmProgress::StopIteration & ) {}
-
+	times.attr("class") = "POSIXct";
 	return List::create(_["frames"] = DataFrame::create(_["time"]  = times,
 	                                                    _["space"]  = space,
 	                                                    _["height"]  = height,
@@ -276,7 +278,7 @@ SEXP pfmQueryCollideFrames(const ExperimentPtr & experiment,
 		                            },
 		                            args);
 	} catch ( FmProgress::StopIteration & ) {}
-
+	times.attr("class") = "POSIXct";
 	return List::create(_["frames"] = DataFrame::create(_["time"]  = times,
 	                                                    _["space"]  = space,
 	                                                    _["height"]  = height,
@@ -323,6 +325,7 @@ SEXP pfmQueryComputeAntTrajectories(const ExperimentPtr & experiment,
 		                                     },
 		                                     args);
 	} catch ( const FmProgress::StopIteration & ) {}
+	tStart.attr("class") = "POSIXct";
 
 	return List::create(_["trajectories_summary"] = DataFrame::create(_["antID"] = antID,
 	                                                                  _["space"] = space,
@@ -398,6 +401,9 @@ SEXP pfmQueryComputeAntInteractionsFull(const ExperimentPtr & experiment,
 		                                     args);
 	} catch ( const FmProgress::StopIteration & ) {}
 
+	tStart.attr("class") = "POSIXct";
+	iStart.attr("class") = "POSIXct";
+	iEnd.attr("class") = "POSIXct";
 	return List::create(_["trajectories_summary"]  = DataFrame::create(_["antID"] = tAnt,
 	                                                                   _["space"] = tSpace,
 	                                                                   _["start"] = tStart),
@@ -417,14 +423,6 @@ SEXP pfmQueryComputeAntInteractionsFull(const ExperimentPtr & experiment,
 	                    );
 }
 
-std::string ZoneList(const std::set<ZoneID> & zones) {
-	std::string delim,res;
-	for ( const auto & zoneID : zones) {
-		res += delim + std::to_string(zoneID);
-		delim = ",";
-	}
-	return res;
-}
 
 SEXP pfmQueryComputeAntInteractionsSummarized(const ExperimentPtr & experiment,
                                               const fort::Time & start,
@@ -437,7 +435,6 @@ SEXP pfmQueryComputeAntInteractionsSummarized(const ExperimentPtr & experiment,
 	NumericVector iMx1,iMy1,iMa1,iMx2,iMy2,iMa2;
 	DatetimeVector tStart(0),iStart(0),iEnd(0);
 	CharacterVector types,zone1,zone2;
-	std::vector<DataFrame> positions;
 
 	Query::ComputeAntInteractionsArgs args;
 	args.Start = start;
@@ -467,8 +464,8 @@ SEXP pfmQueryComputeAntInteractionsSummarized(const ExperimentPtr & experiment,
 			iMx2.push_back(std::get<1>(i->Trajectories).second.Mean.x());
 			iMy2.push_back(std::get<1>(i->Trajectories).second.Mean.y());
 			iMa2.push_back(std::get<1>(i->Trajectories).second.Mean.z());
-			zone1.push_back(ZoneList(std::get<1>(i->Trajectories).first.Zones));
-			zone2.push_back(ZoneList(std::get<1>(i->Trajectories).second.Zones));
+			zone1.push_back(fmInteraction_ZoneList(std::get<1>(i->Trajectories).first.Zones));
+			zone2.push_back(fmInteraction_ZoneList(std::get<1>(i->Trajectories).second.Zones));
 		};
 
 	try {
@@ -477,7 +474,8 @@ SEXP pfmQueryComputeAntInteractionsSummarized(const ExperimentPtr & experiment,
 		                                     storeInteractions,
 		                                     args);
 	} catch ( const FmProgress::StopIteration & ) {}
-
+	iStart.attr("class") = "POSIXct";
+	iEnd.attr("class") = "POSIXct";
 	return DataFrame::create(_["ant1"] = iAnt1,
 	                         _["ant2"] = iAnt2,
 	                         _["start"] = iStart,
@@ -532,7 +530,6 @@ template <> SEXP wrap(const fort::myrmidon::ExperimentDataInfo & infos) {
 	CharacterVector tddURIs,tddPaths,spaceURIs,spaceNames;
 	IntegerVector tddFrames,spaceIDs,spaceFrames;
 	DatetimeVector tddStart(0),tddEnd(0),spaceStart(0),spaceEnd(0);
-
 
 	for ( const auto & [spaceID,space] : infos.Spaces) {
 		for ( const auto & tdd : space.TrackingDataDirectories ) {
