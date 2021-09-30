@@ -130,9 +130,6 @@ public:
 		d_computeStart = fort::Time::Now();
 		d_lastShown = d_computeStart.Add(-DISPLAY_PERIOD);
 		d_last = d_start;
-		if ( showProgress ) {
-			Rcpp::Rcerr << "\n\n";
-		}
 	}
 
 
@@ -163,21 +160,25 @@ public:
 		std::ostringstream percent;
 		percent << std::fixed << std::setprecision(1) << std::right << std::setfill(' ') << std::setw(5)
 		        << (100 * ratio ) << "%";
+
+		std::ostringstream firstLine;
+		firstLine << "Processed until "
+		          << time.Round(fort::Duration::Second)
+		          << ", computed "
+		          << Round(computeEllapsed,fort::Duration::Minute)
+		          << " over "
+		          << Round(d_duration,fort::Duration::Minute)
+		          << ", ETA: " << Round(ETD,fort::Duration::Second);
+
 		size_t pos = std::min(std::max(0,int(71 * ratio -1)),70);
-		Rcpp::Rcerr << "\r\rProcessed until "
-		            << time.Round(fort::Duration::Second)
-		            << ", computed "
-		            << Round(computeEllapsed,fort::Duration::Minute)
-		            << " over "
-		            << Round(d_duration,fort::Duration::Minute)
-		            << ", ETA: " << Round(ETD,fort::Duration::Second) << "\n"
+		Rcpp::Rcerr << std::left << std::setw(80) << firstLine.str() << "\n"
 		            << "["
-		            << std::string('=',pos)
+		            << std::string(pos,'=')
 		            << ">"
-		            << std::string(' ', 70-pos)
+		            << std::string(70-pos,' ')
 		            << "] "
 		            << percent.str()
-		            << "\n";
+		            << "\r\r" << std::flush;
 
 		d_last = time;
 		d_lastShown = now;
@@ -199,9 +200,9 @@ SEXP pfmQueryIdentifyFrames(const ExperimentPtr & experiment,
                             bool computeZones,
                             bool showProgress,
                             bool singleThreaded) {
-	DatetimeVector times(0);
-	IntegerVector width,height,space;
-	List positions;
+	std::vector<double> times;
+	std::vector<int32_t> width,height,space;
+	std::vector<DataFrame> positions;
 
 
 	Query::IdentifyFramesArgs args;
@@ -218,19 +219,20 @@ SEXP pfmQueryIdentifyFrames(const ExperimentPtr & experiment,
 			                             progress.Increment(frame->FrameTime);
 
 			                             positions.push_back(fmIdentifiedFrame_Positions(*frame));
-			                             times.push_back(fmTime_asR(frame->FrameTime));
+			                             times.push_back(frame->FrameTime.Sub(fort::Time()).Seconds());
 			                             space.push_back(frame->Space);
 			                             width.push_back(frame->Width);
 			                             height.push_back(frame->Height);
 		                             },
 		                             args);
 	} catch ( const FmProgress::StopIteration & ) {}
-	times.attr("class") = "POSIXct";
-	return List::create(_["frames"] = DataFrame::create(_["time"]  = times,
-	                                                    _["space"]  = space,
-	                                                    _["height"]  = height,
-	                                                    _["width"]  = width),
-	                    _["positions"] = positions);
+	auto ttimes = DatetimeVector::import(times.begin(),times.end());
+	ttimes.attr("class") = "POSIXct";
+	return List::create(_["frames"] = DataFrame::create(_["time"]  = ttimes,
+	                                                    _["space"]  = IntegerVector::import(space.begin(),space.end()),
+	                                                    _["height"]  = IntegerVector::import(height.begin(),height.end()),
+	                                                    _["width"]  = IntegerVector::import(width.begin(),width.end())),
+	                    _["positions"] = List::import(positions.begin(),positions.end()));
 }
 
 
@@ -241,10 +243,10 @@ SEXP pfmQueryCollideFrames(const ExperimentPtr & experiment,
                            bool showProgress,
                            bool singleThreaded) {
 
-	DatetimeVector times(0);
-	IntegerVector width,height,space,ant1,ant2,zone,indexes;
-	CharacterVector types;
-	List positions;
+	std::vector<double> times(0);
+	std::vector<int32_t> width,height,space,ant1,ant2,zone,indexes;
+	std::vector<std::string> types;
+	std::vector<DataFrame> positions;
 
 	auto fillCollisions =
 		[&] (const CollisionFrame & frame, size_t current) {
@@ -271,25 +273,25 @@ SEXP pfmQueryCollideFrames(const ExperimentPtr & experiment,
 			                            positions.push_back(fmIdentifiedFrame_Positions(*std::get<0>(data)));
 			                            fillCollisions(*std::get<1>(data),positions.size());
 
-			                            times.push_back(fmTime_asR(std::get<0>(data)->FrameTime));
+			                            times.push_back(std::get<0>(data)->FrameTime.Sub(fort::Time()).Seconds());
 			                            space.push_back(std::get<0>(data)->Space);
 			                            width.push_back(std::get<0>(data)->Width);
 			                            height.push_back(std::get<0>(data)->Height);
 		                            },
 		                            args);
 	} catch ( FmProgress::StopIteration & ) {}
-	times.attr("class") = "POSIXct";
-	return List::create(_["frames"] = DataFrame::create(_["time"]  = times,
-	                                                    _["space"]  = space,
-	                                                    _["height"]  = height,
-	                                                    _["width"]  = width),
-	                    _["positions"] = positions,
-	                    _["collisions"] = DataFrame::create(_["ant1"] = ant1,
-	                                                        _["ant2"] = ant2,
-	                                                        _["zone"] = zone,
-	                                                        _["types"] = types,
-	                                                        _["frames_row_index"] = indexes));
-
+	auto ttimes = DatetimeVector::import(times.begin(),times.end());
+	ttimes.attr("class") = "POSIXct";
+	return List::create(_["frames"] = DataFrame::create(_["time"]   = ttimes,
+	                                                    _["space"]  = IntegerVector::import(space.begin(),space.end()),
+	                                                    _["height"] = IntegerVector::import(height.begin(),height.end()),
+	                                                    _["width"]  = IntegerVector::import(width.begin(),width.end())),
+	                    _["positions"] = List::import(positions.begin(),positions.end()),
+	                    _["collisions"] = DataFrame::create(_["ant1"] = IntegerVector::import(ant1.begin(),ant1.end()),
+	                                                        _["ant2"] = IntegerVector::import(ant2.begin(),ant2.end()),
+	                                                        _["zone"] = IntegerVector::import(zone.begin(),zone.end()),
+	                                                        _["types"] = CharacterVector::import(types.begin(),types.end()),
+	                                                        _["frames_row_index"] = IntegerVector::import(indexes.begin(),indexes.end())));
 }
 
 //[[Rcpp::export]]
@@ -301,9 +303,9 @@ SEXP pfmQueryComputeAntTrajectories(const ExperimentPtr & experiment,
                                     bool computeZones,
                                     bool showProgress,
                                     bool singleThreaded) {
-	IntegerVector antID,space;
-	DatetimeVector tStart(0);
-	List trajectories;
+	std::vector<int32_t> antID,space;
+	std::vector<double> tStart;
+	std::vector<DataFrame> trajectories;
 
 	Query::ComputeAntTrajectoriesArgs args;
 	args.Start = start;
@@ -321,16 +323,17 @@ SEXP pfmQueryComputeAntTrajectories(const ExperimentPtr & experiment,
 			                                     trajectories.push_back(fmAntTrajectory_Positions(*t));
 			                                     antID.push_back(t->Ant);
 			                                     space.push_back(t->Space);
-			                                     tStart.push_back(fmTime_asR(t->Start));
+			                                     tStart.push_back(t->Start.Sub(fort::Time()).Seconds());
 		                                     },
 		                                     args);
 	} catch ( const FmProgress::StopIteration & ) {}
-	tStart.attr("class") = "POSIXct";
+	auto ttStart = DatetimeVector::import(tStart.begin(),tStart.end());
+	ttStart.attr("class") = "POSIXct";
 
-	return List::create(_["trajectories_summary"] = DataFrame::create(_["antID"] = antID,
-	                                                                  _["space"] = space,
-	                                                                  _["start"] = tStart),
-	                    _["trajectories"] = trajectories);
+	return List::create(_["trajectories_summary"] = DataFrame::create(_["antID"] = IntegerVector::import(antID.begin(),antID.end()),
+	                                                                  _["space"] = IntegerVector::import(space.begin(),space.end()),
+	                                                                  _["start"] = ttStart),
+	                    _["trajectories"] = List::import(trajectories.begin(),trajectories.end()));
 }
 
 
@@ -342,9 +345,9 @@ SEXP pfmQueryComputeAntInteractionsFull(const ExperimentPtr & experiment,
                                         bool showProgress,
                                         bool singleThreaded) {
 
-	IntegerVector tAnt,iAnt1,iAnt2,tSpace,iSpace,iTrajRow1,iTrajStart1,iTrajEnd1,iTrajRow2,iTrajStart2,iTrajEnd2;
-	DatetimeVector tStart(0),iStart(0),iEnd(0);
-	CharacterVector types,zone1,zone2;
+	std::vector<int32_t> tAnt,iAnt1,iAnt2,tSpace,iSpace,iTrajRow1,iTrajStart1,iTrajEnd1,iTrajRow2,iTrajStart2,iTrajEnd2;
+	std::vector<double> tStart(0),iStart(0),iEnd(0);
+	std::vector<std::string> types,zone1,zone2;
 	std::vector<DataFrame> positions;
 
 	Query::ComputeAntInteractionsArgs args;
@@ -363,7 +366,7 @@ SEXP pfmQueryComputeAntInteractionsFull(const ExperimentPtr & experiment,
 			positions.push_back(fmAntTrajectory_Positions(*t));
 			tAnt.push_back(t->Ant);
 			tSpace.push_back(t->Space);
-			tStart.push_back(fmTime_asR(t->Start));
+			tStart.push_back(t->Start.Sub(fort::Time()).Seconds());
 			size_t tIndex = positions.size();
 			for ( const auto & iIndex : needsIndexing[t.get()].first ) {
 				iTrajRow1[iIndex] = tIndex;
@@ -382,8 +385,8 @@ SEXP pfmQueryComputeAntInteractionsFull(const ExperimentPtr & experiment,
 			needsIndexing[std::get<0>(i->Trajectories).second.Trajectory.get()].second.push_back(iIndex);
 			iAnt1.push_back(i->IDs.first);
 			iAnt2.push_back(i->IDs.second);
-			iStart.push_back(fmTime_asR(i->Start));
-			iEnd.push_back(fmTime_asR(i->End));
+			iStart.push_back(i->Start.Sub(fort::Time()).Seconds());
+			iEnd.push_back(i->End.Sub(fort::Time()).Seconds());
 			iSpace.push_back(i->Space);
 			types.push_back(fmInteractionTypes_asStr(i->Types));
 			iTrajRow1.push_back(0);
@@ -401,25 +404,28 @@ SEXP pfmQueryComputeAntInteractionsFull(const ExperimentPtr & experiment,
 		                                     args);
 	} catch ( const FmProgress::StopIteration & ) {}
 
-	tStart.attr("class") = "POSIXct";
-	iStart.attr("class") = "POSIXct";
-	iEnd.attr("class") = "POSIXct";
-	return List::create(_["trajectories_summary"]  = DataFrame::create(_["antID"] = tAnt,
-	                                                                   _["space"] = tSpace,
-	                                                                   _["start"] = tStart),
+	auto ttStart = DatetimeVector::import(tStart.begin(),tStart.end());
+	auto iiStart = DatetimeVector::import(iStart.begin(),iStart.end());
+	auto iiEnd = DatetimeVector::import(iEnd.begin(),iEnd.end());
+	ttStart.attr("class") = "POSIXct";
+	iiStart.attr("class") = "POSIXct";
+	iiEnd.attr("class") = "POSIXct";
+	return List::create(_["trajectories_summary"]  = DataFrame::create(_["antID"] = IntegerVector::import(tAnt.begin(),tAnt.end()),
+	                                                                   _["space"] = IntegerVector::import(tSpace.begin(),tSpace.end()),
+	                                                                   _["start"] = ttStart),
 	                    _["trajectories"] = positions,
-	                    _["interactions"] = DataFrame::create(_["ant1"] = iAnt1,
-	                                                          _["ant2"] = iAnt2,
-	                                                          _["start"] = iStart,
-	                                                          _["end"] = iEnd,
-	                                                          _["space"] = iSpace,
-	                                                          _["types"] = types,
-	                                                          _["ant1.trajectory.row"]  = iTrajRow1,
-	                                                          _["ant1.trajectory.start"]  = iTrajStart1,
-	                                                          _["ant1.trajectory.end"]  = iTrajEnd1,
-	                                                          _["ant2.trajectory.row"]  = iTrajRow2,
-	                                                          _["ant2.trajectory.start"]  = iTrajStart2,
-	                                                          _["ant2.trajectory.end"]  = iTrajEnd2)
+	                    _["interactions"] = DataFrame::create(_["ant1"] = IntegerVector::import(iAnt1.begin(),iAnt1.end()),
+	                                                          _["ant2"] = IntegerVector::import(iAnt2.begin(),iAnt2.end()),
+	                                                          _["start"] = iiStart,
+	                                                          _["end"] = iiEnd,
+	                                                          _["space"] = IntegerVector::import(iSpace.begin(),iSpace.end()),
+	                                                          _["types"] = CharacterVector::import(types.begin(),types.end()),
+	                                                          _["ant1.trajectory.row"]  = IntegerVector::import(iTrajRow1.begin(),iTrajRow1.end()),
+	                                                          _["ant1.trajectory.start"]  = IntegerVector::import(iTrajStart1.begin(),iTrajStart1.end()),
+	                                                          _["ant1.trajectory.end"]  = IntegerVector::import(iTrajEnd1.begin(),iTrajEnd1.end()),
+	                                                          _["ant2.trajectory.row"]  = IntegerVector::import(iTrajRow2.begin(),iTrajRow2.end()),
+	                                                          _["ant2.trajectory.start"]  = IntegerVector::import(iTrajStart2.begin(),iTrajStart2.end()),
+	                                                          _["ant2.trajectory.end"]  = IntegerVector::import(iTrajEnd2.begin(),iTrajEnd2.end()))
 	                    );
 }
 
@@ -431,10 +437,10 @@ SEXP pfmQueryComputeAntInteractionsSummarized(const ExperimentPtr & experiment,
                                               const fort::myrmidon::Matcher::Ptr & matcher,
                                               bool showProgress,
                                               bool singleThreaded) {
-	IntegerVector tAnt,iAnt1,iAnt2,tSpace,iSpace;
-	NumericVector iMx1,iMy1,iMa1,iMx2,iMy2,iMa2;
-	DatetimeVector tStart(0),iStart(0),iEnd(0);
-	CharacterVector types,zone1,zone2;
+	std::vector<int32_t> tAnt,iAnt1,iAnt2,tSpace,iSpace;
+	std::vector<double> iMx1,iMy1,iMa1,iMx2,iMy2,iMa2;
+	std::vector<double> iStart(0),iEnd(0);
+	std::vector<std::string> types,zone1,zone2;
 
 	Query::ComputeAntInteractionsArgs args;
 	args.Start = start;
@@ -448,14 +454,13 @@ SEXP pfmQueryComputeAntInteractionsSummarized(const ExperimentPtr & experiment,
 	FmProgress progress(*experiment,start,end,showProgress);
 	auto storeTrajectories =
 		[&progress] (const AntTrajectory::Ptr & t) {
-			progress.Increment(t->End());
 		};
 	auto storeInteractions =
 		[&] (const AntInteraction::Ptr & i) {
 			iAnt1.push_back(i->IDs.first);
 			iAnt2.push_back(i->IDs.second);
-			iStart.push_back(fmTime_asR(i->Start));
-			iEnd.push_back(fmTime_asR(i->End));
+			iStart.push_back(i->Start.Sub(fort::Time()).Seconds());
+			iEnd.push_back(i->End.Sub(fort::Time()).Seconds());
 			iSpace.push_back(i->Space);
 			types.push_back(fmInteractionTypes_asStr(i->Types));
 			iMx1.push_back(std::get<1>(i->Trajectories).first.Mean.x());
@@ -466,6 +471,7 @@ SEXP pfmQueryComputeAntInteractionsSummarized(const ExperimentPtr & experiment,
 			iMa2.push_back(std::get<1>(i->Trajectories).second.Mean.z());
 			zone1.push_back(fmInteraction_ZoneList(std::get<1>(i->Trajectories).first.Zones));
 			zone2.push_back(fmInteraction_ZoneList(std::get<1>(i->Trajectories).second.Zones));
+			progress.Increment(i->End);
 		};
 
 	try {
@@ -474,22 +480,25 @@ SEXP pfmQueryComputeAntInteractionsSummarized(const ExperimentPtr & experiment,
 		                                     storeInteractions,
 		                                     args);
 	} catch ( const FmProgress::StopIteration & ) {}
-	iStart.attr("class") = "POSIXct";
-	iEnd.attr("class") = "POSIXct";
-	return DataFrame::create(_["ant1"] = iAnt1,
-	                         _["ant2"] = iAnt2,
-	                         _["start"] = iStart,
-	                         _["end"] = iEnd,
-	                         _["space"] = iSpace,
-	                         _["types"] = types,
-	                         _["ant1.mean.x"]  = iMx1,
-	                         _["ant1.mean.y"]  = iMy1,
-	                         _["ant1.mean.angle"]  = iMa1,
-	                         _["ant2.mean.x"]  = iMx2,
-	                         _["ant2.mean.y"]  = iMy2,
-	                         _["ant2.mean.angle"]  = iMa2,
-	                         _["ant1.zones"] = zone1,
-	                         _["ant2.zones"] = zone2
+
+	auto iiStart = DatetimeVector::import(iStart.begin(),iStart.end());
+	auto iiEnd = DatetimeVector::import(iEnd.begin(),iEnd.end());
+	iiStart.attr("class") = "POSIXct";
+	iiEnd.attr("class") = "POSIXct";
+	return DataFrame::create(_["ant1"] = IntegerVector::import(iAnt1.begin(),iAnt1.end()),
+	                         _["ant2"] = IntegerVector::import(iAnt2.begin(),iAnt2.end()),
+	                         _["start"] = iiStart,
+	                         _["end"] = iiEnd,
+	                         _["space"] = IntegerVector::import(iSpace.begin(),iSpace.end()),
+	                         _["types"] = CharacterVector::import(types.begin(),types.end()),
+	                         _["ant1.mean.x"]  = NumericVector::import(iMx1.begin(),iMx1.end()),
+	                         _["ant1.mean.y"]  = NumericVector::import(iMy1.begin(),iMy1.end()),
+	                         _["ant1.mean.angle"]  = NumericVector::import(iMa1.begin(),iMa1.end()),
+	                         _["ant2.mean.x"]  = NumericVector::import(iMx2.begin(),iMx2.end()),
+	                         _["ant2.mean.y"]  = NumericVector::import(iMy2.begin(),iMy2.end()),
+	                         _["ant2.mean.angle"]  = NumericVector::import(iMa2.begin(),iMa2.end()),
+	                         _["ant1.zones"] = CharacterVector::import(zone1.begin(),zone1.end()),
+	                         _["ant2.zones"] = CharacterVector::import(zone2.begin(),zone2.end())
 	                         );
 }
 
