@@ -17,7 +17,7 @@ Sets \strong{key} to \strong{value} starting at \strong{time}. Errors
 could occurs if:
 \itemize{
 \item \strong{key} is not defined in \code{\link{fmExperiment}}.
-\item \strong{time} is  \code{\link{fmTimeForever}}.
+\item \strong{time} is  \code{\link{fmTimeForever}()}.
 \item \strong{value} is not the right type for \strong{key}
 }
 }

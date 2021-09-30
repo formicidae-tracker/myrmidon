@@ -11,17 +11,17 @@ with coordinate from another fmSpace.
 fmSpace are uniquely identified with their ID.
 
 fmSpace can only be created from an
-\link{\code{fmExperiment}} with
-\link{\code{fmExperiment$createSpace}}
+\code{\link{fmExperiment}} with
+\code{\link{fmExperiment$createSpace}()}
 
 Within a single fmSpace, it could be relevant to
-define \link{\code{fmZone}} where interaction between
-\link{\code{fmAnt}} could be measured. I.e. Ants in different
+define \code{\link{fmZone}} where interaction between
+\code{\link{fmAnt}} could be measured. I.e. Ants in different
 fmZones won't report interactions.
 
-\link{\code{Zone}} are manipulated with
-\link{\code{fmSpace$createZone}} and
-\link{\code{fmSpace$deleteZone}}.
+\code{\link{fmZone}} are manipulated with
+\code{\link{fmSpace$createZone}()} and
+\code{\link{fmSpace$deleteZone}()}.
 }
 \section{Fields}{
 

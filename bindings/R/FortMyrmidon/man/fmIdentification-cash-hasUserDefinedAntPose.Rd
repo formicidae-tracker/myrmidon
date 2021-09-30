@@ -5,16 +5,16 @@
 \title{Indicates if the user overided the computed Ant Pose}
 \value{
 \code{TRUE} when an ant pose was defined with
-\code{\link{fmIdentification$setUserDefinedAntPose}}
+\code{\link{fmIdentification$setUserDefinedAntPose}()}
 }
 \description{
 Indicates if the user overided the computed Ant Pose
 }
 \seealso{
 Other fmIdentification methods: 
-\code{\link{fmIdendification}},
 \code{\link{fmIdentification$clearUserDefinedAntPose}},
 \code{\link{fmIdentification$hasDefaultTagSize}},
-\code{\link{fmIdentification$setUserDefinedAntPose}}
+\code{\link{fmIdentification$setUserDefinedAntPose}},
+\code{\link{fmIdentification}}
 }
 \concept{fmIdentification methods}

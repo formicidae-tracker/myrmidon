@@ -7,7 +7,7 @@
 \item{index}{the index of the definition to remove}
 }
 \description{
-Removes a \link{\code{fmZoneDefinition}} to the
+Removes a \code{\link{fmZoneDefinition}} to the
 fmZone.
 }
 \seealso{

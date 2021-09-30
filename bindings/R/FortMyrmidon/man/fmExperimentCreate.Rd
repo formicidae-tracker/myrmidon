@@ -10,7 +10,7 @@ fmExperimentCreate(filepath)
 \item{filepath}{to use for the experiment.}
 }
 \value{
-a \link{\code{fmExperiment}} with the associated filepath
+a \code{\link{fmExperiment}} with the associated filepath
 }
 \description{
 No file will be created a filepath, but it is
@@ -19,6 +19,28 @@ Data Directory that will be added to the experiment.
 }
 \seealso{
 Other fmExperiment methods: 
-\code{\link{fmExperimentOpen}()}
+\code{\link{fmExperiment$addIdentification}},
+\code{\link{fmExperiment$addTrackingDataDirectory}},
+\code{\link{fmExperiment$createAntShapeType}},
+\code{\link{fmExperiment$createAnt}},
+\code{\link{fmExperiment$createMeasurementType}},
+\code{\link{fmExperiment$createSpace}},
+\code{\link{fmExperiment$deleteAntShapeType}},
+\code{\link{fmExperiment$deleteAnt}},
+\code{\link{fmExperiment$deleteIdentification}},
+\code{\link{fmExperiment$deleteMeasurementType}},
+\code{\link{fmExperiment$deleteMetaDataKey}},
+\code{\link{fmExperiment$deleteSpace}},
+\code{\link{fmExperiment$freeIdentificationRangeAt}},
+\code{\link{fmExperiment$identificationsAt}},
+\code{\link{fmExperiment$removeTrackingDataDirectory}},
+\code{\link{fmExperiment$renameMetaDataKey}},
+\code{\link{fmExperiment$save}},
+\code{\link{fmExperiment$setAntShapeTypeName}},
+\code{\link{fmExperiment$setMeasurementTypeName}},
+\code{\link{fmExperiment$setMetaDataKey}},
+\code{\link{fmExperiment.HEAD_TAIL_MEASUREMENT_TYPE_ID}},
+\code{\link{fmExperimentOpen}()},
+\code{\link{fmExperiment}}
 }
 \concept{fmExperiment methods}

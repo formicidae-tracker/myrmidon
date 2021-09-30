@@ -4,7 +4,7 @@
 \alias{fmDefaultPaletteColor}
 \title{Returns myrmidon' default color for index, wrapping arround}
 \usage{
-fmDefaultPaletteColor(i)
+fmDefaultPaletteColor(index)
 }
 \arguments{
 \item{index}{the wanted index}

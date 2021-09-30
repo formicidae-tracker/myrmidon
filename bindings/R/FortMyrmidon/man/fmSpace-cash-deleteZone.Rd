@@ -4,10 +4,10 @@
 \alias{fmSpace$deleteZone}
 \title{Removes a fmZone for this fmSpace}
 \arguments{
-\item{zoneID}{the ID of the \link{\code{fmZone}} to remove}
+\item{zoneID}{the ID of the \code{\link{fmZone}} to remove}
 }
 \description{
-Removes a \link{\code{fmZone}} from this fmSpace.
+Removes a \code{\link{fmZone}} from this fmSpace.
 }
 \seealso{
 Other fmSpace methods: 

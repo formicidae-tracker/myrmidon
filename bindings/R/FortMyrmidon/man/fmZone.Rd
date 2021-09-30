@@ -5,30 +5,30 @@
 \title{A geometric zone of a space}
 \description{
 A fmZone represents a geometric zone of a
-\link{\code{fmSpace}} for tracking localization and
+\code{\link{fmSpace}} for tracking localization and
 interactions. It means that two Ant, which are lying in two
 separate Zone will never report a collision or Interaction.
 
 fmZone can only be created from a
-\link{\code{fmSpace}} with \link{\code{fmSpace$createZone}}.
+\code{\link{fmSpace}} with \code{\link{fmSpace$createZone}()}.
 }
 \details{
 Zones are uniquely idenrified trough their ID in an
-\link{\code{fmExperiment}}, but they are managed and are
-related to a single \link{\code{fmSpace}}. They also have a
+\code{\link{fmExperiment}}, but they are managed and are
+related to a single \code{\link{fmSpace}}. They also have a
 user defined name, but it is never used internally.
 
-By default an \link{\code{Ant}} lies in no fmZone, which
+By default an \code{\link{fmAnt}} lies in no fmZone, which
 is identified by the ZoneID 0.
 
-Zone have time valid \link{\code{ZoneDefinition}} which
+Zone have time valid \code{\link{fmZoneDefinition}} which
 represents their geometry. In most cases a Zone will have a
 single ZoneDefinition valid for
-]\link{\code{fmTimeSinceEver}};\link{\code{fmTimeForever}}[. However
+]\code{\link{fmTimeSinceEver}()};\code{\link{fmTimeForever}()}[. However
 it is possible to add as many different definition to a Zone,
 as long as they do not overlap in Time. The defintions are
-manipulated with \link{\code{fmZone$addDefinition}} and
-\link{\code{fmZone$deleteDefinition}}.
+manipulated with \code{\link{fmZone$addDefinition}()} and
+\code{\link{fmZone$deleteDefinition}()}.
 }
 \section{Fields}{
 

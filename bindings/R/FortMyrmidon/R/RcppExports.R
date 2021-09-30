@@ -36,8 +36,8 @@ fmDefaultPalette <- function() {
 #' @param index the wanted index
 #' @return a list of RGB 8-bit triplets
 #' @family fmColor methods
-fmDefaultPaletteColor <- function(i) {
-    .Call(`_FortMyrmidon_fmDefaultPaletteColor`, i)
+fmDefaultPaletteColor <- function(index) {
+    .Call(`_FortMyrmidon_fmDefaultPaletteColor`, index)
 }
 
 #' Creates a fmVector2dList from a list of numerical vector or a data.frame
@@ -57,7 +57,7 @@ pfmIWantAVector2dList <- function(l) {
 #'   required to determine relative path to the eventual Tracking
 #'   Data Directory that will be added to the experiment.
 #' @param filepath to use for the experiment.
-#' @return a \link{\code{fmExperiment}} with the associated filepath
+#' @return a \code{\link{fmExperiment}} with the associated filepath
 #' @family fmExperiment methods
 fmExperimentCreate <- function(filepath) {
     .Call(`_FortMyrmidon_fmExperimentCreate`, filepath)
@@ -65,10 +65,24 @@ fmExperimentCreate <- function(filepath) {
 
 #' Opens an Experiment
 #' @param filepath the path to the '.myrmidon' file
-#' @return a \link{\code{fmExperiment}}
+#' @return a \code{\link{fmExperiment}}
 #' @family fmExperiment methods
 fmExperimentOpen <- function(filepath) {
     .Call(`_FortMyrmidon_fmExperimentOpen`, filepath)
+}
+
+#' Formats an AntID
+#' @param antID the AntID to format
+#' @return a character with the formatted ID
+fmFormatAntID <- function(antID) {
+    .Call(`_FortMyrmidon_fmFormatAntID`, antID)
+}
+
+#' Formats a TagID
+#' @param tagID the TagID to format
+#' @return a character with the formatted ID
+fmFormatTagID <- function(tagID) {
+    .Call(`_FortMyrmidon_fmFormatTagID`, tagID)
 }
 
 #' Creates a fmShapeList

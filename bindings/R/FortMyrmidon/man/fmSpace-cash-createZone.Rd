@@ -4,13 +4,13 @@
 \alias{fmSpace$createZone}
 \title{Creates a fmZone for this fmSpace}
 \arguments{
-\item{name}{the wanted name for the \link{\code{fmZone}}}
+\item{name}{the wanted name for the \code{\link{fmZone}}}
 }
 \value{
-the new \link{\code{fmZone}}
+the new \code{\link{fmZone}}
 }
 \description{
-Creates a new \link{\code{fmZone}} for this fmSpace.
+Creates a new \code{\link{fmZone}} for this fmSpace.
 }
 \seealso{
 Other fmSpace methods: 

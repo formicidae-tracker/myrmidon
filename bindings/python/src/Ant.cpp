@@ -55,21 +55,21 @@ using :meth:`SetValue` and :meth:`DeleteValue` and accesible through
 
 	ant.def_property_readonly("Identifications",
 		                       &Ant::Identifications,
-	                          ":obj:`list` of :obj:`Identification`: all Identification that target this Ant, ordered by validity time.")
+	                          "List[Identification]: all Identification that target this Ant, ordered by validity time.")
 		.def_property_readonly("ID",
 		                       &Ant::ID,
 		                       "int: the AntID for this Ant")
 		.def_property("DisplayColor",
 		              &Ant::DisplayColor,
 		              &Ant::SetDisplayColor,
-		              ":obj:`tuple` of 3 integer: the color used to display the Ant in **fort-studio**")
+		              "Tuple[int,int,int]: the color used to display the Ant in **fort-studio**")
 		.def_property("DisplayStatus",
 		              &Ant::DisplayStatus,
 		              &Ant::SetDisplayStatus,
 		              "Ant.DisplayState: the DisplayState in **fort-studio** for this Ant")
 		.def_property_readonly("Capsules",
 		                       &Ant::Capsules,
-		                       ":obj:`list` of :obj:`tuple` (int,Capsule)): a list of capsules and their type")
+		                       "List[Tuple[int,Capsule]]: a list of capsules and their type")
 		.def("IdentifiedAt",
 	        &Ant::IdentifiedAt,
 	        py::arg("time"),

@@ -57,7 +57,7 @@ RCPP_MODULE(utestdata) {
 	using namespace Rcpp;
 	using namespace fort::myrmidon;
 
-	class_<fort::myrmidon::UTestData>("fmUTestData")
+	class_<fort::myrmidon::UTestData>("pfmUTestData")
 		.property("Basedir",&UTestData::Basedir,"")
 		.property("NestDataDirs",&UTestData::NestDataDirs,"")
 		.property("ForagingDataDirs",&UTestData::ForagingDataDirs,"")
@@ -68,5 +68,5 @@ RCPP_MODULE(utestdata) {
 		.property("V0_1_File",&UTestData::V0_1_File,"")
 		;
 
-	function("fmUTestDataCreate",&fmUTestDataCreate);
+	function("pfmUTestDataCreate",&fmUTestDataCreate);
 }

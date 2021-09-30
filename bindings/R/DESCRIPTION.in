@@ -14,7 +14,7 @@ Description: This package are R Bindings to the FORT myrmidon C++ API,
  collision with other individual, construct their trajectories and
  finally estimate their timed intercation with other individuals.
 License: LGPL-3
-Imports: Rcpp, methods
+Imports: Rcpp, methods, waldo, rlang, withr
 LinkingTo: Rcpp
 Encoding: UTF-8
 Suggests:

@@ -11,9 +11,9 @@ Indicates if the Experiment's default tag size should be used
 }
 \seealso{
 Other fmIdentification methods: 
-\code{\link{fmIdendification}},
 \code{\link{fmIdentification$clearUserDefinedAntPose}},
 \code{\link{fmIdentification$hasUserDefinedAntPose}},
-\code{\link{fmIdentification$setUserDefinedAntPose}}
+\code{\link{fmIdentification$setUserDefinedAntPose}},
+\code{\link{fmIdentification}}
 }
 \concept{fmIdentification methods}

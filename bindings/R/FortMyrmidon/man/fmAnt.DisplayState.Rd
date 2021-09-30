@@ -3,7 +3,8 @@
 \docType{data}
 \name{fmAnt.DisplayState}
 \alias{fmAnt.DisplayState}
-\title{Describes the posible values for \code{\link{fmAnt$displayStatus}}}
+\title{Describes the posible values for \code{$displayStatus} field of
+\code{\link{fmAnt}}}
 \format{
 An object of class \code{list} of length 3.
 }
@@ -11,7 +12,8 @@ An object of class \code{list} of length 3.
 fmAnt.DisplayState
 }
 \description{
-Describes the posible values for \code{\link{fmAnt$displayStatus}}
+Describes the posible values for \code{$displayStatus} field of
+\code{\link{fmAnt}}
 }
 \seealso{
 Other fmAnt methods: 

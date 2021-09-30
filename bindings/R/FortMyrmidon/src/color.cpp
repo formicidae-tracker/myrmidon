@@ -51,6 +51,6 @@ SEXP fmDefaultPalette() {
 //' @return a list of RGB 8-bit triplets
 //' @family fmColor methods
 //[[Rcpp::export]]
-fort::myrmidon::Color fmDefaultPaletteColor(int i ) {
-	return fort::myrmidon::DefaultPaletteColor(i-1);
+fort::myrmidon::Color fmDefaultPaletteColor(int index) {
+	return fort::myrmidon::DefaultPaletteColor(index-1);
 }

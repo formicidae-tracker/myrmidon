@@ -9,9 +9,9 @@ automatically computed one from \strong{fort-studio}
 }
 \seealso{
 Other fmIdentification methods: 
-\code{\link{fmIdendification}},
 \code{\link{fmIdentification$hasDefaultTagSize}},
 \code{\link{fmIdentification$hasUserDefinedAntPose}},
-\code{\link{fmIdentification$setUserDefinedAntPose}}
+\code{\link{fmIdentification$setUserDefinedAntPose}},
+\code{\link{fmIdentification}}
 }
 \concept{fmIdentification methods}

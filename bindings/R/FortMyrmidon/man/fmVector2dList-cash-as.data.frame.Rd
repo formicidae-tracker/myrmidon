@@ -10,7 +10,7 @@ a copy of the list data organized in a data.frame
 Returns a copy of the list as a data.frame
 
 Returns a copy of the list as a data.frame. Also works with
-the \code{as.data.frame} function
+the \code{as.data.frame()} function
 }
 \examples{
     l <-fmVector2dListCreate(data.frame("x" = c(1,2,3), "y"= c(1,2,3)))

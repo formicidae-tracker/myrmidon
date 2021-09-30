@@ -15,7 +15,7 @@ NULL
 #' @name fmVector2dList$size
 #' @title returns the size of the Vector2dList
 #' @description returns the size of the Vector2dList. Works also with
-#'     the \code{length} function
+#'     the \code{length()} function
 #' @examples
 #'     l <-fmVector2dListCreate(data.frame("x" = c(1,2,3), "y"= c(1,2,3)))
 #'     l$size()
@@ -47,7 +47,7 @@ NULL
 #' @name fmVector2dList$as.data.frame
 #' @title Returns a copy of the list as a data.frame
 #' @title Returns a copy of the list as a data.frame. Also works with
-#'     the \code{as.data.frame} function
+#'     the \code{as.data.frame()} function
 #' @examples
 #'     l <-fmVector2dListCreate(data.frame("x" = c(1,2,3), "y"= c(1,2,3)))
 #'     \dontrun{as.data.frame(l)}
@@ -59,7 +59,7 @@ NULL
 #' @name fmVector2dList$as.list
 #' @title Returns a copy of the list as a plain R list
 #' @title Returns a copy of the list as a plain R list. Also works with
-#'     the \code{as.list} function
+#'     the \code{as.list()} function
 #' @examples
 #'     l <-fmVector2dListCreate(data.frame("x" = c(1,2,3), "y"= c(1,2,3)))
 #'     \dontrun{as.list(l)}

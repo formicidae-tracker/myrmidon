@@ -91,7 +91,7 @@ Example:
 		.def_property("Vertices",
 		              &Polygon::Vertices,
 		              &Polygon::SetVertices,
-		              ":obj:`list` of :obj:`numpy.ndarray`: a list of the polygon vertices (float64 , size [2,1])")
+		              "List[numpy.ndarray]: a list of the polygon vertices (float64 , size [2,1])")
 		;
 
 

@@ -7,7 +7,7 @@
 a fmTime represents a Time issued by the tracking
 system. These times are more precise than the natural ctPOSIX
 object used by R. They can also describe the infinite time
-\code{\link{fmTimeSinceEver}} and \code{\link{fmTimeForever}}
+\code{\link{fmTimeSinceEver}()} and \code{\link{fmTimeForever}()}
 }
 \seealso{
 Other fmTime methods: 

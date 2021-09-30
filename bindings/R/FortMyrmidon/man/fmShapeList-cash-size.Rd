@@ -7,7 +7,7 @@
 the size of the \code{\link{fmShapeList}}
 }
 \description{
-the \code{length} function can also be used.
+the \code{length()} function can also be used.
 }
 \examples{
 l <- fmShapeListCreate()

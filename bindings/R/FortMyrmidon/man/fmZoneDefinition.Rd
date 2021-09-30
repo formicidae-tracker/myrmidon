@@ -7,17 +7,17 @@
 Defines the geometry of a Zone for a given Time range.
 
 fmZoneDefinition can only be created from a
-\link{\code{fmZone}} with \link{\code{fmZone$addDefinition}}
+\code{\link{fmZone}} with \code{\link{fmZone$addDefinition}()}
 }
 \section{Fields}{
 
 \describe{
-\item{\code{shapes}}{a \link{\code{fmShapeList}} defining the zone
+\item{\code{shapes}}{a \code{\link{fmShapeList}} defining the zone
 geometry}
 
-\item{\code{start}}{the first valid \link{\code{fmTime}} for the zone}
+\item{\code{start}}{the first valid \code{\link{fmTime}} for the zone}
 
-\item{\code{end}}{the last valid \link{\code{fmTime}} for the zone}
+\item{\code{end}}{the last valid \code{\link{fmTime}} for the zone}
 }}
 
 \seealso{

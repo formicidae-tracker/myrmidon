@@ -93,11 +93,11 @@ public:
 	typedef std::shared_ptr<Identification>       Ptr;
 
 	/**
-	 *  Gets the ::TagID of this Identification
+	 *  Gets the TagID of this Identification
 	 *
 	 * The associated TagID of an Identification is immuable.
 	 *
-	 * @return the ::TagID used by this Identification
+	 * @return the TagID used by this Identification
 	 */
 	TagID TagValue() const;
 
@@ -111,7 +111,7 @@ public:
 	AntID TargetAntID() const;
 
 	/*
-	 *  Sets the starting validity Time for this Identification
+	 * Sets the starting validity Time for this Identification
 	 *
 	 * @param start the starting Time. It can be Time::SinceEver().
 	 *
@@ -125,7 +125,7 @@ public:
 	void SetStart(const Time & start);
 
 	/**
-	 *  Sets the ending validity time for this Identification
+	 * Sets the ending validity time for this Identification
 	 *
 	 * @param end the ending Time. It can be Time::Forever().
 	 *
@@ -187,7 +187,7 @@ public:
 
 
 	/**
-	 *  Indicates if Identification has a user defined pose.
+	 * Indicates if Identification has a user defined pose.
 	 *
 	 *
 	 * @return `true` if the Identification has a user defined pose
@@ -196,7 +196,7 @@ public:
 	bool HasUserDefinedAntPose() const;
 
 	/**
-	 *  Sets a user defined Ant pose.
+	 * Sets a user defined Ant pose.
 	 *
 	 * @param antPosition the offset, from the tag center to the Ant
 	 *                    center, expressed in the tag reference frame.
@@ -216,10 +216,10 @@ public:
 	void ClearUserDefinedAntPose();
 
 	/**
-	 * Value use to mark the Identification to use the Experiment::DefaultTagSize()
-	 *
+	 * Value use to mark the Identification to use the
+	 * Experiment::DefaultTagSize()
 	 */
-	const static double DEFAULT_TAG_SIZE;
+	static const double DEFAULT_TAG_SIZE;
 
 	/**
 	 * Sets the tag size for this Identification
@@ -243,7 +243,8 @@ public:
 	/**
 	 * Checks if Experiment::DefaultTagSize() is used.
 	 *
-	 * @return `true` if this Identification uses Experiment::DefaultTagSize()
+	 * @return `true` if this Identification uses
+	 *         Experiment::DefaultTagSize()
 	 */
 	bool HasDefaultTagSize() const;
 

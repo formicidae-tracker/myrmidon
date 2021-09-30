@@ -83,13 +83,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // fmDefaultPaletteColor
-fort::myrmidon::Color fmDefaultPaletteColor(int i);
-RcppExport SEXP _FortMyrmidon_fmDefaultPaletteColor(SEXP iSEXP) {
+fort::myrmidon::Color fmDefaultPaletteColor(int index);
+RcppExport SEXP _FortMyrmidon_fmDefaultPaletteColor(SEXP indexSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type i(iSEXP);
-    rcpp_result_gen = Rcpp::wrap(fmDefaultPaletteColor(i));
+    Rcpp::traits::input_parameter< int >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmDefaultPaletteColor(index));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -133,6 +133,28 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::string& >::type filepath(filepathSEXP);
     rcpp_result_gen = Rcpp::wrap(fmExperimentOpen(filepath));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fmFormatAntID
+std::string fmFormatAntID(fort::myrmidon::AntID antID);
+RcppExport SEXP _FortMyrmidon_fmFormatAntID(SEXP antIDSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< fort::myrmidon::AntID >::type antID(antIDSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmFormatAntID(antID));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fmFormatTagID
+std::string fmFormatTagID(fort::myrmidon::TagID tagID);
+RcppExport SEXP _FortMyrmidon_fmFormatTagID(SEXP tagIDSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< fort::myrmidon::TagID >::type tagID(tagIDSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmFormatTagID(tagID));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -310,6 +332,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FortMyrmidon_pfmIWantAVector2dList", (DL_FUNC) &_FortMyrmidon_pfmIWantAVector2dList, 1},
     {"_FortMyrmidon_fmExperimentCreate", (DL_FUNC) &_FortMyrmidon_fmExperimentCreate, 1},
     {"_FortMyrmidon_fmExperimentOpen", (DL_FUNC) &_FortMyrmidon_fmExperimentOpen, 1},
+    {"_FortMyrmidon_fmFormatAntID", (DL_FUNC) &_FortMyrmidon_fmFormatAntID, 1},
+    {"_FortMyrmidon_fmFormatTagID", (DL_FUNC) &_FortMyrmidon_fmFormatTagID, 1},
     {"_FortMyrmidon_fmShapeListCreate", (DL_FUNC) &_FortMyrmidon_fmShapeListCreate, 1},
     {"_FortMyrmidon_pfmIWantAShapeList", (DL_FUNC) &_FortMyrmidon_pfmIWantAShapeList, 1},
     {"_FortMyrmidon_fmTimeCreate", (DL_FUNC) &_FortMyrmidon_fmTimeCreate, 1},

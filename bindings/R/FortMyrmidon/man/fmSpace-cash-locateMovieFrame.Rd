@@ -13,7 +13,7 @@ time.
 }
 \description{
 Locates a movie file and frame number from a
-\link{\code{fmTime}}.
+\code{\link{fmTime}}.
 }
 \seealso{
 Other fmSpace methods: 

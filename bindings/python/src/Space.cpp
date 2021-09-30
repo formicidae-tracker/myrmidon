@@ -58,7 +58,7 @@ Within a single Space , it could be relevant to define
 		.def_property_readonly("Zones",
 		                       &Space::Zones,
 		                       py::return_value_policy::reference_internal,
-		                       ":obj:`dict` of :obj:`py_fort_myrmidon.Zone` indexed by :obj:`int`: the Space's Zone by their ZoneID")
+		                       "Dict[int,Zone]: the Space's Zone by their ZoneID")
 		.def("LocateMovieFrame",
 		     &Space::LocateMovieFrame,
 		     py::arg("time"),

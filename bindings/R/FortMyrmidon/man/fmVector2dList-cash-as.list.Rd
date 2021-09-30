@@ -10,7 +10,7 @@ a copy of the list data organized in a list
 Returns a copy of the list as a plain R list
 
 Returns a copy of the list as a plain R list. Also works with
-the \code{as.list} function
+the \code{as.list()} function
 }
 \examples{
     l <-fmVector2dListCreate(data.frame("x" = c(1,2,3), "y"= c(1,2,3)))

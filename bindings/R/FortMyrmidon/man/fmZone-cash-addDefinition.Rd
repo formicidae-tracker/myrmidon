@@ -6,15 +6,15 @@
 \arguments{
 \item{shapes}{the geometry}
 
-\item{start}{the first valid \link{\code{fmTime}} for this definition.}
+\item{start}{the first valid \code{\link{fmTime}} for this definition.}
 
-\item{end}{the first invalid \link{\code{fmTime}} for this definition.}
+\item{end}{the first invalid \code{\link{fmTime}} for this definition.}
 }
 \value{
-a \link{\code{fmZoneDefinition}}
+a \code{\link{fmZoneDefinition}}
 }
 \description{
-Adds a new \link{\code{fmZoneDefinition}} to the
+Adds a new \code{\link{fmZoneDefinition}} to the
 fmZone.
 }
 \seealso{

@@ -15,13 +15,13 @@ Sets an user defined ant position relatively to the
 tag, overiding the one computed from manual measurements.
 
 To revert to the automatically computed ones, use
-\code{\link{fmIdentification$clearUserDefinedAntPose}}
+\code{\link{fmIdentification$clearUserDefinedAntPose}()}
 }
 \seealso{
 Other fmIdentification methods: 
-\code{\link{fmIdendification}},
 \code{\link{fmIdentification$clearUserDefinedAntPose}},
 \code{\link{fmIdentification$hasDefaultTagSize}},
-\code{\link{fmIdentification$hasUserDefinedAntPose}}
+\code{\link{fmIdentification$hasUserDefinedAntPose}},
+\code{\link{fmIdentification}}
 }
 \concept{fmIdentification methods}

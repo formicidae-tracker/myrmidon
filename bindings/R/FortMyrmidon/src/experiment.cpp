@@ -193,7 +193,7 @@ RCPP_MODULE(experiment) {
 //'   required to determine relative path to the eventual Tracking
 //'   Data Directory that will be added to the experiment.
 //' @param filepath to use for the experiment.
-//' @return a \link{\code{fmExperiment}} with the associated filepath
+//' @return a \code{\link{fmExperiment}} with the associated filepath
 //' @family fmExperiment methods
 //[[Rcpp::export]]
 ExperimentPtr fmExperimentCreate(const std::string & filepath) {
@@ -203,7 +203,7 @@ ExperimentPtr fmExperimentCreate(const std::string & filepath) {
 
 //' Opens an Experiment
 //' @param filepath the path to the '.myrmidon' file
-//' @return a \link{\code{fmExperiment}}
+//' @return a \code{\link{fmExperiment}}
 //' @family fmExperiment methods
 //[[Rcpp::export]]
 ExperimentPtr fmExperimentOpen(const std::string & filepath) {
@@ -222,4 +222,21 @@ template <> SEXP wrap(const fort::myrmidon::AntByID & ants) {
 }
 
 
+}
+
+
+//' Formats an AntID
+//' @param antID the AntID to format
+//' @return a character with the formatted ID
+//[[Rcpp::export]]
+std::string fmFormatAntID(fort::myrmidon::AntID antID) {
+	return fort::myrmidon::FormatAntID(antID);
+}
+
+//' Formats a TagID
+//' @param tagID the TagID to format
+//' @return a character with the formatted ID
+//[[Rcpp::export]]
+std::string fmFormatTagID(fort::myrmidon::TagID tagID) {
+	return fort::myrmidon::FormatTagID(tagID);
 }

@@ -14,7 +14,7 @@ void BindZoneDefinition(py::module_ & m) {
 		.def_property("Shapes",
 		     &ZoneDefinition::Shapes,
 		     &ZoneDefinition::SetShapes,
-		     ":obj:`list` of :obj:`Shape`: the list of Shape that defines the geometry")
+		     "List[Shape]: the list of Shape that defines the geometry")
 		.def_property("Start",
 		              &ZoneDefinition::Start,
 		              &ZoneDefinition::SetStart,
@@ -64,7 +64,7 @@ not overlap in Time. The definitions are manipulated with
 		.def_property_readonly("Definitions",
 		                       &Zone::Definitions,
 		                       py::return_value_policy::reference_internal,
-		                       ":obj:`list` of :obj:`ZoneDefinition`: the definitions for this Zone")
+		                       "List[ZoneDefinition]: the definitions for this Zone")
 		.def("AddDefinition",&Zone::AddDefinition,
 		     py::arg("shapes") = py::list(),
 		     py::arg("start") = fort::Time::SinceEver(),
@@ -73,7 +73,7 @@ not overlap in Time. The definitions are manipulated with
     Adds a new ZoneDefinition to this Zone
 
     Args:
-        shapes (:obj:`list` of :obj:`Shape`): the
+        shapes (List[Shape]): the
             geometry of the ZoneDefinition
         start (Time): the first valid Time for the
             ZoneDefinition
@@ -81,7 +81,7 @@ not overlap in Time. The definitions are manipulated with
             ZoneDefinition
 
     Returns:
-        ZoneDefinition: the new :obj:`ZoneDefinition` for this Zone
+        ZoneDefinition: the new :class:`ZoneDefinition` for this Zone
 
     Raises:
         ValueError: if start or end would make an overlapping

@@ -84,7 +84,7 @@ NULL
 
 #' @name fmShapeList$size
 #' @title The size of the fmShapeList
-#' @description the \code{length} function can also be used.
+#' @description the \code{length()} function can also be used.
 #' @examples
 #' l <- fmShapeListCreate()
 #' l$size()

@@ -8,7 +8,7 @@ the number of points in the list
 }
 \description{
 returns the size of the Vector2dList. Works also with
-the \code{length} function
+the \code{length()} function
 }
 \examples{
     l <-fmVector2dListCreate(data.frame("x" = c(1,2,3), "y"= c(1,2,3)))

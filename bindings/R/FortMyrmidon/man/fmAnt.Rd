@@ -12,30 +12,30 @@ metadata.
 
 Ant can only be created from an
 \code{\link{fmExperiment}} with
-\code{\link{fmExperiment$createAnt}}.
+\code{\link{fmExperiment$createAnt}()}.
 
 Ant are uniquely identified by their $ID. By
 convention we use decimal notation with up to two \code{0} prefix
 to display these AntID, as returned by
-\code{\link{fmFormatAntID}}.
+\code{\link{fmFormatAntID}()}.
 
 Instead of working directly with tag ID
 \strong{fort-myrmidon} uses \code{\link{fmIdentification}} to relate
 a tag value to an Ant. An Ants could have different
 identifications, allowing us to use different tag ID to refer
 to the same individuals. One would use
-\code{\link{fmAnt$identifiedAt}} to obtain the tag ID that
+\code{\link{fmAnt$identifiedAt}()} to obtain the tag ID that
 identifies an Ant at a given \code{\link{fmTime}}.
 
 Each Ant has an associated virtual shape that is used
 to compute instantaneous collision detection (
-\code{\link{fmQueryCollideFrame}} ), or timed ant interactions
-( \code{\link{fmQueryComputeAntInteraction}} ). These shapes
+\code{\link{fmQueryCollideFrame}()} ), or timed ant interactions
+( \code{\link{fmQueryComputeAntInteraction}()} ). These shapes
 can be defined manually in \strong{fort-studio} or programmatically
 accessed with $capsules and modified with
-\code{\link{fmAnt$addCaspule}},
-\code{\link{fmAnt$deleteCapsule}} and
-\code{\link{fmAnt$clearCapsules}}.
+\code{\link{fmAnt$addCapsule}()},
+\code{\link{fmAnt$deleteCapsule}()} and
+\code{\link{fmAnt$clearCapsules}()}.
 
 Basic visualization of Experiment data can be done
 through \strong{fort-studio}. Ants are displayed according to their
@@ -43,9 +43,9 @@ $displayStatus and $displayColor. $displayStatus should be one
 of the values described in \code{\link{fmAnt.DisplayState}}
 
 Ant can stores timed user defined metadata. These are
-modifiable using \code{\link{fmAnt$setValue}} and
-\code{\link{fmAnt$deleteValue}} and accesible through
-\code{\link{fmAnt$getValue}}.
+modifiable using \code{\link{fmAnt$setValue}()} and
+\code{\link{fmAnt$deleteValue}()} and accesible through
+\code{\link{fmAnt$getValue}()}.
 }
 \section{Fields}{
 
