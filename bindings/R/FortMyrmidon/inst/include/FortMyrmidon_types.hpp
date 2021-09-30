@@ -3,6 +3,7 @@
 #include <fort/myrmidon/Zone.hpp>
 #include <fort/myrmidon/Space.hpp>
 #include <fort/myrmidon/Experiment.hpp>
+#include <fort/myrmidon/Matchers.hpp>
 #include <RcppCommon.h>
 
 RCPP_EXPOSED_CLASS_NODECL(fort::Duration);
@@ -32,6 +33,7 @@ template <> SEXP wrap(const fort::myrmidon::AntStaticValue & );
 
 template <> SEXP wrap(const fort::myrmidon::TypedCapsuleList & );
 
+template <> std::vector<fort::myrmidon::Matcher::Ptr> as(SEXP exp);
 }
 
 RCPP_EXPOSED_ENUM_NODECL(fort::myrmidon::Shape::Type)
@@ -51,3 +53,5 @@ RCPP_EXPOSED_CLASS_NODECL(fort::myrmidon::Ant::Ptr);
 
 typedef std::shared_ptr<fort::myrmidon::Experiment> ExperimentPtr;
 RCPP_EXPOSED_CLASS_NODECL(ExperimentPtr);
+
+RCPP_EXPOSED_CLASS_NODECL(fort::myrmidon::Matcher::Ptr);

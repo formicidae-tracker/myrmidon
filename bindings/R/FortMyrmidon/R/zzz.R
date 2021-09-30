@@ -33,6 +33,7 @@ Rcpp::loadModule("ant",TRUE)
 
 Rcpp::loadModule("experiment",TRUE)
 
+Rcpp::loadModule("matchers",TRUE)
 
 Rcpp::loadModule("utestdata",TRUE)
 

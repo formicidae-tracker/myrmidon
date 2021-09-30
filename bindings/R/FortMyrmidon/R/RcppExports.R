@@ -85,6 +85,121 @@ fmFormatTagID <- function(tagID) {
     .Call(`_FortMyrmidon_fmFormatTagID`, tagID)
 }
 
+#' A fmMatcher that matches anything
+#' @return a \code{\link{fmMatcher}} that matches everything.
+#' @family fmMatcher methods
+fmMatcherAny <- function() {
+    .Call(`_FortMyrmidon_fmMatcherAny`)
+}
+
+#' Combines fmMatcher in conjunction
+#' @param matchers the \code{\link{fmMatcher}} to combine
+#' @return a \code{\link{fmMatcher}} that matches when all
+#'   **matchers** matches.
+#' @family fmMatcher methods
+fmMatcherAnd <- function(matchers) {
+    .Call(`_FortMyrmidon_fmMatcherAnd`, matchers)
+}
+
+#' Combines fmMatcher in disjunction
+#' @param matchers the \code{\link{fmMatcher}} to combine
+#' @return a \code{\link{fmMatcher}} that matches when any of the
+#'   **matchers** matches.
+#' @family fmMatcher methods
+fmMatcherOr <- function(matchers) {
+    .Call(`_FortMyrmidon_fmMatcherOr`, matchers)
+}
+
+#' A fmMatcher that matches AntID
+#' @details In the case of interactions, matches interaction with one
+#'   of the Ant having **antID**.
+#' @param antID the Ant ID to match
+#' @return a \code{\link{fmMatcher}} that matches when one of the
+#'   considered Ant is **antID**
+#' @family fmMatcher methods
+fmMatcherAntID <- function(antID) {
+    .Call(`_FortMyrmidon_fmMatcherAntID`, antID)
+}
+
+#' A fmMatcher that matches metadata key/value
+#' @details In the case of interactions, matches interaction with one
+#'   of the Ant meeting the criterion.
+#' @param key the key to match
+#' @param value the value to match. Should either be a logical,
+#'   integer, numerical, character or \code{\link{fmTime}}.
+#' @return a \code{\link{fmMatcher}} that matches when one of the
+#'   considered Ant is has **key** equal to **value**.
+#' @family fmMatcher methods
+fmMatcherAntMetaData <- function(key, value) {
+    .Call(`_FortMyrmidon_fmMatcherAntMetaData`, key, value)
+}
+
+#' A fmMatcher that matches ants distances
+#' @details In the case of trajectories, it matches anything.
+#' @param distance the distance in pixel to be smaller
+#' @return a \code{\link{fmMatcher}} that matches when two Ant lies
+#'   within the given distance.
+#' @family fmMatcher methods
+fmMatcherAntDistanceSmallerThan <- function(distance) {
+    .Call(`_FortMyrmidon_fmMatcherAntDistanceSmallerThan`, distance)
+}
+
+#' A fmMatcher that matches ants distances
+#' @details In the case of trajectories, it matches anything.
+#' @param distance the distance in pixel to be greater
+#' @return a \code{\link{fmMatcher}} that matches when two Ant lies
+#'   apart of the given distance.
+#' @family fmMatcher methods
+fmMatcherAntDistanceGreaterThan <- function(distance) {
+    .Call(`_FortMyrmidon_fmMatcherAntDistanceGreaterThan`, distance)
+}
+
+#' A fmMatcher that matches ants angles
+#' @details In the case of trajectories, it matches anything.
+#' @param angle the angle in radians to be smaller
+#' @return a \code{\link{fmMatcher}} that matches when the absolute
+#'     angle between two Ant is smaller than **angle**.
+#' @family fmMatcher methods
+fmMatcherAntAngleSmallerThan <- function(angle) {
+    .Call(`_FortMyrmidon_fmMatcherAntAngleSmallerThan`, angle)
+}
+
+#' A fmMatcher that matches ants angles
+#' @details In the case of trajectories, it matches anything.
+#' @param angle the angle in radians to be larger
+#' @return a \code{\link{fmMatcher}} that matches when the absolute
+#'     angle between two Ant is larger than **angle**.
+#' @family fmMatcher methods
+fmMatcherAntAngleGreaterThan <- function(angle) {
+    .Call(`_FortMyrmidon_fmMatcherAntAngleGreaterThan`, angle)
+}
+
+#' A fmMatcher that matches interaction types
+#' @details In the case of trajectories, it matches anything.
+#' @param type1 the first ant shape type to match
+#' @param type2 the second ant shape type to match
+#' @return a \code{\link{fmMatcher}} that matches
+#'     (**type1**,**type2**) and (**type2**,**type1**) interactions.
+#' @family fmMatcher methods
+fmMatcherInteractionType <- function(type1, type2) {
+    .Call(`_FortMyrmidon_fmMatcherInteractionType`, type1, type2)
+}
+
+#' A fmMatcher that matches ant displacement
+#' @param under the maximal allowed displacement in pixel
+#' @param minimumGap minimal time Gap between check
+#' @description Matches trajectories and interactions where the Ant
+#'     displacement between two consecutive position is smaller than
+#'     **under**. If **minimumGap** is not zero, this check will be
+#'     enforced only if there was at least a duration of **minimumGap**
+#'     between two consecutive positions.
+#' @return a \code{\link{fmMatcher}} that rejects large displacement
+#'   in a tracking gap.
+#' @family fmMatcher methods
+fmMatcherAntDisplacement <- function(under, minimumGap) {
+    .Call(`_FortMyrmidon_fmMatcherAntDisplacement`, under, minimumGap)
+}
+
 #' Creates a fmShapeList
 #' @param shapes the shape in the list. should be a list of fmCircle,
 #'   fmCapsule or fmPolygon.

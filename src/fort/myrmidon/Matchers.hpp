@@ -31,23 +31,31 @@ class Query;
 }
 
 /**
- * A Matcher reduces down the output of a Query with some criterion
+ * A Matcher helps to build complex Query by adding one or several
+ * constraints.
+ *
+ * Matchers works either on single Ant for trajectory computation, or
+ * on a pair of Ant when considering interactions. Some matcher have
+ * no real meaning outside of interaction (i.e. InteractionType()) and
+ * would match any trajectory.
  *
  * Base Matchers
  * =============
  *
  * One would use the following function to get a Matcher :
  *
- * * AntID() : one of the considered Ant in the result should
- *   match a given AntID
- * * AntMetaData() : one of the key-value user defined meta-data pair
- *                 should match.
- * * AntDistanceSmallerThan(),AntDistanceGreaterThan() : for
- *   interaction queries only, ensure some criterion for the distance
- *   between the two considedred Ant.
- * * AntAngleSmallerThan()/AntAngleGreaterThan() : for interaction
- *   queries only, ensure that angle between Ant meets some
- *   criterion.
+ *  * AntID() : one of the considered Ant in the result should
+ *    match a given AntID
+ *  * AntMetaData() : one of the key-value user defined meta-data pair
+ *    for one of the Ant should match.
+ *  * AntDistanceSmallerThan(),AntDistanceGreaterThan() : for
+ *    interaction queries only, ensure some criterion for the distance
+ *    between the two considedred Ant.
+ *  * AntAngleSmallerThan()/AntAngleGreaterThan() : for interaction
+ *    queries only, ensure that angle between Ant meets some
+ *    criterion.
+ *  * AntDisplacement(): matches interaction were the displacement of
+ *    either of the Ant is kept under a threshold.
  *
  * Combination
  * ===========
@@ -56,20 +64,9 @@ class Query;
  * build more complex criterion. For example to build a Matcher that
  * matches ID `001` or `002`:
  *
- * c++ :
- * ```
+ * ```c++
  * using namespace fort::myrmidon;
  * auto m = Matcher::Or(Matcher::AntID(1),Matcher::AntID(2));
- * ```
- * python :
- * ```python
- * import py_fort_myrmidon as fm
- * m = fm.Matcher.Or(fm.Matcher.AntID(1),fm.Matcher.AntID(2))
- * ```
- * R :
- * ```R
- * library(FortMyrmidon)
- * m <- fmMatcherOr(fmMatcherAntID(1),fmMatcherAntID(2))
  * ```
  */
 class Matcher {
@@ -81,15 +78,6 @@ public:
 	/**
 	 * Combines several Matcher together in conjunction
 	 *
-	 * * python:
-	 * ```python
-	 * py_fort_myrmidon.Matcher.And(*args) -> py_fort_myrmidon.Matcher
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmMatcherAnd <- function(...) # returns a Rcpp_fmMatcher
-	 * ```
-	 *
 	 * @param matchers the matchers to combine
 	 *
 	 * @return a new Matcher which will match only when all matchers
@@ -100,15 +88,6 @@ public:
 	/**
 	 * Combines several Matcher together in disjunction.
 	 *
-	 * * python:
-	 * ```python
-	 * py_fort_myrmidon.Matcher.Or(*args) -> py_fort_myrmidon.Matcher
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmMatcherOr <- function(...) # returns a Rcpp_fmMatcher
-	 * ```
-	 *
 	 * @param matchers the matchers to combine
 	 *
 	 * @return a new Matcher which will match if any of the matchers
@@ -118,15 +97,6 @@ public:
 
 	/**
 	 * Matches a given AntID
-	 *
-	 * * Python:
-	 * ```python
-	 * py_fort_myrmidon.Matcher.AntID(antID :int) -> py_fort_myrmidon.Matcher
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmMatcherAntID <- function(antID = 0) # returns a Rcpp_fmMatcher
-	 * ```
 	 *
 	 * @param antID the AntID to match against
 	 *
@@ -139,15 +109,6 @@ public:
 
 	/**
 	 *  Matches a given user meta data key/value
-	 *
-	 * * python:
-	 * ```python
-	 * py_fort_myrmidon.Matcher.AntMetaData(key :str, value :py_fort_myrmidon.AntStaticValue) -> py_fort_myrmidon.Matcher
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmMatcherAntMetaData <- function(key = '', value = false) # returns a Rcpp_fmMatcher
-	 * ```
 	 *
 	 * @param key the key to match against
 	 * @param value the value to match against
@@ -162,18 +123,9 @@ public:
 	/**
 	 * Matches a distance between two Ants
 	 *
-	 * * python:
-	 * ```python
-	 * py_fort_myrmidon.Matcher.AntDistanceSmallerThan(distance: float) -> py_fort_myrmidon.Matcher
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmMatcherAntDistanceSmallerThan <- function(distance = 0.0) # returns a Rcpp_fmMatcher
-	 * ```
-	 *
 	 * @param distance the distance to be smaller.
 	 *
-	 * In case of Trajectory, it matches anything.
+	 * In case of trajectories, it matches anything.
 	 *
 	 * @return a Matcher that matches when two Ant lies within the given
 	 *         distance
@@ -183,18 +135,9 @@ public:
 	/**
 	 * Matches a distance between two Ants
 	 *
-	 * * python:
-	 * ```python
-	 * py_fort_myrmidon.Matcher.AntDistanceGreaterThan(distance: float) -> py_fort_myrmidon.Matcher
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmMatcherAntDistanceGreaterThan <- function(distance = 0.0) # returns a Rcpp_fmMatcher
-	 * ```
-	 *
 	 * @param distance the distance to be greater.
 	 *
-	 * In case of Trajectories, it matches anything.
+	 * In case of trajectories, it matches anything.
 	 *
 	 * @return a Matcher that matches two Ant further appart than
 	 *         distance.
@@ -203,15 +146,6 @@ public:
 
 	/**
 	 * Matches an absolute angle between two Ants
-	 *
-	 * * python:
-	 * ```python
-	 * py_fort_myrmidon.Matcher.AntAngleSmallerThan(angle: float) -> py_fort_myrmidon.Matcher
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmMatcherAntAngleSmallerThan <- function(angle = 0.0) # returns a Rcpp_fmMatcher
-	 * ```
 	 *
 	 * @param angle the angle to be smaller (in radians).
 	 *
@@ -225,15 +159,6 @@ public:
 	/**
 	 * Matches an absolute angle between two Ants
 	 *
-	 * * python:
-	 * ```python
-	 * py_fort_myrmidon.Matcher.AntAngleGreaterThan(angle: float) -> py_fort_myrmidon.Matcher
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmMatcherAntAngleGreaterThan <- function(angle = 0.0) # returns a Rcpp_fmMatcher
-	 * ```
-	 *
 	 * @param angle the angle to be greater to (in radians).
 	 *
 	 * In case of trajectories, it matches anything.
@@ -246,15 +171,6 @@ public:
 
 	/**
 	 * Matches an InteractionType
-	 *
-	 * * python:
-	 * ```python
-	 * py_fort_myrmidon.Matcher.InteractionType(type1: int, type2: int) -> py_fort_myrmidon.Matcher
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmMatcherInteractionType <- function(type1 = 0, type2 = 0) # returns a Rcpp_fmMatcher
-	 * ```
 	 *
 	 * @param type1 the first AntShapeTypeID to match
 	 * @param type2 the second AntShapeTypeID to match
@@ -272,17 +188,8 @@ public:
 	/**
 	 * Matches Ant displacement
 	 *
-	 * * python:
-	 * ```python
-	 * py_fort_myrmidon.Matcher.AntDisplacement(under :float, minimumGap: py_fort_myrmidon.Duration) -> py_fort_myrmidon.Matcher
-	 * ```
-	 * * R:
-	 * ```R
-	 * fmMatcherAntDisplacement <- function( under = 0.0, minimumGap = fmSeconds(0.0)) # returns a Rcpp_fmMatcher
-	 * ```
 	 * @param under maximal allowed displacement in pixels
 	 * @param minimumGap minimal time gap
-	 *
 	 *
 	 * Matches Trajectories and Interactions where Ant displacement
 	 * between two consecutive position is smaller than under. If

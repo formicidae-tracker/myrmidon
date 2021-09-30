@@ -158,6 +158,129 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// fmMatcherAny
+fort::myrmidon::Matcher::Ptr fmMatcherAny();
+RcppExport SEXP _FortMyrmidon_fmMatcherAny() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(fmMatcherAny());
+    return rcpp_result_gen;
+END_RCPP
+}
+// fmMatcherAnd
+fort::myrmidon::Matcher::Ptr fmMatcherAnd(const std::vector<fort::myrmidon::Matcher::Ptr>& matchers);
+RcppExport SEXP _FortMyrmidon_fmMatcherAnd(SEXP matchersSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::vector<fort::myrmidon::Matcher::Ptr>& >::type matchers(matchersSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmMatcherAnd(matchers));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fmMatcherOr
+fort::myrmidon::Matcher::Ptr fmMatcherOr(const std::vector<fort::myrmidon::Matcher::Ptr>& matchers);
+RcppExport SEXP _FortMyrmidon_fmMatcherOr(SEXP matchersSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::vector<fort::myrmidon::Matcher::Ptr>& >::type matchers(matchersSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmMatcherOr(matchers));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fmMatcherAntID
+fort::myrmidon::Matcher::Ptr fmMatcherAntID(fort::myrmidon::AntID antID);
+RcppExport SEXP _FortMyrmidon_fmMatcherAntID(SEXP antIDSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< fort::myrmidon::AntID >::type antID(antIDSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmMatcherAntID(antID));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fmMatcherAntMetaData
+fort::myrmidon::Matcher::Ptr fmMatcherAntMetaData(const std::string& key, const fort::myrmidon::AntStaticValue& value);
+RcppExport SEXP _FortMyrmidon_fmMatcherAntMetaData(SEXP keySEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string& >::type key(keySEXP);
+    Rcpp::traits::input_parameter< const fort::myrmidon::AntStaticValue& >::type value(valueSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmMatcherAntMetaData(key, value));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fmMatcherAntDistanceSmallerThan
+fort::myrmidon::Matcher::Ptr fmMatcherAntDistanceSmallerThan(double distance);
+RcppExport SEXP _FortMyrmidon_fmMatcherAntDistanceSmallerThan(SEXP distanceSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type distance(distanceSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmMatcherAntDistanceSmallerThan(distance));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fmMatcherAntDistanceGreaterThan
+fort::myrmidon::Matcher::Ptr fmMatcherAntDistanceGreaterThan(double distance);
+RcppExport SEXP _FortMyrmidon_fmMatcherAntDistanceGreaterThan(SEXP distanceSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type distance(distanceSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmMatcherAntDistanceGreaterThan(distance));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fmMatcherAntAngleSmallerThan
+fort::myrmidon::Matcher::Ptr fmMatcherAntAngleSmallerThan(double angle);
+RcppExport SEXP _FortMyrmidon_fmMatcherAntAngleSmallerThan(SEXP angleSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type angle(angleSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmMatcherAntAngleSmallerThan(angle));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fmMatcherAntAngleGreaterThan
+fort::myrmidon::Matcher::Ptr fmMatcherAntAngleGreaterThan(double angle);
+RcppExport SEXP _FortMyrmidon_fmMatcherAntAngleGreaterThan(SEXP angleSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type angle(angleSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmMatcherAntAngleGreaterThan(angle));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fmMatcherInteractionType
+fort::myrmidon::Matcher::Ptr fmMatcherInteractionType(fort::myrmidon::AntShapeTypeID type1, fort::myrmidon::AntShapeTypeID type2);
+RcppExport SEXP _FortMyrmidon_fmMatcherInteractionType(SEXP type1SEXP, SEXP type2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< fort::myrmidon::AntShapeTypeID >::type type1(type1SEXP);
+    Rcpp::traits::input_parameter< fort::myrmidon::AntShapeTypeID >::type type2(type2SEXP);
+    rcpp_result_gen = Rcpp::wrap(fmMatcherInteractionType(type1, type2));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fmMatcherAntDisplacement
+fort::myrmidon::Matcher::Ptr fmMatcherAntDisplacement(double under, fort::Duration minimumGap);
+RcppExport SEXP _FortMyrmidon_fmMatcherAntDisplacement(SEXP underSEXP, SEXP minimumGapSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type under(underSEXP);
+    Rcpp::traits::input_parameter< fort::Duration >::type minimumGap(minimumGapSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmMatcherAntDisplacement(under, minimumGap));
+    return rcpp_result_gen;
+END_RCPP
+}
 // fmShapeListCreate
 fort::myrmidon::Shape::List fmShapeListCreate(SEXP shapes);
 RcppExport SEXP _FortMyrmidon_fmShapeListCreate(SEXP shapesSEXP) {
@@ -313,6 +436,7 @@ RcppExport SEXP _rcpp_module_boot_ant();
 RcppExport SEXP _rcpp_module_boot_eigen();
 RcppExport SEXP _rcpp_module_boot_experiment();
 RcppExport SEXP _rcpp_module_boot_identification();
+RcppExport SEXP _rcpp_module_boot_matchers();
 RcppExport SEXP _rcpp_module_boot_shapes();
 RcppExport SEXP _rcpp_module_boot_space();
 RcppExport SEXP _rcpp_module_boot_time();
@@ -334,6 +458,17 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FortMyrmidon_fmExperimentOpen", (DL_FUNC) &_FortMyrmidon_fmExperimentOpen, 1},
     {"_FortMyrmidon_fmFormatAntID", (DL_FUNC) &_FortMyrmidon_fmFormatAntID, 1},
     {"_FortMyrmidon_fmFormatTagID", (DL_FUNC) &_FortMyrmidon_fmFormatTagID, 1},
+    {"_FortMyrmidon_fmMatcherAny", (DL_FUNC) &_FortMyrmidon_fmMatcherAny, 0},
+    {"_FortMyrmidon_fmMatcherAnd", (DL_FUNC) &_FortMyrmidon_fmMatcherAnd, 1},
+    {"_FortMyrmidon_fmMatcherOr", (DL_FUNC) &_FortMyrmidon_fmMatcherOr, 1},
+    {"_FortMyrmidon_fmMatcherAntID", (DL_FUNC) &_FortMyrmidon_fmMatcherAntID, 1},
+    {"_FortMyrmidon_fmMatcherAntMetaData", (DL_FUNC) &_FortMyrmidon_fmMatcherAntMetaData, 2},
+    {"_FortMyrmidon_fmMatcherAntDistanceSmallerThan", (DL_FUNC) &_FortMyrmidon_fmMatcherAntDistanceSmallerThan, 1},
+    {"_FortMyrmidon_fmMatcherAntDistanceGreaterThan", (DL_FUNC) &_FortMyrmidon_fmMatcherAntDistanceGreaterThan, 1},
+    {"_FortMyrmidon_fmMatcherAntAngleSmallerThan", (DL_FUNC) &_FortMyrmidon_fmMatcherAntAngleSmallerThan, 1},
+    {"_FortMyrmidon_fmMatcherAntAngleGreaterThan", (DL_FUNC) &_FortMyrmidon_fmMatcherAntAngleGreaterThan, 1},
+    {"_FortMyrmidon_fmMatcherInteractionType", (DL_FUNC) &_FortMyrmidon_fmMatcherInteractionType, 2},
+    {"_FortMyrmidon_fmMatcherAntDisplacement", (DL_FUNC) &_FortMyrmidon_fmMatcherAntDisplacement, 2},
     {"_FortMyrmidon_fmShapeListCreate", (DL_FUNC) &_FortMyrmidon_fmShapeListCreate, 1},
     {"_FortMyrmidon_pfmIWantAShapeList", (DL_FUNC) &_FortMyrmidon_pfmIWantAShapeList, 1},
     {"_FortMyrmidon_fmTimeCreate", (DL_FUNC) &_FortMyrmidon_fmTimeCreate, 1},
@@ -352,6 +487,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_rcpp_module_boot_eigen", (DL_FUNC) &_rcpp_module_boot_eigen, 0},
     {"_rcpp_module_boot_experiment", (DL_FUNC) &_rcpp_module_boot_experiment, 0},
     {"_rcpp_module_boot_identification", (DL_FUNC) &_rcpp_module_boot_identification, 0},
+    {"_rcpp_module_boot_matchers", (DL_FUNC) &_rcpp_module_boot_matchers, 0},
     {"_rcpp_module_boot_shapes", (DL_FUNC) &_rcpp_module_boot_shapes, 0},
     {"_rcpp_module_boot_space", (DL_FUNC) &_rcpp_module_boot_space, 0},
     {"_rcpp_module_boot_time", (DL_FUNC) &_rcpp_module_boot_time, 0},

@@ -1,0 +1,35 @@
+#' @name fmMatcher
+#' @title Adds constraints to fmQuery
+#' @description A Matcher helps to build complex \code{\link{fmQuery}}
+#'     by adding one or several constraints.
+#' @description Matchers works either on single \code{\link{fmAnt}}
+#'     for trajectory computation, or on a pair of \code{\link{fmAnt}}
+#'     when considering interactions. Some matcher have no real
+#'     meaning outside of interactions
+#'     (i.e. \code{\link{fmMatcherInteractionType}()}) and would match
+#'     any trajectory.
+#' @description One would use the following function to get a Matcher
+#'     : \itemize{ \item \code{\link{fmMatcherAntID}()} : one of the
+#'     considered Ant in the trajectory or interaction should match a
+#'     given AntID \item \code{\link{fmMatcherAntMetaData}()} : one of
+#'     the key-value meta-data for one of the considered Ant should
+#'     match.  \item \code{\link{fmMatcherAntDistanceSmallerThan}()},
+#'     \code{\link{fmMatcherAntDistanceGreaterThan}()} : for
+#'     interaction queries only, ensure some criterion for the
+#'     distance between the two considered ants.  \item
+#'     \code{\link{fmMatcherAntAngleSmallerThan}()},
+#'     \code{\link{fmMatcherAntAngleGreaterThan}()} : for interaction
+#'     queries only, ensure that angle between Ant meets some
+#'     criterion.  \item \code{\link{fmMatcherInteractionType}()} :
+#'     considers only interaction of a given type.  \item
+#'     \code{\link{fmMatcherAntDisplacement}()}: matches interaction
+#'     were the displacement of either of the Ant is kept under a
+#'     threshold.  }
+#' @description Using \code{\link{fmMatcherAnd}()} or
+#'     \code{\link{fmMatcherOr}()}, one can combine several Matcher
+#'     together to build more complex criterion.
+#' @examples
+#' # m will match AntID 001 or 002
+#' m <- fmMatcherOr(list(fmMatcherAntID(1),fmMatcherAntID(2)))
+#' @family fmMatcher methods
+NULL
