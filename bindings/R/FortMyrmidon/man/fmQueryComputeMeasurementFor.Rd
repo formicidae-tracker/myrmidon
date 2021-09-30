@@ -22,7 +22,12 @@ Queries manual measurements for an Ant
 }
 \seealso{
 Other fmQuery methods: 
+\code{\link{fmQueryCollideFrames}()},
+\code{\link{fmQueryComputeAntInteractions}()},
+\code{\link{fmQueryComputeAntTrajectories}()},
 \code{\link{fmQueryComputeTagStatistics}()},
+\code{\link{fmQueryGetDataInformations}()},
+\code{\link{fmQueryIdentifyFrames}()},
 \code{\link{fmQuery}}
 }
 \concept{fmQuery methods}

@@ -378,20 +378,18 @@ struct AntTrajectorySegment {
 	 */
 	size_t End;
 
-	/**
-	 * Optionally report the mean trajectory.
-	 */
-	std::unique_ptr<Eigen::Vector3d> Mean;
-	/**
-	 * Optionally report the zones traversed by the Ant
-	 */
-	std::unique_ptr<std::set<ZoneID>> Zones;
-
 	Time StartTime() const;
 	Time EndTime() const;
 
 };
 
+/**
+ * Defines a trajectory sub-segment summary
+ */
+struct AntTrajectorySummary {
+	Eigen::Vector3d Mean;
+	std::set<ZoneID> Zones;
+};
 
 
 /**
@@ -418,14 +416,14 @@ struct AntInteraction {
 	 */
 	InteractionTypes                  Types;
 	/**
-	 * Reports the AntTrajectory of each Ant.
-	 *
-	 * Reports the AntTrajectory of each Ant during the
-	 * interaction. The Trajectory are truncated to the interaction
-	 * timing.
+	 * Reports the AntTrajectory or their summary for each Ant during
+	 * the interaction. The trajectories are truncated to the
+	 * interaction timing.
 	 */
-	std::pair<AntTrajectorySegment,
-	          AntTrajectorySegment>    Trajectories;
+	std::variant<std::pair<AntTrajectorySegment,
+	                       AntTrajectorySegment>,
+	             std::pair<AntTrajectorySummary,
+	                       AntTrajectorySummary>> Trajectories;
 	/**
 	 * Reports the Time the interaction starts
 	 */

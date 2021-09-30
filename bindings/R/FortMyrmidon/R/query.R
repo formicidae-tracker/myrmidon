@@ -32,6 +32,7 @@ NULL
 #'     each frame.\item\code{$positions}: a list of \code{data.frame}
 #'     with the position of each ant for that frame. Each element of
 #'     this list correspond to the same index in \code{frames}}
+#' @family fmQuery methods
 fmQueryIdentifyFrames <- function(experiment,
                                   start = fmTimeSinceEver(),
                                   end = fmTimeForever(),
@@ -64,6 +65,7 @@ fmQueryIdentifyFrames <- function(experiment,
 #'     happening between **start** and **end**. The field
 #'     \code{$frame_row_index} indicates in which row in \code{frames}
 #'     this collision happens.}
+#' @family fmQuery methods
 fmQueryCollideFrames <- function(experiment,
                                  start = fmTimeSinceEver(),
                                  end = fmTimeForever(),
@@ -76,7 +78,7 @@ fmQueryCollideFrames <- function(experiment,
                           singleThreaded)
 }
 
-#' Computes trajectories for ants.
+#' @title Computes trajectories for ants.
 #' @description Computes ant trajectories for the fmExperiment. A
 #'     trajectory is the consecutive position of an Ant in a Space,
 #'     with detection gap smaller than **maximumGap**. These will be
@@ -99,10 +101,11 @@ fmQueryCollideFrames <- function(experiment,
 #' @return a named list of two elements:
 #'     \itemize{\code{$trajectories_summary}: a \code{data.frame}
 #'     summarizing the ant, space and starting time of the
-#'     trajectory.\item\code{trajectories} a list of \code{data.frame}
+#'     trajectory.\item\code{$trajectories} a list of \code{data.frame}
 #'     with the position of the ant during the trajectory \code{$time}
 #'     is the offset from the trajectory \code{$start} time in
-#'     seconds.
+#'     seconds.}
+#' @family fmQuery methods
 fmQueryComputeAntTrajectories <- function(experiment,
                                           start = fmTimeSinceEver(),
                                           end = fmTimeForever(),
@@ -123,10 +126,9 @@ fmQueryComputeAntTrajectories <- function(experiment,
 
 
 #' Computes ant interactions for ants.
-#' @description Computes ant interactions, i.e. time intervals where two Ants
-#' collides. These will be reported ordered by ending time.
-#'
-#' @description the parameter **reportFullTrajectories** controls if
+#' @description Computes ant interactions, i.e. time intervals where
+#'     two Ants collides. These will be reported ordered by ending
+#'     time.  The parameter **reportFullTrajectories** controls if
 #'     full trajectories should be reported or if only a summary
 #'     should be reported. The former have an high impact on the
 #'     amount of RAM required to perform the query efficiently or at
@@ -164,6 +166,7 @@ fmQueryComputeAntTrajectories <- function(experiment,
 #'     the interaction start time. \item\code{$ant1.trajectory.end}:
 #'     likewise, the row index that correspond to the interaction
 #'     end}}}
+#' @family fmQuery methods
 fmQueryComputeAntInteractions <- function(experiment,
                                           start = fmTimeSinceEver(),
                                           end = fmTimeForever(),

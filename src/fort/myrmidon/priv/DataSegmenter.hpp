@@ -77,7 +77,7 @@ private:
 		            const Time & curTime);
 
 
-		static void SummarizeTrajectorySegment(AntTrajectorySegment & s);
+		static AntTrajectorySummary SummarizeTrajectorySegment(AntTrajectorySegment & s);
 
 		AntInteraction::Ptr Terminate(bool summarize);
 	};

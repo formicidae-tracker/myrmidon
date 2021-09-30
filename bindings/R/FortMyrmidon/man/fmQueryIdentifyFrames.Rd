@@ -40,3 +40,14 @@ Identifies fmAnt in tracking data frame. I.e. finds
 fmAnt based on fmIdentification and apply the tag <-> ant
 position corrections.
 }
+\seealso{
+Other fmQuery methods: 
+\code{\link{fmQueryCollideFrames}()},
+\code{\link{fmQueryComputeAntInteractions}()},
+\code{\link{fmQueryComputeAntTrajectories}()},
+\code{\link{fmQueryComputeMeasurementFor}()},
+\code{\link{fmQueryComputeTagStatistics}()},
+\code{\link{fmQueryGetDataInformations}()},
+\code{\link{fmQuery}}
+}
+\concept{fmQuery methods}

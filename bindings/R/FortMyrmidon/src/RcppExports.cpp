@@ -372,6 +372,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// fmQueryGetDataInformations
+fort::myrmidon::ExperimentDataInfo fmQueryGetDataInformations(const ExperimentPtr& experiment);
+RcppExport SEXP _FortMyrmidon_fmQueryGetDataInformations(SEXP experimentSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const ExperimentPtr& >::type experiment(experimentSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmQueryGetDataInformations(experiment));
+    return rcpp_result_gen;
+END_RCPP
+}
 // fmShapeListCreate
 fort::myrmidon::Shape::List fmShapeListCreate(SEXP shapes);
 RcppExport SEXP _FortMyrmidon_fmShapeListCreate(SEXP shapesSEXP) {
@@ -566,6 +577,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FortMyrmidon_pfmQueryCollideFrames", (DL_FUNC) &_FortMyrmidon_pfmQueryCollideFrames, 5},
     {"_FortMyrmidon_pfmQueryComputeAntTrajectories", (DL_FUNC) &_FortMyrmidon_pfmQueryComputeAntTrajectories, 8},
     {"_FortMyrmidon_pfmQueryComputeAntInteractions", (DL_FUNC) &_FortMyrmidon_pfmQueryComputeAntInteractions, 8},
+    {"_FortMyrmidon_fmQueryGetDataInformations", (DL_FUNC) &_FortMyrmidon_fmQueryGetDataInformations, 1},
     {"_FortMyrmidon_fmShapeListCreate", (DL_FUNC) &_FortMyrmidon_fmShapeListCreate, 1},
     {"_FortMyrmidon_pfmIWantAShapeList", (DL_FUNC) &_FortMyrmidon_pfmIWantAShapeList, 1},
     {"_FortMyrmidon_fmTimeCreate", (DL_FUNC) &_FortMyrmidon_fmTimeCreate, 1},

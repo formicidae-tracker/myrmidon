@@ -39,3 +39,14 @@ Finds collision, (punctual interactions) between fmAnt
 in tracking frame based on their virtual shape. Current zone
 for each ants will also be computed.
 }
+\seealso{
+Other fmQuery methods: 
+\code{\link{fmQueryComputeAntInteractions}()},
+\code{\link{fmQueryComputeAntTrajectories}()},
+\code{\link{fmQueryComputeMeasurementFor}()},
+\code{\link{fmQueryComputeTagStatistics}()},
+\code{\link{fmQueryGetDataInformations}()},
+\code{\link{fmQueryIdentifyFrames}()},
+\code{\link{fmQuery}}
+}
+\concept{fmQuery methods}

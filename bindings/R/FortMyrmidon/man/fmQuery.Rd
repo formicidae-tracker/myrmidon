@@ -19,7 +19,12 @@ controlled the singleThreaded args of multi-threaded queries.
 }
 \seealso{
 Other fmQuery methods: 
+\code{\link{fmQueryCollideFrames}()},
+\code{\link{fmQueryComputeAntInteractions}()},
+\code{\link{fmQueryComputeAntTrajectories}()},
 \code{\link{fmQueryComputeMeasurementFor}()},
-\code{\link{fmQueryComputeTagStatistics}()}
+\code{\link{fmQueryComputeTagStatistics}()},
+\code{\link{fmQueryGetDataInformations}()},
+\code{\link{fmQueryIdentifyFrames}()}
 }
 \concept{fmQuery methods}

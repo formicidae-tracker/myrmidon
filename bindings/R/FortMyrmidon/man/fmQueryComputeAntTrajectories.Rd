@@ -43,10 +43,10 @@ match anything.}
 a named list of two elements:
 \itemize{\code{$trajectories_summary}: a \code{data.frame}
 summarizing the ant, space and starting time of the
-trajectory.\item\code{trajectories} a list of \code{data.frame}
+trajectory.\item\code{$trajectories} a list of \code{data.frame}
 with the position of the ant during the trajectory \code{$time}
 is the offset from the trajectory \code{$start} time in
-seconds.
+seconds.}
 }
 \description{
 Computes ant trajectories for the fmExperiment. A
@@ -54,3 +54,14 @@ trajectory is the consecutive position of an Ant in a Space,
 with detection gap smaller than \strong{maximumGap}. These will be
 reported ordered by ending time.
 }
+\seealso{
+Other fmQuery methods: 
+\code{\link{fmQueryCollideFrames}()},
+\code{\link{fmQueryComputeAntInteractions}()},
+\code{\link{fmQueryComputeMeasurementFor}()},
+\code{\link{fmQueryComputeTagStatistics}()},
+\code{\link{fmQueryGetDataInformations}()},
+\code{\link{fmQueryIdentifyFrames}()},
+\code{\link{fmQuery}}
+}
+\concept{fmQuery methods}

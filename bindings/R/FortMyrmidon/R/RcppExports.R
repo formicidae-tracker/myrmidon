@@ -236,6 +236,20 @@ pfmQueryComputeAntInteractions <- function(experiment, start, end, maximumGap, m
     .Call(`_FortMyrmidon_pfmQueryComputeAntInteractions`, experiment, start, end, maximumGap, matcher, reportFullTrajectories, showProgress, singleThreaded)
 }
 
+#' Collects tracking data information on the fmExperiment
+#' @param experiment the \code{\link{fmExperiment}} to query
+#' @return a names list with the following items:
+#'   \itemize{\code{$frames}: the total number of
+#'   frames.\item\code{$start} the first tracked time in the
+#'   experiment. \item\code{$end} the last tracked
+#'   time. \item\code{$details}: a \code{data.frame} listing the start,
+#'   end and number of frame in each tracking data directory and space of
+#'   the experiment.}
+#' @family fmQuery methods
+fmQueryGetDataInformations <- function(experiment) {
+    .Call(`_FortMyrmidon_fmQueryGetDataInformations`, experiment)
+}
+
 #' Creates a fmShapeList
 #' @param shapes the shape in the list. should be a list of fmCircle,
 #'   fmCapsule or fmPolygon.

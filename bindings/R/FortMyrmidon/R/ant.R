@@ -21,8 +21,8 @@
 #'     identifies an Ant at a given \code{\link{fmTime}}.
 #' @description Each Ant has an associated virtual shape that is used
 #'     to compute instantaneous collision detection (
-#'     \code{\link{fmQueryCollideFrame}()} ), or timed ant interactions
-#'     ( \code{\link{fmQueryComputeAntInteraction}()} ). These shapes
+#'     \code{\link{fmQueryCollideFrames}()} ), or timed ant interactions
+#'     ( \code{\link{fmQueryComputeAntInteractions}()} ). These shapes
 #'     can be defined manually in **fort-studio** or programmatically
 #'     accessed with $capsules and modified with
 #'     \code{\link{fmAnt$addCapsule}()},

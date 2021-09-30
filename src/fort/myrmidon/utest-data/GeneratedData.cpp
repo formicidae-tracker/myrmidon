@@ -263,8 +263,7 @@ void GeneratedData::GenerateInteractionsFor(AntID antID,const AntData & ant) {
 			res->Space = bSegments[ii].Trajectory->Space;
 			res->Start = std::min(aSegments[ii].StartTime(),bSegments[ii].StartTime());
 			res->End = std::max(aSegments[ii].EndTime(),bSegments[ii].EndTime());
-			res->Trajectories.first = std::move(aSegments[ii]);
-			res->Trajectories.second = std::move(bSegments[ii]);
+			res->Trajectories = std::make_pair(std::move(aSegments[ii]),std::move(bSegments[ii]));
 			Interactions.push_back(res);
 		}
 	}

@@ -537,54 +537,13 @@ AssertTrajectorySegmentEqual(const char * aExpr,
                              const char * bExpr,
                              const fort::myrmidon::AntTrajectorySegment & a,
                              const fort::myrmidon::AntTrajectorySegment & b) {
-	if ( !a.Trajectory != !b.Trajectory ) {
+	if ( !a.Trajectory || !b.Trajectory ) {
 		return ::testing::AssertionFailure()
 			<< std::boolalpha
 			<< "Value of: !" << aExpr << ".Trajectory" << std::endl
 			<< "  Actual: "  << !a.Trajectory << std::endl
 			<< "Expected: !" << bExpr << ".Trajectory" << std::endl
 			<< "Which is: " << !b.Trajectory ;
-	}
-	if ( !a.Trajectory ) {
-		if (!b.Mean) {
-			return ::testing::AssertionFailure()
-				<< std::boolalpha
-				<< "Value of: !" << bExpr << ".Mean" << std::endl
-				<< "  Actual: " << !b.Mean << std::endl
-				<< "Expected: false";
-		}
-		if (!a.Mean) {
-			return ::testing::AssertionFailure()
-				<< std::boolalpha
-				<< "Value of: !" << aExpr << ".Mean" << std::endl
-				<< "  Actual: " << !a.Mean << std::endl
-				<< "Expected: false";
-		}
-		for ( size_t i = 0; i < 3; ++i ) {
-			if ( std::abs((*a.Mean)(i) - (*b.Mean)(i)) > 1.0e-3 ) {
-			return ::testing::AssertionFailure()
-				<< "Value of: (*" << aExpr << ".Mean)(" << i << ")" <<std::endl
-				<< "  Actual: " << (*a.Mean)(i) << std::endl
-				<< "  Within: " << 1.0e-3 << std::endl
-				<< "      Of: (*" << bExpr << ".Mean)(" << i << ")" <<std::endl
-				<< "Which is: " << (*b.Mean)(i);
-			}
-		}
-		return ::testing::AssertionSuccess();
-	}
-	if (b.Mean) {
-		return ::testing::AssertionFailure()
-			<< std::boolalpha
-			<< "Value of: !" << bExpr << ".Mean" << std::endl
-			<< "  Actual: " << !b.Mean << std::endl
-			<< "Expected: true";
-	}
-	if (a.Mean) {
-		return ::testing::AssertionFailure()
-			<< std::boolalpha
-			<< "Value of: !" << aExpr << ".Mean" << std::endl
-			<< "  Actual: " << !a.Mean << std::endl
-			<< "Expected: true";
 	}
 
 	if( a.Trajectory->Ant != b.Trajectory->Ant ) {
@@ -602,6 +561,37 @@ AssertTrajectorySegmentEqual(const char * aExpr,
 		return failure_helper(aExpr,bExpr,a,b,End);
 	}
 
+	return ::testing::AssertionSuccess();
+}
+
+::testing::AssertionResult
+AssertTrajectorySummaryEqual(const char * aExpr,
+                             const char * bExpr,
+                             const fort::myrmidon::AntTrajectorySummary & a,
+                             const fort::myrmidon::AntTrajectorySummary & b) {
+	for ( size_t i = 0; i < 3; ++i ) {
+		if ( std::abs(a.Mean(i) - b.Mean(i)) > 1.0e-3 ) {
+			return ::testing::AssertionFailure()
+				<< "Value of: " << aExpr << ".Mean(" << i << ")" <<std::endl
+				<< "  Actual: " << a.Mean(i) << std::endl
+				<< "  Within: " << 1.0e-3 << std::endl
+				<< "      Of: " << bExpr << ".Mean(" << i << ")" <<std::endl
+				<< "Which is: " << b.Mean(i);
+		}
+	}
+
+	if ( a.Zones.size() != b.Zones.size() ) {
+		return failure_helper(aExpr,bExpr,a,b,Zones.size());
+	}
+
+	for ( const auto & zoneID : b.Zones ) {
+		if ( a.Zones.count(zoneID) == 0 ) {
+			return ::testing::AssertionFailure()
+				<< "   Value: " << aExpr << ".Zones" <<std::endl
+				<< "Contains: " << zoneID << std::endl
+				<< "  Actual: it doesn't";
+		}
+	}
 	return ::testing::AssertionSuccess();
 }
 
@@ -642,17 +632,33 @@ AssertAntInteractionEqual(const char * aExpr,
 		return tmp;
 	}
 
-	tmp = AssertTrajectorySegmentEqual((std::string(aExpr) + ".Trajectories.first").c_str(),
-	                                   (std::string(bExpr) + ".Trajectories.first").c_str(),
-	                                   a.Trajectories.first,
-	                                   b.Trajectories.first);
+	if ( a.Trajectories.index() == 0 ) {
+		tmp = AssertTrajectorySegmentEqual((std::string(aExpr) + ".Trajectories.first").c_str(),
+		                                   (std::string(bExpr) + ".Trajectories.first").c_str(),
+		                                   std::get<0>(a.Trajectories).first,
+		                                   std::get<0>(b.Trajectories).first);
 
-	if (!tmp) {
-		return tmp;
+		if (!tmp) {
+			return tmp;
+		}
+
+		return AssertTrajectorySegmentEqual((std::string(aExpr) + ".Trajectories.second").c_str(),
+		                                    (std::string(bExpr) + ".Trajectories.second").c_str(),
+		                                    std::get<0>(a.Trajectories).second,
+		                                    std::get<0>(b.Trajectories).second);
+	} else {
+		tmp = AssertTrajectorySummaryEqual((std::string(aExpr) + ".Trajectories.first").c_str(),
+		                                   (std::string(bExpr) + ".Trajectories.first").c_str(),
+		                                   std::get<1>(a.Trajectories).first,
+		                                   std::get<1>(b.Trajectories).first);
+
+		if (!tmp) {
+			return tmp;
+		}
+		return AssertTrajectorySummaryEqual((std::string(aExpr) + ".Trajectories.second").c_str(),
+		                                    (std::string(bExpr) + ".Trajectories.second").c_str(),
+		                                    std::get<1>(a.Trajectories).second,
+		                                    std::get<1>(b.Trajectories).second);
 	}
 
-	return AssertTrajectorySegmentEqual((std::string(aExpr) + ".Trajectories.second").c_str(),
-	                                   (std::string(bExpr) + ".Trajectories.second").c_str(),
-	                                   a.Trajectories.second,
-	                                   b.Trajectories.second);
 }

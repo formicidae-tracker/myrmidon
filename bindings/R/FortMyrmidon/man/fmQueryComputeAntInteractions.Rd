@@ -60,12 +60,22 @@ likewise, the row index that correspond to the interaction
 end}}}
 }
 \description{
-Computes ant interactions, i.e. time intervals where two Ants
-collides. These will be reported ordered by ending time.
-
-the parameter \strong{reportFullTrajectories} controls if
+Computes ant interactions, i.e. time intervals where
+two Ants collides. These will be reported ordered by ending
+time.  The parameter \strong{reportFullTrajectories} controls if
 full trajectories should be reported or if only a summary
 should be reported. The former have an high impact on the
 amount of RAM required to perform the query efficiently or at
 all.
 }
+\seealso{
+Other fmQuery methods: 
+\code{\link{fmQueryCollideFrames}()},
+\code{\link{fmQueryComputeAntTrajectories}()},
+\code{\link{fmQueryComputeMeasurementFor}()},
+\code{\link{fmQueryComputeTagStatistics}()},
+\code{\link{fmQueryGetDataInformations}()},
+\code{\link{fmQueryIdentifyFrames}()},
+\code{\link{fmQuery}}
+}
+\concept{fmQuery methods}

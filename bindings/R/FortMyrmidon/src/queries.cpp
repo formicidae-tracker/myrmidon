@@ -375,8 +375,8 @@ SEXP pfmQueryComputeAntInteractionsFull(const ExperimentPtr & experiment,
 	auto storeInteractions =
 		[&] (const AntInteraction::Ptr & i) {
 			size_t iIndex = iAnt1.size();
-			needsIndexing[i->Trajectories.first.Trajectory.get()].first.push_back(iIndex);
-			needsIndexing[i->Trajectories.second.Trajectory.get()].second.push_back(iIndex);
+			needsIndexing[std::get<0>(i->Trajectories).first.Trajectory.get()].first.push_back(iIndex);
+			needsIndexing[std::get<0>(i->Trajectories).second.Trajectory.get()].second.push_back(iIndex);
 			iAnt1.push_back(i->IDs.first);
 			iAnt2.push_back(i->IDs.second);
 			iStart.push_back(fmTime_asR(i->Start));
@@ -384,11 +384,11 @@ SEXP pfmQueryComputeAntInteractionsFull(const ExperimentPtr & experiment,
 			iSpace.push_back(i->Space);
 			types.push_back(fmInteractionTypes_asStr(i->Types));
 			iTrajRow1.push_back(0);
-			iTrajStart1.push_back(i->Trajectories.first.Begin+1);
-			iTrajEnd1.push_back(i->Trajectories.first.End);
+			iTrajStart1.push_back(std::get<0>(i->Trajectories).first.Begin+1);
+			iTrajEnd1.push_back(std::get<0>(i->Trajectories).first.End);
 			iTrajRow2.push_back(0);
-			iTrajStart2.push_back(i->Trajectories.second.Begin+1);
-			iTrajEnd2.push_back(i->Trajectories.second.End);
+			iTrajStart2.push_back(std::get<0>(i->Trajectories).second.Begin+1);
+			iTrajEnd2.push_back(std::get<0>(i->Trajectories).second.End);
 		};
 
 	try {
@@ -461,14 +461,14 @@ SEXP pfmQueryComputeAntInteractionsSummarized(const ExperimentPtr & experiment,
 			iEnd.push_back(fmTime_asR(i->End));
 			iSpace.push_back(i->Space);
 			types.push_back(fmInteractionTypes_asStr(i->Types));
-			iMx1.push_back(i->Trajectories.first.Mean->x());
-			iMy1.push_back(i->Trajectories.first.Mean->y());
-			iMa1.push_back(i->Trajectories.first.Mean->z());
-			iMx2.push_back(i->Trajectories.second.Mean->x());
-			iMy2.push_back(i->Trajectories.second.Mean->y());
-			iMa2.push_back(i->Trajectories.second.Mean->z());
-			zone1.push_back(ZoneList(*i->Trajectories.first.Zones));
-			zone2.push_back(ZoneList(*i->Trajectories.second.Zones));
+			iMx1.push_back(std::get<1>(i->Trajectories).first.Mean.x());
+			iMy1.push_back(std::get<1>(i->Trajectories).first.Mean.y());
+			iMa1.push_back(std::get<1>(i->Trajectories).first.Mean.z());
+			iMx2.push_back(std::get<1>(i->Trajectories).second.Mean.x());
+			iMy2.push_back(std::get<1>(i->Trajectories).second.Mean.y());
+			iMa2.push_back(std::get<1>(i->Trajectories).second.Mean.z());
+			zone1.push_back(ZoneList(std::get<1>(i->Trajectories).first.Zones));
+			zone2.push_back(ZoneList(std::get<1>(i->Trajectories).second.Zones));
 		};
 
 	try {
@@ -509,4 +509,66 @@ SEXP pfmQueryComputeAntInteractions(const ExperimentPtr & experiment,
 		return pfmQueryComputeAntInteractionsFull(experiment,start,end,maximumGap,matcher,showProgress,singleThreaded);
 	}
 	return pfmQueryComputeAntInteractionsSummarized(experiment,start,end,maximumGap,matcher,showProgress,singleThreaded);
+}
+
+//' Collects tracking data information on the fmExperiment
+//' @param experiment the \code{\link{fmExperiment}} to query
+//' @return a names list with the following items:
+//'   \itemize{\code{$frames}: the total number of
+//'   frames.\item\code{$start} the first tracked time in the
+//'   experiment. \item\code{$end} the last tracked
+//'   time. \item\code{$details}: a \code{data.frame} listing the start,
+//'   end and number of frame in each tracking data directory and space of
+//'   the experiment.}
+//' @family fmQuery methods
+//[[Rcpp::export]]
+fort::myrmidon::ExperimentDataInfo fmQueryGetDataInformations(const ExperimentPtr & experiment) {
+	return fort::myrmidon::Query::GetDataInformations(*experiment);
+}
+
+namespace Rcpp {
+
+template <> SEXP wrap(const fort::myrmidon::ExperimentDataInfo & infos) {
+	CharacterVector tddURIs,tddPaths,spaceURIs,spaceNames;
+	IntegerVector tddFrames,spaceIDs,spaceFrames;
+	DatetimeVector tddStart(0),tddEnd(0),spaceStart(0),spaceEnd(0);
+
+
+	for ( const auto & [spaceID,space] : infos.Spaces) {
+		for ( const auto & tdd : space.TrackingDataDirectories ) {
+			tddURIs.push_back(tdd.URI);
+			tddPaths.push_back(tdd.AbsoluteFilePath);
+			tddFrames.push_back(tdd.Frames);
+			tddStart.push_back(fmTime_asR(tdd.Start));
+			tddEnd.push_back(fmTime_asR(tdd.End));
+
+			spaceIDs.push_back(spaceID);
+			spaceURIs.push_back(space.URI);
+			spaceNames.push_back(space.Name);
+			spaceFrames.push_back(space.Frames);
+			spaceStart.push_back(fmTime_asR(space.Start));
+			spaceEnd.push_back(fmTime_asR(space.End));
+		}
+	}
+	spaceStart.attr("class") = "POSIXct";
+	spaceEnd.attr("class") = "POSIXct";
+	tddStart.attr("class") = "POSIXct";
+	tddEnd.attr("class") = "POSIXct";
+	List res;
+	res["frames"] = infos.Frames;
+	res["start"]  = fmTime_asR(infos.Start);
+	res["end"] = fmTime_asR(infos.End);
+	res["details"] = DataFrame::create(_["space.ID"]     = spaceIDs,
+	                                   _["space.name"]   = spaceNames,
+	                                   _["space.frames"] = spaceFrames,
+	                                   _["space.start"]  = spaceStart,
+	                                   _["space.end"]    = spaceEnd,
+	                                   _["tdd.URI"]      = tddURIs,
+	                                   _["tdd.path"]     = tddPaths,
+	                                   _["tdd.frames"]   = tddFrames,
+	                                   _["tdd.start"]    = tddStart,
+	                                   _["tdd.end"]      = tddEnd);
+	return res;
+}
+
 }

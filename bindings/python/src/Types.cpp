@@ -195,60 +195,47 @@ void BindAntInteraction(py::module_ & m) {
 	py::class_<AntTrajectorySegment>(m,
 	                                 "AntTrajectorySegment",
 	                                 R"pydoc(
-    Represents a section or a summary of an AntTrajectory.
-
-    This object is an hybrid object. Depending on Query option, it
-holds a pointer to an AntTrajectory and the corresponding index in
-that trajectory. Or it just holds the Mean in that trajectory.
-
-R)pydoc")
+Represents a section  of an :class:`AntTrajectory`.
+)pydoc")
 		.def_readonly("Trajectory",
 		              &AntTrajectorySegment::Trajectory,
-		              R"pydoc(
-    (py_fort_myrmidon.Trajectory): the AntTrajectory it refers to. if
-        it contains a Mean, then this field will not be valid and
-        accessing it will raise an Error.
-)pydoc")
+		              "Trajectory: the AntTrajectory it refers to.")
 		.def_readonly("Begin",
 		              &AntTrajectorySegment::Begin,
-		              "(int): the first index in Trajectory this segment refers to.")
+		              "int: the first index in Trajectory this segment refers to.")
 		.def_readonly("End",
 		              &AntTrajectorySegment::End,
-		              "(int): the last index+1 in Trajectory this segment refers to.")
-		.def_property_readonly("Mean",
-		                       [](const AntTrajectorySegment & ts) -> const Eigen::Vector3d & {
-			                       if ( !ts.Mean ) {
-				                       throw std::runtime_error("py_fort_myrmidon.AntTrajectorySegment.Mean is not computed");
-			                       }
-			                       return *ts.Mean;
-		                       },
-		                       py::return_value_policy::reference_internal,
-		                       R"pydoc(
-
-    numpy.ndarray(numpy.float64(3,1)): the average position and angle
-        in this Trajectory sub-segment.
-)pydoc")
+		              "int: the last index+1 in Trajectory this segment refers to.")
 		.def("StartTime",
 		     &AntTrajectorySegment::StartTime,
 		     R"pydoc(
-    Computes the starting Time of the AntTrajectorySegment
+Computes the starting Time of the AntTrajectorySegment
 
-    Returns:
-        py_fort_myrmidon.Time: the starting Time of the
-            AntTrajectorySegment if not summarized or
-            py_fort_myrmidon.Time.SinceEver() otherwise.
+Returns:
+    Time: the starting Time of the AntTrajectorySegment.
 )pydoc")
 		.def("EndTime",
 		     &AntTrajectorySegment::EndTime,
 		     R"pydoc(
-    Computes the ending Time of the AntTrajectorySegment
+Computes the ending Time of the AntTrajectorySegment
 
-    Returns:
-        py_fort_myrmidon.Time: the ending Time of the
-            AntTrajectorySegment if not summarized or
-            py_fort_myrmidon.Time.Forever() otherwise.
+Returns:
+    Time: the ending Time of the AntTrajectorySegment.
 )pydoc")
 ;
+	py::class_<AntTrajectorySummary>(m,
+	                                 "AntTrajectorySummary",
+	                                 R"pydoc(
+Represents a summary  of an :class:`AntTrajectory` section.
+)pydoc")
+		.def_readonly("Mean",
+		              &AntTrajectorySummary::Mean,
+		              "Trajectory: the AntTrajectory it refers to.")
+		.def_readonly("Zones",
+		              &AntTrajectorySummary::Zones,
+		              "List[int]: all the ZoneID the trajectory crossed.")
+;
+
 
 	py::class_<AntInteraction,std::shared_ptr<AntInteraction>>(m,
 	                                                           "AntInteraction",
@@ -271,19 +258,16 @@ R)pydoc")
   )pydoc")
 		.def_readonly("Trajectories",
 		              &AntInteraction::Trajectories,
-		              R"pydoc(
-    (Tuple[py_fort_myrmidon.AntTrajectorySegment,py_fort_myrmidon.AntTrajectorySegment]):
-        The two AntTrajectorySegment for the two Ant during this interaction.
-)pydoc")
+		              "Union[Tuple[AntTrajectorySegment,AntTrajectorySegment],Tuple[AntTrajectorySummary,AntTrajetorySummary]]: The two section of trajectory for the two Ant during this interaction. Summarized or full.")
 		.def_readonly("Start",
 		              &AntInteraction::Start,
-		              "(py_fort_myrmidon.Time): the start Time of the interaction.")
+		              "Time: the start Time of the interaction.")
 		.def_readonly("End",
 		              &AntInteraction::End,
-		              "(py_fort_myrmidon.Time): the end Time of the interaction.")
+		              "Time: the end Time of the interaction.")
 		.def_readonly("Space",
 		              &AntInteraction::Space,
-		              "(int): the SpaceID of the Space the interaction takes place.")
+		              "int: the SpaceID of the Space the interaction takes place.")
 		;
 }
 

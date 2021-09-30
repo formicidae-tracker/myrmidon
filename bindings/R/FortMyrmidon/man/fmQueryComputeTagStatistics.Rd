@@ -18,7 +18,12 @@ Computes tag statistics for an experiment
 }
 \seealso{
 Other fmQuery methods: 
+\code{\link{fmQueryCollideFrames}()},
+\code{\link{fmQueryComputeAntInteractions}()},
+\code{\link{fmQueryComputeAntTrajectories}()},
 \code{\link{fmQueryComputeMeasurementFor}()},
+\code{\link{fmQueryGetDataInformations}()},
+\code{\link{fmQueryIdentifyFrames}()},
 \code{\link{fmQuery}}
 }
 \concept{fmQuery methods}

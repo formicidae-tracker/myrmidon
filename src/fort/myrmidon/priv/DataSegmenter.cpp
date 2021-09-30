@@ -119,17 +119,15 @@ size_t DataSegmenter::BuildingTrajectory::FindIndexFor(const Time & time,
 }
 
 
-void DataSegmenter::BuildingInteraction::SummarizeTrajectorySegment(AntTrajectorySegment & s) {
-	s.Mean = std::make_unique<Eigen::Vector3d>(Eigen::Vector3d::Zero());
-	s.Zones = std::make_unique<std::set<ZoneID>>();
-	for ( int i = s.Begin; i < s.End; ++i ) {
-		*(s.Mean) += s.Trajectory->Positions.block<1,3>(i,1).transpose() / (s.End - s.Begin);
-		s.Zones->insert(s.Trajectory->Positions(i,4));
-	}
+AntTrajectorySummary DataSegmenter::BuildingInteraction::SummarizeTrajectorySegment(AntTrajectorySegment & s) {
 
-	s.Trajectory.reset();
-	s.Begin = 0;
-	s.End = 0;
+	Eigen::Vector3d mean = Eigen::Vector3d::Zero();
+	std::set<ZoneID> zones;
+	for ( int i = s.Begin; i < s.End; ++i ) {
+		mean += s.Trajectory->Positions.block<1,3>(i,1).transpose() / (s.End - s.Begin);
+		zones.insert(s.Trajectory->Positions(i,4));
+	}
+	return AntTrajectorySummary{.Mean = mean,.Zones = zones};
 }
 
 
@@ -148,21 +146,20 @@ AntInteraction::Ptr DataSegmenter::BuildingInteraction::Terminate(bool summarize
 		++i;
 	}
 
-	res->Trajectories.first = {
-							   .Trajectory = Trajectories.first->Trajectory,
-							   .Begin = SegmentStarts.first,
-							   .End = Trajectories.first->FindIndexFor(Last,MinEnd.first,MaxEnd.first)+1,
+	auto segment1 = AntTrajectorySegment{.Trajectory = Trajectories.first->Trajectory,
+	                                     .Begin = SegmentStarts.first,
+	                                     .End = Trajectories.first->FindIndexFor(Last,MinEnd.first,MaxEnd.first)+1,
 	};
-
-	res->Trajectories.second = {
-							   .Trajectory = Trajectories.second->Trajectory,
-							   .Begin = SegmentStarts.second,
-							   .End = Trajectories.second->FindIndexFor(Last,MinEnd.second,MaxEnd.second)+1,
+	auto segment2 = AntTrajectorySegment{.Trajectory = Trajectories.second->Trajectory,
+	                                     .Begin = SegmentStarts.second,
+	                                     .End = Trajectories.second->FindIndexFor(Last,MinEnd.second,MaxEnd.second)+1,
 	};
 
 	if ( summarize == true ) {
-		SummarizeTrajectorySegment(res->Trajectories.first);
-		SummarizeTrajectorySegment(res->Trajectories.second);
+		res->Trajectories = std::make_pair(SummarizeTrajectorySegment(segment1),
+		                                   SummarizeTrajectorySegment(segment2));
+	} else {
+		res->Trajectories = std::make_pair(segment1,segment2);
 	}
 
 

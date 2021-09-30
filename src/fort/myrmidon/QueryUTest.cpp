@@ -213,8 +213,8 @@ TEST_F(QueryUTest,ComputeAntInteractions) {
 				<< "  With i: " << i << std::endl
 				<< "Expected Interaction End: " << expected.Interactions[i]->End << std::endl
 				<< "  Acutal Interaction End: " << interactions[i]->End << std::endl
-				<< "    Expected Segment End: " << expected.Interactions[i]->Trajectories.first.EndTime() << std::endl
-				<< "      Actual Segment End: " << interactions[i]->Trajectories.first.EndTime() << std::endl;
+				<< "    Expected Segment End: " << std::get<0>(expected.Interactions[i]->Trajectories).first.EndTime() << std::endl
+				<< "      Actual Segment End: " << std::get<0>(interactions[i]->Trajectories).first.EndTime() << std::endl;
 
 		}
 	}

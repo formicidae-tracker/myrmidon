@@ -39,6 +39,7 @@ template <> std::vector<fort::myrmidon::Matcher::Ptr> as(SEXP);
 
 template <> SEXP wrap(const fort::myrmidon::TagStatistics::ByTagID &);
 
+template <> SEXP wrap(const fort::myrmidon::ExperimentDataInfo &);
 }
 
 RCPP_EXPOSED_ENUM_NODECL(fort::myrmidon::Shape::Type)
