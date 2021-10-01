@@ -21,7 +21,7 @@ requirements:
     - git
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - libopencv =4.5.1
+    - libopencv {{ opencv }}
     - {{ cdt('mesa-libgl-devel') }}  [linux]
     - {{ cdt('mesa-libegl-devel') }} [linux]
     - {{ cdt('mesa-dri-drivers') }}  [linux]
@@ -34,10 +34,10 @@ requirements:
     - libstdcxx-ng {{ c_compiler_version }} [linux]
     - eigen =3.4.0
     - tbb-devel =2020.2
-    - libprotobuf =3.17.2
+    - libprotobuf {{ protobuf }}
     - yaml-cpp =0.6.3
     - asio =1.14.1
-    - libopencv =4.5.1
+    - libopencv {{ opencv }}
 
 outputs:
   - name: libfort-myrmidon
@@ -53,8 +53,8 @@ outputs:
     requirements:
       run:
         - eigen =3.4.0
-        - libprotobuf =3.17.2
-        - libopencv =4.5.1
+        - libprotobuf {{ protobuf }}
+        - libopencv {{ opencv }}
         - yaml-cpp =0.6.3
         - tbb =2020.2
         - libstdcxx-ng {{ c_compiler_version }} [linux]
@@ -82,9 +82,10 @@ outputs:
         - r-base {{ r_base }}
         - r-rcpp
         - r-testthat
+        - r-codetools
         - {{ pin_subpackage('libfort-myrmidon', exact=True) }}
-        - libprotobuf =3.17.2
-        - libopencv =4.5.1
+        - libprotobuf {{ protobuf }}
+        - libopencv {{ opencv }}
         - yaml-cpp =0.6.3
         - eigen =3.4.0
         - libstdcxx-ng {{ c_compiler_version }} [linux]
@@ -93,8 +94,8 @@ outputs:
         - r-rcpp
         - r-codetools
         - {{ pin_subpackage('libfort-myrmidon', exact=True) }}
-        - libprotobuf =3.17.2
-        - libopencv =4.5.1
+        - libprotobuf {{ protobuf }}
+        - libopencv {{ opencv }}
         - yaml-cpp =0.6.3
         - libstdcxx-ng {{ c_compiler_version }} [linux]
     test:
@@ -108,18 +109,21 @@ outputs:
     requirements:
       build:
         - python {{python}}
+        - libopencv {{ opencv }}
+        - libprotobuf {{ protobuf }}
       host:
         - python {{python}}
         - {{ pin_subpackage('libfort-myrmidon',exact=True) }}
         - pybind11 =2.7.1
-        - libprotobuf =3.17.2
+        - libprotobuf {{ protobuf }}
         - numpy =1.21.2
         - libstdcxx-ng {{ c_compiler_version }} [linux]
+        - libopencv {{ opencv }}
       run:
         - python {{python}}
         - {{ pin_subpackage('libfort-myrmidon',exact=True) }}
-        - libprotobuf =3.17.2
-        - libopencv =4.5.1
+        - libprotobuf {{ protobuf }}
+        - libopencv {{ opencv }}
         - yaml-cpp =0.6.3
         - numpy =1.21.2
         - libstdcxx-ng {{ c_compiler_version }} [linux]
