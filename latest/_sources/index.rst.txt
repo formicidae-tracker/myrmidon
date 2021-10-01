@@ -18,9 +18,9 @@ Table of Contents
 
 .. toctree::
    :maxdepth: 1
-   :caption: Advanced features of **fort-myrmidon**
+   :caption: Advanced Usage
 
-
+   time.rst
 .. toctree::
    :maxdepth: 2
    :caption: API References

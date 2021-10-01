@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Queries And Matchers &mdash; fort-myrmidon  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/../version_dropdown.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Time Representation" href="time.html" />
+    <link rel="prev" title="Spaces and Zones" href="space_zone.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> fort-myrmidon
+          </a>
+              <div class="version">
+                placeholder
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../time.html">Time Representation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API References</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Python</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="experiment.html">API Entry Point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ant_identification.html">Ants and Identifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="space_zone.html">Spaces and Zones</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Queries And Matchers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#py-fort-myrmidon-query">py_fort_myrmidon.Query</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#py-fort-myrmidon-matcher">py_fort_myrmidon.Matcher</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="time.html">Time Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shapes.html">2D Geometric Shapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="misc.html">Miscanellous</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html#c">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html#r">R</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fort-myrmidon</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Python</a> &raquo;</li>
+      <li>Queries And Matchers</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/api/python/queries_matchers.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="queries-and-matchers">
+<h1>Queries And Matchers<a class="headerlink" href="#queries-and-matchers" title="Permalink to this headline"></a></h1>
+<section id="py-fort-myrmidon-query">
+<h2>py_fort_myrmidon.Query<a class="headerlink" href="#py-fort-myrmidon-query" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Query">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">Query</span></span><a class="headerlink" href="#py_fort_myrmidon.Query" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Query.CollideFrames">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">CollideFrames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">experiment:</span> <span class="pre">py_fort_myrmidon.Experiment</span></em>, <em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">start:</span> <span class="pre">py_fort_myrmidon.Time</span> <span class="pre">=</span> <span class="pre">{Time:-∞}</span></em>, <em class="sig-param"><span class="pre">end:</span> <span class="pre">py_fort_myrmidon.Time</span> <span class="pre">=</span> <span class="pre">{Time:+∞}</span></em>, <em class="sig-param"><span class="pre">singleThreaded:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><span class="pre">list</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Query.CollideFrames" title="Permalink to this definition"></a></dt>
+<dd><p>Gets Ant collision in video frames.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>experiment</strong> (<a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><em>py_fort_myrmidon.Experiment</em></a>) – the experiment to
+query</p></li>
+<li><p><strong>start</strong> (<a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><em>py_fort_myrmidon.Time</em></a>) – the first video acquisition
+time to consider</p></li>
+<li><p><strong>end</strong> (<a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><em>py_fort_myrmidon.Time</em></a>) – the last video acquisition
+time to consider</p></li>
+<li><p><strong>singleThreaded</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – limits computation to happen in a
+single thread.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the detected position and collision of the Ants in video frames in
+[start;end[</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[Tuple[py_fort_myrmidon.IdentifiedFrame,py_fort_myrmidon.CollisionFrame]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Query.ComputeAntInteractions">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">ComputeAntInteractions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">experiment:</span> <span class="pre">py_fort_myrmidon.Experiment</span></em>, <em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">start:</span> <span class="pre">py_fort_myrmidon.Time</span> <span class="pre">=</span> <span class="pre">{Time:-∞}</span></em>, <em class="sig-param"><span class="pre">end:</span> <span class="pre">py_fort_myrmidon.Time</span> <span class="pre">=</span> <span class="pre">{Time:+∞}</span></em>, <em class="sig-param"><span class="pre">maximumGap:</span> <span class="pre">py_fort_myrmidon.Duration</span> <span class="pre">=</span> <span class="pre">&lt;py_fort_myrmidon.Duration</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x7fbac5aa1df0&gt;</span></em>, <em class="sig-param"><span class="pre">matcher:</span> <span class="pre">py_fort_myrmidon.Matcher</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">reportFullTrajectories:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em>, <em class="sig-param"><span class="pre">singleThreaded:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><span class="pre">tuple</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Query.ComputeAntInteractions" title="Permalink to this definition"></a></dt>
+<dd><p>Conputes Ant Interctions between two times.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>experiment</strong> (<a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><em>py_fort_myrmidon.Experiment</em></a>) – the experiment to
+query</p></li>
+<li><p><strong>start</strong> (<a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><em>py_fort_myrmidon.Time</em></a>) – the first video acquisition
+time to consider</p></li>
+<li><p><strong>end</strong> (<a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><em>py_fort_myrmidon.Time</em></a>) – the last video acquisition
+time to consider</p></li>
+<li><p><strong>maximumGap</strong> (<a class="reference internal" href="time.html#py_fort_myrmidon.Duration" title="py_fort_myrmidon.Duration"><em>py_fort_myrmidon.Duration</em></a>) – maximum tracking gap
+allowed in a AntTrajectory object.</p></li>
+<li><p><strong>matcher</strong> (<a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher"><em>py_fort_myrmidon.Matcher</em></a>) – a Matcher that reduces
+down the query to more specific use case.</p></li>
+<li><p><strong>reportFullTrajectories</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – if true, full AntTrajectory
+will be computed and returned. Otherwise, none will be
+returned and only the average Ants position will be
+returned in AntTrajectorySegment.</p></li>
+<li><p><strong>singleThreaded</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – limits computation to happen in a
+single thread.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>a list of all</dt><dd><p>AntTrajectory taking place in [start;end[ given the
+matcher criterion and maximumGap if reportFullTrajectories
+is <cite>true</cite>. Otherwise it will be an empty list.</p>
+</dd>
+<dt>List[py_fort_myrmidon.AntInteraction]: a list of all</dt><dd><p>AntInteraction taking place in [start;end[ given the
+matcher criterion and maximumGap</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[py_fort_myrmidon.AntTrajectory]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Query.ComputeAntTrajectories">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">ComputeAntTrajectories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">experiment:</span> <span class="pre">py_fort_myrmidon.Experiment</span></em>, <em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">start:</span> <span class="pre">py_fort_myrmidon.Time</span> <span class="pre">=</span> <span class="pre">{Time:-∞}</span></em>, <em class="sig-param"><span class="pre">end:</span> <span class="pre">py_fort_myrmidon.Time</span> <span class="pre">=</span> <span class="pre">{Time:+∞}</span></em>, <em class="sig-param"><span class="pre">maximumGap:</span> <span class="pre">py_fort_myrmidon.Duration</span> <span class="pre">=</span> <span class="pre">&lt;py_fort_myrmidon.Duration</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x7fbac5afcef0&gt;</span></em>, <em class="sig-param"><span class="pre">matcher:</span> <span class="pre">py_fort_myrmidon.Matcher</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">computeZones:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></em>, <em class="sig-param"><span class="pre">singleThreaded:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><span class="pre">list</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Query.ComputeAntTrajectories" title="Permalink to this definition"></a></dt>
+<dd><p>Conputes Ant Trajectories between two times.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>experiment</strong> (<a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><em>py_fort_myrmidon.Experiment</em></a>) – the experiment to
+query</p></li>
+<li><p><strong>start</strong> (<a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><em>py_fort_myrmidon.Time</em></a>) – the first video acquisition
+time to consider</p></li>
+<li><p><strong>end</strong> (<a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><em>py_fort_myrmidon.Time</em></a>) – the last video acquisition
+time to consider</p></li>
+<li><p><strong>maximumGap</strong> (<a class="reference internal" href="time.html#py_fort_myrmidon.Duration" title="py_fort_myrmidon.Duration"><em>py_fort_myrmidon.Duration</em></a>) – maximum tracking gap
+allowed in a AntTrajectory object.</p></li>
+<li><p><strong>matcher</strong> (<a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher"><em>py_fort_myrmidon.Matcher</em></a>) – a Matcher that reduces
+down the query to more specific use case.</p></li>
+<li><p><strong>computeZones</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – computes the zone of the Ant. Otherwise 0
+will always be returned.</p></li>
+<li><p><strong>singleThreaded</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – limits computation to happen in a
+single thread.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>a list of all</dt><dd><p>AntTrajectory taking place in [start;end[ given the
+matcher criterion and maximumGap.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[py_fort_myrmidon.AntTrajectory]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Query.ComputeMeasurementFor">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">ComputeMeasurementFor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experiment</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">antID</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurementTypeID</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">py_fort_myrmidon.ComputedMeasurement</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#py_fort_myrmidon.Query.ComputeMeasurementFor" title="Permalink to this definition"></a></dt>
+<dd><p>Computes Ant manual measurement in millimeters.</p>
+<p>Computes the list of manual measurements made in <cite>fort-studio</cite> for
+a given Ant in millimeters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>experiment</strong> (<a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><em>py_fort_myrmidon.Experiment</em></a>) – the experiment to
+query</p></li>
+<li><p><strong>antID</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the Ant to consider</p></li>
+<li><p><strong>measurementTypeID</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the kind of measurement to consider</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>the list of measurement</dt><dd><p>for antID and measurementTypeID</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[py_fort_myrmidon.Measurement]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Query.ComputeTagStatistics">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">ComputeTagStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experiment</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">py_fort_myrmidon.TagStatistics</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#py_fort_myrmidon.Query.ComputeTagStatistics" title="Permalink to this definition"></a></dt>
+<dd><p>Computes tag detection statistics in an experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>experiment</strong> (<a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><em>py_fort_myrmidon.Experiment</em></a>) – the experiment to
+query</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>the list of</dt><dd><p>TagStatistics indexed by TagID.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>,py_fort_myrmidon.TagStatistics]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Query.GetDataInformations">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">GetDataInformations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experiment</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">py_fort_myrmidon.ExperimentDataInfo</span></span></span><a class="headerlink" href="#py_fort_myrmidon.Query.GetDataInformations" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Query.IdentifyFrames">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">IdentifyFrames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">experiment:</span> <span class="pre">py_fort_myrmidon.Experiment</span></em>, <em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">start:</span> <span class="pre">py_fort_myrmidon.Time</span> <span class="pre">=</span> <span class="pre">{Time:-∞}</span></em>, <em class="sig-param"><span class="pre">end:</span> <span class="pre">py_fort_myrmidon.Time</span> <span class="pre">=</span> <span class="pre">{Time:+∞}</span></em>, <em class="sig-param"><span class="pre">singleThreaded:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></em>, <em class="sig-param"><span class="pre">computeZones:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><span class="pre">list</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Query.IdentifyFrames" title="Permalink to this definition"></a></dt>
+<dd><p>Gets Ant positions in video frames.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>experiment</strong> (<a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><em>py_fort_myrmidon.Experiment</em></a>) – the experiment to
+query</p></li>
+<li><p><strong>start</strong> (<a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><em>py_fort_myrmidon.Time</em></a>) – the first video acquisition
+time to consider</p></li>
+<li><p><strong>end</strong> (<a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><em>py_fort_myrmidon.Time</em></a>) – the last video acquisition
+time to consider</p></li>
+<li><p><strong>singleThreaded</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – limits computation to happen in a
+single thread.</p></li>
+<li><p><strong>computeZones</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – computes the zone for the Ant, otherwise
+0 will always be returned for the ants’ current ZoneID.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>the detected position</dt><dd><p>of the Ant in video frames in [start;end[</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[py_fort_myrmidon.IdentifiedFrame]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="py-fort-myrmidon-matcher">
+<h2>py_fort_myrmidon.Matcher<a class="headerlink" href="#py-fort-myrmidon-matcher" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Matcher">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">Matcher</span></span><a class="headerlink" href="#py_fort_myrmidon.Matcher" title="Permalink to this definition"></a></dt>
+<dd><p>A Matcher helps to build complex <a class="reference internal" href="#py_fort_myrmidon.Query" title="py_fort_myrmidon.Query"><code class="xref py py-class docutils literal notranslate"><span class="pre">Query</span></code></a> by adding one or
+several constraints.</p>
+<p>Matchers works either on single Ant for trajectory computation, or on
+a pair of Ant when considering interactions. Some matcher have no real
+meaning outside of interaction (i.e. <a class="reference internal" href="#py_fort_myrmidon.Matcher.InteractionType" title="py_fort_myrmidon.Matcher.InteractionType"><code class="xref py py-meth docutils literal notranslate"><span class="pre">InteractionType()</span></code></a>) and
+would match any trajectory.</p>
+<p>One would use the following function to get a Matcher :</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#py_fort_myrmidon.Matcher.AntID" title="py_fort_myrmidon.Matcher.AntID"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AntID()</span></code></a> : one of the considered Ant in the trajectory or
+interaction should match a given AntID</p></li>
+<li><p><a class="reference internal" href="#py_fort_myrmidon.Matcher.AntMetaData" title="py_fort_myrmidon.Matcher.AntMetaData"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AntMetaData()</span></code></a> : one of the key-value meta-data for one of the
+considered Ant should match.</p></li>
+<li><p><a class="reference internal" href="#py_fort_myrmidon.Matcher.AntDistanceSmallerThan" title="py_fort_myrmidon.Matcher.AntDistanceSmallerThan"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AntDistanceSmallerThan()</span></code></a>, <a class="reference internal" href="#py_fort_myrmidon.Matcher.AntDistanceGreaterThan" title="py_fort_myrmidon.Matcher.AntDistanceGreaterThan"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AntDistanceGreaterThan()</span></code></a> : for
+interaction queries only, ensure some criterion for the distance
+between the two considered ants.</p></li>
+<li><p><a class="reference internal" href="#py_fort_myrmidon.Matcher.AntAngleSmallerThan" title="py_fort_myrmidon.Matcher.AntAngleSmallerThan"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AntAngleSmallerThan()</span></code></a>, <a class="reference internal" href="#py_fort_myrmidon.Matcher.AntAngleGreaterThan" title="py_fort_myrmidon.Matcher.AntAngleGreaterThan"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AntAngleGreaterThan()</span></code></a> : for
+interaction queries only, ensure that angle between Ant meets some
+criterion.</p></li>
+<li><p><a class="reference internal" href="#py_fort_myrmidon.Matcher.InteractionType" title="py_fort_myrmidon.Matcher.InteractionType"><code class="xref py py-meth docutils literal notranslate"><span class="pre">InteractionType()</span></code></a> : considers only interaction of a given
+type.</p></li>
+<li><p><a class="reference internal" href="#py_fort_myrmidon.Matcher.AntDisplacement" title="py_fort_myrmidon.Matcher.AntDisplacement"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AntDisplacement()</span></code></a>: matches interaction were the displacement
+of either of the Ant is kept under a threshold.</p></li>
+</ul>
+</div></blockquote>
+<p>Using <a class="reference internal" href="#py_fort_myrmidon.Matcher.And" title="py_fort_myrmidon.Matcher.And"><code class="xref py py-meth docutils literal notranslate"><span class="pre">And()</span></code></a> or <a class="reference internal" href="#py_fort_myrmidon.Matcher.Or" title="py_fort_myrmidon.Matcher.Or"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Or()</span></code></a>, one can combine several Matcher
+together to build more complex criterion.
+.. rubric:: Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">py_fort_myrmidon</span> <span class="kn">as</span> <span class="nn">fm</span>
+<span class="c1"># m will match ant 001 or 002</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Matcher</span><span class="o">.</span><span class="n">Or</span><span class="p">(</span><span class="n">fm</span><span class="o">.</span><span class="n">Matcher</span><span class="o">.</span><span class="n">AntID</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">fm</span><span class="o">.</span><span class="n">Matcher</span><span class="o">.</span><span class="n">AntID</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Matcher.And">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">And</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher"><span class="pre">py_fort_myrmidon.Matcher</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Matcher.And" title="Permalink to this definition"></a></dt>
+<dd><p>Combines several Matcher together in conjuction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>*args</strong> (<a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher"><em>Matcher</em></a>) – several other Matcher</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a Matcher that matches when all passed matcher also
+matches.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher">Matcher</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Matcher.AntAngleGreaterThan">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">AntAngleGreaterThan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher"><span class="pre">py_fort_myrmidon.Matcher</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Matcher.AntAngleGreaterThan" title="Permalink to this definition"></a></dt>
+<dd><p>A Matcher that matches ant angles.</p>
+<p>In the case of trajectories, it matches anything</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>angle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the angle in radians</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a Matcher that matches when the two Ant are facing
+directions which are greater appart than <strong>angle</strong>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher">Matcher</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Matcher.AntAngleSmallerThan">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">AntAngleSmallerThan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher"><span class="pre">py_fort_myrmidon.Matcher</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Matcher.AntAngleSmallerThan" title="Permalink to this definition"></a></dt>
+<dd><p>A Matcher that matches ant angles.</p>
+<p>In the case of trajectories, it matches anything</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>angle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the angle in radians</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a Matcher that matches when the two Ant are facing the
+same direction within <strong>angle</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher">Matcher</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Matcher.AntDisplacement">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">AntDisplacement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">under:</span> <span class="pre">float</span></em>, <em class="sig-param"><span class="pre">minimumGap:</span> <span class="pre">py_fort_myrmidon.Duration</span> <span class="pre">=</span> <span class="pre">&lt;py_fort_myrmidon.Duration</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x7fbac5b23df0&gt;</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher"><span class="pre">py_fort_myrmidon.Matcher</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Matcher.AntDisplacement" title="Permalink to this definition"></a></dt>
+<dd><p>A Matcher that rejects large ants displacement.</p>
+<p>Discards any trajectories and interactions where an Ant shows a
+displacement from one detected position to another larger than
+<strong>under</strong>. If <strong>minimumGap</strong> is larger than <code class="docutils literal notranslate"><span class="pre">0s</span></code>, this check is
+enforced only if there are more than minimumGap time ellapsed between
+two tracked positions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>under</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – maximum allowed Ant displacement in pixels</p></li>
+<li><p><strong>minimumGap</strong> (<a class="reference internal" href="time.html#py_fort_myrmidon.Duration" title="py_fort_myrmidon.Duration"><em>Duration</em></a>) – minimum tracking time between positions to
+enable the check.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Matcher that matches small Ant displacement.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher">Matcher</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Matcher.AntDistanceGreaterThan">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">AntDistanceGreaterThan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher"><span class="pre">py_fort_myrmidon.Matcher</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Matcher.AntDistanceGreaterThan" title="Permalink to this definition"></a></dt>
+<dd><p>A Matcher that matches ant distance.</p>
+<p>In the case of trajectories, it matches anything</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>distance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the distance in pixel to match</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a Matcher that matches when the two Ant are further than
+<strong>distance</strong>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher">Matcher</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Matcher.AntDistanceSmallerThan">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">AntDistanceSmallerThan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher"><span class="pre">py_fort_myrmidon.Matcher</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Matcher.AntDistanceSmallerThan" title="Permalink to this definition"></a></dt>
+<dd><p>A Matcher that matches ant distance.</p>
+<p>In the case of trajectories, it matches anything</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>distance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the distance in pixel to match</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a Matcher that matches when the two Ant are within
+<strong>distance</strong>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher">Matcher</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Matcher.AntID">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">AntID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">antID</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher"><span class="pre">py_fort_myrmidon.Matcher</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Matcher.AntID" title="Permalink to this definition"></a></dt>
+<dd><p>Matches a given AntID.</p>
+<p>In case of interaction, matches any interaction with one of the Ant
+having <strong>antID</strong>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>antID</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the AntID to match against.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a matcher that matches <strong>antID</strong>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher">Matcher</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Matcher.AntMetaData">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">AntMetaData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><span class="pre">py_fort_myrmidon.Time</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher"><span class="pre">py_fort_myrmidon.Matcher</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Matcher.AntMetaData" title="Permalink to this definition"></a></dt>
+<dd><p>Matches a given user meta data value.</p>
+<p>In case of interaction, matches any interaction where at least one of
+the Ant meets the criterion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – the key to match from</p></li>
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – the value for key. Should be a bool, int, float, str
+or <a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">Time</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a Matcher that matches Ant who current <strong>key</strong> meta data
+value matches <strong>value</strong>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher">Matcher</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Matcher.InteractionType">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">InteractionType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">type2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher"><span class="pre">py_fort_myrmidon.Matcher</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Matcher.InteractionType" title="Permalink to this definition"></a></dt>
+<dd><p>Matches InteractionType (type1,type2) and (type2,type1).</p>
+<p>In the case of trajectories it matches anything.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the first AntShapeTypeID to match</p></li>
+<li><p><strong>type2</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the second AntShapeTypeID to match</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Matcher that matches interactions (type1,type2) or
+(type2,type1).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher">Matcher</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Matcher.Or">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">Or</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher"><span class="pre">py_fort_myrmidon.Matcher</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Matcher.Or" title="Permalink to this definition"></a></dt>
+<dd><p>Combines several Matcher together in disjunction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>*args</strong> (<a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher"><em>py_fort_myrmidon.Matcher</em></a>) – several other Matcher</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a Matcher that matches when any of the passed matcher
+matches.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher">Matcher</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="space_zone.html" class="btn btn-neutral float-left" title="Spaces and Zones" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="time.html" class="btn btn-neutral float-right" title="Time Representation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Université de Lausanne.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
