@@ -25,71 +25,17 @@ packages.
 editing of **.myrmidon** files, and to provide basic visualization of
 tracking datasets.
 
-Installation
+INstallation
 ------------
 
-**fort-myrmidon** and all the supported bindings (R,python) is primarly
+**fort-myrmidon** and all the supported bindings (R,python) are primarly
 distributed with
 [conda](https://docs.conda.io/projects/conda/en/latest/).
 
-**fort-studio** is principally distributed using **snap**. However it is
-also distributed with **conda** to allow to pinpoint a perticular
-release.
+**fort-studio** is distributed using **snap**.
 
-Install **fort-myrmidon** from **conda**
-========================================
-
-The following packages are available from the anaconda channel
-`formicidae-tracker <https://anaconda.org/formicidae-tracker>`_:
-
-* **libfort-myrmidon**: C++ library and development files
-* **r-fort-myrmidon**: R bindings for **libfort-myrmidon**. R 3.6 and 4.0 are currently supported
-* **py-fort-myrmidon**: Python bindings for **libfort-myrmidon**
-* **fort-studio**: conda distibution of **fort-studio**. It is provided to
-  allow pinpointing a perticular version. The snap distribution should
-  be preferred in most use case. Please remind that care must be taken
-  if you install this conda package, as the command line executable
-  **fort-studio** may not match anymore the application **FORT Studio**
-  available through the **snap** package.
-
-Install **fort-studio** from snap
-=================================
-
-**fort-studio** is available through its own snap. It comes with its own
-bundled version of **libfort-myrmidon**. It can be installed using the
-following command:
-
-.. code-block:: bash
-
-   sudo snap install fort-studio
-
-
-If your tracking data is not in your home but on a removable media,
-you must allow **fort-studio** the access to removable media using the
-following command:
-
-.. code-block:: bash
-
-   sudo connect fort-studio:removable-media :removable-media
-
-Installation from sources
-=========================
-
-This project uses CMake as a build system. It requires a minimum
-version of 3.11 at least as it needs to fetch some external
-dependencies using **fetch_content**. It also requires the following
-dependencies:
-
-* OpenCV 3 or 4
-* cmake (>=3.11)
-* Eigen 3
-* Asio Library
-* Qt 5
-* Google Protobuf (>=3.3.0)
-* Google glog
-* yaml-cpp
-* TBB (==2020.02)
-
+Detailed installation instructions can be found in the `documentation
+<https:://formicidae-tracker.github.io/myrmidon/latest/installation.html>`_
 
 Versioning
 ----------

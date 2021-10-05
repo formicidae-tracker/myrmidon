@@ -6,11 +6,12 @@ Table of Contents
 .. toctree::
    :maxdepth: 1
 
-   introduction
+   installation
 
 .. toctree::
    :maxdepth: 1
    :caption: **fort-myrmidon** Basics
+
 
 .. toctree::
    :maxdepth: 1
