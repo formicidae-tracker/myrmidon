@@ -21,7 +21,7 @@ and **r-fort-myrmidon** via ``conda`` or ``mamba`` and to install
 
    As for most other snaps, **fort-studio** uses strict confinement. It
    means that by default, it will only be allowed to access files on the
-   current user's home. However with the FORT system, experiment tends to
+   current user's home. However, with the FORT system, experiment tends to
    be quite large and stored on external hard drives. To enable
    **fort-studio** to access these files, you must grant the snap right
    to access external hard drives by allowing the ``removable-media``
@@ -63,12 +63,12 @@ items regarding **fort-myrmidon**.
 .. note::
 
    More general, but detailed information can be found in the
-   `Introduction to Conda for (Data) Scientist
+   `"Introduction to Conda for (Data) Scientist"
    <https://carpentries-incubator.github.io/introduction-to-conda-for-data-scientists/aio/index.html>`_.
 
-1. Install **miniconda** instead of **anaconda**. The later comes with
+1. Install **miniconda** instead of **anaconda**. The latter comes with
    a very large number of preinstalled packages, and most of them are
-   not required to run **fort-myrmidon**. This could leads to quite
+   not required to run **fort-myrmidon**. This could lead to quite
    long solving environment computation time, which are for some users
    quite irritating.
 
@@ -76,7 +76,7 @@ items regarding **fort-myrmidon**.
    **anaconda** and **conda-forge** a careful installation as per
    `conda-forge documentation
    <https://conda-forge.org/docs/user/introduction.html#how-can-i-install-packages-from-conda-forge>`_
-   is strongly recommanded. In summary, one must perform once:
+   is strongly recommended. In summary, one must perform once:
 
    .. code-block:: bash
 
@@ -90,7 +90,7 @@ items regarding **fort-myrmidon**.
    are now built and tested with **mamba**, and therefore is supported.
 
 4. Do not `ever` use the ``base`` environment. This is a good practice
-   rule to avoid running into a lot of dependency problem when you may
+   rule to avoid running into a lot of dependency problems when you may
    want to be able to use different **fort-myrmidon** version on the
    same system. Let says you are running a long experiment for over a
    year and do not want to lose time rewriting all your script because
@@ -98,8 +98,8 @@ items regarding **fort-myrmidon**.
    project to start to use the latest version of
    **fort-myrmidon**. With the power of **conda** virtual environment,
    you can easily install the two versions, and choose when you run
-   your script which version to use. However if you install everything
-   in the ``base`` environment, you would certainly loose the ability
+   your script which version to use. However, if you install everything
+   in the ``base`` environment, you would certainly lose the ability
    to do that as it will certainly lead to a lot of conflict between
    your base and environment where you want another **fort-myrmidon**
    version installed. Therefore, `always` make sure:
@@ -128,9 +128,9 @@ Using **rstudio** with **conda**
 If you are an **rstudio** user, you will remark that it will always
 use the system's R version instead of the one you installed with
 **conda**, which means that it will never be able to find
-**r-fort-myrmidon**. Indeed **rstudio** will use the first R version
+**r-fort-myrmidon**. Indeed, **rstudio** will use the first R version
 found in the PATH, and if you launch it from the system's menu, it
-cannot found the version you installed as an user (it is not
+cannot find the version you installed as a user (it is not
 conda-aware), and defaults to the system's one. There are two means to circumvent that:
 
 a. Runs **rstudio** from a terminal within the right environment
@@ -143,6 +143,6 @@ a. Runs **rstudio** from a terminal within the right environment
 	  rstudio
 
 
-b. Installs and runs **rstudio** from conda. It is not recommended as
+b. Installs and runs **rstudio** from **conda**. It is not recommended as
    it is a more heavy solution and will make your environments much more
-   complex and time consuming to solve.
+   complex and time-consuming to solve.
