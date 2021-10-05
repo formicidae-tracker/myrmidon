@@ -119,7 +119,54 @@ items regarding **fort-myrmidon**.
    b. The right environment name is displayed in your prompt, and not
       ``base``.
 
+Including **fort-studio** to your project
++++++++++++++++++++++++++++++++++++++++++
 
+
+Python
+------
+
+After installing the **py-fort-myrmidon** package in an environment, the
+**py_fort_myrmidon** module is available to python in that
+environment.
+
+.. note::
+
+   The examples in this documentation assumes this module to be included as :
+
+   .. code-block:: python
+
+	  import py_fort_myrmidon as fm
+
+R
+-
+
+After installing the **r-fort-myrmidon** package in an environment,
+the **FortMyrmidon** package is available to the R version `packaged
+with this environment`. The system packaged R will not be able to see
+nor to use without crashing the **FortMyrmidon** package.
+
+C++
+---
+
+After installing the **libfort-myrmidon** package, libraries and
+header files for **fort-myrmidon** will be available to the targeted
+conda environment. The recommanded way is to use CMake to build your
+project and link with **fort-myrmidon**.
+
+.. code-block:: cmake
+
+   find_package(FortMyrmidon REQUIRED)
+   include_directories(FORT_MYRMIDON_INCLUDE_DIRS)
+   # fort-myrmidon requires at least the c++17 standard
+   set(CMAKE_CXX_STANDARD 17)
+
+   # once my-target is created
+   target_link_libraries(my-target ${FORT_MYRMIDON_LIBRARIES})
+
+
+A ``pkg-config`` configuration file is also available, but it is not
+nicely integrated with **conda**. Its utilisation should be avoided.
 
 
 Using **rstudio** with **conda**
