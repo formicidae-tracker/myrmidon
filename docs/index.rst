@@ -14,7 +14,7 @@ Table of Contents
    :caption: fort-myrmidon Basics
 
    linking_tdata
-
+   identify_ants
 
 .. toctree::
    :maxdepth: 1
