@@ -135,6 +135,16 @@ VisualizationWorkspace::~VisualizationWorkspace() {
 	delete d_ui;
 }
 
+void VisualizationWorkspace::onMovieSegmentActivated ( const QModelIndex & index ) {
+	auto movieBridge = d_experiment->movies();
+	const auto & [spaceID,tdd,segment,start]  = movieBridge->tddAndMovieSegment(index);
+	if ( !segment == true || !tdd == true || spaceID == 0) {
+		return;
+	}
+	d_videoPlayer->setMovieSegment(spaceID,tdd,segment,start);
+	d_videoPlayer->play();
+}
+
 void VisualizationWorkspace::initialize(QMainWindow * main,ExperimentBridge * experiment) {
 	d_experiment = experiment;
 	auto movieBridge = experiment->movies();
@@ -152,14 +162,8 @@ void VisualizationWorkspace::initialize(QMainWindow * main,ExperimentBridge * ex
 
 	connect(d_treeView,
 	        &QAbstractItemView::activated,
-	        [this,movieBridge] ( const QModelIndex & index ) {
-		        const auto & [spaceID,tdd,segment,start]  = movieBridge->tddAndMovieSegment(index);
-		        if ( !segment == true || !tdd == true || spaceID == 0) {
-			        return;
-		        }
-		        d_videoPlayer->setMovieSegment(spaceID,tdd,segment,start);
-		        d_videoPlayer->play();
-	        });
+	        this,
+	        &VisualizationWorkspace::onMovieSegmentActivated);
 
 	d_videoPlayer->setup(experiment->identifiedFrameLoader());
 	d_ui->trackingVideoWidget->setup(experiment->antDisplay());

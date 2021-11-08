@@ -199,6 +199,8 @@ set(SRC_UTEST_FILES utest/main.cpp
 					utest/AntShapeUTest.cpp
 					utest/AntGeometryWorkspace.cpp
 					utest/TagCloseUpBridge.cpp
+					utest/WorkspaceUTest.cpp
+					utest/VisualizationWorkspaceUTest.cpp
                     )
 
 set(HDR_UTEST_FILES utest/ExperimentBridgeUTest.hpp
@@ -213,7 +215,10 @@ set(HDR_UTEST_FILES utest/ExperimentBridgeUTest.hpp
                     utest/AntShapeUTest.hpp
 					utest/AntGeometryWorkspace.hpp
 					utest/TagCloseUpBridge.hpp
-                    )
+					utest/WorkspaceUTest.hpp
+					utest/VisualizationWorkspaceUTest.hpp
+					)
+
 
 include_directories(${PROJECT_BINARY_DIR}/src
                     ${PROJECT_BINARY_DIR}/src/myrmidon
@@ -251,7 +256,7 @@ add_executable(fort-studio-tests ${SRC_UTEST_FILES}
                                  ${HDR_UTEST_FILES}
                                  )
 
-set_target_properties(fort-studio-tests PROPERTIES AUTOUIC_SEARCH_PATHS ${PROJECT_SOURCE_DIR}/src/fort/studio/widget)
+set_target_properties(fort-studio-tests PROPERTIES AUTOUIC_SEARCH_PATHS "${PROJECT_SOURCE_DIR}/src/fort/studio/widget;${PROJECT_SOURCE_DIR}/src/fort/studio/workspace")
 
 target_link_libraries(fort-studio-tests fort-studio-common
                                         fort-myrmidon-utest-common

@@ -92,7 +92,7 @@ void GeneratedData::AssignTicks(const std::vector<Time> & ticks,
 			}
 		}
 		if ( current != TDDs.end() ) {
-			auto monoValue = Ticks.back().second.Sub(current->Start).Nanoseconds() + 2000;
+			auto monoValue = Ticks.back().second.Sub(current->Start).Nanoseconds() + 20e9;
 			Ticks.back().second =
 				Time::FromTimestampAndMonotonic(Ticks.back().second.ToTimestamp(),
 				                                monoValue,
