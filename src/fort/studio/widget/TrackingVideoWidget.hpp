@@ -28,6 +28,7 @@ public:
 
 	bool showCollisions() const;
 
+	bool showLoadingBanner() const;
 
 	fort::Time trackingTime() const;
 
@@ -50,15 +51,22 @@ public slots:
 	void setShowID(bool show);
 	void setShowCollisions(bool show);
 
+
+
 protected:
 	void paintEvent(QPaintEvent * event) override;
 
-	void paintIdentifiedAnts(QPainter * painter, const QRectF & focusRectangle);
+	void paint(QPainter * painter);
+
+	void paintAntsAndCollisions(QPainter * painter, const QRectF & focusRectangle);
+
+	void paintAnts(QPainter * painter, double ratio, const QRectF & focusRectangle, bool hasSolo);
+	void paintCollisions(QPainter * painter, double ratio, const QRectF & focusRectangle, bool hasSolo);
 
 	void mousePressEvent(QMouseEvent * event) override;
 	void mouseDoubleClickEvent(QMouseEvent * event) override;
-
 private:
+	friend class TrackingVideoWidgetUTest;
 	void focusAnt(quint32 antID, bool reset = false);
 
 	void setHasTrackingTime(bool value);

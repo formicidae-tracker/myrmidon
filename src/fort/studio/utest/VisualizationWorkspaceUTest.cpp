@@ -70,10 +70,12 @@ TEST_F(VisualizationWorkspaceUTest,DisplaysSegmentsCorrectly) {
 
 TEST_F(VisualizationWorkspaceUTest,ShowsBanner) {
 	QSignalSpy seekReady(VideoPlayer(),&TrackingVideoPlayer::seekReady);
+	EXPECT_TRUE(VideoWidget()->showLoadingBanner());
+	EXPECT_FALSE(VideoPlayer()->isSeekReady());
 	StartMovie();
 	seekReady.wait();
-	EXPECT_EQ(VideoPlayer()->isSeekReady(),true);
-
+	EXPECT_TRUE(VideoPlayer()->isSeekReady());
+	EXPECT_FALSE(VideoWidget()->showLoadingBanner());
 }
 
 
