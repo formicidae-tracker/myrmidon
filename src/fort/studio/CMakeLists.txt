@@ -201,6 +201,7 @@ set(SRC_UTEST_FILES utest/main.cpp
 					utest/TagCloseUpBridge.cpp
 					utest/WorkspaceUTest.cpp
 					utest/VisualizationWorkspaceUTest.cpp
+					utest/TrackingVideoWidgetUTest.cpp
                     )
 
 set(HDR_UTEST_FILES utest/ExperimentBridgeUTest.hpp
@@ -217,6 +218,7 @@ set(HDR_UTEST_FILES utest/ExperimentBridgeUTest.hpp
 					utest/TagCloseUpBridge.hpp
 					utest/WorkspaceUTest.hpp
 					utest/VisualizationWorkspaceUTest.hpp
+					utest/TrackingVideoWidgetUTest.hpp
 					)
 
 
