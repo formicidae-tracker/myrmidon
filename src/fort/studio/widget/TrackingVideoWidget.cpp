@@ -86,7 +86,7 @@ void TrackingVideoWidget::paintEvent(QPaintEvent * event) {
 		QPainter imagePainter(&image);
 		imagePainter.setRenderHint(QPainter::Antialiasing,true);
 		imagePainter.setRenderHint(QPainter::TextAntialiasing,true);
-		paintIdentifiedAnt(&imagePainter,sourceRect);
+		paintIdentifiedAnts(&imagePainter,sourceRect);
 	}
 
 
@@ -126,7 +126,7 @@ void TrackingVideoWidget::setup(AntDisplayBridge * antDisplay) {
 
 
 
-void TrackingVideoWidget::paintIdentifiedAnt(QPainter * painter, const QRectF & focusRectangle) {
+void TrackingVideoWidget::paintIdentifiedAnts(QPainter * painter, const QRectF & focusRectangle) {
 	VIDEO_PLAYER_DEBUG(std::cerr << "[widget] identification painting on:" << d_frame << std::endl);
 	const auto & tFrame = d_frame.TrackingFrame;
 	const auto & iFrame = d_frame.CollisionFrame;

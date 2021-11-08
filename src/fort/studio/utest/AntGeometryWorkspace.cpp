@@ -12,25 +12,11 @@
 #include <fort/studio/bridge/AntShapeBridge.hpp>
 
 
-void WorkspaceUTest::SetUp(const std::string & name) {
-	experiment = fmp::Experiment::Create(TestSetup::UTestData().Basedir() / name);
-
-	bridge = new ExperimentBridge();
-	mainWindow = new QMainWindow();
-	bridge->setExperiment(experiment);
-}
-
-void WorkspaceUTest::TearDown() {
-	delete mainWindow;
-	delete bridge;
-	bridge = nullptr;
-}
 
 
 void AntShapeWorkspaceUTest::SetUp() {
-	WorkspaceUTest::SetUp("ant-shape-workspace.myrmidon");
 	shapeWs = new AntShapeWorkspace();
-	static_cast<Workspace*>(shapeWs)->initialize(mainWindow,bridge);
+	WorkspaceUTest::SetUp(fmp::Experiment::Create(TestSetup::UTestData().Basedir() / "ant-shape-workspace.myrmidon"),shapeWs);
 
 	bridge->createAnt();
 	bridge->identifier()->addIdentification(1,1,fort::Time::SinceEver(),fort::Time::Forever());

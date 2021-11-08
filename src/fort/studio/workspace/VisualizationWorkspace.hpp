@@ -33,8 +33,12 @@ protected:
 private slots :
 	void onCopyTimeActionTriggered();
 
+	void onMovieSegmentActivated(const QModelIndex & index);
+
 	void jumpToTime();
 private:
+	friend class VisualizationWorkspaceUTest;
+
 	void setUpUI();
 
 	ExperimentBridge           * d_experiment;

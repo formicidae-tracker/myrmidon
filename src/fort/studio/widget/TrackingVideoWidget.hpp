@@ -53,7 +53,7 @@ public slots:
 protected:
 	void paintEvent(QPaintEvent * event) override;
 
-	void paintIdentifiedAnt(QPainter * painter, const QRectF & focusRectangle);
+	void paintIdentifiedAnts(QPainter * painter, const QRectF & focusRectangle);
 
 	void mousePressEvent(QMouseEvent * event) override;
 	void mouseDoubleClickEvent(QMouseEvent * event) override;
