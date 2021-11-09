@@ -139,7 +139,6 @@ void TrackingVideoWidget::paintCollisions(QPainter * painter, double ratio, cons
 	if ( !iFrame ) {
 		return;
 	}
-
 	fmp::DenseMap<quint32,size_t> positionIndex;
 	for ( size_t i = 0; i < tFrame->Positions.rows(); ++i ) {
 		fm::AntID antID = tFrame->Positions(i,0);
@@ -152,8 +151,8 @@ void TrackingVideoWidget::paintCollisions(QPainter * painter, double ratio, cons
 		const auto & [aDisplayStatus,aDisplayColor] = d_antDisplay->displayStatusAndColor(aID);
 		const auto & [bDisplayStatus,bDisplayColor] = d_antDisplay->displayStatusAndColor(bID);
 
-		if ( aDisplayStatus != fmp::Ant::DisplayState::HIDDEN
-		     || bDisplayStatus != fmp::Ant::DisplayState::HIDDEN
+		if ( aDisplayStatus != fmp::Ant::DisplayState::VISIBLE
+		     || bDisplayStatus != fmp::Ant::DisplayState::VISIBLE
 		     || ( hasSolo == true
 		          && aDisplayStatus != fmp::Ant::DisplayState::SOLO
 		          && bDisplayStatus != fmp::Ant::DisplayState::SOLO) ) {

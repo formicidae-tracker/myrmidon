@@ -299,6 +299,18 @@ fm::AntID AntDisplayBridge::antIDForIndex(const QModelIndex & index) const {
 }
 
 
+void AntDisplayBridge::setAntDisplayStatus(quint32 antID,
+                                           fm::Ant::DisplayState state) {
+	auto item = d_model->itemFromAntID(antID);
+	auto hideItem = d_model->item(item->row(),HIDE_COLUMN);
+	auto soloItem = d_model->item(item->row(),SOLO_COLUMN);
+	auto ant = item->data().value<fmp::Ant::Ptr>();
+
+	setAntDisplayState(hideItem, soloItem, ant, state);
+}
+
+
+
 std::pair<fmp::Ant::DisplayState,fm::Color>
 AntDisplayBridge::displayStatusAndColor(fm::AntID antID) const {
 	auto ant = AntGlobalModel::findAnt(d_experiment,antID);
