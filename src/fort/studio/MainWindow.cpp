@@ -109,57 +109,7 @@ void MainWindow::setUpWorkspacesActions() {
 }
 
 void MainWindow::setUpNavigationActions() {
-	auto toolbar = new QToolBar(this);
-	d_navigationActions.NavigationToolBar = toolbar;
-	addToolBar(toolbar);
-
-
-#define set_button(res,symbolStr,legendStr,shortCutStr,toolTipStr) do {	  \
-		(res) = toolbar->addAction(QIcon::fromTheme(symbolStr), \
-		                           tr(legendStr)); \
-		(res)->setShortcut(QKeySequence(shortCutStr)); \
-		(res)->setToolTip(tr(toolTipStr " (" shortCutStr ")")); \
-		(res)->setStatusTip((res)->toolTip()); \
-		(res)->setEnabled(false); \
-	}while(0)
-	set_button(d_navigationActions.PreviousTag,
-	           "go-first-symbolic",
-	           "Previous Tag",
-	           "Alt+W",
-	           "Jump to previous tag");
-
-	set_button(d_navigationActions.PreviousCloseUp,
-	           "go-previous-symbolic",
-	           "Previous Close Up",
-	           "Alt+A",
-	           "Jump to previous close-up");
-
-	set_button(d_navigationActions.NextCloseUp,
-	           "go-next-symbolic",
-	           "Next Close Up",
-	           "Alt+D",
-	           "Jump to next close-up");
-
-	set_button(d_navigationActions.NextTag,
-	           "go-last-symbolic",
-	           "Next Tag",
-	           "Alt+S",
-	           "Jump to next tag");
-
-	toolbar->addSeparator();
-	set_button(d_navigationActions.CopyCurrentTime,
-	           "edit-copy-symbolic",
-	           "Copy Current Time",
-	           "Ctrl+Shift+C",
-	           "Copy time of currently displayed frame or close-up");
-
-	toolbar->addSeparator();
-	set_button(d_navigationActions.JumpToTime,
-	           "go-jump-symbolic",
-	           "Jump To Time",
-	           "Ctrl+T",
-	           "Jump current movie to time");
-#undef set_button
+	addToolBar(d_navigationActions.NavigationToolBar);
 
 	d_ui->menuMove->addAction(d_navigationActions.NextCloseUp);
 	d_ui->menuMove->addAction(d_navigationActions.PreviousCloseUp);
@@ -227,7 +177,8 @@ MainWindow::MainWindow(QWidget *parent)
 	, d_experiment(new ExperimentBridge(this))
 	, d_logger( new Logger(this) )
 	, d_loggerWidget(nullptr)
-	, d_lastWorkspace(nullptr) {
+	, d_lastWorkspace(nullptr)
+	, d_navigationActions(this) {
 
 	d_ui->setupUi(this);
 

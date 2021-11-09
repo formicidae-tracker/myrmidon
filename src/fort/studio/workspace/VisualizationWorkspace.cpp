@@ -50,14 +50,11 @@ VisualizationWorkspace::VisualizationWorkspace(QWidget *parent)
 	: Workspace(true,parent)
 	, d_experiment(nullptr)
 	, d_ui(new Ui::VisualizationWorkspace)
-	, d_videoPlayer(new TrackingVideoPlayer(this))
-	, d_jumpToTimeAction( new QAction(tr("Jump to Time"),this)) {
+	, d_videoPlayer(new TrackingVideoPlayer(this)) {
 	setUpUI();
 
 	d_ui->setupUi(this);
 
-	d_jumpToTimeAction->setToolTip(tr("Jump current movie to time"));
-	d_jumpToTimeAction->setShortcut(tr("Ctrl+T"));
 
 	auto togglePlayPauseShortcut = new QShortcut(tr("Space"),this);
 	auto nextFrameShortcut = new QShortcut(tr("."),this);
@@ -196,8 +193,6 @@ void VisualizationWorkspace::initialize(QMainWindow * main,ExperimentBridge * ex
 
 	d_ui->videoControl->setShowID(d_ui->trackingVideoWidget->showID());
 
-	connect(d_jumpToTimeAction,&QAction::triggered,
-	        this,&VisualizationWorkspace::jumpToTime);
 
 	d_videoPlayer->clearMovieSegment();
 
@@ -234,7 +229,12 @@ void VisualizationWorkspace::setUp(const NavigationAction & actions) {
 	        this,
 	        &VisualizationWorkspace::onCopyTimeActionTriggered);
 
+	connect(actions.JumpToTime,&QAction::triggered,
+	        this,&VisualizationWorkspace::jumpToTimeAction);
+
 	actions.CopyCurrentTime->setEnabled(d_ui->trackingVideoWidget->hasTrackingTime());
+
+	actions.JumpToTime->setEnabled(true);
 	d_antDisplayDock->show();
 	d_segmentListDock->show();
 }
@@ -249,17 +249,18 @@ void VisualizationWorkspace::tearDown(const NavigationAction & actions) {
 	           &QAction::triggered,
 	           this,
 	           &VisualizationWorkspace::onCopyTimeActionTriggered);
+
+	disconnect(actions.JumpToTime,&QAction::triggered,
+	        this,&VisualizationWorkspace::jumpToTimeAction);
+
 	actions.CopyCurrentTime->setEnabled(false);
+	actions.JumpToTime->setEnabled(false);
 	d_antDisplayDock->hide();
 	d_segmentListDock->hide();
 }
 
-QAction * VisualizationWorkspace::jumpToTimeAction() const {
-	return d_jumpToTimeAction;
-}
 
-
-void VisualizationWorkspace::jumpToTime() {
+void VisualizationWorkspace::jumpToTimeAction() {
 	if ( d_experiment == nullptr || d_experiment->isActive() == false ) {
 		return;
 	}
@@ -324,12 +325,18 @@ void VisualizationWorkspace::jumpToTime() {
 	    return;
     }
     auto spaceID = spaceCombo->currentData().toInt();
-    auto [tdd,segment,start] = d_experiment->movies()->findTime(spaceID,
-                                                                wanted);
+    jumpToTime(spaceID,wanted);
 
+}
+
+
+void VisualizationWorkspace::jumpToTime(uint32_t spaceID,
+                                        const fort::Time & time) {
+	auto [tdd,segment,start] = d_experiment->movies()->findTime(spaceID,
+                                                                time);
     if ( !tdd || !segment ) {
-	    qCritical() << "Could not find time " << ToQString(wanted) << " in space "
-	                << spaceCombo->currentText();
+	    qCritical() << "Could not find time " << ToQString(time) << " in space "
+	                << spaceID;
 	    return;
     }
 
@@ -339,5 +346,5 @@ void VisualizationWorkspace::jumpToTime() {
          currentSegment->URI() != segment->URI() ) {
 	    d_videoPlayer->setMovieSegment(spaceID,tdd,segment,start);
     }
-    d_videoPlayer->setTime(wanted);
+    d_videoPlayer->setTime(time);
 }

@@ -18,4 +18,5 @@ protected:
 	fmp::Experiment::Ptr experiment;
 	ExperimentBridge   * bridge;
 	QMainWindow        * mainWindow;
+	NavigationAction   * actions;
 };

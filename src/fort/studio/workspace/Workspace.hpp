@@ -17,6 +17,8 @@ struct NavigationAction {
 	QAction * JumpToTime;
 
 	QToolBar * NavigationToolBar;
+
+	NavigationAction(QWidget * parent);
 };
 
 
