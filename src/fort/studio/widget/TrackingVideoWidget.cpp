@@ -189,7 +189,7 @@ void TrackingVideoWidget::paintAnts(QPainter * painter, double ratio, const QRec
 
 	for ( size_t i = 0; i < tFrame->Positions.rows(); ++i ) {
 		fm::AntID antID = tFrame->Positions(i,0);
-		auto position = tFrame->Positions.block<2,1>(i,1).transpose();
+		auto position = tFrame->Positions.block<1,2>(i,1).transpose();
 		auto angle = tFrame->Positions(i,3);
 		const auto & [displayStatus,displayColor] = d_antDisplay->displayStatusAndColor(antID);
 		if ( displayStatus == fmp::Ant::DisplayState::HIDDEN
