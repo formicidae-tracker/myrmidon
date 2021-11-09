@@ -16,6 +16,9 @@ class TrackingVideoWidget : public QWidget {
 	           READ showCollisions
 	           WRITE setShowCollisions
 	           NOTIFY showCollisionsChanged);
+	Q_PROPERTY(int opacity
+	           READ opacity
+	           WRITE setOpacity);
 
 public:
 	explicit TrackingVideoWidget(QWidget * parent = nullptr);
@@ -34,6 +37,7 @@ public:
 
 	bool hasTrackingTime() const;
 
+	int opacity() const;
 signals:
 	void showIDChanged(bool value);
 	void showCollisionsChanged(bool value);
@@ -51,7 +55,7 @@ public slots:
 	void setShowID(bool show);
 	void setShowCollisions(bool show);
 
-
+	void setOpacity(int opacity);
 
 protected:
 	void paintEvent(QPaintEvent * event) override;
@@ -80,4 +84,5 @@ private:
 	quint32            d_focusedAntID;
 	qreal              d_zoom;
 	QPointF            d_lastFocus;
+	int                d_opacity;
 };

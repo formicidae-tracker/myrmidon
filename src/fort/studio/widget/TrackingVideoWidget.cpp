@@ -22,7 +22,8 @@ TrackingVideoWidget::TrackingVideoWidget(QWidget * parent)
 	, d_focusedAntID(0)
 	, d_zoom(1.0)
 	, d_lastFocus(0,0)
-	, d_hasTrackingTime(false) {
+	, d_hasTrackingTime(false)
+	, d_opacity(150) {
 }
 
 TrackingVideoWidget::~TrackingVideoWidget() {
@@ -108,7 +109,7 @@ void TrackingVideoWidget::paint(QPainter * painter) {
 		auto font = painter->font();
 		font.setPointSize(14);
 		painter->setFont(font);
-		painter->setBrush(QColor(255,255,255,150));
+		painter->setBrush(QColor(255,255,255,d_opacity));
 		painter->setPen(Qt::NoPen);
 		auto rect = QRectF(0,0,width(),60);
 
@@ -168,7 +169,7 @@ void TrackingVideoWidget::paintCollisions(QPainter * painter, double ratio, cons
 		     && focusRectangle.contains(bPos) == false ) {
 			continue;
 		}
-		auto c = Conversion::colorFromFM(aDisplayColor,150);
+		auto c = Conversion::colorFromFM(aDisplayColor,d_opacity);
 		painter->setPen(QPen(c,3));
 
 		painter->drawLine(aPos,bPos);
@@ -201,7 +202,7 @@ void TrackingVideoWidget::paintAnts(QPainter * painter, double ratio, const QRec
 			continue;
 		}
 
-		auto c = Conversion::colorFromFM(displayColor,150);
+		auto c = Conversion::colorFromFM(displayColor,d_opacity);
 		painter->setPen(Qt::NoPen);
 		painter->setBrush(c);
 
@@ -353,4 +354,12 @@ void TrackingVideoWidget::mouseDoubleClickEvent(QMouseEvent * event) {
 		emit togglePlayPause();
 	}
 	event->accept();
+}
+
+int TrackingVideoWidget::opacity() const {
+	return d_opacity;
+}
+
+void TrackingVideoWidget::setOpacity(int opacity) {
+	d_opacity = std::clamp(opacity,0,255);
 }
