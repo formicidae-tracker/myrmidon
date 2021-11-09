@@ -55,6 +55,9 @@ public slots:
 	                        const QColor & color);
 
 
+	void setAntDisplayStatus(quint32 antID,
+	                         fm::Ant::DisplayState state);
+
 	void showAll();
 	void unsoloAll();
 
@@ -79,7 +82,7 @@ private:
 	void setAntDisplayState(QStandardItem * hideItem,
 	                        QStandardItem * soloItem,
 	                        const fmp::Ant::Ptr & ant,
-	                        fmp::Ant::DisplayState ds);
+	                        fm::Ant::DisplayState ds);
 
 	QList<QStandardItem*> buildAnt(const fmp::Ant::Ptr & ant);
 

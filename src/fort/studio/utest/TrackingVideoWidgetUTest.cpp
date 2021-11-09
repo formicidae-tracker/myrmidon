@@ -3,6 +3,7 @@
 #include <QPainter>
 
 #include <fort/studio/bridge/ExperimentBridge.hpp>
+#include <fort/studio/bridge/AntDisplayBridge.hpp>
 #include <fort/studio/widget/TrackingVideoWidget.hpp>
 #include <fort/studio/MyrmidonTypes/Conversion.hpp>
 
@@ -87,10 +88,9 @@ TEST_F(TrackingVideoWidgetUTest,BannerIsShown) {
 
 
 
-TEST_F(TrackingVideoWidgetUTest,AntAreDisplayedAtTheRightLocation) {
+TEST_F(TrackingVideoWidgetUTest,AntAreDisplayedCorrectly) {
 	QImage res(1920,1080,QImage::Format_RGB888);
 	QPainter painter(&res);
-	Paint(&painter);
 	widget->display(frame);
 	widget->hideLoadingBanner(true);
 	Paint(&painter);
@@ -100,4 +100,40 @@ TEST_F(TrackingVideoWidgetUTest,AntAreDisplayedAtTheRightLocation) {
 	EXPECT_EQ(res.pixelColor(300,400),
 	          Conversion::colorFromFM(ants[1]->DisplayColor()));
 
+}
+
+
+TEST_F(TrackingVideoWidgetUTest,AntVisibilityIsRespected) {
+	QImage res(1920,1080,QImage::Format_RGB888);
+	QPainter painter(&res);
+	widget->display(frame);
+	widget->hideLoadingBanner(true);
+
+	experiment->antDisplay()->setAntDisplayStatus(2,fm::Ant::DisplayState::HIDDEN);
+	Paint(&painter);
+
+	EXPECT_EQ(res.pixelColor(100,200),
+	          Conversion::colorFromFM(ants[0]->DisplayColor()));
+	EXPECT_EQ(res.pixelColor(300,400),
+	          QColor(0,0,0));
+
+	experiment->antDisplay()->setAntDisplayStatus(2,fm::Ant::DisplayState::SOLO);
+	Paint(&painter);
+	EXPECT_EQ(res.pixelColor(100,200),
+	          QColor(0,0,0));
+	EXPECT_EQ(res.pixelColor(300,400),
+	          Conversion::colorFromFM(ants[1]->DisplayColor()));
+}
+
+
+TEST_F(TrackingVideoWidgetUTest,AntCollisionAreShown) {
+	QImage res(1920,1080,QImage::Format_RGB888);
+	QPainter painter(&res);
+	widget->display(frame);
+	widget->hideLoadingBanner(true);
+	widget->setShowCollisions(true);
+	Paint(&painter);
+
+	EXPECT_EQ(res.pixelColor(200,300),
+	          Conversion::colorFromFM(ants[0]->DisplayColor()));
 }
