@@ -7,14 +7,19 @@ Table of Contents
    :maxdepth: 1
 
    introduction
+   installation
 
 .. toctree::
    :maxdepth: 1
-   :caption: **fort-myrmidon** Basics
+   :caption: fort-myrmidon Basics
+
+   linking_tdata
+   identifying_ants
+   defining_ant_metadata
 
 .. toctree::
    :maxdepth: 1
-   :caption: **fort-studio** Manual
+   :caption: fort-studio Manual
 
 .. toctree::
    :maxdepth: 1

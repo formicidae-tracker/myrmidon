@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Installation &mdash; fort-myrmidon  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/../version_dropdown.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Linking Tracking Data" href="linking_tdata.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> fort-myrmidon
+          </a>
+              <div class="version">
+                placeholder
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#fort-studio-through-snap"><strong>fort-studio</strong> through snap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fort-myrmidon-and-bindings-through-conda"><strong>fort-myrmidon</strong> and bindings through <code class="docutils literal notranslate"><span class="pre">conda</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tips-on-an-efficient-conda-usage">Tips on an efficient <strong>conda</strong> usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#including-fort-studio-to-your-project">Including <strong>fort-studio</strong> to your project</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#python">Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#r">R</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#c">C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-rstudio-with-conda">Using <strong>rstudio</strong> with <strong>conda</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-myrmidon Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defining_ant_metadata.html">Defining Ant Metadata</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="time.html">Time Representation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html#c">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html#r">R</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fort-myrmidon</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Installation</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/installation.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h1>
+<p>It is recommended to install <strong>fort-myrmidon</strong>, <strong>py-fort-myrmidon</strong>
+and <strong>r-fort-myrmidon</strong> via <code class="docutils literal notranslate"><span class="pre">conda</span></code> or <code class="docutils literal notranslate"><span class="pre">mamba</span></code> and to install
+<strong>fort-studio</strong> using <code class="docutils literal notranslate"><span class="pre">snap</span></code>.</p>
+<section id="fort-studio-through-snap">
+<h2><strong>fort-studio</strong> through snap<a class="headerlink" href="#fort-studio-through-snap" title="Permalink to this headline"></a></h2>
+<p><strong>fort-studio</strong> is available on the snap store with the eponymous snap:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo snap install fort-studio
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>As for most other snaps, <strong>fort-studio</strong> uses strict confinement. It
+means that by default, it will only be allowed to access files on the
+current user’s home. However, with the FORT system, experiment tends to
+be quite large and stored on external hard drives. To enable
+<strong>fort-studio</strong> to access these files, you must grant the snap right
+to access external hard drives by allowing the <code class="docutils literal notranslate"><span class="pre">removable-media</span></code>
+connection:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo snap connect fort-studio:removable-media :removable-media
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For systems with auxiliary disk, it is recommended to mount
+the disk meant to be used with <strong>fort-studio</strong> under <code class="docutils literal notranslate"><span class="pre">/media</span></code>, as
+otherwise they won’t be accessible through the confinement.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">edge</span></code> channel of this snap is reserved for continuous
+deployment and is automatically updated with any code pushed on the
+<code class="docutils literal notranslate"><span class="pre">master</span></code> branch.</p>
+</div>
+</section>
+<section id="fort-myrmidon-and-bindings-through-conda">
+<h2><strong>fort-myrmidon</strong> and bindings through <code class="docutils literal notranslate"><span class="pre">conda</span></code><a class="headerlink" href="#fort-myrmidon-and-bindings-through-conda" title="Permalink to this headline"></a></h2>
+<p>A complete distribution of <strong>libfort-myrmidon</strong> (C++ library)
+<strong>py-fort-myrmidon</strong> (python bindings) and <strong>r-fort-myrmidon</strong> (R
+bindings) are available on the <a class="reference external" href="https::/anaconda.org/formicidae-tracker">formicidae-tracker</a> channel.</p>
+<section id="tips-on-an-efficient-conda-usage">
+<h3>Tips on an efficient <strong>conda</strong> usage<a class="headerlink" href="#tips-on-an-efficient-conda-usage" title="Permalink to this headline"></a></h3>
+<p><strong>conda</strong> can be a bit daunting to master at first. The ecosystem of
+tools has grown quite large, and it is difficult to get all essential
+information in one place. You can find some pointers on essentials
+items regarding <strong>fort-myrmidon</strong>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>More general, but detailed information can be found in the
+<a class="reference external" href="https://carpentries-incubator.github.io/introduction-to-conda-for-data-scientists/aio/index.html">“Introduction to Conda for (Data) Scientist”</a>.</p>
+</div>
+<ol class="arabic">
+<li><p>Install <strong>miniconda</strong> instead of <strong>anaconda</strong>. The latter comes with
+a very large number of preinstalled packages, and most of them are
+not required to run <strong>fort-myrmidon</strong>. This could lead to quite
+long solving environment computation time, which are for some users
+quite irritating.</p></li>
+<li><p><strong>conda</strong> setup: Since <strong>libfort-myrmidon</strong> depends on package from
+<strong>anaconda</strong> and <strong>conda-forge</strong> a careful installation as per
+<a class="reference external" href="https://conda-forge.org/docs/user/introduction.html#how-can-i-install-packages-from-conda-forge">conda-forge documentation</a>
+is strongly recommended. In summary, one must perform once:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda config --add channels conda-forge
+conda config --set channel_priority strict
+</pre></div>
+</div>
+</li>
+<li><p>Use <a class="reference external" href="https://github.com/mamba-org/mamba">mamba</a> to install
+<strong>conda</strong> package. This is a tool that is a replacement for the
+<strong>conda</strong> command which is an order of magnitude faster with
+dependencies and environment solving. <strong>fort-myrmidon</strong> packages
+are now built and tested with <strong>mamba</strong>, and therefore is supported.</p></li>
+<li><p>Do not <cite>ever</cite> use the <code class="docutils literal notranslate"><span class="pre">base</span></code> environment. This is a good practice
+rule to avoid running into a lot of dependency problems when you may
+want to be able to use different <strong>fort-myrmidon</strong> version on the
+same system. Let says you are running a long experiment for over a
+year and do not want to lose time rewriting all your script because
+of a major update of <strong>fort-myrmidon</strong> but you still want for a new
+project to start to use the latest version of
+<strong>fort-myrmidon</strong>. With the power of <strong>conda</strong> virtual environment,
+you can easily install the two versions, and choose when you run
+your script which version to use. However, if you install everything
+in the <code class="docutils literal notranslate"><span class="pre">base</span></code> environment, you would certainly lose the ability
+to do that as it will certainly lead to a lot of conflict between
+your base and environment where you want another <strong>fort-myrmidon</strong>
+version installed. Therefore, <cite>always</cite> make sure:</p>
+<ol class="loweralpha">
+<li><p>To activate the environment you want to modify:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda activate my-env-name
+</pre></div>
+</div>
+<p>You can create an environment with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda create -n my-env-name
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>The right environment name is displayed in your prompt, and not
+<code class="docutils literal notranslate"><span class="pre">base</span></code>.</p></li>
+</ol>
+</li>
+</ol>
+</section>
+</section>
+<section id="including-fort-studio-to-your-project">
+<h2>Including <strong>fort-studio</strong> to your project<a class="headerlink" href="#including-fort-studio-to-your-project" title="Permalink to this headline"></a></h2>
+<section id="python">
+<h3>Python<a class="headerlink" href="#python" title="Permalink to this headline"></a></h3>
+<p>After installing the <strong>py-fort-myrmidon</strong> package in an environment, the
+<strong>py_fort_myrmidon</strong> module is available to python in that
+environment.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The examples in this documentation assumes this module to be included as :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">py_fort_myrmidon</span> <span class="kn">as</span> <span class="nn">fm</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="r">
+<h3>R<a class="headerlink" href="#r" title="Permalink to this headline"></a></h3>
+<p>After installing the <strong>r-fort-myrmidon</strong> package in an environment,
+the <strong>FortMyrmidon</strong> package is available to the R version <cite>packaged
+with this environment</cite>. The system packaged R will not be able to see
+nor to use without crashing the <strong>FortMyrmidon</strong> package.</p>
+</section>
+<section id="c">
+<h3>C++<a class="headerlink" href="#c" title="Permalink to this headline"></a></h3>
+<p>After installing the <strong>libfort-myrmidon</strong> package, libraries and
+header files for <strong>fort-myrmidon</strong> will be available to the targeted
+conda environment. The recommanded way is to use CMake to build your
+project and link with <strong>fort-myrmidon</strong>.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">find_package</span><span class="p">(</span><span class="s">FortMyrmidon</span> <span class="s">REQUIRED</span><span class="p">)</span>
+<span class="nb">include_directories</span><span class="p">(</span><span class="s">FORT_MYRMIDON_INCLUDE_DIRS</span><span class="p">)</span>
+<span class="c"># fort-myrmidon requires at least the c++17 standard</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span> <span class="s">17</span><span class="p">)</span>
+
+<span class="c"># once my-target is created</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">my-target</span> <span class="o">${</span><span class="nv">FORT_MYRMIDON_LIBRARIES</span><span class="o">}</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A <code class="docutils literal notranslate"><span class="pre">pkg-config</span></code> configuration file is also available, but it is not
+nicely integrated with <strong>conda</strong>. Its utilisation should be avoided.</p>
+</section>
+<section id="using-rstudio-with-conda">
+<h3>Using <strong>rstudio</strong> with <strong>conda</strong><a class="headerlink" href="#using-rstudio-with-conda" title="Permalink to this headline"></a></h3>
+<p>If you are an <strong>rstudio</strong> user, you will remark that it will always
+use the system’s R version instead of the one you installed with
+<strong>conda</strong>, which means that it will never be able to find
+<strong>r-fort-myrmidon</strong>. Indeed, <strong>rstudio</strong> will use the first R version
+found in the PATH, and if you launch it from the system’s menu, it
+cannot find the version you installed as a user (it is not
+conda-aware), and defaults to the system’s one. There are two means to circumvent that:</p>
+<ol class="loweralpha">
+<li><p>Runs <strong>rstudio</strong> from a terminal within the right environment
+(recommended). One can simply use the following commands to
+activate <code class="docutils literal notranslate"><span class="pre">my-env</span></code> and run rstudio within it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">activate</span> <span class="n">my</span><span class="o">-</span><span class="n">env</span><span class="o">-</span><span class="n">name</span>
+<span class="n">rstudio</span>
+</pre></div>
+</div>
+</li>
+<li><p>Installs and runs <strong>rstudio</strong> from <strong>conda</strong>. It is not recommended as
+it is a more heavy solution and will make your environments much more
+complex and time-consuming to solve.</p></li>
+</ol>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="linking_tdata.html" class="btn btn-neutral float-right" title="Linking Tracking Data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Université de Lausanne.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

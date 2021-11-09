@@ -41,7 +41,17 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-myrmidon Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defining_ant_metadata.html">Defining Ant Metadata</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../time.html">Time Representation</a></li>
 </ul>
@@ -110,11 +120,11 @@ with <a class="reference internal" href="experiment.html#py_fort_myrmidon.Experi
 <a class="reference internal" href="#py_fort_myrmidon.Space.DeleteZone" title="py_fort_myrmidon.Space.DeleteZone"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DeleteZone()</span></code></a>.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="py_fort_myrmidon.Space.CreateZone">
-<span class="sig-name descname"><span class="pre">CreateZone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#py_fort_myrmidon.Space" title="py_fort_myrmidon.Space"><span class="pre">py_fort_myrmidon.Space</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#py_fort_myrmidon.Zone" title="py_fort_myrmidon.Zone"><span class="pre">py_fort_myrmidon.Zone</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Space.CreateZone" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">CreateZone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#py_fort_myrmidon.Space" title="py_fort_myrmidon.Space"><span class="pre">py_fort_myrmidon.Space</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#py_fort_myrmidon.Zone" title="py_fort_myrmidon.Zone"><span class="pre">py_fort_myrmidon.Zone</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Space.CreateZone" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a new Zone in this space</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – the name for the new Zone</p>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name for the new Zone</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>the newly created Zone</p>
@@ -127,14 +137,14 @@ with <a class="reference internal" href="experiment.html#py_fort_myrmidon.Experi
 
 <dl class="py method">
 <dt class="sig sig-object py" id="py_fort_myrmidon.Space.DeleteZone">
-<span class="sig-name descname"><span class="pre">DeleteZone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#py_fort_myrmidon.Space" title="py_fort_myrmidon.Space"><span class="pre">py_fort_myrmidon.Space</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">zoneID</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Space.DeleteZone" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DeleteZone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#py_fort_myrmidon.Space" title="py_fort_myrmidon.Space"><span class="pre">py_fort_myrmidon.Space</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">zoneID</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Space.DeleteZone" title="Permalink to this definition"></a></dt>
 <dd><p>Deletes a Zone of this Space</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>zoneID</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the zoneID in self.Zones to delete</p>
+<dd class="field-odd"><p><strong>zoneID</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the zoneID in self.Zones to delete</p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.9)"><strong>IndexError</strong></a> – if zoneID is not in self.Zones</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – if zoneID is not in self.Zones</p>
 </dd>
 </dl>
 </dd></dl>
@@ -145,14 +155,14 @@ with <a class="reference internal" href="experiment.html#py_fort_myrmidon.Experi
 <dd><p>the unique SpaceID of this space</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>)</p>
+<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="py_fort_myrmidon.Space.LocateMovieFrame">
-<span class="sig-name descname"><span class="pre">LocateMovieFrame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#py_fort_myrmidon.Space" title="py_fort_myrmidon.Space"><span class="pre">py_fort_myrmidon.Space</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><span class="pre">py_fort_myrmidon.Time</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#py_fort_myrmidon.Space.LocateMovieFrame" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">LocateMovieFrame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#py_fort_myrmidon.Space" title="py_fort_myrmidon.Space"><span class="pre">py_fort_myrmidon.Space</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><span class="pre">py_fort_myrmidon.Time</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#py_fort_myrmidon.Space.LocateMovieFrame" title="Permalink to this definition"></a></dt>
 <dd><p>Locates a movie file and frame for a given time.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -163,10 +173,10 @@ with <a class="reference internal" href="experiment.html#py_fort_myrmidon.Experi
 int: the movie frame number that was acquired at or just after time</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.9)"><strong>IndexError</strong></a> – if time is outside of this Space tracking data</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – if time is outside of this Space tracking data</p>
 </dd>
 </dl>
 </dd></dl>
@@ -177,7 +187,7 @@ int: the movie frame number that was acquired at or just after time</p>
 <dd><p>the name for this space</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>)</p>
+<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -188,7 +198,7 @@ int: the movie frame number that was acquired at or just after time</p>
 <dd><p>the Space’s Zone by their ZoneID</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>,<a class="reference internal" href="#py_fort_myrmidon.Zone" title="py_fort_myrmidon.Zone">Zone</a>]</p>
+<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>,<a class="reference internal" href="#py_fort_myrmidon.Zone" title="py_fort_myrmidon.Zone">Zone</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -240,7 +250,7 @@ ZoneDefinition</p></li>
 <dd class="field-odd"><p><a class="reference internal" href="#py_fort_myrmidon.ZoneDefinition" title="py_fort_myrmidon.ZoneDefinition">ZoneDefinition</a></p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><strong>ValueError</strong></a> – if start or end would make an overlapping
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if start or end would make an overlapping
     definition with another ZoneDefinition of this Zone</p>
 </dd>
 </dl>
@@ -259,14 +269,14 @@ ZoneDefinition</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="py_fort_myrmidon.Zone.DeleteDefinition">
-<span class="sig-name descname"><span class="pre">DeleteDefinition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#py_fort_myrmidon.Zone" title="py_fort_myrmidon.Zone"><span class="pre">py_fort_myrmidon.Zone</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Zone.DeleteDefinition" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DeleteDefinition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#py_fort_myrmidon.Zone" title="py_fort_myrmidon.Zone"><span class="pre">py_fort_myrmidon.Zone</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Zone.DeleteDefinition" title="Permalink to this definition"></a></dt>
 <dd><p>Removes a ZoneDefinition</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the index in <a class="reference internal" href="#py_fort_myrmidon.Zone.Definitions" title="py_fort_myrmidon.Zone.Definitions"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Definitions</span></code></a> to remove.</p>
+<dd class="field-odd"><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the index in <a class="reference internal" href="#py_fort_myrmidon.Zone.Definitions" title="py_fort_myrmidon.Zone.Definitions"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Definitions</span></code></a> to remove.</p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.9)"><strong>IndexError</strong></a> – if index &gt;= len(self.Definitions)</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – if index &gt;= len(self.Definitions)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -277,7 +287,7 @@ ZoneDefinition</p></li>
 <dd><p>the unique ID for this Zone</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -288,7 +298,7 @@ ZoneDefinition</p></li>
 <dd><p>the name of the Zone</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
 </dd></dl>

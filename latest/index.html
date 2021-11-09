@@ -19,7 +19,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Time Representation" href="time.html" /> 
+    <link rel="next" title="Introduction" href="introduction.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -40,7 +40,17 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-myrmidon Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defining_ant_metadata.html">Defining Ant Metadata</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="time.html">Time Representation</a></li>
 </ul>
@@ -92,62 +102,12 @@ packages.</p>
 editing of <strong>.myrmidon</strong> files, and to provide basic visualization of
 tracking datasets.</p>
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
-<p><strong>fort-myrmidon</strong> and all the supported bindings (R,python) is primarly
+<h2>INstallation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
+<p><strong>fort-myrmidon</strong> and all the supported bindings (R,python) are primarly
 distributed with
 [conda](<a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/">https://docs.conda.io/projects/conda/en/latest/</a>).</p>
-<p><strong>fort-studio</strong> is principally distributed using <strong>snap</strong>. However it is
-also distributed with <strong>conda</strong> to allow to pinpoint a perticular
-release.</p>
-<section id="install-fort-myrmidon-from-conda">
-<h3>Install <strong>fort-myrmidon</strong> from <strong>conda</strong><a class="headerlink" href="#install-fort-myrmidon-from-conda" title="Permalink to this headline"></a></h3>
-<p>The following packages are available from the anaconda channel
-<a class="reference external" href="https://anaconda.org/formicidae-tracker">formicidae-tracker</a>:</p>
-<ul class="simple">
-<li><p><strong>libfort-myrmidon</strong>: C++ library and development files</p></li>
-<li><p><strong>r-fort-myrmidon</strong>: R bindings for <strong>libfort-myrmidon</strong>. R 3.6 and 4.0 are currently supported</p></li>
-<li><p><strong>py-fort-myrmidon</strong>: Python bindings for <strong>libfort-myrmidon</strong></p></li>
-<li><p><strong>fort-studio</strong>: conda distibution of <strong>fort-studio</strong>. It is provided to
-allow pinpointing a perticular version. The snap distribution should
-be preferred in most use case. Please remind that care must be taken
-if you install this conda package, as the command line executable
-<strong>fort-studio</strong> may not match anymore the application <strong>FORT Studio</strong>
-available through the <strong>snap</strong> package.</p></li>
-</ul>
-</section>
-<section id="install-fort-studio-from-snap">
-<h3>Install <strong>fort-studio</strong> from snap<a class="headerlink" href="#install-fort-studio-from-snap" title="Permalink to this headline"></a></h3>
-<p><strong>fort-studio</strong> is available through its own snap. It comes with its own
-bundled version of <strong>libfort-myrmidon</strong>. It can be installed using the
-following command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo snap install fort-studio
-</pre></div>
-</div>
-<p>If your tracking data is not in your home but on a removable media,
-you must allow <strong>fort-studio</strong> the access to removable media using the
-following command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo connect fort-studio:removable-media :removable-media
-</pre></div>
-</div>
-</section>
-<section id="installation-from-sources">
-<h3>Installation from sources<a class="headerlink" href="#installation-from-sources" title="Permalink to this headline"></a></h3>
-<p>This project uses CMake as a build system. It requires a minimum
-version of 3.11 at least as it needs to fetch some external
-dependencies using <strong>fetch_content</strong>. It also requires the following
-dependencies:</p>
-<ul class="simple">
-<li><p>OpenCV 3 or 4</p></li>
-<li><p>cmake (&gt;=3.11)</p></li>
-<li><p>Eigen 3</p></li>
-<li><p>Asio Library</p></li>
-<li><p>Qt 5</p></li>
-<li><p>Google Protobuf (&gt;=3.3.0)</p></li>
-<li><p>Google glog</p></li>
-<li><p>yaml-cpp</p></li>
-<li><p>TBB (==2020.02)</p></li>
-</ul>
-</section>
+<p><strong>fort-studio</strong> is distributed using <strong>snap</strong>.</p>
+<p>Detailed installation instructions can be found in the <a class="reference external" href="https:://formicidae-tracker.github.io/myrmidon/latest/installation.html">documentation</a></p>
 </section>
 <section id="versioning">
 <h2>Versioning<a class="headerlink" href="#versioning" title="Permalink to this headline"></a></h2>
@@ -171,8 +131,18 @@ file for details</p>
 <section id="table-of-contents">
 <h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline"></a></h2>
 <div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+</ul>
 </div>
 <div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">fort-myrmidon Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defining_ant_metadata.html">Defining Ant Metadata</a></li>
+</ul>
 </div>
 <div class="toctree-wrapper compound">
 </div>
@@ -217,7 +187,7 @@ file for details</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="time.html" class="btn btn-neutral float-right" title="Time Representation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="introduction.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
