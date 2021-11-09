@@ -99,4 +99,5 @@ TEST_F(TrackingVideoWidgetUTest,AntAreDisplayedAtTheRightLocation) {
 	          Conversion::colorFromFM(ants[0]->DisplayColor()));
 	EXPECT_EQ(res.pixelColor(300,400),
 	          Conversion::colorFromFM(ants[1]->DisplayColor()));
+
 }
