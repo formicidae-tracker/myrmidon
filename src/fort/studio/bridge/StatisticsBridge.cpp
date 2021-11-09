@@ -113,7 +113,7 @@ void StatisticsBridge::rebuildModel() {
 				row.push_back(new QStandardItem(QString::number(tagStats.Counts(i))));
 				row.back()->setData(quint64(tagStats.Counts(i)));
 			}
-			quint64 count = tagStats.Counts.block<1,6>(4,0).sum();
+			quint64 count = tagStats.Counts.block<6,1>(4,0).sum();
 			row.push_back(new QStandardItem(QString::number(count)));
 			row.back()->setData(count);
 		}
