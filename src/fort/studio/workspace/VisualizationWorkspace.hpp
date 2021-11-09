@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Workspace.hpp"
-
+#include <fort/time/Time.hpp>
 class QAction;
 
 class QDockWidget;
@@ -21,8 +21,8 @@ public:
 	explicit VisualizationWorkspace(QWidget *parent = 0);
 	virtual ~VisualizationWorkspace();
 
-
-	QAction * jumpToTimeAction() const;
+	void jumpToTime(uint32_t spaceID,
+	                const fort::Time & time);
 
 protected:
 	void initialize(QMainWindow * main,ExperimentBridge * experiment) override;
@@ -30,12 +30,13 @@ protected:
 	void tearDown(const NavigationAction & actions) override;
 
 
+
 private slots :
 	void onCopyTimeActionTriggered();
 
 	void onMovieSegmentActivated(const QModelIndex & index);
 
-	void jumpToTime();
+	void jumpToTimeAction();
 private:
 	friend class VisualizationWorkspaceUTest;
 
@@ -44,7 +45,6 @@ private:
 	ExperimentBridge           * d_experiment;
 	Ui::VisualizationWorkspace * d_ui;
 	TrackingVideoPlayer        * d_videoPlayer;
-	QAction                    * d_jumpToTimeAction;
 	AntDisplayListWidget       * d_antDisplay;
 	QDockWidget                * d_antDisplayDock;
 	QTreeView                  * d_treeView;

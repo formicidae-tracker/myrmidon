@@ -24,6 +24,7 @@ protected:
 
 	TrackingVideoControl * VideoControl() const;
 	TrackingVideoWidget * VideoWidget() const;
+	const NavigationAction * Actions() const;
 
 	void StartMovie();
 

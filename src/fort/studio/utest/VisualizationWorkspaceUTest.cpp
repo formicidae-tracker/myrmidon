@@ -2,6 +2,7 @@
 
 #include <QTreeView>
 #include <QSignalSpy>
+#include <QAction>
 
 #include <fort/studio/workspace/VisualizationWorkspace.hpp>
 #include <fort/studio/widget/TrackingDataDirectoryLoader.hpp>
@@ -29,10 +30,12 @@ void VisualizationWorkspaceUTest::SetUp() {
 	nestIndex = m->index(0,0);
 	forageIndex = m->index(1,0);
 	movieIndex = m->index(0,0,nestIndex);
+	ws->setUp(*Actions());
 
 }
 
 void VisualizationWorkspaceUTest::TearDown() {
+	ws->tearDown(*Actions());
 	delete ws;
 	WorkspaceUTest::TearDown();
 }
@@ -51,6 +54,10 @@ TrackingVideoControl * VisualizationWorkspaceUTest::VideoControl() const {
 
 TrackingVideoWidget * VisualizationWorkspaceUTest::VideoWidget() const {
 	return ws->d_ui->trackingVideoWidget;
+}
+
+const NavigationAction * VisualizationWorkspaceUTest::Actions() const {
+	return actions;
 }
 
 
@@ -95,4 +102,8 @@ TEST_F(VisualizationWorkspaceUTest,ShowsCollisions) {
 	ASSERT_EQ(showCollisions.count(),1);
 	EXPECT_TRUE(showCollisions.last().last().toBool());
 	EXPECT_TRUE(VideoWidget()->showCollisions());
+}
+
+TEST_F(VisualizationWorkspaceUTest,JumpToTime) {
+	EXPECT_TRUE(Actions()->JumpToTime->isEnabled());
 }
