@@ -231,7 +231,7 @@ inline bool MonoIDMismatch(const Time & a,
 void DataSegmenter::operator()(const myrmidon::Query::CollisionData & data) {
 
 	if ( d_args.Matcher ) {
-		d_args.Matcher->SetUp(std::get<0>(data),std::get<1>(data));
+		d_args.Matcher->SetUp(*std::get<0>(data));
 	}
 	bool hasCollision = std::get<1>(data) != nullptr;
 
