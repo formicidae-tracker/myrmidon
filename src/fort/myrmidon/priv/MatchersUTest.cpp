@@ -26,8 +26,7 @@ public:
 	void SetUpOnce(const AntByID & ants) override {
 	}
 
-	void SetUp(const IdentifiedFrame::Ptr & identifiedFrame,
-	           const CollisionFrame::Ptr & collisionFrame) override{
+	void SetUp(const IdentifiedFrame & identifiedFrame) override{
 	};
 
 	bool Match(fort::myrmidon::AntID ant1,
@@ -49,8 +48,7 @@ public:
 class MockMatcher : public Matcher {
 public:
 	MOCK_METHOD(void,SetUpOnce,(const AntByID & ants),(override));
-	MOCK_METHOD(void,SetUp,(const IdentifiedFrame::Ptr & f,
-	                        const CollisionFrame::Ptr & i),(override));
+	MOCK_METHOD(void,SetUp,(const IdentifiedFrame & f),(override));
 	MOCK_METHOD(bool,Match,(fort::myrmidon::AntID a,
 	                        fort::myrmidon::AntID b,
 	                        const fort::myrmidon::InteractionTypes & types), (override));
@@ -82,8 +80,8 @@ TEST_F(MatchersUTest,CombinedMatchersSetup) {
 	EXPECT_CALL(*matchers[0],SetUpOnce(_)).Times(2);
 	EXPECT_CALL(*matchers[1],SetUpOnce(_)).Times(2);
 
-	EXPECT_CALL(*matchers[0],SetUp(_,_)).Times(2);
-	EXPECT_CALL(*matchers[1],SetUp(_,_)).Times(2);
+	EXPECT_CALL(*matchers[0],SetUp(_)).Times(2);
+	EXPECT_CALL(*matchers[1],SetUp(_)).Times(2);
 
 
 	auto andMatcher = Matcher::And({matchers[0],matchers[1]});
@@ -92,8 +90,8 @@ TEST_F(MatchersUTest,CombinedMatchersSetup) {
 	andMatcher->SetUpOnce({});
 	orMatcher->SetUpOnce({});
 
-	andMatcher->SetUp({},{});
-	orMatcher->SetUp({},{});
+	andMatcher->SetUp(IdentifiedFrame());
+	orMatcher->SetUp(IdentifiedFrame());
 
 	andMatcher.reset();
 	orMatcher.reset();
@@ -106,7 +104,7 @@ TEST_F(MatchersUTest,IDMatcher) {
 	auto idMatcher = Matcher::AntIDMatcher(42);
 	ASSERT_NO_THROW({
 			idMatcher->SetUpOnce({});
-			idMatcher->SetUp({},{});
+			idMatcher->SetUp(IdentifiedFrame());
 		});
 
 	//Matches as expected for trajectories
@@ -136,29 +134,25 @@ TEST_F(MatchersUTest,ColumnMatcher) {
 
 
 
-	auto identifiedFrame = std::make_shared<IdentifiedFrame>();
-	identifiedFrame->FrameTime = Time().Add(-1);
-	auto collisionFrame = std::make_shared<CollisionFrame>();
+	auto identifiedFrame = IdentifiedFrame();
+	identifiedFrame.FrameTime = Time().Add(-1);
 	ASSERT_NO_THROW({
 			columnMatcher->SetUpOnce(experiment->Identifier()->Ants());
 		});
 
-	ASSERT_THROW({
-			columnMatcher->SetUp({},{});
-		},std::runtime_error);
-
 	ASSERT_NO_THROW({
-			columnMatcher->SetUp(identifiedFrame,{});
+			columnMatcher->SetUp(identifiedFrame);
 		});
 
 	EXPECT_FALSE(columnMatcher->Match(0,0,{}));
 	EXPECT_TRUE(columnMatcher->Match(a->AntID(),0,{}));
 	// it should also match with another ant in interaction.
 	EXPECT_TRUE(columnMatcher->Match(a->AntID(),b->AntID(),{}));
-	ASSERT_NO_THROW({
-			columnMatcher->SetUp({},collisionFrame);
-		});
 
+	identifiedFrame.FrameTime = fort::Time();
+	ASSERT_NO_THROW({
+			columnMatcher->SetUp(identifiedFrame);
+		});
 	EXPECT_FALSE(columnMatcher->Match(a->AntID(),0,{}));
 
 }
@@ -169,26 +163,17 @@ TEST_F(MatchersUTest,DistanceMatcher) {
 	auto smallerMatcher = Matcher::AntDistanceSmallerThan(10);
 
 
-	auto identifiedFrame = std::make_shared<IdentifiedFrame>();
-	identifiedFrame->Positions.resize(3,5);
-	identifiedFrame->Positions.row(0) << 1,0,0,0,0;
-	identifiedFrame->Positions.row(1) << 2,0,12,0,0;
-	identifiedFrame->Positions.row(2) << 3,0,8,0,0;
-	auto collisionFrame = std::make_shared<CollisionFrame>();
+	auto identifiedFrame = IdentifiedFrame();
+	identifiedFrame.Positions.resize(3,5);
+	identifiedFrame.Positions.row(0) << 1,0,0,0,0;
+	identifiedFrame.Positions.row(1) << 2,0,12,0,0;
+	identifiedFrame.Positions.row(2) << 3,0,8,0,0;
 
 	ASSERT_NO_THROW({ greaterMatcher->SetUpOnce({}); });
 
-	ASSERT_THROW({
-			greaterMatcher->SetUp({},{});
-		},std::runtime_error);
-
-	ASSERT_THROW({
-			smallerMatcher->SetUp({},collisionFrame);
-		},std::runtime_error);
-
 	ASSERT_NO_THROW({
-			greaterMatcher->SetUp(identifiedFrame,{});
-			smallerMatcher->SetUp(identifiedFrame,{});
+			greaterMatcher->SetUp(identifiedFrame);
+			smallerMatcher->SetUp(identifiedFrame);
 		});
 
 
@@ -209,26 +194,18 @@ TEST_F(MatchersUTest,AngleMatcher) {
 	auto smallerMatcher = Matcher::AntAngleSmallerThan(M_PI/4);
 
 
-	auto identifiedFrame = std::make_shared<IdentifiedFrame>();
-	identifiedFrame->Positions.resize(3,5);
-	identifiedFrame->Positions.row(0) << 1,0,0,0,0;
-	identifiedFrame->Positions.row(1) << 2,0,0,M_PI/5,0;
-	identifiedFrame->Positions.row(2) << 3,0,0,-M_PI/3,0;
+	auto identifiedFrame = IdentifiedFrame();
+	identifiedFrame.Positions.resize(3,5);
+	identifiedFrame.Positions.row(0) << 1,0,0,0,0;
+	identifiedFrame.Positions.row(1) << 2,0,0,M_PI/5,0;
+	identifiedFrame.Positions.row(2) << 3,0,0,-M_PI/3,0;
 	auto collisionFrame = std::make_shared<CollisionFrame>();
 
 	ASSERT_NO_THROW({ greaterMatcher->SetUpOnce({}); });
 
-	ASSERT_THROW({
-			greaterMatcher->SetUp({},{});
-		},std::runtime_error);
-
-	ASSERT_THROW({
-			smallerMatcher->SetUp({},collisionFrame);
-		},std::runtime_error);
-
 	ASSERT_NO_THROW({
-			greaterMatcher->SetUp(identifiedFrame,{});
-			smallerMatcher->SetUp(identifiedFrame,{});
+			greaterMatcher->SetUp(identifiedFrame);
+			smallerMatcher->SetUp(identifiedFrame);
 		});
 
 
@@ -263,8 +240,8 @@ TEST_F(MatchersUTest,InteractionsTypesMatcher) {
 	EXPECT_NO_THROW({
 			oneOne->SetUpOnce({});
 			oneTwo->SetUpOnce({});
-			oneOne->SetUp({},{});
-			oneTwo->SetUp({},{});
+			oneOne->SetUp(IdentifiedFrame());
+			oneTwo->SetUp(IdentifiedFrame());
 		});
 	// always matches single ant
 	EXPECT_TRUE(oneOne->Match(1,0,{}));
@@ -285,6 +262,77 @@ TEST_F(MatchersUTest,InteractionsTypesMatcher) {
 	EXPECT_FALSE(twoThree->Match(1,2,BuildTypes({1,1,2,2,3,3})));
 
 }
+
+
+TEST_F(MatchersUTest,AntDisplacement) {
+	IdentifiedFrame frames[4];
+	frames[0].Space = 1;
+	frames[0].Positions.resize(4,5);
+	frames[0].Positions <<
+		1,0,0,0,0,
+		2,0,0,0,0,
+		3,0,0,0,0,
+		4,0,0,0,0;
+
+	frames[1].Space = 2;
+	frames[1].Positions.resize(0,5);
+
+	frames[2].Space = 1;
+	frames[2].FrameTime = Time().Add(250*Duration::Millisecond);
+	frames[2].Positions.resize(2,5);
+	frames[2].Positions <<
+		1, 10,0,0,0,
+		2, 50,0,0,0;
+
+	frames[3].Space = 2;
+	frames[3].FrameTime = Time().Add(250*Duration::Millisecond);
+	frames[3].Positions.resize(1,5);
+	frames[3].Positions <<
+		3,50,0,0,0;
+
+	struct TestData {
+		Matcher::Ptr                          M;
+		std::map<std::pair<AntID,AntID>,bool> Expected;
+	};
+
+	std::vector<TestData> testdata =
+		{
+		 {Matcher::AntDisplacement(11,0),
+		  {
+		   {{1,0},true},
+		   {{2,0},false},
+		   {{1,2},false},
+		   {{3,0},true},
+		   {{4,0},true},
+		  },
+		 },
+		 {Matcher::AntDisplacement(11,500*Duration::Millisecond),
+		  {
+		   {{1,0},true},
+		   {{2,0},true},
+		   {{1,2},true},
+		   {{3,0},true},
+		   {{4,0},true},
+		  },				 },
+		};
+
+	// initializes all data
+	for (const auto & d : testdata ) {
+		d.M->SetUpOnce({});
+		for ( const auto & f : frames ) {
+			d.M->SetUp(f);
+		}
+
+		for ( const auto [IDs,expected] : d.Expected ) {
+			EXPECT_EQ(d.M->Match(IDs.first,IDs.second,{}),expected);
+		}
+	}
+
+
+
+}
+
+
 
 TEST_F(MatchersUTest,Formatting) {
 	struct TestData {
@@ -339,6 +387,11 @@ TEST_F(MatchersUTest,Formatting) {
 		    Matcher::InteractionType(5,5),
 		    "InteractionType(5 - 5)",
 		   },
+
+		   {
+		    Matcher::AntDisplacement(12,200 * Duration::Millisecond),
+		    "AntDisplacement(under: 12, minimumGap: 200ms)"
+		   } ,
 
 	};
 

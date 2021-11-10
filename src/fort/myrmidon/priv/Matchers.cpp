@@ -22,10 +22,9 @@ Matcher::Ptr Matcher::And(const std::vector<Ptr>  &matchers) {
 			              [&ants](const Ptr & matcher) { matcher->SetUpOnce(ants); });
 		}
 
-		void SetUp(const IdentifiedFrame::Ptr & identifiedFrame,
-		           const CollisionFrame::Ptr & collisionFrame) override {
+		void SetUp(const IdentifiedFrame & identifiedFrame) override {
 			std::for_each(d_matchers.begin(),d_matchers.end(),
-			              [&](const Ptr & matcher) { matcher->SetUp(identifiedFrame,collisionFrame); });
+			              [&](const Ptr & matcher) { matcher->SetUp(identifiedFrame); });
 
 		}
 
@@ -68,10 +67,9 @@ Matcher::Ptr Matcher::Or(const std::vector<Ptr> & matchers) {
 			              [&ants](const Ptr & matcher) { matcher->SetUpOnce(ants); });
 		}
 
-		void SetUp(const IdentifiedFrame::Ptr & identifiedFrame,
-		           const CollisionFrame::Ptr & collisionFrame) override {
+		void SetUp(const IdentifiedFrame & identifiedFrame) override {
 			std::for_each(d_matchers.begin(),d_matchers.end(),
-			              [&](const Ptr & matcher) { matcher->SetUp(identifiedFrame,collisionFrame); });
+			              [&](const Ptr & matcher) { matcher->SetUp(identifiedFrame); });
 
 		}
 
@@ -112,8 +110,7 @@ Matcher::Ptr Matcher::AntIDMatcher(AntID ID) {
 		void SetUpOnce(const AntByID & ants) override {
 		}
 
-		void SetUp(const IdentifiedFrame::Ptr & identifiedFrame,
-		           const CollisionFrame::Ptr & collisionFrame) override {
+		void SetUp(const IdentifiedFrame & identifiedFrame) override {
 		}
 
 		bool Match(fort::myrmidon::AntID ant1,
@@ -151,19 +148,8 @@ Matcher::Ptr Matcher::AntColumnMatcher(const std::string & name, const AntStatic
 			d_ants = ants;
 		}
 
-		void SetUp(const IdentifiedFrame::Ptr & identifiedFrame,
-		           const CollisionFrame::Ptr & collisionFrame) override {
-			if ( !identifiedFrame == false ) {
-				d_time = identifiedFrame->FrameTime;
-				return;
-			}
-
-			if ( !collisionFrame == false ) {
-				d_time = collisionFrame->FrameTime;
-				return;
-			}
-			throw std::runtime_error("This matcher requires current time through ant position or interaction, but none is available in the current context");
-
+		void SetUp(const IdentifiedFrame & identifiedFrame) override {
+			d_time = identifiedFrame.FrameTime;
 		}
 
 		bool Match(fort::myrmidon::AntID ant1,
@@ -193,20 +179,15 @@ Matcher::Ptr Matcher::AntColumnMatcher(const std::string & name, const AntStatic
 
 class AntGeometryMatcher : public Matcher {
 protected:
-	DenseMap<AntID,size_t>                   d_index;
-	IdentifiedFrame::Ptr                     d_identifiedFrame;
+	DenseMap<AntID,Eigen::Vector3d>          d_positions;
 public:
 	virtual ~AntGeometryMatcher(){}
 	void SetUpOnce(const AntByID & ) override {}
-	void SetUp(const IdentifiedFrame::Ptr & identifiedFrame,
-	           const CollisionFrame::Ptr & collisionFrame) override {
-		if ( !identifiedFrame ) {
-			throw std::runtime_error("This matcher requires ant position, which are unavailable in the current context");
-		}
-		d_identifiedFrame = identifiedFrame;
-		d_index.clear();
-		for ( size_t i = 0; i < identifiedFrame->Positions.rows(); ++i) {
-			d_index.insert(std::make_pair(AntID(identifiedFrame->Positions(i,0)),i));
+	void SetUp(const IdentifiedFrame & identifiedFrame) override {
+		d_positions.clear();
+		for ( size_t i = 0; i < identifiedFrame.Positions.rows(); ++i) {
+			d_positions.insert(std::make_pair(AntID(identifiedFrame.Positions(i,0)),
+			                                  identifiedFrame.Positions.block<1,3>(i,1)));
 		}
 	}
 };
@@ -224,13 +205,12 @@ public:
 	bool Match(fort::myrmidon::AntID ant1,
 	           fort::myrmidon::AntID ant2,
 	           const fort::myrmidon::InteractionTypes & types) override {
-		auto fi1 = d_index.find(ant1);
-		auto fi2 = d_index.find(ant2);
-		if ( fi1 == d_index.end() || fi2 == d_index.end() ) {
+		auto fi1 = d_positions.find(ant1);
+		auto fi2 = d_positions.find(ant2);
+		if ( fi1 == d_positions.end() || fi2 == d_positions.end() ) {
 			return true;
 		}
-		double sDist = (d_identifiedFrame->Positions.block<1,2>(fi1->second,1)
-		                - d_identifiedFrame->Positions.block<1,2>(fi2->second,1)).squaredNorm();
+		double sDist = (fi1->second.block<2,1>(0,0) - fi2->second.block<2,1>(0,0)).squaredNorm();
 		if ( d_greater == true ) {
 			return d_distanceSquare < sDist;
 		} else {
@@ -258,13 +238,12 @@ public:
 	bool Match(fort::myrmidon::AntID ant1,
 	           fort::myrmidon::AntID ant2,
 	           const fort::myrmidon::InteractionTypes & types) override {
-		auto fi1 = d_index.find(ant1);
-		auto fi2 = d_index.find(ant2);
-		if ( fi1 == d_index.end() || fi2 == d_index.end() ) {
+		auto fi1 = d_positions.find(ant1);
+		auto fi2 = d_positions.find(ant2);
+		if ( fi1 == d_positions.end() || fi2 == d_positions.end() ) {
 			return true;
 		}
-		double angle = std::abs(d_identifiedFrame->Positions(fi1->second,3)
-		                        - d_identifiedFrame->Positions(fi2->second,3));
+		double angle = std::abs(fi1->second.z() - fi2->second.z());
 		if ( d_greater == true ) {
 			return angle > d_angle;
 		} else {
@@ -291,8 +270,7 @@ public:
 	void SetUpOnce(const AntByID & ants) override {
 	}
 
-	void SetUp(const IdentifiedFrame::Ptr & identifiedFrame,
-	           const CollisionFrame::Ptr & collisionFrame) override {
+	void SetUp(const IdentifiedFrame & identifiedFrame) override {
 	}
 
 	bool Match(fort::myrmidon::AntID ant1,
@@ -331,8 +309,7 @@ public:
 	void SetUpOnce(const AntByID & ants) override {
 	}
 
-	void SetUp(const IdentifiedFrame::Ptr & identifiedFrame,
-	           const CollisionFrame::Ptr & collisionFrame) override {
+	void SetUp(const IdentifiedFrame & identifiedFrame) override {
 	}
 
 	bool Match(fort::myrmidon::AntID ant1,
@@ -383,6 +360,7 @@ class AntDisplacementMatcher : public Matcher {
 public :
 	AntDisplacementMatcher(double under,Duration minimumGap)
 		: d_under(under)
+		, d_under2(under*under)
 		, d_minimumGap(minimumGap) {
 	}
 	virtual ~AntDisplacementMatcher() {}
@@ -390,13 +368,29 @@ public :
 	void SetUpOnce(const AntByID & ants) override {
 	}
 
-	void SetUp(const IdentifiedFrame::Ptr & identifiedFrame,
-	           const CollisionFrame::Ptr & collisionFrame) override {
+	void SetUp(const IdentifiedFrame & identifiedFrame) override {
+		for ( size_t i = 0; i < identifiedFrame.Positions.rows(); ++i) {
+			AntID antID = identifiedFrame.Positions(i,0);
+			auto [fi,inserted] = d_displacements.insert(std::make_pair(antID,Displacement()));
+			fi->second.Update(identifiedFrame.Space,
+			                  identifiedFrame.FrameTime,
+			                  identifiedFrame.Positions.block<1,2>(i,1).transpose(),
+			                  d_minimumGap);
+		}
 	}
 
 	bool Match(fort::myrmidon::AntID ant1,
 	           fort::myrmidon::AntID ant2,
 	           const fort::myrmidon::InteractionTypes & types) override {
+		if ( d_displacements.count(ant1) != 0
+		     && d_displacements.at(ant1).Displacement2 > d_under2 ) {
+			return false;
+		}
+		if ( d_displacements.count(ant2) != 0
+		     && d_displacements.at(ant2).Displacement2 > d_under2 ) {
+			return false;
+		}
+
 		return true;
 	}
 
@@ -406,8 +400,37 @@ public :
 	}
 
 private:
-	double   d_under;
+	double   d_under,d_under2;
 	Duration d_minimumGap;
+
+	struct Displacement {
+		double          Displacement2;
+		Eigen::Vector2d Position;
+		SpaceID         Space;
+		fort::Time      At;
+		EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
+
+		Displacement()
+			: Space(0) {
+		}
+
+		void Update(SpaceID spaceID,const fort::Time & time,const Eigen::Vector2d & position, Duration minimumGap) {
+			auto gap = time.Sub(At);
+			if ( Space != spaceID || gap <= minimumGap ) {
+				Displacement2 = 0.0;
+				Space = spaceID;
+			} else {
+				Displacement2 = (position - Position).squaredNorm();
+			}
+			Position = position;
+			At = time;
+		}
+	};
+
+
+
+	DenseMap<AntID,Displacement> d_displacements;
+
 };
 
 Matcher::Ptr Matcher::AntDisplacement(double under,
