@@ -19,7 +19,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Time Representation" href="time.html" />
+    <link rel="next" title="Performing Queries" href="performing_queries.html" />
     <link rel="prev" title="Identifying Ants" href="identifying_ants.html" /> 
 </head>
 
@@ -55,9 +55,21 @@
 <li class="toctree-l2"><a class="reference internal" href="#ant-visualization-data">Ant visualization data</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="performing_queries.html">Performing Queries</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-studio Manual</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="studio/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/defining_ant_shapes.html">Defining Ant Shapes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/measuring_ants.html">Measuring Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/metadata_edition.html">Ant Metadata Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/visualization.html">Tracking Data Visualization</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="space_zoning.html">Segmenting Spaces in Zones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matching_movie_and_tracking_data.html">Matching Movie Frame and Tracking Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="time.html">Time Representation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API References</span></p>
@@ -98,11 +110,22 @@ metadata on the ants that will be used for interaction detection,
 visualisation or for any pre-defined usage.</p>
 <section id="ant-virtual-shapes">
 <h2>Ant virtual shapes<a class="headerlink" href="#ant-virtual-shapes" title="Permalink to this headline"></a></h2>
-<span class="target" id="ant-shape-fig"></span><p>In <strong>fort-myrmidon</strong> each ant has a virtual shape defined as an union
+<p>In <strong>fort-myrmidon</strong> each ant has a virtual shape defined as an union
 of <cite>capsules</cite> <a class="footnote-reference brackets" href="#capsule" id="id1">2</a>, as shown in figure
-<code class="xref std std-numref docutils literal notranslate"><span class="pre">ant_shape_fig</span></code>. There are no predefined type in a new
+<a class="reference internal" href="#ant-shape-fig"><span class="std std-numref">Fig. 1</span></a>. There are no predefined type in a new
 experiment, and they must be <em>created</em> <a class="footnote-reference brackets" href="#createantshapetype" id="id2">3</a> before
 <em>adding a capsule to an ant</em> <a class="footnote-reference brackets" href="#addcapsule" id="id3">4</a>.</p>
+<figure class="align-center" id="ant-shape-fig">
+<img alt="An ant virtual shape is defined by a collection of typed capsules" src="_images/ant_virtual_shape.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Ant virtual shape in <strong>fort-myrmidon</strong>.</span><a class="headerlink" href="#ant-shape-fig" title="Permalink to this image"></a></p>
+<div class="legend">
+<p>Ant virtual shape are defined as a collection of typed capsules. Here
+each type is assigned an unique color. A capsule is defined as
+region inside and between two circles.</p>
+</div>
+</figcaption>
+</figure>
 <p>Capsule are defined in the ant reference frame.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#python</span>
 <span class="kn">import</span> <span class="nn">py_fort_myrmidon</span> <span class="kn">as</span> <span class="nn">fm</span>
@@ -229,16 +252,16 @@ boolean, integer, float, strings or <cite>Time</cite> <a class="footnote-referen
 <span class="nf">a.GetValue</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="n">t</span><span class="o">$</span><span class="nf">add</span><span class="p">(</span><span class="nf">fmSecond</span><span class="p">(</span><span class="m">-1</span><span class="p">)))</span> <span class="c1"># TRUE, it was alive before t</span>
 </pre></div>
 </div>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span>// C++
-e-&gt;SetMetaDataKey(&quot;group&quot;,&quot;worker&quot;);
-e-&gt;SetMetaDataKey(&quot;alive&quot;,true);
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// C++</span>
+<span class="n">e</span><span class="o">-&gt;</span><span class="n">SetMetaDataKey</span><span class="p">(</span><span class="s">&quot;group&quot;</span><span class="p">,</span><span class="s">&quot;worker&quot;</span><span class="p">);</span>
+<span class="n">e</span><span class="o">-&gt;</span><span class="n">SetMetaDataKey</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="nb">true</span><span class="p">);</span>
 
-t = fort::Time::Now()
+<span class="n">t</span> <span class="o">=</span> <span class="n">fort</span><span class="o">::</span><span class="n">Time</span><span class="o">::</span><span class="n">Now</span><span class="p">();</span>
 
-a-&gt;GetValue(&quot;group&quot;,t) // is a &quot;worker&quot;
-a-&gt;SetValue(&quot;alive&quot;,false,t)
-a-&gt;GetValue(&quot;alive&quot;,t) # false
-a-&gt;GetValue(&quot;alive&quot;,t.Add(-1 * fort::Duration::Second)) # true, it was alive before t
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">GetValue</span><span class="p">(</span><span class="s">&quot;group&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">);</span> <span class="c1">// is a &quot;worker&quot;</span>
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">SetValue</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="nb">false</span><span class="p">,</span><span class="n">t</span><span class="p">);</span>
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">GetValue</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">);</span> <span class="c1">// false</span>
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">GetValue</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">fort</span><span class="o">::</span><span class="n">Duration</span><span class="o">::</span><span class="n">Second</span><span class="p">));</span> <span class="c1">// true, it was alive before t</span>
 </pre></div>
 </div>
 </section>
@@ -246,6 +269,21 @@ a-&gt;GetValue(&quot;alive&quot;,t.Add(-1 * fort::Duration::Second)) # true, it 
 <h2>Ant visualization data<a class="headerlink" href="#ant-visualization-data" title="Permalink to this headline"></a></h2>
 <p>It is possible to <em>set or access</em> <a class="footnote-reference brackets" href="#visualization" id="id8">8</a> properties on how
 ants should be displayed in <strong>fort-studio</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#python</span>
+<span class="n">a</span><span class="o">.</span><span class="n">DisplayColor</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">DefaultPaletteColor</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">a</span><span class="o">.</span><span class="n">DisplayStatus</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Ant</span><span class="o">.</span><span class="n">DisplayState</span><span class="o">.</span><span class="n">SOLO</span>
+</pre></div>
+</div>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="c1">#R</span>
+<span class="n">a</span><span class="o">$</span><span class="n">displayColor</span> <span class="o">=</span> <span class="nf">fmDefaultPaletteColor</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+<span class="n">a</span><span class="o">$</span><span class="n">displayStatus</span> <span class="o">=</span> <span class="n">fmAntDisplayState</span><span class="o">$</span><span class="n">SOLO</span>
+</pre></div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">//C++</span>
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">SetDisplayColor</span><span class="p">(</span><span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">DefaultPaletteColor</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">SetDisplayStatus</span><span class="p">(</span><span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">Ant</span><span class="o">::</span><span class="n">DisplayState</span><span class="o">::</span><span class="n">SOLO</span><span class="p">);</span>
+</pre></div>
+</div>
 <dl class="footnote brackets">
 <dt class="label" id="time"><span class="brackets"><a class="fn-backref" href="#id7">1</a></span></dt>
 <dd><p>Python: <a class="reference internal" href="api/python/time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Time</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmTime</span></code>, C++: <a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort4TimeE" title="fort::Time"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::Time</span></code></a></p>
@@ -280,7 +318,7 @@ ants should be displayed in <strong>fort-studio</strong>.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="identifying_ants.html" class="btn btn-neutral float-left" title="Identifying Ants" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="time.html" class="btn btn-neutral float-right" title="Time Representation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="performing_queries.html" class="btn btn-neutral float-right" title="Performing Queries" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

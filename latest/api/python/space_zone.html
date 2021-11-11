@@ -50,9 +50,21 @@
 <li class="toctree-l1"><a class="reference internal" href="../../linking_tdata.html">Linking Tracking Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../identifying_ants.html">Identifying Ants</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../defining_ant_metadata.html">Defining Ant Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../performing_queries.html">Performing Queries</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-studio Manual</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/defining_ant_shapes.html">Defining Ant Shapes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/measuring_ants.html">Measuring Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/metadata_edition.html">Ant Metadata Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/visualization.html">Tracking Data Visualization</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../space_zoning.html">Segmenting Spaces in Zones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matching_movie_and_tracking_data.html">Matching Movie Frame and Tracking Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../time.html">Time Representation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API References</span></p>
@@ -107,7 +119,7 @@
 <h2>py_fort_myrmidon.Space<a class="headerlink" href="#py-fort-myrmidon-space" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="py_fort_myrmidon.Space">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">Space</span></span><a class="headerlink" href="#py_fort_myrmidon.Space" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">Space</span></span><a class="headerlink" href="#py_fort_myrmidon.Space" title="Permalink to this definition"></a></dt>
 <dd><p>An homogenous coordinate system for tracking data.</p>
 <p>A Space represents an homogenous coordinate system for tracking
 data. I.e. coordinates from two different Space cannot be
@@ -120,7 +132,7 @@ with <a class="reference internal" href="experiment.html#py_fort_myrmidon.Experi
 <a class="reference internal" href="#py_fort_myrmidon.Space.DeleteZone" title="py_fort_myrmidon.Space.DeleteZone"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DeleteZone()</span></code></a>.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="py_fort_myrmidon.Space.CreateZone">
-<span class="sig-name descname"><span class="pre">CreateZone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#py_fort_myrmidon.Space" title="py_fort_myrmidon.Space"><span class="pre">py_fort_myrmidon.Space</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#py_fort_myrmidon.Zone" title="py_fort_myrmidon.Zone"><span class="pre">py_fort_myrmidon.Zone</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Space.CreateZone" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">CreateZone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Space" title="py_fort_myrmidon.Space"><span class="pre">py_fort_myrmidon.Space</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#py_fort_myrmidon.Zone" title="py_fort_myrmidon.Zone"><span class="pre">py_fort_myrmidon.Zone</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Space.CreateZone" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a new Zone in this space</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -137,7 +149,7 @@ with <a class="reference internal" href="experiment.html#py_fort_myrmidon.Experi
 
 <dl class="py method">
 <dt class="sig sig-object py" id="py_fort_myrmidon.Space.DeleteZone">
-<span class="sig-name descname"><span class="pre">DeleteZone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#py_fort_myrmidon.Space" title="py_fort_myrmidon.Space"><span class="pre">py_fort_myrmidon.Space</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">zoneID</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Space.DeleteZone" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DeleteZone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Space" title="py_fort_myrmidon.Space"><span class="pre">py_fort_myrmidon.Space</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">zoneID</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Space.DeleteZone" title="Permalink to this definition"></a></dt>
 <dd><p>Deletes a Zone of this Space</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -151,7 +163,7 @@ with <a class="reference internal" href="experiment.html#py_fort_myrmidon.Experi
 
 <dl class="py property">
 <dt class="sig sig-object py" id="py_fort_myrmidon.Space.ID">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">ID</span></span><a class="headerlink" href="#py_fort_myrmidon.Space.ID" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ID</span></span><a class="headerlink" href="#py_fort_myrmidon.Space.ID" title="Permalink to this definition"></a></dt>
 <dd><p>the unique SpaceID of this space</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -162,7 +174,7 @@ with <a class="reference internal" href="experiment.html#py_fort_myrmidon.Experi
 
 <dl class="py method">
 <dt class="sig sig-object py" id="py_fort_myrmidon.Space.LocateMovieFrame">
-<span class="sig-name descname"><span class="pre">LocateMovieFrame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#py_fort_myrmidon.Space" title="py_fort_myrmidon.Space"><span class="pre">py_fort_myrmidon.Space</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><span class="pre">py_fort_myrmidon.Time</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#py_fort_myrmidon.Space.LocateMovieFrame" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">LocateMovieFrame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Space" title="py_fort_myrmidon.Space"><span class="pre">py_fort_myrmidon.Space</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><span class="pre">py_fort_myrmidon.Time</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#py_fort_myrmidon.Space.LocateMovieFrame" title="Permalink to this definition"></a></dt>
 <dd><p>Locates a movie file and frame for a given time.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -183,7 +195,7 @@ int: the movie frame number that was acquired at or just after time</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="py_fort_myrmidon.Space.Name">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">Name</span></span><a class="headerlink" href="#py_fort_myrmidon.Space.Name" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Name</span></span><a class="headerlink" href="#py_fort_myrmidon.Space.Name" title="Permalink to this definition"></a></dt>
 <dd><p>the name for this space</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -194,7 +206,7 @@ int: the movie frame number that was acquired at or just after time</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="py_fort_myrmidon.Space.Zones">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">Zones</span></span><a class="headerlink" href="#py_fort_myrmidon.Space.Zones" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Zones</span></span><a class="headerlink" href="#py_fort_myrmidon.Space.Zones" title="Permalink to this definition"></a></dt>
 <dd><p>the Space’s Zone by their ZoneID</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -210,7 +222,7 @@ int: the movie frame number that was acquired at or just after time</p>
 <h2>py_fort_myrmidon.Zone<a class="headerlink" href="#py-fort-myrmidon-zone" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="py_fort_myrmidon.Zone">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">Zone</span></span><a class="headerlink" href="#py_fort_myrmidon.Zone" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">Zone</span></span><a class="headerlink" href="#py_fort_myrmidon.Zone" title="Permalink to this definition"></a></dt>
 <dd><p>Defines a named region of interest for tracking and interactions</p>
 <p>Zones defines a named region of interest for tracking and
 interactions. It means that two <a class="reference internal" href="ant_identification.html#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant"><code class="xref py py-class docutils literal notranslate"><span class="pre">Ant</span></code></a>, which are lying in two
@@ -230,7 +242,7 @@ not overlap in Time. The definitions are manipulated with
 <a class="reference internal" href="#py_fort_myrmidon.Zone.AddDefinition" title="py_fort_myrmidon.Zone.AddDefinition"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AddDefinition()</span></code></a> and <a class="reference internal" href="#py_fort_myrmidon.Zone.DeleteDefinition" title="py_fort_myrmidon.Zone.DeleteDefinition"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DeleteDefinition()</span></code></a>.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="py_fort_myrmidon.Zone.AddDefinition">
-<span class="sig-name descname"><span class="pre">AddDefinition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self:</span> <span class="pre">py_fort_myrmidon.Zone</span></em>, <em class="sig-param"><span class="pre">shapes:</span> <span class="pre">py_fort_myrmidon.ShapeList</span> <span class="pre">=</span> <span class="pre">[]</span></em>, <em class="sig-param"><span class="pre">start:</span> <span class="pre">py_fort_myrmidon.Time</span> <span class="pre">=</span> <span class="pre">{Time:-∞}</span></em>, <em class="sig-param"><span class="pre">end:</span> <span class="pre">py_fort_myrmidon.Time</span> <span class="pre">=</span> <span class="pre">{Time:+∞}</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#py_fort_myrmidon.ZoneDefinition" title="py_fort_myrmidon.ZoneDefinition"><span class="pre">py_fort_myrmidon.ZoneDefinition</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Zone.AddDefinition" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">AddDefinition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">py_fort_myrmidon.Zone</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shapes:</span> <span class="pre">py_fort_myrmidon.ShapeList</span> <span class="pre">=</span> <span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start:</span> <span class="pre">py_fort_myrmidon.Time</span> <span class="pre">=</span> <span class="pre">{Time:-∞}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end:</span> <span class="pre">py_fort_myrmidon.Time</span> <span class="pre">=</span> <span class="pre">{Time:+∞}</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#py_fort_myrmidon.ZoneDefinition" title="py_fort_myrmidon.ZoneDefinition"><span class="pre">py_fort_myrmidon.ZoneDefinition</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Zone.AddDefinition" title="Permalink to this definition"></a></dt>
 <dd><p>Adds a new ZoneDefinition to this Zone</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -258,7 +270,7 @@ ZoneDefinition</p></li>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="py_fort_myrmidon.Zone.Definitions">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">Definitions</span></span><a class="headerlink" href="#py_fort_myrmidon.Zone.Definitions" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Definitions</span></span><a class="headerlink" href="#py_fort_myrmidon.Zone.Definitions" title="Permalink to this definition"></a></dt>
 <dd><p>the definitions for this Zone</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -269,7 +281,7 @@ ZoneDefinition</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="py_fort_myrmidon.Zone.DeleteDefinition">
-<span class="sig-name descname"><span class="pre">DeleteDefinition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#py_fort_myrmidon.Zone" title="py_fort_myrmidon.Zone"><span class="pre">py_fort_myrmidon.Zone</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Zone.DeleteDefinition" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DeleteDefinition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Zone" title="py_fort_myrmidon.Zone"><span class="pre">py_fort_myrmidon.Zone</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Zone.DeleteDefinition" title="Permalink to this definition"></a></dt>
 <dd><p>Removes a ZoneDefinition</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -283,7 +295,7 @@ ZoneDefinition</p></li>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="py_fort_myrmidon.Zone.ID">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">ID</span></span><a class="headerlink" href="#py_fort_myrmidon.Zone.ID" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ID</span></span><a class="headerlink" href="#py_fort_myrmidon.Zone.ID" title="Permalink to this definition"></a></dt>
 <dd><p>the unique ID for this Zone</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -294,7 +306,7 @@ ZoneDefinition</p></li>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="py_fort_myrmidon.Zone.Name">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">Name</span></span><a class="headerlink" href="#py_fort_myrmidon.Zone.Name" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Name</span></span><a class="headerlink" href="#py_fort_myrmidon.Zone.Name" title="Permalink to this definition"></a></dt>
 <dd><p>the name of the Zone</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -310,11 +322,11 @@ ZoneDefinition</p></li>
 <h2>py_fort_myrmidon.ZoneDefinition<a class="headerlink" href="#py-fort-myrmidon-zonedefinition" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="py_fort_myrmidon.ZoneDefinition">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">ZoneDefinition</span></span><a class="headerlink" href="#py_fort_myrmidon.ZoneDefinition" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">ZoneDefinition</span></span><a class="headerlink" href="#py_fort_myrmidon.ZoneDefinition" title="Permalink to this definition"></a></dt>
 <dd><p>Defines the geometry of a <a class="reference internal" href="#py_fort_myrmidon.Zone" title="py_fort_myrmidon.Zone"><code class="xref py py-class docutils literal notranslate"><span class="pre">Zone</span></code></a> during a time interval</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="py_fort_myrmidon.ZoneDefinition.End">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">End</span></span><a class="headerlink" href="#py_fort_myrmidon.ZoneDefinition.End" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">End</span></span><a class="headerlink" href="#py_fort_myrmidon.ZoneDefinition.End" title="Permalink to this definition"></a></dt>
 <dd><p>the first invalid Time for this ZoneDefinition</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -325,7 +337,7 @@ ZoneDefinition</p></li>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="py_fort_myrmidon.ZoneDefinition.Shapes">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">Shapes</span></span><a class="headerlink" href="#py_fort_myrmidon.ZoneDefinition.Shapes" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Shapes</span></span><a class="headerlink" href="#py_fort_myrmidon.ZoneDefinition.Shapes" title="Permalink to this definition"></a></dt>
 <dd><p>the list of Shape that defines the geometry</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -336,7 +348,7 @@ ZoneDefinition</p></li>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="py_fort_myrmidon.ZoneDefinition.Start">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">Start</span></span><a class="headerlink" href="#py_fort_myrmidon.ZoneDefinition.Start" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Start</span></span><a class="headerlink" href="#py_fort_myrmidon.ZoneDefinition.Start" title="Permalink to this definition"></a></dt>
 <dd><p>the first valid Time for this ZoneDefinition</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>

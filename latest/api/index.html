@@ -50,9 +50,21 @@
 <li class="toctree-l1"><a class="reference internal" href="../linking_tdata.html">Linking Tracking Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../identifying_ants.html">Identifying Ants</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../defining_ant_metadata.html">Defining Ant Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performing_queries.html">Performing Queries</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-studio Manual</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../studio/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../studio/identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../studio/defining_ant_shapes.html">Defining Ant Shapes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../studio/measuring_ants.html">Measuring Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../studio/metadata_edition.html">Ant Metadata Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../studio/visualization.html">Tracking Data Visualization</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../space_zoning.html">Segmenting Spaces in Zones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../matching_movie_and_tracking_data.html">Matching Movie Frame and Tracking Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../time.html">Time Representation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API References</span></p>
@@ -77,7 +89,8 @@
 <li class="toctree-l2"><a class="reference internal" href="cpp/typedef.html">API generic types</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#r">R</a><ul class="simple">
+<li class="toctree-l1"><a class="reference internal" href="#r">R</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="R.html">Disclaimer</a></li>
 </ul>
 </li>
 </ul>
@@ -129,6 +142,18 @@
 <li class="toctree-l1"><a class="reference internal" href="python/queries_matchers.html">Queries And Matchers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="python/queries_matchers.html#py-fort-myrmidon-query">py_fort_myrmidon.Query</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python/queries_matchers.html#py-fort-myrmidon-matcher">py_fort_myrmidon.Matcher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/queries_matchers.html#queries-result-structures">Queries’ result structures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#py-fort-myrmiond-anttrajectory">py_fort_myrmiond.AntTrajectory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#py-fort-myrmidon-antinteraction">py_fort_myrmidon.AntInteraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#py-fort-myrmidon-anttrajectorysegment">py_fort_myrmidon.AntTrajectorySegment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#py-fort-myrmidon-anttrajectorysummary">py_fort_myrmidon.AntTrajectorySummary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#py-fort-myrmidon-identifiedframe">py_fort_myrmidon.IdentifiedFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#py-fort-myrmidon-collisionframe">py_fort_myrmidon.CollisionFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#py-fort-myrmidon-computedmeasurement">py_fort_myrmidon.ComputedMeasurement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#py-fort-myrmidon-tagstatistics">py_fort_myrmidon.TagStatistics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#py-fort-myrmidon-experimentdatainfo">py_fort_myrmidon.ExperimentDataInfo</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="python/time.html">Time Representation</a><ul>
@@ -180,6 +205,7 @@
 <li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-anttrajectory">fort::myrmidon::AntTrajectory</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-antinteraction">fort::myrmidon::AntInteraction</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-anttrajectorysegment">fort::myrmidon::AntTrajectorySegment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-anttrajectorysummary">fort::myrmidon::AntTrajectorySummary</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-identifiedframe">fort::myrmidon::IdentifiedFrame</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-collisionframe">fort::myrmidon::CollisionFrame</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-computedmeasurement">fort::myrmidon::ComputedMeasurement</a></li>
@@ -211,6 +237,9 @@
 <section id="r">
 <h1>R<a class="headerlink" href="#r" title="Permalink to this headline"></a></h1>
 <div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="R.html">Disclaimer</a></li>
+</ul>
 </div>
 </section>
 

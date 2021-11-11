@@ -1,5 +1,3 @@
-.. defining_ant_metadata
-
 Defining Ant Metadata
 =====================
 
@@ -10,22 +8,22 @@ visualisation or for any pre-defined usage.
 Ant virtual shapes
 ******************
 
-.. _ant_shape_fig:
-..
-   .. figure:: ant_virutal_shape.png
-
-
-	  Ant virtual shape in **fort-myrmidon**.
-
-	  Ant virtual shape is defined as a collection of typed capsule. Here
-	  each type is assigned an unique color. A capsule is defined as
-	  region inside and between two circles.
-
 In **fort-myrmidon** each ant has a virtual shape defined as an union
 of `capsules` [#capsule]_, as shown in figure
 :numref:`ant_shape_fig`. There are no predefined type in a new
 experiment, and they must be *created* [#createAntShapeType]_ before
 *adding a capsule to an ant* [#addCapsule]_.
+
+.. figure:: _static/images/ant_virtual_shape.png
+   :name: ant_shape_fig
+   :alt: An ant virtual shape is defined by a collection of typed capsules
+   :align: center
+
+   Ant virtual shape in **fort-myrmidon**.
+
+   Ant virtual shape are defined as a collection of typed capsules. Here
+   each type is assigned an unique color. A capsule is defined as
+   region inside and between two circles.
 
 Capsule are defined in the ant reference frame.
 
@@ -168,12 +166,12 @@ boolean, integer, float, strings or `Time` [#time]_.
    e->SetMetaDataKey("group","worker");
    e->SetMetaDataKey("alive",true);
 
-   t = fort::Time::Now()
+   t = fort::Time::Now();
 
-   a->GetValue("group",t) // is a "worker"
-   a->SetValue("alive",false,t)
-   a->GetValue("alive",t) # false
-   a->GetValue("alive",t.Add(-1 * fort::Duration::Second)) # true, it was alive before t
+   a->GetValue("group",t); // is a "worker"
+   a->SetValue("alive",false,t);
+   a->GetValue("alive",t); // false
+   a->GetValue("alive",t.Add(-1 * fort::Duration::Second)); // true, it was alive before t
 
 
 Ant visualization data
@@ -181,6 +179,25 @@ Ant visualization data
 
 It is possible to *set or access* [#visualization]_ properties on how
 ants should be displayed in **fort-studio**.
+
+.. code-block:: python
+
+   #python
+   a.DisplayColor = fm.DefaultPaletteColor(1)
+   a.DisplayStatus = fm.Ant.DisplayState.SOLO
+
+.. code-block:: R
+
+   #R
+   a$displayColor = fmDefaultPaletteColor(2)
+   a$displayStatus = fmAntDisplayState$SOLO
+
+.. code-block:: c++
+
+   //C++
+   a->SetDisplayColor(fort::myrmidon::DefaultPaletteColor(1));
+   a->SetDisplayStatus(fort::myrmidon::Ant::DisplayState::SOLO);
+
 
 .. [#time] Python: :py:class:`py_fort_myrmidon.Time`, R: :obj:`fmTime`, C++: :cpp:class:`fort::Time`
 .. [#capsule] Python: :py:class:`py_fort_myrmidon.Capsule`, R: :obj:`fmCapsule`, C++: :cpp:class:`fort::myrmidon::Capsule`
