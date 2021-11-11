@@ -23,12 +23,20 @@ Table of Contents
    :maxdepth: 1
    :caption: fort-studio Manual
 
+   studio/introduction
+   studio/identifying_ants
+   studio/defining_ant_shapes
+   studio/measuring_ants
+   studio/metadata_edition
+   studio/visualization
+
 .. toctree::
    :maxdepth: 1
    :caption: Advanced Usage
 
+   space_zoning
+   matching_movie_and_tracking_data
    time.rst
-
 
 .. toctree::
    :maxdepth: 2
