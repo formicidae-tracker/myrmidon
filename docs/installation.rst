@@ -1,6 +1,3 @@
-.. installation
-
-
 Installation
 ============
 

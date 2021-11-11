@@ -1,6 +1,3 @@
-.. linking_tdata
-
-
 Linking Tracking Data
 =====================
 
