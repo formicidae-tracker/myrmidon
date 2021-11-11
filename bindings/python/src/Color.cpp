@@ -28,14 +28,14 @@ Returns:
 	      &DefaultPaletteColor,
 	      py::arg("index"),
 	      R"pydoc(
-Safely returns one of the :func:`DefaultPalette`color for any index
+Safely returns one of the :func:`DefaultPalette` color for any index.
 
 Args:
     index(int) : a positive index
 
 Returns:
     Tuple[int,int,int]: a color from :func:`DefaultPalette` wrapping
-        arround **index**.\
+        arround **index**.
 )pydoc");
 
 

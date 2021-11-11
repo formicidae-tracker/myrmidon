@@ -168,12 +168,12 @@ boolean, integer, float, strings or `Time` [#time]_.
    e->SetMetaDataKey("group","worker");
    e->SetMetaDataKey("alive",true);
 
-   t = fort::Time::Now()
+   t = fort::Time::Now();
 
-   a->GetValue("group",t) // is a "worker"
-   a->SetValue("alive",false,t)
-   a->GetValue("alive",t) # false
-   a->GetValue("alive",t.Add(-1 * fort::Duration::Second)) # true, it was alive before t
+   a->GetValue("group",t); // is a "worker"
+   a->SetValue("alive",false,t);
+   a->GetValue("alive",t); // false
+   a->GetValue("alive",t.Add(-1 * fort::Duration::Second)); // true, it was alive before t
 
 
 Ant visualization data
@@ -181,6 +181,25 @@ Ant visualization data
 
 It is possible to *set or access* [#visualization]_ properties on how
 ants should be displayed in **fort-studio**.
+
+.. code-block:: python
+
+   #python
+   a.DisplayColor = fm.DefaultPaletteColor(1)
+   a.DisplayStatus = fm.Ant.DisplayState.SOLO
+
+.. code-block:: R
+
+   #R
+   a$displayColor = fmDefaultPaletteColor(2)
+   a$displayStatus = fmAntDisplayState$SOLO
+
+.. code-block:: c++
+
+   //C++
+   a->SetDisplayColor(fort::myrmidon::DefaultPaletteColor(1));
+   a->SetDisplayStatus(fort::myrmidon::Ant::DisplayState::SOLO);
+
 
 .. [#time] Python: :py:class:`py_fort_myrmidon.Time`, R: :obj:`fmTime`, C++: :cpp:class:`fort::Time`
 .. [#capsule] Python: :py:class:`py_fort_myrmidon.Capsule`, R: :obj:`fmCapsule`, C++: :cpp:class:`fort::myrmidon::Capsule`

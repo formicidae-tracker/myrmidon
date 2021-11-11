@@ -16,6 +16,8 @@ Table of Contents
    linking_tdata
    identifying_ants
    defining_ant_metadata
+   performing_queries
+
 
 .. toctree::
    :maxdepth: 1
@@ -26,6 +28,8 @@ Table of Contents
    :caption: Advanced Usage
 
    time.rst
+
+
 .. toctree::
    :maxdepth: 2
    :caption: API References
