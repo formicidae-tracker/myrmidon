@@ -1,5 +1,3 @@
-.. defining_ant_metadata
-
 Defining Ant Metadata
 =====================
 

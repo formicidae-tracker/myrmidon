@@ -39,6 +39,13 @@ fort::myrmidon::AntTrajectorySegment
 .. doxygenstruct:: fort::myrmidon::AntTrajectorySegment
    :members:
 
+fort::myrmidon::AntTrajectorySummary
+************************************
+
+.. doxygenstruct:: fort::myrmidon::AntTrajectorySummary
+   :members:
+
+
 fort::myrmidon::IdentifiedFrame
 *******************************
 
