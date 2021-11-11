@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python &mdash; fort-myrmidon  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/../version_dropdown.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API Entry Point" href="python/experiment.html" />
+    <link rel="prev" title="Time Representation" href="../time.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> fort-myrmidon
+          </a>
+              <div class="version">
+                placeholder
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-myrmidon Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../defining_ant_metadata.html">Defining Ant Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performing_queries.html">Performing Queries</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-studio Manual</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../studio/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../studio/identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../studio/defining_ant_shapes.html">Defining Ant Shapes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../studio/measuring_ants.html">Measuring Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../studio/metadata_edition.html">Ant Metadata Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../studio/visualization.html">Tracking Data Visualization</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../space_zoning.html">Segmenting Spaces in Zones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../matching_movie_and_tracking_data.html">Matching Movie Frame and Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../time.html">Time Representation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API References</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python/experiment.html">API Entry Point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/ant_identification.html">Ants and Identifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/space_zone.html">Spaces and Zones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/queries_matchers.html">Queries And Matchers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/time.html">Time Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/shapes.html">2D Geometric Shapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/misc.html">Miscanellous</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#c">C++</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp/experiment.html">API Entry Point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/ant_identification.html">Ants and Identifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/space_zone.html">Spaces and Zones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/queries_matchers.html">Queries And Matchers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/time.html">Time Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/shapes.html">2D Geometric Shapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/typedef.html">API generic types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#r">R</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="R.html">Disclaimer</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fort-myrmidon</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Python</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/api/index.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="python">
+<span id="api"></span><h1>Python<a class="headerlink" href="#python" title="Permalink to this headline"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="python/experiment.html">API Entry Point</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python/experiment.html#py-fort-myrmidon-experiment">py_fort_myrmidon.Experiment</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python/ant_identification.html">Ants and Identifications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python/ant_identification.html#py-fort-myrmidon-ant">py_fort_myrmidon.Ant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/ant_identification.html#py-fort-myrmidon-identification">py_fort_myrmidon.Identification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/ant_identification.html#py-fort-myrmidon-overlappingidentification">py_fort_myrmidon.OverlappingIdentification</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python/space_zone.html">Spaces and Zones</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python/space_zone.html#py-fort-myrmidon-space">py_fort_myrmidon.Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/space_zone.html#py-fort-myrmidon-zone">py_fort_myrmidon.Zone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/space_zone.html#py-fort-myrmidon-zonedefinition">py_fort_myrmidon.ZoneDefinition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python/queries_matchers.html">Queries And Matchers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python/queries_matchers.html#py-fort-myrmidon-query">py_fort_myrmidon.Query</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/queries_matchers.html#py-fort-myrmidon-matcher">py_fort_myrmidon.Matcher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/queries_matchers.html#queries-result-structures">Queries’ result structures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#py-fort-myrmiond-anttrajectory">py_fort_myrmiond.AntTrajectory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#py-fort-myrmidon-antinteraction">py_fort_myrmidon.AntInteraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#py-fort-myrmidon-anttrajectorysegment">py_fort_myrmidon.AntTrajectorySegment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#py-fort-myrmidon-anttrajectorysummary">py_fort_myrmidon.AntTrajectorySummary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#py-fort-myrmidon-identifiedframe">py_fort_myrmidon.IdentifiedFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#py-fort-myrmidon-collisionframe">py_fort_myrmidon.CollisionFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#py-fort-myrmidon-computedmeasurement">py_fort_myrmidon.ComputedMeasurement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#py-fort-myrmidon-tagstatistics">py_fort_myrmidon.TagStatistics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#py-fort-myrmidon-experimentdatainfo">py_fort_myrmidon.ExperimentDataInfo</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python/time.html">Time Representation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python/time.html#py-fort-myrmidon-duration">py_fort_myrmidon.Duration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/time.html#py-fort-myrmidon-time">py_fort_myrmidon.Time</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python/shapes.html">2D Geometric Shapes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python/shapes.html#py-fort-myrmidon-shape">py_fort_myrmidon.Shape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/shapes.html#py-fort-myrmidon-circle">py_fort_myrmidon.Circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/shapes.html#py-fort-myrmidon-capsule">py_fort_myrmidon.Capsule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/shapes.html#py-fort-myrmidon-polygon">py_fort_myrmidon.Polygon</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python/misc.html">Miscanellous</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python/misc.html#py-fort-myrmidon-tagfamily">py_fort_myrmidon.TagFamily</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/misc.html#id-formatting">ID formatting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/misc.html#color">Color</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="c">
+<h1>C++<a class="headerlink" href="#c" title="Permalink to this headline"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cpp/experiment.html">API Entry Point</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp/experiment.html#fort-myrmidon-experiment">fort::myrmidon::Experiment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/experiment.html#fort-myrmidon-trackingsolver">fort::myrmidon::TrackingSolver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cpp/ant_identification.html">Ants and Identifications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp/ant_identification.html#fort-myrmidon-ant">fort::myrmidon::Ant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/ant_identification.html#fort-myrmidon-identification">fort::myrmidon::Identification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/ant_identification.html#fort-myrmidon-overlappingidentification">fort::myrmidon::OverlappingIdentification</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cpp/space_zone.html">Spaces and Zones</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp/space_zone.html#fort-myrmidon-space">fort::myrmidon::Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/space_zone.html#fort-myrmidon-zone">fort::myrmidon::Zone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/space_zone.html#fort-myrmidon-zonedefinition">fort::myrmidon::ZoneDefinition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cpp/queries_matchers.html">Queries And Matchers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-query">fort::myrmidon::Query</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-matcher">fort::myrmidon::Matcher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/queries_matchers.html#queries-result-structures">Queries’ result structures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-anttrajectory">fort::myrmidon::AntTrajectory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-antinteraction">fort::myrmidon::AntInteraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-anttrajectorysegment">fort::myrmidon::AntTrajectorySegment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-anttrajectorysummary">fort::myrmidon::AntTrajectorySummary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-identifiedframe">fort::myrmidon::IdentifiedFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-collisionframe">fort::myrmidon::CollisionFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-computedmeasurement">fort::myrmidon::ComputedMeasurement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-tagstatistics">fort::myrmidon::TagStatistics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-experimentdatainfo">fort::myrmidon::ExperimentDataInfo</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cpp/time.html">Time Representation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp/time.html#fort-duration">fort::Duration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/time.html#fort-time">fort::Time</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cpp/shapes.html">2D Geometric Shapes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp/shapes.html#fort-myrmidon-shape">fort::myrmidon::Shape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/shapes.html#fort-myrmidon-capsule">fort::myrmidon::Capsule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/shapes.html#fort-myrmidon-circle">fort::myrmidon::Circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/shapes.html#fort-myrmidon-polygon">fort::myrmidon::Polygon</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cpp/typedef.html">API generic types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp/typedef.html#simple-typedefs">Simple typedefs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="r">
+<h1>R<a class="headerlink" href="#r" title="Permalink to this headline"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="R.html">Disclaimer</a></li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../time.html" class="btn btn-neutral float-left" title="Time Representation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="python/experiment.html" class="btn btn-neutral float-right" title="API Entry Point" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Université de Lausanne.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

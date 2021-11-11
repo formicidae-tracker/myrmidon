@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Entry Point &mdash; fort-myrmidon  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/../version_dropdown.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Ants and Identifications" href="ant_identification.html" />
+    <link rel="prev" title="Python" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> fort-myrmidon
+          </a>
+              <div class="version">
+                placeholder
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-myrmidon Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defining_ant_metadata.html">Defining Ant Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../performing_queries.html">Performing Queries</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-studio Manual</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/defining_ant_shapes.html">Defining Ant Shapes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/measuring_ants.html">Measuring Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/metadata_edition.html">Ant Metadata Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/visualization.html">Tracking Data Visualization</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../space_zoning.html">Segmenting Spaces in Zones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matching_movie_and_tracking_data.html">Matching Movie Frame and Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../time.html">Time Representation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API References</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Python</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">API Entry Point</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#py-fort-myrmidon-experiment">py_fort_myrmidon.Experiment</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ant_identification.html">Ants and Identifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="space_zone.html">Spaces and Zones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="queries_matchers.html">Queries And Matchers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="time.html">Time Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shapes.html">2D Geometric Shapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="misc.html">Miscanellous</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html#c">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html#r">R</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fort-myrmidon</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Python</a> &raquo;</li>
+      <li>API Entry Point</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/api/python/experiment.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="api-entry-point">
+<h1>API Entry Point<a class="headerlink" href="#api-entry-point" title="Permalink to this headline"></a></h1>
+<section id="py-fort-myrmidon-experiment">
+<h2>py_fort_myrmidon.Experiment<a class="headerlink" href="#py-fort-myrmidon-experiment" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">Experiment</span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment" title="Permalink to this definition"></a></dt>
+<dd><p>An Experiment olds a collection of <a class="reference internal" href="ant_identification.html#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant"><code class="xref py py-class docutils literal notranslate"><span class="pre">Ant</span></code></a>,
+<a class="reference internal" href="ant_identification.html#py_fort_myrmidon.Identification" title="py_fort_myrmidon.Identification"><code class="xref py py-class docutils literal notranslate"><span class="pre">Identification</span></code></a>, <a class="reference internal" href="space_zone.html#py_fort_myrmidon.Space" title="py_fort_myrmidon.Space"><code class="xref py py-class docutils literal notranslate"><span class="pre">Space</span></code></a> and <a class="reference internal" href="space_zone.html#py_fort_myrmidon.Zone" title="py_fort_myrmidon.Zone"><code class="xref py py-class docutils literal notranslate"><span class="pre">Zone</span></code></a> and give
+access to the identified tracking data instantaneous collision and
+interaction detection through <a class="reference internal" href="queries_matchers.html#py_fort_myrmidon.Query" title="py_fort_myrmidon.Query"><code class="xref py py-class docutils literal notranslate"><span class="pre">Query</span></code></a>.</p>
+<p>Experiment are save to the filesystem in <cite>.myrmidon</cite> files. One can
+use <a class="reference internal" href="#py_fort_myrmidon.Experiment.Open" title="py_fort_myrmidon.Experiment.Open"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Open()</span></code></a>, <a class="reference internal" href="#py_fort_myrmidon.Experiment.OpenDataLess" title="py_fort_myrmidon.Experiment.OpenDataLess"><code class="xref py py-meth docutils literal notranslate"><span class="pre">OpenDataLess()</span></code></a>, and <a class="reference internal" href="#py_fort_myrmidon.Experiment.Save" title="py_fort_myrmidon.Experiment.Save"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Save()</span></code></a> to interact
+with these files.</p>
+<p>One can use <a class="reference internal" href="#py_fort_myrmidon.Experiment.AddTrackingDataDirectory" title="py_fort_myrmidon.Experiment.AddTrackingDataDirectory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AddTrackingDataDirectory()</span></code></a> to link an Experiment
+with some tracking data, organized by <strong>fort-leto</strong> in a tracking data
+directory. This data must be assigned to a <a class="reference internal" href="space_zone.html#py_fort_myrmidon.Space" title="py_fort_myrmidon.Space"><code class="xref py py-class docutils literal notranslate"><span class="pre">Space</span></code></a> (previously
+created with <a class="reference internal" href="#py_fort_myrmidon.Experiment.CreateSpace" title="py_fort_myrmidon.Experiment.CreateSpace"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CreateSpace()</span></code></a>).  Experiment saves relative links to
+these tracking data directory. These paths are relative, so one can
+rename a <cite>.myrmidon</cite> file on the filesystem with <a class="reference internal" href="#py_fort_myrmidon.Experiment.Save" title="py_fort_myrmidon.Experiment.Save"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Save()</span></code></a>, but it
+must remains in the same directory.</p>
+<p>In <strong>fort-myrmidon</strong>, tags are not used directly. Instead user are
+required to make <a class="reference internal" href="ant_identification.html#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant"><code class="xref py py-class docutils literal notranslate"><span class="pre">Ant</span></code></a> object (through <a class="reference internal" href="#py_fort_myrmidon.Experiment.CreateAnt" title="py_fort_myrmidon.Experiment.CreateAnt"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CreateAnt()</span></code></a>) and
+use <a class="reference internal" href="ant_identification.html#py_fort_myrmidon.Identification" title="py_fort_myrmidon.Identification"><code class="xref py py-class docutils literal notranslate"><span class="pre">Identification</span></code></a> (through <a class="reference internal" href="#py_fort_myrmidon.Experiment.AddIdentification" title="py_fort_myrmidon.Experiment.AddIdentification"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AddIdentification()</span></code></a>) to
+relate a tag value to an Ant. To perform collision and interaction
+detection, users can create for each Ant a virtual shape, made of a
+collection of <a class="reference internal" href="shapes.html#py_fort_myrmidon.Capsule" title="py_fort_myrmidon.Capsule"><code class="xref py py-class docutils literal notranslate"><span class="pre">Capsule</span></code></a>. Each Capsule is assigned an
+AntShapeTypeID (an integer starting from 1) which must be previously
+defined using <a class="reference internal" href="#py_fort_myrmidon.Experiment.CreateAntShapeType" title="py_fort_myrmidon.Experiment.CreateAntShapeType"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CreateAntShapeType()</span></code></a>. There is no predefined
+AntShapeTypeID.</p>
+<p><strong>fort-studio</strong> allows to make measurement on close-up of each
+<a class="reference internal" href="ant_identification.html#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant"><code class="xref py py-class docutils literal notranslate"><span class="pre">Ant</span></code></a>. These measurement must be assigned to a type, created
+with <a class="reference internal" href="#py_fort_myrmidon.Experiment.CreateMeasurementType" title="py_fort_myrmidon.Experiment.CreateMeasurementType"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CreateMeasurementType()</span></code></a>. There is a predefined, undeletable
+MeasurementTypeID: <code class="xref py py-attr docutils literal notranslate"><span class="pre">HEAD_TAIL_MEASUREMENT_TYPE</span></code>. It is used to
+automatically determine <a class="reference internal" href="ant_identification.html#py_fort_myrmidon.Identification.AntPosition" title="py_fort_myrmidon.Identification.AntPosition"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Identification.AntPosition</span></code></a> and
+<a class="reference internal" href="ant_identification.html#py_fort_myrmidon.Identification.AntAngle" title="py_fort_myrmidon.Identification.AntAngle"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Identification.AntAngle</span></code></a> from <strong>fort-studio</strong> measurement.</p>
+<p>Each <a class="reference internal" href="ant_identification.html#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant"><code class="xref py py-class docutils literal notranslate"><span class="pre">Ant</span></code></a> can also holds a dictionnary of key/value pairs. The
+key name, type and initial value for each Ant must be defined with
+<a class="reference internal" href="#py_fort_myrmidon.Experiment.SetMetaDataKey" title="py_fort_myrmidon.Experiment.SetMetaDataKey"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SetMetaDataKey()</span></code></a>. Through <a class="reference internal" href="ant_identification.html#py_fort_myrmidon.Ant.SetValue" title="py_fort_myrmidon.Ant.SetValue"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Ant.SetValue()</span></code></a>, individual,
+timed value can be assigned to each Ant. There are no predefined keys.</p>
+<p>An Experiment is also usuable without linking to any tracking
+data. <a class="reference internal" href="#py_fort_myrmidon.Experiment.OpenDataLess" title="py_fort_myrmidon.Experiment.OpenDataLess"><code class="xref py py-meth docutils literal notranslate"><span class="pre">OpenDataLess()</span></code></a> can be used to open an existing Experiment,
+previously linked with acquired data, but without requiring the data
+to be present on the filesystem. Any <a class="reference internal" href="queries_matchers.html#py_fort_myrmidon.Query" title="py_fort_myrmidon.Query"><code class="xref py py-class docutils literal notranslate"><span class="pre">Query</span></code></a> on such Experiment
+object will report no data, but a <code class="xref py py-class docutils literal notranslate"><span class="pre">TrackingSolver</span></code> (acquired
+with <a class="reference internal" href="#py_fort_myrmidon.Experiment.CompileTrackingSolver" title="py_fort_myrmidon.Experiment.CompileTrackingSolver"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CompileTrackingSolver()</span></code></a>) could be used, to perform, for
+example identifications and collision detection on a live tracking
+datastream of <strong>fort-leto</strong>. Also tracking and user-defined meta-data
+can be manipulated without the need of the often very large tracking
+data directory to be present on the filesystem.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.AbsoluteFilePath">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AbsoluteFilePath</span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.AbsoluteFilePath" title="Permalink to this definition"></a></dt>
+<dd><p>the absolute filepath of the Experiment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.AddIdentification">
+<span class="sig-name descname"><span class="pre">AddIdentification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">py_fort_myrmidon.Experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">antID:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tagID:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start:</span> <span class="pre">py_fort_myrmidon.Time</span> <span class="pre">=</span> <span class="pre">{Time:-∞}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end:</span> <span class="pre">py_fort_myrmidon.Time</span> <span class="pre">=</span> <span class="pre">{Time:+∞}</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="ant_identification.html#py_fort_myrmidon.Identification" title="py_fort_myrmidon.Identification"><span class="pre">py_fort_myrmidon.Identification</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.AddIdentification" title="Permalink to this definition"></a></dt>
+<dd><p>Adds an Identification to the Experiment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>antID</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the ant to target</p></li>
+<li><p><strong>tagID</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the TagID to use</p></li>
+<li><p><strong>start</strong> (<a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><em>Time</em></a>) – the first valid Time for the <a class="reference internal" href="ant_identification.html#py_fort_myrmidon.Identification" title="py_fort_myrmidon.Identification"><code class="xref py py-class docutils literal notranslate"><span class="pre">Identification</span></code></a></p></li>
+<li><p><strong>end</strong> (<a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><em>Time</em></a>) – the first invalid Time for the <a class="reference internal" href="ant_identification.html#py_fort_myrmidon.Identification" title="py_fort_myrmidon.Identification"><code class="xref py py-class docutils literal notranslate"><span class="pre">Identification</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the newly created Identification</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="ant_identification.html#py_fort_myrmidon.Identification" title="py_fort_myrmidon.Identification">Identification</a></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – if <strong>antID</strong> is not valid for the Experiment</p></li>
+<li><p><a class="reference internal" href="ant_identification.html#py_fort_myrmidon.OverlappingIdentification" title="py_fort_myrmidon.OverlappingIdentification"><strong>OverlappingIdentification</strong></a> – if the resulting Identification would
+    overlap in time with another one, either for a given <strong>antID</strong>
+    or <strong>tagID</strong>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.AddTrackingDataDirectory">
+<span class="sig-name descname"><span class="pre">AddTrackingDataDirectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">spaceID</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.AddTrackingDataDirectory" title="Permalink to this definition"></a></dt>
+<dd><p>Adds a tracking data directory to the Experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spaceID</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the space to add the tracking data directory
+to.</p></li>
+<li><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the filepath to the tracking data directory.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>the relative path from self.AbsoluteFilePath to <strong>filepath</strong>,</dt><dd><p>that will be the URI to identify the tracking data directory.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – if <strong>spaceID</strong> is not valid for this Experiment</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.10)"><strong>RuntimeError</strong></a> – if <strong>filepath</strong> is not a valid tracking data
+    directory.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.10)"><strong>RuntimeError</strong></a> – if the data will overlap in time with another
+    directory in the same space</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.10)"><strong>RuntimeError</strong></a> – if the data is used by another space</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if the tag family does not match with other directory
+    in the experiment</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.AntShapeTypeNames">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AntShapeTypeNames</span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.AntShapeTypeNames" title="Permalink to this definition"></a></dt>
+<dd><p>the ant shape type name by their AntShapeTypeID</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.Ants">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Ants</span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.Ants" title="Permalink to this definition"></a></dt>
+<dd><p>the Ant indexed by their AntID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>,<a class="reference internal" href="ant_identification.html#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant">Ant</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.Author">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Author</span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.Author" title="Permalink to this definition"></a></dt>
+<dd><p>the author of the Experiment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.Comment">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Comment</span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.Comment" title="Permalink to this definition"></a></dt>
+<dd><p>a comment about the Experiment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.CompileTrackingSolver">
+<span class="sig-name descname"><span class="pre">CompileTrackingSolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">py_fort_myrmidon.TrackingSolver</span></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.CompileTrackingSolver" title="Permalink to this definition"></a></dt>
+<dd><p>Compiles a <code class="xref py py-class docutils literal notranslate"><span class="pre">TrackingSolver</span></code> that can be used to identify and
+collide ant from raw data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the compiled tracking solver.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>TrackingSolver</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.CreateAnt">
+<span class="sig-name descname"><span class="pre">CreateAnt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="ant_identification.html#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant"><span class="pre">py_fort_myrmidon.Ant</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.CreateAnt" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a new Ant in the Experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the newly created Ant</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="ant_identification.html#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant">Ant</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.CreateAntShapeType">
+<span class="sig-name descname"><span class="pre">CreateAntShapeType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.CreateAntShapeType" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a new Ant shape type</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the ant shape type</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the AntShapeTypeID for the new type</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.CreateMeasurementType">
+<span class="sig-name descname"><span class="pre">CreateMeasurementType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.CreateMeasurementType" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a new measurement type</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the measurement type</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the MeasurementTypeID for the new type</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.CreateSpace">
+<span class="sig-name descname"><span class="pre">CreateSpace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="space_zone.html#py_fort_myrmidon.Space" title="py_fort_myrmidon.Space"><span class="pre">py_fort_myrmidon.Space</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.CreateSpace" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a new Space in this Experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name for the new space</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the newly created Space</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="space_zone.html#py_fort_myrmidon.Space" title="py_fort_myrmidon.Space">Space</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.DefaultTagSize">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DefaultTagSize</span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.DefaultTagSize" title="Permalink to this definition"></a></dt>
+<dd><p>the default tag size in mm used in the Experiment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.DeleteAnt">
+<span class="sig-name descname"><span class="pre">DeleteAnt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">antID</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.DeleteAnt" title="Permalink to this definition"></a></dt>
+<dd><p>Deletes an Ant from the Experiment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>antID</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the AntID of the Ant to remove</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – if <strong>antID</strong> is invalid for the experiment</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.10)"><strong>RuntimeError</strong></a> – if the ant still have Identification targetting
+    her</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.DeleteAntShapeType">
+<span class="sig-name descname"><span class="pre">DeleteAntShapeType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">antShapeTypeID</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.DeleteAntShapeType" title="Permalink to this definition"></a></dt>
+<dd><p>Deletes an Ant shape type</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>antShapeTypeID</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the type to delete</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – if <strong>antShapeTypeID</strong> is not valid for Experiment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.DeleteIdentification">
+<span class="sig-name descname"><span class="pre">DeleteIdentification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">identification</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="ant_identification.html#py_fort_myrmidon.Identification" title="py_fort_myrmidon.Identification"><span class="pre">py_fort_myrmidon.Identification</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.DeleteIdentification" title="Permalink to this definition"></a></dt>
+<dd><p>Deletes an Identification from this Experiment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>identification</strong> (<a class="reference internal" href="ant_identification.html#py_fort_myrmidon.Identification" title="py_fort_myrmidon.Identification"><em>Identification</em></a>) – the Identification to remove</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if <strong>identification</strong> is not a valid Identification
+    object from this Experiment.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.DeleteMeasurementType">
+<span class="sig-name descname"><span class="pre">DeleteMeasurementType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurementTypeID</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.DeleteMeasurementType" title="Permalink to this definition"></a></dt>
+<dd><p>Deletes a measurement type</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>measurementTypeID</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the measurement type to delete</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – if <strong>measurementTypeID</strong> is not valid for Experiment</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if measurementTypeID is
+    <code class="xref py py-attr docutils literal notranslate"><span class="pre">HEAD_TAIL_MEASUREMENT_TYPE_ID</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.DeleteMetaDataKey">
+<span class="sig-name descname"><span class="pre">DeleteMetaDataKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.DeleteMetaDataKey" title="Permalink to this definition"></a></dt>
+<dd><p>Deletes a meta data key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the key to delete</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – if <strong>key</strong> is not valid for this Experiment</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.10)"><strong>RuntimeError</strong></a> – if any <a class="reference internal" href="ant_identification.html#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant"><code class="xref py py-class docutils literal notranslate"><span class="pre">Ant</span></code></a> contains timed data for <strong>key</strong></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.DeleteSpace">
+<span class="sig-name descname"><span class="pre">DeleteSpace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">spaceID</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.DeleteSpace" title="Permalink to this definition"></a></dt>
+<dd><p>Deletes a Space from this Experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>spaceID</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the spaceID of this space</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – if <strong>spaceID</strong> is not a valid for this Experiment.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.Family">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Family</span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.Family" title="Permalink to this definition"></a></dt>
+<dd><p>the TagFamily used in the Experiment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="misc.html#py_fort_myrmidon.TagFamily" title="py_fort_myrmidon.TagFamily">TagFamily</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.FreeIdentificationRangeAt">
+<span class="sig-name descname"><span class="pre">FreeIdentificationRangeAt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">tagID</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><span class="pre">py_fort_myrmidon.Time</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><span class="pre">py_fort_myrmidon.Time</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><span class="pre">py_fort_myrmidon.Time</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.FreeIdentificationRangeAt" title="Permalink to this definition"></a></dt>
+<dd><p>Returns an available time range for a tag.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tagID</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the tagID to query for</p></li>
+<li><p><strong>time</strong> (<a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><em>Time</em></a>) – a time that must be contained in the result.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A time range (can be
+(<a class="reference internal" href="time.html#py_fort_myrmidon.Time.SinceEver" title="py_fort_myrmidon.Time.SinceEver"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Time.SinceEver()</span></code></a> , <a class="reference internal" href="time.html#py_fort_myrmidon.Time.Forever" title="py_fort_myrmidon.Time.Forever"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Time.Forever()</span></code></a> )) containing
+<strong>time</strong> where <strong>tagID</strong> is not used by any Identification.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">Time</span></code></a>, <a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">Time</span></code></a>]</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.10)"><strong>RuntimeError</strong></a> – if <strong>tagID</strong> already identifies an Ant at <strong>time</strong></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.IdentificationsAt">
+<span class="sig-name descname"><span class="pre">IdentificationsAt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><span class="pre">py_fort_myrmidon.Time</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">removeUnidentifiedAnt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.IdentificationsAt" title="Permalink to this definition"></a></dt>
+<dd><p>Gets AntID &lt;-&gt; TagID correspondances at a given Time</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><em>Time</em></a>) – the wanted Time for the correspondance matching.</p></li>
+<li><p><strong>removeUnidentifiedAnt</strong> – if true, <a class="reference internal" href="ant_identification.html#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant"><code class="xref py py-class docutils literal notranslate"><span class="pre">Ant</span></code></a> without an
+<a class="reference internal" href="ant_identification.html#py_fort_myrmidon.Identification" title="py_fort_myrmidon.Identification"><code class="xref py py-class docutils literal notranslate"><span class="pre">Identification</span></code></a> at <strong>time</strong> will not be part of the
+result. Otherwise the associated tagID value will be 2^32-1.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.MeasurementTypeNames">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MeasurementTypeNames</span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.MeasurementTypeNames" title="Permalink to this definition"></a></dt>
+<dd><p>the measurement type name by their MeasurementTypeID</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.MetaDataKeys">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MetaDataKeys</span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.MetaDataKeys" title="Permalink to this definition"></a></dt>
+<dd><p>metadata key default value by their unique keys. Object are bool, int, float, str or <a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">Time</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)">object</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.Name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Name</span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.Name" title="Permalink to this definition"></a></dt>
+<dd><p>the name of the Experiment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.Open">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Open</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.Open" title="Permalink to this definition"></a></dt>
+<dd><p>Opens an existing Experiment on the filesystem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the filepath to open.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the Experiment located at filepath</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment">Experiment</a></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.10)"><strong>RuntimeError</strong></a> – if <strong>filepath</strong> does not contains a valid Experiment
+    or associated tracking data is not accessible.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.OpenDataLess">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">OpenDataLess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.OpenDataLess" title="Permalink to this definition"></a></dt>
+<dd><p>Opens an existing Experiment on the filesystem in dataless mode.</p>
+<p>In dataless mode, no associated tracking data will be opened, but
+a <code class="xref py py-class docutils literal notranslate"><span class="pre">TrackingSolver</span></code> can be used to identify Ants in live tracking
+situation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the filepath to open.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the Experiment located at filepath</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment">Experiment</a></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.10)"><strong>RuntimeError</strong></a> – if <strong>filepath</strong> does not contains a valid Experiment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.RemoveTrackingDataDirectory">
+<span class="sig-name descname"><span class="pre">RemoveTrackingDataDirectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">URI</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.RemoveTrackingDataDirectory" title="Permalink to this definition"></a></dt>
+<dd><p>Removes a tracking data directory from the Experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>URI</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the URI that identifies the tracking data directory</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – if <strong>URI</strong> does not identifies a tracking data
+    directory in this experiment.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.RenameMetaDataKey">
+<span class="sig-name descname"><span class="pre">RenameMetaDataKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">oldKey</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">newKey</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.RenameMetaDataKey" title="Permalink to this definition"></a></dt>
+<dd><p>Renames a meta data key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>oldKey</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the old name of the key</p></li>
+<li><p><strong>newKey</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the new name for the key</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – if <strong>oldKey</strong> is invalid for the Experiment</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if <strong>newKey</strong> is in use for the Experiment</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.Save">
+<span class="sig-name descname"><span class="pre">Save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.Save" title="Permalink to this definition"></a></dt>
+<dd><p>Saves the experiment on the filesystem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepath</strong> – the filepath to save the experiment to.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if <strong>filepath</strong> would change the directory of the
+    Experiment on the filesystem.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.SetAntShapeTypeName">
+<span class="sig-name descname"><span class="pre">SetAntShapeTypeName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">antShapeTypeID</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.SetAntShapeTypeName" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the name for an Ant shape type</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>antShapeTypeID</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the type to modify</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the wanted name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – if <strong>antShapeTypeID</strong> is invalid for this Experiment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.SetMeasurementTypeName">
+<span class="sig-name descname"><span class="pre">SetMeasurementTypeName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurementTypeID</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.SetMeasurementTypeName" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the name for a measurement type</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>measurementTypeID</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the type to modify</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the wanted name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – if <strong>measurementTypeID</strong> is invalid for this
+    Experiment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.SetMetaDataKey">
+<span class="sig-name descname"><span class="pre">SetMetaDataKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultValue</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><span class="pre">py_fort_myrmidon.Time</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.SetMetaDataKey" title="Permalink to this definition"></a></dt>
+<dd><p>Adds or modifies a meta data key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the key to modify</p></li>
+<li><p><strong>defaultValue</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><em>object</em></a>) – the default value for the key. It will sets
+its type. Must be a boolean, an int, a float, a str or a
+<a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">Time</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.10)"><strong>RuntimeError</strong></a> – if the following conditions are met: a) <strong>key</strong> is
+    already registered, b) <strong>defaultValue</strong> would change the type
+    of <strong>key</strong> and c) at least one <a class="reference internal" href="ant_identification.html#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant"><code class="xref py py-class docutils literal notranslate"><span class="pre">Ant</span></code></a> has a value
+    registered for <strong>key</strong></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.Spaces">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Spaces</span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.Spaces" title="Permalink to this definition"></a></dt>
+<dd><p>this Experiment space indexed by their SpaceID</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>,<a class="reference internal" href="space_zone.html#py_fort_myrmidon.Space" title="py_fort_myrmidon.Space">Space</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Initialize an experiment from a specified filesystem
+location. This location will be used to determine relative path to
+the tracking data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the wanted filesystem path to the experiment.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a new empty Experiment associated with <strong>filepath</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment">Experiment</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Python" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ant_identification.html" class="btn btn-neutral float-right" title="Ants and Identifications" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Université de Lausanne.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

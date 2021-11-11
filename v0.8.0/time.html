@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Time Representation &mdash; fort-myrmidon  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/../version_dropdown.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Python" href="api/index.html" />
+    <link rel="prev" title="Matching Movie Frame and Tracking Data" href="matching_movie_and_tracking_data.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> fort-myrmidon
+          </a>
+              <div class="version">
+                placeholder
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-myrmidon Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defining_ant_metadata.html">Defining Ant Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="performing_queries.html">Performing Queries</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-studio Manual</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="studio/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/defining_ant_shapes.html">Defining Ant Shapes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/measuring_ants.html">Measuring Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/metadata_edition.html">Ant Metadata Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/visualization.html">Tracking Data Visualization</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="space_zoning.html">Segmenting Spaces in Zones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matching_movie_and_tracking_data.html">Matching Movie Frame and Tracking Data</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Time Representation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#c">C++</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#python">Python</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#python-convertion-to-and-from-time-time">Python convertion to and from <strong>time.Time</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#python-convertion-to-and-from-datetime-datetime">Python convertion to and from <strong>datetime.datetime</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#r">R</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#conversion-to-and-from-posixct">Conversion to and from <strong>POSIXct</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html#c">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html#r">R</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fort-myrmidon</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Time Representation</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/time.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="time-representation">
+<h1>Time Representation<a class="headerlink" href="#time-representation" title="Permalink to this headline"></a></h1>
+<p><strong>fort-myrmidon</strong> uses its own classes to represent
+<a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort4TimeE" title="fort::Time"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::Time</span></code></a> and <a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort8DurationE" title="fort::Duration"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::Duration</span></code></a>. Their python
+equivalents are <a class="reference internal" href="api/python/time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Time</span></code></a> and
+<a class="reference internal" href="api/python/time.html#py_fort_myrmidon.Duration" title="py_fort_myrmidon.Duration"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Duration</span></code></a>. These have been developped to
+handle the following features, which are not available with
+<strong>std::chrono</strong>, or python and R usual time representations:</p>
+<ul class="simple">
+<li><p>Microseconds precision (actually up to nanosecond).</p></li>
+<li><p>Robustness to wall clock reset, that could naturally happen when the
+system clock is reset by <strong>ntp</strong> on windows, or when a leap second
+occurs. Like the go time package, it uses a mix of wall and
+monotonic clocks (issued by the camera/framegrabber). It support
+multiple monotonic clock sources.</p></li>
+<li><p>Supports for representing -∞ and +∞ time concepts.</p></li>
+</ul>
+<section id="c">
+<h2>C++<a class="headerlink" href="#c" title="Permalink to this headline"></a></h2>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this headline"></a></h3>
+<p><a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort4TimeE" title="fort::Time"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::Time</span></code></a> and <a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort8DurationE" title="fort::Duration"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::Duration</span></code></a> provides
+operators for manipulating duration naturally:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fort/time/Time.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">auto</span> <span class="n">start</span> <span class="o">=</span> <span class="n">fort</span><span class="o">::</span><span class="n">Time</span><span class="o">::</span><span class="n">Now</span><span class="p">();</span>
+<span class="c1">// do some operation</span>
+<span class="n">ellapsed</span> <span class="o">=</span> <span class="n">fort</span><span class="o">::</span><span class="n">Time</span><span class="o">::</span><span class="n">Now</span><span class="p">().</span><span class="n">Sub</span><span class="p">(</span><span class="n">start</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;operation took: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">ellapsed</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+<span class="c1">//always true:</span>
+<span class="n">start</span> <span class="o">&lt;</span> <span class="n">fort</span><span class="o">::</span><span class="n">Time</span><span class="o">::</span><span class="n">Forever</span><span class="p">();</span>
+<span class="n">start</span> <span class="o">&gt;</span> <span class="n">fort</span><span class="o">::</span><span class="n">Time</span><span class="o">::</span><span class="n">SinceEver</span><span class="p">();</span>
+<span class="n">start</span> <span class="o">&lt;</span> <span class="n">start</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="n">fort</span><span class="o">::</span><span class="n">Duration</span><span class="o">::</span><span class="n">Second</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">fort</span><span class="o">::</span><span class="n">Duration</span><span class="o">::</span><span class="n">Millisecond</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="python">
+<h2>Python<a class="headerlink" href="#python" title="Permalink to this headline"></a></h2>
+<p>Due to python and R limitation, we cannot implictly convert native
+time object of these object from and to <a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort4TimeE" title="fort::Time"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::Time</span></code></a> and
+<a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort8DurationE" title="fort::Duration"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::Duration</span></code></a>. Indeed:</p>
+<ul class="simple">
+<li><p>python <a class="reference external" href="https://docs.python.org/3/library/time.html#time.time" title="(in Python v3.10)"><code class="xref py py-func docutils literal notranslate"><span class="pre">time.time()</span></code></a> representation and R <strong>POSIXct</strong> as a <strong>double</strong>
+precision floating point number of second ellapsed from the system
+epoch, is only guaranted 10us precision for time arround the
+year 2020. However the framegrabber used in the FORT issues time
+which are precise to the microsecond. By converting
+<a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort4TimeE" title="fort::Time"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::Time</span></code></a> objects to these native representation,
+rounding error may occurs and may change the behavior of certain
+queries.</p></li>
+<li><p>R only supports 32-bit integer, that may overflow for duration of more
+than 2s when expressed in nanoseconds.</p></li>
+</ul>
+<p>Therefore the c++ classes <a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort4TimeE" title="fort::Time"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::Time</span></code></a> and
+<a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort8DurationE" title="fort::Duration"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::Duration</span></code></a> are binded to python and R. However the
+two bindings differs a bit from the pure c++ implementation.</p>
+<section id="python-convertion-to-and-from-time-time">
+<h3>Python convertion to and from <strong>time.Time</strong><a class="headerlink" href="#python-convertion-to-and-from-time-time" title="Permalink to this headline"></a></h3>
+<p><a class="reference internal" href="api/python/time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Time</span></code></a> objects can be created from and converted to a float
+number of seconds from the epoch, as returned by <a class="reference external" href="https://docs.python.org/3/library/time.html#time.time" title="(in Python v3.10)"><code class="xref py py-func docutils literal notranslate"><span class="pre">time.time()</span></code></a> or
+<a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime.timestamp" title="(in Python v3.10)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">datetime.datetime.timestamp()</span></code></a>, with:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="api/python/time.html#py_fort_myrmidon.Time.__init__" title="py_fort_myrmidon.Time.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Time.__init__()</span></code></a></p></li>
+<li><p><a class="reference internal" href="api/python/time.html#py_fort_myrmidon.Time.ToTimestamp" title="py_fort_myrmidon.Time.ToTimestamp"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Time.ToTimestamp()</span></code></a></p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These conversions have a guaranted precision of only +/-10 us.</p>
+</div>
+</section>
+<section id="python-convertion-to-and-from-datetime-datetime">
+<h3>Python convertion to and from <strong>datetime.datetime</strong><a class="headerlink" href="#python-convertion-to-and-from-datetime-datetime" title="Permalink to this headline"></a></h3>
+<p><a class="reference internal" href="api/python/time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Time</span></code></a> objects can be created from and
+converted to <a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a>:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="api/python/time.html#py_fort_myrmidon.Time.__init__" title="py_fort_myrmidon.Time.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Time.__init__()</span></code></a></p></li>
+<li><p><a class="reference internal" href="api/python/time.html#py_fort_myrmidon.Time.ToDateTime" title="py_fort_myrmidon.Time.ToDateTime"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Time.ToDateTime()</span></code></a></p></li>
+</ul>
+<p>However as cpython and c++17 lacks supports for timezone, these
+<a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a> objects are treated as naïve objects,
+i.e. object wihtout an associated timezone, and assumed to be in local
+time. On the contrary, <a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort4TimeE" title="fort::Time"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::Time</span></code></a> uses only UTC time. It
+means that:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="api/python/time.html#py_fort_myrmidon.Time.ToDateTime" title="py_fort_myrmidon.Time.ToDateTime"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Time.ToDateTime()</span></code></a>, will return
+values that differs from one can read from the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Time.__str__()</span></code> if not careful to
+take into account the local timezone.</p></li>
+<li><p>before passing any <a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a> object to</p></li>
+</ul>
+<p><a class="reference internal" href="api/python/time.html#py_fort_myrmidon.Time.__init__" title="py_fort_myrmidon.Time.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Time.__init__()</span></code></a>, one must ensure they are
+converted to localtime first. One could use
+<a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime.astimezone" title="(in Python v3.10)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">datetime.datetime.astimezone()</span></code></a> with <code class="docutils literal notranslate"><span class="pre">tz=None</span></code> to do that.</p>
+</section>
+<section id="id1">
+<h3>Example<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
+<p><a class="reference internal" href="api/python/time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Time</span></code></a> and
+<a class="reference internal" href="api/python/time.html#py_fort_myrmidon.Duration" title="py_fort_myrmidon.Duration"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Duration</span></code></a> provides overloaded operator
+that gives a natural feeling on time manipulation.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">py_fort_myrmidon</span> <span class="kn">as</span> <span class="nn">fm</span>
+
+<span class="n">start</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">Now</span><span class="p">()</span>
+<span class="n">somefunction</span><span class="p">()</span>
+<span class="n">ellapsed</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">Now</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span> <span class="c1"># equivalent to ellapsed = fm.Time.Now().Sub(start)</span>
+
+<span class="n">later</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">fm</span><span class="o">.</span><span class="n">Duration</span><span class="o">.</span><span class="n">Second</span> <span class="c1"># equivalent to later = start.Add(5 * fm.Duration.Second)</span>
+
+<span class="c1"># we can compare Time and Duration</span>
+<span class="n">later</span> <span class="o">&gt;</span> <span class="n">start</span> <span class="c1"># equivalent to later.After(start)</span>
+<span class="n">later</span> <span class="o">&lt;</span> <span class="n">start</span> <span class="c1"># equivalent to later.Before(start)</span>
+<span class="n">later</span> <span class="o">==</span> <span class="n">start</span> <span class="c1"># equivalent to later.Equals(start)</span>
+<span class="n">later</span> <span class="o">&gt;=</span> <span class="n">start</span>
+<span class="n">later</span> <span class="o">&lt;=</span> <span class="n">start</span>
+
+<span class="c1"># always true</span>
+<span class="n">start</span> <span class="o">&gt;</span> <span class="n">fm</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">SinceEver</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="r">
+<h2>R<a class="headerlink" href="#r" title="Permalink to this headline"></a></h2>
+<section id="conversion-to-and-from-posixct">
+<h3>Conversion to and from <strong>POSIXct</strong><a class="headerlink" href="#conversion-to-and-from-posixct" title="Permalink to this headline"></a></h3>
+</section>
+<section id="id2">
+<h3>Example<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">FortMyrmidon</span><span class="p">)</span>
+
+<span class="n">start</span> <span class="o">&lt;-</span> <span class="nf">fmTimeNow</span><span class="p">()</span>
+<span class="c1"># do some work</span>
+<span class="n">ellapsed</span> <span class="o">&lt;-</span> <span class="nf">fmTimeNow</span><span class="p">()</span><span class="o">$</span><span class="nf">sub</span><span class="p">(</span><span class="n">start_</span>
+
+<span class="n">later</span> <span class="o">&lt;-</span> <span class="n">start</span><span class="o">$</span><span class="nf">add</span><span class="p">(</span><span class="nf">fmSecond</span><span class="p">(</span><span class="m">5.0</span><span class="p">))</span>
+
+<span class="c1"># we can compare time objects</span>
+<span class="n">later</span> <span class="o">&gt;</span> <span class="n">start</span>
+<span class="n">later</span> <span class="o">&lt;</span> <span class="n">start</span>
+<span class="n">later</span> <span class="o">==</span> <span class="n">start</span>
+<span class="n">later</span> <span class="o">&lt;=</span> <span class="n">start</span>
+<span class="n">later</span> <span class="o">&gt;=</span> <span class="n">start</span>
+
+<span class="c1"># we can access +/- ∞ values</span>
+<span class="n">later</span> <span class="o">&gt;=</span> <span class="nf">fmTimeForever</span><span class="p">()</span> <span class="c1"># always FALSE</span>
+<span class="n">later</span> <span class="o">&gt;</span> <span class="nf">fmTimeSinceEver</span><span class="p">()</span> <span class="c1"># always TRUE</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="matching_movie_and_tracking_data.html" class="btn btn-neutral float-left" title="Matching Movie Frame and Tracking Data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api/index.html" class="btn btn-neutral float-right" title="Python" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Université de Lausanne.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

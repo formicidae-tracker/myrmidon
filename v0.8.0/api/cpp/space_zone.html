@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spaces and Zones &mdash; fort-myrmidon  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/../version_dropdown.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Queries And Matchers" href="queries_matchers.html" />
+    <link rel="prev" title="Ants and Identifications" href="ant_identification.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> fort-myrmidon
+          </a>
+              <div class="version">
+                placeholder
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-myrmidon Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defining_ant_metadata.html">Defining Ant Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../performing_queries.html">Performing Queries</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-studio Manual</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/defining_ant_shapes.html">Defining Ant Shapes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/measuring_ants.html">Measuring Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/metadata_edition.html">Ant Metadata Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/visualization.html">Tracking Data Visualization</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../space_zoning.html">Segmenting Spaces in Zones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matching_movie_and_tracking_data.html">Matching Movie Frame and Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../time.html">Time Representation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API References</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Python</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html#c">C++</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="experiment.html">API Entry Point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ant_identification.html">Ants and Identifications</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Spaces and Zones</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fort-myrmidon-space">fort::myrmidon::Space</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fort-myrmidon-zone">fort::myrmidon::Zone</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fort-myrmidon-zonedefinition">fort::myrmidon::ZoneDefinition</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="queries_matchers.html">Queries And Matchers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="time.html">Time Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shapes.html">2D Geometric Shapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef.html">API generic types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html#r">R</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fort-myrmidon</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Python</a> &raquo;</li>
+      <li>Spaces and Zones</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/api/cpp/space_zone.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="spaces-and-zones">
+<h1>Spaces and Zones<a class="headerlink" href="#spaces-and-zones" title="Permalink to this headline"></a></h1>
+<section id="fort-myrmidon-space">
+<h2>fort::myrmidon::Space<a class="headerlink" href="#fort-myrmidon-space" title="Permalink to this headline"></a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5SpaceE">
+<span id="_CPPv3N4fort8myrmidon5SpaceE"></span><span id="_CPPv2N4fort8myrmidon5SpaceE"></span><span id="fort::myrmidon::Space"></span><span class="target" id="classfort_1_1myrmidon_1_1Space"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Space</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5SpaceE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>An homogenous coordinate system for tracking data. </p>
+<p>A <a class="reference internal" href="#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a> represent the physical space tracked by one single Camera. Coordinates in one <a class="reference internal" href="#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a> cannot be compared with coordinate from another <a class="reference internal" href="#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a>.</p>
+<p><a class="reference internal" href="#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a> are uniquely identified with their <a class="reference internal" href="#classfort_1_1myrmidon_1_1Space_1a450d71525ddcbc448f067255548837f0"><span class="std std-ref">ID()</span></a>.</p>
+<p><a class="reference internal" href="#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a> can only be created from an <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> with <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment_1a5feea1c53406110159168d4d6cab66d4"><span class="std std-ref">Experiment::CreateSpace()</span></a></p>
+<section id="classfort_1_1myrmidon_1_1Space_1autotoc_md10">
+<h3>Zoning<a class="headerlink" href="#classfort_1_1myrmidon_1_1Space_1autotoc_md10" title="Permalink to this headline"></a></h3>
+<p id="classfort_1_1myrmidon_1_1Space_1autotoc_md10">Within a single <a class="reference internal" href="#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a>, it could be relevant to define <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> where interaction between <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> could be measured. I.e. <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> in different <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> won’t report interactions.</p>
+<p><a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> are manipulated with <a class="reference internal" href="#classfort_1_1myrmidon_1_1Space_1a3d2fcc137680110be2c8eb3ea12915d9"><span class="std std-ref">CreateZone()</span></a> and <a class="reference internal" href="#classfort_1_1myrmidon_1_1Space_1a81ed0ed4b09a6f20659b5a9779270576"><span class="std std-ref">DeleteZone()</span></a>. </p>
+</section>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon5Space2IDEv">
+<span id="_CPPv3NK4fort8myrmidon5Space2IDEv"></span><span id="_CPPv2NK4fort8myrmidon5Space2IDEv"></span><span id="fort::myrmidon::Space::IDC"></span><span class="target" id="classfort_1_1myrmidon_1_1Space_1a450d71525ddcbc448f067255548837f0"></span><a class="reference internal" href="typedef.html#_CPPv4N4fort8myrmidon7SpaceIDE" title="fort::myrmidon::SpaceID"><span class="n"><span class="pre">SpaceID</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ID</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon5Space2IDEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a> ID. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a> SpaceID; </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon5Space4NameEv">
+<span id="_CPPv3NK4fort8myrmidon5Space4NameEv"></span><span id="_CPPv2NK4fort8myrmidon5Space4NameEv"></span><span id="fort::myrmidon::Space::NameC"></span><span class="target" id="classfort_1_1myrmidon_1_1Space_1aaa48e69331f84b45a3ac5eb1c97e4ad7"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">Name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon5Space4NameEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a> name. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a> name </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5Space7SetNameERKNSt6stringE">
+<span id="_CPPv3N4fort8myrmidon5Space7SetNameERKNSt6stringE"></span><span id="_CPPv2N4fort8myrmidon5Space7SetNameERKNSt6stringE"></span><span id="fort::myrmidon::Space::SetName__ssCR"></span><span class="target" id="classfort_1_1myrmidon_1_1Space_1a4e54d821b3c59fe20f3a821ae3f8ac35"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetName</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5Space7SetNameERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Sets the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a> name. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> – the wanted name </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5Space10CreateZoneERKNSt6stringE">
+<span id="_CPPv3N4fort8myrmidon5Space10CreateZoneERKNSt6stringE"></span><span id="_CPPv2N4fort8myrmidon5Space10CreateZoneERKNSt6stringE"></span><span id="fort::myrmidon::Space::CreateZone__ssCR"></span><span class="target" id="classfort_1_1myrmidon_1_1Space_1a3d2fcc137680110be2c8eb3ea12915d9"></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon4ZoneE" title="fort::myrmidon::Zone"><span class="n"><span class="pre">Zone</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon4Zone3PtrE" title="fort::myrmidon::Zone::Ptr"><span class="n"><span class="pre">Ptr</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CreateZone</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5Space10CreateZoneERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Creates a new <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> in this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> – the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone_1a80ac89c4d6068cb9e4d0aefe5efb6f41"><span class="std std-ref">Zone::Name()</span></a></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the newly created <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5Space10DeleteZoneE6ZoneID">
+<span id="_CPPv3N4fort8myrmidon5Space10DeleteZoneE6ZoneID"></span><span id="_CPPv2N4fort8myrmidon5Space10DeleteZoneE6ZoneID"></span><span id="fort::myrmidon::Space::DeleteZone__ZoneID"></span><span class="target" id="classfort_1_1myrmidon_1_1Space_1a81ed0ed4b09a6f20659b5a9779270576"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DeleteZone</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="typedef.html#_CPPv4N4fort8myrmidon6ZoneIDE" title="fort::myrmidon::ZoneID"><span class="n"><span class="pre">ZoneID</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">zoneID</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5Space10DeleteZoneE6ZoneID" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Deletes a <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> in this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>zoneID</strong> – the ZoneID of the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> to delete.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if zoneID is not the ID of a <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> owned by this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon5Space5ZonesEv">
+<span id="_CPPv3NK4fort8myrmidon5Space5ZonesEv"></span><span id="_CPPv2NK4fort8myrmidon5Space5ZonesEv"></span><span id="fort::myrmidon::Space::ZonesC"></span><span class="target" id="classfort_1_1myrmidon_1_1Space_1a1192cfcc4a0cda8556299f8b1cf239b8"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">ZoneByID</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">Zones</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon5Space5ZonesEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the Zones in this space. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a map of Zone::ByID of all <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> in this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon5Space16LocateMovieFrameERK4Time">
+<span id="_CPPv3NK4fort8myrmidon5Space16LocateMovieFrameERK4Time"></span><span id="_CPPv2NK4fort8myrmidon5Space16LocateMovieFrameERK4Time"></span><span id="fort::myrmidon::Space::LocateMovieFrame__TimeCRC"></span><span class="target" id="classfort_1_1myrmidon_1_1Space_1a1ead443dd0a664776b40e25df641f107"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LocateMovieFrame</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">time</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon5Space16LocateMovieFrameERK4Time" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Locates a movie file and frame number. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>time</strong> – the <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> we want a movie frame for.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if a movie frame for the specified <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> could not be found. </p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a pair of an absolute file path to the movie file, and the wanted movie frame number.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="fort-myrmidon-zone">
+<h2>fort::myrmidon::Zone<a class="headerlink" href="#fort-myrmidon-zone" title="Permalink to this headline"></a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon4ZoneE">
+<span id="_CPPv3N4fort8myrmidon4ZoneE"></span><span id="_CPPv2N4fort8myrmidon4ZoneE"></span><span id="fort::myrmidon::Zone"></span><span class="target" id="classfort_1_1myrmidon_1_1Zone"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Zone</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon4ZoneE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>A tracking region where collisions/interactions are computed. </p>
+<p>A <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> defines a tracked area region where collisions and interactions can be computed. I.e. two <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> in different <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> won’t report any collisions or interactions.</p>
+<p><a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> can only be created from a <a class="reference internal" href="#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a> with <a class="reference internal" href="#classfort_1_1myrmidon_1_1Space_1a3d2fcc137680110be2c8eb3ea12915d9"><span class="std std-ref">Space::CreateZone()</span></a>.</p>
+<section id="classfort_1_1myrmidon_1_1Zone_1autotoc_md8">
+<h3>Naming and Identification<a class="headerlink" href="#classfort_1_1myrmidon_1_1Zone_1autotoc_md8" title="Permalink to this headline"></a></h3>
+<p id="classfort_1_1myrmidon_1_1Zone_1autotoc_md8"><a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> are managed by <a class="reference internal" href="#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a>, and have a unique ZoneID within an experiment. <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> have a user definable <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone_1a80ac89c4d6068cb9e4d0aefe5efb6f41"><span class="std std-ref">Name()</span></a> but internally only their ZoneID is used.</p>
+<p>By default, any <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> is considered to be within the <code class="docutils literal notranslate"><span class="pre">null</span></code> <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> with ZoneID 0, so all possible interactions are reported. User needs to add <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> only to prune unwanted interactions or to be able to query where an <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> is at any given <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a>.</p>
+</section>
+<section id="classfort_1_1myrmidon_1_1Zone_1autotoc_md9">
+<h3>Geometric definition<a class="headerlink" href="#classfort_1_1myrmidon_1_1Zone_1autotoc_md9" title="Permalink to this headline"></a></h3>
+<p id="classfort_1_1myrmidon_1_1Zone_1autotoc_md9"><a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> have time valid <a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition"><span class="std std-ref">ZoneDefinition</span></a>. In most cases there would be a single <a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition"><span class="std std-ref">ZoneDefinition</span></a> for any <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> valid for ]<a class="reference internal" href="time.html#classfort_1_1Time_1a9593a5d95440d83965255957deb60226"><span class="std std-ref">Time::SinceEver()</span></a>,<a class="reference internal" href="time.html#classfort_1_1Time_1a0f13c9a8cc26f34ca49c006c115dc845"><span class="std std-ref">Time::Forever()</span></a>[, but it is possible to assign different <a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition_1a005d0afcff0696160b5eec0215b06029"><span class="std std-ref">ZoneDefinition::Shapes()</span></a> for different time range using multiple <a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition"><span class="std std-ref">ZoneDefinition</span></a>.</p>
+<p><a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition"><span class="std std-ref">ZoneDefinition</span></a> are manipulated using <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone_1a5612847db0a1f59f1509104ebb501116"><span class="std std-ref">AddDefinition()</span></a> and <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone_1a9d39c3eaacc68eb4b7f76aad0b20e422"><span class="std std-ref">DeleteDefinition()</span></a>. </p>
+</section>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon4Zone3PtrE">
+<span id="_CPPv3N4fort8myrmidon4Zone3PtrE"></span><span id="_CPPv2N4fort8myrmidon4Zone3PtrE"></span><span id="fort::myrmidon::Zone::Ptr"></span><span class="target" id="classfort_1_1myrmidon_1_1Zone_1ab31055c5546a5bc522f820d7eedda1d8"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon4ZoneE" title="fort::myrmidon::Zone"><span class="n"><span class="pre">Zone</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Ptr</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon4Zone3PtrE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>a pointer to a <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon4Zone13AddDefinitionERKN5Shape4ListERK4TimeRK4Time">
+<span id="_CPPv3N4fort8myrmidon4Zone13AddDefinitionERKN5Shape4ListERK4TimeRK4Time"></span><span id="_CPPv2N4fort8myrmidon4Zone13AddDefinitionERKN5Shape4ListERK4TimeRK4Time"></span><span id="fort::myrmidon::Zone::AddDefinition__Shape::ListCR.TimeCR.TimeCR"></span><span class="target" id="classfort_1_1myrmidon_1_1Zone_1a5612847db0a1f59f1509104ebb501116"></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon14ZoneDefinitionE" title="fort::myrmidon::ZoneDefinition"><span class="n"><span class="pre">ZoneDefinition</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon14ZoneDefinition3PtrE" title="fort::myrmidon::ZoneDefinition::Ptr"><span class="n"><span class="pre">Ptr</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AddDefinition</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="shapes.html#_CPPv4N4fort8myrmidon5ShapeE" title="fort::myrmidon::Shape"><span class="n"><span class="pre">Shape</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="shapes.html#_CPPv4N4fort8myrmidon5Shape4ListE" title="fort::myrmidon::Shape::List"><span class="n"><span class="pre">List</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">shapes</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">start</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">end</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon4Zone13AddDefinitionERKN5Shape4ListERK4TimeRK4Time" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Adds a new timed <a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition"><span class="std std-ref">ZoneDefinition</span></a>. </p>
+<p>Adds a new timed <a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition"><span class="std std-ref">ZoneDefinition</span></a> valid for [start,end[ to this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a>. It accepts <a class="reference internal" href="time.html#classfort_1_1Time_1a9593a5d95440d83965255957deb60226"><span class="std std-ref">Time::SinceEver()</span></a> and <a class="reference internal" href="time.html#classfort_1_1Time_1a0f13c9a8cc26f34ca49c006c115dc845"><span class="std std-ref">Time::Forever()</span></a> for start or end.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shapes</strong> – the shape of the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> as a <a class="reference internal" href="shapes.html#classfort_1_1myrmidon_1_1Shape_1ad6c720912cf1ff2980601dd2a487fa0e"><span class="std std-ref">Shape::List</span></a> </p></li>
+<li><p><strong>start</strong> – the first valid <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> for this definition. </p></li>
+<li><p><strong>end</strong> – the first invalid <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> for this definition.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if start or end would make the resulting definition overlap in time with another <a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition"><span class="std std-ref">ZoneDefinition</span></a> for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a>. </p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the new <a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition"><span class="std std-ref">ZoneDefinition</span></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon4Zone11DefinitionsEv">
+<span id="_CPPv3NK4fort8myrmidon4Zone11DefinitionsEv"></span><span id="_CPPv2NK4fort8myrmidon4Zone11DefinitionsEv"></span><span id="fort::myrmidon::Zone::DefinitionsC"></span><span class="target" id="classfort_1_1myrmidon_1_1Zone_1aedbb47fdfe069471a366ddd896cf5625"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">ZoneDefinitionList</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">Definitions</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon4Zone11DefinitionsEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a>’s <a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition"><span class="std std-ref">ZoneDefinition</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a ZoneDefinition::List of <a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition"><span class="std std-ref">ZoneDefinition</span></a> for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon4Zone16DeleteDefinitionE6size_t">
+<span id="_CPPv3N4fort8myrmidon4Zone16DeleteDefinitionE6size_t"></span><span id="_CPPv2N4fort8myrmidon4Zone16DeleteDefinitionE6size_t"></span><span id="fort::myrmidon::Zone::DeleteDefinition__s"></span><span class="target" id="classfort_1_1myrmidon_1_1Zone_1a9d39c3eaacc68eb4b7f76aad0b20e422"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DeleteDefinition</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon4Zone16DeleteDefinitionE6size_t" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Removes a <a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition"><span class="std std-ref">ZoneDefinition</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> – the index in <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone_1aedbb47fdfe069471a366ddd896cf5625"><span class="std std-ref">Definitions()</span></a> to remove.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if index &gt;= <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone_1aedbb47fdfe069471a366ddd896cf5625"><span class="std std-ref">Definitions()</span></a>.size() </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon4Zone4NameEv">
+<span id="_CPPv3NK4fort8myrmidon4Zone4NameEv"></span><span id="_CPPv2NK4fort8myrmidon4Zone4NameEv"></span><span id="fort::myrmidon::Zone::NameC"></span><span class="target" id="classfort_1_1myrmidon_1_1Zone_1a80ac89c4d6068cb9e4d0aefe5efb6f41"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">Name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon4Zone4NameEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> name. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> name </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon4Zone7SetNameERKNSt6stringE">
+<span id="_CPPv3N4fort8myrmidon4Zone7SetNameERKNSt6stringE"></span><span id="_CPPv2N4fort8myrmidon4Zone7SetNameERKNSt6stringE"></span><span id="fort::myrmidon::Zone::SetName__ssCR"></span><span class="target" id="classfort_1_1myrmidon_1_1Zone_1a54afcf2da38c8e7c968a3cbae4404734"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetName</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon4Zone7SetNameERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> name. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> – the wanted <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone_1a80ac89c4d6068cb9e4d0aefe5efb6f41"><span class="std std-ref">Name()</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon4Zone2IDEv">
+<span id="_CPPv3NK4fort8myrmidon4Zone2IDEv"></span><span id="_CPPv2NK4fort8myrmidon4Zone2IDEv"></span><span id="fort::myrmidon::Zone::IDC"></span><span class="target" id="classfort_1_1myrmidon_1_1Zone_1a95414cc30f28b07c0f65b4b8fd1894fa"></span><a class="reference internal" href="typedef.html#_CPPv4N4fort8myrmidon6ZoneIDE" title="fort::myrmidon::ZoneID"><span class="n"><span class="pre">ZoneID</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ID</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon4Zone2IDEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> ID. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> ZoneID </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="fort-myrmidon-zonedefinition">
+<h2>fort::myrmidon::ZoneDefinition<a class="headerlink" href="#fort-myrmidon-zonedefinition" title="Permalink to this headline"></a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon14ZoneDefinitionE">
+<span id="_CPPv3N4fort8myrmidon14ZoneDefinitionE"></span><span id="_CPPv2N4fort8myrmidon14ZoneDefinitionE"></span><span id="fort::myrmidon::ZoneDefinition"></span><span class="target" id="classfort_1_1myrmidon_1_1ZoneDefinition"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">ZoneDefinition</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14ZoneDefinitionE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Defines the geometry of a <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> in <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a>. </p>
+<p><a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition"><span class="std std-ref">ZoneDefinition</span></a> contains for a time range [<a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition_1a57ef6eff745ea5cbec967e6d90fc7efd"><span class="std std-ref">Start()</span></a>,<a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition_1a96a0be017407ad61199d701cd88e493a"><span class="std std-ref">End()</span></a>[ the <a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition_1a005d0afcff0696160b5eec0215b06029"><span class="std std-ref">Shapes()</span></a> for a <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a>.</p>
+<p><a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition"><span class="std std-ref">ZoneDefinition</span></a> can only be created from a <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> with <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone_1a5612847db0a1f59f1509104ebb501116"><span class="std std-ref">Zone::AddDefinition()</span></a>. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon14ZoneDefinition3PtrE">
+<span id="_CPPv3N4fort8myrmidon14ZoneDefinition3PtrE"></span><span id="_CPPv2N4fort8myrmidon14ZoneDefinition3PtrE"></span><span id="fort::myrmidon::ZoneDefinition::Ptr"></span><span class="target" id="classfort_1_1myrmidon_1_1ZoneDefinition_1a0b83436867246c25f6768eee899cb9ed"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon14ZoneDefinitionE" title="fort::myrmidon::ZoneDefinition"><span class="n"><span class="pre">ZoneDefinition</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Ptr</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14ZoneDefinition3PtrE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>A pointer to a <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a>. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon14ZoneDefinition6ShapesEv">
+<span id="_CPPv3NK4fort8myrmidon14ZoneDefinition6ShapesEv"></span><span id="_CPPv2NK4fort8myrmidon14ZoneDefinition6ShapesEv"></span><span id="fort::myrmidon::ZoneDefinition::ShapesC"></span><span class="target" id="classfort_1_1myrmidon_1_1ZoneDefinition_1a005d0afcff0696160b5eec0215b06029"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="shapes.html#_CPPv4N4fort8myrmidon5ShapeE" title="fort::myrmidon::Shape"><span class="n"><span class="pre">Shape</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="shapes.html#_CPPv4N4fort8myrmidon5Shape4ListE" title="fort::myrmidon::Shape::List"><span class="n"><span class="pre">List</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">Shapes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon14ZoneDefinition6ShapesEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the geometry of this <a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition"><span class="std std-ref">ZoneDefinition</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a list of <a class="reference internal" href="shapes.html#classfort_1_1myrmidon_1_1Shape"><span class="std std-ref">Shape</span></a> that define the <a class="reference internal" href="shapes.html#classfort_1_1myrmidon_1_1Shape"><span class="std std-ref">Shape</span></a> of the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> for [<a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition_1a57ef6eff745ea5cbec967e6d90fc7efd"><span class="std std-ref">Start()</span></a>;<a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition_1a96a0be017407ad61199d701cd88e493a"><span class="std std-ref">End()</span></a>[ </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon14ZoneDefinition9SetShapesERKN5Shape4ListE">
+<span id="_CPPv3N4fort8myrmidon14ZoneDefinition9SetShapesERKN5Shape4ListE"></span><span id="_CPPv2N4fort8myrmidon14ZoneDefinition9SetShapesERKN5Shape4ListE"></span><span id="fort::myrmidon::ZoneDefinition::SetShapes__Shape::ListCR"></span><span class="target" id="classfort_1_1myrmidon_1_1ZoneDefinition_1a49c0e28203132a372633574dafe04d83"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetShapes</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="shapes.html#_CPPv4N4fort8myrmidon5ShapeE" title="fort::myrmidon::Shape"><span class="n"><span class="pre">Shape</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="shapes.html#_CPPv4N4fort8myrmidon5Shape4ListE" title="fort::myrmidon::Shape::List"><span class="n"><span class="pre">List</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">shapes</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14ZoneDefinition9SetShapesERKN5Shape4ListE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Sets the Shapes of this <a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition"><span class="std std-ref">ZoneDefinition</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>shapes</strong> – a union of <a class="reference internal" href="shapes.html#classfort_1_1myrmidon_1_1Shape"><span class="std std-ref">Shape</span></a> defining the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> shapes. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon14ZoneDefinition5StartEv">
+<span id="_CPPv3NK4fort8myrmidon14ZoneDefinition5StartEv"></span><span id="_CPPv2NK4fort8myrmidon14ZoneDefinition5StartEv"></span><span id="fort::myrmidon::ZoneDefinition::StartC"></span><span class="target" id="classfort_1_1myrmidon_1_1ZoneDefinition_1a57ef6eff745ea5cbec967e6d90fc7efd"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">Start</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon14ZoneDefinition5StartEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the first valid time of the <a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition"><span class="std std-ref">ZoneDefinition</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the first valid <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> of this definition. It can be <a class="reference internal" href="time.html#classfort_1_1Time_1a9593a5d95440d83965255957deb60226"><span class="std std-ref">Time::SinceEver()</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon14ZoneDefinition3EndEv">
+<span id="_CPPv3NK4fort8myrmidon14ZoneDefinition3EndEv"></span><span id="_CPPv2NK4fort8myrmidon14ZoneDefinition3EndEv"></span><span id="fort::myrmidon::ZoneDefinition::EndC"></span><span class="target" id="classfort_1_1myrmidon_1_1ZoneDefinition_1a96a0be017407ad61199d701cd88e493a"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">End</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon14ZoneDefinition3EndEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the first invalid time of the <a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition"><span class="std std-ref">ZoneDefinition</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the first invalid <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> of this definition. It can be <a class="reference internal" href="time.html#classfort_1_1Time_1a0f13c9a8cc26f34ca49c006c115dc845"><span class="std std-ref">Time::Forever()</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon14ZoneDefinition8SetStartERK4Time">
+<span id="_CPPv3N4fort8myrmidon14ZoneDefinition8SetStartERK4Time"></span><span id="_CPPv2N4fort8myrmidon14ZoneDefinition8SetStartERK4Time"></span><span id="fort::myrmidon::ZoneDefinition::SetStart__TimeCR"></span><span class="target" id="classfort_1_1myrmidon_1_1ZoneDefinition_1aa118b717da2cebb47707c547be81c9bb"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetStart</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">start</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14ZoneDefinition8SetStartERK4Time" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Sets the first valid time of the <a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition"><span class="std std-ref">ZoneDefinition</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>start</strong> – the first valid <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> of this definition. It can be <a class="reference internal" href="time.html#classfort_1_1Time_1a9593a5d95440d83965255957deb60226"><span class="std std-ref">Time::SinceEver()</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon14ZoneDefinition6SetEndERK4Time">
+<span id="_CPPv3N4fort8myrmidon14ZoneDefinition6SetEndERK4Time"></span><span id="_CPPv2N4fort8myrmidon14ZoneDefinition6SetEndERK4Time"></span><span id="fort::myrmidon::ZoneDefinition::SetEnd__TimeCR"></span><span class="target" id="classfort_1_1myrmidon_1_1ZoneDefinition_1a18f423f638dd7fed5118c13ea98d0c47"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetEnd</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">end</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14ZoneDefinition6SetEndERK4Time" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Sets the first invalid time of the <a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition"><span class="std std-ref">ZoneDefinition</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>end</strong> – the first invalid <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> of this definition. It can be <a class="reference internal" href="time.html#classfort_1_1Time_1a0f13c9a8cc26f34ca49c006c115dc845"><span class="std std-ref">Time::Forever()</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ant_identification.html" class="btn btn-neutral float-left" title="Ants and Identifications" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="queries_matchers.html" class="btn btn-neutral float-right" title="Queries And Matchers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Université de Lausanne.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
