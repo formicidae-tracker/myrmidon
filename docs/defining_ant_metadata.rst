@@ -10,22 +10,22 @@ visualisation or for any pre-defined usage.
 Ant virtual shapes
 ******************
 
-.. _ant_shape_fig:
-..
-   .. figure:: ant_virutal_shape.png
-
-
-	  Ant virtual shape in **fort-myrmidon**.
-
-	  Ant virtual shape is defined as a collection of typed capsule. Here
-	  each type is assigned an unique color. A capsule is defined as
-	  region inside and between two circles.
-
 In **fort-myrmidon** each ant has a virtual shape defined as an union
 of `capsules` [#capsule]_, as shown in figure
 :numref:`ant_shape_fig`. There are no predefined type in a new
 experiment, and they must be *created* [#createAntShapeType]_ before
 *adding a capsule to an ant* [#addCapsule]_.
+
+.. figure:: _static/images/ant_virtual_shape.png
+   :name: ant_shape_fig
+   :alt: An ant virtual shape is defined by a collection of typed capsules
+   :align: center
+
+   Ant virtual shape in **fort-myrmidon**.
+
+   Ant virtual shape are defined as a collection of typed capsules. Here
+   each type is assigned an unique color. A capsule is defined as
+   region inside and between two circles.
 
 Capsule are defined in the ant reference frame.
 
