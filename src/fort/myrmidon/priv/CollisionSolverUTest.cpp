@@ -215,7 +215,8 @@ CollisionFrame::Ptr CollisionSolverUTest::NaiveCollisions() {
 
 TEST_F(CollisionSolverUTest,TestE2E) {
 	auto solver = std::make_shared<CollisionSolver>(universe->Spaces(),
-	                                                  ants);
+	                                                ants,
+	                                                false);
 	auto res = std::make_shared<CollisionFrame>();
 	EXPECT_THROW({
 			frame->Space = 2;

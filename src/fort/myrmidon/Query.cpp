@@ -64,6 +64,12 @@ ExperimentDataInfo Query::GetDataInformations(const Experiment & experiment) {
 	return res;
 }
 
+Query::QueryArgs::QueryArgs()
+	: Start(Time::SinceEver())
+	, End(Time::Forever())
+	, SingleThreaded(false)
+	, AllocationInCurrentThread(false) {
+}
 
 Query::IdentifyFramesArgs::IdentifyFramesArgs()
 	: ComputeZones(false) {
@@ -86,23 +92,20 @@ void Query::IdentifyFrames(const Experiment & experiment,
 	                            args);
 }
 
-Query::QueryArgs::QueryArgs()
-	: Start(Time::SinceEver())
-	, End(Time::Forever())
-	, SingleThreaded(false)
-	, AllocationInCurrentThread(false) {
+Query::CollideFramesArgs::CollideFramesArgs()
+	: CollisionsIgnoreZones(false) {
 }
 
 void Query::CollideFramesFunctor(const Experiment & experiment,
                                  std::function<void (const CollisionData & data)> storeData,
-                                 const QueryArgs & args) {
+                                 const CollideFramesArgs & args) {
 	priv::Query::CollideFrames(experiment.d_p->Get(),storeData,args);
 }
 
 
 void Query::CollideFrames(const Experiment & experiment,
                           std::vector<CollisionData> & result,
-                          const QueryArgs & args) {
+                          const CollideFramesArgs & args) {
 	priv::Query::CollideFrames(experiment.d_p->Get(),
 	                           [&result](const CollisionData & data) {
 		                           result.push_back(data);

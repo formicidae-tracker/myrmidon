@@ -550,7 +550,7 @@ public:
 	 *
 	 * @return a TrackingSolver for the Experiment.
 	 */
-	TrackingSolver::Ptr CompileTrackingSolver() const;
+	TrackingSolver::Ptr CompileTrackingSolver(bool collisionsIgnoreZones) const;
 
 
 	~Experiment();

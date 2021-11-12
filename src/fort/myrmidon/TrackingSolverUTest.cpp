@@ -13,7 +13,7 @@ protected:
 	void SetUp() {
 		ASSERT_NO_THROW({
 				experiment = Experiment::Open(TestSetup::UTestData().CurrentVersionFile().AbsoluteFilePath);
-				solver = experiment->CompileTrackingSolver();
+				solver = experiment->CompileTrackingSolver(false);
 			});
 
 		auto firstFramePath = TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath / "tracking.0000.hermes";

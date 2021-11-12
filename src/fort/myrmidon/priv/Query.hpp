@@ -28,7 +28,7 @@ public:
 
 	static void CollideFrames(const Experiment & experiment,
 	                          std::function<void (const CollisionData & data) > storeData,
-	                          const myrmidon::Query::QueryArgs & args);
+	                          const myrmidon::Query::CollideFramesArgs & args);
 
 	static void ComputeTrajectories(const Experiment & experiment,
 	                                std::function<void (const AntTrajectory::Ptr &)> storeData,

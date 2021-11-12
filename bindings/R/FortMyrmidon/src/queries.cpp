@@ -240,6 +240,7 @@ SEXP pfmQueryIdentifyFrames(const ExperimentPtr & experiment,
 SEXP pfmQueryCollideFrames(const ExperimentPtr & experiment,
                            const fort::Time & start,
                            const fort::Time & end,
+                           bool collisionsIgnoreZones,
                            bool showProgress,
                            bool singleThreaded) {
 
@@ -259,11 +260,12 @@ SEXP pfmQueryCollideFrames(const ExperimentPtr & experiment,
 			}
 		};
 
-	Query::QueryArgs args;
+	Query::CollideFramesArgs args;
 	args.Start = start;
 	args.End = end;
 	args.SingleThreaded = singleThreaded;
 	args.AllocationInCurrentThread = true;
+	args.CollisionsIgnoreZones = collisionsIgnoreZones;
 
 	FmProgress progress(*experiment,start,end,showProgress);
 	try {
@@ -342,6 +344,7 @@ SEXP pfmQueryComputeAntInteractionsFull(const ExperimentPtr & experiment,
                                         const fort::Time & end,
                                         const fort::Duration & maximumGap,
                                         const fort::myrmidon::Matcher::Ptr & matcher,
+                                        bool collisionsIgnoreZones,
                                         bool showProgress,
                                         bool singleThreaded) {
 
@@ -358,6 +361,7 @@ SEXP pfmQueryComputeAntInteractionsFull(const ExperimentPtr & experiment,
 	args.SingleThreaded = singleThreaded;
 	args.ReportFullTrajectories = true;
 	args.AllocationInCurrentThread = true;
+	args.CollisionsIgnoreZones = collisionsIgnoreZones;
 
 	FmProgress progress(*experiment,start,end,showProgress);
 	std::map<AntTrajectory*,std::pair<std::vector<size_t>,std::vector<size_t>>> needsIndexing;
@@ -435,6 +439,7 @@ SEXP pfmQueryComputeAntInteractionsSummarized(const ExperimentPtr & experiment,
                                               const fort::Time & end,
                                               const fort::Duration & maximumGap,
                                               const fort::myrmidon::Matcher::Ptr & matcher,
+                                              bool collisionsIgnoreZones,
                                               bool showProgress,
                                               bool singleThreaded) {
 	std::vector<int32_t> tAnt,iAnt1,iAnt2,tSpace,iSpace;
@@ -450,6 +455,7 @@ SEXP pfmQueryComputeAntInteractionsSummarized(const ExperimentPtr & experiment,
 	args.SingleThreaded = singleThreaded;
 	args.ReportFullTrajectories = false;
 	args.AllocationInCurrentThread = true;
+	args.CollisionsIgnoreZones = collisionsIgnoreZones;
 
 	FmProgress progress(*experiment,start,end,showProgress);
 	auto storeTrajectories =
@@ -509,13 +515,14 @@ SEXP pfmQueryComputeAntInteractions(const ExperimentPtr & experiment,
                                     const fort::Time & end,
                                     const fort::Duration & maximumGap,
                                     const fort::myrmidon::Matcher::Ptr & matcher,
+                                    bool collisionsIgnoreZones,
                                     bool reportFullTrajectories,
                                     bool showProgress,
                                     bool singleThreaded) {
 	if ( reportFullTrajectories == true ) {
-		return pfmQueryComputeAntInteractionsFull(experiment,start,end,maximumGap,matcher,showProgress,singleThreaded);
+		return pfmQueryComputeAntInteractionsFull(experiment,start,end,maximumGap,matcher,collisionsIgnoreZones,showProgress,singleThreaded);
 	}
-	return pfmQueryComputeAntInteractionsSummarized(experiment,start,end,maximumGap,matcher,showProgress,singleThreaded);
+	return pfmQueryComputeAntInteractionsSummarized(experiment,start,end,maximumGap,matcher,collisionsIgnoreZones,showProgress,singleThreaded);
 }
 
 //' Collects tracking data information on the fmExperiment

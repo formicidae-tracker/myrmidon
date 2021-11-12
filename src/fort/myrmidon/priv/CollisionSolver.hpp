@@ -31,12 +31,14 @@ public:
 	typedef std::shared_ptr<const CollisionSolver> ConstPtr;
 
 	CollisionSolver(const SpaceByID & spaces,
-	                const AntByID & ants);
+	                const AntByID & ants,
+	                bool ignoreZones);
 
 	AntZoner::ConstPtr ZonerFor(const IdentifiedFrame & frame) const;
 
 	void ComputeCollisions(CollisionFrame & collision,
 	                       IdentifiedFrame & frame) const;
+
 private:
 	typedef DenseMap<AntID,TypedCapsuleList>                                AntGeometriesByID;
 	typedef TimeMap<ZoneID,ZoneGeometry::ConstPtr>                          ZoneGeometriesByTime;
@@ -54,6 +56,7 @@ private:
 	AntGeometriesByID    d_antGeometries;
 	GeometriesBySpaceID  d_spaceDefinitions;
 	ZoneIDsBySpaceID     d_zoneIDs;
+	bool                 d_ignoreZones;
 
 };
 

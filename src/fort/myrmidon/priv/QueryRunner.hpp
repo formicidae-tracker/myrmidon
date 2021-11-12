@@ -18,6 +18,7 @@ public:
 		Time End;
 		bool Localize;
 		bool Collide;
+		bool CollisionsIgnoreZones;
 	};
 
 	typedef std::function<void (const Query::CollisionData & data)> Finalizer;
