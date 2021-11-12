@@ -233,7 +233,7 @@ QueryRunner::computeData(const Experiment & experiment,
 				   return std::make_pair(identified,nullptr);
 			   };
 	}
-	auto collider = experiment.CompileCollisionSolver();
+	auto collider = experiment.CompileCollisionSolver(args.CollisionsIgnoreZones);
 	if ( args.Collide == false ) {
 		return [identifier,collider] (const RawData & raw) {
 			       // TODO optimize memory allocation here
@@ -249,13 +249,15 @@ QueryRunner::computeData(const Experiment & experiment,
 
 	return [identifier,collider] (const RawData & raw) {
 		       // TODO optimize memory allocation here
-			   auto identified = std::make_shared<IdentifiedFrame>();
-			   std::get<1>(raw)->IdentifyFrom(*identified,*identifier,std::get<0>(raw));
-			   // TODO optimize memory allocation here
-			   auto collided = std::make_shared<CollisionFrame>();
-			   collider->ComputeCollisions(*collided,*identified);
-			   return std::make_pair(identified,collided);
-		   };
+		       auto identified = std::make_shared<IdentifiedFrame>();
+		       std::get<1>(raw)->IdentifyFrom(*identified,*identifier,std::get<0>(raw));
+		       // TODO optimize memory allocation here
+		       auto collided = std::make_shared<CollisionFrame>();
+		       collider->ComputeCollisions(*collided,*identified);
+		       return std::make_pair(identified,collided);
+	       };
+
+
 }
 
 } // namespace priv

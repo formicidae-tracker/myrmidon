@@ -91,7 +91,7 @@ TEST_F(QueryUTest,CollideFrames) {
 	std::vector<Query::CollisionData> collisionData;
 
 	ASSERT_NO_THROW({
-			myrmidon::Query::QueryArgs args;
+			myrmidon::Query::CollideFramesArgs args;
 			Query::CollideFramesFunctor(*experiment,
 			                            [&collisionData] (const Query::CollisionData & data) {
 				                            collisionData.push_back(data);

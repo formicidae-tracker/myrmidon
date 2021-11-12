@@ -469,6 +469,7 @@ Args:
  )pydoc")
 		.def("CompileTrackingSolver",
 		     &Experiment::CompileTrackingSolver,
+		     py::arg("collisionsIgnoreZones") = false,
 		     R"pydoc(
 Compiles a :class:`TrackingSolver` that can be used to identify and
 collide ant from raw data.

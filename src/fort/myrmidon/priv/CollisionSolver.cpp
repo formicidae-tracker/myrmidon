@@ -10,7 +10,9 @@ namespace myrmidon {
 namespace priv {
 
 CollisionSolver::CollisionSolver(const SpaceByID & spaces,
-                                 const AntByID & ants) {
+                                 const AntByID & ants,
+                                 bool ignoreZones)
+	: d_ignoreZones(ignoreZones) {
 
 	// Deep copy ant shape data.
 	for ( const auto & [aID,ant] : ants ) {
@@ -97,7 +99,7 @@ void CollisionSolver::LocateAnts(LocatedAnts & locatedAnts,
 	// now for each geometry. we test if the ants is in the zone
 	for ( size_t i = 0; i < frame.Positions.rows(); ++i ) {
 		ZoneID zoneID = zoner->LocateAnt(frame.Positions.row(i));
-		locatedAnts[zoneID].push_back(frame.Positions.row(i));
+		locatedAnts[d_ignoreZones == true ? 0 : zoneID].push_back(frame.Positions.row(i));
 	}
 }
 

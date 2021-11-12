@@ -130,6 +130,20 @@ public:
 	                           const IdentifyFramesArgs & args = IdentifyFramesArgs() );
 
 	/**
+	 * Arguments for CollideFrames
+	 *
+	 * Arguments for CollideFrames() and CollideFramesFunctor().
+	 */
+	struct CollideFramesArgs : public QueryArgs {
+		//! Collision detection happens over different zones (default: false).
+		bool CollisionsIgnoreZones;
+
+		// Builds default arguments
+		CollideFramesArgs();
+	};
+
+
+	/**
 	 * Finds Collision in tracking frames - functor version
 	 * @param experiment the Experiment to query for
 	 * @param storeData a functor to store the data as it is produced
@@ -143,7 +157,7 @@ public:
 	 */
 	static void CollideFramesFunctor(const Experiment & experiment,
 	                                 std::function<void (const CollisionData & data)> storeData,
-	                                 const QueryArgs & args = QueryArgs());
+	                                 const CollideFramesArgs & args = CollideFramesArgs());
 
 
 	/**
@@ -157,7 +171,7 @@ public:
 	 */
 	static void CollideFrames(const Experiment & experiment,
 	                          std::vector<CollisionData> & result,
-	                          const QueryArgs & args = QueryArgs());
+	                          const CollideFramesArgs & args = CollideFramesArgs());
 
 
 	/**
@@ -235,6 +249,10 @@ public:
 		//! will be computed like ComputeAntTrajectories() and
 		//! AntInteraction wil points to sub-segment (default: true).
 		bool ReportFullTrajectories;
+
+		//! Collisions, and therefore interactions, happens over
+		//! different zones.
+		bool CollisionsIgnoreZones;
 
 		//! Builds default arguments
 		ComputeAntInteractionsArgs();

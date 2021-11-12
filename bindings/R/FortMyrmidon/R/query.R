@@ -54,11 +54,14 @@ fmQueryIdentifyFrames <- function(experiment,
 #' @param experiment the \code{\link{fmExperiment}} to query on
 #' @param start the first tracking time to consider,
 #' @param end the last tracking time to consider
+#' @param collisionsIgnoreZones if TRUE zones won't affect collision
+#'     detection. All ants can collide regardless of their current
+#'     zone.
 #' @param showProgress display query progress in the console
 #' @param singleThreaded enforce the use of a single thread.
-#' @return a named list of two elements:\itemize{\item\code{$frame}:
-#'     a \code{data.frame} summarizing the time, space and dimensions
-#'     of each frame \item\code{$positions} a list of \code{data.frame}
+#' @return a named list of two elements:\itemize{\item\code{$frame}: a
+#'     \code{data.frame} summarizing the time, space and dimensions of
+#'     each frame \item\code{$positions} a list of \code{data.frame}
 #'     with the position of each ant for that frame. Each element of
 #'     this list correspond to the same row in \code{$frames}
 #'     \item{$collisions} a \code{data.frame} with all collision
@@ -69,11 +72,13 @@ fmQueryIdentifyFrames <- function(experiment,
 fmQueryCollideFrames <- function(experiment,
                                  start = fmTimeSinceEver(),
                                  end = fmTimeForever(),
+                                 collisionsIgnoreZones = FALSE,
                                  showProgress = TRUE,
                                  singleThreaded = FALSE) {
     pfmQueryCollideFrames(experiment,
                           start,
                           end,
+                          collisionsIgnoreZones,
                           showProgress,
                           singleThreaded)
 }
@@ -172,6 +177,7 @@ fmQueryComputeAntInteractions <- function(experiment,
                                           end = fmTimeForever(),
                                           maximumGap = fmMillisecond(500),
                                           matcher = fmMatcherAny(),
+                                          collisionsIgnoreZones = FALSE,
                                           reportFullTrajectories = FALSE,
                                           showProgress = TRUE,
                                           singleThreaded = FALSE) {
@@ -180,6 +186,7 @@ fmQueryComputeAntInteractions <- function(experiment,
                                    end,
                                    maximumGap,
                                    matcher,
+                                   collisionsIgnoreZones,
                                    reportFullTrajectories,
                                    showProgress,
                                    singleThreaded)

@@ -67,6 +67,7 @@ void Query::IdentifyFrames(const Experiment & experiment,
 			.End = args.End,
 			.Localize = args.ComputeZones,
 			.Collide = false,
+			.CollisionsIgnoreZones = false,
 		   },
 		   [=](const Query::CollisionData & data) {
 			   storeDataFunctor(data.first);
@@ -75,7 +76,7 @@ void Query::IdentifyFrames(const Experiment & experiment,
 
 void Query::CollideFrames(const Experiment & experiment,
                           std::function<void (const CollisionData &)> storeDataFunctor,
-                          const myrmidon::Query::QueryArgs & args) {
+                          const myrmidon::Query::CollideFramesArgs & args) {
 
 	auto runner = QueryRunner::RunnerFor(args.SingleThreaded == false,
 										 args.AllocationInCurrentThread);
@@ -85,6 +86,7 @@ void Query::CollideFrames(const Experiment & experiment,
 			.End = args.End,
 			.Localize = false,
 			.Collide = true,
+			.CollisionsIgnoreZones = args.CollisionsIgnoreZones,
 		   },
 		   [=](const Query::CollisionData & data) {
 			   storeDataFunctor(data);
@@ -112,6 +114,7 @@ void Query::ComputeTrajectories(const Experiment & experiment,
 			.End = args.End,
 			.Localize = args.ComputeZones,
 			.Collide = false,
+			.CollisionsIgnoreZones = false,
 		   },
 		   [&segmenter](const Query::CollisionData & data)  {
 			   segmenter(data);
@@ -147,6 +150,7 @@ void Query::ComputeAntInteractions(const Experiment & experiment,
 			.End = args.End,
 			.Localize = false,
 			.Collide = true,
+			.CollisionsIgnoreZones = args.CollisionsIgnoreZones,
 		   },
 		   [&segmenter](const Query::CollisionData & data)  {
 			   segmenter(data);

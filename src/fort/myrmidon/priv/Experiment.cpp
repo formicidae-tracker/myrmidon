@@ -648,9 +648,10 @@ void Experiment::CloneAntShape(fort::myrmidon::AntID sourceAntID,
 	}
 }
 
-CollisionSolver::ConstPtr Experiment::CompileCollisionSolver() const {
+CollisionSolver::ConstPtr Experiment::CompileCollisionSolver(bool collisionsIgnoreZones) const {
 	return std::make_shared<CollisionSolver>(d_universe->Spaces(),
-	                                         d_identifier->Ants());
+	                                         d_identifier->Ants(),
+	                                         collisionsIgnoreZones);
 }
 
 

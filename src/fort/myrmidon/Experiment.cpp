@@ -244,9 +244,9 @@ std::map<AntID,TagID> Experiment::IdentificationsAt(const Time & time,
 	return d_p->Get().Identifier()->IdentificationsAt(time,removeUnidentifiedAnt);
 }
 
-TrackingSolver::Ptr Experiment::CompileTrackingSolver() const {
+TrackingSolver::Ptr Experiment::CompileTrackingSolver(bool collisionsIgnoreZones) const {
 	auto privateSolver = std::make_shared<priv::TrackingSolver>(d_p->Get().Identifier(),
-	                                                            d_p->Get().CompileCollisionSolver());
+	                                                            d_p->Get().CompileCollisionSolver(collisionsIgnoreZones));
 	return std::unique_ptr<TrackingSolver>(new TrackingSolver(privateSolver));
 }
 

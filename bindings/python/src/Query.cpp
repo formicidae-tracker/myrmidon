@@ -27,13 +27,15 @@ py::list QueryIdentifyFrames(const fort::myrmidon::Experiment & experiment,
 py::list QueryCollideFrames(const fort::myrmidon::Experiment & experiment,
                             fort::Time start,
                             fort::Time end,
+                            bool collisionsIgnoreZones,
                             bool singleThreaded) {
 	py::list res;
-	fort::myrmidon::Query::QueryArgs args;
+	fort::myrmidon::Query::CollideFramesArgs args;
 	args.Start = start;
 	args.End = end;
 	args.SingleThreaded = singleThreaded;
 	args.AllocationInCurrentThread = false;
+	args.CollisionsIgnoreZones = collisionsIgnoreZones;
 	fort::myrmidon::Query::CollideFramesFunctor(experiment,
 	                                            [&res](const fort::myrmidon::Query::CollisionData & d) {
 		                                             res.append(d);
@@ -69,12 +71,13 @@ py::list QueryComputeAntTrajectories(const fort::myrmidon::Experiment & experime
 }
 
 py::tuple QueryComputeAntInteractions(const fort::myrmidon::Experiment & experiment,
-                                     fort::Time start,
-                                     fort::Time end,
-                                     fort::Duration maximumGap,
-                                     const fort::myrmidon::Matcher::Ptr & matcher,
-                                     bool reportFullTrajectories,
-                                     bool singleThreaded) {
+                                      fort::Time start,
+                                      fort::Time end,
+                                      fort::Duration maximumGap,
+                                      const fort::myrmidon::Matcher::Ptr & matcher,
+                                      bool collisionsIgnoreZones,
+                                      bool reportFullTrajectories,
+                                      bool singleThreaded) {
 
 	py::list trajectories;
 	py::list interactions;
@@ -87,6 +90,7 @@ py::tuple QueryComputeAntInteractions(const fort::myrmidon::Experiment & experim
 	args.ReportFullTrajectories = reportFullTrajectories;
 	args.SingleThreaded = singleThreaded;
 	args.AllocationInCurrentThread = false;
+	args.CollisionsIgnoreZones = collisionsIgnoreZones;
 	fort::myrmidon::Query::ComputeAntInteractionsFunctor(experiment,
 	                                                     [&trajectories](const fort::myrmidon::AntTrajectory::Ptr & t) {
 		                                                     trajectories.append(t);
@@ -104,7 +108,7 @@ void BindQuery(py::module_ & m) {
 	using namespace pybind11::literals;
 
 	fort::myrmidon::Query::IdentifyFramesArgs identifyArgs;
-	fort::myrmidon::Query::QueryArgs collideArgs;
+	fort::myrmidon::Query::CollideFramesArgs collideArgs;
 	fort::myrmidon::Query::ComputeAntTrajectoriesArgs trajectoryArgs;
 	fort::myrmidon::Query::ComputeAntInteractionsArgs interactionArgs;
 
@@ -177,6 +181,7 @@ void BindQuery(py::module_ & m) {
 		            py::kw_only(),
 		            "start"_a = collideArgs.Start,
 		            "end"_a = collideArgs.End,
+		            "collisionsIgnoreZones"_a = collideArgs.CollisionsIgnoreZones,
 		            "singleThreaded"_a = collideArgs.SingleThreaded,
 		            R"pydoc(
     Gets Ant collision in video frames.
@@ -236,6 +241,7 @@ void BindQuery(py::module_ & m) {
 		            "end"_a = interactionArgs.End,
 		            "maximumGap"_a = interactionArgs.MaximumGap,
 		            "matcher"_a = interactionArgs.Matcher,
+		            "collisionsIgnoreZones"_a = interactionArgs.CollisionsIgnoreZones,
 		            "reportFullTrajectories"_a = interactionArgs.ReportFullTrajectories,
 		            "singleThreaded"_a = interactionArgs.SingleThreaded,
 		            R"pydoc(

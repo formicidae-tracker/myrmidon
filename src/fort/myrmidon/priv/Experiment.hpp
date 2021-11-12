@@ -238,7 +238,7 @@ public :
 	                   bool scaleToSize,
 	                   bool overwriteShapes);
 
-	CollisionSolverConstPtr CompileCollisionSolver() const;
+	CollisionSolverConstPtr CompileCollisionSolver(bool collisionsIgnoreZones) const;
 
 
 	// Computes the conventional ratio beween corner size and
