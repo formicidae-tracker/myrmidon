@@ -1,14 +1,27 @@
-#include "ExperimentBridgeUTest.hpp"
+#include <gtest/gtest.h>
+
+#include <QSignalSpy>
+
 
 #include <fort/myrmidon/TestSetup.hpp>
+
 #include <fort/studio/bridge/ExperimentBridge.hpp>
 #include <fort/studio/bridge/UniverseBridge.hpp>
 #include <fort/studio/bridge/GlobalPropertyBridge.hpp>
 #include <fort/studio/bridge/MeasurementBridge.hpp>
 #include <fort/studio/bridge/IdentifierBridge.hpp>
 #include <fort/studio/bridge/AntShapeTypeBridge.hpp>
+#include <fort/myrmidon/priv/Experiment.hpp>
 
-#include <QSignalSpy>
+namespace fmp = fort::myrmidon::priv;
+
+class ExperimentBridgeUTest : public ::testing::Test {
+protected:
+	void SetUp();
+
+	fs::path pathExisting;
+};
+
 
 void ExperimentBridgeUTest::SetUp() {
 	try {
@@ -34,8 +47,8 @@ TEST_F(ExperimentBridgeUTest,ActiveModifiedState) {
 	EXPECT_EQ(activatedSpy.count(),0);
 
 	ASSERT_TRUE(controller.open(pathExisting.c_str(),nullptr));
-	EXPECT_EQ(controller.absoluteFilePath().generic_string(),
-	          pathExisting.generic_string());
+	EXPECT_EQ(controller.absoluteFilePath().toUtf8().constData(),
+	          pathExisting.string());
 	EXPECT_EQ(controller.isModified(),false);
 	EXPECT_EQ(controller.isActive(),true);
 	EXPECT_EQ(modifiedSpy.count(),0);
@@ -43,8 +56,8 @@ TEST_F(ExperimentBridgeUTest,ActiveModifiedState) {
 	EXPECT_EQ(activatedSpy.at(0).at(0).toBool(),true);
 
 	ASSERT_TRUE(controller.create(pathCreated.c_str()));
-	EXPECT_EQ(controller.absoluteFilePath().generic_string(),
-	          pathCreated.generic_string());
+	EXPECT_EQ(controller.absoluteFilePath().toUtf8().constData(),
+	          pathCreated.string());
 	EXPECT_EQ(controller.isModified(),false);
 	EXPECT_EQ(controller.isActive(),true);
 	EXPECT_EQ(modifiedSpy.count(),0);

@@ -24,11 +24,16 @@ namespace fmp = fort::myrmidon::priv;
 
 class ExperimentBridge : public Bridge {
 	Q_OBJECT
+	Q_PROPERTY(QString absoluteFilePath
+	           READ absoluteFilePath()
+	           NOTIFY absoluteFilePathChanged)
+
 public:
 
 	ExperimentBridge(QObject * parent = NULL);
 	virtual ~ExperimentBridge();
-	const fs::path & absoluteFilePath() const;
+
+	const QString & absoluteFilePath() const;
 
 	bool isActive() const override;
 
@@ -82,6 +87,8 @@ public slots:
 	void selectAnt(quint32 antID);
 
 signals:
+	void absoluteFilePathChanged(const QString & filepath);
+
 	void antCreated(quint32);
 	void antDeleted(quint32);
 
@@ -93,7 +100,7 @@ private:
 	friend class ExperimentBridgeUTest_ActiveModifiedState_Test;
 
 	void resetChildModified();
-
+	void setAbsoluteFilePathProperty(const QString & path);
 
 	fmp::Experiment::Ptr              d_experiment;
 	UniverseBridge                  * d_universe;
@@ -112,4 +119,5 @@ private:
 	AntShapeBridge                  * d_antShapes;
 	const std::vector<GlobalBridge*>  d_children;
 	quint32                           d_selectedID;
+	QString                           d_absoluteFilePath;
 };

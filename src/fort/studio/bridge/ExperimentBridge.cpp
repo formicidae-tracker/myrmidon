@@ -75,12 +75,8 @@ bool ExperimentBridge::isActive() const {
 	return d_experiment.get() != NULL;
 }
 
-const fs::path & ExperimentBridge::absoluteFilePath() const {
-	if ( !d_experiment ) {
-		static fs::path empty;
-		return empty;
-	}
-	return d_experiment->AbsoluteFilePath();
+const QString & ExperimentBridge::absoluteFilePath() const {
+	return d_absoluteFilePath;
 }
 
 
@@ -108,6 +104,7 @@ bool ExperimentBridge::saveAs(const QString & path ) {
 		            << path << "': " << e.what();
 		return false;
 	}
+	setAbsoluteFilePathProperty(path);
 	return true;
 }
 
@@ -228,7 +225,13 @@ void ExperimentBridge::setExperiment(const fmp::Experiment::Ptr & experiment) {
 	resetChildModified();
 
 	selectAnt(0);
-	emit activated(d_experiment.get() != NULL);
+	if ( d_experiment == nullptr ) {
+		setAbsoluteFilePathProperty("");
+		emit activated(false);
+	} else {
+		setAbsoluteFilePathProperty(d_experiment->AbsoluteFilePath().c_str());
+		emit activated(true);
+	}
 }
 
 void ExperimentBridge::onChildModified(bool modified) {
@@ -311,4 +314,13 @@ fmp::Ant::ConstPtr ExperimentBridge::ant(fm::AntID aID) const {
 		return fmp::Ant::ConstPtr();
 	}
 	return fi->second;
+}
+
+
+void ExperimentBridge::setAbsoluteFilePathProperty(const QString & path) {
+	if ( path == d_absoluteFilePath) {
+		return;
+	}
+	d_absoluteFilePath = path;
+	emit absoluteFilePathChanged(d_absoluteFilePath);
 }

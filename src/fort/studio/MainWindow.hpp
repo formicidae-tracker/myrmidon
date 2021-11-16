@@ -49,10 +49,13 @@ protected:
     void closeEvent(QCloseEvent *event) override;
 
 private:
+	friend class MainWindowUTest;
+
+	QString dirFromCurrentPath() const;
 
 	void setUpLogger();
 	void setUpSaveAndModificationEvents();
-	void setUpDynamicWindowTitle();
+	void setUpAbsoluteFilePathHandling();
 	void setUpWorkspaces();
 	void setUpWorkspacesActions();
 	void setUpWorkspacesSelectionActions();
@@ -63,16 +66,14 @@ private:
 
 	QString promptPath();
 
-
-	void pushRecent();
 	void loadSettings();
 	void rebuildRecentsFiles();
 
-
-
+	void pushRecentFile(const QString & path);
 
     Ui::MainWindow      * d_ui;
 	ExperimentBridge    * d_experiment;
+	QString               d_lastPath;
 	std::deque<QString>   d_recentPaths;
 	Logger              * d_logger;
 	LoggerWidget        * d_loggerWidget;

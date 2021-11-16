@@ -202,10 +202,10 @@ set(SRC_UTEST_FILES utest/main.cpp
 					utest/WorkspaceUTest.cpp
 					utest/VisualizationWorkspaceUTest.cpp
 					utest/TrackingVideoWidgetUTest.cpp
+					utest/MainWindow.cpp
                     )
 
-set(HDR_UTEST_FILES utest/ExperimentBridgeUTest.hpp
-                    utest/GlobalPropertyUTest.hpp
+set(HDR_UTEST_FILES utest/GlobalPropertyUTest.hpp
                     utest/UniverseUTest.hpp
                     utest/MeasurementUTest.hpp
                     utest/IdentifierUTest.hpp
@@ -258,7 +258,7 @@ add_executable(fort-studio-tests ${SRC_UTEST_FILES}
                                  ${HDR_UTEST_FILES}
                                  )
 
-set_target_properties(fort-studio-tests PROPERTIES AUTOUIC_SEARCH_PATHS "${PROJECT_SOURCE_DIR}/src/fort/studio/widget;${PROJECT_SOURCE_DIR}/src/fort/studio/workspace")
+set_target_properties(fort-studio-tests PROPERTIES AUTOUIC_SEARCH_PATHS "${PROJECT_SOURCE_DIR}/src/fort/studio/widget;${PROJECT_SOURCE_DIR}/src/fort/studio/workspace;${PROJECT_SOURCE_DIR}/src/fort/studio")
 
 target_link_libraries(fort-studio-tests fort-studio-common
                                         fort-myrmidon-utest-common

@@ -57,17 +57,6 @@ void MainWindow::setUpSaveAndModificationEvents() {
 	        &MainWindow::onExperimentActivated);
 }
 
-void MainWindow::setUpDynamicWindowTitle() {
-	setWindowTitle(tr("FORmicidae Tracker Studio"));
-	connect(d_experiment,
-	        &ExperimentBridge::activated,
-	        [this]() {
-		        if (d_experiment->isActive() == false ) {
-			        setWindowTitle(tr("FORmicidae Tracker Studio"));
-		        }
-		        setWindowTitle(tr("FORmicidae Tracker Studio - %1").arg(d_experiment->absoluteFilePath().c_str()));
-	        });
-}
 
 void MainWindow::setUpWorkspaces() {
 	std::vector<Workspace*> workspace
@@ -171,6 +160,39 @@ void MainWindow::setUpWorkspacesSelectionActions() {
 	addToolBar(tb);
 }
 
+void MainWindow::setUpAbsoluteFilePathHandling() {
+	connect(d_experiment,
+	        &ExperimentBridge::absoluteFilePathChanged,
+	        this,
+	        [this](const QString & filepath) {
+		        if (filepath.isEmpty()) {
+			        setWindowTitle(tr("FORmicidae Tracker Studio"));
+		        } else {
+			        setWindowTitle(tr("FORmicidae Tracker Studio - %1").arg(filepath));
+		        }
+		        pushRecentFile(d_lastPath);
+		        d_lastPath = filepath;
+	        });
+
+}
+
+void MainWindow::pushRecentFile(const QString & path) {
+	if ( path.isEmpty() || path == d_recentPaths.front() ) {
+		return;
+	}
+
+	d_recentPaths.push_front(path);
+	d_recentPaths.erase(std::remove(d_recentPaths.begin()+1,
+	                                d_recentPaths.end(),
+	                                path),
+	                    d_recentPaths.end());
+	if ( d_recentPaths.size() > 5 ) {
+		d_recentPaths.resize(5);
+	}
+	rebuildRecentsFiles();
+}
+
+
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
 	, d_ui(new Ui::MainWindow)
@@ -184,7 +206,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 	setUpLogger();
 	setUpSaveAndModificationEvents();
-	setUpDynamicWindowTitle();
+	setUpAbsoluteFilePathHandling();
 
 	loadSettings();
 
@@ -217,8 +239,6 @@ void MainWindow::on_actionNew_triggered() {
 	if ( d_experiment->create(path) == false ) {
 		return;
 	}
-
-	pushRecent();
 }
 
 void MainWindow::on_actionOpen_triggered() {
@@ -226,13 +246,8 @@ void MainWindow::on_actionOpen_triggered() {
 		return;
 	}
 
-	QString dir = "";
-	if ( d_experiment->absoluteFilePath().empty() == false ) {
-		dir = d_experiment->absoluteFilePath().parent_path().c_str();
-	}
-
 	QString filename = QFileDialog::getOpenFileName(this,"Open an experiment",
-	                                                dir,
+	                                                dirFromCurrentPath(),
 	                                                tr("FORT Experiment (*.myrmidon)"));
 
 	if (filename.isEmpty() ) {
@@ -242,8 +257,6 @@ void MainWindow::on_actionOpen_triggered() {
 	if ( d_experiment->open(filename,this) == false ) {
 		return;
 	}
-
-	pushRecent();
 }
 
 void MainWindow::on_actionQuit_triggered() {
@@ -263,8 +276,6 @@ void MainWindow::on_actionSaveAs_triggered() {
 	if ( d_experiment->saveAs(path) ) {
 		return;
     }
-
-	pushRecent();
 }
 
 
@@ -274,9 +285,7 @@ QString MainWindow::promptPath() {
 	dialog.setWindowModality(Qt::WindowModal);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setDefaultSuffix(".myrmidon");
-    if ( d_experiment->absoluteFilePath().empty() == false ) {
-	    dialog.setDirectory(d_experiment->absoluteFilePath().parent_path().c_str());
-    }
+    dialog.setDirectory(dirFromCurrentPath());
     if (dialog.exec() != QDialog::Accepted) {
 	    return  "";
     }
@@ -356,7 +365,7 @@ void MainWindow::closeEvent(QCloseEvent *e) {
 
 }
 
-void MainWindow::pushRecent() {
+/*void MainWindow::pushRecent() {
 	QString newPath = d_experiment->absoluteFilePath().c_str();
 
 	//if already in the vector, just move it to the top
@@ -380,11 +389,11 @@ void MainWindow::pushRecent() {
 		if ( i < d_recentPaths.size() ) {
 			data = d_recentPaths[i];
 		}
-		settings.setValue("recent-files/"+QString::number(i),data);
+
 	}
 
 	rebuildRecentsFiles();
-}
+	}*/
 
 
 void MainWindow::loadSettings() {
@@ -404,14 +413,18 @@ void MainWindow::loadSettings() {
 
 void MainWindow::rebuildRecentsFiles() {
 	std::vector<QAction*> actions = {d_ui->recentFile1,d_ui->recentFile2,d_ui->recentFile3,d_ui->recentFile4,d_ui->recentFile5};
+	QSettings settings;
 	for ( size_t i = 0 ; i < 5 ; ++i ) {
 		if ( i >= d_recentPaths.size() ) {
 			actions[i]->setVisible(false);
+			settings.setValue("recent-files/"+QString::number(i),"");
 			continue;
 		}
-		actions[i]->setText(d_recentPaths[i]);
+		const auto & path = d_recentPaths[i];
+		settings.setValue("recent-files/"+QString::number(i),path);
+		actions[i]->setText(path);
 		actions[i]->setVisible(true);
-		actions[i]->setEnabled(QFileInfo::exists(d_recentPaths[i]));
+		actions[i]->setEnabled(QFileInfo::exists(path));
 	}
 }
 
@@ -504,4 +517,12 @@ void MainWindow::on_actionHelpAbout_triggered() {
 	                      "<br/>"
 	                      "<a href=\"https://github.com/formicidae-tracker/studio/blob/master/AUTHORS\">AUTHORS</a> &bull; <a href=\"https://github.com/formicidae-tracker/studio/graphs/contributors\">CONTRIBUTORS</a>").arg(version));
 
+}
+
+QString MainWindow::dirFromCurrentPath() const {
+	auto path = d_experiment->absoluteFilePath();
+	if ( path.isEmpty() ) {
+		return "";
+	}
+	return fs::path(path.toUtf8().constData()).parent_path().c_str();
 }
