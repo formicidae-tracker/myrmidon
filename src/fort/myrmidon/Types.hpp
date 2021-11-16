@@ -552,6 +552,14 @@ struct ExperimentDataInfo {
 	std::map<SpaceID,SpaceDataInfo> Spaces;
 };
 
+
+struct MovieSegmentData {
+	fort::Time Start;
+	std::string AbsoluteFilePath;
+	size_t BeginFramePosition,EndFramePosition;
+	std::vector<fort::Duration> FrameTimeOffsets;
+};
+
 /**
  * Formats a TagID to conventional format
  * @param tagID the TagID to format

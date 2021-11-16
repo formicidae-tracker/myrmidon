@@ -309,6 +309,12 @@ public:
 	                                   const ComputeAntInteractionsArgs & args = ComputeAntInteractionsArgs());
 
 
+	static void MatchMovieSegments(SpaceID space,
+	                               std::vector<MovieSegmentData> & movieSegmentData,
+	                               const fort::Time & start,
+	                               const fort::Time & end);
+
+
 };
 
 
