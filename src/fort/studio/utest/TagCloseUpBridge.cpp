@@ -47,7 +47,12 @@ TEST_F(TagCloseUpUTest,ListTagsForNewFolder) {
 
 	ASSERT_EQ(model->rowCount(),tagCounts.size());
 	for ( const auto & [tagID,count] : tagCounts ) {
-		EXPECT_EQ(model->data(model->index(tagID,1)).toInt(),count);
+		QVariant displayVariant = model->data(model->index(tagID,1));
+
+		// Ensuring that the display variant is not a string but an
+		// integer ensure sorting with a proxy model. see issue #200
+		EXPECT_EQ(displayVariant.type(),QVariant::ULongLong);
+		EXPECT_EQ(displayVariant.toInt(),count);
 	}
 
 }

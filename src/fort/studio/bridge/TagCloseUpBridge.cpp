@@ -120,9 +120,11 @@ TagCloseUpBridge::addCloseUp(const fmp::TagCloseUp::ConstPtr & closeUp) {
 
 	auto tagItem = new QStandardItem(tagLabel);
 
-	auto countItem = new QStandardItem("0");
+	auto countItem = new QStandardItem();
+	countItem->setData(qulonglong(0),Qt::DisplayRole);
 
-	auto usedItem = new QStandardItem("0");
+	auto usedItem = new QStandardItem();
+	usedItem->setData(qulonglong(0),Qt::DisplayRole);
 
 	QList<QStandardItem*> row = {tagItem,countItem,usedItem};
 	for ( const auto & item : row ) {
@@ -249,9 +251,8 @@ void TagCloseUpBridge::count(fm::TagID tagID) {
 	auto row = items[0]->row();
 
 	if ( total != 0 ) {
-
-		d_tagModel->item(row,1)->setText(QString::number(total));
-		d_tagModel->item(row,2)->setText(QString::number(used));
+		d_tagModel->item(row,1)->setData(qulonglong(total),Qt::DisplayRole);
+		d_tagModel->item(row,2)->setData(qulonglong(used),Qt::DisplayRole);
 
 	} else {
 		d_tagsLists.erase(tagID);
