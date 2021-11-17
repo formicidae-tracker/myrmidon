@@ -222,6 +222,7 @@ set(SRC_UTEST_FILES main-check.cpp
                     TrackingSolverUTest.cpp
                     TypesUTest.cpp
                     ZoneUTest.cpp
+                    MovieSegmentDataUTest.cpp
                     )
 
 
