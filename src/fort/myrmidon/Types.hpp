@@ -263,6 +263,25 @@ struct CollisionFrame {
  */
 typedef std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr> CollisionData;
 
+template <typename T> struct data_traits;
+template <>
+struct data_traits<CollisionData> {
+	typedef timed_data data_category;
+	const static bool spaced_data = true;
+
+	inline static SpaceID space(const CollisionData & v) {
+		return v.first->Space;
+	}
+
+	inline static const fort::Time & time(const CollisionData & v) {
+		return v.first->FrameTime;
+	}
+
+	inline static bool compare(const CollisionData & a,
+	                           const CollisionData & b) {
+		return a.first->FrameTime < b.first->FrameTime;
+	}
+};
 
 /**
  * Defines a trajectory for an Ant

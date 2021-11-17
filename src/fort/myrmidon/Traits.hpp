@@ -39,47 +39,62 @@ public:
 };
 
 template <typename T>
-struct data_trait {
+struct data_traits {
 	typedef typename T::data_category data_category;
 	const static bool spaced_data = has_space_field<T>::value;
 
-	template <std::enable_if_t<spaced_data,bool> = true>
-	static uint32_t space(const T & v) {
+	template <typename Actual = T,
+	          std::enable_if_t<data_traits<Actual>::spaced_data,bool> = true>
+	static uint32_t space(const Actual & v) {
 		return v.Space;
 	}
 
-	template <std::enable_if_t<std::is_same<data_category,timed_data>::value,bool> = true>
-	static const fort::Time & time(const T & v) {
+	template <typename Actual = T,
+	          std::enable_if_t<std::is_same<typename data_traits<Actual>::data_category,
+	                                        timed_data>::value,bool> = true>
+	static const fort::Time & time(const Actual & v) {
 		return v.FrameTime;
 	}
 
-	template <std::enable_if_t<std::is_same<data_category,time_ranged_data>::value,bool> = true>
-	static const fort::Time & start(const T & v) {
+	template <typename Actual = T,
+	          std::enable_if_t<std::is_same<typename data_traits<Actual>::data_category,
+	                                        time_ranged_data>::value,bool> = true>
+	static const fort::Time & start(const Actual & v) {
 		return v.Start;
 	}
 
-	template <std::enable_if_t<std::is_same<data_category,time_ranged_data>::value
+
+
+	template <typename Actual = T,
+	          std::enable_if_t<std::is_same<typename data_traits<Actual>::data_category,
+	                                        time_ranged_data>::value
 	                           && has_end_field<T>::value,bool> = true>
-	static const fort::Time & end(const T & v) {
+	static const fort::Time & end(const Actual & v) {
 		return v.End;
 	}
 
-	template <std::enable_if_t<std::is_same<data_category,time_ranged_data>::value
-	                           && has_end_member<T>::value,bool> = true>
-	static fort::Time end(const T & v) {
+	template <typename Actual = T,
+	          std::enable_if_t<std::is_same<typename data_traits<Actual>::data_category,
+	                                        time_ranged_data>::value
+	                           && has_end_member<Actual>::value,bool> = true>
+	static fort::Time end(const Actual & v) {
 		return v.End();
 	}
 
-	template <std::enable_if_t<std::is_same<data_category,timed_data>::value,bool> = true>
-	static inline bool compare(const T & a,
-	                           const T & b) {
-		return data_trait<T>::time(a) < data_trait<T>::time(b);
+	template <typename Actual = T,
+	          std::enable_if_t<std::is_same<typename data_traits<Actual>::data_category,
+	                                        timed_data>::value,bool> = true>
+	static inline bool compare(const Actual & a,
+	                           const Actual & b) {
+		return data_traits<T>::time(a) < data_traits<T>::time(b);
 	}
 
-	template <std::enable_if_t<std::is_same<data_category,time_ranged_data>::value,bool> = true>
-	static inline bool compare(const T & a,
-	                           const T & b) {
-		return data_trait<T>::end(a) < data_trait<T>::end(b);
+	template <typename Actual = T,
+	          std::enable_if_t<std::is_same<typename data_traits<Actual>::data_category,
+	                                        time_ranged_data>::value,bool> = true>
+	static inline bool compare(const Actual & a,
+	                           const Actual & b) {
+		return data_traits<T>::end(a) < data_traits<T>::end(b);
 	}
 };
 

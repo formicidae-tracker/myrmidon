@@ -8,25 +8,6 @@
 namespace fort {
 namespace myrmidon {
 
-template <>
-struct data_trait<CollisionData> {
-	typedef timed_data data_category;
-	const static bool spaced_data = true;
-
-	inline static SpaceID space(const CollisionData & v) {
-		return v.first->Space;
-	}
-
-	inline static const fort::Time & time(const CollisionData & v) {
-		return v.first->FrameTime;
-	}
-
-	inline static bool compare(const CollisionData & a,
-	                           const CollisionData & b) {
-		return a.first->FrameTime < b.first->FrameTime;
-	}
-};
-
 
 struct MovieSegmentData {
 	struct MatchedData {
@@ -119,11 +100,11 @@ MovieSegmentData::MatchData(List & list,
 	SpaceID space = list.front().Space;
 
 	typedef typename std::iterator_traits<IterType>::value_type Type;
-	typedef data_trait<Type> TypeTrait;
+	typedef data_traits<Type> TypeTraits;
 
-	typedef typename TypeTrait::data_category data_category;
-	if constexpr ( TypeTrait::spaced_data == false ) {
-		std::sort(begin,end,TypeTrait::compare);
+	typedef typename TypeTraits::data_category data_category;
+	if constexpr ( TypeTraits::spaced_data == false ) {
+		std::sort(begin,end,TypeTraits::compare);
 		MatchSortedFilteredData(list,begin,end);
 		return;
 	} else {
@@ -138,7 +119,7 @@ MovieSegmentData::MatchData(List & list,
 
 		std::sort(filtered.begin(),
 		          filtered.end(),
-		          TypeTrait::compare);
+		          TypeTraits::compare);
 
 		MatchSortedFilteredData(list,filtered.begin(),filtered.end());
 	}
@@ -151,9 +132,9 @@ MovieSegmentData::MatchSortedFilteredData(List & list,
                                           IterType end) {
 
 	typedef typename std::iterator_traits<IterType>::value_type Type;
-	typedef data_trait<Type> TypeTrait;
+	typedef data_traits<Type> TypeTraits;
 
-	typedef typename TypeTrait::data_category data_category;
+	typedef typename TypeTraits::data_category data_category;
 
 	for ( auto & s : list ) {
 		begin = s.MatchData(begin,end,data_category());

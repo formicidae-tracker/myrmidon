@@ -2,7 +2,7 @@
 
 
 #include <fort/time/Time.hpp>
-#include <fort/myrmidon/Traits.hpp>
+#include <fort/myrmidon/MaybeDeref.hpp>
 
 namespace fort {
 

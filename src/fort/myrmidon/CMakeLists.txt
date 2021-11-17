@@ -223,6 +223,7 @@ set(SRC_UTEST_FILES main-check.cpp
                     TypesUTest.cpp
                     ZoneUTest.cpp
                     MovieSegmentDataUTest.cpp
+                    TraitsUTest.cpp
                     )
 
 
