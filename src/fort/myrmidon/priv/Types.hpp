@@ -1,7 +1,5 @@
 #pragma once
 
-#include <fort/myrmidon/Types.hpp>
-
 #include <cstdint>
 
 #include <tuple>
@@ -13,6 +11,7 @@
 
 #include <Eigen/Geometry>
 
+#include <fort/myrmidon/Types.hpp>
 
 namespace fort {
 namespace myrmidon {

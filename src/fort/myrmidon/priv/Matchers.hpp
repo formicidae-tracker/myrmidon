@@ -1,6 +1,6 @@
 #pragma once
 
-#include <fort/myrmidon/Types.hpp>
+#include <fort/myrmidon/Typedefs.hpp>
 
 #include "Identifier.hpp"
 

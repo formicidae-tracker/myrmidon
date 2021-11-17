@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "Types.hpp"
+#include "Typedefs.hpp"
 #include "Color.hpp"
 #include "Identification.hpp"
 #include "ForwardDeclaration.hpp"

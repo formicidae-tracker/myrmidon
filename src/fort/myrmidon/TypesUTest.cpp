@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Types.hpp"
+#include "Typedefs.hpp"
 #include "TestSetup.hpp"
 
 namespace fort {

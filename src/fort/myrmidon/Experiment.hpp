@@ -4,7 +4,7 @@
 
 #include <fort/tags/fort-tags.hpp>
 
-#include "Types.hpp"
+#include "Typedefs.hpp"
 #include "Ant.hpp"
 #include "Space.hpp"
 #include "TrackingSolver.hpp"

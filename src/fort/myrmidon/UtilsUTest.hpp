@@ -6,6 +6,7 @@
 #include <Eigen/Core>
 
 #include <fort/myrmidon/Shapes.hpp>
+#include <fort/myrmidon/Types.hpp>
 
 #include <google/protobuf/message.h>
 

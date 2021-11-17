@@ -1,6 +1,7 @@
 #pragma once
 
 #include <fort/myrmidon/Types.hpp>
+#include <fort/myrmidon/ForwardDeclaration.hpp>
 #include <fort/myrmidon/Shapes.hpp>
 
 namespace fort {

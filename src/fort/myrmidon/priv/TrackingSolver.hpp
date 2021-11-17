@@ -1,7 +1,7 @@
 #pragma once
 
 #include <fort/hermes/FrameReadout.pb.h>
-#include <fort/myrmidon/Types.hpp>
+#include <fort/myrmidon/Typedefs.hpp>
 
 #include "CollisionSolver.hpp"
 #include "Identifier.hpp"

@@ -1,20 +1,32 @@
 #pragma once
 
 #include <any>
-#include <fort/myrmidon/Types.hpp>
 
+#include <fort/myrmidon/Traits.hpp>
+#include <fort/myrmidon/Types.hpp>
 
 namespace fort {
 namespace myrmidon {
 
-template <typename T>
-const fort::Time & GetStart(const T & value);
+template <>
+struct data_trait<CollisionData> {
+	typedef timed_data data_category;
+	const static bool spaced_data = true;
 
-template <typename T>
-fort::Duration GetDuration(const T & value);
+	inline static SpaceID space(const CollisionData & v) {
+		return v.first->Space;
+	}
 
-template <typename T>
-SpaceID GetSpace(const T & value);
+	inline static const fort::Time & time(const CollisionData & v) {
+		return v.first->FrameTime;
+	}
+
+	inline static bool compare(const CollisionData & a,
+	                           const CollisionData & b) {
+		return a.first->FrameTime < b.first->FrameTime;
+	}
+};
+
 
 struct MovieSegmentData {
 	struct MatchedData {
@@ -31,86 +43,31 @@ struct MovieSegmentData {
 
 	typedef std::vector<MovieSegmentData> List;
 
-	SpaceID                     ID;
+	SpaceID                     Space;
 	std::string                 AbsoluteFilePath;
 	std::vector<MatchedData>    Data;
 
-	template <typename IterType>  IterType MatchData(IterType begin,
-	                                                 IterType end,
-	                                                 bool sortFirst = true);
+	template <typename IterType>
+	static void MatchData(List & list,
+	                      IterType begin,
+	                      IterType end);
 
-	template <typename IterType>  static void MatchData(List & list,
-	                                                    IterType begin,
-	                                                    IterType end);
+private:
+	template <typename IterType>
+	static void MatchSortedFilteredData(List & list,
+	                        IterType begin,
+	                        IterType end);
 
+	template <typename IterType>
+	IterType MatchData(IterType begin,
+	                   IterType end,
+	                   timed_data);
+
+	template <typename IterType>
+	IterType MatchData(IterType begin,
+	                   IterType end,
+	                   time_ranged_data);
 };
-
-
-template <typename T>
-struct static_assert_false : public std::false_type {};
-
-template <typename T>
-int TimeCompare(const T & value,
-                const fort::Time & time) {
-	static_assert(static_assert_false<T>::value,"The matched type must specialize int fort::myrmidon::TimeLocate(const T & value,const fort::Time & time)");
-	return -1;
-}
-
-template <typename T>
-bool SpaceCompare(const T & value,
-                  SpaceID spaceID) {
-	static_assert(static_assert_false<T>::value,"The matched type must specialize bool fort::myrmidon::SpaceCompare(const T & value,SpaceID spaceID)");
-	return false;
-}
-
-
-
-template <>
-inline int
-TimeCompare(const IdentifiedFrame::Ptr & value,
-            const fort::Time & time) {
-	if ( time.Before(value->FrameTime) ) {
-		return -1;
-	}
-	if ( time.Equals(value->FrameTime) ) {
-		return 0;
-	}
-	return 1;
-}
-
-template <>
-inline int
-TimeCompare(const CollisionData & value,
-            const fort::Time & time) {
-	return TimeCompare<IdentifiedFrame::Ptr>(value.first,time);
-}
-
-template <>
-inline int
-TimeCompare(const AntTrajectory::Ptr & value,
-            const fort::Time & time) {
-	if ( time.Before(value->Start) ) {
-		return -1;
-	}
-	if ( time.After(value->End()) ) {
-		return 1;
-	}
-	return 0;
-}
-
-template <>
-inline int
-TimeCompare(const AntInteraction::Ptr & value,
-            const fort::Time & time) {
-	if ( time.Before(value->Start) ) {
-		return -1;
-	}
-	if ( time.After(value->End) ) {
-		return 1;
-	}
-	return 0;
-}
-
 
 template <typename T>
 inline void
@@ -143,24 +100,111 @@ MovieSegmentData::MatchedData::Append(const AntInteraction::Ptr & i) {
 }
 
 template <typename IterType>
-inline IterType MovieFrameSegment::MatchData(IterType begin,
-                                             IterType end) {
-	for ( const auto & d : Data ) {
-		while(SpaceCompare(*begin,Space) == false
-		      || TimeCompare(*begin,d.Time) > 0 ) {
+inline void
+MovieSegmentData::MatchData(List & list,
+                            IterType begin,
+                            IterType end) {
+
+	if ( list.empty() ) {
+		return;
+	}
+	if ( std::find_if(list.begin()+1,
+	                  list.end(),
+	                  [&list](const MovieSegmentData & s) {
+		                  return s.Space != list.front().Space;
+	                  }) != list.end() ) {
+		throw std::invalid_argument("This implementation only supports matching of segment from the same space");
+	}
+
+	SpaceID space = list.front().Space;
+
+	typedef typename std::iterator_traits<IterType>::value_type Type;
+	typedef data_trait<Type> TypeTrait;
+
+	typedef typename TypeTrait::data_category data_category;
+	if constexpr ( TypeTrait::spaced_data == false ) {
+		std::sort(begin,end,TypeTrait::compare);
+		MatchSortedFilteredData(list,begin,end);
+		return;
+	} else {
+		std::vector<Type> filtered;
+		filtered.reserve(std::distance(begin,end));
+
+		std::copy_if(begin,end,
+		             filtered.begin(),
+		             [space](const Type & v) {
+			             MaybeDeref(v).Space == space;
+		             });
+
+		std::sort(filtered.begin(),
+		          filtered.end(),
+		          TypeTrait::compare);
+
+		MatchSortedFilteredData(list,filtered.begin(),filtered.end());
+	}
+}
+
+template <typename IterType>
+inline void
+MovieSegmentData::MatchSortedFilteredData(List & list,
+                                          IterType begin,
+                                          IterType end) {
+
+	typedef typename std::iterator_traits<IterType>::value_type Type;
+	typedef data_trait<Type> TypeTrait;
+
+	typedef typename TypeTrait::data_category data_category;
+
+	for ( auto & s : list ) {
+		begin = s.MatchData(begin,end,data_category());
+		if ( begin == end ) {
+			return;
+		}
+	}
+}
+
+template <typename IterType>
+inline IterType
+MovieSegmentData::MatchData(IterType begin,
+                            IterType end,
+                            timed_data /*placeholder*/) {
+
+	for ( auto & d : Data ) {
+		while( MaybeDeref(*begin).Time() < d.Time ) {
 			++begin;
 			if ( begin == end ) {
 				return end;
 			}
 		}
-		for( IterType iter = begin;
-		     iter != end;
-		     ++iter) {
-			if ( SpaceCompare(*iter,Space) == false ) {
-				continue;
+		while ( MaybeDeref(*begin).Time() == d.Time ) {
+			d.Append(*begin);
+			++begin;
+			if ( begin == end ) {
+				return end;
 			}
-			if ( TimeCompare(*iter,d.Time) == 0 ) {
-				// Space and Time are correct
+		}
+	}
+	return begin;
+}
+
+
+template <typename IterType>
+inline IterType
+MovieSegmentData::MatchData(IterType begin,
+                            IterType end,
+                            time_ranged_data /*placeholder*/) {
+	//TODO use segment tree to reduce to O(n log(n) ) complexity from O(n2) here
+	for ( auto & d : Data ) {
+		while( MaybeCall(MaybeDeref(*begin).End) > d.Time ) {
+			++begin;
+			if ( begin == end ) {
+				return end;
+			}
+		}
+		for ( IterType iter = begin; iter != end; ++iter ) {
+			const auto & start = MaybeDeref(*iter).Start;
+			const auto & end = MaybeCall(MaybeDeref(*iter).End);
+			if ( d.Time <= start && d.Time <= end ) {
 				d.Append(*iter);
 			}
 		}
@@ -168,23 +212,6 @@ inline IterType MovieFrameSegment::MatchData(IterType begin,
 	return begin;
 }
 
-template <typename IterType>
-inline static void
-MovieFrameSegment::MatchData(List & list,
-                             IterType begin,
-                             IterType end) {
-	std::map<fort::Time,IterType> byEnd,byStart;
-	for ( auto iter = begin; iter != end; ++iter) {
-		byEnd =
-	}
-
-	for ( auto & s : list) {
-		begin = s.MatchData(begin,end);
-		if ( begin == end ) {
-			return;
-		}
-	}
-}
 
 } // namespace myrmidon
 } // namespace fort

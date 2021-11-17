@@ -193,7 +193,7 @@ public:
 	typedef std::function<void()> Loader;
 
 	std::vector<Loader> PrepareTagCloseUpsLoaders();
-	std::vector<Loader> PrepareFrameDataLoaders();
+	std::vector<Loader> PrepareTagStatisticsLoaders();
 	std::vector<Loader> PrepareFullFramesLoaders();
 
 	const tags::ApriltagOptions & DetectionSettings() const;

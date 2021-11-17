@@ -1,15 +1,10 @@
 #pragma once
 
-#include <variant>
-#include <map>
-#include <vector>
 
 #include <Eigen/Core>
 
-#include <fort/time/Time.hpp>
-
-
-#include "ForwardDeclaration.hpp"
+#include "TraitCategory.hpp"
+#include "Typedefs.hpp"
 
 /**
  * the namespace for all the FORmicidae Tracker libraries
@@ -25,89 +20,6 @@ namespace fort {
 namespace myrmidon {
 
 /**
- * The ID for a tag
- *
- * The identifier for a tag, which relates to Ant using
- * Identification.
- */
-typedef uint32_t TagID;
-
-
-/**
- * The ID for an Ant.
- *
- * Ant are uniquely identified within an Experiment with an AntID,
- * which is at least `1`. `0` is an invalid AntID.
- */
-typedef uint32_t AntID;
-
-/**
- * The ID for a Space.
- *
- * Space are uniquely identified within an Experiment with a SpaceID,
- * which is at least `1`. `0` is an invalid SpaceID.
- */
-typedef uint32_t SpaceID;
-
-/**
- * The ID for a Zone.
- *
- * Zone are uniquely identified within an Experiment with a ZoneID, which is
- * at least `1`. `0` is an invalid/undefined Zone.
- */
-typedef uint32_t ZoneID;
-
-/**
- * C++ type for named values.
- *
- * A c++ type that can hold only one of any #AntMetaDataType.
- */
-typedef std::variant<bool,int32_t,double,std::string,Time> AntStaticValue;
-
-/**
- * A List of 2D Vector.
- *
- */
-typedef std::vector<Eigen::Vector2d,Eigen::aligned_allocator<Eigen::Vector2d>> Vector2dList;
-
-
-class ZoneDefinition;
-/**
- * A List of ZoneDefinition
- */
-typedef std::vector<std::shared_ptr<ZoneDefinition>> ZoneDefinitionList;
-
-class Zone;
-typedef std::map<ZoneID,std::shared_ptr<Zone>> ZoneByID;
-
-class Space;
-typedef std::map<SpaceID,std::shared_ptr<Space>> SpaceByID;
-
-class Ant;
-typedef std::map<AntID,std::shared_ptr<Ant>> AntByID;
-
-class Identification;
-typedef std::vector<std::shared_ptr<Identification>> IdentificationList;
-
-/**
- * The ID for Ant virtual body parts
- *
- * Uniquely identifies an Ant shape type in an Experiment, from
- * `1`. `0` is an invalid value.
- */
-typedef uint32_t AntShapeTypeID;
-
-
-/**
- * The ID for Ant manual measurement types
- *
- * Uniquely identifies an Ant measurement type in an Experiment, from
- * `1`. `0` is an invalid value. The value `1` always refers to the
- * valid MeasurementTypeID #HEAD_TAIL_MEASUREMENT_TYPE.
- */
-typedef uint32_t MeasurementTypeID;
-
-/**
  * The head-tail Measurement type.
  *
  * This Measurement type is always define for any Experiment and
@@ -115,10 +27,6 @@ typedef uint32_t MeasurementTypeID;
  */
 const MeasurementTypeID HEAD_TAIL_MEASUREMENT_TYPE = 1;
 
-/** A list of Ant virtual shape part
- *
- */
-typedef std::vector<std::pair<AntShapeTypeID,std::shared_ptr<Capsule>>> TypedCapsuleList;
 
 /**
  * AntMetaDataType enumerates possible type for AntStaticValue
@@ -272,6 +180,9 @@ struct IdentifiedFrame {
 	 *         Ant at index.
 	 */
 	std::tuple<AntID,const Eigen::Ref<const Eigen::Vector3d>,ZoneID> At(size_t index) const;
+
+	// type traits;
+	typedef timed_data data_category;
 };
 
 /**
@@ -343,6 +254,8 @@ struct CollisionFrame {
 	 */
 	std::vector<Collision> Collisions;
 
+	// type traits;
+	typedef timed_data data_category;
 };
 
 /**
@@ -396,6 +309,8 @@ struct AntTrajectory {
 	 *         data.
 	 */
 	Time End() const;
+
+	typedef time_ranged_data data_category;
 };
 
 /**
@@ -480,6 +395,7 @@ struct AntInteraction {
 	 */
 	SpaceID                            Space;
 
+	typedef time_ranged_data data_category;
 };
 
 /**
@@ -578,8 +494,6 @@ std::string FormatTagID(TagID tagID);
  */
 std::string FormatAntID(AntID antID);
 
-
-typedef Eigen::AlignedBox<double,2> AABB;
 }
 }
 

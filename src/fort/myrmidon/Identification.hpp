@@ -5,7 +5,7 @@
 
 #include <Eigen/Core>
 
-#include "Types.hpp"
+#include "Typedefs.hpp"
 
 
 namespace fort {

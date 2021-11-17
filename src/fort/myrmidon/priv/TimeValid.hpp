@@ -2,6 +2,7 @@
 
 
 #include <fort/time/Time.hpp>
+#include <fort/myrmidon/Traits.hpp>
 
 namespace fort {
 
@@ -31,18 +32,6 @@ public:
 		return d_start <= time && time < d_end;
 	}
 
-	template <typename T>
-	static inline T & MaybeDeref(T & x) { return x;}
-	template <typename T>
-	static inline T & MaybeDeref(T* x) { return *x;}
-	template <typename T>
-	static inline T & MaybeDeref(std::shared_ptr<T> & x) { return *x;}
-	template <typename T>
-	static inline T & MaybeDeref(std::unique_ptr<T> & x) { return *x;}
-	template <typename T>
-	static inline T & MaybeDeref(const std::shared_ptr<T> & x) { return *x;}
-	template <typename T>
-	static inline T & MaybeDeref(const std::unique_ptr<T> & x) { return *x;}
 
 
 	template <typename T>

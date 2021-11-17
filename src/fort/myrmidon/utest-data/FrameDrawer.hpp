@@ -2,7 +2,7 @@
 
 #include <fort/tags/fort-tags.hpp>
 
-#include <fort/myrmidon/Types.hpp>
+#include <fort/myrmidon/Typedefs.hpp>
 #include "Config.hpp"
 
 namespace cv {

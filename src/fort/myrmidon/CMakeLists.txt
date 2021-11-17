@@ -93,6 +93,10 @@ set(HDR_PRIVATE_FILES utils/StringManipulation.hpp
 
 
 set(HDR_PUBLIC_FILES ForwardDeclaration.hpp
+                     Typedefs.hpp
+                     MaybeDeref.hpp
+                     TraitCategory.hpp
+                     Traits.hpp
                      Types.hpp
                      Color.hpp
                      Shapes.hpp
