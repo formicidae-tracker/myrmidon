@@ -319,6 +319,9 @@ struct Collision {
 	 */
 	ZoneID                       Zone;
 };
+
+
+
 /**
  * Reports all Collision happening at a given time.
  */
@@ -341,6 +344,12 @@ struct CollisionFrame {
 	std::vector<Collision> Collisions;
 
 };
+
+/**
+ *  Data returned by Query::CollideFrames
+ */
+typedef std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr> CollisionData;
+
 
 /**
  * Defines a trajectory for an Ant
@@ -552,13 +561,6 @@ struct ExperimentDataInfo {
 	std::map<SpaceID,SpaceDataInfo> Spaces;
 };
 
-
-struct MovieSegmentData {
-	fort::Time Start;
-	std::string AbsoluteFilePath;
-	size_t BeginFramePosition,EndFramePosition;
-	std::vector<fort::Duration> FrameTimeOffsets;
-};
 
 /**
  * Formats a TagID to conventional format

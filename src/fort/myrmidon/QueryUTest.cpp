@@ -138,7 +138,7 @@ TEST_F(QueryUTest,ComputeAntTrajectories) {
 		EXPECT_EQ(trajectories.size(),expected.Trajectories.size());
 		// trajectories, due to TDD boundaries may not be sorted
 		std::sort(trajectories.begin(),
-		          trajectories.end(),
+d		          trajectories.end(),
 		          [](const AntTrajectory::Ptr & a,
 		             const AntTrajectory::Ptr & b) {
 			          if ( a->End() == b->End() ) {

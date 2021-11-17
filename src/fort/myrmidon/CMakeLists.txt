@@ -104,6 +104,7 @@ set(HDR_PUBLIC_FILES ForwardDeclaration.hpp
                      Experiment.hpp
                      Query.hpp
                      Matchers.hpp
+                     MovieSegmentData.hpp
                      utils/FileSystem.hpp)
 
 set(SRC_PRIVATE_FILES utils/StringManipulation.cpp

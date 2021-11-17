@@ -4,6 +4,8 @@
 
 #include "Experiment.hpp"
 #include "Matchers.hpp"
+#include "MovieSegmentData.hpp"
+
 
 namespace fort {
 namespace myrmidon {
@@ -309,12 +311,10 @@ public:
 	                                   const ComputeAntInteractionsArgs & args = ComputeAntInteractionsArgs());
 
 
-	static void MatchMovieSegments(SpaceID space,
-	                               std::vector<MovieSegmentData> & movieSegmentData,
-	                               const fort::Time & start,
-	                               const fort::Time & end);
-
-
+	static
+	std::vector<MovieSegmentData> FindMovieSegment(SpaceID space,
+	                                               const fort::Time & start,
+	                                               const fort::Time & end);
 };
 
 
