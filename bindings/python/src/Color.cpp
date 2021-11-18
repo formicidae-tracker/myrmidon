@@ -3,7 +3,7 @@
 
 #include "BindMethods.hpp"
 
-#include <fort/myrmidon/Color.hpp>
+#include <fort/myrmidon/types/Color.hpp>
 
 namespace py = pybind11;
 

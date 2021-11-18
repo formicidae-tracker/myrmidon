@@ -7,7 +7,7 @@
 #include <pybind11/operators.h>
 #include <pybind11/chrono.h>
 
-#include <fort/myrmidon/Types.hpp>
+#include <fort/myrmidon/types/Typedefs.hpp>
 #include <fort/myrmidon/Shapes.hpp>
 
 PYBIND11_MAKE_OPAQUE(fort::myrmidon::Vector2dList)

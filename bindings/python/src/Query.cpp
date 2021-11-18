@@ -1,6 +1,8 @@
 #include "BindTypes.hpp"
 
 #include <fort/myrmidon/Query.hpp>
+#include <fort/myrmidon/Matchers.hpp>
+#include <fort/myrmidon/Experiment.hpp>
 
 namespace py = pybind11;
 
@@ -37,7 +39,7 @@ py::list QueryCollideFrames(const fort::myrmidon::Experiment & experiment,
 	args.AllocationInCurrentThread = false;
 	args.CollisionsIgnoreZones = collisionsIgnoreZones;
 	fort::myrmidon::Query::CollideFramesFunctor(experiment,
-	                                            [&res](const fort::myrmidon::Query::CollisionData & d) {
+	                                            [&res](const fort::myrmidon::CollisionData & d) {
 		                                             res.append(d);
 	                                             },
 	                                             args);

@@ -1,7 +1,16 @@
 #include "BindMethods.hpp"
 
-#include <fort/myrmidon/Types.hpp>
 #include <fort/time/Time.hpp>
+
+#include <fort/myrmidon/types/ComputedMeasurement.hpp>
+#include <fort/myrmidon/types/AntStaticValue.hpp>
+#include <fort/myrmidon/types/TagStatistics.hpp>
+#include <fort/myrmidon/types/IdentifiedFrame.hpp>
+#include <fort/myrmidon/types/Collision.hpp>
+#include <fort/myrmidon/types/AntInteraction.hpp>
+#include <fort/myrmidon/types/AntTrajectory.hpp>
+#include <fort/myrmidon/types/ExperimentDataInfo.hpp>
+
 
 namespace py = pybind11;
 
