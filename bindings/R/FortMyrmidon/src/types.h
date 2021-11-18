@@ -2,6 +2,10 @@
 
 #include "../inst/include/FortMyrmidon_types.hpp"
 
+#include <fort/myrmidon/types/IdentifiedFrame.hpp>
+#include <fort/myrmidon/types/Collision.hpp>
+#include <fort/myrmidon/types/AntTrajectory.hpp>
+
 #include "Rcpp.h"
 
 Rcpp::DataFrame fmIdentifiedFrame_Positions(fort::myrmidon::IdentifiedFrame & frame);

@@ -149,6 +149,9 @@ fmQueryComputeAntTrajectories <- function(experiment,
 #' @param matcher a \code{\link{fmMatcher}} to reduce the query to
 #'     wanted criterion. You can use \code{\link{fmMatcherAny}()} to
 #'     match anything.
+#' @param collisionsIgnoreZones if TRUE zones won't affect collision
+#'     detection. All ants can collide regardless of their current
+#'     zone.
 #' @param reportFullTrajectories computes the zone of the
 #'     Ant. Otherwise \code{0} will always be reported.
 #' @param showProgress display query progress in the console

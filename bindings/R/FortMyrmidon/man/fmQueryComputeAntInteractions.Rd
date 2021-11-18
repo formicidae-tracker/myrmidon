@@ -10,6 +10,7 @@ fmQueryComputeAntInteractions(
   end = fmTimeForever(),
   maximumGap = fmMillisecond(500),
   matcher = fmMatcherAny(),
+  collisionsIgnoreZones = FALSE,
   reportFullTrajectories = FALSE,
   showProgress = TRUE,
   singleThreaded = FALSE
@@ -31,6 +32,10 @@ ant moves from a space to another.}
 \item{matcher}{a \code{\link{fmMatcher}} to reduce the query to
 wanted criterion. You can use \code{\link{fmMatcherAny}()} to
 match anything.}
+
+\item{collisionsIgnoreZones}{if TRUE zones won't affect collision
+detection. All ants can collide regardless of their current
+zone.}
 
 \item{reportFullTrajectories}{computes the zone of the
 Ant. Otherwise \code{0} will always be reported.}

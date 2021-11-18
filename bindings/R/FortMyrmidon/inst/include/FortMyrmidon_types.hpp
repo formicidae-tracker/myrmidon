@@ -6,6 +6,9 @@
 #include <fort/myrmidon/Space.hpp>
 #include <fort/myrmidon/Experiment.hpp>
 #include <fort/myrmidon/Matchers.hpp>
+#include <fort/myrmidon/types/TagStatistics.hpp>
+#include <fort/myrmidon/types/ExperimentDataInfo.hpp>
+
 #include <RcppCommon.h>
 
 RCPP_EXPOSED_CLASS_NODECL(fort::Duration);

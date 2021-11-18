@@ -270,7 +270,7 @@ SEXP pfmQueryCollideFrames(const ExperimentPtr & experiment,
 	FmProgress progress(*experiment,start,end,showProgress);
 	try {
 		Query::CollideFramesFunctor(*experiment,
-		                            [&](const Query::CollisionData & data) {
+		                            [&](const CollisionData & data) {
 			                            progress.Increment(std::get<0>(data)->FrameTime);
 			                            positions.push_back(fmIdentifiedFrame_Positions(*std::get<0>(data)));
 			                            fillCollisions(*std::get<1>(data),positions.size());

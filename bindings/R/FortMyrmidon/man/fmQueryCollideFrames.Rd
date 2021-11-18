@@ -8,6 +8,7 @@ fmQueryCollideFrames(
   experiment,
   start = fmTimeSinceEver(),
   end = fmTimeForever(),
+  collisionsIgnoreZones = FALSE,
   showProgress = TRUE,
   singleThreaded = FALSE
 )
@@ -19,14 +20,18 @@ fmQueryCollideFrames(
 
 \item{end}{the last tracking time to consider}
 
+\item{collisionsIgnoreZones}{if TRUE zones won't affect collision
+detection. All ants can collide regardless of their current
+zone.}
+
 \item{showProgress}{display query progress in the console}
 
 \item{singleThreaded}{enforce the use of a single thread.}
 }
 \value{
-a named list of two elements:\itemize{\item\code{$frame}:
-a \code{data.frame} summarizing the time, space and dimensions
-of each frame \item\code{$positions} a list of \code{data.frame}
+a named list of two elements:\itemize{\item\code{$frame}: a
+\code{data.frame} summarizing the time, space and dimensions of
+each frame \item\code{$positions} a list of \code{data.frame}
 with the position of each ant for that frame. Each element of
 this list correspond to the same row in \code{$frames}
 \item{$collisions} a \code{data.frame} with all collision
