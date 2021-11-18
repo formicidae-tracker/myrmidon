@@ -65,10 +65,10 @@ private:
 	QString findTypeName(fm::AntMetaDataType type);
 
 	void setupItemFromValue(QStandardItem * item,
-	                        const fmp::Ant::ConstPtr & ant,
+	                        const fmp::Ant::Ptr & ant,
 	                        const fmp::AntMetadata::Key::ConstPtr & column);
 
-	QString textForValue(const fmp::Ant::ConstPtr & ant,
+	QString textForValue(const fmp::Ant::Ptr & ant,
 	                     const fmp::AntMetadata::Key::ConstPtr & column);
 
 	void setSelectedAntID(quint32 ID);

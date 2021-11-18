@@ -7,6 +7,7 @@
 #include <fort/studio/MyrmidonTypes/Conversion.hpp>
 
 #include <fort/myrmidon/priv/Identifier.hpp>
+#include <fort/myrmidon/Identification.hpp>
 
 #include "ExperimentBridge.hpp"
 #include "GlobalPropertyBridge.hpp"
@@ -16,7 +17,6 @@ IdentifierBridge::IdentifierBridge(QObject * parent)
 	: GlobalBridge(parent)
 	, d_model(new QStandardItemModel(this)) {
 
-	qRegisterMetaType<fmp::Ant::ConstPtr>();
 	qRegisterMetaType<fmp::Ant::Ptr>();
 	qRegisterMetaType<fmp::Identification::ConstPtr>();
 
@@ -335,7 +335,7 @@ fmp::Identification::ConstPtr IdentifierBridge::identificationForIndex(const QMo
 std::vector<fm::AntID> IdentifierBridge::unidentifiedAntAt(const fort::Time & time) const {
 	std::vector<fm::AntID> res;
 	for ( const auto & [antID,ant] : d_experiment->Identifier()->Ants() ) {
-		const auto & identifications = ant->CIdentifications();
+		const auto & identifications = ant->Identifications();
 		if ( std::find_if(identifications.begin(),
 		                  identifications.end(),
 		                  [&time](const fmp::Identification::ConstPtr & ident) {

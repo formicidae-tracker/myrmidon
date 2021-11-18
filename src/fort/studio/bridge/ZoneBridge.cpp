@@ -26,7 +26,7 @@ ZoneBridge::ZoneBridge(QObject * parent)
 
 	qRegisterMetaType<fmp::Space::Ptr>();
 	qRegisterMetaType<fmp::Zone::Ptr>();
-	qRegisterMetaType<fmp::Zone::Definition::Ptr>();
+	qRegisterMetaType<fmp::ZoneDefinition::Ptr>();
 	qRegisterMetaType<ZoneBridge::FullFrame>();
 
 	connect(d_spaceModel,&QStandardItemModel::itemChanged,
@@ -168,7 +168,7 @@ void ZoneBridge::removeItemAtIndex(const QModelIndex & index) {
 
 
 void ZoneBridge::addDefinition(QStandardItem * zoneRootItem) {
-	fmp::Zone::Definition::Ptr definition;
+	fmp::ZoneDefinition::Ptr definition;
 	auto z = zoneRootItem->data(DataRole).value<fmp::Zone::Ptr>();
 	fort::Time start,end;
 	if ( !z == true || z->NextFreeTimeRegion(start,end) == false ) {
@@ -323,7 +323,7 @@ QList<QStandardItem*> ZoneBridge::buildZone(const fmp::Zone::Ptr & zone) const {
 	return res;
 }
 
-QList<QStandardItem*> ZoneBridge::buildDefinition(const fmp::Zone::Definition::Ptr & definition) const {
+QList<QStandardItem*> ZoneBridge::buildDefinition(const fmp::ZoneDefinition::Ptr & definition) const {
 	auto typeData = QVariant(DefinitionType);
 	auto data = QVariant::fromValue(definition);
 	QList<QStandardItem*> res;
@@ -424,7 +424,7 @@ void ZoneBridge::changeZoneName(QStandardItem * zoneNameItem) {
 }
 
 void ZoneBridge::changeDefinitionTime(QStandardItem * definitionTimeItem, bool start) {
-	auto d = definitionTimeItem->data(DataRole).value<fmp::Zone::Definition::Ptr>();
+	auto d = definitionTimeItem->data(DataRole).value<fmp::ZoneDefinition::Ptr>();
 	if ( !d == true  ) {
 		return;
 	}
@@ -555,8 +555,8 @@ void ZoneBridge::rebuildChildBridges() {
 	auto spaceRootItem = items[0];
 
 	auto addChildBridge
-		= [this](const fmp::Zone::ConstPtr & zone,
-		         const fmp::Zone::Definition::Ptr & definition,
+		= [this](const fmp::Zone::Ptr & zone,
+		         const fmp::ZoneDefinition::Ptr & definition,
 		         QStandardItem * countItem) {
 			  auto c = std::make_shared<ZoneDefinitionBridge>(zone,definition);
 			  connect(c.get(),&Bridge::modified,
@@ -584,7 +584,7 @@ void ZoneBridge::rebuildChildBridges() {
 		}
 
 		for ( int j = 0; j < zoneRootItem->rowCount(); ++j ) {
-			auto d = zoneRootItem->child(j,0)->data(DataRole).value<fmp::Zone::Definition::Ptr>();
+			auto d = zoneRootItem->child(j,0)->data(DataRole).value<fmp::ZoneDefinition::Ptr>();
 			if ( d->IsValid(d_selectedTime) == true ) {
 				addChildBridge(zone,d,zoneRootItem->child(j,2));
 				break;
@@ -606,8 +606,8 @@ void ZoneBridge::selectTime(const fort::Time & time) {
 
 ZoneDefinitionBridge::~ZoneDefinitionBridge() {}
 
-ZoneDefinitionBridge::ZoneDefinitionBridge(const fmp::Zone::ConstPtr & zone,
-                                           const fmp::Zone::Definition::Ptr & ptr)
+ZoneDefinitionBridge::ZoneDefinitionBridge(const fmp::Zone::Ptr & zone,
+                                           const fmp::ZoneDefinition::Ptr & ptr)
 	: Bridge(nullptr)
 	, d_definition(ptr)
 	, d_zone(zone) {

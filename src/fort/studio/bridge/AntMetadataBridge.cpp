@@ -356,7 +356,7 @@ void AntMetadataBridge::rebuildDataModel() {
 
 
 void AntMetadataBridge::setupItemFromValue(QStandardItem * item,
-                                           const fmp::Ant::ConstPtr & ant,
+                                           const fmp::Ant::Ptr & ant,
                                            const fmp::AntMetadata::Key::ConstPtr & column) {
 	bool isDefault = true;
 	fm::AntStaticValue v;

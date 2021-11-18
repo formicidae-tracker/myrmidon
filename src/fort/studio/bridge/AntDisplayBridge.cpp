@@ -113,7 +113,7 @@ QList<QStandardItem*> AntDisplayBridge::buildAnt(const fmp::Ant::Ptr & ant) {
 	return {label,hidden,solo};
 }
 
-QIcon AntDisplayBridge::antDisplayColor(const fmp::Ant::ConstPtr & ant) {
+QIcon AntDisplayBridge::antDisplayColor(const fmp::Ant::Ptr & ant) {
 	auto c = ant->DisplayColor();
 	return Conversion::iconFromFM(c);
 }

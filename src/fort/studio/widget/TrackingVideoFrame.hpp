@@ -6,7 +6,9 @@
 
 #include <fort/time/Time.hpp>
 
-#include <fort/myrmidon/priv/Types.hpp>
+#include <fort/myrmidon/priv/Typedefs.hpp>
+#include <fort/myrmidon/types/IdentifiedFrame.hpp>
+#include <fort/myrmidon/types/Collision.hpp>
 
 #include <QObject>
 #include <QImage>

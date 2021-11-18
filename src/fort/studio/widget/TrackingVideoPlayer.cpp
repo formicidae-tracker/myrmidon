@@ -466,7 +466,7 @@ void TrackingVideoPlayer::setSeekReady(bool ready) {
 }
 
 
-void TrackingVideoPlayer::jumpNextVisible(fmp::AntID antID, bool backward) {
+void TrackingVideoPlayer::jumpNextVisible(fm::AntID antID, bool backward) {
 	if ( d_task == nullptr
 	     || d_seekReady == false
 	     || d_displayed.Contains(antID) == true ) {

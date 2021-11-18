@@ -304,14 +304,14 @@ quint32 ExperimentBridge::selectedAntID() const {
 	return d_selectedID;
 }
 
-fmp::Ant::ConstPtr ExperimentBridge::ant(fm::AntID aID) const {
+fmp::Ant::Ptr ExperimentBridge::ant(fm::AntID aID) const {
 	if ( !d_experiment == true ) {
-		return fmp::Ant::ConstPtr();
+		return fmp::Ant::Ptr();
 	}
 	const auto & ants = d_experiment->Identifier()->Ants();
 	auto fi = ants.find(aID);
 	if ( fi == ants.cend() ) {
-		return fmp::Ant::ConstPtr();
+		return fmp::Ant::Ptr();
 	}
 	return fi->second;
 }

@@ -41,7 +41,7 @@ private:
 
 	void updateMeasurementCount(const fmp::Measurement::ConstPtr & m, int incrementValue);
 
-	void buildCountForAnt(const fmp::Ant::ConstPtr & ant);
+	void buildCountForAnt(const fmp::Ant::Ptr & ant);
 
 	QList<QStandardItem*> buildAnt(const fmp::Ant::Ptr & ant);
 

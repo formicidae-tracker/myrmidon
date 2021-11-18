@@ -5,6 +5,10 @@
 #include <QList>
 
 #include <fort/studio/MyrmidonTypes/Experiment.hpp>
+#include <fort/studio/MyrmidonTypes/Zone.hpp>
+
+#include <fort/myrmidon/priv/FrameReference.hpp>
+#include <fort/myrmidon/priv/Space.hpp>
 
 class QAbstractItemModel;
 class QStandardItemModel;
@@ -13,8 +17,8 @@ class QStandardItem;
 class ZoneDefinitionBridge : public Bridge {
 	Q_OBJECT
 public:
-	ZoneDefinitionBridge(const fmp::Zone::ConstPtr & zone,
-	                     const fmp::Zone::Definition::Ptr & ptr);
+	ZoneDefinitionBridge(const fmp::Zone::Ptr & zone,
+	                     const fmp::ZoneDefinition::Ptr & ptr);
 	virtual ~ZoneDefinitionBridge();
 	bool isActive() const override;
 
@@ -105,9 +109,9 @@ private:
 	void changeZoneName(QStandardItem * zoneNameItem);
 	void changeDefinitionTime(QStandardItem * definitionStartItem, bool start);
 
-	QList<QStandardItem*> buildSpace(const fmp::Space::Ptr & space) const;
-	QList<QStandardItem*> buildZone(const fmp::Zone::Ptr & zone) const;
-	QList<QStandardItem*> buildDefinition(const fmp::Zone::Definition::Ptr & pdefinition) const;
+	QList<QStandardItem*> buildSpace(const fmp::SpacePtr & space) const;
+	QList<QStandardItem*> buildZone(const fmp::ZonePtr & zone) const;
+	QList<QStandardItem*> buildDefinition(const std::shared_ptr<fmp::ZoneDefinition> & pdefinition) const;
 
 	QStandardItemModel  * d_spaceModel;
 	QStandardItemModel  * d_fullFrameModel;

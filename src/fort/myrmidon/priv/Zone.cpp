@@ -124,7 +124,7 @@ ZoneDefinition::Ptr Zone::AddDefinition(const Shape::List & shapes,
 	if ( !itself ) {
 		throw DeletedReference<Zone>();
 	}
-	auto def = std::make_shared<Definition>(itself,shapes,start,end);
+	auto def = std::make_shared<ZoneDefinition>(itself,shapes,start,end);
 	auto oldDefinitions = d_definitions;
 	d_definitions.push_back(def);
 	auto check = TimeValid::SortAndCheckOverlap(d_definitions.begin(),d_definitions.end());
@@ -223,6 +223,6 @@ void Zone::SetName(const std::string & name) {
 
 
 std::ostream & operator<<(std::ostream & out,
-                          const fort::myrmidon::priv::Zone::Definition & definition) {
-	return out << "Zone::Definition";
+                          const fort::myrmidon::priv::ZoneDefinition & definition) {
+	return out << "ZoneDefinition";
 }

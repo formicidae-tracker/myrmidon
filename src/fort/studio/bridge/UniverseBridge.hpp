@@ -4,6 +4,7 @@
 #include <QStandardItemModel>
 
 #include <fort/myrmidon/priv/Experiment.hpp>
+#include <fort/myrmidon/types/Typedefs.hpp>
 
 #include <fort/studio/MyrmidonTypes/TrackingDataDirectory.hpp>
 #include <fort/studio/MyrmidonTypes/Space.hpp>
@@ -24,7 +25,7 @@ public:
 
 	QString basepath() const;
 
-	const fmp::Space::Universe::TrackingDataDirectoryByURI & trackingDataDirectories() const;
+	const fmp::TrackingDataDirectoryByURI & trackingDataDirectories() const;
 
 	bool spaceExists(const QString & spaceName) const;
 
@@ -61,7 +62,7 @@ private slots:
 private:
 
 	const static std::vector<fmp::Space::Ptr> s_emptySpaces;
-	const static fmp::Space::Universe::TrackingDataDirectoryByURI s_emptyTDDs;
+	const static fmp::TrackingDataDirectoryByURI s_emptyTDDs;
 
 	enum ObjectType {
 	                 SPACE_TYPE = 1,

@@ -5,7 +5,7 @@
 #include <QBarCategoryAxis>
 #include <QValueAxis>
 
-#include <fort/myrmidon/Types.hpp>
+#include <fort/myrmidon/types/TagStatistics.hpp>
 
 namespace fm = fort::myrmidon;
 

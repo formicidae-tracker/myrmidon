@@ -53,7 +53,7 @@ TEST_F(IdentifierUTest,ActivationTest) {
 
 
 TEST_F(IdentifierUTest,IdentificationModification) {
-	fmp::Ant::ConstPtr ant;
+	fmp::Ant::Ptr ant;
 	QSignalSpy modified(identifier,SIGNAL(modified(bool)));
 	QSignalSpy identificationCreated(identifier,SIGNAL(identificationCreated(fmp::Identification::ConstPtr)));
 	QSignalSpy identificationDeleted(identifier,SIGNAL(identificationDeleted(fmp::Identification::ConstPtr)));

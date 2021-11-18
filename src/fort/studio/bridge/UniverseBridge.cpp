@@ -131,7 +131,7 @@ QList<QStandardItem*> UniverseBridge::buildSpace(const fmp::Space::Ptr & s) {
 }
 
 const std::vector<fmp::Space::Ptr> UniverseBridge::s_emptySpaces;
-const fmp::Space::Universe::TrackingDataDirectoryByURI UniverseBridge::s_emptyTDDs;
+const fmp::TrackingDataDirectoryByURI UniverseBridge::s_emptyTDDs;
 
 
 void UniverseBridge::addSpace(const QString & spaceName) {
@@ -369,9 +369,9 @@ void UniverseBridge::rebuildAll(const fmp::SpaceByID & spaces) {
 }
 
 
-const fmp::Space::Universe::TrackingDataDirectoryByURI & UniverseBridge::trackingDataDirectories() const {
+const fmp::TrackingDataDirectoryByURI & UniverseBridge::trackingDataDirectories() const {
 	if ( !d_experiment ) {
-		static fmp::Space::Universe::TrackingDataDirectoryByURI empty;
+		static fmp::TrackingDataDirectoryByURI empty;
 		return empty;
 	}
 	return d_experiment->TrackingDataDirectories();

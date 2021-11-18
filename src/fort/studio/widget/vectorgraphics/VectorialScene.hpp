@@ -5,8 +5,15 @@
 #include <QSharedPointer>
 
 #include <functional>
-#include <fort/myrmidon/priv/Types.hpp>
-#include <fort/myrmidon/Types.hpp>
+
+#include <fort/myrmidon/types/ForwardDeclaration.hpp>
+
+namespace fort {
+namespace myrmidon {
+namespace priv {
+}
+}
+}
 
 
 namespace fm = fort::myrmidon;

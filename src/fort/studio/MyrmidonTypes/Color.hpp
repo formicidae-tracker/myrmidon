@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QObject>
-#include <fort/myrmidon/Color.hpp>
+#include <fort/myrmidon/types/Color.hpp>
 
 namespace fm = fort::myrmidon;
 

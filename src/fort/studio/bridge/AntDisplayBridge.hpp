@@ -73,7 +73,7 @@ private slots:
 
 
 private:
-	static QIcon antDisplayColor(const fmp::Ant::ConstPtr & ant);
+	static QIcon antDisplayColor(const fmp::Ant::Ptr & ant);
 
 	void setAntDisplayColor(QStandardItem * item,
 	                        const QColor & color);

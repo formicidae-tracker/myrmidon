@@ -83,19 +83,18 @@ public:
 	typedef std::shared_ptr<const Zone> ConstPtr;
 
 	typedef ZoneGeometry   Geometry;
-	typedef ZoneDefinition Definition;
 
 	virtual ~Zone();
 
 	static Ptr Create(ZoneID ZID,const std::string & name,const std::string & parentURI);
 
-	Definition::Ptr AddDefinition(const Shape::List & shapes,
-	                              const Time & start,
-	                              const Time & end);
+	ZoneDefinition::Ptr AddDefinition(const Shape::List & shapes,
+	                                  const Time & start,
+	                                  const Time & end);
 
 	bool NextFreeTimeRegion(Time & start,Time & end) const;
 
-	const Definition::List & Definitions() const;
+	const ZoneDefinition::List & Definitions() const;
 
 
 	void EraseDefinition(size_t index);
@@ -115,10 +114,10 @@ private:
 
 	Zone(ZoneID zoneID,const std::string & name, const std::string & parentURI);
 
-	ZoneID              d_zoneID;
-	std::weak_ptr<Zone> d_itself;
-	std::string         d_name,d_URI;
-	Definition::List    d_definitions;
+	ZoneID               d_zoneID;
+	std::weak_ptr<Zone>  d_itself;
+	std::string          d_name,d_URI;
+	ZoneDefinition::List d_definitions;
 };
 
 } // namespace priv

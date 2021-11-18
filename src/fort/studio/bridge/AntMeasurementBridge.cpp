@@ -156,7 +156,7 @@ QList<QStandardItem*> AntMeasurementBridge::buildAnt(const fmp::Ant::Ptr & ant) 
 }
 
 
-void AntMeasurementBridge::buildCountForAnt(const fmp::Ant::ConstPtr & ant) {
+void AntMeasurementBridge::buildCountForAnt(const fmp::Ant::Ptr & ant) {
 	auto antItem = d_model->itemFromAntID(ant->AntID());
 	if ( isActive() == false || antItem == nullptr ) {
 		return;

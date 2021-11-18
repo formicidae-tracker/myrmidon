@@ -43,7 +43,7 @@ private :
 	const static int SpaceIDRole;
 
 
-	static QList<QStandardItem*> buildSpace(const fmp::SpaceConstPtr & space);
+	static QList<QStandardItem*> buildSpace(const fmp::SpacePtr & space);
 	static QList<QStandardItem*> buildMovieSegment(quint32 spaceID,
 	                                               const fmp::TrackingDataDirectoryPtr & tdd,
 	                                               const fmp::MovieSegmentConstPtr & ms,

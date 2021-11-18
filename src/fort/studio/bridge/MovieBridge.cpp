@@ -123,7 +123,7 @@ void MovieBridge::rebuildModel() {
 }
 
 
-QList<QStandardItem*> MovieBridge::buildSpace(const fmp::SpaceConstPtr & space) {
+QList<QStandardItem*> MovieBridge::buildSpace(const fmp::SpacePtr & space) {
 	auto nameItem = new QStandardItem(ToQString(space->Name()));
 	nameItem->setData(ToQString(space->URI()),IDRole);
 	nameItem->setEditable(false);

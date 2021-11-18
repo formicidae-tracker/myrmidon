@@ -21,13 +21,13 @@ fmp::Ant::Ptr AntGlobalModel::findAnt(const fmp::Experiment::Ptr & experiment,
 	}
 }
 
-QString AntGlobalModel::formatAntName(const fmp::Ant::ConstPtr & ant) {
+QString AntGlobalModel::formatAntName(const fmp::Ant::Ptr & ant) {
 	QString res = ant->FormattedID().c_str();
-	if ( ant->CIdentifications().empty() ) {
+	if ( ant->Identifications().empty() ) {
 		return res + " <no-tags>";
 	}
 	std::set<fmp::TagID> tags;
-	for ( const auto & i : ant->CIdentifications() ) {
+	for ( const auto & i : ant->Identifications() ) {
 		tags.insert(i->TagValue());
 	}
 	QString prefix = " ↤ {";

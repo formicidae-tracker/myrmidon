@@ -17,7 +17,7 @@ public:
 	static fmp::Ant::Ptr findAnt(const fmp::Experiment::Ptr & experiment,
 	                             fm::AntID antID);
 
-	static QString formatAntName(const fmp::Ant::ConstPtr & ant);
+	static QString formatAntName(const fmp::Ant::Ptr & ant);
 
 
 	explicit AntGlobalModel(QObject * parent);

@@ -70,7 +70,7 @@ public:
 
 	AntShapeBridge * antShapes() const;
 
-	fmp::Ant::ConstPtr ant(fmp::AntID antID) const;
+	fmp::Ant::Ptr ant(fmp::AntID antID) const;
 
 	void setExperiment(const fmp::Experiment::Ptr & );
 

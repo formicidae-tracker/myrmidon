@@ -3,7 +3,7 @@
 #include "Bridge.hpp"
 
 #include <fort/studio/MyrmidonTypes/Capsule.hpp>
-#include <fort/myrmidon/Types.hpp>
+#include <fort/myrmidon/types/Typedefs.hpp>
 
 class QAbstractItemModel;
 class AntGlobalModel;

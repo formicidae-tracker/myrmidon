@@ -11,6 +11,9 @@
 #include <fort/studio/MyrmidonTypes/MovieSegment.hpp>
 #include <fort/studio/MyrmidonTypes/Experiment.hpp>
 
+#include <fort/myrmidon/types/IdentifiedFrame.hpp>
+#include <fort/myrmidon/types/Collision.hpp>
+
 namespace fmp = fort::myrmidon::priv;
 
 class IdentifiedFrameConcurrentLoader : public QObject {
@@ -59,7 +62,7 @@ private :
 	typedef fmp::DenseMap<fmp::MovieFrameID,fm::CollisionFrame::Ptr> CollisionsByMovieID;
 	typedef std::tuple<fmp::MovieFrameID,fm::IdentifiedFrame::Ptr,fm::CollisionFrame::Ptr> ConcurrentResult;
 
-	fmp::ExperimentConstPtr d_experiment;
+	std::shared_ptr<const fmp::Experiment> d_experiment;
 	FramesByMovieID         d_frames;
 	CollisionsByMovieID     d_collisions;
 	int                     d_done,d_toDo;

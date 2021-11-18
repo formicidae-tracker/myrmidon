@@ -103,7 +103,7 @@ void IdentifiedFrameConcurrentLoader::loadMovieSegment(quint32 spaceID,
 	}
 
 	clear();
-	auto identifier = d_experiment->Identifier()->Compile();
+	auto identifier = fmp::Identifier::Compile(d_experiment->Identifier());
 	auto solver = d_experiment->CompileCollisionSolver(false);
 
 	size_t currentLoadingID = ++d_currentLoadingID;
