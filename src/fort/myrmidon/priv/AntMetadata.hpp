@@ -4,8 +4,6 @@
 #include <string>
 #include <map>
 
-#include "Types.hpp"
-
 namespace fort {
 namespace myrmidon {
 namespace priv {

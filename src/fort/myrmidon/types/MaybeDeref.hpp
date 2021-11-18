@@ -1,5 +1,8 @@
 #pragma once
 
+#include <memory>
+
+
 namespace fort {
 namespace myrmidon {
 

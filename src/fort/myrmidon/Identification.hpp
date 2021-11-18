@@ -5,8 +5,9 @@
 
 #include <Eigen/Core>
 
-#include "Typedefs.hpp"
+#include <fort/time/Time.hpp>
 
+#include <fort/myrmidon/types/Typedefs.hpp>
 
 namespace fort {
 namespace myrmidon {

@@ -1,9 +1,13 @@
 #pragma once
 
+#include <memory>
+#include <string>
+
 #include <fort/time/Time.hpp>
 
-#include "Types.hpp"
 #include "LocatableTypes.hpp"
+#include "Typedefs.hpp"
+
 
 namespace fort {
 namespace myrmidon {

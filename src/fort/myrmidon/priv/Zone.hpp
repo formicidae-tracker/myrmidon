@@ -4,8 +4,6 @@
 #include "LocatableTypes.hpp"
 #include <fort/myrmidon/Shapes.hpp>
 
-#include <fort/myrmidon/Typedefs.hpp>
-
 namespace fort {
 namespace myrmidon {
 namespace priv {

@@ -42,6 +42,8 @@ include_directories(${PROJECT_BINARY_DIR}/src
 
 set(HDR_PRIVATE_FILES utils/StringManipulation.hpp
                       utils/ObjectPool.hpp
+                      priv/AntTimedValue.hpp
+                      priv/EigenRefs.hpp
                       priv/ForwardDeclaration.hpp
                       priv/LocatableTypes.hpp
                       priv/TimeUtils.hpp
@@ -62,7 +64,7 @@ set(HDR_PRIVATE_FILES utils/StringManipulation.hpp
                       priv/Isometry2D.hpp
                       priv/TimeValid.hpp
                       priv/MovieSegment.hpp
-                      priv/Types.hpp
+                      priv/Typedefs.hpp
                       priv/FrameReference.hpp
                       priv/TagCloseUp.hpp
                       priv/AntMetadata.hpp
@@ -92,13 +94,20 @@ set(HDR_PRIVATE_FILES utils/StringManipulation.hpp
                       )
 
 
-set(HDR_PUBLIC_FILES ForwardDeclaration.hpp
-                     Typedefs.hpp
-                     MaybeDeref.hpp
-                     TraitCategory.hpp
-                     Traits.hpp
-                     Types.hpp
-                     Color.hpp
+set(HDR_PUBLIC_FILES types/AntInteraction.hpp
+                     types/AntStaticValue.hpp
+                     types/AntTrajectory.hpp
+                     types/Collision.hpp
+                     types/Color.hpp
+                     types/ComputedMeasurement.hpp
+                     types/ExperimentDataInfo.hpp
+                     types/ForwardDeclaration.hpp
+                     types/IdentifiedFrame.hpp
+                     types/MaybeDeref.hpp
+                     types/TagStatistics.hpp
+                     types/Traits.hpp
+                     types/TraitsCategory.hpp
+                     types/Typedefs.hpp
                      Shapes.hpp
                      Identification.hpp
                      Ant.hpp
@@ -112,8 +121,10 @@ set(HDR_PUBLIC_FILES ForwardDeclaration.hpp
                      utils/FileSystem.hpp)
 
 set(SRC_PRIVATE_FILES utils/StringManipulation.cpp
+                      priv/AntTimedValue.cpp
+                      priv/EigenRefs.cpp
                       priv/TimeValid.cpp
-                      priv/Types.cpp
+                      priv/Typedefs.cpp
                       priv/LocatableTypes.cpp
                       priv/TimeUtils.cpp
                       priv/DenseMap.cpp
@@ -154,9 +165,18 @@ set(SRC_PRIVATE_FILES utils/StringManipulation.cpp
 					  priv/DataSegmenter.cpp
                       )
 
-set(SRC_FILES ForwardDeclaration.cpp
-              Types.cpp
-              Color.cpp
+set(SRC_FILES types/AntInteraction.cpp
+              types/AntStaticValue.cpp
+              types/AntTrajectory.cpp
+              types/Collision.cpp
+              types/Color.cpp
+              types/ComputedMeasurement.cpp
+              types/ExperimentDataInfo.cpp
+              types/ForwardDeclaration.cpp
+              types/IdentifiedFrame.cpp
+              types/TagStatistics.cpp
+              types/Traits.cpp
+              types/Typedefs.cpp
               Shapes.cpp
               Identification.cpp
               Ant.cpp
@@ -212,7 +232,6 @@ set(SRC_UTEST_FILES main-check.cpp
                     priv/LocatableTypesUTest.cpp
                     priv/UtilsUTest.cpp
                     AntUTest.cpp
-                    ColorUTest.cpp
                     ExperimentUTest.cpp
                     IdentificationUTest.cpp
                     MatchersUTest.cpp
@@ -223,7 +242,8 @@ set(SRC_UTEST_FILES main-check.cpp
                     TypesUTest.cpp
                     ZoneUTest.cpp
                     MovieSegmentDataUTest.cpp
-                    TraitsUTest.cpp
+                    types/TraitsUTest.cpp
+                    types/ColorUTest.cpp
                     )
 
 

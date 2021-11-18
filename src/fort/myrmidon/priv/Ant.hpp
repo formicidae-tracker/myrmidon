@@ -1,18 +1,15 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
-#include <fort/myrmidon/Color.hpp>
+#include <fort/myrmidon/types/Typedefs.hpp>
+#include <fort/myrmidon/types/Color.hpp>
 #include <fort/myrmidon/Shapes.hpp>
-#include <fort/myrmidon/Ant.hpp>
 
-#include <fort/myrmidon/utils/FileSystem.hpp>
-
-
+#include "ForwardDeclaration.hpp"
 #include "Identification.hpp"
-
-#include "TimeMap.hpp"
-
+#include "AntTimedValue.hpp"
 
 
 namespace fort {
@@ -41,8 +38,6 @@ public:
 
 	// A pointer to an Ant
 	typedef std::shared_ptr<Ant>       Ptr;
-	// A pointer to an Ant
-	typedef std::shared_ptr<const Ant> ConstPtr;
 
 	// The Constructor for an Ant
 	Ant(const AntShapeTypeContainerConstPtr & shapeTypeContainer,
@@ -65,14 +60,6 @@ public:
 	// @return a <TagID> that identify this ant at this time if it
 	// exists (throw an exception otherwise)
 	TagID IdentifiedAt(const Time &) const;
-
-	// The Identification::List associated with this priv::Ant.
-	//
-	// A sorted <Identification::List> associated with this
-	// <priv::Ant>. Adding and removing of <Identification> have to be
-	// respectively performed using <Identifier::AddIdentification>
-	// and <Identifier::RemoveIdentification>.
-	const Identification::ConstList & CIdentifications() const;
 
 	// The Identification::List associated with this priv::Ant.
 	//
@@ -134,8 +121,6 @@ public:
 	AntStaticValue GetBaseValue(const std::string & name) const;
 
 	const AntDataMap & DataMap();
-
-	const AntConstDataMap & CDataMap() const;
 
 	void CompileData();
 

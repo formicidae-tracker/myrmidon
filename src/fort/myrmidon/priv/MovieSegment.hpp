@@ -4,7 +4,6 @@
 
 #include <fort/myrmidon/utils/FileSystem.hpp>
 
-#include "Types.hpp"
 #include "ForwardDeclaration.hpp"
 #include "LocatableTypes.hpp"
 

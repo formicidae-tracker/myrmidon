@@ -1,7 +1,6 @@
 #pragma once
 
 #include <fort/time/Time.hpp>
-#include "Types.hpp"
 #include "FrameReference.hpp"
 
 namespace fort {

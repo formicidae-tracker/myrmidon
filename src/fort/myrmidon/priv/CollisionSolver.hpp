@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ForwardDeclaration.hpp"
-#include "Types.hpp"
 
 #include "Ant.hpp"
 #include "Zone.hpp"

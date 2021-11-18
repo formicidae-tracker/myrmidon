@@ -2,8 +2,6 @@
 
 #include <any>
 
-#include <fort/myrmidon/Traits.hpp>
-#include <fort/myrmidon/Types.hpp>
 
 namespace fort {
 namespace myrmidon {

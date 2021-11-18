@@ -1,8 +1,14 @@
 #pragma once
 
-#include <fort/myrmidon/Typedefs.hpp>
+#include <vector>
+#include <string>
 
-#include "Identifier.hpp"
+#include <fort/time/Time.hpp>
+
+#include <fort/myrmidon/types/Typedefs.hpp>
+#include <fort/myrmidon/types/Collision.hpp>
+
+#include "ForwardDeclaration.hpp"
 
 
 namespace fort {
@@ -35,7 +41,7 @@ public:
 	static Ptr AntDisplacement(double under,
 	                           Duration minimumGap);
 
-	virtual void SetUpOnce(const AntByID & ants) = 0;
+	virtual void SetUpOnce(const priv::AntByID & ants) = 0;
 
 	virtual void SetUp(const IdentifiedFrame & identifiedFrame) = 0;
 

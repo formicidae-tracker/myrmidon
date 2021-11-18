@@ -1,14 +1,16 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 #include <fort/tags/fort-tags.hpp>
 
-#include "Typedefs.hpp"
+#include <fort/myrmidon/types/Typedefs.hpp>
+
 #include "Ant.hpp"
 #include "Space.hpp"
 #include "TrackingSolver.hpp"
-
+#include "Identification.hpp"
 
 namespace fort {
 namespace myrmidon {

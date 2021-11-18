@@ -1,8 +1,11 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
-#include "Typedefs.hpp"
+#include <Eigen/Core>
+
+#include <fort/myrmidon/types/ForwardDeclaration.hpp>
 
 namespace fort {
 namespace myrmidon {

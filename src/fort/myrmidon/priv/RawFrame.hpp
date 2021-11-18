@@ -8,7 +8,6 @@
 #include <google/protobuf/util/time_util.h>
 
 #include <fort/time/Time.hpp>
-#include "Types.hpp"
 #include "LocatableTypes.hpp"
 #include "FrameReference.hpp"
 

@@ -1,12 +1,11 @@
 #pragma once
 
-#include <variant>
 #include <map>
 #include <vector>
 #include <memory>
 
-#include <fort/time/Time.hpp>
 #include <Eigen/Geometry>
+
 
 namespace fort {
 namespace myrmidon {
@@ -46,13 +45,6 @@ typedef uint32_t SpaceID;
 typedef uint32_t ZoneID;
 
 /**
- * C++ type for named values.
- *
- * A c++ type that can hold only one of any #AntMetaDataType.
- */
-typedef std::variant<bool,int32_t,double,std::string,Time> AntStaticValue;
-
-/**
  * A List of 2D Vector.
  *
  */
@@ -79,6 +71,21 @@ typedef uint32_t MeasurementTypeID;
 
 typedef Eigen::AlignedBox<double,2> AABB;
 
+/**
+ * Formats a TagID to conventional format
+ * @param tagID the TagID to format
+ *
+ * @return tagID formatted to the myrmidon convetion for TagID.
+ */
+std::string FormatTagID(TagID tagID);
+
+/**
+ * Formats a AntID to conventional format
+ * @param antID the TagID to format
+ *
+ * @return antID formatted to the myrmidon convention for AntID.
+ */
+std::string FormatAntID(AntID antID);
 
 
 } // namespace myrmidon

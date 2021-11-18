@@ -2,10 +2,13 @@
 
 #include <memory>
 
-#include "Typedefs.hpp"
-#include "Color.hpp"
-#include "Identification.hpp"
-#include "ForwardDeclaration.hpp"
+#include <fort/time/Time.hpp>
+
+#include <fort/myrmidon/types/Typedefs.hpp>
+#include <fort/myrmidon/types/ForwardDeclaration.hpp>
+#include <fort/myrmidon/types/Color.hpp>
+#include <fort/myrmidon/types/AntStaticValue.hpp>
+
 #include "Shapes.hpp"
 
 namespace fort {

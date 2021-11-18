@@ -2,9 +2,9 @@
 
 #include <functional>
 
-#include "Types.hpp"
+#include <fort/time/Time.hpp>
 
-#include <fort/myrmidon/Types.hpp>
+#include <fort/myrmidon/types/TagStatistics.hpp>
 
 namespace fort {
 namespace myrmidon {

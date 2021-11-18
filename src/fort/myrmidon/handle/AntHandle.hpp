@@ -4,6 +4,8 @@
 
 #include "IdentificationHandle.hpp"
 
+#include <fort/myrmidon/Identification.hpp>
+
 namespace fort {
 namespace myrmidon {
 

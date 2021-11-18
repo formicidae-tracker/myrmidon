@@ -1,8 +1,13 @@
 #pragma once
 
 #include <memory>
+#include <vector>
+#include <string>
 
-#include "Typedefs.hpp"
+#include <fort/time/Time.hpp>
+
+#include <fort/myrmidon/types/Typedefs.hpp>
+#include <fort/myrmidon/types/AntStaticValue.hpp>
 
 
 namespace fort {

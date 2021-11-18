@@ -2,7 +2,8 @@
 
 #include <vector>
 
-#include "ForwardDeclaration.hpp"
+#include <fort/time/Time.hpp>
+
 #include "Shapes.hpp"
 
 namespace fort {

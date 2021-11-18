@@ -1,11 +1,14 @@
 #pragma once
 
+#include <memory>
+
 #include <fort/hermes/FrameReadout.pb.h>
 
-#include "Types.hpp"
-#include "Ant.hpp"
-#include "Space.hpp"
+#include <fort/time/Time.hpp>
 
+#include <fort/myrmidon/types/Typedefs.hpp>
+#include <fort/myrmidon/types/IdentifiedFrame.hpp>
+#include <fort/myrmidon/types/Collision.hpp>
 
 
 namespace fort {

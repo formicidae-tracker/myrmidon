@@ -1,6 +1,5 @@
 #pragma once
 
-#include <fort/myrmidon/Types.hpp>
 #include <fort/myrmidon/Query.hpp>
 
 #include "Experiment.hpp"

@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include <map>
+#include <utility>
 
 #include "Typedefs.hpp"
 
@@ -52,8 +53,13 @@ typedef std::vector<std::shared_ptr<Identification>> IdentificationList;
  */
 typedef std::vector<std::pair<AntShapeTypeID,std::shared_ptr<Capsule>>> TypedCapsuleList;
 
-
-
+/**
+ * The head-tail Measurement type.
+ *
+ * This Measurement type is always define for any Experiment and
+ * cannot be deleted. However, it can be renamed.
+ */
+const MeasurementTypeID HEAD_TAIL_MEASUREMENT_TYPE = 1;
 
 } // namespace myrmidon
 } // namespace fort

@@ -7,7 +7,6 @@
 #include <fort/time/Time.hpp>
 #include <fort/myrmidon/Ant.hpp>
 
-#include "Types.hpp"
 #include "LocatableTypes.hpp"
 
 #include "ForwardDeclaration.hpp"

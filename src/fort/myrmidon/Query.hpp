@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Types.hpp"
 
 #include "Experiment.hpp"
 #include "Matchers.hpp"

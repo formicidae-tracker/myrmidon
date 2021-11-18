@@ -5,8 +5,6 @@
 
 #include <Eigen/Core>
 
-#include "Types.hpp"
-
 #include "Isometry2D.hpp"
 
 #include "ForwardDeclaration.hpp"
