@@ -2,42 +2,30 @@
 
 #include "HandleInContext.hpp"
 
-#include "ZoneDefinitionHandle.hpp"
+#include <fort/time/Time.hpp>
+
+#include <fort/myrmidon/types/ForwardDeclaration.hpp>
+#include <fort/myrmidon/Shapes.hpp>
 
 namespace fort {
 namespace myrmidon {
+class ZoneDefinition;
+namespace priv {
+class Zone;
+class ZoneDefinition;
+} // namespace priv
 
 class ZoneHandle : public priv::Handle<priv::Zone> {
 public:
-	ZoneHandle(const priv::Zone::Ptr & zone)
-		: Handle(zone) {
-		for(const auto & definition : zone->Definitions() ) {
-			d_definitions.push_back(MakeDefinitionPtr(definition));
-		}
-	}
+	ZoneHandle(const std::shared_ptr<priv::Zone> & zone);
+	std::shared_ptr<ZoneDefinition> AddDefinition(const Shape::List & shapes,
+	                                              const Time & start,
+	                                              const Time & end);
 
-	ZoneDefinition::Ptr AddDefinition(const Shape::List & shapes,
-	                                  const Time & start,
-	                                  const Time & end) {
-		auto definition = MakeDefinitionPtr(d_object->AddDefinition(shapes,start,end));
-		d_definitions.push_back(definition);
-		priv::TimeValid::SortAndCheckOverlap(d_definitions.begin(),d_definitions.end());
-		return definition;
-	}
-
-	void DeleteDefinition(size_t index) {
-		d_object->EraseDefinition(index);
-		d_definitions.erase(d_definitions.begin()+index);
-	}
-
-	const ZoneDefinitionList & Definitions() const {
-		return d_definitions;
-	}
-
+	void DeleteDefinition(size_t index);
+	const ZoneDefinitionList & Definitions() const;
 private:
-	ZoneDefinition::Ptr MakeDefinitionPtr(const priv::ZoneDefinition::Ptr & definition) {
-		return ZoneDefinition::Ptr(new ZoneDefinition(std::make_unique<ZoneDefinitionHandle>(definition,d_object)));
-	}
+	std::shared_ptr<ZoneDefinition> MakeDefinitionPtr(const std::shared_ptr<priv::ZoneDefinition> & definition);
 
 	ZoneDefinitionList d_definitions;
 };

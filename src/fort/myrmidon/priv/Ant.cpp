@@ -26,16 +26,12 @@ Ant::Ant(const AntShapeTypeContainerConstPtr & shapeTypeContainer,
 Ant::~Ant() {
 }
 
-Identification::List & Ant::Accessor::Identifications(Ant & a){
+Identification::List & Ant::Accessor::Identifications(Ant & a) {
 	return a.d_identifications;
 }
 
-const Identification::List & Ant::Identifications() {
+const Identification::List & Ant::Identifications() const {
 	return d_identifications;
-}
-
-const Identification::ConstList & Ant::CIdentifications() const {
-	return reinterpret_cast<const std::vector<Identification::ConstPtr>&>(d_identifications);
 }
 
 
@@ -175,12 +171,8 @@ void Ant::DeleteValue(const std::string & name,
 	CompileData();
 }
 
-const AntDataMap & Ant::DataMap() {
+const AntDataMap & Ant::DataMap() const {
 	return d_data;
-}
-
-const AntConstDataMap & Ant::CDataMap() const {
-	return reinterpret_cast<const AntConstDataMap &>(d_data);
 }
 
 void Ant::CompileData() {

@@ -1,12 +1,21 @@
 #pragma once
 
+#include <set>
 #include <functional>
+#include <vector>
 
-#include <fort/myrmidon/Types.hpp>
+#include <Eigen/Core>
+
+#include <fort/time/Time.hpp>
+
 #include <fort/myrmidon/Query.hpp>
 
+#include <fort/myrmidon/types/AntTrajectory.hpp>
+#include <fort/myrmidon/types/AntInteraction.hpp>
+#include <fort/myrmidon/types/Collision.hpp>
+
 #include "Matchers.hpp"
-#include <set>
+#include "EigenRefs.hpp"
 
 namespace fort {
 namespace myrmidon {
@@ -28,7 +37,7 @@ public:
 
 	static AntTrajectorySummary SummarizeTrajectorySegment(AntTrajectorySegment & s);
 
-	void operator()(const myrmidon::Query::CollisionData & data);
+	void operator()(const myrmidon::CollisionData & data);
 private:
 	struct BuildingInteraction;
 	struct BuildingTrajectory {

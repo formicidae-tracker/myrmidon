@@ -2,10 +2,21 @@
 
 #include <map>
 #include <filesystem>
+#include <memory>
+#include <string>
+#include <cstdint>
+#include <vector>
+
+#include <fort/time/Time.hpp>
 
 #include <fort/tags/fort-tags.hpp>
 
-#include <fort/myrmidon/Typedefs.hpp>
+#include <fort/myrmidon/utils/FileSystem.hpp>
+
+#include <fort/myrmidon/types/AntInteraction.hpp>
+#include <fort/myrmidon/types/AntTrajectory.hpp>
+#include <fort/myrmidon/types/TagStatistics.hpp>
+
 #include <fort/myrmidon/Matchers.hpp>
 
 #include "Config.hpp"

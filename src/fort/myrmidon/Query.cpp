@@ -1,10 +1,13 @@
 #include "Query.hpp"
 
-#include <tbb/pipeline.h>
-
-#include "priv/Query.hpp"
-
 #include "handle/ExperimentHandle.hpp"
+
+#include "Experiment.hpp"
+
+#include "priv/Experiment.hpp"
+#include "priv/TrackingDataDirectory.hpp"
+#include "priv/Space.hpp"
+#include "priv/Query.hpp"
 
 namespace fort {
 namespace myrmidon {

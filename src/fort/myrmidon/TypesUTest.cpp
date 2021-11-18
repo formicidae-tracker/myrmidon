@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Typedefs.hpp"
+#include <fort/myrmidon/types/IdentifiedFrame.hpp>
 #include "TestSetup.hpp"
 
 namespace fort {

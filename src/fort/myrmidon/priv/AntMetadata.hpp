@@ -4,6 +4,9 @@
 #include <string>
 #include <map>
 
+#include <fort/myrmidon/types/AntStaticValue.hpp>
+
+
 namespace fort {
 namespace myrmidon {
 namespace priv {

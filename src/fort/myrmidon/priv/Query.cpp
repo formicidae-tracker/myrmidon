@@ -6,6 +6,8 @@
 #include <tbb/parallel_for.h>
 #include <tbb/pipeline.h>
 
+#include <fort/myrmidon/Matchers.hpp>
+
 #include "TagStatistics.hpp"
 #include "TrackingDataDirectory.hpp"
 #include "Identifier.hpp"
@@ -13,15 +15,17 @@
 #include "CollisionSolver.hpp"
 #include "QueryRunner.hpp"
 #include "DataSegmenter.hpp"
+#include "Space.hpp"
+#include "Experiment.hpp"
 
 namespace fort {
 namespace myrmidon {
 namespace priv {
 
 
-static void EnsureTagStatisticsAreComputed(const SpaceConstPtr & space) {
+static void EnsureTagStatisticsAreComputed(const Space & space) {
 	std::vector<TrackingDataDirectory::Loader> loaders;
-	for ( const auto & tdd : space->TrackingDataDirectories() ) {
+	for ( const auto & tdd : space.TrackingDataDirectories() ) {
 		if ( tdd->TagStatisticsComputed() == true ) {
 			continue;
 		}
@@ -43,7 +47,7 @@ void Query::ComputeTagStatistics(const Experiment & experiment,TagStatistics::By
 
 	typedef std::vector<TagStatisticsHelper::Loader> StatisticLoaderList;
 	for ( const auto & [spaceID,space] : experiment.Spaces() ) {
-		EnsureTagStatisticsAreComputed(space);
+		EnsureTagStatisticsAreComputed(*space);
 		std::vector<TagStatisticsHelper::Timed> spaceResults;
 		for ( const auto & tdd : space->TrackingDataDirectories() ) {
 			spaceResults.push_back(tdd->TagStatistics());
@@ -69,7 +73,7 @@ void Query::IdentifyFrames(const Experiment & experiment,
 			.Collide = false,
 			.CollisionsIgnoreZones = false,
 		   },
-		   [=](const Query::CollisionData & data) {
+		   [=](const CollisionData & data) {
 			   storeDataFunctor(data.first);
 		   });
 }
@@ -88,7 +92,7 @@ void Query::CollideFrames(const Experiment & experiment,
 			.Collide = true,
 			.CollisionsIgnoreZones = args.CollisionsIgnoreZones,
 		   },
-		   [=](const Query::CollisionData & data) {
+		   [=](const CollisionData & data) {
 			   storeDataFunctor(data);
 		   });
 }
@@ -116,7 +120,7 @@ void Query::ComputeTrajectories(const Experiment & experiment,
 			.Collide = false,
 			.CollisionsIgnoreZones = false,
 		   },
-		   [&segmenter](const Query::CollisionData & data)  {
+		   [&segmenter](const CollisionData & data)  {
 			   segmenter(data);
 		   });
 }
@@ -152,7 +156,7 @@ void Query::ComputeAntInteractions(const Experiment & experiment,
 			.Collide = true,
 			.CollisionsIgnoreZones = args.CollisionsIgnoreZones,
 		   },
-		   [&segmenter](const Query::CollisionData & data)  {
+		   [&segmenter](const CollisionData & data)  {
 			   segmenter(data);
 		   });
 }

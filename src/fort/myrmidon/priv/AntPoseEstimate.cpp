@@ -1,5 +1,7 @@
 #include "AntPoseEstimate.hpp"
 
+#include <fort/myrmidon/types/Typedefs.hpp>
+
 namespace fort {
 namespace myrmidon {
 namespace priv {

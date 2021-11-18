@@ -55,13 +55,13 @@ TEST_F(SpaceUTest,NameCheck) {
 		 {"/foo", true},
 		 {"foo/", true},
 		};
-	auto universe = std::make_shared<Space::Universe>();
+	auto universe = std::make_shared<Universe>();
 
-	auto good = Space::Universe::CreateSpace(universe,0,"good");
+	auto good = Universe::CreateSpace(universe,0,"good");
 	for (const auto & d : testdata) {
 		if (d.Throws == true) {
 			EXPECT_THROW({
-					Space::Universe::CreateSpace(universe,0,d.Name);
+					Universe::CreateSpace(universe,0,d.Name);
 					;},Space::InvalidName) << "Testing " << d.Name;
 			EXPECT_THROW({
 					good->SetName(d.Name);
@@ -77,7 +77,7 @@ TEST_F(SpaceUTest,NameCheck) {
 				}) << "Testing " << d.Name;
 
 			EXPECT_NO_THROW({
-					auto res = Space::Universe::CreateSpace(universe,0,d.Name);
+					auto res = Universe::CreateSpace(universe,0,d.Name);
 					EXPECT_EQ(res->Name(),
 					          d.Name);
 					EXPECT_EQ(res->URI(),
@@ -87,20 +87,20 @@ TEST_F(SpaceUTest,NameCheck) {
 	}
 
 	EXPECT_THROW({
-			Space::Universe::CreateSpace(universe,0,"good");
+			Universe::CreateSpace(universe,0,"good");
 		}, Space::InvalidName);
 
 	universe.reset();
 	EXPECT_THROW({
 			good->SetName("willcrash");
-		},DeletedReference<Space::Universe>);
+		},DeletedReference<Universe>);
 }
 
 
 TEST_F(SpaceUTest,CanHoldTDD) {
 
-	auto universe = std::make_shared<Space::Universe>();
-	auto foo = Space::Universe::CreateSpace(universe,0,"foo");
+	auto universe = std::make_shared<Universe>();
+	auto foo = Universe::CreateSpace(universe,0,"foo");
 	EXPECT_NO_THROW({
 			foo->AddTrackingDataDirectory(s_nest[2]);
 			foo->AddTrackingDataDirectory(s_nest[1]);
@@ -140,7 +140,7 @@ TEST_F(SpaceUTest,CanHoldTDD) {
 			universe->DeleteSpace(foo->ID()+1);
 		},Space::UnmanagedSpace);
 
-	auto bar = Space::Universe::CreateSpace(universe,0,"bar");
+	auto bar = Universe::CreateSpace(universe,0,"bar");
 
 	EXPECT_NO_THROW({
 			//not used by any other zone
@@ -169,12 +169,12 @@ TEST_F(SpaceUTest,ExceptionFormatting) {
 		std::string What;
 	};
 
-	Space::Universe::Ptr universe;
+	Universe::Ptr universe;
 	Space::Ptr z;
 
 	ASSERT_NO_THROW({
-			universe = std::make_shared<Space::Universe>();
-			z = Space::Universe::CreateSpace(universe,0,"z");
+			universe = std::make_shared<Universe>();
+		 	z = Universe::CreateSpace(universe,0,"z");
 			z->AddTrackingDataDirectory(s_nest[1]);
 			z->AddTrackingDataDirectory(s_nest[0]);
 		});

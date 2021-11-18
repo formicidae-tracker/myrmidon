@@ -1,5 +1,7 @@
 #include "Identifier.hpp"
 
+#include <fort/myrmidon/Identification.hpp>
+
 #include "Ant.hpp"
 #include "Experiment.hpp"
 #include "DeletedReference.hpp"
@@ -29,6 +31,14 @@ Identifier::UnmanagedTag::UnmanagedTag(TagID ID) noexcept
 	                     }()) {}
 
 Identifier::Identifier()
+	: d_callback([](const Identification::Ptr &, const std::vector<AntPoseEstimateConstPtr> &){}) {
+}
+
+Identifier::Ptr Identifier::Create() {
+	return std::make_shared<Identifier>(this_is_private());
+}
+
+Identifier::Identifier(const this_is_private &)
 	: d_callback([](const Identification::Ptr &, const std::vector<AntPoseEstimateConstPtr> &){}) {
 }
 
@@ -312,9 +322,14 @@ void Identifier::SetAntPositionUpdateCallback(const OnPositionUpdateCallback & c
 }
 
 
-Identifier::Compiled::Compiled(const Identifier::IdentificationByTagID & identifications) {
-	for ( const auto & [tagID,idents] : identifications ) {
-		d_identifications.insert(std::make_pair(tagID+1,idents));
+Identifier::Compiled::Compiled(const Identifier::ConstPtr & parent)
+	: d_parent(parent) {
+	for ( const auto & [tagID,identifications] : d_parent->d_identifications ) {
+		d_identifications.insert(std::make_pair(tagID+1,IdentificationConstList()));
+		d_identifications.at(tagID+1).reserve(identifications.size());
+		for ( const auto & i : identifications ) {
+			d_identifications.at(tagID+1).push_back(i);
+		}
 	}
 }
 
@@ -334,8 +349,8 @@ Identification::ConstPtr Identifier::Compiled::Identify(TagID tagID, const Time 
 	return Identification::Ptr();
 }
 
-Identifier::Compiled::ConstPtr Identifier::Compile() const {
-	return std::make_shared<Compiled>(d_identifications);
+Identifier::Compiled::ConstPtr Identifier::Compile(const Identifier::ConstPtr & identifier) {
+	return std::make_shared<Compiled>(identifier);
 }
 
 std::map<AntID,TagID> Identifier::IdentificationsAt(const Time & time,

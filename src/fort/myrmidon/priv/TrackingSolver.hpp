@@ -2,8 +2,11 @@
 
 #include <fort/hermes/FrameReadout.pb.h>
 
-#include "CollisionSolver.hpp"
-#include "Identifier.hpp"
+#include "ForwardDeclaration.hpp"
+
+#include <fort/myrmidon/types/IdentifiedFrame.hpp>
+#include <fort/myrmidon/types/Collision.hpp>
+#include <fort/myrmidon/types/Typedefs.hpp>
 
 namespace fort {
 namespace myrmidon {
@@ -13,8 +16,8 @@ class TrackingSolver {
 public :
 	typedef std::shared_ptr<const TrackingSolver> ConstPtr;
 
-	TrackingSolver(const std::shared_ptr<const Identifier> & identifier,
-	               const CollisionSolver::ConstPtr & solver);
+	TrackingSolver(const IdentifierConstPtr & identifier,
+	               const CollisionSolverConstPtr & solver);
 
 	// Identifies a single tag
 	// @tagID the TagID to identify
@@ -43,9 +46,8 @@ public :
 	void CollideFrame(CollisionFrame & c,
 	                  IdentifiedFrame & identified) const;
 private :
-	std::shared_ptr<const Identifier> d_rawIdentifier;
-	Identifier::Compiled::ConstPtr    d_identifier;
-	CollisionSolver::ConstPtr         d_solver;
+	IdentifierIFConstPtr              d_identifier;
+	CollisionSolverConstPtr           d_solver;
 
 };
 

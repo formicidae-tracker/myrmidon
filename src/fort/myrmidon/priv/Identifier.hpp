@@ -45,16 +45,20 @@ public:
 // make sure that we respect the non-<OverlappingIdentification>
 // invariant in the library.
 class Identifier : public IdentifierIF, protected AlmostContiguousIDContainer<AntID,Ant> {
+private:
+	struct this_is_private;
 public:
 	// A Pointer to an Identifier
 	typedef std::shared_ptr<Identifier> Ptr;
+	// A Pointer to a const Identifier
+	typedef std::shared_ptr<const Identifier> ConstPtr;
 
 
 	typedef std::function<void(const IdentificationPtr &,
 	                           const std::vector<AntPoseEstimateConstPtr> &)> OnPositionUpdateCallback;
 
-	Identifier();
-
+	static Ptr Create();
+	Identifier(const this_is_private &);
 	virtual ~Identifier();
 
 	// A default asking for the next available ID
@@ -179,12 +183,12 @@ public:
 
 	void SetAntPositionUpdateCallback(const OnPositionUpdateCallback & callback);
 
-
-
 	class Compiled : public IdentifierIF {
 	public:
-		typedef std::shared_ptr<const Compiled> ConstPtr;
-		Compiled(const std::unordered_map<TagID,IdentificationList> & identification);
+		typedef std::shared_ptr<const Compiled>     ConstPtr;
+		typedef std::vector<IdentificationConstPtr> IdentificationConstList;
+
+		Compiled(const Identifier::ConstPtr & parent);
 		virtual ~Compiled();
 
 		IdentificationConstPtr Identify(TagID tagID, const Time & time) const override;
@@ -192,9 +196,10 @@ public:
 	private:
 		typedef DenseMap<TagID,IdentificationConstList> IdentificationsByTagID;
 		IdentificationsByTagID d_identifications;
+		Identifier::ConstPtr   d_parent;
 	};
 
-	Compiled::ConstPtr Compile() const;
+	static Compiled::ConstPtr Compile(const Identifier::ConstPtr & identifier);
 
 
 	// Gets AntID <- TagID correspondances at a given time
@@ -217,6 +222,9 @@ public:
 
 
 private:
+	struct this_is_private{};
+	Identifier();
+
 	class AntPoseEstimateComparator {
 	public:
 		bool operator() (const AntPoseEstimateConstPtr & a,

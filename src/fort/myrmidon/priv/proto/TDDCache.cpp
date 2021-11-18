@@ -38,9 +38,8 @@ TrackingDataDirectory::Ptr TDDCache::Load(const fs::path & absoluteFilePath ,
 			                                          + std::to_string(CACHE_VERSION)
 			                                          + "'");
 		                 }
-
-		                 start = IOUtils::LoadFrameReference(pb.start(),URI,monoID);
-		                 end = IOUtils::LoadFrameReference(pb.end(),URI,monoID);
+		                 IOUtils::LoadFrameReference(&start,pb.start(),URI,monoID);
+		                 IOUtils::LoadFrameReference(&end,pb.end(),URI,monoID);
 	                 },
 	                 [=](const pb::TrackingDataDirectoryFileLine & line) {
 		                 if ( line.has_movie() == true ) {
@@ -54,12 +53,16 @@ TrackingDataDirectory::Ptr TDDCache::Load(const fs::path & absoluteFilePath ,
 			                 mi->Insert(FrameReference(URI,ms->StartFrame(),movieStartTime),ms);
 		                 }
 		                 if ( line.has_segment() == true ) {
-			                 ti->Insert(IOUtils::LoadTrackingIndexSegment(line.segment(),
-			                                                              URI,
-			                                                              monoID));
+			                 TrackingDataDirectory::TrackingIndex::Segment s;
+			                 IOUtils::LoadTrackingIndexSegment(&s,
+			                                                   line.segment(),
+			                                                   URI,
+			                                                   monoID);
+			                 ti->Insert(s);
 		                 }
 		                 if ( line.has_cachedframe() == true ) {
-			                 auto ref = IOUtils::LoadFrameReference(line.cachedframe(),URI,monoID);
+			                 FrameReference ref;
+			                 IOUtils::LoadFrameReference(&ref,line.cachedframe(),URI,monoID);
 			                 cache->insert(std::make_pair(ref.FrameID(),ref));
 		                 }
 	                 });
@@ -100,7 +103,7 @@ void TDDCache::Save(const TrackingDataDirectory::Ptr & tdd) {
 	for ( const auto & ms : tdd->MovieSegments().Segments() ) {
 		lines.push_back([ms,tdd](pb::TrackingDataDirectoryFileLine & line){
 			                IOUtils::SaveMovieSegment(line.mutable_movie(),
-			                                          ms.second,
+			                                          *ms.second,
 			                                          tdd->AbsoluteFilePath());
 			                IOUtils::SaveTime(line.mutable_moviestarttime(),
 			                                  ms.first.Time());

@@ -1,12 +1,13 @@
 #include <gtest/gtest.h>
 
+#include <fort/myrmidon/TestSetup.hpp>
+
 #include <fort/myrmidon/priv/Experiment.hpp>
 #include <fort/myrmidon/priv/Identifier.hpp>
 #include <fort/myrmidon/priv/Ant.hpp>
 #include <fort/myrmidon/priv/Measurement.hpp>
 #include <fort/myrmidon/priv/TrackingDataDirectory.hpp>
-#include <fort/myrmidon/TestSetup.hpp>
-
+#include <fort/myrmidon/priv/Space.hpp>
 
 
 namespace fort {

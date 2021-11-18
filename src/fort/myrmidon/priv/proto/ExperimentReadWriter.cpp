@@ -45,19 +45,20 @@ Experiment::Ptr ExperimentReadWriter::DoOpen(const fs::path & filename, bool dat
 	                 },
 	                 [&measurements,&res,filename,dataLess](const pb::FileLine & line) {
 		                 if (line.has_experiment() == true ) {
-			                 IOUtils::LoadExperiment(res, line.experiment());
+			                 IOUtils::LoadExperiment(*res, line.experiment());
 		                 }
 
 		                 if (line.has_antdescription() == true ) {
-			                 IOUtils::LoadAnt(res, line.antdescription());
+			                 IOUtils::LoadAnt(*res, line.antdescription());
 		                 }
 
 		                 if (line.has_measurement() == true && dataLess == false ) {
-			                 measurements.push_back(IOUtils::LoadMeasurement(line.measurement()));
+			                 auto m = IOUtils::LoadMeasurement(line.measurement());
+			                 measurements.push_back(m);
 		                 }
 
 		                 if (line.has_space() == true ) {
-			                 IOUtils::LoadSpace(res,line.space(),dataLess == false);
+			                 IOUtils::LoadSpace(*res,line.space(),dataLess == false);
 		                 }
 	                 });
 
@@ -83,7 +84,7 @@ void ExperimentReadWriter::DoSave(const Experiment & experiment, const fs::path 
 
 	for ( const auto & [spaceID,space] : experiment.Spaces() ) {
 		lines.push_back([space=space](pb::FileLine & line) {
-			                IOUtils::SaveSpace(line.mutable_space(),space);
+			                IOUtils::SaveSpace(line.mutable_space(),*space);
 		                });
 	}
 
@@ -99,14 +100,14 @@ void ExperimentReadWriter::DoSave(const Experiment & experiment, const fs::path 
 	for (const auto & ID : antIDs) {
 		lines.push_back([&experiment,ID](pb::FileLine & line) {
 			                IOUtils::SaveAnt(line.mutable_antdescription(),
-			                                 experiment.Identifier()->Ants().find(ID)->second);
+			                                 *experiment.Identifier()->Ants().find(ID)->second);
 		                });
 	}
 
 	for ( const auto & [uri,measurementByType] : experiment.Measurements() ) {
 		for (const auto & [type,m] : measurementByType) {
 			lines.push_back([m = m](pb::FileLine & line) {
-				                IOUtils::SaveMeasurement(line.mutable_measurement(),m);
+				                IOUtils::SaveMeasurement(line.mutable_measurement(),*m);
 			                });
 		}
 	}

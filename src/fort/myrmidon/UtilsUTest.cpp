@@ -4,6 +4,15 @@
 
 #include <Eigen/Geometry>
 
+#include <fort/myrmidon/Shapes.hpp>
+#include <fort/myrmidon/types/AntStaticValue.hpp>
+#include <fort/myrmidon/types/IdentifiedFrame.hpp>
+#include <fort/myrmidon/types/AntTrajectory.hpp>
+#include <fort/myrmidon/types/AntInteraction.hpp>
+#include <fort/myrmidon/types/Collision.hpp>
+
+
+
 #define failure_helper(aExpr,bExpr,a,b,field) \
 	::testing::AssertionFailure() \
 	<< "Value of: " << aExpr << "." << #field << std::endl \

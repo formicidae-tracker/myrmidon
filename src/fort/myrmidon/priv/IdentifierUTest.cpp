@@ -21,7 +21,7 @@ class IdentifierUTest : public ::testing::Test {};
 typedef AlmostContiguousIDContainer<fort::myrmidon::AntID,Ant> Container;
 
 TEST_F(IdentifierUTest,AntsAreCreatedSequentially) {
-	auto i = std::make_shared<Identifier>();
+	auto i = Identifier::Create();
 	auto shapeTypes = std::make_shared<AntShapeTypeContainer>();
 	auto metadata = std::make_shared<AntMetadata>();
 	try{
@@ -57,7 +57,7 @@ TEST_F(IdentifierUTest,AntsAreCreatedSequentially) {
 
 
 TEST_F(IdentifierUTest,AntsCanBeDeleted) {
-	auto i = std::make_shared<Identifier>();
+	auto i = Identifier::Create();
 	auto shapeTypes = std::make_shared<AntShapeTypeContainer>();
 	auto metadata = std::make_shared<AntMetadata>();
 	AntPtr a;
@@ -87,7 +87,7 @@ TEST_F(IdentifierUTest,AntsCanBeDeleted) {
 
 
 TEST_F(IdentifierUTest,AntCanBeAttachedToIdentification) {
-	auto i = std::make_shared<Identifier>();
+	auto i = Identifier::Create();
 	auto shapeTypes = std::make_shared<AntShapeTypeContainer>();
 	auto metadata = std::make_shared<AntMetadata>();
 	auto a = i->CreateAnt(shapeTypes,metadata);
@@ -98,7 +98,7 @@ TEST_F(IdentifierUTest,AntCanBeAttachedToIdentification) {
 	IdentificationPtr ident1,ident2;
 	EXPECT_NO_THROW(ident1 = Identifier::AddIdentification(i,a->AntID(),123,Time::SinceEver(),Time::Forever()));
 
-	auto ii = std::make_shared<Identifier>();
+	auto ii = Identifier::Create();
 	auto aa = ii->CreateAnt(shapeTypes,metadata);
 	ident2 = Identifier::AddIdentification(ii,aa->AntID(),124,Time::SinceEver(),Time::Forever());
 
@@ -112,7 +112,7 @@ TEST_F(IdentifierUTest,AntCanBeAttachedToIdentification) {
 }
 
 TEST_F(IdentifierUTest,CanIdentifyAntByTag) {
-	auto i = std::make_shared<Identifier>();
+	auto i = Identifier::Create();
 	auto shapeTypes = std::make_shared<AntShapeTypeContainer>();
 	auto metadata = std::make_shared<AntMetadata>();
 	auto a = i->CreateAnt(shapeTypes,metadata);
@@ -184,7 +184,7 @@ TEST_F(IdentifierUTest,Compilation) {
 
     std::uniform_int_distribution<uint32_t> duration(0, 600000);
     std::uniform_real_distribution<double> uniform(0, 1.0);
-    auto identifier = std::make_shared<Identifier>();
+    auto identifier = Identifier::Create();
     auto shapeTypes = std::make_shared<AntShapeTypeContainer>();
     auto metadata = std::make_shared<AntMetadata>();
 	std::set<Time> times;
@@ -220,7 +220,7 @@ TEST_F(IdentifierUTest,Compilation) {
 	}
 
 	auto start = Time::Now();
-	auto compiled = identifier->Compile();
+	auto compiled = Identifier::Compile(identifier);
 	auto end = Time::Now();
 
 	std::vector<Duration> flatTimes,compiledTimes;

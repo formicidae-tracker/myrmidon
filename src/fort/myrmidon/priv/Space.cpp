@@ -8,7 +8,7 @@ namespace myrmidon {
 namespace priv {
 
 Space::TDDOverlap::TDDOverlap(const TrackingDataDirectory::Ptr & a,
-                             const TrackingDataDirectory::Ptr & b) noexcept
+                              const TrackingDataDirectory::Ptr & b) noexcept
 	: std::domain_error(BuildWhat(a,b))
 	, d_a(a)
 	, d_b(b) {
@@ -23,7 +23,7 @@ const TrackingDataDirectoryPtr & Space::TDDOverlap::B() const {
 }
 
 std::string Space::TDDOverlap::BuildWhat(const TrackingDataDirectory::Ptr & a,
-                                        const TrackingDataDirectory::Ptr & b) noexcept {
+                                         const TrackingDataDirectory::Ptr & b) noexcept {
 	std::ostringstream oss;
 
 	oss << *a << " and " << *b << " overlaps in time";
@@ -63,45 +63,45 @@ std::string Space::SpaceNotEmpty::BuildReason(const Space & z) {
 
 Space::TDDAlreadyInUse::TDDAlreadyInUse(const std::string & tddURI, SpaceID spaceID)
 	: std::invalid_argument("TDD{URI:'"
-	                     + tddURI
-	                     + "'} is in use in Space{ID:"
+	                        + tddURI
+	                        + "'} is in use in Space{ID:"
 	                        + std::to_string(spaceID) + "}") {
 }
 
-Space::Ptr Space::Universe::CreateSpace(const Ptr & itself,
-                                        SpaceID spaceID,
-                                        const std::string & name) {
+Space::Ptr Universe::CreateSpace(const Ptr & itself,
+                                 SpaceID spaceID,
+                                 const std::string & name) {
 	return itself->d_spaces.CreateObject([&itself,&name](SpaceID spaceID) {
 		                                     return Space::Ptr(new Space(spaceID,name,itself));
 	                                     });
 }
 
-void Space::Universe::DeleteSpace(SpaceID spaceID) {
+void Universe::DeleteSpace(SpaceID spaceID) {
 	auto fi = d_spaces.Objects().find(spaceID);
 	if ( fi == d_spaces.Objects().end() ) {
-		throw UnmanagedSpace(spaceID);
+		throw Space::UnmanagedSpace(spaceID);
 	}
 
 	if ( fi->second->d_tdds.empty() == false ) {
-		throw SpaceNotEmpty(*fi->second);
+		throw Space::SpaceNotEmpty(*fi->second);
 	}
 
 	d_spaces.DeleteObject(spaceID);
 }
 
-void Space::Universe::DeleteTrackingDataDirectory(const std::string & URI) {
+void Universe::DeleteTrackingDataDirectory(const std::string & URI) {
 	for ( const auto & [spaceID,s] : d_spaces.Objects() ) {
 		try {
 			s->DeleteTrackingDataDirectory(URI);
 			return;
-		} catch ( const UnmanagedTrackingDataDirectory & e) {
+		} catch ( const Space::UnmanagedTrackingDataDirectory & e) {
 		}
 	}
-	throw UnmanagedTrackingDataDirectory(URI);
+	throw Space::UnmanagedTrackingDataDirectory(URI);
 }
 
 
-const SpaceByID & Space::Universe::Spaces() const {
+const SpaceByID & Universe::Spaces() const {
 	return d_spaces.Objects();
 }
 
@@ -113,8 +113,8 @@ Space::Space(SpaceID spaceID, const std::string & name, const Universe::Ptr & un
 
 Space::~Space() {}
 
-const Space::Universe::TrackingDataDirectoryByURI &
-Space::Universe::TrackingDataDirectories() const {
+const TrackingDataDirectoryByURI &
+Universe::TrackingDataDirectories() const {
 	return d_tddsByURI;
 }
 
@@ -220,16 +220,16 @@ const std::vector<TrackingDataDirectory::Ptr> & Space::TrackingDataDirectories()
 	return d_tdds;
 }
 
-Space::Universe::Ptr Space::LockUniverse() const {
+Universe::Ptr Space::LockUniverse() const {
 	auto locked = d_universe.lock();
 	if ( !locked ) {
-		throw DeletedReference<Space::Universe>();
+		throw DeletedReference<Universe>();
 	}
 	return locked;
 }
 
 std::pair<Space::Ptr,TrackingDataDirectory::Ptr>
-Space::Universe::LocateTrackingDataDirectory(const std::string & tddURI) const {
+Universe::LocateTrackingDataDirectory(const std::string & tddURI) const {
 	auto tddi = d_tddsByURI.find(tddURI) ;
 	if ( tddi == d_tddsByURI.end() ) {
 		return std::make_pair(Space::Ptr(),TrackingDataDirectory::Ptr());
@@ -252,7 +252,7 @@ Space::Universe::LocateTrackingDataDirectory(const std::string & tddURI) const {
 	return std::make_pair(si->second,tddi->second);
 }
 
-Space::Ptr Space::Universe::LocateSpace(const std::string & spaceName) const {
+Space::Ptr Universe::LocateSpace(const std::string & spaceName) const {
 	auto si = std::find_if(d_spaces.Objects().begin(),
 	                       d_spaces.Objects().end(),
 	                       [&spaceName] ( const std::pair<SpaceID,Space::ConstPtr> & iter) {
@@ -264,9 +264,9 @@ Space::Ptr Space::Universe::LocateSpace(const std::string & spaceName) const {
 	return si->second;
 }
 
-Zone::Ptr Space::Universe::CreateZone(ZoneID zoneID,
-                                      const std::string & name,
-                                      const std::string & parentURI) {
+Zone::Ptr Universe::CreateZone(ZoneID zoneID,
+                               const std::string & name,
+                               const std::string & parentURI) {
 	try {
 		return d_zones.CreateObject([&name,&parentURI](ZoneID zoneID_) { return Zone::Create(zoneID_,name,parentURI); },zoneID);
 	} catch ( const AlmostContiguousIDContainer<ZoneID,Zone>::AlreadyExistingObject & ) {
@@ -274,7 +274,7 @@ Zone::Ptr Space::Universe::CreateZone(ZoneID zoneID,
 	}
 }
 
-void Space::Universe::DeleteZone(ZoneID zoneID) {
+void Universe::DeleteZone(ZoneID zoneID) {
 	try {
 		d_zones.DeleteObject(zoneID);
 	} catch ( const AlmostContiguousIDContainer<ZoneID, Zone>::UnmanagedObject &) {
@@ -293,7 +293,6 @@ Zone::Ptr Space::CreateZone(const std::string & name, ZoneID zoneID) {
 void Space::DeleteZone(ZoneID zoneID) {
 	LockUniverse()->DeleteZone(zoneID);
 	d_zones.erase(zoneID);
-	d_publicZones.erase(zoneID);
 }
 
 

@@ -5,8 +5,14 @@
 
 #include <fstream>
 
-#include "ExperimentReadWriter.hpp"
+#include <fort/myrmidon/utils/Checker.hpp>
+#include <fort/myrmidon/utils/PosixCall.h>
+#include <fort/myrmidon/utils/Defer.hpp>
 
+#include <fort/myrmidon/Shapes.hpp>
+
+
+#include "ExperimentReadWriter.hpp"
 #include "Ant.hpp"
 #include "Identifier.hpp"
 #include "Measurement.hpp"
@@ -15,14 +21,9 @@
 #include "AntPoseEstimate.hpp"
 #include "AntShapeType.hpp"
 #include "AntMetadata.hpp"
-#include <fort/myrmidon/Shapes.hpp>
+#include "Space.hpp"
 #include "CollisionSolver.hpp"
-
-#include <fort/myrmidon/utils/Checker.hpp>
-#include <fort/myrmidon/utils/PosixCall.h>
-
-
-#include <fort/myrmidon/utils/Defer.hpp>
+#include "TagCloseUp.hpp"
 
 namespace fort {
 namespace myrmidon {
@@ -32,8 +33,8 @@ namespace priv {
 Experiment::Experiment(const fs::path & filepath )
 	: d_absoluteFilepath(fs::absolute(fs::weakly_canonical(filepath)))
 	, d_basedir(d_absoluteFilepath.parent_path())
-	, d_identifier(std::make_shared<fort::myrmidon::priv::Identifier>())
-	, d_universe(std::make_shared<Space::Universe>())
+	, d_identifier(Identifier::Create())
+	, d_universe(std::make_shared<Universe>())
 	, d_defaultTagSize(1.0)
 	, d_antShapeTypes(std::make_shared<AntShapeTypeContainer>()) {
 
@@ -164,7 +165,7 @@ void Experiment::Save(const fs::path & filepath) {
 }
 
 Space::Ptr Experiment::CreateSpace(const std::string & name,SpaceID spaceID) {
-	return Space::Universe::CreateSpace(d_universe,spaceID,name);
+	return Universe::CreateSpace(d_universe,spaceID,name);
 }
 
 
@@ -176,7 +177,7 @@ const SpaceByID & Experiment::Spaces() const {
 	return d_universe->Spaces();
 }
 
-const Space::Universe::TrackingDataDirectoryByURI &
+const TrackingDataDirectoryByURI &
 Experiment::TrackingDataDirectories() const {
 	return d_universe->TrackingDataDirectories();
 }

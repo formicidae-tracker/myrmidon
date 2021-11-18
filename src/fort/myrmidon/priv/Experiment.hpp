@@ -1,18 +1,18 @@
 #pragma once
 
-#include <memory>
+#include <map>
+#include <cstdint>
+#include <string>
 
 #include <fort/tags/fort-tags.hpp>
 
-#include <fort/time/Time.hpp>
+#include <fort/myrmidon/types/Typedefs.hpp>
+#include <fort/myrmidon/types/ComputedMeasurement.hpp>
+
 #include <fort/myrmidon/utils/FileSystem.hpp>
 
-
-#include "Space.hpp"
-#include "FrameReference.hpp"
-#include "AntMetadata.hpp"
-
 #include "ForwardDeclaration.hpp"
+#include "AntMetadata.hpp"
 #include "LocatableTypes.hpp"
 
 namespace fort {
@@ -101,27 +101,26 @@ public :
 	const fs::path & Basedir() const;
 
 
-	Space::Ptr CreateSpace(const std::string & name,
-	                       SpaceID spaceID = Space::Universe::NEXT_AVAILABLE_SPACE_ID);
-
+	SpacePtr CreateSpace(const std::string & name,
+	                     SpaceID spaceID = 0);
 
 	void DeleteSpace(SpaceID spaceID);
 
-	const SpaceByID & Spaces() const;
+	const priv::SpaceByID & Spaces() const;
 
-	const Space::Universe::TrackingDataDirectoryByURI & TrackingDataDirectories() const;
+	const TrackingDataDirectoryByURI & TrackingDataDirectories() const;
 
 	bool TrackingDataDirectoryIsDeletable(const std::string & URI) const;
 
 	void DeleteTrackingDataDirectory(const std::string & URI);
 
-	void AddTrackingDataDirectory(const Space::Ptr & space,
+	void AddTrackingDataDirectory(const SpacePtr & space,
 	                              const TrackingDataDirectoryPtr & tdd);
 
-	std::pair<Space::Ptr,TrackingDataDirectoryPtr>
+	std::pair<SpacePtr,TrackingDataDirectoryPtr>
 	LocateTrackingDataDirectory(const std::string & tddURI) const;
 
-	Space::Ptr LocateSpace(const std::string & spaceName) const;
+	SpacePtr LocateSpace(const std::string & spaceName) const;
 
 	AntPtr CreateAnt(AntID aID = 0);
 
@@ -223,9 +222,9 @@ public :
 
 	const AntShapeTypeByID & AntShapeTypes() const;
 
-	const priv::AntShapeTypePtr & AntShapeTypesPtr() const;
+	const AntShapeTypePtr & AntShapeTypesPtr() const;
 
-	const priv::AntMetadataPtr & AntMetadataPtr() const ;
+	const AntMetadata::Ptr & AntMetadataPtr() const ;
 
 	AntMetadata::Key::Ptr SetMetaDataKey(const std::string & name, AntStaticValue type);
 
@@ -275,7 +274,7 @@ private:
 
 	fs::path             d_absoluteFilepath;
 	fs::path             d_basedir;
-	Space::Universe::Ptr d_universe;
+	UniversePtr          d_universe;
 	IdentifierPtr        d_identifier;
 
 	std::string        d_name;

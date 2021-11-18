@@ -1,16 +1,17 @@
 #pragma once
 
 #include <memory>
-#include <iostream>
 
 #include <fort/hermes/FrameReadout.pb.h>
 
 #include <google/protobuf/util/time_util.h>
 
 #include <fort/time/Time.hpp>
+
 #include "LocatableTypes.hpp"
 #include "FrameReference.hpp"
 
+#include <fort/myrmidon/types/IdentifiedFrame.hpp>
 
 
 

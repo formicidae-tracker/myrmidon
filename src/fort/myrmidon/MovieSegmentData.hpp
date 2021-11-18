@@ -1,7 +1,16 @@
 #pragma once
 
+#include <vector>
 #include <any>
 
+#include <fort/time/Time.hpp>
+
+#include <fort/myrmidon/types/Typedefs.hpp>
+#include <fort/myrmidon/types/Traits.hpp>
+#include <fort/myrmidon/types/IdentifiedFrame.hpp>
+#include <fort/myrmidon/types/Collision.hpp>
+#include <fort/myrmidon/types/AntTrajectory.hpp>
+#include <fort/myrmidon/types/AntInteraction.hpp>
 
 namespace fort {
 namespace myrmidon {

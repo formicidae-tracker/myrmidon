@@ -1,12 +1,13 @@
 #include "Experiment.hpp"
 
-#include "priv/Experiment.hpp"
-#include "priv/TrackingSolver.hpp"
-#include "priv/AntShapeType.hpp"
-#include "priv/Identifier.hpp"
-#include "priv/Measurement.hpp"
-#include "priv/TrackingDataDirectory.hpp"
 #include "handle/ExperimentHandle.hpp"
+
+#include "priv/Measurement.hpp"
+#include "priv/Experiment.hpp"
+#include "priv/TrackingDataDirectory.hpp"
+#include "priv/Identifier.hpp"
+#include "priv/AntShapeType.hpp"
+#include "priv/TrackingSolver.hpp"
 
 
 namespace fort {

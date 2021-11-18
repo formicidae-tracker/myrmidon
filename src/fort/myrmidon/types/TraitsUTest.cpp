@@ -1,9 +1,10 @@
 #include <gtest/gtest.h>
 
 #include "Traits.hpp"
-#include "Types.hpp"
-#include "UtilsUTest.hpp"
+#include <fort/myrmidon/UtilsUTest.hpp>
 
+#include "IdentifiedFrame.hpp"
+#include "Collision.hpp"
 
 namespace fort {
 namespace myrmidon {

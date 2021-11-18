@@ -2,9 +2,10 @@
 
 #include <fort/myrmidon/Shapes.hpp>
 
-#include "priv/Zone.hpp"
 #include "handle/ZoneHandle.hpp"
+#include "handle/ZoneDefinitionHandle.hpp"
 
+#include "priv/Zone.hpp"
 
 namespace fort {
 namespace myrmidon {

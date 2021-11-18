@@ -1,6 +1,12 @@
 #pragma once
 
+#include <cstdint>
+#include <memory>
+#include <string>
+#include <tuple>
+
 #include "LocatableTypes.hpp"
+#include "Typedefs.hpp"
 
 #include <Eigen/Core>
 

@@ -13,7 +13,7 @@
 
 #include "RawFrame.hpp"
 #include "UtilsUTest.hpp"
-
+#include "TagCloseUp.hpp"
 
 #include <yaml-cpp/yaml.h>
 

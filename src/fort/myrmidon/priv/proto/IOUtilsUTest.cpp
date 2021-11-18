@@ -2,6 +2,18 @@
 
 #include "IOUtils.hpp"
 
+
+#include <fort/myrmidon/Time.pb.h>
+#include <fort/myrmidon/AntDescription.pb.h>
+#include <fort/myrmidon/Experiment.pb.h>
+#include <fort/myrmidon/TrackingDataDirectory.pb.h>
+#include <fort/myrmidon/TagCloseUpCache.pb.h>
+#include <fort/myrmidon/TagFamily.pb.h>
+#include <fort/myrmidon/Shapes.pb.h>
+#include <fort/myrmidon/Zone.pb.h>
+#include <fort/myrmidon/Space.pb.h>
+#include <fort/myrmidon/Vector2d.pb.h>
+
 #include <google/protobuf/util/time_util.h>
 #include <google/protobuf/util/message_differencer.h>
 
@@ -16,6 +28,8 @@
 #include <fort/myrmidon/priv/Space.hpp>
 #include <fort/myrmidon/priv/AntShapeType.hpp>
 #include <fort/myrmidon/priv/AntMetadata.hpp>
+#include <fort/myrmidon/priv/TrackingDataDirectory.hpp>
+#include <fort/myrmidon/priv/TagCloseUp.hpp>
 
 namespace fort {
 namespace myrmidon {
@@ -141,12 +155,12 @@ TEST_F(IOUtilsUTest,IdentificationIO) {
 		expected.set_id(d.Value);
 		expected.set_tagsize(d.TagSize);
 
-		IOUtils::SaveIdentification(&identPb, ident);
+		IOUtils::SaveIdentification(&identPb, *ident);
 		EXPECT_MESSAGE_EQ(identPb,expected);
 
 		e->Identifier()->DeleteIdentification(ident);
 		ASSERT_TRUE(a->Identifications().empty());
-		IOUtils::LoadIdentification(e,a,identPb);
+		IOUtils::LoadIdentification(*e,*a,identPb);
 
 		EXPECT_EQ(a->Identifications().size(),1);
 
@@ -416,7 +430,7 @@ TEST_F(IOUtilsUTest,AntIO) {
 			                                           identData.Start,
 			                                           identData.End);
 			dIdents.push_back(ident);
-			IOUtils::SaveIdentification(expected.add_identifications(), ident);
+			IOUtils::SaveIdentification(expected.add_identifications(), *ident);
 		}
 
 		for ( const auto & c : d.Capsules ) {
@@ -450,13 +464,13 @@ TEST_F(IOUtilsUTest,AntIO) {
 		}
 
 
-		IOUtils::SaveAnt(&a,dA);
+		IOUtils::SaveAnt(&a,*dA);
 		std::string differences;
 
 		EXPECT_MESSAGE_EQ(a,expected);
 
 		EXPECT_THROW({
-				IOUtils::LoadAnt(e,a);
+				IOUtils::LoadAnt(*e,a);
 			},std::exception);
 
 		EXPECT_NO_THROW({
@@ -466,7 +480,7 @@ TEST_F(IOUtilsUTest,AntIO) {
 				e->Identifier()->DeleteAnt(dA->AntID());
 			});
 
-		IOUtils::LoadAnt(e,a);
+		IOUtils::LoadAnt(*e,a);
 		auto fi = e->Identifier()->Ants().find(expected.id());
 		EXPECT_TRUE(fi != e->Identifier()->Ants().cend());
 		if ( fi == e->Identifier()->Ants().cend() ) {
@@ -474,11 +488,11 @@ TEST_F(IOUtilsUTest,AntIO) {
 		}
 		auto res = fi->second;
 		EXPECT_EQ(res->AntID(),expected.id());
-		EXPECT_EQ(res->CIdentifications().size(),dIdents.size());
+		EXPECT_EQ(res->Identifications().size(),dIdents.size());
 		for(size_t i = 0 ;
-		    i < std::min(res->CIdentifications().size(),dIdents.size());
+		    i < std::min(res->Identifications().size(),dIdents.size());
 		    ++i) {
-			auto ii = res->CIdentifications()[i];
+			auto ii = res->Identifications()[i];
 			auto ie = dIdents[i];
 			EXPECT_EQ(ii->TagValue(),ie->TagValue());
 			EXPECT_TIME_EQ(ii->Start(),ie->Start());
@@ -543,7 +557,7 @@ TEST_F(IOUtilsUTest,MeasurementIO) {
 		IOUtils::SaveVector(expected.mutable_end(),d.End);
 		expected.set_tagsizepx(d.TagSizePx);
 
-		IOUtils::SaveMeasurement(&pbRes,dM);
+		IOUtils::SaveMeasurement(&pbRes,*dM);
 		EXPECT_MESSAGE_EQ(pbRes,expected);
 
 		auto res = IOUtils::LoadMeasurement(pbRes);
@@ -624,7 +638,7 @@ TEST_F(IOUtilsUTest,ExperimentIO) {
 	IOUtils::SaveExperiment(&ePb,*e);
 	EXPECT_MESSAGE_EQ(ePb,expected);
 
-	IOUtils::LoadExperiment(res,ePb);
+	IOUtils::LoadExperiment(*res,ePb);
 	EXPECT_EQ(res->Author(),e->Author());
 	EXPECT_EQ(res->Name(),e->Name());
 	EXPECT_EQ(res->Comment(),e->Comment());
@@ -672,11 +686,11 @@ TEST_F(IOUtilsUTest,ZoneIO) {
 	stamp.ToTimestamp(pbDef2->mutable_start());
 	IOUtils::SaveShape(pbDef2->add_shapes(),*def2->Shapes().front());
 
-	IOUtils::SaveZone(&z,dZ);
+	IOUtils::SaveZone(&z,*dZ);
 	EXPECT_MESSAGE_EQ(z,expected);
 	auto e2 = Experiment::Create(TestSetup::UTestData().Basedir()/ "zone-io.myrmidon");
 	auto s2 = e2->CreateSpace("foo");
-	IOUtils::LoadZone(s2,z);
+	IOUtils::LoadZone(*s2,z);
 	ASSERT_FALSE(s2->Zones().empty());
 	auto res = s2->Zones().begin()->second;
 	EXPECT_EQ(dZ->ID(),res->ID());
@@ -716,11 +730,11 @@ TEST_F(IOUtilsUTest,SpaceIO) {
 	expected.set_id(dS->ID());
 	expected.set_name(dS->Name());
 	expected.add_trackingdatadirectories(tddPath.filename());
-	IOUtils::SaveZone(expected.add_zones(),z);
+	IOUtils::SaveZone(expected.add_zones(),*z);
 
-	IOUtils::SaveSpace(&s,dS);
+	IOUtils::SaveSpace(&s,*dS);
 	EXPECT_MESSAGE_EQ(s,expected);
-	IOUtils::LoadSpace(e2,s);
+	IOUtils::LoadSpace(*e2,s);
 	ASSERT_EQ(e2->Spaces().size(),1);
 	auto res = e2->Spaces().begin()->second;
 	EXPECT_EQ(res->ID(),dS->ID());
@@ -766,7 +780,8 @@ TEST_F(IOUtilsUTest,TrackingIndexIO) {
 		EXPECT_MESSAGE_EQ(pbRes.Get(i),expected.Get(i));
 	}
 	for (const auto & pb : pbRes ) {
-		auto s = IOUtils::LoadTrackingIndexSegment(pb, parentURI,monoID);
+		TrackingDataDirectory::TrackingIndex::Segment s;
+		IOUtils::LoadTrackingIndexSegment(&s,pb, parentURI,monoID);
 		res->Insert(s.first,s.second);
 	}
 	auto ress = res->Segments();
@@ -786,7 +801,8 @@ TEST_F(IOUtilsUTest,TrackingIndexIO) {
 
 
 TEST_F(IOUtilsUTest,MovieSegmentIO) {
-	MovieSegment::Ptr ms,res;
+	MovieSegment::Ptr ms;
+	MovieSegment::ConstPtr res;
 	Time::MonoclockID monoID(42);
 	Time startTime = Time::FromTimestampAndMonotonic(Time::FromTimeT(1).ToTimestamp(),
 	                                                 123456789,
@@ -823,7 +839,7 @@ TEST_F(IOUtilsUTest,MovieSegmentIO) {
 		pbo->set_offset(o.second);
 	}
 
-	IOUtils::SaveMovieSegment(&pbRes,ms,tddPath);
+	IOUtils::SaveMovieSegment(&pbRes,*ms,tddPath);
 	EXPECT_MESSAGE_EQ(pbRes,expected);
 
 	res = IOUtils::LoadMovieSegment(pbRes,
@@ -845,7 +861,7 @@ TEST_F(IOUtilsUTest,MovieSegmentIO) {
 
 	//not using an absolute path as arguments
 	EXPECT_THROW({
-			IOUtils::SaveMovieSegment(&pbRes,ms, "nest.0000");
+			IOUtils::SaveMovieSegment(&pbRes,*ms, "nest.0000");
 		},std::invalid_argument);
 	EXPECT_THROW({
 			IOUtils::LoadMovieSegment(pbRes, "nest.0000","nest.0000");
@@ -935,7 +951,7 @@ TEST_F(IOUtilsUTest,TagCloseUpIO) {
 		expected.set_frameid(d.Reference.FrameID());
 		expected.set_imagepath(d.Filepath.generic_string());
 
-		IOUtils::SaveTagCloseUp(&pbRes,dTCU,basedir);
+		IOUtils::SaveTagCloseUp(&pbRes,*dTCU,basedir);
 		EXPECT_MESSAGE_EQ(pbRes,expected);
 		auto res = IOUtils::LoadTagCloseUp(pbRes,basedir,resolver);
 

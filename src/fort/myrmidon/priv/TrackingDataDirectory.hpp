@@ -1,22 +1,22 @@
 #pragma once
 
-#include "ForwardDeclaration.hpp"
+#include <memory>
+#include <cstdint>
+#include <map>
+#include <utility>
+#include <functional>
+
+#include <fort/tags/options.hpp>
+
+#include <fort/hermes/FileContext.hpp>
 
 #include <fort/myrmidon/utils/FileSystem.hpp>
 
-#include <google/protobuf/util/time_util.h>
-
-#include <fort/hermes/FileContext.hpp>
-#include <fort/tags/options.hpp>
-
-#include "LocatableTypes.hpp"
-#include "TimeValid.hpp"
-#include "SegmentIndexer.hpp"
 #include "MovieSegment.hpp"
-#include "FrameReference.hpp"
-#include "TagCloseUp.hpp"
+#include "SegmentIndexer.hpp"
+#include "ForwardDeclaration.hpp"
 #include "TagStatistics.hpp"
-
+#include "TimeValid.hpp"
 
 namespace fort {
 namespace myrmidon {
@@ -40,7 +40,7 @@ public:
 
 	typedef int32_t                                    UID;
 	typedef SegmentIndexer<std::string>                TrackingIndex;
-	typedef SegmentIndexer<MovieSegment::ConstPtr>     MovieIndex;
+	typedef SegmentIndexer<MovieSegmentConstPtr>       MovieIndex;
 	typedef std::map<FrameID,FrameReference>           FrameReferenceCache;
 	typedef std::shared_ptr<const FrameReferenceCache> FrameReferenceCacheConstPtr;
 
@@ -181,7 +181,7 @@ public:
 		virtual ~ComputedRessourceUnavailable() noexcept;
 	};
 
-	const std::vector<TagCloseUp::ConstPtr> & TagCloseUps() const;
+	const std::vector<TagCloseUpConstPtr> & TagCloseUps() const;
 	const std::map<FrameReference,fs::path> & FullFrames() const;
 	const TagStatisticsHelper::Timed & TagStatistics() const;
 
@@ -282,7 +282,7 @@ private:
 	tags::ApriltagOptions       d_detectionSettings;
 
 	// cached data
-	std::shared_ptr<std::vector<TagCloseUp::ConstPtr>> d_tagCloseUps;
+	std::shared_ptr<std::vector<TagCloseUpConstPtr>>   d_tagCloseUps;
 	std::shared_ptr<std::map<FrameReference,fs::path>> d_fullFrames;
 	std::shared_ptr<TagStatisticsHelper::Timed>        d_tagStatistics;
 

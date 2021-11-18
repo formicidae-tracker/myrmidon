@@ -25,14 +25,14 @@ protected:
 	static CollisionFrame::Ptr NaiveCollisions();
 
 	static IdentifiedFrame::Ptr      frame;
-	static Space::Universe::Ptr      universe;
+	static Universe::Ptr             universe;
 	static AntByID                   ants;
 	static CollisionFrame::Ptr       collisions;
 };
 
 
 IdentifiedFrame::Ptr     CollisionSolverUTest::frame;
-Space::Universe::Ptr     CollisionSolverUTest::universe;
+Universe::Ptr            CollisionSolverUTest::universe;
 AntByID                  CollisionSolverUTest::ants;
 CollisionFrame::Ptr      CollisionSolverUTest::collisions;
 
@@ -131,8 +131,8 @@ void CollisionSolverUTest::SetUpTestSuite() {
 
 
 	//defines the space
-	universe = std::make_shared<Space::Universe>();
-	auto foo = Space::Universe::CreateSpace(universe,1,"foo");
+	universe = std::make_shared<Universe>();
+	auto foo = Universe::CreateSpace(universe,1,"foo");
 	identifiedFrame->Space = 1;
 	auto nest = foo->CreateZone("nest");
 	std::vector<Shape::Ptr> nestShapes = {std::make_shared<Polygon>(Vector2dList({{WIDTH/2,0},{WIDTH,0},{WIDTH,HEIGHT},{WIDTH/2,HEIGHT}}))};

@@ -45,7 +45,7 @@ void TagCloseUpCache::Save(const fs::path & tddAbsoluteFilePath,
 	for ( const auto & tcu : tagCloseUps ) {
 		lines.push_back([tcu = std::ref(tcu),
 		                 &tddAbsoluteFilePath](pb::TagCloseUp & line) {
-			                proto::IOUtils::SaveTagCloseUp(&line,tcu,tddAbsoluteFilePath / "ants");
+			                proto::IOUtils::SaveTagCloseUp(&line,*tcu.get(),tddAbsoluteFilePath / "ants");
 		                });
 	}
 

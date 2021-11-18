@@ -1,32 +1,51 @@
 #pragma once
 
-#include <fort/tags/fort-tags.h>
+#include <fort/tags/fort-tags.hpp>
 
 #include <fort/time/Time.hpp>
 
-#include <fort/myrmidon/Time.pb.h>
-#include <fort/myrmidon/AntDescription.pb.h>
-#include <fort/myrmidon/Experiment.pb.h>
-#include <fort/myrmidon/TrackingDataDirectory.pb.h>
-#include <fort/myrmidon/TagCloseUpCache.pb.h>
-#include <fort/myrmidon/TagFamily.pb.h>
-#include <fort/myrmidon/Shapes.pb.h>
-#include <fort/myrmidon/Zone.pb.h>
-#include <fort/myrmidon/Space.pb.h>
+#include <Eigen/Core>
 
-#include <fort/myrmidon/Color.hpp>
+#include <fort/myrmidon/Vector2d.pb.h>
 
-#include <fort/myrmidon/priv/ForwardDeclaration.hpp>
-#include <fort/myrmidon/priv/TrackingDataDirectory.hpp>
-#include <fort/myrmidon/priv/Ant.hpp>
+#include <fort/myrmidon/Ant.hpp>
+#include <fort/myrmidon/types/Color.hpp>
 #include <fort/myrmidon/Shapes.hpp>
 
-#include <Eigen/Core>
-#include <fort/myrmidon/Vector2d.pb.h>
+#include <fort/myrmidon/utils/FileSystem.hpp>
+
+#include <fort/myrmidon/priv/ForwardDeclaration.hpp>
+#include <fort/myrmidon/priv/Typedefs.hpp>
+
 
 namespace fort {
 namespace myrmidon {
+namespace pb {
+class Time;
+enum TagFamily : int;
+class Identification;
+class Color;
+enum AntDisplayState : int;
+class AntStaticValue;
+class AntDescription;
+class TimedFrame;
+class TrackingSegment;
+class MovieSegment;
+class TagCloseUp;
+class Measurement;
+class Zone;
+class Space;
+class Capsule;
+class Circle;
+class Polygon;
+class Shape;
+class Experiment;
+} // namespace pb
+
 namespace priv {
+class FrameReference;
+
+
 namespace proto {
 
 // Class to perform IO from/to protobuf
@@ -82,8 +101,8 @@ public:
 	// @e the <priv::Experiment> that owns the <Identification> and the <priv::Ant>
 	// @a the <priv::Ant> the <Identification> points to.
 	// @pb the message to read from
-	static void LoadIdentification(const ExperimentPtr & e,
-	                               const priv::AntPtr & a,
+	static void LoadIdentification(const priv::Experiment & e,
+	                               const priv::Ant & a,
 	                               const pb::Identification & pb);
 
 	// Saves an Identification to protobuf message
@@ -91,17 +110,16 @@ public:
 	// @pb the message to save to
 	// @ident the <Identification> to save to
 	static void SaveIdentification(pb::Identification * pb,
-	                               const IdentificationConstPtr & ident);
+	                               const priv::Identification & ident);
 
 
 	static Color LoadColor(const pb::Color & pb);
 
 	static void  SaveColor(pb::Color * pb, const Color & c);
 
-	static Ant::DisplayState LoadAntDisplayState(pb::AntDisplayState pb);
+	static myrmidon::Ant::DisplayState LoadAntDisplayState(pb::AntDisplayState pb);
 
-	static pb::AntDisplayState  SaveAntDisplayState(Ant::DisplayState s);
-
+	static pb::AntDisplayState  SaveAntDisplayState(myrmidon::Ant::DisplayState s);
 
 	static AntStaticValue LoadAntStaticValue(const pb::AntStaticValue & pb);
 
@@ -112,25 +130,25 @@ public:
 	//
 	// @e the <priv::Experiment> that will own the Ant
 	// @pb the serialized data
-	static void LoadAnt(const ExperimentPtr & e, const pb::AntDescription & pb);
+	static void LoadAnt(Experiment & e, const pb::AntDescription & pb);
 
 	// Saves an Ant to a protobuf message
 	//
 	// @pb the message to save to
 	// @a the <priv::Ant> to save
-	static void SaveAnt(pb::AntDescription * pb, const AntConstPtr & a);
+	static void SaveAnt(pb::AntDescription * pb, const priv::Ant & a);
 
 	// Converts a Family from a protobuf enum
 	//
 	// @pb the protobuf enum value
 	// @return a <fort::tags::Family> enum value
-	static tags::Family LoadFamily(const pb::TagFamily & pb);
+	static fort::tags::Family LoadFamily(const pb::TagFamily & pb);
 
 	// Converts a Family to a protobuf enum
 	//
 	// @f the <fort::tags::Family> enum value
 	// @return a corresponding pbValue
-	static pb::TagFamily SaveFamily(const tags::Family f);
+	static pb::TagFamily SaveFamily(const fort::tags::Family f);
 
 	// Loads a Measurement from a message
 	//
@@ -142,27 +160,27 @@ public:
 	//
 	// @pb the message to save to
 	// @m the <Measurement> to save
-	static void SaveMeasurement(pb::Measurement * pb, const MeasurementConstPtr & m);
+	static void SaveMeasurement(pb::Measurement * pb, const Measurement & m);
 
 
-	static void  LoadZone(const SpacePtr & space,
-	                      const pb::Zone & pb);
+	static void LoadZone(Space & space,
+	                     const pb::Zone & pb);
 
-	static void SaveZone(pb::Zone * pb, const ZoneConstPtr & zone);
+	static void SaveZone(pb::Zone * pb, const priv::Zone & zone);
 
-	static void LoadSpace(const ExperimentPtr & e,
+	static void LoadSpace(Experiment & e,
 	                      const pb::Space & pb,
 	                      bool loadTrackingDataDirectory = true);
 
 	static void SaveSpace(pb::Space * pb,
-	                      const SpaceConstPtr & space);
+	                      const Space & space);
 
 
 	// Loads an Experiment from a protobuf message
 	//
 	// @e the empty <priv::Experiment> to load data to
 	// @pb the <pb::Experiment> protobuf message to read from
-	static void LoadExperiment(const ExperimentPtr & e,
+	static void LoadExperiment(Experiment & e,
 	                           const pb::Experiment & pb);
 
 	// Saves an Experiment to a protobuf message
@@ -178,9 +196,10 @@ public:
 	// @parentURI the URI of the parent <TrackingDataDirectory>
 	// @monoID the <Time::MonoclockID> associated with the parent <TrackingDataDirectory>
 	// @return a <FrameReference> contained in the message
-	static FrameReference LoadFrameReference(const pb::TimedFrame & pb,
-	                                         const std::string & parentURI,
-	                                         Time::MonoclockID monoID);
+	static void LoadFrameReference(FrameReference *,
+	                               const pb::TimedFrame & pb,
+	                               const std::string & parentURI,
+	                               Time::MonoclockID monoID);
 
 	// Save a FrameReference to a message
 	//
@@ -195,17 +214,17 @@ public:
 	// @parentURI the URI of the parent <TrackingDataDirectory>
 	// @monoID the <Time::MonoclockID> associated with the parent <TrackingDataDirectory>
 	// @return the segment in the message
-	static  TrackingDataDirectory::TrackingIndex::Segment
-	LoadTrackingIndexSegment(const pb::TrackingSegment & pb,
-	                         const std::string & parentURI,
-	                         Time::MonoclockID monoID);
+	static  void LoadTrackingIndexSegment(std::pair<FrameReference,std::string> * segment,
+	                                      const pb::TrackingSegment & pb,
+	                                      const std::string & parentURI,
+	                                      Time::MonoclockID monoID);
 
 	// Saves a TrackingIndex to a message
 	//
 	// @pb the protobuf message field to save to
 	// @si a <TrackingDataDirectory::TrackingIndex::Segment> to save
 	static void SaveTrackingIndexSegment(pb::TrackingSegment * pb,
-	                                     const TrackingDataDirectory::TrackingIndex::Segment & si);
+	                                     const std::pair<FrameReference,std::string> & si);
 
 	// Loads a MovieSegment from a message
 	//
@@ -214,9 +233,9 @@ public:
 	// @parentURI the URI of the parent
 	// @monoID the <Time::MonoclockID> associated with the parent
 	// @return the <MovieSegment> in the message
-	static MovieSegmentPtr LoadMovieSegment(const fort::myrmidon::pb::MovieSegment & pb,
-	                                        const fs::path & parentAbsoluteFilePath,
-	                                        const std::string & parentURI);
+	static MovieSegmentConstPtr LoadMovieSegment(const fort::myrmidon::pb::MovieSegment & pb,
+	                                             const fs::path & parentAbsoluteFilePath,
+	                                             const std::string & parentURI);
 
 	// Saves a MovieSegment to a message
 	//
@@ -224,7 +243,7 @@ public:
 	// @ms the <MovieSegment> to save
 	// @parentAbsoluteFilePath the absolute path to the parent TrackingDataDirectory
 	static void SaveMovieSegment(fort::myrmidon::pb::MovieSegment * pb,
-	                             const MovieSegmentConstPtr & ms,
+	                             const MovieSegment & ms,
 	                             const fs::path & parentAbsoluteFilePath);
 
 
@@ -245,7 +264,7 @@ public:
 	// @tcu the TagCloseUp to save
 	// @absoluteBasedir the actual directory containing the close-ups images
 	static void SaveTagCloseUp(pb::TagCloseUp * pb,
-	                           const TagCloseUpConstPtr & tcu,
+	                           const TagCloseUp & tcu,
 	                           const fs::path & absoluteBasedir);
 
 

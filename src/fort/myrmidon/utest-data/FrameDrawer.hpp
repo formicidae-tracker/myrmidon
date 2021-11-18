@@ -1,8 +1,16 @@
 #pragma once
 
+#include <memory>
+#include <utility>
+#include <cstdint>
+
+#include <Eigen/Core>
+
 #include <fort/tags/fort-tags.hpp>
 
-#include <fort/myrmidon/Typedefs.hpp>
+#include <fort/myrmidon/types/IdentifiedFrame.hpp>
+#include <fort/myrmidon/types/Typedefs.hpp>
+
 #include "Config.hpp"
 
 namespace cv {

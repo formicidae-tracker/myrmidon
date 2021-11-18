@@ -1,7 +1,18 @@
 #include "QueryRunner.hpp"
 
+#include <thread>
+
 #include <tbb/concurrent_queue.h>
+#include <tbb/pipeline.h>
+
 #include <fort/myrmidon/utils/Defer.hpp>
+
+#include "TrackingDataDirectory.hpp"
+#include "RawFrame.hpp"
+#include "Experiment.hpp"
+#include "Space.hpp"
+#include "Identifier.hpp"
+#include "CollisionSolver.hpp"
 
 namespace fort {
 namespace myrmidon {
@@ -128,11 +139,11 @@ void QueryRunner::RunMultithread(const Experiment & experiment,
 	tbb::filter_t<void,RawData>
 		loadData(tbb::filter::serial_in_order,loader);
 
-	tbb::filter_t<RawData,Query::CollisionData>
+	tbb::filter_t<RawData,CollisionData>
 		computeData(tbb::filter::parallel,
 					QueryRunner::computeData(experiment,args));
 
-	tbb::filter_t<Query::CollisionData,void>
+	tbb::filter_t<CollisionData,void>
 		finalizeData(tbb::filter::serial_in_order,
 					 finalizer);
 
@@ -162,20 +173,20 @@ void QueryRunner::RunMultithreadFinalizeInCurrent(const Experiment & experiment,
 												  const Args & args,
 												  Finalizer finalizer) {
 	// we use a queue to retrieve all data in the main thread
-	tbb::concurrent_bounded_queue<myrmidon::Query::CollisionData> queue;
+	tbb::concurrent_bounded_queue<myrmidon::CollisionData> queue;
 
 	DataLoader loader(experiment,args);
 
 	tbb::filter_t<void,RawData>
 		loadData(tbb::filter::serial_in_order,loader);
 
-	tbb::filter_t<RawData,Query::CollisionData>
+	tbb::filter_t<RawData,CollisionData>
 		computeData(tbb::filter::parallel,
 					QueryRunner::computeData(experiment,args));
 
-	tbb::filter_t<Query::CollisionData,void>
+	tbb::filter_t<CollisionData,void>
 		finalizeData(tbb::filter::serial_in_order,
-		             [&queue](const myrmidon::Query::CollisionData & data){
+		             [&queue](const myrmidon::CollisionData & data){
 			             queue.push(data);
 		             });
 
@@ -191,7 +202,7 @@ void QueryRunner::RunMultithreadFinalizeInCurrent(const Experiment & experiment,
 
 	// we consume the queue in the current thread
 	for (;;) {
-		Query::CollisionData v;
+		CollisionData v;
 		queue.pop(v);
 		if ( v.first == nullptr && v.second == nullptr ) {
 			break;
@@ -221,10 +232,10 @@ QueryRunner::Runner QueryRunner::RunnerFor(bool multithread,bool finalizerInCurr
 }
 
 
-std::function<Query::CollisionData(const QueryRunner::RawData &)>
+std::function<CollisionData(const QueryRunner::RawData &)>
 QueryRunner::computeData(const Experiment & experiment,
 						 const QueryRunner::Args & args) {
-	auto identifier = experiment.Identifier()->Compile();
+	auto identifier = Identifier::Compile(experiment.Identifier());
 	if ( args.Collide == false && args.Localize == false ) {
 		return [identifier](const RawData & raw) {
 			       // TODO optimize memory allocation here

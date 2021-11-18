@@ -1,7 +1,17 @@
 #pragma once
 
-#include <fort/myrmidon/Types.hpp>
-#include <fort/myrmidon/ForwardDeclaration.hpp>
+#include <string>
+#include <vector>
+#include <cstdint>
+#include <map>
+
+#include <Eigen/Core>
+
+#include <fort/time/Time.hpp>
+
+
+#include <fort/myrmidon/types/Typedefs.hpp>
+#include <fort/myrmidon/types/Collision.hpp>
 #include <fort/myrmidon/Shapes.hpp>
 
 namespace fort {

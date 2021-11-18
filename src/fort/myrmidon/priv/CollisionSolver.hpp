@@ -5,6 +5,10 @@
 #include "Ant.hpp"
 #include "Zone.hpp"
 #include "TimeMap.hpp"
+#include "EigenRefs.hpp"
+
+#include <fort/myrmidon/types/IdentifiedFrame.hpp>
+#include <fort/myrmidon/types/Collision.hpp>
 
 namespace fort {
 namespace myrmidon {

@@ -88,61 +88,6 @@ public:
 		TDDAlreadyInUse(const std::string & tddURI, SpaceID spaceID);
 	};
 
-
-	// Universe manages several Space to insure <priv::Experiment>
-	// invariant.
-	//
-	// A Grouo manages several Space all together to ensure the
-	// following invariants:
-	//   * No two <Space> can have the same name
-	//   * A given <TrackingDataDirectory> can only be assigned to a single space
-	//
-	// The <Space> are managing the invariant that no two
-	// <TrackingDataDirectory> can overlap in time in this Space.
-	class Universe {
-	public:
-		typedef std::shared_ptr<Universe> Ptr;
-
-		typedef std::map<std::string,TrackingDataDirectoryPtr> TrackingDataDirectoryByURI;
-
-		const static SpaceID NEXT_AVAILABLE_SPACE_ID = 0;
-
-		static Space::Ptr CreateSpace(const Ptr & itself,
-		                              SpaceID spaceID,
-		                              const std::string & name);
-
-
-		void DeleteSpace(SpaceID spaceID);
-
-		void DeleteTrackingDataDirectory(const std::string & URI);
-
-		const SpaceByID & Spaces() const;
-
-		const TrackingDataDirectoryByURI & TrackingDataDirectories() const;
-
-		std::pair<Space::Ptr,TrackingDataDirectoryPtr>
-		LocateTrackingDataDirectory(const std::string & tddURI) const;
-
-
-		Space::Ptr LocateSpace(const std::string & spaceName) const;
-
-		Zone::Ptr CreateZone(ZoneID zoneID,
-		                     const std::string & name,
-		                     const std::string & parentURI);
-
-		void DeleteZone(ZoneID zoneID);
-	private:
-		friend class Space;
-
-		AlmostContiguousIDContainer<SpaceID,Space> d_spaces;
-
-		AlmostContiguousIDContainer<ZoneID,Zone> d_zones;
-
-		TrackingDataDirectoryByURI d_tddsByURI;
-
-		std::map<SpaceID,myrmidon::Space> d_publicSpaces;
-	};
-
 	virtual ~Space();
 
 	const std::string & URI() const override;
@@ -171,20 +116,20 @@ public:
 	};
 
 private :
+	friend class Universe;
 	friend class SpaceUTest_CanHoldTDD_Test;
 	friend class SpaceUTest_ExceptionFormatting_Test;
 
 	typedef std::set<ZoneID> SetOfZoneID;
 
-	Space(SpaceID spaceID, const std::string & name, const Universe::Ptr & universe);
+	Space(SpaceID spaceID, const std::string & name, const UniversePtr & universe);
 
 
 	void AddTrackingDataDirectory(const TrackingDataDirectoryPtr & tdd);
 
 	void DeleteTrackingDataDirectory(const std::string & URI);
 
-
-	Universe::Ptr LockUniverse() const;
+	UniversePtr LockUniverse() const;
 
 	SpaceID                 d_spaceID;
 	std::string             d_URI;
@@ -193,9 +138,58 @@ private :
 
 	std::vector<TrackingDataDirectoryPtr> d_tdds;
 
-	DenseMap<ZoneID,Zone::Ptr> d_zones;
+	DenseMap<ZoneID,priv::Zone::Ptr> d_zones;
+};
 
-	myrmidon::ZoneByID d_publicZones;
+// Universe manages several Space to insure <priv::Experiment>
+// invariant.
+//
+// A Grouo manages several Space all together to ensure the
+// following invariants:
+//   * No two <Space> can have the same name
+//   * A given <TrackingDataDirectory> can only be assigned to a single space
+//
+// The <Space> are managing the invariant that no two
+// <TrackingDataDirectory> can overlap in time in this Space.
+class Universe {
+public:
+	typedef std::shared_ptr<Universe> Ptr;
+
+	const static SpaceID NEXT_AVAILABLE_SPACE_ID = 0;
+
+	static Space::Ptr CreateSpace(const Ptr & itself,
+	                              SpaceID spaceID,
+	                              const std::string & name);
+
+
+	void DeleteSpace(SpaceID spaceID);
+
+	void DeleteTrackingDataDirectory(const std::string & URI);
+
+	const priv::SpaceByID & Spaces() const;
+
+	const priv::TrackingDataDirectoryByURI & TrackingDataDirectories() const;
+
+	std::pair<priv::Space::Ptr,TrackingDataDirectoryPtr>
+	LocateTrackingDataDirectory(const std::string & tddURI) const;
+
+
+	priv::Space::Ptr LocateSpace(const std::string & spaceName) const;
+
+	priv::Zone::Ptr CreateZone(ZoneID zoneID,
+	                           const std::string & name,
+	                           const std::string & parentURI);
+
+	void DeleteZone(ZoneID zoneID);
+private:
+	friend class priv::Space;
+
+	AlmostContiguousIDContainer<SpaceID,priv::Space> d_spaces;
+
+	AlmostContiguousIDContainer<ZoneID,priv::Zone> d_zones;
+
+	TrackingDataDirectoryByURI d_tddsByURI;
+
 };
 
 

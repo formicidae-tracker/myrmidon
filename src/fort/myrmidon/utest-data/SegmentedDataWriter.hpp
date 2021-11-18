@@ -1,6 +1,10 @@
 #pragma once
 
-#include <fort/myrmidon/Types.hpp>
+#include <memory>
+#include <vector>
+#include <cstdint>
+
+#include <fort/myrmidon/types/IdentifiedFrame.hpp>
 
 namespace fort {
 namespace myrmidon {

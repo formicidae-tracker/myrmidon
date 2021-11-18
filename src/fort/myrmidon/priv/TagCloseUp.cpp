@@ -15,8 +15,6 @@
 
 
 #include <fort/myrmidon/utils/Checker.hpp>
-#include <fort/myrmidon/priv/proto/FileReadWriter.hpp>
-#include <fort/myrmidon/priv/proto/IOUtils.hpp>
 #include <fort/myrmidon/TagCloseUpCache.pb.h>
 
 #include <fort/myrmidon/utils/Defer.hpp>

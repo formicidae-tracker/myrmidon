@@ -9,7 +9,6 @@ namespace myrmidon {
 
 namespace priv {
 
-
 // A SegementIndexer indexes segment
 //
 // A <SegementIndexer> indexes <Segement>: a <std::string> associated
@@ -23,9 +22,9 @@ namespace priv {
 template <typename T>
 class SegmentIndexer {
 public:
-	typedef std::shared_ptr<SegmentIndexer> Ptr;
+	typedef std::shared_ptr<SegmentIndexer>       Ptr;
 	typedef std::shared_ptr<const SegmentIndexer> ConstPtr;
-	typedef std::pair<FrameReference,T> Segment;
+	typedef std::pair<FrameReference,T>           Segment;
 
 	void Insert(const FrameReference & ref, const T & value);
 

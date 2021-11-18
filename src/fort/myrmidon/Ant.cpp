@@ -1,8 +1,9 @@
 #include "Ant.hpp"
 
-#include "priv/Ant.hpp"
 
 #include "handle/AntHandle.hpp"
+
+#include "priv/Ant.hpp"
 
 namespace fort {
 namespace myrmidon {

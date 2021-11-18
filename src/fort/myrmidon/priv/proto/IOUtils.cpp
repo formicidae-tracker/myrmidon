@@ -1,5 +1,21 @@
 #include "IOUtils.hpp"
 
+#include <fort/myrmidon/utils/Checker.hpp>
+
+#include <fort/myrmidon/Identification.hpp>
+#include <fort/myrmidon/Shapes.hpp>
+
+#include <fort/myrmidon/Time.pb.h>
+#include <fort/myrmidon/AntDescription.pb.h>
+#include <fort/myrmidon/Experiment.pb.h>
+#include <fort/myrmidon/TrackingDataDirectory.pb.h>
+#include <fort/myrmidon/TagCloseUpCache.pb.h>
+#include <fort/myrmidon/TagFamily.pb.h>
+#include <fort/myrmidon/Shapes.pb.h>
+#include <fort/myrmidon/Zone.pb.h>
+#include <fort/myrmidon/Space.pb.h>
+#include <fort/myrmidon/Vector2d.pb.h>
+
 #include <fort/myrmidon/priv/Experiment.hpp>
 #include <fort/myrmidon/priv/Ant.hpp>
 #include <fort/myrmidon/priv/TagCloseUp.hpp>
@@ -7,10 +23,7 @@
 #include <fort/myrmidon/priv/Measurement.hpp>
 #include <fort/myrmidon/priv/Space.hpp>
 #include <fort/myrmidon/priv/AntShapeType.hpp>
-
-#include <fort/myrmidon/Shapes.hpp>
-
-#include <fort/myrmidon/utils/Checker.hpp>
+#include <fort/myrmidon/priv/TrackingDataDirectory.hpp>
 
 
 
@@ -38,7 +51,7 @@ void IOUtils::SaveTime(pb::Time * pb,const Time & t) {
 
 
 
-void IOUtils::LoadIdentification(const ExperimentPtr & e, const AntPtr & target,
+void IOUtils::LoadIdentification(const Experiment & e, const Ant & target,
                                  const fort::myrmidon::pb::Identification & pb) {
 	auto start = Time::SinceEver();
 	auto end =  Time::Forever();
@@ -49,7 +62,7 @@ void IOUtils::LoadIdentification(const ExperimentPtr & e, const AntPtr & target,
 		end = Time::FromTimestamp(pb.end());
 	}
 
-	auto res = Identifier::AddIdentification(e->Identifier(),target->AntID(),pb.id(),start,end);
+	auto res = Identifier::AddIdentification(e.Identifier(),target.AntID(),pb.id(),start,end);
 	if ( pb.tagsize() != 0.0 ) {
 		res->SetTagSize(pb.tagsize());
 	} else {
@@ -71,29 +84,29 @@ void IOUtils::LoadIdentification(const ExperimentPtr & e, const AntPtr & target,
 }
 
 void IOUtils::SaveIdentification(fort::myrmidon::pb::Identification * pb,
-                                 const Identification::ConstPtr & ident) {
+                                 const Identification & ident) {
 	pb->Clear();
-	if ( ident->Start().IsSinceEver() == false ) {
-		ident->Start().ToTimestamp(pb->mutable_start());
+	if ( ident.Start().IsSinceEver() == false ) {
+		ident.Start().ToTimestamp(pb->mutable_start());
 	}
-	if ( ident->End().IsForever() == false ) {
-		ident->End().ToTimestamp(pb->mutable_end());
+	if ( ident.End().IsForever() == false ) {
+		ident.End().ToTimestamp(pb->mutable_end());
 	}
-	pb->set_id(ident->TagValue());
-	if ( ident->UseDefaultTagSize() == false ) {
-		pb->set_tagsize(ident->TagSize());
+	pb->set_id(ident.TagValue());
+	if ( ident.UseDefaultTagSize() == false ) {
+		pb->set_tagsize(ident.TagSize());
 	}
 
 	fort::myrmidon::pb::IdentificationPose * poseToSave = nullptr;
 
-	if ( ident->HasUserDefinedAntPose() == true ) {
+	if ( ident.HasUserDefinedAntPose() == true ) {
 		poseToSave = pb->mutable_userdefinedpose();
 	} else {
 		poseToSave = pb->mutable_cachedpose();
 	}
 
-	SaveVector(poseToSave->mutable_position(),ident->AntPosition());
-	poseToSave->set_angle(ident->AntAngle());
+	SaveVector(poseToSave->mutable_position(),ident.AntPosition());
+	poseToSave->set_angle(ident.AntAngle());
 }
 
 
@@ -187,11 +200,11 @@ void IOUtils::SaveAntStaticValue(pb::AntStaticValue * pb, const AntStaticValue &
 	}
 }
 
-void IOUtils::LoadAnt(const ExperimentPtr & e, const fort::myrmidon::pb::AntDescription & pb) {
-	auto ant = e->CreateAnt(pb.id());
+void IOUtils::LoadAnt(Experiment & e, const fort::myrmidon::pb::AntDescription & pb) {
+	auto ant = e.CreateAnt(pb.id());
 
 	for ( const auto & ident : pb.identifications() ) {
-		LoadIdentification(e,ant,ident);
+		LoadIdentification(e,*ant,ident);
 	}
 
 	for ( const auto & s : pb.shape() ) {
@@ -212,24 +225,24 @@ void IOUtils::LoadAnt(const ExperimentPtr & e, const fort::myrmidon::pb::AntDesc
 	ant->SetValues(antData);
 }
 
-void IOUtils::SaveAnt(fort::myrmidon::pb::AntDescription * pb, const AntConstPtr & ant) {
+void IOUtils::SaveAnt(fort::myrmidon::pb::AntDescription * pb, const Ant & ant) {
 	pb->Clear();
-	pb->set_id(ant->AntID());
+	pb->set_id(ant.AntID());
 
-	for ( const auto & ident : ant->CIdentifications() ) {
-		SaveIdentification(pb->add_identifications(),ident);
+	for ( const auto & ident : ant.Identifications() ) {
+		SaveIdentification(pb->add_identifications(),*ident);
 	}
 
-	for ( const auto & [type,capsule] : ant->Capsules() ) {
+	for ( const auto & [type,capsule] : ant.Capsules() ) {
 		auto spb = pb->add_shape();
 		spb->set_type(type);
 		SaveCapsule(spb->mutable_capsule(),*capsule);
 	}
 
-	SaveColor(pb->mutable_color(),ant->DisplayColor());
-	pb->set_displaystate(SaveAntDisplayState(ant->DisplayStatus()));
+	SaveColor(pb->mutable_color(),ant.DisplayColor());
+	pb->set_displaystate(SaveAntDisplayState(ant.DisplayStatus()));
 
-	for ( const auto & [name,tValues] : ant->CDataMap() ) {
+	for ( const auto & [name,tValues] : ant.DataMap() ) {
 		for ( const auto & [time, value] : tValues ) {
 			auto vPb = pb->add_namedvalues();
 			vPb->set_name(name);
@@ -297,9 +310,9 @@ Measurement::ConstPtr IOUtils::LoadMeasurement(const pb::Measurement & pb) {
 }
 
 
-void IOUtils::LoadZone(const Space::Ptr & space,
+void IOUtils::LoadZone(Space & space,
                        const pb::Zone & pb) {
-	auto z = space->CreateZone(pb.name(),pb.id());
+	auto z = space.CreateZone(pb.name(),pb.id());
 	for ( const auto & dPb : pb.definitions() ) {
 		Zone::Geometry::ConstPtr geometry;
 		std::vector<Shape::Ptr> shapes;
@@ -322,11 +335,11 @@ void IOUtils::LoadZone(const Space::Ptr & space,
 	}
 }
 
-void IOUtils::SaveZone(pb::Zone * pb, const ZoneConstPtr & zone) {
+void IOUtils::SaveZone(pb::Zone * pb, const Zone & zone) {
 	pb->Clear();
-	pb->set_id(zone->ID());
-	pb->set_name(zone->Name());
-	for ( const auto & d : zone->Definitions() ) {
+	pb->set_id(zone.ID());
+	pb->set_name(zone.Name());
+	for ( const auto & d : zone.Definitions() ) {
 		auto dPb = pb->add_definitions();
 		if ( d->Start().IsSinceEver() == false ) {
 			d->Start().ToTimestamp(dPb->mutable_start());
@@ -340,72 +353,72 @@ void IOUtils::SaveZone(pb::Zone * pb, const ZoneConstPtr & zone) {
 	}
 }
 
-void IOUtils::LoadSpace(const Experiment::Ptr & e,
+void IOUtils::LoadSpace(Experiment & e,
                         const pb::Space & pb,
                         bool loadTrackingDataDirectory) {
-	auto s = e->CreateSpace(pb.name(),pb.id());
+	auto s = e.CreateSpace(pb.name(),pb.id());
 	for ( const auto & zPb : pb.zones() ) {
-		LoadZone(s,zPb);
+		LoadZone(*s,zPb);
 	}
 	if ( loadTrackingDataDirectory == false ) {
 		return;
 	}
 	for ( const auto & tddRelPath : pb.trackingdatadirectories() ) {
-		auto tdd = TrackingDataDirectory::Open(e->Basedir() / tddRelPath, e->Basedir());
-		e->AddTrackingDataDirectory(s,tdd);
+		auto tdd = TrackingDataDirectory::Open(e.Basedir() / tddRelPath, e.Basedir());
+		e.AddTrackingDataDirectory(s,tdd);
 	}
 }
 
 void IOUtils::SaveSpace(pb::Space * pb,
-                        const Space::ConstPtr & space) {
+                        const Space & space) {
 	pb->Clear();
-	pb->set_id(space->ID());
-	pb->set_name(space->Name());
-	for ( const auto & tdd : space->TrackingDataDirectories() ) {
+	pb->set_id(space.ID());
+	pb->set_name(space.Name());
+	for ( const auto & tdd : space.TrackingDataDirectories() ) {
 		pb->add_trackingdatadirectories(tdd->URI());
 	}
-	for ( const auto & [zoneID,z] : space->Zones() ) {
-		SaveZone(pb->add_zones(),z);
+	for ( const auto & [zoneID,z] : space.Zones() ) {
+		SaveZone(pb->add_zones(),*z);
 	}
 }
 
 
-void IOUtils::SaveMeasurement(pb::Measurement * pb, const Measurement::ConstPtr & m) {
+void IOUtils::SaveMeasurement(pb::Measurement * pb, const Measurement & m) {
 	pb->Clear();
-	pb->set_tagcloseupuri(m->TagCloseUpURI());
-	pb->set_type(m->Type());
-	SaveVector(pb->mutable_start(),m->StartFromTag());
-	SaveVector(pb->mutable_end(),m->EndFromTag());
-	pb->set_tagsizepx(m->TagSizePx());
+	pb->set_tagcloseupuri(m.TagCloseUpURI());
+	pb->set_type(m.Type());
+	SaveVector(pb->mutable_start(),m.StartFromTag());
+	SaveVector(pb->mutable_end(),m.EndFromTag());
+	pb->set_tagsizepx(m.TagSizePx());
 }
 
 
-void IOUtils::LoadExperiment(const Experiment::Ptr & e,
+void IOUtils::LoadExperiment(Experiment & e,
                              const pb::Experiment & pb) {
-	e->SetAuthor(pb.author());
-	e->SetName(pb.name());
-	e->SetComment(pb.comment());
-	e->SetDefaultTagSize(pb.tagsize());
+	e.SetAuthor(pb.author());
+	e.SetName(pb.name());
+	e.SetComment(pb.comment());
+	e.SetDefaultTagSize(pb.tagsize());
 
 	for (const auto & ct : pb.custommeasurementtypes()) {
 		if ( ct.id() == Measurement::HEAD_TAIL_TYPE ) {
-			auto fi = e->MeasurementTypes().find(Measurement::HEAD_TAIL_TYPE);
-			if ( fi == e->MeasurementTypes().cend() ) {
+			auto fi = e.MeasurementTypes().find(Measurement::HEAD_TAIL_TYPE);
+			if ( fi == e.MeasurementTypes().cend() ) {
 				throw std::logic_error("Experiment missing default MeasurementType::ID Measurement::HEAD_TAIL_TYPE");
 			}
 			fi->second->SetName(ct.name());
 		} else {
-			e->CreateMeasurementType(ct.name(),ct.id());
+			e.CreateMeasurementType(ct.name(),ct.id());
 		}
 	}
 
 	for (const auto & ast : pb.antshapetypes() ) {
-		e->CreateAntShapeType(ast.name(),ast.id());
+		e.CreateAntShapeType(ast.name(),ast.id());
 	}
 
 	for (const auto & column : pb.antmetadata() ) {
 		auto defaultValue = LoadAntStaticValue(column.defaultvalue());
-		auto c = e->SetMetaDataKey(column.name(),defaultValue);
+		auto c = e.SetMetaDataKey(column.name(),defaultValue);
 	}
 }
 
@@ -439,10 +452,11 @@ void IOUtils::SaveExperiment(fort::myrmidon::pb::Experiment * pb, const Experime
 
 }
 
-FrameReference IOUtils::LoadFrameReference(const pb::TimedFrame & pb,
-                                           const std::string & parentURI,
-                                           Time::MonoclockID monoID) {
-	return FrameReference(parentURI,pb.frameid(),LoadTime(pb.time(),monoID));
+void IOUtils::LoadFrameReference(FrameReference * ref,
+                                 const pb::TimedFrame & pb,
+                                 const std::string & parentURI,
+                                 Time::MonoclockID monoID) {
+	*ref = FrameReference(parentURI,pb.frameid(),LoadTime(pb.time(),monoID));
 }
 
 void IOUtils::SaveFrameReference(pb::TimedFrame * pb,
@@ -451,12 +465,13 @@ void IOUtils::SaveFrameReference(pb::TimedFrame * pb,
 		SaveTime(pb->mutable_time(),ref.Time());
 }
 
-TrackingDataDirectory::TrackingIndex::Segment
-IOUtils::LoadTrackingIndexSegment(const pb::TrackingSegment & pb,
-                                  const std::string & parentURI,
-                                  Time::MonoclockID monoID) {
-	return std::make_pair(LoadFrameReference(pb.frame(),parentURI,monoID),
-	                      pb.filename());
+void IOUtils::LoadTrackingIndexSegment(TrackingDataDirectory::TrackingIndex::Segment * s,
+                                       const pb::TrackingSegment & pb,
+                                       const std::string & parentURI,
+                                       Time::MonoclockID monoID) {
+
+	LoadFrameReference(&(s->first),pb.frame(),parentURI,monoID);
+	s->second = pb.filename();
 }
 
 void IOUtils::SaveTrackingIndexSegment(pb::TrackingSegment * pb,
@@ -466,7 +481,7 @@ void IOUtils::SaveTrackingIndexSegment(pb::TrackingSegment * pb,
 }
 
 
-MovieSegment::Ptr
+MovieSegment::ConstPtr
 IOUtils::LoadMovieSegment(const fort::myrmidon::pb::MovieSegment & pb,
                           const fs::path & parentAbsoluteFilePath,
                           const std::string & parentURI) {
@@ -488,7 +503,7 @@ IOUtils::LoadMovieSegment(const fort::myrmidon::pb::MovieSegment & pb,
 }
 
 void IOUtils::SaveMovieSegment(fort::myrmidon::pb::MovieSegment * pb,
-                               const MovieSegment::ConstPtr & ms,
+                               const MovieSegment & ms,
                                const fs::path & parentAbsoluteFilePath) {
 
 	if (parentAbsoluteFilePath.is_absolute() == false ) {
@@ -498,13 +513,13 @@ void IOUtils::SaveMovieSegment(fort::myrmidon::pb::MovieSegment * pb,
 	}
 	pb->Clear();
 
-	pb->set_id(ms->ID());
-	pb->set_path(fs::relative(ms->AbsoluteFilePath(),parentAbsoluteFilePath).generic_string());
-	pb->set_trackingstart(ms->StartFrame());
-	pb->set_trackingend(ms->EndFrame());
-	pb->set_moviestart(ms->StartMovieFrame());
-	pb->set_movieend(ms->EndMovieFrame());
-	for ( const auto & o : ms->Offsets() ) {
+	pb->set_id(ms.ID());
+	pb->set_path(fs::relative(ms.AbsoluteFilePath(),parentAbsoluteFilePath).generic_string());
+	pb->set_trackingstart(ms.StartFrame());
+	pb->set_trackingend(ms.EndFrame());
+	pb->set_moviestart(ms.StartMovieFrame());
+	pb->set_movieend(ms.EndMovieFrame());
+	for ( const auto & o : ms.Offsets() ) {
 		auto pbo = pb->add_offsets();
 		pbo->set_movieframeid(o.first);
 		pbo->set_offset(o.second);
@@ -536,18 +551,18 @@ TagCloseUp::ConstPtr IOUtils::LoadTagCloseUp(const pb::TagCloseUp & pb,
 }
 
 void IOUtils::SaveTagCloseUp(pb::TagCloseUp * pb,
-                             const TagCloseUp::ConstPtr & tcu,
+                             const TagCloseUp & tcu,
                              const fs::path & absoluteBasedir) {
 	FORT_MYRMIDON_CHECK_PATH_IS_ABSOLUTE(absoluteBasedir);
 
 	pb->Clear();
 
-	pb->set_frameid(tcu->Frame().FrameID());
-	pb->set_imagepath(fs::relative(tcu->AbsoluteFilePath(),absoluteBasedir).generic_string());
-	SaveVector(pb->mutable_position(),tcu->TagPosition());
-	pb->set_angle(tcu->TagAngle());
-	pb->set_value(tcu->TagValue());
-	for (const auto & c : tcu->Corners()) {
+	pb->set_frameid(tcu.Frame().FrameID());
+	pb->set_imagepath(fs::relative(tcu.AbsoluteFilePath(),absoluteBasedir).generic_string());
+	SaveVector(pb->mutable_position(),tcu.TagPosition());
+	pb->set_angle(tcu.TagAngle());
+	pb->set_value(tcu.TagValue());
+	for (const auto & c : tcu.Corners()) {
 		SaveVector(pb->add_corners(),c);
 	}
 

@@ -1,9 +1,10 @@
 #include "Identification.hpp"
 
-#include "priv/Identification.hpp"
-#include "priv/Ant.hpp"
 
 #include "handle/IdentificationHandle.hpp"
+
+#include "priv/Identification.hpp"
+#include "priv/Ant.hpp"
 
 namespace fort {
 namespace myrmidon {

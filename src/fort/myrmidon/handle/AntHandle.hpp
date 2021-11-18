@@ -2,66 +2,31 @@
 
 #include "HandleInContext.hpp"
 
-#include "IdentificationHandle.hpp"
-
-#include <fort/myrmidon/Identification.hpp>
+#include <fort/myrmidon/types/ForwardDeclaration.hpp>
 
 namespace fort {
 namespace myrmidon {
 
+namespace priv {
+class Ant;
+class Experiment;
+class Identification;
+}
+
+
 class AntHandle : public priv::HandleInContext<priv::Ant,priv::Experiment> {
 public:
 	AntHandle(const std::shared_ptr<priv::Ant> & ant,
-	          const std::shared_ptr<priv::Experiment> & experiment)
-		: HandleInContext(ant,experiment) {
-		ReflectPrivateIdentifications();
-	}
+	          const std::shared_ptr<priv::Experiment> & experiment);
 
 
-	const IdentificationList & Identifications() const {
-		return d_identifications;
-	}
+	const IdentificationList & Identifications() const;
 
-	void ReflectPrivateIdentifications() {
-		const auto & pIdentifications = Get().Identifications();
-		auto isNotInPrivateList
-			= [&pIdentifications] (const Identification::Ptr & i) {
-				  return std::find_if(pIdentifications.begin(),
-				                      pIdentifications.end(),
-				                      [&i] (const priv::Identification::Ptr & pi) -> bool {
-					                      return i->d_p->Ptr() == pi;
-				                      }) == pIdentifications.end();
-			  };
-
-		d_identifications.erase(std::remove_if(d_identifications.begin(),
-		                                       d_identifications.end(),
-		                                       isNotInPrivateList),
-		                        d_identifications.end());
-
-
-		for ( const auto & pi : pIdentifications) {
-			if ( FindPrivateIdentification(pi) == d_identifications.end() ) {
-				d_identifications.push_back(MakeIdentificationPtr(pi));
-			}
-		}
-
-		priv::TimeValid::SortAndCheckOverlap(d_identifications.begin(),
-		                                     d_identifications.end());
-	}
+	void ReflectPrivateIdentifications();
 
 private:
-
-	IdentificationList::const_iterator FindPrivateIdentification(const priv::Identification::Ptr & pi) {
-		return std::find_if(d_identifications.begin(),
-		                    d_identifications.end(),
-		                    [&pi](const Identification::Ptr & i) -> bool {
-			                    return i->d_p->Ptr() == pi;
-		                    });
-	}
-
-	Identification::Ptr MakeIdentificationPtr(const priv::Identification::Ptr & identification) {
-		return Identification::Ptr(new Identification(std::make_unique<IdentificationHandle>(identification,d_context,d_object)));
-	}
+	IdentificationList::const_iterator FindPrivateIdentification(const std::shared_ptr<priv::Identification> & pi);
+	std::shared_ptr<Identification> MakeIdentificationPtr(const std::shared_ptr<priv::Identification> & identification);
 
 	IdentificationList d_identifications;
 };

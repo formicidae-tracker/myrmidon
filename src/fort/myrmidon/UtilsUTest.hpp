@@ -2,13 +2,26 @@
 
 #include <gtest/gtest.h>
 
-#include <fort/time/Time.hpp>
 #include <Eigen/Core>
 
-#include <fort/myrmidon/Shapes.hpp>
-#include <fort/myrmidon/Types.hpp>
-
 #include <google/protobuf/message.h>
+
+#include <fort/myrmidon/types/AntStaticValue.hpp>
+#include <fort/myrmidon/types/TagStatistics.hpp>
+
+namespace fort {
+class Time;
+namespace myrmidon {
+class Shape;
+class Capsule;
+class Circle;
+class Polygon;
+class IdentifiedFrame;
+class CollisionFrame;
+class AntTrajectory;
+class AntInteraction;
+} // namespace myrmidon
+} // namespace fort
 
 ::testing::AssertionResult AssertTimeEqual(const char * aExpr,
                                            const char * bExpr,

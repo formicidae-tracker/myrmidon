@@ -1,10 +1,14 @@
 #pragma once
 
+#include <cstdint>
+#include <memory>
+#include <vector>
+#include <utility>
 #include <map>
 
 #include <fort/myrmidon/utils/FileSystem.hpp>
 
-#include "ForwardDeclaration.hpp"
+#include "Typedefs.hpp"
 #include "LocatableTypes.hpp"
 
 namespace fort {

@@ -1,13 +1,21 @@
 #pragma once
 
+#include <utility>
+#include <functional>
+
 #include <fort/time/Time.hpp>
 
-#include "CollisionSolver.hpp"
-#include "Query.hpp"
+#include <fort/myrmidon/types/Typedefs.hpp>
+#include <fort/myrmidon/types/Collision.hpp>
+
+#include "ForwardDeclaration.hpp"
+
 
 namespace fort {
 namespace myrmidon {
 namespace priv {
+
+class Experiment;
 
 class QueryRunner {
 public:
@@ -21,7 +29,7 @@ public:
 		bool CollisionsIgnoreZones;
 	};
 
-	typedef std::function<void (const Query::CollisionData & data)> Finalizer;
+	typedef std::function<void (const CollisionData & data)> Finalizer;
 
 	typedef std::function<void (const Experiment &,const Args &,Finalizer)> Runner;
 
@@ -49,7 +57,7 @@ public:
 private:
 
 
-	static std::function<Query::CollisionData(const RawData &)> computeData(const Experiment & experiment,
+	static std::function<CollisionData(const RawData &)> computeData(const Experiment & experiment,
 																			const Args & args);
 
 };

@@ -1,10 +1,12 @@
 #include "Space.hpp"
 
-#include "priv/Space.hpp"
-#include "priv/TrackingDataDirectory.hpp"
-#include "priv/Experiment.hpp"
+#include <fort/myrmidon/priv/Zone.hpp>
+#include <fort/myrmidon/priv/Space.hpp>
+#include <fort/myrmidon/priv/Experiment.hpp>
+#include <fort/myrmidon/priv/TrackingDataDirectory.hpp>
 
 #include "handle/SpaceHandle.hpp"
+
 
 namespace fort {
 namespace myrmidon {

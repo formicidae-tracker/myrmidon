@@ -1,5 +1,6 @@
 #include "TrackingSolver.hpp"
-
+#include "CollisionSolver.hpp"
+#include "Identifier.hpp"
 
 namespace fort {
 namespace myrmidon {
@@ -8,9 +9,8 @@ namespace priv {
 
 TrackingSolver::TrackingSolver(const std::shared_ptr<const Identifier> & identifier,
                                const CollisionSolver::ConstPtr & solver)
-	: d_rawIdentifier(identifier)
-	, d_solver(solver) {
-	d_identifier = d_rawIdentifier->Compile();
+	: d_solver(solver) {
+	d_identifier = Identifier::Compile(identifier);
 }
 
 void TrackingSolver::IdentifyFrame(IdentifiedFrame & identified,

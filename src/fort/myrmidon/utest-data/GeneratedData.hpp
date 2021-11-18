@@ -1,13 +1,26 @@
 #pragma once
 
-#include "Config.hpp"
+#include <vector>
+#include <utility>
+#include <cstdint>
+
+#include <fort/time/Time.hpp>
 
 #include <fort/hermes/FrameReadout.pb.h>
+
 #include <fort/myrmidon/utils/FileSystem.hpp>
 
+#include <fort/myrmidon/types/Typedefs.hpp>
+#include <fort/myrmidon/types/AntTrajectory.hpp>
+#include <fort/myrmidon/types/AntInteraction.hpp>
+#include <fort/myrmidon/types/TagStatistics.hpp>
 
 namespace fort {
 namespace myrmidon {
+
+struct TDDData;
+class Config;
+struct AntData;
 
 struct GeneratedData {
 	std::vector<Time> NestTicks,ForagingTicks;

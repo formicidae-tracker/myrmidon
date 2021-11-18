@@ -2,7 +2,6 @@
 
 #include "priv/Matchers.hpp"
 
-
 namespace fort {
 namespace myrmidon {
 

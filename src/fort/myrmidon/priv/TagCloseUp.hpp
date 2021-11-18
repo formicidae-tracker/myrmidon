@@ -1,14 +1,17 @@
 #pragma once
 
+#include <mutex>
+
 #include <Eigen/Core>
 
 #include <fort/tags/fort-tags.hpp>
 #include <fort/tags/options.hpp>
 
+#include <fort/myrmidon/types/ForwardDeclaration.hpp>
 
 #include "FrameReference.hpp"
 #include "Isometry2D.hpp"
-#include <mutex>
+
 
 typedef struct apriltag_detection apriltag_detection_t;
 

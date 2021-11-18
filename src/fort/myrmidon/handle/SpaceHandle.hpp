@@ -2,40 +2,31 @@
 
 #include "HandleInContext.hpp"
 
-#include "ZoneHandle.hpp"
+#include <fort/myrmidon/types/ForwardDeclaration.hpp>
 
 namespace fort {
 namespace myrmidon {
 
+class Zone;
+
+namespace priv {
+class Space;
+class Zone;
+class Experiment;
+}
+
 class SpaceHandle : public priv::HandleInContext<priv::Space,priv::Experiment> {
 public :
-	SpaceHandle(const priv::Space::Ptr & space,
-	            const priv::Experiment::Ptr & experiment)
-		: HandleInContext(space,experiment) {
-		for (const auto & [zoneID,zone] : space->Zones() ) {
-			d_zones.insert_or_assign(zoneID,MakeZonePtr(zone));
-		}
-	}
+	SpaceHandle(const std::shared_ptr<priv::Space> & space,
+	            const std::shared_ptr<priv::Experiment> & experiment);
 
-	const ZoneByID & Zones() const {
-		return d_zones;
-	}
+	const ZoneByID & Zones() const;
 
-	void DeleteZone(ZoneID zoneID) {
-		d_object->DeleteZone(zoneID);
-		d_zones.erase(zoneID);
-	}
+	void DeleteZone(ZoneID zoneID);
 
-	Zone::Ptr CreateZone(const std::string & name) {
-		auto zone = MakeZonePtr(d_object->CreateZone(name,0));
-		d_zones.insert_or_assign(zone->ID(),zone);
-		return d_zones.at(zone->ID());
-	}
-
+	std::shared_ptr<Zone> CreateZone(const std::string & name);
 private:
-	Zone::Ptr MakeZonePtr(const priv::Zone::Ptr & zone) {
-		return Zone::Ptr(new Zone(std::make_unique<ZoneHandle>(zone)));
-	}
+	std::shared_ptr<Zone> MakeZonePtr(const std::shared_ptr<priv::Zone> & zone);
 
 	ZoneByID d_zones;
 };

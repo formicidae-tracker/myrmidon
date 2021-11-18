@@ -88,12 +88,12 @@ TEST_F(QueryUTest,IdentifyFrames) {
 TEST_F(QueryUTest,CollideFrames) {
 	const auto & expected = TestSetup::UTestData().ExpectedFrames();
 
-	std::vector<Query::CollisionData> collisionData;
+	std::vector<CollisionData> collisionData;
 
 	ASSERT_NO_THROW({
 			myrmidon::Query::CollideFramesArgs args;
 			Query::CollideFramesFunctor(*experiment,
-			                            [&collisionData] (const Query::CollisionData & data) {
+			                            [&collisionData] (const CollisionData & data) {
 				                            collisionData.push_back(data);
 			                            },
 			                            args);

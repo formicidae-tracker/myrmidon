@@ -6,10 +6,12 @@
 #include <fort/myrmidon/types/Typedefs.hpp>
 #include <fort/myrmidon/types/Color.hpp>
 #include <fort/myrmidon/Shapes.hpp>
+#include <fort/myrmidon/Ant.hpp>
 
 #include "ForwardDeclaration.hpp"
 #include "Identification.hpp"
 #include "AntTimedValue.hpp"
+#include "TimeMap.hpp"
 
 
 namespace fort {
@@ -67,7 +69,7 @@ public:
 	// <priv::Ant>. Adding and removing of <Identification> have to be
 	// respectively performed using <Identifier::AddIdentification>
 	// and <Identifier::RemoveIdentification>.
-	const Identification::List & Identifications();
+	const Identification::List & Identifications() const;
 
 
 	// Gets the Unique ID of the Ant
@@ -120,7 +122,7 @@ public:
 
 	AntStaticValue GetBaseValue(const std::string & name) const;
 
-	const AntDataMap & DataMap();
+	const AntDataMap & DataMap() const;
 
 	void CompileData();
 

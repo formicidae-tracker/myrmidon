@@ -55,7 +55,7 @@ TEST_F(TDDCacheUTest,CacheIO) {
 		 [&cached](pb::TrackingDataDirectoryFileLine & line) {
 
 			 IOUtils::SaveMovieSegment(line.mutable_movie(),
-			                           cached->MovieSegments().Segments().begin()->second,
+			                           *cached->MovieSegments().Segments().begin()->second,
 			                           cached->AbsoluteFilePath());
 		 },
 		};

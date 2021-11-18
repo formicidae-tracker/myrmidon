@@ -3,13 +3,10 @@
 #include <fort/hermes/FileContext.hpp>
 #include <fort/hermes/Error.hpp>
 
-#include <fort/myrmidon/priv/proto/FileReadWriter.hpp>
-
-#include <fort/myrmidon/TagStatisticsCache.pb.h>
-
+#include "Typedefs.hpp"
 #include "DenseMap.hpp"
-
 #include "TimeUtils.hpp"
+
 
 namespace fort {
 namespace myrmidon {

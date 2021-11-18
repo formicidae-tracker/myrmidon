@@ -1,5 +1,7 @@
 #include "GeneratedData.hpp"
 
+#include "Config.hpp"
+
 #include <random>
 
 #include <fort/myrmidon/priv/TagStatistics.hpp>

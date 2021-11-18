@@ -88,9 +88,12 @@ set(HDR_PRIVATE_FILES utils/StringManipulation.hpp
 					  priv/QueryRunner.hpp
 					  priv/DataSegmenter.hpp
 					  handle/HandleInContext.hpp
+					  handle/AntHandle.hpp
+					  handle/ExperimentHandle.hpp
+					  handle/IdentificationHandle.hpp
+					  handle/SpaceHandle.hpp
 					  handle/ZoneDefinitionHandle.hpp
 					  handle/ZoneHandle.hpp
-					  handle/SpaceHandle.hpp
                       )
 
 
@@ -163,6 +166,12 @@ set(SRC_PRIVATE_FILES utils/StringManipulation.cpp
                       priv/TrackingSolver.cpp
 					  priv/QueryRunner.cpp
 					  priv/DataSegmenter.cpp
+					  handle/AntHandle.cpp
+					  handle/ExperimentHandle.cpp
+					  handle/IdentificationHandle.cpp
+					  handle/SpaceHandle.cpp
+					  handle/ZoneDefinitionHandle.cpp
+					  handle/ZoneHandle.cpp
                       )
 
 set(SRC_FILES types/AntInteraction.cpp

@@ -1,14 +1,25 @@
 #pragma once
 
+#include <vector>
 
-#include "Experiment.hpp"
-#include "Matchers.hpp"
 #include "MovieSegmentData.hpp"
 
+#include <fort/time/Time.hpp>
+
+
+#include <fort/myrmidon/types/ComputedMeasurement.hpp>
+#include <fort/myrmidon/types/ExperimentDataInfo.hpp>
+#include <fort/myrmidon/types/TagStatistics.hpp>
+#include <fort/myrmidon/types/IdentifiedFrame.hpp>
+#include <fort/myrmidon/types/Collision.hpp>
+#include <fort/myrmidon/types/AntTrajectory.hpp>
+#include <fort/myrmidon/types/AntInteraction.hpp>
 
 namespace fort {
 namespace myrmidon {
 
+class Experiment;
+class Matcher;
 
 /**
  * Queries are computation on an Experiment tracking data.
@@ -34,9 +45,6 @@ namespace myrmidon {
  */
 class Query {
 public:
-
-	// Data returned by <CollideFrames>.
-	typedef std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr> CollisionData;
 
 	/**
 	 * Computes all measurement for an Ant
@@ -187,7 +195,7 @@ public:
 		Duration MaximumGap;
 		//! Matcher to reduce the query to an Ant subset (default: to
 		//! nullptr, i.e. anything).
-		myrmidon::Matcher::Ptr Matcher;
+		std::shared_ptr<myrmidon::Matcher> Matcher;
 		//! Computes the zone of each Ant (default: false)
 		bool ComputeZones;
 
@@ -243,7 +251,7 @@ public:
 		Duration MaximumGap;
 		//! Matcher to reduce the query to an Ant subset (default: to
 		//! nullptr, i.e. anything).
-		myrmidon::Matcher::Ptr Matcher;
+		std::shared_ptr<myrmidon::Matcher> Matcher;
 
 		//! Reports full trajectories. If false only mean trajectory
 		//! during interactions will be reported, otherwise trajectory

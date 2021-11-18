@@ -7,6 +7,7 @@
 
 #include <fort/myrmidon/types/Typedefs.hpp>
 #include <fort/myrmidon/types/Collision.hpp>
+#include <fort/myrmidon/types/AntStaticValue.hpp>
 
 #include "ForwardDeclaration.hpp"
 

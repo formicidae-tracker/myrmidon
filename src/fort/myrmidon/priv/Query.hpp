@@ -2,21 +2,14 @@
 
 #include <fort/myrmidon/Query.hpp>
 
-#include "Experiment.hpp"
-#include "TrackingDataDirectory.hpp"
-#include "Matchers.hpp"
-
-
-#include <tbb/pipeline.h>
-
 namespace fort {
 namespace myrmidon {
 namespace priv {
 
+class Experiment;
 
 class Query {
 public:
-	typedef fort::myrmidon::Query::CollisionData  CollisionData;
 
 	static void ComputeTagStatistics(const Experiment & experiment,
 	                                 TagStatistics::ByTagID & result);
@@ -49,6 +42,3 @@ private:
 } // namespace priv
 } // namespace myrmidon
 } // namespace fort
-
-
-#include "Query.impl.hpp"
