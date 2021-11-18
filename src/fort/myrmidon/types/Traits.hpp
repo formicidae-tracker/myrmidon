@@ -20,13 +20,14 @@ template <typename T, typename = int>
 struct has_end_member : std::false_type { };
 
 template <typename T>
-struct has_end_member <T, decltype((void) T::End(), 0)> : std::true_type { };
+struct has_end_member <T, decltype(std::declval<T&>().End(), 0)> : std::true_type { };
 
 template <typename T, typename = int>
 struct has_space_field : std::false_type { };
 
 template <typename T>
 struct has_space_field <T, decltype((void) T::Space, 0)> : std::true_type { };
+
 
 template <typename T>
 class pointed_type_if_any {
@@ -63,12 +64,10 @@ struct data_traits {
 		return v.Start;
 	}
 
-
-
 	template <typename Actual = T,
 	          std::enable_if_t<std::is_same<typename data_traits<Actual>::data_category,
 	                                        time_ranged_data>::value
-	                           && has_end_field<T>::value,bool> = true>
+	                           && has_end_field<Actual>::value,bool> = true>
 	static const fort::Time & end(const Actual & v) {
 		return v.End;
 	}

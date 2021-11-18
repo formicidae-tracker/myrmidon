@@ -12,6 +12,7 @@
 #include <fort/myrmidon/types/AntTrajectory.hpp>
 #include <fort/myrmidon/types/AntInteraction.hpp>
 
+
 namespace fort {
 namespace myrmidon {
 

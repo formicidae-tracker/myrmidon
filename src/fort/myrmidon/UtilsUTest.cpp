@@ -25,9 +25,10 @@
                                            const fort::Time & a,
                                            const fort::Time & b) {
 	if ( a.Equals(b) == false ) {
-		return ::testing::AssertionFailure() << "Value of: " << aExpr <<".Equals(" << bExpr << ")" << std::endl
-		                                     << "  Actual: false" << std::endl
-		                                     << "Expected: true";
+		return ::testing::AssertionFailure() << "Value of: " << aExpr << std::endl
+		                                     << "  Actual: " << a.Format() << std::endl
+		                                     << "Expected: " << bExpr << std::endl
+		                                     << "Which is: " << b.Format();
 	}
 
 	if ( google::protobuf::util::MessageDifferencer::Equals(a.ToTimestamp(),b.ToTimestamp()) == false ) {
