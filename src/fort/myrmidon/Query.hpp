@@ -318,11 +318,11 @@ public:
 	                                   const ComputeAntInteractionsArgs & args = ComputeAntInteractionsArgs());
 
 
-	static
-	std::vector<MovieSegmentData> FindMovieSegment(const Experiment & experiment,
-	                                               SpaceID space,
-	                                               const fort::Time & start,
-	                                               const fort::Time & end);
+	static void  FindMovieSegment(const Experiment & experiment,
+	                              std::vector<MovieSegmentData> & segments,
+	                              SpaceID space,
+	                              const fort::Time & start,
+	                              const fort::Time & end);
 };
 
 

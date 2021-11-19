@@ -24,10 +24,12 @@ protected:
 TEST_F(MovieSegmentDataUTest,EndToEnd) {
 	const auto & expected = TestSetup::UTestData().ExpectedResults().front();
 	const auto & frames = TestSetup::UTestData().ExpectedFrames();
-	auto segments = Query::FindMovieSegment(*experiment,
-	                                        1,
-	                                        expected.Start,
-	                                        expected.End);
+	std::vector<MovieSegmentData> segments;
+	Query::FindMovieSegment(*experiment,
+	                        segments,
+	                        1,
+	                        expected.Start,
+	                        expected.End);
 
 	MovieSegmentData::MatchData(segments,
 	                            frames.begin(),

@@ -164,7 +164,7 @@ MovieSegmentData::MatchData(IterType begin,
                             timed_data /*placeholder*/) {
 
 	typedef typename std::iterator_traits<IterType>::value_type Type;
-	typedef data_traits<typename pointed_type_if_any>::type>    TypeTraits;
+	typedef data_traits<typename pointed_type_if_any<Type>::type>    TypeTraits;
 
 	for ( auto & d : Data ) {
 		while( TypeTraits::time(MaybeDeref(*begin)) < d.Time ) {
@@ -190,18 +190,21 @@ inline IterType
 MovieSegmentData::MatchData(IterType begin,
                             IterType end,
                             time_ranged_data /*placeholder*/) {
+	typedef typename std::iterator_traits<IterType>::value_type Type;
+	typedef data_traits<typename pointed_type_if_any<Type>::type>    TypeTraits;
+
 	//TODO use segment tree to reduce to O(n log(n) ) complexity from O(n2) here
 	for ( auto & d : Data ) {
-		while( MaybeCall(MaybeDeref(*begin).End) > d.Time ) {
+		while( TypeTraits::end(MaybeDeref(*begin)) > d.Time ) {
 			++begin;
 			if ( begin == end ) {
 				return end;
 			}
 		}
 		for ( IterType iter = begin; iter != end; ++iter ) {
-			const auto & start = MaybeDeref(*iter).Start;
-			const auto & end = MaybeCall(MaybeDeref(*iter).End);
-			if ( d.Time <= start && d.Time <= end ) {
+			const auto & start = TypeTraits::start(MaybeDeref(*iter));
+			const auto & end = TypeTraits::end(MaybeDeref(*iter));
+			if ( start <= d.Time && d.Time <= end ) {
 				d.Append(*iter);
 			}
 		}

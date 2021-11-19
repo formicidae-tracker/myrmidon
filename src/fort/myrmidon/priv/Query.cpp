@@ -7,6 +7,7 @@
 #include <tbb/pipeline.h>
 
 #include <fort/myrmidon/Matchers.hpp>
+#include <fort/myrmidon/MovieSegmentData.hpp>
 
 #include "TagStatistics.hpp"
 #include "TrackingDataDirectory.hpp"
@@ -161,6 +162,14 @@ void Query::ComputeAntInteractions(const Experiment & experiment,
 		   });
 }
 
+void Query::FindMovieSegment(const Experiment & experiment,
+                             std::vector<MovieSegmentData> & segments,
+                             SpaceID space,
+                             const Time & start,
+                             const Time & end) {
+
+	segments.clear();
+}
 
 
 } // namespace priv

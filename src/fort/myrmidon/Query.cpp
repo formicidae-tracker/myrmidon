@@ -170,6 +170,17 @@ void Query::ComputeAntInteractions(const Experiment & experiment,
 	                                    args);
 }
 
+void Query::FindMovieSegment(const Experiment & experiment,
+                             std::vector<MovieSegmentData> & segments,
+                             SpaceID space,
+                             const fort::Time & start,
+                             const fort::Time & end) {
+	priv::Query::FindMovieSegment(experiment.d_p->Get(),
+	                              segments,
+	                              space,
+	                              start,
+	                              end);
+}
 
 } // namespace myrmidon
 } // namespace fort
