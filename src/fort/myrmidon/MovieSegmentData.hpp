@@ -11,6 +11,7 @@
 #include <fort/myrmidon/types/Collision.hpp>
 #include <fort/myrmidon/types/AntTrajectory.hpp>
 #include <fort/myrmidon/types/AntInteraction.hpp>
+#include <fort/myrmidon/types/MaybeDeref.hpp>
 
 
 namespace fort {
@@ -107,27 +108,33 @@ MovieSegmentData::MatchData(List & list,
 
 	SpaceID space = list.front().Space;
 
-	typedef typename std::iterator_traits<IterType>::value_type Type;
-	typedef data_traits<Type> TypeTraits;
+	typedef typename std::iterator_traits<IterType>::value_type   Type;
+	typedef data_traits<typename pointed_type_if_any<Type>::type> TypeTraits;
+
+	auto compare =
+		[](const Type & a, const Type & b) -> bool {
+			return TypeTraits::compare(MaybeDeref(a),MaybeDeref(b));
+		};
 
 	typedef typename TypeTraits::data_category data_category;
 	if constexpr ( TypeTraits::spaced_data == false ) {
-		std::sort(begin,end,TypeTraits::compare);
-		MatchSortedFilteredData(list,begin,end);
-		return;
+			std::sort(begin,end,
+			          compare);
+			MatchSortedFilteredData(list,begin,end);
+			return;
 	} else {
 		std::vector<Type> filtered;
 		filtered.reserve(std::distance(begin,end));
 
 		std::copy_if(begin,end,
 		             filtered.begin(),
-		             [space](const Type & v) {
-			             MaybeDeref(v).Space == space;
+		             [space](const Type & v) -> bool {
+			             return TypeTraits::space(MaybeDeref(v)) == space;
 		             });
 
 		std::sort(filtered.begin(),
 		          filtered.end(),
-		          TypeTraits::compare);
+		          compare);
 
 		MatchSortedFilteredData(list,filtered.begin(),filtered.end());
 	}
@@ -138,10 +145,8 @@ inline void
 MovieSegmentData::MatchSortedFilteredData(List & list,
                                           IterType begin,
                                           IterType end) {
-
-	typedef typename std::iterator_traits<IterType>::value_type Type;
-	typedef data_traits<Type> TypeTraits;
-
+	typedef typename std::iterator_traits<IterType>::value_type   Type;
+	typedef data_traits<typename pointed_type_if_any<Type>::type> TypeTraits;
 	typedef typename TypeTraits::data_category data_category;
 
 	for ( auto & s : list ) {
@@ -158,14 +163,17 @@ MovieSegmentData::MatchData(IterType begin,
                             IterType end,
                             timed_data /*placeholder*/) {
 
+	typedef typename std::iterator_traits<IterType>::value_type Type;
+	typedef data_traits<typename pointed_type_if_any>::type>    TypeTraits;
+
 	for ( auto & d : Data ) {
-		while( MaybeDeref(*begin).Time() < d.Time ) {
+		while( TypeTraits::time(MaybeDeref(*begin)) < d.Time ) {
 			++begin;
 			if ( begin == end ) {
 				return end;
 			}
 		}
-		while ( MaybeDeref(*begin).Time() == d.Time ) {
+		while ( TypeTraits::time(MaybeDeref(*begin)) == d.Time ) {
 			d.Append(*begin);
 			++begin;
 			if ( begin == end ) {

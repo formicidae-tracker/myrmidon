@@ -28,7 +28,6 @@ struct has_space_field : std::false_type { };
 template <typename T>
 struct has_space_field <T, decltype((void) T::Space, 0)> : std::true_type { };
 
-
 template <typename T>
 class pointed_type_if_any {
 	template <typename U=T>

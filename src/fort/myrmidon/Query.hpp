@@ -2,7 +2,6 @@
 
 #include <vector>
 
-#include "MovieSegmentData.hpp"
 
 #include <fort/time/Time.hpp>
 
@@ -20,6 +19,7 @@ namespace myrmidon {
 
 class Experiment;
 class Matcher;
+class MovieSegmentData;
 
 /**
  * Queries are computation on an Experiment tracking data.
@@ -319,7 +319,8 @@ public:
 
 
 	static
-	std::vector<MovieSegmentData> FindMovieSegment(SpaceID space,
+	std::vector<MovieSegmentData> FindMovieSegment(const Experiment & experiment,
+	                                               SpaceID space,
 	                                               const fort::Time & start,
 	                                               const fort::Time & end);
 };
