@@ -65,7 +65,6 @@ TrackingDataDirectory::Ptr TrackingDataDirectory::Create(const std::string & uri
 	                                                                     movies,
 	                                                                     referenceCache));
 	res->d_itself = res;
-	res->d_endIterator.d_parent = res;
 	return res;
 }
 
@@ -84,7 +83,6 @@ TrackingDataDirectory::TrackingDataDirectory(const std::string & uri,
 	, d_startFrame(startFrame)
 	, d_endFrame(endFrame)
 	, d_uid(GetUID(d_absoluteFilePath))
-	, d_endIterator(Ptr(),endFrame+1)
 	, d_segments(si)
 	, d_movies(movies)
 	, d_referencesByFID(referenceCache) {
@@ -522,17 +520,12 @@ TrackingDataDirectory::const_iterator::const_iterator(const TrackingDataDirector
 	, d_current(current) {
 }
 
-TrackingDataDirectory::const_iterator::const_iterator(const_iterator & other)
+TrackingDataDirectory::const_iterator::const_iterator(const_iterator && other)
 	: d_parent(other.d_parent)
 	, d_current(other.d_current)
 	, d_file(std::move(other.d_file))
 	, d_message(other.d_message)
 	, d_frame(other.d_frame) {
-}
-
-TrackingDataDirectory::const_iterator::const_iterator(const const_iterator & other)
-	: d_parent(other.d_parent)
-	, d_current(other.d_current) {
 }
 
 TrackingDataDirectory::const_iterator &
@@ -604,6 +597,10 @@ TrackingDataDirectory::Ptr TrackingDataDirectory::const_iterator::LockParent() c
 
 TrackingDataDirectory::const_iterator TrackingDataDirectory::begin() const {
 	return const_iterator(Itself(),d_startFrame);
+}
+
+TrackingDataDirectory::const_iterator TrackingDataDirectory::end() const {
+	return const_iterator(Itself(),d_endFrame+1);
 }
 
 TrackingDataDirectory::const_iterator TrackingDataDirectory::FrameAt(uint64_t frameID) const {
@@ -1034,6 +1031,47 @@ void TrackingDataDirectory::LoadDetectionSettings() {
 }
 
 
+std::pair<TrackingDataDirectory::const_iterator,
+          TrackingDataDirectory::const_iterator>
+TrackingDataDirectory::IteratorRange(const Time & start,
+                                     const Time & end) {
+	if ( start.Before(end) == false
+	     || start.After(End())
+	     || end.Before(Start()) ) {
+		return std::make_pair(this->end(),this->end());
+	}
+
+	const_iterator ibegin = this->begin();
+	const_iterator iend = this->end();
+
+	if ( start.After(Start()) == true ) {
+		ibegin = FrameAfter(start);
+	}
+	if ( end.Before(End()) == true ) {
+		iend = FrameAfter(end);
+	}
+	return std::make_pair(std::move(ibegin),std::move(iend));
+}
+
+std::vector<std::pair<TrackingDataDirectory::const_iterator,
+                      TrackingDataDirectory::const_iterator>>
+TrackingDataDirectory::IteratorRanges(const std::vector<Ptr> & list,
+                                      const Time & start,
+                                      const Time & end) {
+	if ( start.Before(end) == false ) {
+		return {};
+	}
+	std::vector<std::pair<const_iterator,const_iterator>> res;
+	res.reserve(list.size());
+	for ( const auto & tdd : list ) {
+		auto range = tdd->IteratorRange(start,end);
+		if ( range.first == range.second ) {
+			continue;
+		}
+		res.push_back(std::move(range));
+	}
+	return res;
+}
 
 }
 }

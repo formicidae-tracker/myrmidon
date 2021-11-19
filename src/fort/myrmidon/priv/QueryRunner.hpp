@@ -19,6 +19,7 @@ class Experiment;
 
 class QueryRunner {
 public:
+
 	typedef std::pair<SpaceID,RawFrameConstPtr> RawData;
 
 	struct Args {

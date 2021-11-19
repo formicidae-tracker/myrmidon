@@ -12,6 +12,10 @@ warnings.filterwarnings("ignore",
                         category=UserWarning,
                         module='setuptools')
 
+warnings.filterwarnings("ignore",
+                        message="setup_requires is deprecated. Supply build dependencies using PEP 517 pyproject.toml",
+                        module='setuptools')
+
 
 # Convert distutils Windows platform specifiers to CMake -A arguments
 PLAT_TO_CMAKE = {

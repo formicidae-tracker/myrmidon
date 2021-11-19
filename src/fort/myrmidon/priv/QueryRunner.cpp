@@ -22,54 +22,27 @@ namespace priv {
 class DataLoader {
 public:
 	DataLoader(const Experiment & experiment,
-			   const QueryRunner::Args & args)
-		: d_dataRanges(std::make_shared<DataRangeBySpaceID>())
-		, d_rangeIterators(std::make_shared<RangesIteratorByID>())
-		, d_dataIterators(std::make_shared<DataIteratorByID>())
-		, d_continue(std::make_shared<std::atomic<bool>>()) {
-		BuildRanges(experiment,args.Start,args.End,*d_dataRanges);
-		d_continue->store(true);
-		for ( const auto & [spaceID,ranges] : *d_dataRanges ) {
-			d_rangeIterators->insert(std::make_pair(spaceID,ranges.begin()));
-			d_dataIterators->insert(std::make_pair(spaceID,std::move(ranges.begin()->first)));
-		}
+			   const QueryRunner::Args & args) {
+		BuildRanges(experiment,args.Start,args.End);
+		d_continue.store(true);
 	}
-
 
 	void Stop() {
-		d_continue->store(false);
+		d_continue.store(false);
 	}
 
-	QueryRunner::RawData operator()(tbb::flow_control & fc) const {
-		auto res = (*this)();
-		if (std::get<0>(res) == 0 ) {
-			fc.stop();
-		}
-		return res;
-	}
-
-	QueryRunner::RawData operator()() const {
-		if ( d_continue->load() == false ) {
+	QueryRunner::RawData operator()() {
+		if ( d_continue.load() == false ) {
 			return std::make_pair(0,RawFrame::ConstPtr());
 		}
 		static int i = 0;
 		SpaceID next(0);
-		Time nextTime;
-		for (  auto & [spaceID,dataIter] : *d_dataIterators ) {
-			auto & rangeIterator = d_rangeIterators->at(spaceID);
-			if ( rangeIterator == d_dataRanges->at(spaceID).cend() ) {
+		Time nextTime  = Time::SinceEver();
+		for (  auto & [spaceID,spaceIter] : d_spaceIterators ) {
+			if ( spaceIter.Done() ) {
 				continue;
 			}
-			if ( dataIter == d_rangeIterators->at(spaceID)->second ) {
-				++rangeIterator;
-				if ( rangeIterator == d_dataRanges->at(spaceID).cend() ) {
-					continue;
-				}
-				auto newDataIter = std::move(rangeIterator->first);
-				dataIter = std::move(newDataIter);
-			}
-			const auto & dataTime = (*dataIter)->Frame().Time();
-
+			auto dataTime = (*spaceIter)->Frame().Time();
 			if ( next == 0 || dataTime.Before(nextTime) ) {
 				nextTime = dataTime;
 				next = spaceID;
@@ -80,53 +53,92 @@ public:
 			return std::make_pair(0,RawFrame::ConstPtr());
 		}
 
-		auto & dataIter = d_dataIterators->at(next);
-
+		auto & dataIter = d_spaceIterators.at(next);
 		auto res = *(dataIter);
 		++dataIter;
 		return std::make_pair(next,res);
 	}
 
 private:
-	typedef std::pair<TrackingDataDirectory::const_iterator,
-	                  TrackingDataDirectory::const_iterator> DataRange;
-	typedef std::map<SpaceID,std::vector<DataRange>>         DataRangeBySpaceID;
+	class TDDIterator {
+	public:
+		TDDIterator(TrackingDataDirectory::const_iterator & begin,
+		            TrackingDataDirectory::const_iterator & end)
+			: d_iter(std::move(begin))
+			, d_end(std::move(end)) {
+		}
 
-	typedef std::map<SpaceID,std::vector<DataRange>::const_iterator> RangesIteratorByID;
-	typedef std::map<SpaceID,TrackingDataDirectory::const_iterator>  DataIteratorByID;
+		bool Done() const {
+			return d_iter == d_end;
+		}
 
-	static void BuildRanges(const Experiment & experiment,
-							const Time & start,
-							const Time & end,
-							DataRangeBySpaceID & ranges) {
-		const auto & spaces = experiment.Spaces();
-		for ( const auto & [spaceID,space] : spaces ) {
-			for ( const auto & tdd : space->TrackingDataDirectories() ) {
-				TrackingDataDirectory::const_iterator ibegin(tdd->begin()),iend(tdd->end());
-				if ( start.IsSinceEver() == false ) {
-					if ( tdd->End().Before(start) == true ) {
-						continue;
-					}
-					if ( start.After(tdd->Start()) == true ) {
-						ibegin = tdd->FrameAfter(start);
-					}
-				}
-				if (end.IsForever() == false ) {
-					if (end.Before(tdd->Start()) == true ) {
-						continue;
-					}
-					iend = tdd->FrameAfter(end);
-				}
-				ranges[spaceID].push_back(std::make_pair(ibegin,iend));
+		const RawFrameConstPtr & operator*() {
+			return *d_iter;
+		}
+
+		TDDIterator & operator++() {
+			if ( Done() ) {
+				return *this;
 			}
+			++d_iter;
+			return *this;
+		}
+
+	private:
+		TrackingDataDirectory::const_iterator d_iter,d_end;
+	};
+
+	class SpaceIterator {
+	public:
+		SpaceIterator(std::vector<std::pair<TrackingDataDirectory::const_iterator,
+		              TrackingDataDirectory::const_iterator>> & ranges ) {
+			for ( auto & range : ranges ) {
+				d_tddIterators.push_back(TDDIterator(range.first,range.second));
+			}
+			d_current = d_tddIterators.begin();
+			while( !Done() && d_current->Done() ) {
+				++d_current;
+			}
+		}
+
+		bool Done() const {
+			return d_current == d_tddIterators.end();
+		}
+
+		const RawFrameConstPtr & operator*() {
+			return **d_current;
+		}
+
+		SpaceIterator & operator++() {
+			if ( Done() ) {
+				return *this;
+			}
+			++(*d_current);
+			while ( !Done() && d_current->Done() ) {
+				++d_current;
+			}
+			return *this;
+		}
+
+	private:
+		std::vector<TDDIterator>            d_tddIterators;
+		std::vector<TDDIterator>::iterator  d_current;
+	};
+
+
+	void BuildRanges(const Experiment & experiment,
+	                 const Time & start,
+	                 const Time & end) {
+		for ( const auto & [spaceID,space] : experiment.Spaces() ) {
+			auto ranges =TrackingDataDirectory::IteratorRanges(space->TrackingDataDirectories(),
+			                                                   start,
+			                                                   end);
+			d_spaceIterators.insert(std::make_pair(spaceID,SpaceIterator(ranges)));
 		}
 	}
 
-
-	std::shared_ptr<DataRangeBySpaceID>   d_dataRanges;
-	std::shared_ptr<RangesIteratorByID>   d_rangeIterators;
-	std::shared_ptr<DataIteratorByID>     d_dataIterators;
-	std::shared_ptr<std::atomic<bool>>    d_continue;
+	std::map<SpaceID,SpaceIterator> d_spaceIterators;
+	std::atomic<bool>       d_continue;
 };
 
 
@@ -134,10 +146,17 @@ void QueryRunner::RunMultithread(const Experiment & experiment,
 								 const Args & args,
 								 Finalizer finalizer) {
 
-	DataLoader loader(experiment,args);
+	auto loader = std::make_shared<DataLoader>(experiment,args);
 
 	tbb::filter_t<void,RawData>
-		loadData(tbb::filter::serial_in_order,loader);
+		loadData(tbb::filter::serial_in_order,
+		         [loader](tbb::flow_control & fc) -> RawData {
+			         auto res = (*loader)();
+			         if ( std::get<0>(res) == 0 ) {
+				         fc.stop();
+			         }
+			         return res;
+		         });
 
 	tbb::filter_t<RawData,CollisionData>
 		computeData(tbb::filter::parallel,
@@ -156,11 +175,11 @@ void QueryRunner::RunSingleThread(const Experiment & experiment,
 								  const Args & args,
 								  Finalizer finalizer) {
 
-	DataLoader load(experiment,args);
+	DataLoader loader(experiment,args);
 	auto compute = QueryRunner::computeData(experiment,args);
 	// we simply run in a single thread
 	for (;;) {
-		auto raw = load();
+		auto raw = loader();
 		if ( std::get<0>(raw) == 0 ) {
 			break;
 		}
@@ -175,10 +194,17 @@ void QueryRunner::RunMultithreadFinalizeInCurrent(const Experiment & experiment,
 	// we use a queue to retrieve all data in the main thread
 	tbb::concurrent_bounded_queue<myrmidon::CollisionData> queue;
 
-	DataLoader loader(experiment,args);
+	auto loader = std::make_shared<DataLoader>(experiment,args);
 
 	tbb::filter_t<void,RawData>
-		loadData(tbb::filter::serial_in_order,loader);
+		loadData(tbb::filter::serial_in_order,
+		         [loader](tbb::flow_control & fc) -> RawData {
+			         auto res = (*loader)();
+			         if ( std::get<0>(res) == 0 ) {
+				         fc.stop();
+			         }
+			         return res;
+		         });
 
 	tbb::filter_t<RawData,CollisionData>
 		computeData(tbb::filter::parallel,
@@ -210,7 +236,7 @@ void QueryRunner::RunMultithreadFinalizeInCurrent(const Experiment & experiment,
 		try {
 			finalizer(v);
 		} catch(...) {
-			loader.Stop();
+			loader->Stop();
 			go.join();
 			throw;
 		}

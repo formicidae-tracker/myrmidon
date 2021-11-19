@@ -54,10 +54,11 @@ public:
 	public:
 		const_iterator(const Ptr & tdd,uint64_t current);
 
-		const const_iterator & operator=(const const_iterator & other) = delete;
+		const_iterator & operator=(const const_iterator & other) = delete;
+		const_iterator(const const_iterator & other) = delete;
+
 		const_iterator & operator=(const_iterator && other);
-		const_iterator(const const_iterator & other);
-		const_iterator(const_iterator & other);
+		const_iterator(const_iterator && other);
 
 		const_iterator& operator++();
 		bool operator==(const const_iterator & other) const;
@@ -69,7 +70,7 @@ public:
 		using reference = const RawFrameConstPtr &;
 		using iterator_category = std::forward_iterator_tag;
 
-	private:
+		//	private:
 		friend class TrackingDataDirectory;
 		const static RawFrameConstPtr NULLPTR;
 
@@ -155,9 +156,7 @@ public:
 
 	const_iterator begin() const;
 
-	inline const const_iterator & end() const {
-		return d_endIterator;
-	}
+	const_iterator end() const;
 
 	const_iterator FrameAt(FrameID frameID) const;
 
@@ -198,6 +197,15 @@ public:
 
 	const tags::ApriltagOptions & DetectionSettings() const;
 
+	std::pair<const_iterator,const_iterator>
+	IteratorRange(const Time & start,
+	              const Time & end);
+
+	static
+	std::vector<std::pair<const_iterator,const_iterator>>
+	IteratorRanges(const std::vector<Ptr> & list,
+	               const Time & start,
+	               const Time & end);
 private:
 
 	typedef std::pair<FrameID,Time> TimedFrame;
@@ -271,7 +279,6 @@ private:
 	std::string    d_URI;
 	FrameID        d_startFrame,d_endFrame;
 	UID            d_uid;
-	const_iterator d_endIterator;
 
 
 
