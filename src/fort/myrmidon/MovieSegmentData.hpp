@@ -127,7 +127,7 @@ MovieSegmentData::MatchData(List & list,
 		filtered.reserve(std::distance(begin,end));
 
 		std::copy_if(begin,end,
-		             filtered.begin(),
+		             std::back_inserter(filtered),
 		             [space](const Type & v) -> bool {
 			             return TypeTraits::space(MaybeDeref(v)) == space;
 		             });

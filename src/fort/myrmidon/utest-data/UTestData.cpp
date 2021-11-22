@@ -141,6 +141,8 @@ void UTestData::BuildFakeData(const fs::path & basedir) {
 
 	WriteFakedata();
 
+	GenerateSegmentedResults();
+	GenerateTruncatedResults();
 
 
 #ifndef NDEBUG
@@ -154,8 +156,6 @@ void UTestData::GenerateFakedata() {
 	SaveFullExpectedResult(gen);
 	GenerateTDDStructure();
 	GenerateExperimentStructure();
-	GenerateSegmentedResults();
-	GenerateTruncatedResults();
 }
 
 void UTestData::SaveFullExpectedResult(const GeneratedData & gen) {
@@ -703,14 +703,14 @@ void MatchMovieData(MovieSegmentData & data,
 	for ( auto & d : data.Data ) {
 		std::copy_if(result.Trajectories.begin(),
 		             result.Trajectories.end(),
-		             d.Trajectories.begin(),
+		             std::back_inserter(d.Trajectories),
 		             [&](const AntTrajectory::Ptr & t ) -> bool {
 			             return t->Space == data.Space && t->Start <= d.Time && d.Time <= t->End();
 		             });
 
 		std::copy_if(result.Interactions.begin(),
 		             result.Interactions.end(),
-		             d.Interactions.begin(),
+		             std::back_inserter(d.Interactions),
 		             [&] (const AntInteraction::Ptr & i) -> bool {
 			             return data.Space == i->Space && i->Start <= d.Time && d.Time <= i->End;
 		             });
