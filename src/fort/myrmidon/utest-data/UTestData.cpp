@@ -736,10 +736,14 @@ void UTestData::GenerateMovieSegmentData(ExpectedResult & result,
 		MatchMovieData(movieSegments.back(),d_frames,result,info.Start,info.End);
 
 	}
-
+#ifndef NDEBUG
 	for ( const auto & s : movieSegments ) {
-		std::cerr << "MovieSegment{ Space = " << s.Space << " , AbsoluteFilePath = " << s.AbsoluteFilePath << "}" << std::endl;
+		std::cerr << "MovieSegment{ Space = " << s.Space
+		          << " , AbsoluteFilePath = " << s.AbsoluteFilePath
+		          << " , Frames = " << s.Data.size()
+		          << "}" << std::endl;
 	}
+#endif //NDEBUG
 }
 
 } // namespace myrmidon

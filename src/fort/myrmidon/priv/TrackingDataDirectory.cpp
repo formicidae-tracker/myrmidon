@@ -1036,8 +1036,8 @@ std::pair<TrackingDataDirectory::const_iterator,
 TrackingDataDirectory::IteratorRange(const Time & start,
                                      const Time & end) {
 	if ( start.Before(end) == false
-	     || start.After(End())
-	     || end.Before(Start()) ) {
+	     || start >= End()
+	     || end < Start() ) {
 		return std::make_pair(this->end(),this->end());
 	}
 

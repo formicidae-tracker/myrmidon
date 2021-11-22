@@ -169,6 +169,37 @@ void Query::FindMovieSegment(const Experiment & experiment,
                              const Time & end) {
 
 	segments.clear();
+
+	if ( experiment.Spaces().count(space)) {
+		return;
+	}
+	auto ranges = TrackingDataDirectory::IteratorRanges(experiment.Spaces().at(space)->TrackingDataDirectories(),
+	                                                    start,end);
+
+	for ( auto & [iter,end] : ranges ) {
+		MovieSegment::ConstPtr segment;
+		MovieFrameID lastMovieID;
+		for ( ; iter != end; ++iter) {
+			const auto & frame = *iter;
+			auto frameID = frame->Frame().ID();
+			if ( segment == nullptr
+			     || segment->EndFrame() < frameID ) {
+				segment = iter.LockParent()->MovieSegments().Find(frameID).second;
+				lastMovieID = segment->ToMovieFrameID(frameID) - 1;
+				segments.push_back(MovieSegmentData{.Space = space,
+				                                    .AbsoluteFilePath = segment->AbsoluteFilePath });
+			}
+			while(lastMovieID < segment->ToMovieFrameID(frameID) ) {
+				++lastMovieID;
+				segments.back().Data.push_back(
+
+			}
+
+
+
+		}
+
+	}
 }
 
 
