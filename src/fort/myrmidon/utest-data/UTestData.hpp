@@ -49,7 +49,7 @@ public:
 	struct SegmentInfo {
 		std::string URI;
 		uint64_t    FrameID;
-		fort::Time  Time;
+		fort::Time  Start,End;
 		std::string RelativePath;
 	};
 
@@ -79,7 +79,7 @@ public:
 		std::vector<AntTrajectory::Ptr> Trajectories;
 		std::vector<AntInteraction::Ptr> Interactions;
 		std::vector<AntInteraction::Ptr> Summarized() const;
-		std::vector<MovieSegmentData>    MovieSegment;
+		std::map<SpaceID,std::vector<MovieSegmentData>>    MovieSegments;
 	};
 
 	static fs::path TempDirName();
@@ -137,6 +137,10 @@ private:
 	void GenerateSegmentedResult(ExpectedResult & result,
 	                             const TDDInfo & tddInfo,
 	                             SpaceID space);
+
+	void GenerateMovieSegmentData(ExpectedResult & result,
+	                              const TDDInfo & tddInfo,
+	                              SpaceID space);
 	void GenerateTDDStructure();
 
 	void WriteFakedata();

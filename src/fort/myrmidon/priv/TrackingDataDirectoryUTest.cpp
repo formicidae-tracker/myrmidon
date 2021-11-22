@@ -48,7 +48,7 @@ TEST_F(TrackingDataDirectoryUTest,ExtractInfoFromTrackingDatadirectories) {
 			EXPECT_EQ(tddInfo.Segments[i].URI,
 			          tdd->TrackingSegments().Segments()[i].first.URI());
 			EXPECT_EQ(tddInfo.Segments[i].FrameID,tdd->TrackingSegments().Segments()[i].first.FrameID()) << " With i: " << i;
-		 	EXPECT_TIME_EQ(tddInfo.Segments[i].Time,tdd->TrackingSegments().Segments()[i].first.Time()) << " With i: " << i;
+		 	EXPECT_TIME_EQ(tddInfo.Segments[i].Start,tdd->TrackingSegments().Segments()[i].first.Time()) << " With i: " << i;
 			EXPECT_EQ(tddInfo.Segments[i].RelativePath,tdd->TrackingSegments().Segments()[i].second) << " With i: " << i;
 		}
 

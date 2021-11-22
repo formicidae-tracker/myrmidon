@@ -22,7 +22,7 @@ struct MovieSegmentData {
 	struct MatchedData {
 		fort::Time                       Time;
 		IdentifiedFrame::Ptr             Identified;
-		CollisionFrame::Ptr              Collisions;
+		CollisionFrame::Ptr              Collided;
 		std::vector<AntTrajectory::Ptr>  Trajectories;
 		std::vector<AntInteraction::Ptr> Interactions;
 		std::vector<std::any>            UserData;

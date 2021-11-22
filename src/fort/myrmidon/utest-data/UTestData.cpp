@@ -141,6 +141,8 @@ void UTestData::BuildFakeData(const fs::path & basedir) {
 
 	WriteFakedata();
 
+
+
 #ifndef NDEBUG
 	std::cerr << "Generated data in " << Time::Now().Sub(start) << std::endl;
 #endif
@@ -357,6 +359,7 @@ public:
 		d_endFrame = frameID;
 		d_end = data.FrameTime;
 		if ( d_saved ) {
+			d_tddInfo.Segments.back().End = data.FrameTime.Add(1);
 			return;
 		}
 		d_saved = true;
@@ -366,7 +369,8 @@ public:
 		d_tddInfo.Segments.push_back({
 		                              .URI = d_tddInfo.AbsoluteFilePath.filename() / "frames" / std::to_string(frameID),
 		                              .FrameID = frameID,
-		                              .Time = data.FrameTime,
+		                              .Start = data.FrameTime,
+		                              .End = data.FrameTime.Add(1),
 		                              .RelativePath = relpath.str(),
 			});
 	}
@@ -645,8 +649,6 @@ void UTestData::SetMonotonicTimeToResults() {
 
 std::vector<AntInteraction::Ptr> UTestData::ExpectedResult::Summarized() const {
 	std::vector<AntInteraction::Ptr> res;
-
-
 	for ( const auto & i : Interactions ) {
 		auto ii = std::make_shared<AntInteraction>(*i);
 		ii->Trajectories = std::make_pair(priv::DataSegmenter::SummarizeTrajectorySegment(std::get<0>(i->Trajectories).first),
@@ -670,9 +672,75 @@ void UTestData::GenerateSegmentedResults() {
 void UTestData::GenerateSegmentedResult(ExpectedResult & result,
                                         const TDDInfo & info,
                                         SpaceID spaceID) {
-
+	if ( info.HasMovie == true ) {
+		GenerateMovieSegmentData(result,info,spaceID);
+	}
+	// Other segmented data to generate
 }
 
+std::string MovieSegmentName(size_t index) {
+	std::ostringstream oss;
+	oss << "stream." << std::setw(4) << std::setfill('0') << index << ".mp4";
+	return oss.str();
+}
+
+void MatchMovieData(MovieSegmentData & data,
+                    std::vector<std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr>> & frames,
+                    UTestData::ExpectedResult & result,
+                    const Time & start,
+                    const Time & end) {
+	for ( const auto & [identified,collided] : frames ) {
+		if ( identified->Space != data.Space
+		     || start > identified->FrameTime
+		     || identified->FrameTime >= end ) {
+			continue;
+		}
+		data.Data.push_back(MovieSegmentData::MatchedData{.Time = identified->FrameTime,
+			                                                  .Identified = identified,
+			                                                  .Collided = collided});
+	}
+
+	for ( auto & d : data.Data ) {
+		std::copy_if(result.Trajectories.begin(),
+		             result.Trajectories.end(),
+		             d.Trajectories.begin(),
+		             [&](const AntTrajectory::Ptr & t ) -> bool {
+			             return t->Space == data.Space && t->Start <= d.Time && d.Time <= t->End();
+		             });
+
+		std::copy_if(result.Interactions.begin(),
+		             result.Interactions.end(),
+		             d.Interactions.begin(),
+		             [&] (const AntInteraction::Ptr & i) -> bool {
+			             return data.Space == i->Space && i->Start <= d.Time && d.Time <= i->End;
+		             });
+	}
+}
+
+
+void UTestData::GenerateMovieSegmentData(ExpectedResult & result,
+                                         const TDDInfo & info,
+                                         SpaceID spaceID) {
+	auto & movieSegments = result.MovieSegments[spaceID];
+	movieSegments.clear();
+	movieSegments.reserve(info.Segments.size());
+
+	size_t index = -1;
+	for ( const auto & segment : info.Segments ) {
+		++index;
+
+		movieSegments.push_back(MovieSegmentData());
+		movieSegments.back().Space = spaceID;
+		movieSegments.back().AbsoluteFilePath = info.AbsoluteFilePath / MovieSegmentName(index);
+
+		MatchMovieData(movieSegments.back(),d_frames,result,info.Start,info.End);
+
+	}
+
+	for ( const auto & s : movieSegments ) {
+		std::cerr << "MovieSegment{ Space = " << s.Space << " , AbsoluteFilePath = " << s.AbsoluteFilePath << "}" << std::endl;
+	}
+}
 
 } // namespace myrmidon
 } // namespace fort
