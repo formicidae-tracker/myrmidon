@@ -152,6 +152,7 @@ void UTestData::GenerateFakedata() {
 	SaveFullExpectedResult(gen);
 	GenerateTDDStructure();
 	GenerateExperimentStructure();
+	GenerateSegmentedResults();
 	GenerateTruncatedResults();
 }
 
@@ -653,6 +654,23 @@ std::vector<AntInteraction::Ptr> UTestData::ExpectedResult::Summarized() const {
 		res.push_back(ii);
 	}
 	return res;
+}
+
+
+void UTestData::GenerateSegmentedResults() {
+	for ( const auto & tddInfo : d_nestTDDs ) {
+		GenerateSegmentedResult(d_results.front(),tddInfo,1);
+	}
+
+	for ( const auto & tddInfo : d_foragingTDDs) {
+		GenerateSegmentedResult(d_results.front(),tddInfo,2);
+	}
+}
+
+void UTestData::GenerateSegmentedResult(ExpectedResult & result,
+                                        const TDDInfo & info,
+                                        SpaceID spaceID) {
+
 }
 
 

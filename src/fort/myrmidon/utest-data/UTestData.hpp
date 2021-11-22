@@ -16,6 +16,7 @@
 #include <fort/myrmidon/types/AntInteraction.hpp>
 #include <fort/myrmidon/types/AntTrajectory.hpp>
 #include <fort/myrmidon/types/TagStatistics.hpp>
+#include <fort/myrmidon/MovieSegmentData.hpp>
 
 #include <fort/myrmidon/Matchers.hpp>
 
@@ -78,6 +79,7 @@ public:
 		std::vector<AntTrajectory::Ptr> Trajectories;
 		std::vector<AntInteraction::Ptr> Interactions;
 		std::vector<AntInteraction::Ptr> Summarized() const;
+		std::vector<MovieSegmentData>    MovieSegment;
 	};
 
 	static fs::path TempDirName();
@@ -131,6 +133,10 @@ private:
 	                             const std::vector<TDDInfo> & tdds);
 
 	void GenerateTruncatedResults();
+	void GenerateSegmentedResults();
+	void GenerateSegmentedResult(ExpectedResult & result,
+	                             const TDDInfo & tddInfo,
+	                             SpaceID space);
 	void GenerateTDDStructure();
 
 	void WriteFakedata();
