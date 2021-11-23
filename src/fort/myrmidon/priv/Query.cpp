@@ -209,9 +209,8 @@ void Query::FindMovieSegment(const Experiment & experiment,
 				if ( movieID != nextMatch ) {
 					continue;
 				}
-				data.push_back(MovieSegmentData::MatchedData());
-				data.back().FramePosition = movieID;
-				data.back().Time = frame->Frame().Time();
+				data.push_back({.FramePosition = uint32_t(movieID),
+				                .Time = frame->Frame().Time()});
 			}
 		}
 	}

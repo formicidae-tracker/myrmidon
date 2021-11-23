@@ -695,9 +695,9 @@ void MatchMovieData(MovieSegmentData & data,
 		     || identified->FrameTime >= end ) {
 			continue;
 		}
-		data.Data.push_back(MovieSegmentData::MatchedData{.Time = identified->FrameTime,
-			                                                  .Identified = identified,
-			                                                  .Collided = collided});
+		data.Data.push_back({.Time = identified->FrameTime,
+		                     .Identified = identified,
+		                     .Collided = collided});
 	}
 	data.End = data.Data.size();
 

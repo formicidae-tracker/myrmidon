@@ -35,10 +35,10 @@
 
 
 
-::testing::AssertionResult AssertMatchedDataEqual(const char * aExpr,
-                                                  const char * bExpr,
-                                                  const fort::myrmidon::MovieSegmentData::MatchedData & a,
-                                                  const fort::myrmidon::MovieSegmentData::MatchedData & b) {
+::testing::AssertionResult AssertMovieFrameDataEqual(const char * aExpr,
+                                                     const char * bExpr,
+                                                     const fort::myrmidon::MovieFrameData & a,
+                                                     const fort::myrmidon::MovieFrameData & b) {
 	auto tmp = AssertTimeEqual((std::string(aExpr) + ".Time").c_str(),
 	                           (std::string(bExpr) + ".Time").c_str(),
 	                           a.Time,
@@ -106,10 +106,10 @@
 	check(aExpr,bExpr,a,b,End);
 	check(aExpr,bExpr,a,b,Data.size());
 	for ( size_t i = 0; i < a.Data.size(); ++i ) {
-		auto tmp = AssertMatchedDataEqual((std::string(aExpr) + ".Data[" + std::to_string(i) + "]").c_str(),
-		                                  (std::string(bExpr) + ".Data[" + std::to_string(i) + "]").c_str(),
-		                                  a.Data[i],
-		                                  b.Data[i]);
+		auto tmp = AssertMovieFrameDataEqual((std::string(aExpr) + ".Data[" + std::to_string(i) + "]").c_str(),
+		                                     (std::string(bExpr) + ".Data[" + std::to_string(i) + "]").c_str(),
+		                                     a.Data[i],
+		                                     b.Data[i]);
 		if ( !tmp ) {
 			return tmp;
 		}
@@ -172,19 +172,19 @@ TEST_F(MovieSegmentDataUTest,ForEachFramesEdgeCases) {
 
 	MovieSegmentData::ForEachFrames(segments,
 	                                [&](const cv::Mat & ,
-	                                    const MovieSegmentData::MatchedData & d) {
+	                                    const MovieFrameData & d) {
 		                                auto fi = std::find_if(segment.Data.begin(),
 		                                                       segment.Data.end(),
-		                                                       [&](const MovieSegmentData::MatchedData & it) {
+		                                                       [&](const MovieFrameData & it) {
 			                                                       return it.FramePosition == d.FramePosition;
 		                                                       });
 		                                if ( fi == segment.Data.end() ) {
-			                                EXPECT_PRED_FORMAT2(AssertMatchedDataEqual,
+			                                EXPECT_PRED_FORMAT2(AssertMovieFrameDataEqual,
 			                                                    d,
-			                                                    (MovieSegmentData::MatchedData{.FramePosition = d.FramePosition,
+			                                                    (MovieFrameData{.FramePosition = d.FramePosition,
 					             .Time = Time::SinceEver()}));
 		                                } else {
-			                                EXPECT_PRED_FORMAT2(AssertMatchedDataEqual,
+			                                EXPECT_PRED_FORMAT2(AssertMovieFrameDataEqual,
 			                                                    d,
 			                                                    *fi);
 		                                }
@@ -235,10 +235,10 @@ TEST_F(MovieSegmentDataUTest,EndToEnd) {
 
 	MovieSegmentData::ForEachFrames(segments,
 	                                [&](const cv::Mat & mat,
-	                                    const MovieSegmentData::MatchedData & d) {
+	                                    const MovieFrameData & d) {
 		                                ASSERT_TRUE(iter != segments.front().Data.end() );
 		                                EXPECT_FALSE(mat.empty());
-		                                EXPECT_PRED_FORMAT2(AssertMatchedDataEqual,
+		                                EXPECT_PRED_FORMAT2(AssertMovieFrameDataEqual,
 		                                                    d,
 		                                                    *iter);
 		                                ++iter;

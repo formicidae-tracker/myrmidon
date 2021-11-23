@@ -6,7 +6,7 @@ namespace fort {
 namespace myrmidon {
 
 void MovieSegmentData::ForEachFrames(const List & list,
-                                     std::function<void (cv::Mat & frame, const MatchedData & data)> operation) {
+                                     std::function<void (cv::Mat & frame, const MovieFrameData & data)> operation) {
 	for ( const auto & s : list) {
 		cv::VideoCapture cap(s.AbsoluteFilePath);
 		cap.set(cv::CAP_PROP_POS_FRAMES,s.Begin);
@@ -23,7 +23,7 @@ void MovieSegmentData::ForEachFrames(const List & list,
 			if ( iter->FramePosition == moviePos ) {
 				operation(frame,*iter);
 			} else {
-				operation(frame,MatchedData{.FramePosition = moviePos,.Time = Time::SinceEver()});
+				operation(frame,{.FramePosition = moviePos,.Time = Time::SinceEver()});
 			}
 		}
 	}

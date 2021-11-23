@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <any>
+#include <functional>
 
 #include <fort/time/Time.hpp>
 
@@ -21,28 +22,30 @@ namespace fort {
 namespace myrmidon {
 
 
+struct MovieFrameData {
+	uint32_t                         FramePosition;
+	fort::Time                       Time;
+	IdentifiedFrame::Ptr             Identified;
+	CollisionFrame::Ptr              Collided;
+	std::vector<AntTrajectory::Ptr>  Trajectories;
+	std::vector<AntInteraction::Ptr> Interactions;
+	std::vector<std::any>            UserData;
+
+	bool Empty() const;
+
+	template <typename T>
+	void Append(const T & value);
+};
+
+
 struct MovieSegmentData {
-	struct MatchedData {
-		uint32_t                         FramePosition;
-		fort::Time                       Time;
-		IdentifiedFrame::Ptr             Identified;
-		CollisionFrame::Ptr              Collided;
-		std::vector<AntTrajectory::Ptr>  Trajectories;
-		std::vector<AntInteraction::Ptr> Interactions;
-		std::vector<std::any>            UserData;
-
-		bool HasData() const;
-
-		template <typename T>
-		void Append(const T & value);
-	};
-
 	typedef std::vector<MovieSegmentData> List;
 
 	SpaceID                     Space;
 	std::string                 AbsoluteFilePath;
-	std::vector<MatchedData>    Data;
+	std::vector<MovieFrameData> Data;
 	uint32_t                    Begin,End;
+
 	template <typename IterType>
 	static void MatchData(List & list,
 	                      IterType begin,
@@ -50,14 +53,14 @@ struct MovieSegmentData {
 
 	static void ForEachFrames(const List & list,
 	                          std::function<void (cv::Mat & frame,
-	                                              const MatchedData & data)> operation);
+	                                              const MovieFrameData & data)> operation);
 
 
 private:
 	template <typename IterType>
 	static void MatchSortedFilteredData(List & list,
-	                        IterType begin,
-	                        IterType end);
+	                                    IterType begin,
+	                                    IterType end);
 
 	template <typename IterType>
 	IterType MatchData(IterType begin,
@@ -75,32 +78,32 @@ private:
 
 template <typename T>
 inline void
-MovieSegmentData::MatchedData::Append( const T & value) {
+MovieFrameData::Append( const T & value) {
 	UserData.push_back(value);
 }
 
 
 template <>
 inline void
-MovieSegmentData::MatchedData::Append(const IdentifiedFrame::Ptr & f) {
+MovieFrameData::Append(const IdentifiedFrame::Ptr & f) {
 	Identified = f;
 }
 template <>
 inline void
-MovieSegmentData::MatchedData::Append(const CollisionData & data) {
+MovieFrameData::Append(const CollisionData & data) {
 	Identified = std::get<0>(data);
 	Collided = std::get<1>(data);
 }
 
 template <>
 inline void
-MovieSegmentData::MatchedData::Append(const AntTrajectory::Ptr & t) {
+MovieFrameData::Append(const AntTrajectory::Ptr & t) {
 	Trajectories.push_back(t);
 }
 
 template <>
 inline void
-MovieSegmentData::MatchedData::Append(const AntInteraction::Ptr & i) {
+MovieFrameData::Append(const AntInteraction::Ptr & i) {
 	Interactions.push_back(i);
 }
 
