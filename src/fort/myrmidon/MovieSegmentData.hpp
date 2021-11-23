@@ -48,6 +48,9 @@ struct MovieSegmentData {
 	                      IterType begin,
 	                      IterType end);
 
+	static void ForEachFrames(const List & list,
+	                          std::function<void (cv::Mat & frame,
+	                                              const MatchedData & data)> operation);
 
 
 private:
@@ -67,8 +70,6 @@ private:
 	                   time_ranged_data);
 
 
-	static void IterateOverFrames(const List & list,
-	                              std::function<void (cv::Mat & frame, const MatchedData & data)> operation);
 
 };
 

@@ -8,6 +8,8 @@
 #include "UtilsUTest.hpp"
 #include "TestSetup.hpp"
 
+#include <opencv2/core.hpp>
+
 #define failure_helper(aExpr,bExpr,a,b,field) \
 	::testing::AssertionFailure() \
 	<< "Value of: " << aExpr << "." << #field << std::endl \
@@ -151,6 +153,47 @@ TEST_F(MovieSegmentDataUTest,MatchDataEdgeCases) {
 };
 
 
+TEST_F(MovieSegmentDataUTest,ForEachFramesEdgeCases) {
+	const auto & expected = TestSetup::UTestData().ExpectedResults().front();
+	const auto & frames = TestSetup::UTestData().ExpectedFrames();
+	std::vector<MovieSegmentData> segments;
+
+	Query::FindMovieSegment(*experiment,
+	                        segments,
+	                        1,
+	                        expected.Start,
+	                        expected.End);
+	ASSERT_EQ(segments.size(),1);
+	auto & segment = segments.front();
+	segment.Data.resize(segment.Data.size()-1);
+	segment.Data.push_back({.FramePosition = segment.End,
+	                        .Time = Time::SinceEver()});
+	segment.End += 2;
+
+	MovieSegmentData::ForEachFrames(segments,
+	                                [&](const cv::Mat & ,
+	                                    const MovieSegmentData::MatchedData & d) {
+		                                auto fi = std::find_if(segment.Data.begin(),
+		                                                       segment.Data.end(),
+		                                                       [&](const MovieSegmentData::MatchedData & it) {
+			                                                       return it.FramePosition == d.FramePosition;
+		                                                       });
+		                                if ( fi == segment.Data.end() ) {
+			                                EXPECT_PRED_FORMAT2(AssertMatchedDataEqual,
+			                                                    d,
+			                                                    (MovieSegmentData::MatchedData{.FramePosition = d.FramePosition,
+					             .Time = Time::SinceEver()}));
+		                                } else {
+			                                EXPECT_PRED_FORMAT2(AssertMatchedDataEqual,
+			                                                    d,
+			                                                    *fi);
+		                                }
+	                                });
+
+};
+
+
+
 
 TEST_F(MovieSegmentDataUTest,EndToEnd) {
 	const auto & expected = TestSetup::UTestData().ExpectedResults().front();
@@ -184,6 +227,22 @@ TEST_F(MovieSegmentDataUTest,EndToEnd) {
 		                    expected.MovieSegments.at(1)[i])
 			<< "  With i: " << i;
 	}
+
+	ASSERT_EQ(segments.size(),1);
+
+
+	auto iter = segments.front().Data.begin();
+
+	MovieSegmentData::ForEachFrames(segments,
+	                                [&](const cv::Mat & mat,
+	                                    const MovieSegmentData::MatchedData & d) {
+		                                ASSERT_TRUE(iter != segments.front().Data.end() );
+		                                EXPECT_FALSE(mat.empty());
+		                                EXPECT_PRED_FORMAT2(AssertMatchedDataEqual,
+		                                                    d,
+		                                                    *iter);
+		                                ++iter;
+	                                });
 
 	Query::FindMovieSegment(*experiment,
 	                        segments,

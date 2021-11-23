@@ -5,13 +5,13 @@
 namespace fort {
 namespace myrmidon {
 
-void MovieSegmentData::IterateOverFrames(const List & list,
-                                         std::function<void (cv::Mat & frame, const MatchedData & data)> operation) {
+void MovieSegmentData::ForEachFrames(const List & list,
+                                     std::function<void (cv::Mat & frame, const MatchedData & data)> operation) {
 	for ( const auto & s : list) {
 		cv::VideoCapture cap(s.AbsoluteFilePath);
-		cap.set(cv::CV_CAP_FRAME_POS,s.Start);
+		cap.set(cv::CAP_PROP_POS_FRAMES,s.Begin);
 		cv::Mat frame;
-		const auto iter = s.Data.begin();
+		auto iter = s.Data.cbegin();
 		for( auto moviePos = s.Begin; moviePos < s.End; ++moviePos) {
 			cap >> frame;
 			if ( frame.empty() ) {
@@ -28,3 +28,7 @@ void MovieSegmentData::IterateOverFrames(const List & list,
 		}
 	}
 }
+
+
+} // namespace myrmidon
+} // namespace fort

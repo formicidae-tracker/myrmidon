@@ -195,6 +195,7 @@ set(SRC_FILES types/AntInteraction.cpp
               Experiment.cpp
               Query.cpp
               Matchers.cpp
+              MovieSegmentData.cpp
 	          )
 
 set(COMMON_UTEST_SRC_FILES TestSetup.cpp
