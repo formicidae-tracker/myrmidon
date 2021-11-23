@@ -100,6 +100,8 @@
                                                        const fort::myrmidon::MovieSegmentData & b) {
 	check(aExpr,bExpr,a,b,Space);
 	check(aExpr,bExpr,a,b,AbsoluteFilePath);
+	check(aExpr,bExpr,a,b,Begin);
+	check(aExpr,bExpr,a,b,End);
 	check(aExpr,bExpr,a,b,Data.size());
 	for ( size_t i = 0; i < a.Data.size(); ++i ) {
 		auto tmp = AssertMatchedDataEqual((std::string(aExpr) + ".Data[" + std::to_string(i) + "]").c_str(),

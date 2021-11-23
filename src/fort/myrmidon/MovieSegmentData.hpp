@@ -13,6 +13,9 @@
 #include <fort/myrmidon/types/AntInteraction.hpp>
 #include <fort/myrmidon/types/MaybeDeref.hpp>
 
+namespace cv {
+class Mat;
+}
 
 namespace fort {
 namespace myrmidon {
@@ -39,11 +42,13 @@ struct MovieSegmentData {
 	SpaceID                     Space;
 	std::string                 AbsoluteFilePath;
 	std::vector<MatchedData>    Data;
-
+	uint32_t                    Begin,End;
 	template <typename IterType>
 	static void MatchData(List & list,
 	                      IterType begin,
 	                      IterType end);
+
+
 
 private:
 	template <typename IterType>
@@ -60,6 +65,11 @@ private:
 	IterType MatchData(IterType begin,
 	                   IterType end,
 	                   time_ranged_data);
+
+
+	static void IterateOverFrames(const List & list,
+	                              std::function<void (cv::Mat & frame, const MatchedData & data)> operation);
+
 };
 
 template <typename T>

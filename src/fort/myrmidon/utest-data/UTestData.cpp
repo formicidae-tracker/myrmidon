@@ -699,6 +699,7 @@ void MatchMovieData(MovieSegmentData & data,
 			                                                  .Identified = identified,
 			                                                  .Collided = collided});
 	}
+	data.End = data.Data.size();
 
 	for ( auto & d : data.Data ) {
 		std::copy_if(result.Trajectories.begin(),
@@ -732,7 +733,7 @@ void UTestData::GenerateMovieSegmentData(ExpectedResult & result,
 		movieSegments.push_back(MovieSegmentData());
 		movieSegments.back().Space = spaceID;
 		movieSegments.back().AbsoluteFilePath = info.AbsoluteFilePath / MovieSegmentName(index);
-
+		movieSegments.back().Begin = 0;
 		MatchMovieData(movieSegments.back(),d_frames,result,info.Start,info.End);
 
 	}

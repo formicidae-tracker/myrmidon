@@ -194,7 +194,8 @@ void Query::FindMovieSegment(const Experiment & experiment,
 					break;
 				}
 				segments.push_back(MovieSegmentData{.Space = space,
-				                                    .AbsoluteFilePath = segment->AbsoluteFilePath() });
+				                                    .AbsoluteFilePath = segment->AbsoluteFilePath(),
+				                                    .Begin = uint32_t(movieID)});
 			}
 			try {
 				nextMatch = segment->ToMovieFrameID(trackingID);
@@ -202,14 +203,15 @@ void Query::FindMovieSegment(const Experiment & experiment,
 				// no more data
 				break;
 			}
-
+			segments.back().End = uint32_t(nextMatch + 1);
+			auto & data = segments.back().Data;
 			for ( ;movieID <= std::min(segment->EndMovieFrame(),nextMatch); ++movieID) {
 				if ( movieID != nextMatch ) {
 					continue;
 				}
-				segments.back().Data.push_back(MovieSegmentData::MatchedData());
-				segments.back().Data.back().FramePosition = movieID;
-				segments.back().Data.back().Time = frame->Frame().Time();
+				data.push_back(MovieSegmentData::MatchedData());
+				data.back().FramePosition = movieID;
+				data.back().Time = frame->Frame().Time();
 			}
 		}
 	}
