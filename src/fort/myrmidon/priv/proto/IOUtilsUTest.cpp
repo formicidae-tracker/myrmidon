@@ -444,7 +444,7 @@ TEST_F(IOUtilsUTest,AntIO) {
 		dA->SetDisplayColor(d.DisplayColor);
 		IOUtils::SaveColor(expected.mutable_color(),d.DisplayColor);
 		dA->SetDisplayStatus(d.DisplayState);
-		expected.set_displaystate(IOUtils::SaveAntDisplayState(d.DisplayState));
+		expected.set_displaystate(pb::AntDisplayState(IOUtils::SaveAntDisplayState(d.DisplayState)));
 
 		for ( const auto & [name,tValues] : d.DataMap) {
 			for ( const auto & [time,value] : tValues ) {

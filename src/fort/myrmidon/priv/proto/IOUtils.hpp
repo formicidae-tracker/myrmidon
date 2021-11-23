@@ -22,10 +22,8 @@ namespace fort {
 namespace myrmidon {
 namespace pb {
 class Time;
-enum TagFamily : int;
 class Identification;
 class Color;
-enum AntDisplayState : int;
 class AntStaticValue;
 class AntDescription;
 class TimedFrame;
@@ -117,9 +115,9 @@ public:
 
 	static void  SaveColor(pb::Color * pb, const Color & c);
 
-	static myrmidon::Ant::DisplayState LoadAntDisplayState(pb::AntDisplayState pb);
+	static myrmidon::Ant::DisplayState LoadAntDisplayState(int pb);
 
-	static pb::AntDisplayState  SaveAntDisplayState(myrmidon::Ant::DisplayState s);
+	static int SaveAntDisplayState(myrmidon::Ant::DisplayState s);
 
 	static AntStaticValue LoadAntStaticValue(const pb::AntStaticValue & pb);
 
@@ -142,13 +140,13 @@ public:
 	//
 	// @pb the protobuf enum value
 	// @return a <fort::tags::Family> enum value
-	static fort::tags::Family LoadFamily(const pb::TagFamily & pb);
+	static fort::tags::Family LoadFamily(int pb);
 
 	// Converts a Family to a protobuf enum
 	//
 	// @f the <fort::tags::Family> enum value
 	// @return a corresponding pbValue
-	static pb::TagFamily SaveFamily(const fort::tags::Family f);
+	static int SaveFamily(fort::tags::Family f);
 
 	// Loads a Measurement from a message
 	//

@@ -130,8 +130,8 @@ void  IOUtils::SaveColor(pb::Color * pb, const Color & c) {
 	pb->set_b(std::get<2>(c));
 }
 
-Ant::DisplayState IOUtils::LoadAntDisplayState(pb::AntDisplayState pb) {
-	const static std::map<pb::AntDisplayState,Ant::DisplayState> mapping =
+Ant::DisplayState IOUtils::LoadAntDisplayState(int pb) {
+	const static std::map<int,Ant::DisplayState> mapping =
 		{
 		 {pb::AntDisplayState::VISIBLE,Ant::DisplayState::VISIBLE},
 		 {pb::AntDisplayState::HIDDEN,Ant::DisplayState::HIDDEN},
@@ -144,8 +144,8 @@ Ant::DisplayState IOUtils::LoadAntDisplayState(pb::AntDisplayState pb) {
 	return Ant::DisplayState::VISIBLE;
 }
 
-pb::AntDisplayState  IOUtils::SaveAntDisplayState(Ant::DisplayState s) {
-	const static std::map<Ant::DisplayState,pb::AntDisplayState> mapping =
+int IOUtils::SaveAntDisplayState(Ant::DisplayState s) {
+	const static std::map<Ant::DisplayState,int> mapping =
 		{
 		 {Ant::DisplayState::VISIBLE,pb::AntDisplayState::VISIBLE},
 		 {Ant::DisplayState::HIDDEN,pb::AntDisplayState::HIDDEN},
@@ -240,7 +240,7 @@ void IOUtils::SaveAnt(fort::myrmidon::pb::AntDescription * pb, const Ant & ant) 
 	}
 
 	SaveColor(pb->mutable_color(),ant.DisplayColor());
-	pb->set_displaystate(SaveAntDisplayState(ant.DisplayStatus()));
+	pb->set_displaystate(pb::AntDisplayState(SaveAntDisplayState(ant.DisplayStatus())));
 
 	for ( const auto & [name,tValues] : ant.DataMap() ) {
 		for ( const auto & [time, value] : tValues ) {
@@ -255,8 +255,8 @@ void IOUtils::SaveAnt(fort::myrmidon::pb::AntDescription * pb, const Ant & ant) 
 }
 
 
-tags::Family IOUtils::LoadFamily(const pb::TagFamily & pb) {
-	static std::map<pb::TagFamily,fort::tags::Family>
+tags::Family IOUtils::LoadFamily(int pb) {
+	static std::map<int,fort::tags::Family>
 		mapping = {
 		           {pb::UNSET,fort::tags::Family::Undefined},
 		           {pb::TAG16H5,fort::tags::Family::Tag16h5},
@@ -277,8 +277,8 @@ tags::Family IOUtils::LoadFamily(const pb::TagFamily & pb) {
 	return fi->second;
 }
 
-pb::TagFamily IOUtils::SaveFamily(const tags::Family f) {
-	static std::map<fort::tags::Family,pb::TagFamily>
+int IOUtils::SaveFamily(tags::Family f) {
+	static std::map<fort::tags::Family,int>
 		mapping = {
 		           {fort::tags::Family::Undefined,pb::UNSET},
 		           {fort::tags::Family::Tag16h5,pb::TAG16H5},
