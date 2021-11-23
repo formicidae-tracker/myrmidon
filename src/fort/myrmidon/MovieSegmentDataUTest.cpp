@@ -128,11 +128,35 @@ protected:
 	Experiment::Ptr experiment;
 };
 
+TEST_F(MovieSegmentDataUTest,MatchDataEdgeCases) {
+	std::vector<IdentifiedFrame::Ptr> data;
+	EXPECT_NO_THROW({
+			MovieSegmentData::List segments;
+			MovieSegmentData::MatchData(segments,data.begin(),data.end());
+		});
+
+	MovieSegmentData::List segments =
+		{
+		 {.Space = 1},
+		 {.Space = 2},
+		};
+
+
+	EXPECT_THROW({
+			MovieSegmentData::MatchData(segments,
+			                            data.begin(),
+			                            data.end());
+		},std::invalid_argument);
+
+};
+
+
 
 TEST_F(MovieSegmentDataUTest,EndToEnd) {
 	const auto & expected = TestSetup::UTestData().ExpectedResults().front();
 	const auto & frames = TestSetup::UTestData().ExpectedFrames();
 	std::vector<MovieSegmentData> segments;
+
 	Query::FindMovieSegment(*experiment,
 	                        segments,
 	                        1,
@@ -160,6 +184,21 @@ TEST_F(MovieSegmentDataUTest,EndToEnd) {
 		                    expected.MovieSegments.at(1)[i])
 			<< "  With i: " << i;
 	}
+
+	Query::FindMovieSegment(*experiment,
+	                        segments,
+	                        3,
+	                        expected.Start,
+	                        expected.End);
+	EXPECT_TRUE(segments.empty());
+
+	Query::FindMovieSegment(*experiment,
+	                        segments,
+	                        2,
+	                        expected.Start,
+	                        expected.End);
+	EXPECT_TRUE(segments.empty());
+
 }
 
 
