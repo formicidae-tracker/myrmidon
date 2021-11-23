@@ -16,7 +16,7 @@ void BindZone(py::module_ &);
 void BindSpace(py::module_ &);
 
 void BindTrackingSolver(py::module_ & );
-void BindMovieSegmentData(py::module_ & );
+void BindVideoSegment(py::module_ & );
 
 void BindExperiment(py::module_ & );
 void BindMatchers(py::module_ &);

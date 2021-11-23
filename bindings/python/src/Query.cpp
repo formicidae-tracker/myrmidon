@@ -118,10 +118,10 @@ py::tuple QueryComputeAntInteractions(const fort::myrmidon::Experiment & experim
 
 
 fort::myrmidon::MovieSegmentData::List
-FindMovieSegment(const fort::myrmidon::Experiment & e,
-                 fort::myrmidon::SpaceID space,
-                 const fort::Time & start,
-                 const fort::Time & end) {
+FindVideoSegments(const fort::myrmidon::Experiment & e,
+                  fort::myrmidon::SpaceID space,
+                  const fort::Time & start,
+                  const fort::Time & end) {
 	std::vector<fort::myrmidon::MovieSegmentData> segments;
 	fort::myrmidon::Query::FindMovieSegments(e,segments,space,start,end);
 	return segments;
@@ -298,8 +298,8 @@ void BindQuery(py::module_ & m) {
             AntInteraction taking place in [start;end[ given the
             matcher criterion and maximumGap
   )pydoc")
-		.def_static("FindMovieSegment",
-		            &FindMovieSegment,
+		.def_static("FindVideoSegments",
+		            &FindVideoSegments,
 		            "experiment"_a,
 		            py::kw_only(),
 		            "space"_a = 1,
