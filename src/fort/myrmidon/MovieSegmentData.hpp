@@ -20,12 +20,15 @@ namespace myrmidon {
 
 struct MovieSegmentData {
 	struct MatchedData {
+		uint32_t                         FramePosition;
 		fort::Time                       Time;
 		IdentifiedFrame::Ptr             Identified;
 		CollisionFrame::Ptr              Collided;
 		std::vector<AntTrajectory::Ptr>  Trajectories;
 		std::vector<AntInteraction::Ptr> Interactions;
 		std::vector<std::any>            UserData;
+
+		bool HasData() const;
 
 		template <typename T>
 		void Append(const T & value);
@@ -75,6 +78,7 @@ template <>
 inline void
 MovieSegmentData::MatchedData::Append(const CollisionData & data) {
 	Identified = std::get<0>(data);
+	Collided = std::get<1>(data);
 }
 
 template <>
@@ -195,7 +199,7 @@ MovieSegmentData::MatchData(IterType begin,
 
 	//TODO use segment tree to reduce to O(n log(n) ) complexity from O(n2) here
 	for ( auto & d : Data ) {
-		while( TypeTraits::end(MaybeDeref(*begin)) > d.Time ) {
+		while( TypeTraits::end(MaybeDeref(*begin)) < d.Time ) {
 			++begin;
 			if ( begin == end ) {
 				return end;

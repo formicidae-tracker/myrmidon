@@ -170,7 +170,8 @@ void Query::FindMovieSegment(const Experiment & experiment,
 
 	segments.clear();
 
-	if ( experiment.Spaces().count(space)) {
+	if ( experiment.Spaces().count(space) == 0) {
+
 		return;
 	}
 	auto ranges = TrackingDataDirectory::IteratorRanges(experiment.Spaces().at(space)->TrackingDataDirectories(),
@@ -178,27 +179,39 @@ void Query::FindMovieSegment(const Experiment & experiment,
 
 	for ( auto & [iter,end] : ranges ) {
 		MovieSegment::ConstPtr segment;
-		MovieFrameID lastMovieID;
+		MovieFrameID nextMatch(0),movieID(0);
 		for ( ; iter != end; ++iter) {
 			const auto & frame = *iter;
-			auto frameID = frame->Frame().ID();
+			auto trackingID = frame->Frame().FrameID();
 			if ( segment == nullptr
-			     || segment->EndFrame() < frameID ) {
-				segment = iter.LockParent()->MovieSegments().Find(frameID).second;
-				lastMovieID = segment->ToMovieFrameID(frameID) - 1;
+			     || movieID > segment->EndMovieFrame()
+			     || segment->EndFrame() < trackingID ) {
+				try {
+					segment = iter.LockParent()->MovieSegments().Find(trackingID).second;
+					movieID = segment->ToMovieFrameID(trackingID);
+				} catch ( const std::exception &) {
+					// no movie for this time
+					break;
+				}
 				segments.push_back(MovieSegmentData{.Space = space,
-				                                    .AbsoluteFilePath = segment->AbsoluteFilePath });
+				                                    .AbsoluteFilePath = segment->AbsoluteFilePath() });
 			}
-			while(lastMovieID < segment->ToMovieFrameID(frameID) ) {
-				++lastMovieID;
-				segments.back().Data.push_back(
-
+			try {
+				nextMatch = segment->ToMovieFrameID(trackingID);
+			} catch ( const std::exception & ) {
+				// no more data
+				break;
 			}
 
-
-
+			for ( ;movieID <= std::min(segment->EndMovieFrame(),nextMatch); ++movieID) {
+				if ( movieID != nextMatch ) {
+					continue;
+				}
+				segments.back().Data.push_back(MovieSegmentData::MatchedData());
+				segments.back().Data.back().FramePosition = movieID;
+				segments.back().Data.back().Time = frame->Frame().Time();
+			}
 		}
-
 	}
 }
 
