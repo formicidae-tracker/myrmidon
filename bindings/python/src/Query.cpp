@@ -3,8 +3,15 @@
 #include <fort/myrmidon/Query.hpp>
 #include <fort/myrmidon/Matchers.hpp>
 #include <fort/myrmidon/Experiment.hpp>
+#include <fort/myrmidon/MovieSegmentData.hpp>
 
 namespace py = pybind11;
+
+#define check_py_interrupt() do { \
+		if ( PyErr_CheckSignals() != 0 ) { \
+			throw py::error_already_set(); \
+		} \
+	} while(0)
 
 py::list QueryIdentifyFrames(const fort::myrmidon::Experiment & experiment,
                              fort::Time start,
@@ -21,6 +28,7 @@ py::list QueryIdentifyFrames(const fort::myrmidon::Experiment & experiment,
 	fort::myrmidon::Query::IdentifyFramesFunctor(experiment,
 	                                             [&res](const fort::myrmidon::IdentifiedFrame::Ptr & f) {
 		                                             res.append(f);
+		                                             check_py_interrupt();
 	                                             },
 	                                             args);
 	return res;
@@ -41,6 +49,7 @@ py::list QueryCollideFrames(const fort::myrmidon::Experiment & experiment,
 	fort::myrmidon::Query::CollideFramesFunctor(experiment,
 	                                            [&res](const fort::myrmidon::CollisionData & d) {
 		                                             res.append(d);
+		                                             check_py_interrupt();
 	                                             },
 	                                             args);
 	return res;
@@ -67,6 +76,7 @@ py::list QueryComputeAntTrajectories(const fort::myrmidon::Experiment & experime
 	fort::myrmidon::Query::ComputeAntTrajectoriesFunctor(experiment,
 	                                                     [&res](const fort::myrmidon::AntTrajectory::Ptr & t) {
 		                                                     res.append(t);
+		                                                     check_py_interrupt();
 	                                                     },
 	                                                     args);
 	return res;
@@ -96,12 +106,25 @@ py::tuple QueryComputeAntInteractions(const fort::myrmidon::Experiment & experim
 	fort::myrmidon::Query::ComputeAntInteractionsFunctor(experiment,
 	                                                     [&trajectories](const fort::myrmidon::AntTrajectory::Ptr & t) {
 		                                                     trajectories.append(t);
+		                                                     check_py_interrupt();
 	                                                     },
 	                                                     [&interactions](const fort::myrmidon::AntInteraction::Ptr & i) {
 		                                                     interactions.append(i);
+		                                                     check_py_interrupt();
 	                                                     },
 	                                                     args);
 	return py::make_tuple(trajectories,interactions);
+}
+
+
+fort::myrmidon::MovieSegmentData::List
+FindMovieSegment(const fort::myrmidon::Experiment & e,
+                 fort::myrmidon::SpaceID space,
+                 const fort::Time & start,
+                 const fort::Time & end) {
+	std::vector<fort::myrmidon::MovieSegmentData> segments;
+	fort::myrmidon::Query::FindMovieSegments(e,segments,space,start,end);
+	return segments;
 }
 
 
@@ -275,6 +298,16 @@ void BindQuery(py::module_ & m) {
             AntInteraction taking place in [start;end[ given the
             matcher criterion and maximumGap
   )pydoc")
+		.def_static("FindMovieSegment",
+		            &FindMovieSegment,
+		            "experiment"_a,
+		            py::kw_only(),
+		            "space"_a = 1,
+		            "start"_a = fort::Time::SinceEver(),
+		            "end"_a = fort::Time::Forever(),
+		            R"pydoc(
+
+)pydoc")
 		;
 
 

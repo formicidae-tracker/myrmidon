@@ -58,6 +58,8 @@ void BindUTestData(py::module_ & m) {
 		              &UTestData::ExpectedResult::Interactions)
 		.def("Summarized",
 		     &UTestData::ExpectedResult::Summarized)
+		.def_readonly("MovieSegments",
+		              &UTestData::ExpectedResult::MovieSegments)
 		;
 
 

@@ -162,11 +162,11 @@ void Query::ComputeAntInteractions(const Experiment & experiment,
 		   });
 }
 
-void Query::FindMovieSegment(const Experiment & experiment,
-                             std::vector<MovieSegmentData> & segments,
-                             SpaceID space,
-                             const Time & start,
-                             const Time & end) {
+void Query::FindMovieSegments(const Experiment & experiment,
+                              std::vector<MovieSegmentData> & segments,
+                              SpaceID space,
+                              const Time & start,
+                              const Time & end) {
 
 	segments.clear();
 

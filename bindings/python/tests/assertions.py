@@ -103,4 +103,37 @@ class CustomAssertion:
             else:
                 self.assertAntTrajectorySummaryEqual(a.Trajectories[i],
                                                      b.Trajectories[i])
+
+    def assertMovieFrameDataEqual(self,a,b):
+        self.assertEqual(a.FramePosition,b.FramePosition)
+        self.assertTimeEqual(a.Time,b.Time)
+        if b.Identified:
+            self.assertIsNotNone(a.Identified)
+            self.assertIdentifiedFrameEqual(a.Identified,b.Identified)
+        else:            
+            self.assertIsNone(a.Identified)
+        if b.Collided:
+            self.assertIsNotNone(a.Collided)
+            self.assertCollisionFrameEqual(a.Collided,b.Collided)
+        else:
+            self.assertIsNone(a.Collided)
+
+        self.assertEqual(len(a.Trajectories),len(b.Trajectories))
+        for t,e in zip(a.Trajectories,b.Trajectories):
+            self.assertAntTrajectoryEqual(t,e)
+        self.assertEqual(len(a.Interactions),len(b.Interactions))
+        for i,e in zip(a.Interactions,b.Interactions):
+            self.assertAntInteractionEqual(i,e)
+
+    def assertMovieSegmentEqual(self,a,b):
+        self.assertEqual(a.Space,b.Space)
+        self.assertEqual(a.AbsoluteFilePath,b.AbsoluteFilePath)
+        self.assertEqual(a.Begin,b.Begin)
+        self.assertEqual(a.End,b.End)
+        self.assertEqual(len(a.Data),len(b.Data))
+        for d,e in zip(a.Data,b.Data):
+            self.assertMovieFrameDataEqual(d,e)
+
+            
+            
                 

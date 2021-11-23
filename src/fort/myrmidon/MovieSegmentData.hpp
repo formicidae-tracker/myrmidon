@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-#include <any>
 #include <functional>
 
 #include <fort/time/Time.hpp>
@@ -29,7 +28,6 @@ struct MovieFrameData {
 	CollisionFrame::Ptr              Collided;
 	std::vector<AntTrajectory::Ptr>  Trajectories;
 	std::vector<AntInteraction::Ptr> Interactions;
-	std::vector<std::any>            UserData;
 
 	bool Empty() const;
 
@@ -75,12 +73,6 @@ private:
 
 
 };
-
-template <typename T>
-inline void
-MovieFrameData::Append( const T & value) {
-	UserData.push_back(value);
-}
 
 
 template <>

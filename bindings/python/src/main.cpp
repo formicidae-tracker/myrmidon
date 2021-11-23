@@ -25,7 +25,7 @@ PYBIND11_MODULE(py_fort_myrmidon, m) {
     BindZone(m);
     BindSpace(m);
     BindTrackingSolver(m);
-
+    BindMovieSegmentData(m);
     BindExperiment(m);
 
     BindMatchers(m);

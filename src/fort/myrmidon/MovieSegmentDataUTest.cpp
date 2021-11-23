@@ -39,6 +39,7 @@
                                                      const char * bExpr,
                                                      const fort::myrmidon::MovieFrameData & a,
                                                      const fort::myrmidon::MovieFrameData & b) {
+	check(aExpr,bExpr,a,b,FramePosition);
 	auto tmp = AssertTimeEqual((std::string(aExpr) + ".Time").c_str(),
 	                           (std::string(bExpr) + ".Time").c_str(),
 	                           a.Time,
@@ -90,7 +91,6 @@
 		}
 	}
 
-	check(aExpr,bExpr,a,b,UserData.size());
 	return ::testing::AssertionSuccess();
 
 }
@@ -158,11 +158,11 @@ TEST_F(MovieSegmentDataUTest,ForEachFramesEdgeCases) {
 	const auto & frames = TestSetup::UTestData().ExpectedFrames();
 	std::vector<MovieSegmentData> segments;
 
-	Query::FindMovieSegment(*experiment,
-	                        segments,
-	                        1,
-	                        expected.Start,
-	                        expected.End);
+	Query::FindMovieSegments(*experiment,
+	                         segments,
+	                         1,
+	                         expected.Start,
+	                         expected.End);
 	ASSERT_EQ(segments.size(),1);
 	auto & segment = segments.front();
 	segment.Data.resize(segment.Data.size()-1);
@@ -200,11 +200,11 @@ TEST_F(MovieSegmentDataUTest,EndToEnd) {
 	const auto & frames = TestSetup::UTestData().ExpectedFrames();
 	std::vector<MovieSegmentData> segments;
 
-	Query::FindMovieSegment(*experiment,
-	                        segments,
-	                        1,
-	                        expected.Start,
-	                        expected.End);
+	Query::FindMovieSegments(*experiment,
+	                         segments,
+	                         1,
+	                         expected.Start,
+	                         expected.End);
 
 	MovieSegmentData::MatchData(segments,
 	                            frames.begin(),
@@ -244,18 +244,18 @@ TEST_F(MovieSegmentDataUTest,EndToEnd) {
 		                                ++iter;
 	                                });
 
-	Query::FindMovieSegment(*experiment,
-	                        segments,
-	                        3,
-	                        expected.Start,
-	                        expected.End);
+	Query::FindMovieSegments(*experiment,
+	                         segments,
+	                         3,
+	                         expected.Start,
+	                         expected.End);
 	EXPECT_TRUE(segments.empty());
 
-	Query::FindMovieSegment(*experiment,
-	                        segments,
-	                        2,
-	                        expected.Start,
-	                        expected.End);
+	Query::FindMovieSegments(*experiment,
+	                         segments,
+	                         2,
+	                         expected.Start,
+	                         expected.End);
 	EXPECT_TRUE(segments.empty());
 
 }

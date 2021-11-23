@@ -695,9 +695,12 @@ void MatchMovieData(MovieSegmentData & data,
 		     || identified->FrameTime >= end ) {
 			continue;
 		}
-		data.Data.push_back({.Time = identified->FrameTime,
+		data.Data.push_back({
+		                     .FramePosition = uint32_t(data.Data.size()),
+		                     .Time = identified->FrameTime,
 		                     .Identified = identified,
-		                     .Collided = collided});
+		                     .Collided = collided,
+		                     });
 	}
 	data.End = data.Data.size();
 

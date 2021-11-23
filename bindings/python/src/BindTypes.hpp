@@ -10,5 +10,14 @@
 #include <fort/myrmidon/types/Typedefs.hpp>
 #include <fort/myrmidon/Shapes.hpp>
 
+namespace fort {
+namespace myrmidon {
+struct MovieFrameData;
+struct MovieSegmentData;
+}
+}
+
 PYBIND11_MAKE_OPAQUE(fort::myrmidon::Vector2dList)
 PYBIND11_MAKE_OPAQUE(fort::myrmidon::Shape::List)
+PYBIND11_MAKE_OPAQUE(std::vector<fort::myrmidon::MovieFrameData>)
+PYBIND11_MAKE_OPAQUE(std::vector<fort::myrmidon::MovieSegmentData>)
