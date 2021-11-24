@@ -95,6 +95,11 @@ TEST_F(PublicAntUTest,AntHaveStaticValue) {
 	auto t = Time::Now();
 
 	e->SetMetaDataKey("alive",true);
+	auto values = a->GetValues("alive");
+	EXPECT_EQ(values.size(),1);
+	ASSERT_EQ(values.count(Time::SinceEver()),1);
+	EXPECT_ANT_STATIC_VALUE_EQ(values.at(Time::SinceEver()),true);
+
 
 	EXPECT_THROW(a->GetValue("isDead",t),std::out_of_range);
 
@@ -104,6 +109,17 @@ TEST_F(PublicAntUTest,AntHaveStaticValue) {
 
 
 	EXPECT_NO_THROW(a->SetValue("alive",false,t));
+
+	values = a->GetValues("alive");
+	EXPECT_EQ(values.size(),2);
+	ASSERT_EQ(values.count(Time::SinceEver()),1);
+	ASSERT_EQ(values.count(t),1);
+	EXPECT_ANT_STATIC_VALUE_EQ(values.at(Time::SinceEver()),true);
+	EXPECT_ANT_STATIC_VALUE_EQ(values.at(t),false);
+
+	EXPECT_THROW(a->GetValues("isDead"),std::out_of_range);
+
+
 	EXPECT_ANT_STATIC_VALUE_EQ(a->GetValue("alive",Time::SinceEver()),true);
 	EXPECT_ANT_STATIC_VALUE_EQ(a->GetValue("alive",t.Add(-1)),true);
 	EXPECT_ANT_STATIC_VALUE_EQ(a->GetValue("alive",t),false);

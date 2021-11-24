@@ -120,6 +120,8 @@ public:
 	void DeleteValue(const std::string & name,
 	                 const Time & time);
 
+	const std::map<Time,AntStaticValue> & GetValues(const std::string & key) const;
+
 	AntStaticValue GetBaseValue(const std::string & name) const;
 
 	const AntDataMap & DataMap() const;

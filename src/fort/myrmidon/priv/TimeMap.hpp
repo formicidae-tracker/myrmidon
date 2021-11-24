@@ -55,6 +55,10 @@ public:
 		d_map.clear();
 	}
 
+	const std::map<Time,U> & Values(const T & key) const {
+		return d_map.at(key);
+	}
+
 private:
 	typedef std::map<Time,U> ValuesByTime;
 

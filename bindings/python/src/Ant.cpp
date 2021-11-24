@@ -105,6 +105,23 @@ Returns:
 Raises:
     IndexError: if **key** is not defined in :class:`Experiment`
 )pydoc")
+		.def("GetValues",
+		     [](const Ant & self, const std::string & key) -> std::vector<std::pair<fort::Time,AntStaticValue>> {
+			     std::vector<std::pair<fort::Time,AntStaticValue>> res;
+			     const auto & values = self.GetValues(key);
+			     std::copy(values.begin(),values.end(),std::back_inserter(res));
+			     return res;
+		     },
+		     py::arg("key"),
+		     R"pydoc(
+Gets metadata key changes over time.
+
+Args:
+    key (str): the key to list changes
+
+Raises:
+    IndexError: if **key** is not defined in :class:`Experiment`
+)pydoc")
 		.def("SetValue",
 		     &Ant::SetValue,
 		     py::arg("key"),

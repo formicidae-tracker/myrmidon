@@ -53,6 +53,10 @@ void Ant::SetValue(const std::string & name,
 	d_p->Get().SetValue(name,value,time);
 }
 
+const std::map<Time,AntStaticValue> & Ant::GetValues(const std::string & key) const {
+	return d_p->Get().GetValues(key);
+}
+
 void Ant::DeleteValue(const std::string & name,
                       const Time & time) {
 	d_p->Get().DeleteValue(name,time);

@@ -194,38 +194,45 @@ public:
 	/**
 	 *  Sets a user defined timed metadata
 	 *
-	 * @param name the name of the user defined colum in Experiment
+	 * @param key the metadata key to set
 	 * @param value the desired AntStaticValue
 	 * @param time the first Time after which name will be set to
 	 *        value. It can be Time::SinceEver().
 	 *
-	 * Sets name to value starting from time. If time is
+	 * Sets key to value starting from time. If time is
 	 * Time::SinceEver(), sets the starting value for name instead of
-	 * the Experiment's default value for name.
+	 * the Experiment's default value for key.
 	 *
 	 * @throws std::out_of_range if name is not a defined key in Experiment
 	 * @throws std::invalid_argument if time is Time::Forever()
 	 * @throws std::bad_variant_access if value is not of the right type for key
 	 *
 	 */
-	void SetValue(const std::string & name,
+	void SetValue(const std::string & key,
 	              const AntStaticValue & value,
 	              const Time & time);
 
 	/**
 	 * Removes any user defined value at a given time
 	 *
-	 * @param name the named value to remove
+	 * @param key the key to remove
 	 * @param time the Time to remove. It can be Time::SinceEver().
 	 *
 	 * Removes any value defined at a time.
 	 *
-	 * @throws std::out_of_range if no value for name at time have
+	 * @throws std::out_of_range if no value for key at time have
 	 *         been previously set with SetValue().
 	 */
-	void DeleteValue(const std::string & name,
+	void DeleteValue(const std::string & key,
 	                 const Time & time);
 
+	/**
+	 * Gets all metadata key value changes over time
+	 *
+	 * @param key the key to list
+	 * @return the values of key over the time
+	 */
+	const std::map<Time,AntStaticValue> & GetValues(const std::string & key) const;
 
 	/**
 	 *  Adds a Capsule to the Ant virtual shape list.

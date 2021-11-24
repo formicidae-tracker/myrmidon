@@ -197,6 +197,13 @@ void Ant::CompileData() {
 
 }
 
+const std::map<Time,AntStaticValue> & Ant::GetValues(const std::string & key) const {
+	try {
+		return d_compiledData.Values(key);
+	} catch ( const std::out_of_range & ) {
+		throw std::out_of_range("Invalid key '" + key + "'");
+	}
+}
 
 TagID Ant::IdentifiedAt(const Time & time) const {
 	auto fi = std::find_if(d_identifications.cbegin(),

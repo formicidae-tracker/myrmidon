@@ -83,6 +83,9 @@ TEST_F(AntUTest,StaticDataTest) {
 			ant->SetValue("dead",true,Time::FromTimeT(42));
 			EXPECT_EQ(ant->DataMap().size(),1);
 			ant->SetValue("group",std::string("forager"),Time::SinceEver());
+
+
+
 		});
 
 	EXPECT_THROW(ant->DeleteValue("isQueen",Time::SinceEver()),std::out_of_range);
