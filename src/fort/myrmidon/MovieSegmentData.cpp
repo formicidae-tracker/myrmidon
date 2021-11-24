@@ -20,7 +20,7 @@ void MovieSegmentData::ForEachFrames(const List & list,
 			while(iter != s.Data.end() && iter->FramePosition < moviePos) {
 				++iter;
 			}
-			if ( iter->FramePosition == moviePos ) {
+			if ( iter != s.Data.end() && iter->FramePosition == moviePos ) {
 				operation(frame,*iter);
 			} else {
 				operation(frame,{.FramePosition = moviePos,.Time = Time::SinceEver()});

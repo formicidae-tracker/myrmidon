@@ -117,13 +117,13 @@ py::tuple QueryComputeAntInteractions(const fort::myrmidon::Experiment & experim
 }
 
 
-fort::myrmidon::MovieSegmentData::List
+std::shared_ptr<fort::myrmidon::MovieSegmentData::List>
 FindVideoSegments(const fort::myrmidon::Experiment & e,
                   fort::myrmidon::SpaceID space,
                   const fort::Time & start,
                   const fort::Time & end) {
-	std::vector<fort::myrmidon::MovieSegmentData> segments;
-	fort::myrmidon::Query::FindMovieSegments(e,segments,space,start,end);
+	auto segments = std::make_shared<std::vector<fort::myrmidon::MovieSegmentData>>();
+	fort::myrmidon::Query::FindMovieSegments(e,*segments,space,start,end);
 	return segments;
 }
 

@@ -109,7 +109,7 @@ outputs:
     requirements:
       build:
         - python {{python}}
-        - libopencv {{ opencv }}
+        - opencv {{ opencv }}
         - libprotobuf {{ protobuf }}
       host:
         - python {{python}}
@@ -118,12 +118,12 @@ outputs:
         - libprotobuf {{ protobuf }}
         - numpy =1.21.2
         - libstdcxx-ng {{ c_compiler_version }} [linux]
-        - libopencv {{ opencv }}
+        - opencv {{ opencv }}
       run:
         - python {{python}}
         - {{ pin_subpackage('libfort-myrmidon',exact=True) }}
         - libprotobuf {{ protobuf }}
-        - libopencv {{ opencv }}
+        - opencv {{ opencv }}
         - yaml-cpp =0.6.3
         - numpy =1.21.2
         - libstdcxx-ng {{ c_compiler_version }} [linux]

@@ -10,7 +10,7 @@ set(SRC_FILES Time.cpp
               Zone.cpp
               Space.cpp
               TrackingSolver.cpp
-              VideoSegment.cpp
+              Video.cpp
               main.cpp
               )
 

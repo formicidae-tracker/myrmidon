@@ -107,7 +107,7 @@ class CustomAssertion:
                                                      b.Trajectories[i])
 
     def assertVideoFrameDataEqual(self, a, b):
-        self.assertEqual(a.FramePosition, b.FramePosition)
+        self.assertEqual(a.Position, b.Position)
         self.assertTimeEqual(a.Time, b.Time)
         if b.Identified:
             self.assertIsNotNone(a.Identified)

@@ -2,9 +2,11 @@ import py_fort_myrmidon as m
 import py_fort_myrmidon_utestdata as ud
 import unittest
 import assertions
+import cv2
+import numpy.testing as npt
 
 
-class MovieSegmentDataTestCase(unittest.TestCase, assertions.CustomAssertion):
+class VideoTestCase(unittest.TestCase, assertions.CustomAssertion):
     def setUp(self):
         path = str(ud.UData().CurrentVersionFile.AbsoluteFilePath)
         self.experiment = m.Experiment.Open(path)
@@ -26,10 +28,16 @@ class MovieSegmentDataTestCase(unittest.TestCase, assertions.CustomAssertion):
         for s, e in zip(segments, expected.VideoSegments[1]):
             self.assertVideoSegmentEqual(s, e)
 
-        expectedData = expected.VideoSegments[1][0].Data
-        # with m.MovieSegment.Open(segments) as video:
-        #     for i, (frame, data) in enumerate(video):
-        #         self.assertMovieFrameDataEqual(data, expectedData[i])
+        expectedSegment = expected.VideoSegments[1][0]
+
+        cap = cv2.VideoCapture(str(expectedSegment.AbsoluteFilePath))
+        with m.VideoContext(segments) as video:
+            for i, (frame, data) in enumerate(video):
+                ret, expectedFrame = cap.read()
+                self.assertTrue(ret)
+                self.assertVideoFrameDataEqual(data, expectedSegment.Data[i])
+
+        self.assertEqual(cap.get(cv2.CAP_PROP_POS_FRAMES), expectedSegment.End)
 
         segments = m.Query.FindVideoSegments(self.experiment, space=2)
         self.assertEqual(len(segments), 0)
@@ -41,3 +49,22 @@ class MovieSegmentDataTestCase(unittest.TestCase, assertions.CustomAssertion):
         with self.assertRaises(ValueError):
             m.VideoSegment.Match([m.VideoSegment(1),
                                   m.VideoSegment(2)], [])
+
+    def test_video_edge_cases(self):
+        expected = ud.UData().ExpectedResults[0]
+        segments = expected.VideoSegments[1].deepcopy()
+        segments[0].Data.pop(len(segments[0].Data)-1)
+        segments[0].Data.append(m.VideoFrameData(
+            position=segments[0].End, time=m.Time.SinceEver()))
+        segments[0].End += 2
+
+        with m.VideoContext(segments) as video:
+            for _, data in video:
+                fi = (d for d in segments[0].Data
+                      if d.Position == data.Position)
+                try:
+                    self.assertVideoFrameDataEqual(data, next(fi))
+                except StopIteration:
+                    e = m.VideoFrameData(position=data.Position,
+                                         time=m.Time.SinceEver())
+                    self.assertVideoFrameDataEqual(data, e)

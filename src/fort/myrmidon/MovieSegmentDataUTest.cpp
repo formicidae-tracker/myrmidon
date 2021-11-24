@@ -155,15 +155,7 @@ TEST_F(MovieSegmentDataUTest,MatchDataEdgeCases) {
 
 TEST_F(MovieSegmentDataUTest,ForEachFramesEdgeCases) {
 	const auto & expected = TestSetup::UTestData().ExpectedResults().front();
-	const auto & frames = TestSetup::UTestData().ExpectedFrames();
-	std::vector<MovieSegmentData> segments;
-
-	Query::FindMovieSegments(*experiment,
-	                         segments,
-	                         1,
-	                         expected.Start,
-	                         expected.End);
-	ASSERT_EQ(segments.size(),1);
+	auto segments = expected.MovieSegments.at(1);
 	auto & segment = segments.front();
 	segment.Data.resize(segment.Data.size()-1);
 	segment.Data.push_back({.FramePosition = segment.End,
