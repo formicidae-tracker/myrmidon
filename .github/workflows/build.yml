@@ -22,6 +22,7 @@ jobs:
                                git \
                                cmake \
                                libopencv-dev \
+                               python3-opencv \
                                libasio-dev \
                                libboost-dev \
                                libgoogle-glog-dev \
