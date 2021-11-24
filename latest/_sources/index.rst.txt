@@ -35,7 +35,7 @@ Table of Contents
    :caption: Advanced Usage
 
    space_zoning
-   matching_movie_and_tracking_data
+   matching_video
    time.rst
 
 .. toctree::

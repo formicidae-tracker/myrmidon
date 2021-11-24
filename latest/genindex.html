@@ -61,7 +61,7 @@
 <p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="space_zoning.html">Segmenting Spaces in Zones</a></li>
-<li class="toctree-l1"><a class="reference internal" href="matching_movie_and_tracking_data.html">Matching Movie Frame and Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matching_video.html">Matching Video and Tracking Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="time.html">Time Representation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API References</span></p>
@@ -146,6 +146,8 @@
       <ul>
         <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.TrackingDataDirectoryInfo.AbsoluteFilePath">(py_fort_myrmidon.TrackingDataDirectoryInfo property)</a>
 </li>
+        <li><a href="api/python/video.html#py_fort_myrmidon.VideoSegment.AbsoluteFilePath">(py_fort_myrmidon.VideoSegment property)</a>
+</li>
       </ul></li>
       <li><a href="api/python/time.html#py_fort_myrmidon.Time.Add">Add() (py_fort_myrmidon.Time method)</a>
 </li>
@@ -201,6 +203,8 @@
 </li>
       <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.AntTrajectorySummary">AntTrajectorySummary (class in py_fort_myrmidon)</a>
 </li>
+      <li><a href="api/python/video.html#py_fort_myrmidon.VideoSegmentList.append">append() (py_fort_myrmidon.VideoSegmentList method)</a>
+</li>
       <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.IdentifiedFrame.At">At() (py_fort_myrmidon.IdentifiedFrame method)</a>
 </li>
       <li><a href="api/python/experiment.html#py_fort_myrmidon.Experiment.Author">Author (py_fort_myrmidon.Experiment property)</a>
@@ -216,7 +220,11 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.AntTrajectorySegment.Begin">Begin (py_fort_myrmidon.AntTrajectorySegment property)</a>
+
+      <ul>
+        <li><a href="api/python/video.html#py_fort_myrmidon.VideoSegment.Begin">(py_fort_myrmidon.VideoSegment property)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -235,9 +243,13 @@
 </li>
       <li><a href="api/python/shapes.html#py_fort_myrmidon.Circle">Circle (class in py_fort_myrmidon)</a>
 </li>
+      <li><a href="api/python/video.html#py_fort_myrmidon.VideoSegmentList.clear">clear() (py_fort_myrmidon.VideoSegmentList method)</a>
+</li>
       <li><a href="api/python/ant_identification.html#py_fort_myrmidon.Ant.ClearCapsules">ClearCapsules() (py_fort_myrmidon.Ant method)</a>
 </li>
       <li><a href="api/python/ant_identification.html#py_fort_myrmidon.Identification.ClearUserDefinedAntPose">ClearUserDefinedAntPose() (py_fort_myrmidon.Identification method)</a>
+</li>
+      <li><a href="api/python/video.html#py_fort_myrmidon.VideoFrameData.Collided">Collided (py_fort_myrmidon.VideoFrameData property)</a>
 </li>
       <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.Query.CollideFrames">CollideFrames() (py_fort_myrmidon.Query static method)</a>
 </li>
@@ -247,10 +259,10 @@
 </li>
       <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.CollisionFrame.Collisions">Collisions (py_fort_myrmidon.CollisionFrame property)</a>
 </li>
-      <li><a href="api/python/experiment.html#py_fort_myrmidon.Experiment.Comment">Comment (py_fort_myrmidon.Experiment property)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/python/experiment.html#py_fort_myrmidon.Experiment.Comment">Comment (py_fort_myrmidon.Experiment property)</a>
+</li>
       <li><a href="api/python/experiment.html#py_fort_myrmidon.Experiment.CompileTrackingSolver">CompileTrackingSolver() (py_fort_myrmidon.Experiment method)</a>
 </li>
       <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.Query.ComputeAntInteractions">ComputeAntInteractions() (py_fort_myrmidon.Query static method)</a>
@@ -283,6 +295,10 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/python/video.html#py_fort_myrmidon.VideoSegment.Data">Data (py_fort_myrmidon.VideoSegment property)</a>
+</li>
+      <li><a href="api/python/video.html#py_fort_myrmidon.VideoSegmentList.deepcopy">deepcopy() (py_fort_myrmidon.VideoSegmentList method)</a>
+</li>
       <li><a href="api/python/ant_identification.html#py_fort_myrmidon.Identification.DEFAULT_TAG_SIZE">DEFAULT_TAG_SIZE (py_fort_myrmidon.Identification attribute)</a>
 </li>
       <li><a href="api/python/misc.html#py_fort_myrmidon.DefaultPalette">DefaultPalette() (in module py_fort_myrmidon)</a>
@@ -299,10 +315,10 @@
 </li>
       <li><a href="api/python/ant_identification.html#py_fort_myrmidon.Ant.DeleteCapsule">DeleteCapsule() (py_fort_myrmidon.Ant method)</a>
 </li>
-      <li><a href="api/python/space_zone.html#py_fort_myrmidon.Zone.DeleteDefinition">DeleteDefinition() (py_fort_myrmidon.Zone method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/python/space_zone.html#py_fort_myrmidon.Zone.DeleteDefinition">DeleteDefinition() (py_fort_myrmidon.Zone method)</a>
+</li>
       <li><a href="api/python/experiment.html#py_fort_myrmidon.Experiment.DeleteIdentification">DeleteIdentification() (py_fort_myrmidon.Experiment method)</a>
 </li>
       <li><a href="api/python/experiment.html#py_fort_myrmidon.Experiment.DeleteMeasurementType">DeleteMeasurementType() (py_fort_myrmidon.Experiment method)</a>
@@ -327,6 +343,8 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/python/video.html#py_fort_myrmidon.VideoFrameData.Empty">Empty() (py_fort_myrmidon.VideoFrameData method)</a>
+</li>
       <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.AntInteraction.End">End (py_fort_myrmidon.AntInteraction property)</a>
 
       <ul>
@@ -339,6 +357,8 @@
         <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.SpaceDataInfo.End">(py_fort_myrmidon.SpaceDataInfo property)</a>
 </li>
         <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.TrackingDataDirectoryInfo.End">(py_fort_myrmidon.TrackingDataDirectoryInfo property)</a>
+</li>
+        <li><a href="api/python/video.html#py_fort_myrmidon.VideoSegment.End">(py_fort_myrmidon.VideoSegment property)</a>
 </li>
         <li><a href="api/python/space_zone.html#py_fort_myrmidon.ZoneDefinition.End">(py_fort_myrmidon.ZoneDefinition property)</a>
 </li>
@@ -355,6 +375,8 @@
 </li>
       <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.ExperimentDataInfo">ExperimentDataInfo (class in py_fort_myrmidon)</a>
 </li>
+      <li><a href="api/python/video.html#py_fort_myrmidon.VideoSegmentList.extend">extend() (py_fort_myrmidon.VideoSegmentList method)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -362,6 +384,8 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/python/experiment.html#py_fort_myrmidon.Experiment.Family">Family (py_fort_myrmidon.Experiment property)</a>
+</li>
+      <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.Query.FindVideoSegments">FindVideoSegments() (py_fort_myrmidon.Query static method)</a>
 </li>
       <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.TagStatistics.FirstSeen">FirstSeen (py_fort_myrmidon.TagStatistics property)</a>
 </li>
@@ -430,6 +454,8 @@
       <li><a href="api/cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant13DisplayStatusEv">fort::myrmidon::Ant::DisplayStatus (C++ function)</a>
 </li>
       <li><a href="api/cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant8GetValueERKNSt6stringERK4Time">fort::myrmidon::Ant::GetValue (C++ function)</a>
+</li>
+      <li><a href="api/cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant9GetValuesERKNSt6stringE">fort::myrmidon::Ant::GetValues (C++ function)</a>
 </li>
       <li><a href="api/cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant2IDEv">fort::myrmidon::Ant::ID (C++ function)</a>
 </li>
@@ -699,8 +725,6 @@
 </li>
       <li><a href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon15IdentifiedFrameE">fort::myrmidon::IdentifiedFrame (C++ struct)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/cpp/queries_matchers.html#_CPPv4NK4fort8myrmidon15IdentifiedFrame2AtE6size_t">fort::myrmidon::IdentifiedFrame::At (C++ function)</a>
 </li>
       <li><a href="api/cpp/queries_matchers.html#_CPPv4NK4fort8myrmidon15IdentifiedFrame8ContainsE8uint64_t">fort::myrmidon::IdentifiedFrame::Contains (C++ function)</a>
@@ -719,6 +743,8 @@
 </li>
       <li><a href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon15IdentifiedFrame5WidthE">fort::myrmidon::IdentifiedFrame::Width (C++ member)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/cpp/typedef.html#_CPPv4N4fort8myrmidon13InteractionIDE">fort::myrmidon::InteractionID (C++ type)</a>
 </li>
       <li><a href="api/cpp/typedef.html#_CPPv4N4fort8myrmidon16InteractionTypesE">fort::myrmidon::InteractionTypes (C++ type)</a>
@@ -811,7 +837,11 @@
 </li>
       <li><a href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query20ComputeTagStatisticsERK10Experiment">fort::myrmidon::Query::ComputeTagStatistics (C++ function)</a>
 </li>
+      <li><a href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query17FindVideoSegmentsERK10ExperimentRNSt6vectorI12VideoSegmentEE7SpaceIDRKN4fort4TimeERKN4fort4TimeE">fort::myrmidon::Query::FindVideoSegments (C++ function)</a>
+</li>
       <li><a href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query19GetDataInformationsERK10Experiment">fort::myrmidon::Query::GetDataInformations (C++ function)</a>
+</li>
+      <li><a href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query20GetMetaDataKeyRangesERK10ExperimentRKNSt6stringERK14AntStaticValue">fort::myrmidon::Query::GetMetaDataKeyRanges (C++ function)</a>
 </li>
       <li><a href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query14IdentifyFramesERK10ExperimentRNSt6vectorIN15IdentifiedFrame3PtrEEERK18IdentifyFramesArgs">fort::myrmidon::Query::IdentifyFrames (C++ function)</a>
 </li>
@@ -914,6 +944,42 @@
       <li><a href="api/cpp/typedef.html#_CPPv4N4fort8myrmidon16TypedCapsuleListE">fort::myrmidon::TypedCapsuleList (C++ type)</a>
 </li>
       <li><a href="api/cpp/typedef.html#_CPPv4N4fort8myrmidon12Vector2dListE">fort::myrmidon::Vector2dList (C++ type)</a>
+</li>
+      <li><a href="api/cpp/video.html#_CPPv4N4fort8myrmidon14VideoFrameDataE">fort::myrmidon::VideoFrameData (C++ struct)</a>
+</li>
+      <li><a href="api/cpp/video.html#_CPPv4N4fort8myrmidon14VideoFrameData8CollidedE">fort::myrmidon::VideoFrameData::Collided (C++ member)</a>
+</li>
+      <li><a href="api/cpp/video.html#_CPPv4NK4fort8myrmidon14VideoFrameData5EmptyEv">fort::myrmidon::VideoFrameData::Empty (C++ function)</a>
+</li>
+      <li><a href="api/cpp/video.html#_CPPv4N4fort8myrmidon14VideoFrameData10IdentifiedE">fort::myrmidon::VideoFrameData::Identified (C++ member)</a>
+</li>
+      <li><a href="api/cpp/video.html#_CPPv4N4fort8myrmidon14VideoFrameData12InteractionsE">fort::myrmidon::VideoFrameData::Interactions (C++ member)</a>
+</li>
+      <li><a href="api/cpp/video.html#_CPPv4N4fort8myrmidon14VideoFrameData8PositionE">fort::myrmidon::VideoFrameData::Position (C++ member)</a>
+</li>
+      <li><a href="api/cpp/video.html#_CPPv4N4fort8myrmidon14VideoFrameData4TimeE">fort::myrmidon::VideoFrameData::Time (C++ member)</a>
+</li>
+      <li><a href="api/cpp/video.html#_CPPv4N4fort8myrmidon14VideoFrameData12TrajectoriesE">fort::myrmidon::VideoFrameData::Trajectories (C++ member)</a>
+</li>
+      <li><a href="api/cpp/video.html#_CPPv4N4fort8myrmidon12VideoSegmentE">fort::myrmidon::VideoSegment (C++ struct)</a>
+</li>
+      <li><a href="api/cpp/video.html#_CPPv4N4fort8myrmidon12VideoSegment16AbsoluteFilePathE">fort::myrmidon::VideoSegment::AbsoluteFilePath (C++ member)</a>
+</li>
+      <li><a href="api/cpp/video.html#_CPPv4N4fort8myrmidon12VideoSegment5BeginE">fort::myrmidon::VideoSegment::Begin (C++ member)</a>
+</li>
+      <li><a href="api/cpp/video.html#_CPPv4N4fort8myrmidon12VideoSegment4DataE">fort::myrmidon::VideoSegment::Data (C++ member)</a>
+</li>
+      <li><a href="api/cpp/video.html#_CPPv4N4fort8myrmidon12VideoSegment3EndE">fort::myrmidon::VideoSegment::End (C++ member)</a>
+</li>
+      <li><a href="api/cpp/video.html#_CPPv4N4fort8myrmidon12VideoSegment4ListE">fort::myrmidon::VideoSegment::List (C++ type)</a>
+</li>
+      <li><a href="api/cpp/video.html#_CPPv4I0EN4fort8myrmidon12VideoSegment5MatchEvR4List8IterType8IterType">fort::myrmidon::VideoSegment::Match (C++ function)</a>
+</li>
+      <li><a href="api/cpp/video.html#_CPPv4N4fort8myrmidon12VideoSegment5SpaceE">fort::myrmidon::VideoSegment::Space (C++ member)</a>
+</li>
+      <li><a href="api/cpp/video.html#_CPPv4N4fort8myrmidon13VideoSequenceE">fort::myrmidon::VideoSequence (C++ struct)</a>
+</li>
+      <li><a href="api/cpp/video.html#_CPPv4N4fort8myrmidon13VideoSequence7ForEachERKN12VideoSegment4ListENSt8functionIFvRN2cv3MatERK14VideoFrameDataEEE">fort::myrmidon::VideoSequence::ForEach (C++ function)</a>
 </li>
       <li><a href="api/cpp/space_zone.html#_CPPv4N4fort8myrmidon4ZoneE">fort::myrmidon::Zone (C++ class)</a>
 </li>
@@ -1051,9 +1117,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.Query.GetDataInformations">GetDataInformations() (py_fort_myrmidon.Query static method)</a>
 </li>
+      <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.Query.GetMetaDataKeyRanges">GetMetaDataKeyRanges() (py_fort_myrmidon.Query static method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/python/ant_identification.html#py_fort_myrmidon.Ant.GetValue">GetValue() (py_fort_myrmidon.Ant method)</a>
+</li>
+      <li><a href="api/python/ant_identification.html#py_fort_myrmidon.Ant.GetValues">GetValues() (py_fort_myrmidon.Ant method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1095,6 +1165,8 @@
 </li>
       <li><a href="api/python/experiment.html#py_fort_myrmidon.Experiment.IdentificationsAt">IdentificationsAt() (py_fort_myrmidon.Experiment method)</a>
 </li>
+      <li><a href="api/python/video.html#py_fort_myrmidon.VideoFrameData.Identified">Identified (py_fort_myrmidon.VideoFrameData property)</a>
+</li>
       <li><a href="api/python/ant_identification.html#py_fort_myrmidon.Ant.IdentifiedAt">IdentifiedAt() (py_fort_myrmidon.Ant method)</a>
 </li>
   </ul></td>
@@ -1109,6 +1181,10 @@
         <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.Collision.IDs">(py_fort_myrmidon.Collision property)</a>
 </li>
       </ul></li>
+      <li><a href="api/python/video.html#py_fort_myrmidon.VideoSegmentList.insert">insert() (py_fort_myrmidon.VideoSegmentList method)</a>
+</li>
+      <li><a href="api/python/video.html#py_fort_myrmidon.VideoFrameData.Interactions">Interactions (py_fort_myrmidon.VideoFrameData property)</a>
+</li>
       <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.Matcher.InteractionType">InteractionType() (py_fort_myrmidon.Matcher static method)</a>
 </li>
       <li><a href="api/python/time.html#py_fort_myrmidon.Time.IsForever">IsForever() (py_fort_myrmidon.Time method)</a>
@@ -1139,6 +1215,8 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/python/video.html#py_fort_myrmidon.VideoSegment.Match">Match() (py_fort_myrmidon.VideoSegment static method)</a>
+</li>
       <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.Matcher">Matcher (class in py_fort_myrmidon)</a>
 </li>
       <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.AntTrajectorySummary.Mean">Mean (py_fort_myrmidon.AntTrajectorySummary property)</a>
@@ -1147,10 +1225,10 @@
 </li>
       <li><a href="api/python/experiment.html#py_fort_myrmidon.Experiment.MetaDataKeys">MetaDataKeys (py_fort_myrmidon.Experiment property)</a>
 </li>
-      <li><a href="api/python/time.html#py_fort_myrmidon.Duration.Microsecond">Microsecond (py_fort_myrmidon.Duration attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/python/time.html#py_fort_myrmidon.Duration.Microsecond">Microsecond (py_fort_myrmidon.Duration attribute)</a>
+</li>
       <li><a href="api/python/time.html#py_fort_myrmidon.Duration.Microseconds">Microseconds() (py_fort_myrmidon.Duration method)</a>
 </li>
       <li><a href="api/python/time.html#py_fort_myrmidon.Duration.Millisecond">Millisecond (py_fort_myrmidon.Duration attribute)</a>
@@ -1217,9 +1295,13 @@
         <li><a href="api/python/time.html#py_fort_myrmidon.Time.Parse">(py_fort_myrmidon.Time static method)</a>
 </li>
       </ul></li>
+      <li><a href="api/python/shapes.html#py_fort_myrmidon.Polygon">Polygon (class in py_fort_myrmidon)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/python/shapes.html#py_fort_myrmidon.Polygon">Polygon (class in py_fort_myrmidon)</a>
+      <li><a href="api/python/video.html#py_fort_myrmidon.VideoSegmentList.pop">pop() (py_fort_myrmidon.VideoSegmentList method)</a>
+</li>
+      <li><a href="api/python/video.html#py_fort_myrmidon.VideoFrameData.Position">Position (py_fort_myrmidon.VideoFrameData property)</a>
 </li>
       <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.AntTrajectory.Positions">Positions (py_fort_myrmidon.AntTrajectory property)</a>
 
@@ -1300,6 +1382,8 @@
 </li>
         <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.IdentifiedFrame.Space">(py_fort_myrmidon.IdentifiedFrame property)</a>
 </li>
+        <li><a href="api/python/video.html#py_fort_myrmidon.VideoSegment.Space">(py_fort_myrmidon.VideoSegment property)</a>
+</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -1352,6 +1436,8 @@
       <ul>
         <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.ComputedMeasurement.Time">(py_fort_myrmidon.ComputedMeasurement property)</a>
 </li>
+        <li><a href="api/python/video.html#py_fort_myrmidon.VideoFrameData.Time">(py_fort_myrmidon.VideoFrameData property)</a>
+</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -1364,7 +1450,11 @@
       <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.TrackingDataDirectoryInfo">TrackingDataDirectoryInfo (class in py_fort_myrmidon)</a>
 </li>
       <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.AntInteraction.Trajectories">Trajectories (py_fort_myrmidon.AntInteraction property)</a>
+
+      <ul>
+        <li><a href="api/python/video.html#py_fort_myrmidon.VideoFrameData.Trajectories">(py_fort_myrmidon.VideoFrameData property)</a>
 </li>
+      </ul></li>
       <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.AntTrajectorySegment.Trajectory">Trajectory (py_fort_myrmidon.AntTrajectorySegment property)</a>
 </li>
       <li><a href="api/python/queries_matchers.html#py_fort_myrmidon.AntInteraction.Types">Types (py_fort_myrmidon.AntInteraction property)</a>
@@ -1392,6 +1482,16 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/python/shapes.html#py_fort_myrmidon.Polygon.Vertices">Vertices (py_fort_myrmidon.Polygon property)</a>
+</li>
+      <li><a href="api/python/video.html#py_fort_myrmidon.VideoFrameData">VideoFrameData (class in py_fort_myrmidon)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/python/video.html#py_fort_myrmidon.VideoSegment">VideoSegment (class in py_fort_myrmidon)</a>
+</li>
+      <li><a href="api/python/video.html#py_fort_myrmidon.VideoSegmentList">VideoSegmentList (class in py_fort_myrmidon)</a>
+</li>
+      <li><a href="api/python/video.html#py_fort_myrmidon.VideoSequence">VideoSequence (class in py_fort_myrmidon)</a>
 </li>
   </ul></td>
 </tr></table>

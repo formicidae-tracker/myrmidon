@@ -64,7 +64,7 @@
 <p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../space_zoning.html">Segmenting Spaces in Zones</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../matching_movie_and_tracking_data.html">Matching Movie Frame and Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matching_video.html">Matching Video and Tracking Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../time.html">Time Representation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API References</span></p>
@@ -93,6 +93,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="time.html">Time Representation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shapes.html">2D Geometric Shapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video.html">Video Sequence Matching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="typedef.html">API generic types</a></li>
 </ul>
 </li>
@@ -351,6 +352,51 @@ Computes ant interactions, i.e. time intervals where two Ants collides. These wi
 </dl>
 </dd></dl>
 
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5Query17FindVideoSegmentsERK10ExperimentRNSt6vectorI12VideoSegmentEE7SpaceIDRKN4fort4TimeERKN4fort4TimeE">
+<span id="_CPPv3N4fort8myrmidon5Query17FindVideoSegmentsERK10ExperimentRNSt6vectorI12VideoSegmentEE7SpaceIDRKN4fort4TimeERKN4fort4TimeE"></span><span id="_CPPv2N4fort8myrmidon5Query17FindVideoSegmentsERK10ExperimentRNSt6vectorI12VideoSegmentEE7SpaceIDRKN4fort4TimeERKN4fort4TimeE"></span><span id="fort::myrmidon::Query::FindVideoSegments__ExperimentCR.std::vector:VideoSegment:R.SpaceID.fort::TimeCR.fort::TimeCR"></span><span class="target" id="classfort_1_1myrmidon_1_1Query_1ac758e8193eb6f82f811b838dea78b6e7"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FindVideoSegments</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="experiment.html#_CPPv4N4fort8myrmidon10ExperimentE" title="fort::myrmidon::Experiment"><span class="n"><span class="pre">Experiment</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">experiment</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="video.html#_CPPv4N4fort8myrmidon12VideoSegmentE" title="fort::myrmidon::VideoSegment"><span class="n"><span class="pre">VideoSegment</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">segments</span></span>, <a class="reference internal" href="typedef.html#_CPPv4N4fort8myrmidon7SpaceIDE" title="fort::myrmidon::SpaceID"><span class="n"><span class="pre">SpaceID</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">space</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">start</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">end</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5Query17FindVideoSegmentsERK10ExperimentRNSt6vectorI12VideoSegmentEE7SpaceIDRKN4fort4TimeERKN4fort4TimeE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Finds the <a class="reference internal" href="video.html#structfort_1_1myrmidon_1_1VideoSegment"><span class="std std-ref">VideoSegment</span></a> in a <a class="reference internal" href="space_zone.html#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a> of the <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>it would be extremly computationally inefficient to query for a large range [start;end].</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>experiment</strong> – the <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> to query for </p></li>
+<li><p><strong>segments</strong> – container for the <a class="reference internal" href="video.html#structfort_1_1myrmidon_1_1VideoSegment"><span class="std std-ref">VideoSegment</span></a> results </p></li>
+<li><p><strong>space</strong> – the SpaceID of the <a class="reference internal" href="space_zone.html#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a> to query for </p></li>
+<li><p><strong>start</strong> – the first <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> to query a video frame for </p></li>
+<li><p><strong>end</strong> – the last <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> to query a video frame for </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5Query20GetMetaDataKeyRangesERK10ExperimentRKNSt6stringERK14AntStaticValue">
+<span id="_CPPv3N4fort8myrmidon5Query20GetMetaDataKeyRangesERK10ExperimentRKNSt6stringERK14AntStaticValue"></span><span id="_CPPv2N4fort8myrmidon5Query20GetMetaDataKeyRangesERK10ExperimentRKNSt6stringERK14AntStaticValue"></span><span id="fort::myrmidon::Query::GetMetaDataKeyRanges__ExperimentCR.ssCR.AntStaticValueCR"></span><span class="target" id="classfort_1_1myrmidon_1_1Query_1aceea85a97458c2577c2f1657d0b80eb8"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef.html#_CPPv4N4fort8myrmidon5AntIDE" title="fort::myrmidon::AntID"><span class="n"><span class="pre">AntID</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetMetaDataKeyRanges</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="experiment.html#_CPPv4N4fort8myrmidon10ExperimentE" title="fort::myrmidon::Experiment"><span class="n"><span class="pre">Experiment</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">e</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="typedef.html#_CPPv4N4fort8myrmidon14AntStaticValueE" title="fort::myrmidon::AntStaticValue"><span class="n"><span class="pre">AntStaticValue</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5Query20GetMetaDataKeyRangesERK10ExperimentRKNSt6stringERK14AntStaticValue" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the time ranges where metadata key has a given value. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>e</strong> – the <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> to query for </p></li>
+<li><p><strong>key</strong> – the key to query for </p></li>
+<li><p><strong>value</strong> – the value to check equality to</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if key is not defined in <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if value is not of the right type for key </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a vector of tuple of AntID and time range where key is equal to value.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5Query17CollideFramesArgsE">
@@ -392,7 +438,7 @@ Computes ant interactions, i.e. time intervals where two Ants collides. These wi
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5Query26ComputeAntInteractionsArgs7MatcherE">
-<span id="_CPPv3N4fort8myrmidon5Query26ComputeAntInteractionsArgs7MatcherE"></span><span id="_CPPv2N4fort8myrmidon5Query26ComputeAntInteractionsArgs7MatcherE"></span><span id="fort::myrmidon::Query::ComputeAntInteractionsArgs::Matcher__myrmidon::Matcher::Ptr"></span><span class="target" id="structfort_1_1myrmidon_1_1Query_1_1ComputeAntInteractionsArgs_1aa9f5604263b2c2b14ee7b6072f865058"></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon7MatcherE" title="fort::myrmidon::Matcher"><span class="n"><span class="pre">Matcher</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon7Matcher3PtrE" title="fort::myrmidon::Matcher::Ptr"><span class="n"><span class="pre">Ptr</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Matcher</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5Query26ComputeAntInteractionsArgs7MatcherE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N4fort8myrmidon5Query26ComputeAntInteractionsArgs7MatcherE"></span><span id="_CPPv2N4fort8myrmidon5Query26ComputeAntInteractionsArgs7MatcherE"></span><span id="fort::myrmidon::Query::ComputeAntInteractionsArgs::Matcher__std::shared_ptr:myrmidon::Matcher:"></span><span class="target" id="structfort_1_1myrmidon_1_1Query_1_1ComputeAntInteractionsArgs_1a8cc2f2896efdf9fa603262ad1980dec8"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon7MatcherE" title="fort::myrmidon::Matcher"><span class="n"><span class="pre">Matcher</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Matcher</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5Query26ComputeAntInteractionsArgs7MatcherE" title="Permalink to this definition"></a><br /></dt>
 <dd><p><a class="reference internal" href="#classfort_1_1myrmidon_1_1Matcher"><span class="std std-ref">Matcher</span></a> to reduce the query to an <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> subset (default: to nullptr, i.e. </p>
 <p>anything). </p>
 </dd></dl>
@@ -428,7 +474,7 @@ Computes ant interactions, i.e. time intervals where two Ants collides. These wi
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5Query26ComputeAntTrajectoriesArgs7MatcherE">
-<span id="_CPPv3N4fort8myrmidon5Query26ComputeAntTrajectoriesArgs7MatcherE"></span><span id="_CPPv2N4fort8myrmidon5Query26ComputeAntTrajectoriesArgs7MatcherE"></span><span id="fort::myrmidon::Query::ComputeAntTrajectoriesArgs::Matcher__myrmidon::Matcher::Ptr"></span><span class="target" id="structfort_1_1myrmidon_1_1Query_1_1ComputeAntTrajectoriesArgs_1aa89f97ad28bc349c552078ea1fcb73cf"></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon7MatcherE" title="fort::myrmidon::Matcher"><span class="n"><span class="pre">Matcher</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon7Matcher3PtrE" title="fort::myrmidon::Matcher::Ptr"><span class="n"><span class="pre">Ptr</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Matcher</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5Query26ComputeAntTrajectoriesArgs7MatcherE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N4fort8myrmidon5Query26ComputeAntTrajectoriesArgs7MatcherE"></span><span id="_CPPv2N4fort8myrmidon5Query26ComputeAntTrajectoriesArgs7MatcherE"></span><span id="fort::myrmidon::Query::ComputeAntTrajectoriesArgs::Matcher__std::shared_ptr:myrmidon::Matcher:"></span><span class="target" id="structfort_1_1myrmidon_1_1Query_1_1ComputeAntTrajectoriesArgs_1a84e252943d5ebef3923151e7062207eb"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon7MatcherE" title="fort::myrmidon::Matcher"><span class="n"><span class="pre">Matcher</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Matcher</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5Query26ComputeAntTrajectoriesArgs7MatcherE" title="Permalink to this definition"></a><br /></dt>
 <dd><p><a class="reference internal" href="#classfort_1_1myrmidon_1_1Matcher"><span class="std std-ref">Matcher</span></a> to reduce the query to an <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> subset (default: to nullptr, i.e. </p>
 <p>anything). </p>
 </dd></dl>

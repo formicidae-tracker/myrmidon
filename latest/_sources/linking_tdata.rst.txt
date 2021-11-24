@@ -101,10 +101,10 @@ report coordinates. There are no restriction on the `Space` name.
    value for these IDs, excepting by defining objects in the same order.
 
 
-Linking `Tracking Data Directories`
-+++++++++++++++++++++++++++++++++++
+Linking Tracking Data Directories
++++++++++++++++++++++++++++++++++
 
-Finally, we can `add a tracking directory` [#addTDD]_ some data to
+Finally, we can `add a Tracking Data Directory (TDD)` [#addTDD]_ some data to
 the experiment. This will return to us an **URI** used to identify
 this particular TDD, especially to eventually `remove` [#removeTDD]_
 them or to `report` [#reportStats]_ tracking data statistics they contain.

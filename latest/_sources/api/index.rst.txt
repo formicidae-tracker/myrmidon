@@ -10,6 +10,7 @@ Python
    python/queries_matchers
    python/time
    python/shapes
+   python/video
    python/misc
 
 C++
@@ -23,6 +24,7 @@ C++
    cpp/queries_matchers
    cpp/time
    cpp/shapes
+   cpp/video
    cpp/typedef
 
 
