@@ -3,7 +3,7 @@
 #include <fort/myrmidon/Query.hpp>
 #include <fort/myrmidon/Matchers.hpp>
 #include <fort/myrmidon/Experiment.hpp>
-#include <fort/myrmidon/MovieSegmentData.hpp>
+#include <fort/myrmidon/Video.hpp>
 
 namespace py = pybind11;
 
@@ -117,13 +117,13 @@ py::tuple QueryComputeAntInteractions(const fort::myrmidon::Experiment & experim
 }
 
 
-std::shared_ptr<fort::myrmidon::MovieSegmentData::List>
+std::shared_ptr<fort::myrmidon::VideoSegment::List>
 FindVideoSegments(const fort::myrmidon::Experiment & e,
                   fort::myrmidon::SpaceID space,
                   const fort::Time & start,
                   const fort::Time & end) {
-	auto segments = std::make_shared<std::vector<fort::myrmidon::MovieSegmentData>>();
-	fort::myrmidon::Query::FindMovieSegments(e,*segments,space,start,end);
+	auto segments = std::make_shared<std::vector<fort::myrmidon::VideoSegment>>();
+	fort::myrmidon::Query::FindVideoSegments(e,*segments,space,start,end);
 	return segments;
 }
 

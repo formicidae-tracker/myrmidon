@@ -1,6 +1,6 @@
 #include "BindTypes.hpp"
 
-#include <fort/myrmidon/MovieSegmentData.hpp>
+#include <fort/myrmidon/Video.hpp>
 
 #include <opencv2/videoio.hpp>
 
@@ -12,38 +12,38 @@ namespace py = pybind11;
 
 void BindVideoFrameData(py::module_ & m) {
 	using namespace fort::myrmidon;
-	py::class_<MovieFrameData>(m,"VideoFrameData")
+	py::class_<VideoFrameData>(m,"VideoFrameData")
 		.def(py::init([](uint32_t position,
 		                 const fort::Time & time) {
-			              return std::make_unique<MovieFrameData>(MovieFrameData{.FramePosition = position,.Time = time});
+			              return std::make_unique<VideoFrameData>(VideoFrameData{.Position = position,.Time = time});
 		              }),
 		     "position"_a,
 		     "time"_a)
-		.def_readonly("Time",&MovieFrameData::Time)
-		.def_readonly("Position",&MovieFrameData::FramePosition)
+		.def_readonly("Time",&VideoFrameData::Time)
+		.def_readonly("Position",&VideoFrameData::Position)
 		.def_readonly("Identified",
-		              &MovieFrameData::Identified)
+		              &VideoFrameData::Identified)
 		.def_readonly("Collided",
-		              &MovieFrameData::Collided)
+		              &VideoFrameData::Collided)
 		.def_readonly("Trajectories",
-		              &MovieFrameData::Trajectories)
+		              &VideoFrameData::Trajectories)
 		.def_readonly("Interactions",
-		              &MovieFrameData::Interactions)
+		              &VideoFrameData::Interactions)
 		;
 
-	py::bind_vector<std::vector<MovieFrameData>>(m,"VideoFrameDataList");
-	py::implicitly_convertible<py::list,std::vector<MovieFrameData>>();
+	py::bind_vector<std::vector<VideoFrameData>>(m,"VideoFrameDataList");
+	py::implicitly_convertible<py::list,std::vector<VideoFrameData>>();
 }
 
 template <typename T>
-void Match(fort::myrmidon::MovieSegmentData::List & list,
+void Match(fort::myrmidon::VideoSegment::List & list,
            const std::vector<T> & data ) {
-	fort::myrmidon::MovieSegmentData::MatchData(list,data.begin(),data.end());
+	fort::myrmidon::VideoSegment::Match(list,data.begin(),data.end());
 }
 
 class VideoSequence {
 public:
-	VideoSequence(const fort::myrmidon::MovieSegmentData::List & list)
+	VideoSequence(const fort::myrmidon::VideoSegment::List & list)
 		: d_segmentIter(list.begin())
 		, d_segmentEnd(list.end()) {
 		d_VideoCapture = py::module_::import("cv2").attr("VideoCapture");
@@ -81,15 +81,15 @@ public:
 			return Next();
 		}
 
-		while(d_dataIter != d_segmentIter->Data.end() && d_dataIter->FramePosition < d_moviePos) {
+		while(d_dataIter != d_segmentIter->Data.end() && d_dataIter->Position < d_moviePos) {
 			++d_dataIter;
 		}
 
-		if ( d_dataIter != d_segmentIter->Data.end() && d_dataIter->FramePosition == d_moviePos) {
+		if ( d_dataIter != d_segmentIter->Data.end() && d_dataIter->Position == d_moviePos) {
 			return py::make_tuple(readVal[1],*d_dataIter);
 		} else {
 			return py::make_tuple(readVal[1],
-			                      fort::myrmidon::MovieFrameData{.FramePosition = uint32_t(d_moviePos),
+			                      fort::myrmidon::VideoFrameData{.Position = uint32_t(d_moviePos),
 				                                                     .Time = fort::Time::SinceEver()});
 		}
 	}
@@ -113,8 +113,8 @@ private:
 	}
 
 	py::object d_capture,d_VideoCapture;
-	fort::myrmidon::MovieSegmentData::List::const_iterator      d_segmentIter,d_segmentEnd;
-	std::vector<fort::myrmidon::MovieFrameData>::const_iterator d_dataIter;
+	fort::myrmidon::VideoSegment::List::const_iterator      d_segmentIter,d_segmentEnd;
+	std::vector<fort::myrmidon::VideoFrameData>::const_iterator d_dataIter;
 	int32_t d_moviePos;
 };
 
@@ -123,20 +123,20 @@ private:
 void BindVideoSegment(py::module_ & m) {
 	using namespace fort::myrmidon;
 	BindVideoFrameData(m);
-	py::class_<MovieSegmentData>(m,"VideoSegment")
+	py::class_<VideoSegment>(m,"VideoSegment")
 		.def(py::init([](SpaceID space) {
-			              return std::make_unique<MovieSegmentData>(MovieSegmentData{.Space = space});
+			              return std::make_unique<VideoSegment>(VideoSegment{.Space = space});
 		              }))
 		.def_readonly("Space",
-		              &MovieSegmentData::Space)
+		              &VideoSegment::Space)
 		.def_readonly("AbsoluteFilePath",
-		              &MovieSegmentData::AbsoluteFilePath)
+		              &VideoSegment::AbsoluteFilePath)
 		.def_readonly("Begin",
-		              &MovieSegmentData::Begin)
+		              &VideoSegment::Begin)
 		.def_readwrite("End",
-		               &MovieSegmentData::End)
+		               &VideoSegment::End)
 		.def_readwrite("Data",
-		               &MovieSegmentData::Data,
+		               &VideoSegment::Data,
 		               py::return_value_policy::reference_internal)
 		.def_static("Match",
 		            &Match<IdentifiedFrame::Ptr>)
@@ -148,22 +148,22 @@ void BindVideoSegment(py::module_ & m) {
 		            &Match<AntInteraction::Ptr>)
 		;
 
-	auto list = py::bind_vector<std::vector<MovieSegmentData>,std::shared_ptr<std::vector<MovieSegmentData>>>(m,"VideoSegmentList");
+	auto list = py::bind_vector<std::vector<VideoSegment>,std::shared_ptr<std::vector<VideoSegment>>>(m,"VideoSegmentList");
 	list.def("deepcopy",
-	         [](const std::vector<MovieSegmentData> & self) {
-		         return std::make_shared<std::vector<MovieSegmentData>>(self);
+	         [](const std::vector<VideoSegment> & self) {
+		         return std::make_shared<std::vector<VideoSegment>>(self);
 	         });
 	py::implicitly_convertible<py::list,
-	                           std::vector<MovieSegmentData>>();
+	                           std::vector<VideoSegment>>();
 
-	py::class_<VideoSequence>(m,"VideoSequence")
-		.def(py::init([](const std::shared_ptr<std::vector<MovieSegmentData>> & l) {
-			              return std::make_unique<VideoSequence>(*l);
+	py::class_<::VideoSequence>(m,"VideoSequence")
+		.def(py::init([](const std::shared_ptr<std::vector<VideoSegment>> & l) {
+			              return std::make_unique<::VideoSequence>(*l);
 		              }),py::keep_alive<1,2>())
-		.def("__enter__",&VideoSequence::Enter)
-		.def("__exit__",&VideoSequence::Exit)
-		.def("__iter__",&VideoSequence::Iter)
-		.def("__next__",&VideoSequence::Next)
+		.def("__enter__",&::VideoSequence::Enter)
+		.def("__exit__",&::VideoSequence::Exit)
+		.def("__iter__",&::VideoSequence::Iter)
+		.def("__next__",&::VideoSequence::Next)
 		;
 
 }

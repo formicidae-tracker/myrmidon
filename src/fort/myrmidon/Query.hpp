@@ -19,7 +19,7 @@ namespace myrmidon {
 
 class Experiment;
 class Matcher;
-class MovieSegmentData;
+class VideoSegment;
 
 /**
  * Queries are computation on an Experiment tracking data.
@@ -318,8 +318,8 @@ public:
 	                                   const ComputeAntInteractionsArgs & args = ComputeAntInteractionsArgs());
 
 
-	static void  FindMovieSegments(const Experiment & experiment,
-	                               std::vector<MovieSegmentData> & segments,
+	static void  FindVideoSegments(const Experiment & experiment,
+	                               std::vector<VideoSegment> & segments,
 	                               SpaceID space,
 	                               const fort::Time & start,
 	                               const fort::Time & end);

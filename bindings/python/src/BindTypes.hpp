@@ -12,12 +12,12 @@
 
 namespace fort {
 namespace myrmidon {
-struct MovieFrameData;
-struct MovieSegmentData;
+struct VideoFrameData;
+struct VideoSegment;
 }
 }
 
 PYBIND11_MAKE_OPAQUE(fort::myrmidon::Vector2dList)
 PYBIND11_MAKE_OPAQUE(fort::myrmidon::Shape::List)
-PYBIND11_MAKE_OPAQUE(std::vector<fort::myrmidon::MovieFrameData>)
-PYBIND11_MAKE_OPAQUE(std::vector<fort::myrmidon::MovieSegmentData>)
+PYBIND11_MAKE_OPAQUE(std::vector<fort::myrmidon::VideoFrameData>)
+PYBIND11_MAKE_OPAQUE(std::vector<fort::myrmidon::VideoSegment>)

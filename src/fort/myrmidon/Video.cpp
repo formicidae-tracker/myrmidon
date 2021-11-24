@@ -1,12 +1,12 @@
-#include "MovieSegmentData.hpp"
+#include "Video.hpp"
 
 #include <opencv2/videoio.hpp>
 
 namespace fort {
 namespace myrmidon {
 
-void MovieSegmentData::ForEachFrames(const List & list,
-                                     std::function<void (cv::Mat & frame, const MovieFrameData & data)> operation) {
+void VideoSequence::ForEach(const VideoSegment::List & list,
+                            std::function<void (cv::Mat & frame, const VideoFrameData & data)> operation) {
 	for ( const auto & s : list) {
 		cv::VideoCapture cap(s.AbsoluteFilePath);
 		cap.set(cv::CAP_PROP_POS_FRAMES,s.Begin);
@@ -17,13 +17,13 @@ void MovieSegmentData::ForEachFrames(const List & list,
 			if ( frame.empty() ) {
 				break;
 			}
-			while(iter != s.Data.end() && iter->FramePosition < moviePos) {
+			while(iter != s.Data.end() && iter->Position < moviePos) {
 				++iter;
 			}
-			if ( iter != s.Data.end() && iter->FramePosition == moviePos ) {
+			if ( iter != s.Data.end() && iter->Position == moviePos ) {
 				operation(frame,*iter);
 			} else {
-				operation(frame,{.FramePosition = moviePos,.Time = Time::SinceEver()});
+				operation(frame,{.Position = moviePos,.Time = Time::SinceEver()});
 			}
 		}
 	}

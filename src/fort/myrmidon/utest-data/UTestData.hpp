@@ -16,7 +16,7 @@
 #include <fort/myrmidon/types/AntInteraction.hpp>
 #include <fort/myrmidon/types/AntTrajectory.hpp>
 #include <fort/myrmidon/types/TagStatistics.hpp>
-#include <fort/myrmidon/MovieSegmentData.hpp>
+#include <fort/myrmidon/Video.hpp>
 
 #include <fort/myrmidon/Matchers.hpp>
 
@@ -79,7 +79,7 @@ public:
 		std::vector<AntTrajectory::Ptr> Trajectories;
 		std::vector<AntInteraction::Ptr> Interactions;
 		std::vector<AntInteraction::Ptr> Summarized() const;
-		std::map<SpaceID,std::vector<MovieSegmentData>>    MovieSegments;
+		std::map<SpaceID,std::vector<VideoSegment>> VideoSegments;
 	};
 
 	static fs::path TempDirName();

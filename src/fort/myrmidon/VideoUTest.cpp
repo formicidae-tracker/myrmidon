@@ -3,7 +3,7 @@
 #include "Experiment.hpp"
 #include "Query.hpp"
 
-#include "MovieSegmentData.hpp"
+#include "Video.hpp"
 
 #include "UtilsUTest.hpp"
 #include "TestSetup.hpp"
@@ -35,11 +35,11 @@
 
 
 
-::testing::AssertionResult AssertMovieFrameDataEqual(const char * aExpr,
+::testing::AssertionResult AssertVideoFrameDataEqual(const char * aExpr,
                                                      const char * bExpr,
-                                                     const fort::myrmidon::MovieFrameData & a,
-                                                     const fort::myrmidon::MovieFrameData & b) {
-	check(aExpr,bExpr,a,b,FramePosition);
+                                                     const fort::myrmidon::VideoFrameData & a,
+                                                     const fort::myrmidon::VideoFrameData & b) {
+	check(aExpr,bExpr,a,b,Position);
 	auto tmp = AssertTimeEqual((std::string(aExpr) + ".Time").c_str(),
 	                           (std::string(bExpr) + ".Time").c_str(),
 	                           a.Time,
@@ -96,17 +96,17 @@
 }
 
 
-::testing::AssertionResult AssertMovieSegmentDataEqual(const char * aExpr,
-                                                       const char * bExpr,
-                                                       const fort::myrmidon::MovieSegmentData & a,
-                                                       const fort::myrmidon::MovieSegmentData & b) {
+::testing::AssertionResult AssertVideoSegmentEqual(const char * aExpr,
+                                                   const char * bExpr,
+                                                   const fort::myrmidon::VideoSegment & a,
+                                                   const fort::myrmidon::VideoSegment & b) {
 	check(aExpr,bExpr,a,b,Space);
 	check(aExpr,bExpr,a,b,AbsoluteFilePath);
 	check(aExpr,bExpr,a,b,Begin);
 	check(aExpr,bExpr,a,b,End);
 	check(aExpr,bExpr,a,b,Data.size());
 	for ( size_t i = 0; i < a.Data.size(); ++i ) {
-		auto tmp = AssertMovieFrameDataEqual((std::string(aExpr) + ".Data[" + std::to_string(i) + "]").c_str(),
+		auto tmp = AssertVideoFrameDataEqual((std::string(aExpr) + ".Data[" + std::to_string(i) + "]").c_str(),
 		                                     (std::string(bExpr) + ".Data[" + std::to_string(i) + "]").c_str(),
 		                                     a.Data[i],
 		                                     b.Data[i]);
@@ -121,7 +121,7 @@ namespace fort {
 namespace myrmidon {
 
 
-class MovieSegmentDataUTest : public ::testing::Test {
+class VideoUTest : public ::testing::Test {
 protected:
 	void SetUp() {
 		experiment = Experiment::Open(TestSetup::UTestData().CurrentVersionFile().AbsoluteFilePath);
@@ -130,14 +130,14 @@ protected:
 	Experiment::Ptr experiment;
 };
 
-TEST_F(MovieSegmentDataUTest,MatchDataEdgeCases) {
+TEST_F(VideoUTest,MatchDataEdgeCases) {
 	std::vector<IdentifiedFrame::Ptr> data;
 	EXPECT_NO_THROW({
-			MovieSegmentData::List segments;
-			MovieSegmentData::MatchData(segments,data.begin(),data.end());
+			VideoSegment::List segments;
+			VideoSegment::Match(segments,data.begin(),data.end());
 		});
 
-	MovieSegmentData::List segments =
+	VideoSegment::List segments =
 		{
 		 {.Space = 1},
 		 {.Space = 2},
@@ -145,78 +145,78 @@ TEST_F(MovieSegmentDataUTest,MatchDataEdgeCases) {
 
 
 	EXPECT_THROW({
-			MovieSegmentData::MatchData(segments,
-			                            data.begin(),
-			                            data.end());
+			VideoSegment::Match(segments,
+			                    data.begin(),
+			                    data.end());
 		},std::invalid_argument);
 
 };
 
 
-TEST_F(MovieSegmentDataUTest,ForEachFramesEdgeCases) {
+TEST_F(VideoUTest,ForEachFramesEdgeCases) {
 	const auto & expected = TestSetup::UTestData().ExpectedResults().front();
-	auto segments = expected.MovieSegments.at(1);
+	auto segments = expected.VideoSegments.at(1);
 	auto & segment = segments.front();
 	segment.Data.resize(segment.Data.size()-1);
-	segment.Data.push_back({.FramePosition = segment.End,
+	segment.Data.push_back({.Position = segment.End,
 	                        .Time = Time::SinceEver()});
 	segment.End += 2;
 
-	MovieSegmentData::ForEachFrames(segments,
-	                                [&](const cv::Mat & ,
-	                                    const MovieFrameData & d) {
-		                                auto fi = std::find_if(segment.Data.begin(),
-		                                                       segment.Data.end(),
-		                                                       [&](const MovieFrameData & it) {
-			                                                       return it.FramePosition == d.FramePosition;
-		                                                       });
-		                                if ( fi == segment.Data.end() ) {
-			                                EXPECT_PRED_FORMAT2(AssertMovieFrameDataEqual,
-			                                                    d,
-			                                                    (MovieFrameData{.FramePosition = d.FramePosition,
-					             .Time = Time::SinceEver()}));
-		                                } else {
-			                                EXPECT_PRED_FORMAT2(AssertMovieFrameDataEqual,
-			                                                    d,
-			                                                    *fi);
-		                                }
-	                                });
+	VideoSequence::ForEach(segments,
+	                       [&](const cv::Mat & ,
+	                           const VideoFrameData & d) {
+		                       auto fi = std::find_if(segment.Data.begin(),
+		                                              segment.Data.end(),
+		                                              [&](const VideoFrameData & it) {
+			                                              return it.Position == d.Position;
+		                                              });
+		                       if ( fi == segment.Data.end() ) {
+			                       EXPECT_PRED_FORMAT2(AssertVideoFrameDataEqual,
+			                                           d,
+			                                           (VideoFrameData{.Position = d.Position,
+			                                                           .Time = Time::SinceEver()}));
+		                       } else {
+			                       EXPECT_PRED_FORMAT2(AssertVideoFrameDataEqual,
+			                                           d,
+			                                           *fi);
+		                       }
+	                       });
 
 };
 
 
 
 
-TEST_F(MovieSegmentDataUTest,EndToEnd) {
+TEST_F(VideoUTest,EndToEnd) {
 	const auto & expected = TestSetup::UTestData().ExpectedResults().front();
 	const auto & frames = TestSetup::UTestData().ExpectedFrames();
-	std::vector<MovieSegmentData> segments;
+	std::vector<VideoSegment> segments;
 
-	Query::FindMovieSegments(*experiment,
+	Query::FindVideoSegments(*experiment,
 	                         segments,
 	                         1,
 	                         expected.Start,
 	                         expected.End);
 
-	MovieSegmentData::MatchData(segments,
-	                            frames.begin(),
-	                            frames.end());
+	VideoSegment::Match(segments,
+	                    frames.begin(),
+	                    frames.end());
 
-	MovieSegmentData::MatchData(segments,
-	                            expected.Trajectories.begin(),
-	                            expected.Trajectories.end());
+	VideoSegment::Match(segments,
+	                    expected.Trajectories.begin(),
+	                    expected.Trajectories.end());
 
-	MovieSegmentData::MatchData(segments,
-	                            expected.Interactions.begin(),
-	                            expected.Interactions.end());
+	VideoSegment::Match(segments,
+	                    expected.Interactions.begin(),
+	                    expected.Interactions.end());
 
 	ASSERT_EQ(segments.size(),
-	          expected.MovieSegments.at(1).size());
+	          expected.VideoSegments.at(1).size());
 
-	for ( size_t i = 0; i < expected.MovieSegments.at(1).size(); ++i ) {
-		EXPECT_PRED_FORMAT2(AssertMovieSegmentDataEqual,
+	for ( size_t i = 0; i < expected.VideoSegments.at(1).size(); ++i ) {
+		EXPECT_PRED_FORMAT2(AssertVideoSegmentEqual,
 		                    segments[i],
-		                    expected.MovieSegments.at(1)[i])
+		                    expected.VideoSegments.at(1)[i])
 			<< "  With i: " << i;
 	}
 
@@ -225,25 +225,25 @@ TEST_F(MovieSegmentDataUTest,EndToEnd) {
 
 	auto iter = segments.front().Data.begin();
 
-	MovieSegmentData::ForEachFrames(segments,
-	                                [&](const cv::Mat & mat,
-	                                    const MovieFrameData & d) {
-		                                ASSERT_TRUE(iter != segments.front().Data.end() );
-		                                EXPECT_FALSE(mat.empty());
-		                                EXPECT_PRED_FORMAT2(AssertMovieFrameDataEqual,
-		                                                    d,
-		                                                    *iter);
-		                                ++iter;
-	                                });
+	VideoSequence::ForEach(segments,
+	                       [&](const cv::Mat & mat,
+	                           const VideoFrameData & d) {
+		                       ASSERT_TRUE(iter != segments.front().Data.end() );
+		                       EXPECT_FALSE(mat.empty());
+		                       EXPECT_PRED_FORMAT2(AssertVideoFrameDataEqual,
+		                                           d,
+		                                           *iter);
+		                       ++iter;
+	                       });
 
-	Query::FindMovieSegments(*experiment,
+	Query::FindVideoSegments(*experiment,
 	                         segments,
 	                         3,
 	                         expected.Start,
 	                         expected.End);
 	EXPECT_TRUE(segments.empty());
 
-	Query::FindMovieSegments(*experiment,
+	Query::FindVideoSegments(*experiment,
 	                         segments,
 	                         2,
 	                         expected.Start,

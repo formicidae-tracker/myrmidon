@@ -35,8 +35,8 @@ public:
 	                                   std::function<void (const AntInteraction::Ptr &)> storeInteraction,
 	                                   const myrmidon::Query::ComputeAntInteractionsArgs & args);
 
-	static void  FindMovieSegments(const Experiment & experiment,
-	                               std::vector<MovieSegmentData> & segments,
+	static void  FindVideoSegments(const Experiment & experiment,
+	                               std::vector<VideoSegment> & segments,
 	                               SpaceID space,
 	                               const Time & start,
 	                               const Time & end);

@@ -7,7 +7,7 @@
 #include <tbb/pipeline.h>
 
 #include <fort/myrmidon/Matchers.hpp>
-#include <fort/myrmidon/MovieSegmentData.hpp>
+#include <fort/myrmidon/Video.hpp>
 
 #include "TagStatistics.hpp"
 #include "TrackingDataDirectory.hpp"
@@ -162,8 +162,8 @@ void Query::ComputeAntInteractions(const Experiment & experiment,
 		   });
 }
 
-void Query::FindMovieSegments(const Experiment & experiment,
-                              std::vector<MovieSegmentData> & segments,
+void Query::FindVideoSegments(const Experiment & experiment,
+                              std::vector<VideoSegment> & segments,
                               SpaceID space,
                               const Time & start,
                               const Time & end) {
@@ -193,9 +193,9 @@ void Query::FindMovieSegments(const Experiment & experiment,
 					// no movie for this time
 					break;
 				}
-				segments.push_back(MovieSegmentData{.Space = space,
-				                                    .AbsoluteFilePath = segment->AbsoluteFilePath(),
-				                                    .Begin = uint32_t(movieID)});
+				segments.push_back({.Space = space,
+				                    .AbsoluteFilePath = segment->AbsoluteFilePath(),
+				                    .Begin = uint32_t(movieID)});
 			}
 			try {
 				nextMatch = segment->ToMovieFrameID(trackingID);
@@ -209,7 +209,7 @@ void Query::FindMovieSegments(const Experiment & experiment,
 				if ( movieID != nextMatch ) {
 					continue;
 				}
-				data.push_back({.FramePosition = uint32_t(movieID),
+				data.push_back({.Position = uint32_t(movieID),
 				                .Time = frame->Frame().Time()});
 			}
 		}

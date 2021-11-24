@@ -684,39 +684,39 @@ std::string MovieSegmentName(size_t index) {
 	return oss.str();
 }
 
-void MatchMovieData(MovieSegmentData & data,
+void MatchMovieData(VideoSegment & segment,
                     std::vector<std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr>> & frames,
                     UTestData::ExpectedResult & result,
                     const Time & start,
                     const Time & end) {
 	for ( const auto & [identified,collided] : frames ) {
-		if ( identified->Space != data.Space
+		if ( identified->Space != segment.Space
 		     || start > identified->FrameTime
 		     || identified->FrameTime >= end ) {
 			continue;
 		}
-		data.Data.push_back({
-		                     .FramePosition = uint32_t(data.Data.size()),
-		                     .Time = identified->FrameTime,
-		                     .Identified = identified,
-		                     .Collided = collided,
-		                     });
+		segment.Data.push_back({
+		                        .Position = uint32_t(segment.Data.size()),
+		                        .Time = identified->FrameTime,
+		                        .Identified = identified,
+		                        .Collided = collided,
+			});
 	}
-	data.End = data.Data.size();
+	segment.End = segment.Data.size();
 
-	for ( auto & d : data.Data ) {
+	for ( auto & d : segment.Data ) {
 		std::copy_if(result.Trajectories.begin(),
 		             result.Trajectories.end(),
 		             std::back_inserter(d.Trajectories),
 		             [&](const AntTrajectory::Ptr & t ) -> bool {
-			             return t->Space == data.Space && t->Start <= d.Time && d.Time <= t->End();
+			             return t->Space == segment.Space && t->Start <= d.Time && d.Time <= t->End();
 		             });
 
 		std::copy_if(result.Interactions.begin(),
 		             result.Interactions.end(),
 		             std::back_inserter(d.Interactions),
 		             [&] (const AntInteraction::Ptr & i) -> bool {
-			             return data.Space == i->Space && i->Start <= d.Time && d.Time <= i->End;
+			             return segment.Space == i->Space && i->Start <= d.Time && d.Time <= i->End;
 		             });
 	}
 }
@@ -725,26 +725,27 @@ void MatchMovieData(MovieSegmentData & data,
 void UTestData::GenerateMovieSegmentData(ExpectedResult & result,
                                          const TDDInfo & info,
                                          SpaceID spaceID) {
-	auto & movieSegments = result.MovieSegments[spaceID];
-	movieSegments.clear();
-	movieSegments.reserve(info.Segments.size());
+	auto & videoSegments = result.VideoSegments[spaceID];
+	videoSegments.clear();
+	videoSegments.reserve(info.Segments.size());
 
 	size_t index = -1;
 	for ( const auto & segment : info.Segments ) {
 		++index;
 
-		movieSegments.push_back(MovieSegmentData());
-		movieSegments.back().Space = spaceID;
-		movieSegments.back().AbsoluteFilePath = info.AbsoluteFilePath / MovieSegmentName(index);
-		movieSegments.back().Begin = 0;
-		MatchMovieData(movieSegments.back(),d_frames,result,info.Start,info.End);
+		videoSegments.push_back({.Space = spaceID,
+		                         .AbsoluteFilePath = (info.AbsoluteFilePath / MovieSegmentName(index)).string(),
+		                         .Begin = 0});
+		MatchMovieData(videoSegments.back(),d_frames,result,info.Start,info.End);
 
 	}
 #ifndef NDEBUG
-	for ( const auto & s : movieSegments ) {
-		std::cerr << "MovieSegment{ Space = " << s.Space
+	for ( const auto & s : videoSegments ) {
+		std::cerr << "VideoSegment{ Space = " << s.Space
 		          << " , AbsoluteFilePath = " << s.AbsoluteFilePath
-		          << " , Frames = " << s.Data.size()
+		          << " , Begin = " << s.Begin
+		          << " , End = " << s.End
+		          << " , Data.size() = " << s.Data.size()
 		          << "}" << std::endl;
 	}
 #endif //NDEBUG

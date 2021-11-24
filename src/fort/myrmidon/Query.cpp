@@ -170,12 +170,12 @@ void Query::ComputeAntInteractions(const Experiment & experiment,
 	                                    args);
 }
 
-void Query::FindMovieSegments(const Experiment & experiment,
-                              std::vector<MovieSegmentData> & segments,
+void Query::FindVideoSegments(const Experiment & experiment,
+                              std::vector<VideoSegment> & segments,
                               SpaceID space,
-                             const fort::Time & start,
+                              const fort::Time & start,
                               const fort::Time & end) {
-	priv::Query::FindMovieSegments(experiment.d_p->Get(),
+	priv::Query::FindVideoSegments(experiment.d_p->Get(),
 	                               segments,
 	                               space,
 	                               start,

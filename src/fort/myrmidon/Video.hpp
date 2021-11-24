@@ -21,8 +21,8 @@ namespace fort {
 namespace myrmidon {
 
 
-struct MovieFrameData {
-	uint32_t                         FramePosition;
+struct VideoFrameData {
+	uint32_t                         Position;
 	fort::Time                       Time;
 	IdentifiedFrame::Ptr             Identified;
 	CollisionFrame::Ptr              Collided;
@@ -36,81 +36,82 @@ struct MovieFrameData {
 };
 
 
-struct MovieSegmentData {
-	typedef std::vector<MovieSegmentData> List;
+struct VideoSegment {
+	typedef std::vector<VideoSegment> List;
 
 	SpaceID                     Space;
 	std::string                 AbsoluteFilePath;
-	std::vector<MovieFrameData> Data;
+	std::vector<VideoFrameData> Data;
 	uint32_t                    Begin,End;
 
 	template <typename IterType>
-	static void MatchData(List & list,
-	                      IterType begin,
-	                      IterType end);
-
-	static void ForEachFrames(const List & list,
-	                          std::function<void (cv::Mat & frame,
-	                                              const MovieFrameData & data)> operation);
-
+	static void Match(List & list,
+	                  IterType begin,
+	                  IterType end);
 
 private:
 	template <typename IterType>
-	static void MatchSortedFilteredData(List & list,
-	                                    IterType begin,
-	                                    IterType end);
+	static void MatchSortedFiltered(List & list,
+	                                IterType begin,
+	                                IterType end);
 
 	template <typename IterType>
-	IterType MatchData(IterType begin,
-	                   IterType end,
-	                   timed_data);
+	IterType Match(IterType begin,
+	               IterType end,
+	               timed_data);
 
 	template <typename IterType>
-	IterType MatchData(IterType begin,
-	                   IterType end,
-	                   time_ranged_data);
+	IterType Match(IterType begin,
+	               IterType end,
+	               time_ranged_data);
 
 
 
 };
 
 
+struct VideoSequence {
+	static void ForEach(const VideoSegment::List & list,
+	                    std::function<void (cv::Mat & frame,
+	                                        const VideoFrameData & data)> operation);
+};
+
 template <>
 inline void
-MovieFrameData::Append(const IdentifiedFrame::Ptr & f) {
+VideoFrameData::Append(const IdentifiedFrame::Ptr & f) {
 	Identified = f;
 }
 template <>
 inline void
-MovieFrameData::Append(const CollisionData & data) {
+VideoFrameData::Append(const CollisionData & data) {
 	Identified = std::get<0>(data);
 	Collided = std::get<1>(data);
 }
 
 template <>
 inline void
-MovieFrameData::Append(const AntTrajectory::Ptr & t) {
+VideoFrameData::Append(const AntTrajectory::Ptr & t) {
 	Trajectories.push_back(t);
 }
 
 template <>
 inline void
-MovieFrameData::Append(const AntInteraction::Ptr & i) {
+VideoFrameData::Append(const AntInteraction::Ptr & i) {
 	Interactions.push_back(i);
 }
 
 template <typename IterType>
 inline void
-MovieSegmentData::MatchData(List & list,
-                            IterType begin,
-                            IterType end) {
+VideoSegment::Match(List & list,
+                    IterType begin,
+                    IterType end) {
 
 	if ( list.empty() ) {
 		return;
 	}
 	if ( std::find_if(list.begin()+1,
 	                  list.end(),
-	                  [&list](const MovieSegmentData & s) {
+	                  [&list](const VideoSegment & s) {
 		                  return s.Space != list.front().Space;
 	                  }) != list.end() ) {
 		throw std::invalid_argument("This implementation only supports matching of segment from the same space");
@@ -130,7 +131,7 @@ MovieSegmentData::MatchData(List & list,
 	if constexpr ( TypeTraits::spaced_data == false ) {
 			std::sort(begin,end,
 			          compare);
-			MatchSortedFilteredData(list,begin,end);
+			MatchSortedFiltered(list,begin,end);
 			return;
 	} else {
 		std::vector<Type> filtered;
@@ -146,21 +147,21 @@ MovieSegmentData::MatchData(List & list,
 		          filtered.end(),
 		          compare);
 
-		MatchSortedFilteredData(list,filtered.begin(),filtered.end());
+		MatchSortedFiltered(list,filtered.begin(),filtered.end());
 	}
 }
 
 template <typename IterType>
 inline void
-MovieSegmentData::MatchSortedFilteredData(List & list,
-                                          IterType begin,
-                                          IterType end) {
+VideoSegment::MatchSortedFiltered(List & list,
+                                  IterType begin,
+                                  IterType end) {
 	typedef typename std::iterator_traits<IterType>::value_type   Type;
 	typedef data_traits<typename pointed_type_if_any<Type>::type> TypeTraits;
 	typedef typename TypeTraits::data_category data_category;
 
 	for ( auto & s : list ) {
-		begin = s.MatchData(begin,end,data_category());
+		begin = s.Match(begin,end,data_category());
 		if ( begin == end ) {
 			return;
 		}
@@ -169,9 +170,9 @@ MovieSegmentData::MatchSortedFilteredData(List & list,
 
 template <typename IterType>
 inline IterType
-MovieSegmentData::MatchData(IterType begin,
-                            IterType end,
-                            timed_data /*placeholder*/) {
+VideoSegment::Match(IterType begin,
+                    IterType end,
+                    timed_data /*placeholder*/) {
 
 	typedef typename std::iterator_traits<IterType>::value_type Type;
 	typedef data_traits<typename pointed_type_if_any<Type>::type>    TypeTraits;
@@ -197,9 +198,9 @@ MovieSegmentData::MatchData(IterType begin,
 
 template <typename IterType>
 inline IterType
-MovieSegmentData::MatchData(IterType begin,
-                            IterType end,
-                            time_ranged_data /*placeholder*/) {
+VideoSegment::Match(IterType begin,
+                    IterType end,
+                    time_ranged_data /*placeholder*/) {
 	typedef typename std::iterator_traits<IterType>::value_type Type;
 	typedef data_traits<typename pointed_type_if_any<Type>::type>    TypeTraits;
 

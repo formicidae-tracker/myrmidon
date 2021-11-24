@@ -120,7 +120,7 @@ set(HDR_PUBLIC_FILES types/AntInteraction.hpp
                      Experiment.hpp
                      Query.hpp
                      Matchers.hpp
-                     MovieSegmentData.hpp
+                     Video.hpp
                      utils/FileSystem.hpp)
 
 set(SRC_PRIVATE_FILES utils/StringManipulation.cpp
@@ -195,7 +195,7 @@ set(SRC_FILES types/AntInteraction.cpp
               Experiment.cpp
               Query.cpp
               Matchers.cpp
-              MovieSegmentData.cpp
+              Video.cpp
 	          )
 
 set(COMMON_UTEST_SRC_FILES TestSetup.cpp
@@ -251,7 +251,7 @@ set(SRC_UTEST_FILES main-check.cpp
                     TrackingSolverUTest.cpp
                     TypesUTest.cpp
                     ZoneUTest.cpp
-                    MovieSegmentDataUTest.cpp
+                    VideoUTest.cpp
                     types/TraitsUTest.cpp
                     types/ColorUTest.cpp
                     )
