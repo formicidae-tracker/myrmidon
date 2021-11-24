@@ -3,7 +3,6 @@ import py_fort_myrmidon as m
 import py_fort_myrmidon_utestdata as ud
 import assertions
 import functools
-import time
 import os
 
 
@@ -74,14 +73,15 @@ class QueryTestCase(unittest.TestCase, assertions.CustomAssertion):
                                                                         end=expectedResult.End,
                                                                         maximumGap=expectedResult.MaximumGap,
                                                                         matcher=expectedResult.Matches)
-            self.assertEqual(len(trajectories), len(
-                expectedResult.Trajectories))
-            self.assertEqual(len(interactions), len(
-                expectedResult.Interactions))
+            self.assertEqual(len(trajectories),
+                             len(expectedResult.InteractionTrajectories))
+            self.assertEqual(len(interactions),
+                             len(expectedResult.Interactions))
 
             trajectories = sorted(trajectories,
                                   key=functools.cmp_to_key(QueryTestCase.compare_trajectories))
-            for i, expected in enumerate(expectedResult.Trajectories):
+
+            for i, expected in enumerate(expectedResult.InteractionTrajectories):
                 self.assertAntTrajectoryEqual(trajectories[i], expected)
 
             for i, expected in enumerate(expectedResult.Interactions):

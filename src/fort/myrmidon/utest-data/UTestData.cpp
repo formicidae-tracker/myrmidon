@@ -142,7 +142,7 @@ void UTestData::BuildFakeData(const fs::path & basedir) {
 	WriteFakedata();
 
 	GenerateSegmentedResults();
-	GenerateTruncatedResults();
+	GenerateMatchedResults();
 
 
 #ifndef NDEBUG
@@ -165,6 +165,7 @@ void UTestData::SaveFullExpectedResult(const GeneratedData & gen) {
 	full.MaximumGap = 10*Duration::Second;
 	full.Trajectories = gen.Trajectories;
 	full.Interactions = gen.Interactions;
+	full.InteractionTrajectories = gen.Trajectories;
 	d_results.push_back(full);
 	d_frames = gen.Frames;
 	d_statistics = gen.Statistics;
@@ -229,7 +230,36 @@ void UTestData::SplitTrajectoryWithTDDs(const AntTrajectory::Ptr & t,
 	}
 }
 
-void UTestData::GenerateTruncatedResults() {
+void UTestData::GenerateMatchedResults() {
+	d_results.push_back(d_results.front());
+	auto & queenOnly = d_results.back();
+	queenOnly.Matches = fort::myrmidon::Matcher::AntMetaData("isQueen",true);
+	queenOnly.VideoSegments.clear();
+	queenOnly.Trajectories.erase(std::remove_if(queenOnly.Trajectories.begin(),
+	                                            queenOnly.Trajectories.end(),
+	                                            [](const AntTrajectory::Ptr & t ) {
+		                                            return t->Ant != 1;
+	                                            }),
+	                             queenOnly.Trajectories.end());
+	std::set<AntTrajectory::Ptr> toKeep;
+	queenOnly.Interactions.erase(std::remove_if(queenOnly.Interactions.begin(),
+	                                            queenOnly.Interactions.end(),
+	                                            [&](const AntInteraction::Ptr & i ) {
+		                                            if ( i->IDs.first == 1 ) {
+			                                            toKeep.insert(std::get<0>(i->Trajectories).first.Trajectory);
+			                                            toKeep.insert(std::get<0>(i->Trajectories).second.Trajectory);
+			                                            return false;
+		                                            }
+		                                            return true;
+	                                            }),
+	                             queenOnly.Interactions.end());
+
+	queenOnly.InteractionTrajectories.erase(std::remove_if(queenOnly.InteractionTrajectories.begin(),
+	                                                       queenOnly.InteractionTrajectories.end(),
+	                                                       [&](const AntTrajectory::Ptr & t ) {
+		                                                       return toKeep.count(t) == 0 && t->Ant != 1;
+	                                                       }),
+	                                        queenOnly.InteractionTrajectories.end());
 }
 
 
@@ -526,6 +556,12 @@ void UTestData::WriteExperimentFile(const ExperimentInfo & info) {
 	st->set_id(2);
 	st->set_name("body");
 
+	auto md = e.add_antmetadata();
+	md->set_name("isQueen");
+	auto dv = md->mutable_defaultvalue();
+	dv->set_type(pb::AntStaticValue::BOOL);
+	dv->set_boolvalue(false);
+
 	pb::FileHeader header;
 
 	semver::version version(info.Version);
@@ -581,6 +617,12 @@ void UTestData::WriteExperimentFile(const ExperimentInfo & info) {
 
 	for ( const auto & [antID,ant] : d_config.Ants) {
 		fort::myrmidon::pb::AntDescription a;
+		if (ant.IsQueen == true ) {
+			auto nv = a.add_namedvalues();
+			nv->set_name("isQueen");
+			nv->mutable_value()->set_type(pb::AntStaticValue::BOOL);
+			nv->mutable_value()->set_boolvalue(true);
+		}
 		a.set_id(antID);
 		a.mutable_color()->set_r(255);
 		auto identification = a.add_identifications();

@@ -54,6 +54,7 @@ Config::Config() {
 		     .AntSize = 180,
 		     .TagSize = 40,
 		     .Color = 0,
+		     .IsQueen = true,
 			 }},
 		 {2,{ // 2 is kind of a Nurse
 		     .Shape = {
@@ -96,6 +97,7 @@ Config::Config() {
 		     .AntSize = 120,
 		     .TagSize = 40,
 		     .Color = 30,
+		     .IsQueen = false,
 			 }},
 		 {3,{ // 3 is a kind of forager
 		     .Shape = {
@@ -124,6 +126,7 @@ Config::Config() {
 		     .AntSize = 120,
 		     .TagSize = 40,
 		     .Color = 30,
+		     .IsQueen = false,
 			 }},
 		};
 	NestTDDs =

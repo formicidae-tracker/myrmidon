@@ -56,6 +56,8 @@ void BindUTestData(py::module_ & m) {
 		              &UTestData::ExpectedResult::Trajectories)
 		.def_readonly("Interactions",
 		              &UTestData::ExpectedResult::Interactions)
+		.def_readonly("InteractionTrajectories",
+		              &UTestData::ExpectedResult::InteractionTrajectories)
 		.def("Summarized",
 		     &UTestData::ExpectedResult::Summarized)
 		.def_readonly("VideoSegments",

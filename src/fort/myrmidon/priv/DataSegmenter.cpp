@@ -206,7 +206,9 @@ DataSegmenter::~DataSegmenter() {
 	}
 
 	for ( auto & [antID,trajectory] : d_trajectories ) {
-		if ( d_args.Matcher && d_args.Matcher->Match(antID,0,{}) == false ) {
+		if ( d_args.Matcher
+		     && d_args.Matcher->Match(antID,0,{}) == false
+		     && trajectory->ForceKeep == false) {
 			continue;
 		}
 		auto t = trajectory->Terminate();
@@ -311,7 +313,7 @@ void DataSegmenter::TerminateTrajectory(const BuildingTrajectory::Ptr & trajecto
 
 	if ( d_args.Matcher
 		 && d_args.Matcher->Match(antID,0,{}) == false
-		 && trajectory->ForceKeep == false) {
+	     && trajectory->ForceKeep == false) {
 		return;
 	}
 

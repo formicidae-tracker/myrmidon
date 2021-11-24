@@ -107,9 +107,11 @@ void Query::ComputeTrajectories(const Experiment & experiment,
 									  .StoreTrajectory = storeDataFunctor,
 									  .StoreInteraction = [](const AntInteraction::Ptr &) {},
 									  .MaximumGap = args.MaximumGap,
-									  .SummarizeSegment = false,};
+									  .SummarizeSegment = false,
+	};
 	if ( args.Matcher ) {
 		sargs.Matcher = args.Matcher->ToPrivate();
+		sargs.Matcher->SetUpOnce(experiment.Identifier()->Ants());
 	}
 
 	auto segmenter = DataSegmenter(sargs);
@@ -137,6 +139,7 @@ void Query::ComputeAntInteractions(const Experiment & experiment,
 	sargs.MaximumGap = args.MaximumGap;
 	if ( args.Matcher ) {
 		sargs.Matcher = args.Matcher->ToPrivate();
+		sargs.Matcher->SetUpOnce(experiment.Identifier()->Ants());
 	}
 	if ( args.ReportFullTrajectories == true ) {
 		sargs.SummarizeSegment = false;

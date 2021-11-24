@@ -175,6 +175,16 @@ Returns:
 		                       },
 		                       py::return_value_policy::reference_internal,
 		                       "numpy.ndarray: a N row array of position. Columns are (t,x,y,angle,zone), where t is the offset from Start in seconds.")
+		.def("__str__",
+		     [](const AntTrajectory & self) {
+			     std::ostringstream oss;
+			     oss << "AntTrajectory{ Ant = " << self.Ant
+			         << " , Space = " << self.Space
+			         << " , Start = " << self.Start
+			         << " , NPos = " << self.Positions.rows()
+			         << "}";
+			     return oss.str();
+		     })
 		;
 
 }

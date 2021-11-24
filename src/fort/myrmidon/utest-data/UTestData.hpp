@@ -77,6 +77,7 @@ public:
 		Duration      MaximumGap;
 		Matcher::Ptr  Matches;
 		std::vector<AntTrajectory::Ptr> Trajectories;
+		std::vector<AntTrajectory::Ptr> InteractionTrajectories;
 		std::vector<AntInteraction::Ptr> Interactions;
 		std::vector<AntInteraction::Ptr> Summarized() const;
 		std::map<SpaceID,std::vector<VideoSegment>> VideoSegments;
@@ -132,7 +133,7 @@ private:
 	                             std::vector<AntTrajectory::Ptr> & trajectories,
 	                             const std::vector<TDDInfo> & tdds);
 
-	void GenerateTruncatedResults();
+	void GenerateMatchedResults();
 	void GenerateSegmentedResults();
 	void GenerateSegmentedResult(ExpectedResult & result,
 	                             const TDDInfo & tddInfo,

@@ -50,6 +50,7 @@ struct AntData {
 	Eigen::Vector3d              AntPose;
 	size_t                       AntSize,TagSize;
 	uint8_t                      Color;
+	bool                         IsQueen;
 
 	void ComputeTagPosition(double & xTag,
 	                        double & yTag,

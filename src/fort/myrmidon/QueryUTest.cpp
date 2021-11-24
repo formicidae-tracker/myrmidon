@@ -186,7 +186,7 @@ TEST_F(QueryUTest,ComputeAntInteractions) {
 			});
 
 
-		EXPECT_EQ(trajectories.size(),expected.Trajectories.size());
+		EXPECT_EQ(trajectories.size(),expected.InteractionTrajectories.size());
 		EXPECT_EQ(interactions.size(),expected.Interactions.size());
 
 		// trajectories, due to TDD boundaries may not be sorted
@@ -201,9 +201,9 @@ TEST_F(QueryUTest,ComputeAntInteractions) {
 		          });
 
 
-		for ( size_t i = 0; i < std::min(trajectories.size(),expected.Trajectories.size()); ++i ) {
+		for ( size_t i = 0; i < std::min(trajectories.size(),expected.InteractionTrajectories.size()); ++i ) {
 			EXPECT_ANT_TRAJECTORY_EQ(*trajectories[i],
-			                         *expected.Trajectories[i])
+			                         *expected.InteractionTrajectories[i])
 				<< "  With i: " << i;
 		}
 
