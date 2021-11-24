@@ -111,6 +111,7 @@ set(HDR_PUBLIC_FILES types/AntInteraction.hpp
                      types/Traits.hpp
                      types/TraitsCategory.hpp
                      types/Typedefs.hpp
+                     utils/FileSystem.hpp
                      Shapes.hpp
                      Identification.hpp
                      Ant.hpp
@@ -121,7 +122,7 @@ set(HDR_PUBLIC_FILES types/AntInteraction.hpp
                      Query.hpp
                      Matchers.hpp
                      Video.hpp
-                     utils/FileSystem.hpp)
+                     )
 
 set(SRC_PRIVATE_FILES utils/StringManipulation.cpp
                       priv/AntTimedValue.cpp
@@ -302,7 +303,17 @@ set_target_properties(fort-myrmidon PROPERTIES
                                     SOVERSION ${PROJECT_VERSION_ABI})
 
 install(TARGETS fort-myrmidon DESTINATION lib)
-install(FILES ${HDR_PUBLIC_FILES} DESTINATION include/fort/myrmidon)
+foreach(f ${HDR_PUBLIC_FILES})
+	get_filename_component(dir ${f} DIRECTORY)
+	if(dir)
+		install(FILES ${f} DESTINATION include/fort/myrmidon/${dir})
+	else(dir)
+		install(FILES ${f} DESTINATION include/fort/myrmidon )
+	endif(dir)
+endforeach(f ${HDR_PUBLIC_FILES})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/myrmidon-config.h
+              ${CMAKE_CURRENT_BINARY_DIR}/myrmidon-version.h
+        DESTINATION include/fort/myrmidon )
 
 add_library(fort-myrmidon-utestdata SHARED ${UTESTDATA_SRC_FILES}
 	                                       ${UTESTDATA_HDR_FILES})
