@@ -41,9 +41,9 @@ void Match(fort::myrmidon::MovieSegmentData::List & list,
 	fort::myrmidon::MovieSegmentData::MatchData(list,data.begin(),data.end());
 }
 
-class VideoContext {
+class VideoSequence {
 public:
-	VideoContext(const fort::myrmidon::MovieSegmentData::List & list)
+	VideoSequence(const fort::myrmidon::MovieSegmentData::List & list)
 		: d_segmentIter(list.begin())
 		, d_segmentEnd(list.end()) {
 		d_VideoCapture = py::module_::import("cv2").attr("VideoCapture");
@@ -51,11 +51,11 @@ public:
 		d_moviePos = -1;
 	}
 
-	VideoContext & Enter() {
+	VideoSequence & Enter() {
 		return *this;
 	}
 
-	VideoContext & Iter() {
+	VideoSequence & Iter() {
 		return *this;
 	}
 
@@ -156,14 +156,14 @@ void BindVideoSegment(py::module_ & m) {
 	py::implicitly_convertible<py::list,
 	                           std::vector<MovieSegmentData>>();
 
-	py::class_<VideoContext>(m,"VideoContext")
+	py::class_<VideoSequence>(m,"VideoSequence")
 		.def(py::init([](const std::shared_ptr<std::vector<MovieSegmentData>> & l) {
-			              return std::make_unique<VideoContext>(*l);
+			              return std::make_unique<VideoSequence>(*l);
 		              }),py::keep_alive<1,2>())
-		.def("__enter__",&VideoContext::Enter)
-		.def("__exit__",&VideoContext::Exit)
-		.def("__iter__",&VideoContext::Iter)
-		.def("__next__",&VideoContext::Next)
+		.def("__enter__",&VideoSequence::Enter)
+		.def("__exit__",&VideoSequence::Exit)
+		.def("__iter__",&VideoSequence::Iter)
+		.def("__next__",&VideoSequence::Next)
 		;
 
 }

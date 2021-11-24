@@ -31,8 +31,8 @@ class VideoTestCase(unittest.TestCase, assertions.CustomAssertion):
         expectedSegment = expected.VideoSegments[1][0]
 
         cap = cv2.VideoCapture(str(expectedSegment.AbsoluteFilePath))
-        with m.VideoContext(segments) as video:
-            for i, (frame, data) in enumerate(video):
+        with m.VideoSequence(segments) as sequence:
+            for i, (frame, data) in enumerate(sequence):
                 ret, expectedFrame = cap.read()
                 self.assertTrue(ret)
                 self.assertVideoFrameDataEqual(data, expectedSegment.Data[i])
@@ -58,8 +58,8 @@ class VideoTestCase(unittest.TestCase, assertions.CustomAssertion):
             position=segments[0].End, time=m.Time.SinceEver()))
         segments[0].End += 2
 
-        with m.VideoContext(segments) as video:
-            for _, data in video:
+        with m.VideoSequence(segments) as sequence:
+            for _, data in sequence:
                 fi = (d for d in segments[0].Data
                       if d.Position == data.Position)
                 try:
