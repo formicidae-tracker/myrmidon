@@ -18,7 +18,7 @@ class SpaceHandle;
  *
  * Space are uniquely identified with their ID().
  *
- * Space can only be created from an Experiment with
+ * @note Space can only be created from an Experiment with
  * Experiment::CreateSpace()
  *
  * Zoning

@@ -20,30 +20,159 @@ class Mat;
 namespace fort {
 namespace myrmidon {
 
-
+/**
+ * Represents the tracking data and query results associated to a
+ * video frame.
+ *
+ * @note After a call to Query::FindVideoSegments() all pointer values
+ * will be set to `nullptr`. One must call VideoSegment::Match() to
+ * query results with the VideoFrameData present in the
+ * VideoSegment::List.
+ *
+ * @warning In the unlikely case of a VideoFrameData without any
+ * tracking data ( the video frame was exported but not even a
+ * tracking timeout/frame drop was reported), the value of
+ * VideoFrameData::Time will be set to Time::SinceEver(), and all
+ * other field would be empty or set to `nullptr`.
+ */
 struct VideoFrameData {
+	/**
+	 * the video frame position in the video file
+	 */
 	uint32_t                         Position;
+	/**
+	 * the video frame acquisition time.
+	 */
 	fort::Time                       Time;
+	/**
+	 * The ants position (if previously VideoSegment::Match() 'ed)
+	 */
 	IdentifiedFrame::Ptr             Identified;
+	/**
+	 * The ants collision (if previously VideoSegment::Match() 'ed)
+	 */
 	CollisionFrame::Ptr              Collided;
+	/**
+	 * The ants trajectories (if previously VideoSegment::Match() 'ed)
+	 */
 	std::vector<AntTrajectory::Ptr>  Trajectories;
+	/**
+	 * The ants interactions (if previously VideoSegment::Match() 'ed)
+	 */
 	std::vector<AntInteraction::Ptr> Interactions;
 
-	bool Empty() const;
+	/**
+	 * Indicates the (unlikely) case where no tracking data is
+	 * associated with this video frame.
+	 *
+	 * @return `true` if there is no tracking data (not even a timeout /
+	 * frame drop report) associated with this video frame.
+	 */
+	bool Empty() const {
+		return Time.IsInfinite();
+	}
 
 	template <typename T>
 	void Append(const T & value);
 };
 
-
+/**
+ * Represents parts of a video file with its associated tracking data.
+ *
+ * VideoSegment are queried with Query::FindVideoSegments(). Once
+ * queried they are blank, i.e. no query results will appears in their
+ * Data field. One would call Match() to associate queries results
+ * with a VideoSegment::List. Finally one would call
+ * VideoSequence::ForEach to iterate over each video frame in the
+ * VideoSegment::List.
+ *
+ * @note Query::FindVideoSegments(), Match() and
+ * VideoSequence::ForEach accepts a VideoSegment::List as
+ * argument. Indeed it could happen that the desired VideoSequence
+ * would span multiple video file.
+ *
+ * \verbatim embed:rst:leading-asterisk
+ * .. code-block:: cpp
+ *
+ *     #include <fort/myrmidon/Experiment.hpp>
+ *     #include <fort/myrmidon/Query.hpp>
+ *     #include <fort/myrmidon/Video.hpp>
+ *
+ *     using namespace fort::myrmidon;
+ *
+ *     auto e = Experiment::Open("file.myrmidon");
+ *
+ *     // Note: it would be extremly computationally intensive to iterate
+ *     // over the whole experiment, we therefore select a time region.
+ *     auto start = fort::Time::Parse("2019-11-02T20:00:00.000Z");
+ *     auto end = start.Add(30 * fort::Duration::Second);
+ *
+ *     // step 0: perform some queries on the experiment.
+ *     std::vector<AntTrajectory::Ptr> trajectories;
+ *     Query::ComputeAntTrajectoriesArgs args;
+ *     args.Start = start;
+ *     args.End = end;
+ *     Query::ComputeAntTrajectories(e,trajectories,args);
+ *
+ *     // step 1: look up a VideoSegment::List
+ *     VideoSegment::List segments;
+ *     Query::FindVideoSegments(e,
+ *                              segments,
+ *                              1, // space we are looking for
+ *                              start,
+ *                              end);
+ *
+ *     // step 2: match the query results with the VideoSegment::List
+ *     VideoSegment::Match(segments,trajectories.begin(),trajectories.end());
+ *
+ *     // step 3: iterate over all video frames
+ *     VideoSequence::ForEach(segments,
+ *                            [](cv::Mat & frame, const VideoFrameData & data) {
+ *                                // step 3.1: on each `frame`, perform an operation based on `data`
+ *                            });
+ *
+ * \endverbatim
+ */
 struct VideoSegment {
+	/**
+	 * A std::vector of VideoSegment
+	 */
 	typedef std::vector<VideoSegment> List;
 
+	/**
+	 * The SpaceID of the Space this VideoSegment belongs to.
+	 */
 	SpaceID                     Space;
+	/**
+	 * the abolute file path to the video file.
+	 */
 	std::string                 AbsoluteFilePath;
+	/**
+	 * Matched queries result and acquisition time for the frames in the segment.
+	 */
 	std::vector<VideoFrameData> Data;
-	uint32_t                    Begin,End;
+	/**
+	 * Position of the first video frame in the file for the segment.
+	 */
+	uint32_t                    Begin;
+	/**
+	 * Position of the last video frame + 1 in the file for the segment.
+	 */
+	uint32_t                    End;
 
+	/**
+	 * Matches a query result with a VideoSegment::List
+	 * @tparam iterator type of the sequence of object to match. These
+	 * objects should define fort::myrmidon::data_traits. This is the
+	 * case for any result of Query::IdentifyFrames,
+	 * Query::CollideFrames, Query::ComputeAntTrajectories and
+	 * Query::ComputeAntInteractions
+	 * @param list the VideoSegments to associate data with
+	 * @param begin start iterator of the sequence to match
+	 * @param end past over end iterator of the sequence to match
+	 * @throws std::invalid_argument if all VideoSegment in list are
+	 * not from the same Space.
+	 */
 	template <typename IterType>
 	static void Match(List & list,
 	                  IterType begin,
@@ -69,8 +198,39 @@ private:
 
 };
 
-
+/**
+ * Operations on VideoSegment::List ( as they form a sequence)
+ */
 struct VideoSequence {
+	/**
+	 * Iterates over all frames of a sequence.
+	 *
+	 * @param list the VideoSegment::List to iterate on
+	 * @param operation the operation to perform on each video frame
+	 * of the sequence.
+	 *
+	 * \verbatim embed:rst:leading-asterisk
+	 * .. code-block:: c++
+	 *
+	 *     #include <fort/myrmidon/Query.hpp>
+	 *     #include <fort/myrmidon/Video.hpp>
+	 *
+	 *     using namespace fort::myrmidon;
+	 *
+	 *     VideoSegment::List segments;
+	 *     Query::FindVideoSegments(e,
+	 *                              segments,
+	 *                              1,
+	 *                              fort::Time::SinceEver(),
+	 *                              fort::Time::Forever());
+	 *
+	 *     VideoSequence::ForEach(segments,
+	 *                            [](cv::Mat & frame,
+	 *                               const VideoFrameData & data) {
+	 *                                // do something on frame based on data
+	 *                            });
+	 * \endverbatim
+	 */
 	static void ForEach(const VideoSegment::List & list,
 	                    std::function<void (cv::Mat & frame,
 	                                        const VideoFrameData & data)> operation);

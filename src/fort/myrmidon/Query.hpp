@@ -317,7 +317,18 @@ public:
 	                                   std::vector<AntInteraction::Ptr> & interactions,
 	                                   const ComputeAntInteractionsArgs & args = ComputeAntInteractionsArgs());
 
-
+	/**
+	 * Finds the VideoSegment in a Space of the Experiment
+	 *
+	 * @note it would be extremly computationally inefficient to query
+	 * for a large range [start;end].
+	 *
+	 * @param experiment the Experiment to query for
+	 * @param segments container for the VideoSegment results
+	 * @param space the SpaceID of the Space to query for
+	 * @param start the first Time to query a video frame for
+	 * @param end the last Time to query a video frame for
+	 */
 	static void  FindVideoSegments(const Experiment & experiment,
 	                               std::vector<VideoSegment> & segments,
 	                               SpaceID space,

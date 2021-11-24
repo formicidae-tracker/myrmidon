@@ -24,7 +24,7 @@ class AntHandle;
  * perform collision and interaction detection, and holds user defined
  * metadata.
  *
- * Ant can only be created from an Experiment with
+ * @note Ant can only be created from an Experiment with
  * Experiment::CreateAnt().
  *
  * Naming

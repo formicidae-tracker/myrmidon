@@ -41,7 +41,7 @@ class IdentificationHandle;
  * An Identification relates a ::TagID to an Ant, with Time validity
  * data and geometric data.
  *
- * An Identification can only be created from an Experiment with
+ * @note An Identification can only be created from an Experiment with
  * Experiment::AddIdentification.
  *
  * Time validy
