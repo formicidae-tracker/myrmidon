@@ -2,8 +2,6 @@
 
 #include <fort/myrmidon/Video.hpp>
 
-#include <opencv2/videoio.hpp>
-
 using namespace pybind11::literals;
 
 namespace py = pybind11;
@@ -80,7 +78,7 @@ public:
 	VideoSequence(const fort::myrmidon::VideoSegment::List & list)
 		: d_segmentIter(list.begin())
 		, d_segmentEnd(list.end()) {
-		d_VideoCapture = py::module_::import("cv2").attr("VideoCapture");
+		d_cv2 = py::module_::import("cv2");
 		d_capture = py::none();
 		d_moviePos = -1;
 	}
@@ -103,8 +101,8 @@ public:
 		}
 
 		if ( d_capture.is_none() == true ) {
-			d_capture = d_VideoCapture("filename"_a = d_segmentIter->AbsoluteFilePath);
-			d_capture.attr("set")(int(cv::CAP_PROP_POS_FRAMES),d_segmentIter->Begin);
+			d_capture = d_cv2.attr("VideoCapture")("filename"_a = d_segmentIter->AbsoluteFilePath);
+			d_capture.attr("set")(d_cv2.attr("CAP_PROP_POS_FRAMES"),d_segmentIter->Begin);
 			d_moviePos = d_segmentIter->Begin - 1;
 			d_dataIter = d_segmentIter->Data.begin();
 		}
@@ -146,7 +144,7 @@ private:
 		++d_segmentIter;
 	}
 
-	py::object d_capture,d_VideoCapture;
+	py::object d_capture,d_cv2;
 	fort::myrmidon::VideoSegment::List::const_iterator      d_segmentIter,d_segmentEnd;
 	std::vector<fort::myrmidon::VideoFrameData>::const_iterator d_dataIter;
 	int32_t d_moviePos;
