@@ -35,14 +35,14 @@ test_that("it can collide frames",{
 test_that("it can compute ant trajectories",{
     d <- local_data()
     for(expectedResult in ud$ExpectedResults) {
-        trajectories <- fmQueryComputeAntTrajectories(d$experiment,
-                                                      start = expectedResult$Start,
-                                                      end = expectedResult$End,
-                                                      maximumGap = expectedResult$MaximumGap,
-                                                      matcher = expectedResult$Matches,
-                                                      showProgress = FALSE)
-        expect_equal(trajectories$trajectories_summary,expectedResult$trajectories_summary)
-        expect_equal(trajectories$trajectories,expectedResult$trajectories)
+        result <- fmQueryComputeAntTrajectories(d$experiment,
+                                                start = expectedResult$Start,
+                                                end = expectedResult$End,
+                                                maximumGap = expectedResult$MaximumGap,
+                                                matcher = expectedResult$Matches,
+                                                showProgress = FALSE)
+        expect_equal(result$trajectories_summary,expectedResult$trajectories_summary)
+        expect_equal(result$trajectories,expectedResult$trajectories)
     }
 
 })
@@ -57,8 +57,8 @@ test_that("it can compute ant interactions",{
                                                 reportFullTrajectories = TRUE,
                                                 matcher = expectedResult$Matches,
                                                 showProgress = FALSE)
-        expect_equal(result$trajectories_summary,expectedResult$trajectories_summary)
-        expect_equal(result$trajectories,expectedResult$trajectories)
+        expect_equal(result$trajectories_summary,expectedResult$interactions_summary)
+        expect_equal(result$trajectories,expectedResult$interactions_trajectories)
         expect_equal(result$interactions,expectedResult$interactions)
 
         result <- fmQueryComputeAntInteractions(d$experiment,

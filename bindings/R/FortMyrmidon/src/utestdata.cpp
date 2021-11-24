@@ -21,6 +21,8 @@ RCPP_EXPOSED_CLASS_NODECL(fort::myrmidon::UTestData);
 std::tuple<SEXP,SEXP,SEXP>
 wrapFull(const std::vector<fort::myrmidon::AntTrajectory::Ptr> & trajectories,
          const std::vector<fort::myrmidon::AntInteraction::Ptr> & interactions);
+std::tuple<SEXP,SEXP>
+wrapTrajectories(const std::vector<fort::myrmidon::AntTrajectory::Ptr> & trajectories);
 
 SEXP wrapSummarized(const std::vector<fort::myrmidon::AntInteraction::Ptr> & interactions);
 
@@ -57,13 +59,16 @@ template <> SEXP wrap(const fort::myrmidon::UTestData::ExperimentInfo & info) {
 
 
 template <> SEXP wrap(const fort::myrmidon::UTestData::UTestData::ExpectedResult & result) {
-	auto [summary,trajectories,interactions] = wrapFull(result.Trajectories,result.Interactions);
+	auto [interactions_summary,interactions_trajectories,interactions] = wrapFull(result.InteractionTrajectories,result.Interactions);
+	auto [trajectories_summary,trajectories] = wrapTrajectories(result.Trajectories);
 	return List::create(_["Start"] = result.Start,
 	                    _["End"] = result.End,
 	                    _["MaximumGap"] = result.MaximumGap,
 	                    _["Matches"] = result.Matches,
-	                    _["trajectories_summary"] = summary,
+	                    _["trajectories_summary"] = trajectories_summary,
 	                    _["trajectories"] = trajectories,
+	                    _["interactions_summary"] = interactions_summary,
+	                    _["interactions_trajectories"] = interactions_trajectories,
 	                    _["interactions"] = interactions,
 	                    _["summarized_interactions"] = wrapSummarized(result.Summarized()));
 }
