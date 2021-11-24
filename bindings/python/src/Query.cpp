@@ -145,19 +145,18 @@ void BindQuery(py::module_ & m) {
 		            "antID"_a,
 		            "measurementTypeID"_a,
 		            R"pydoc(
-    Computes Ant manual measurement in millimeters.
+Computes Ant manual measurement in millimeters.
 
-    Computes the list of manual measurements made in `fort-studio` for
-    a given Ant in millimeters.
+Computes the list of manual measurements made in `fort-studio` for a
+given Ant in millimeters.
 
-    Args:
-        experiment (py_fort_myrmidon.Experiment): the experiment to
-            query
-        antID (int): the Ant to consider
-        measurementTypeID (int): the kind of measurement to consider
-    Returns:
-        List[py_fort_myrmidon.Measurement]: the list of measurement
-            for antID and measurementTypeID
+Args:
+    experiment (Experiment): the experiment to query
+    antID (int): the Ant to consider
+    measurementTypeID (int): the kind of measurement to consider
+
+Returns:
+        List[Measurement]: the list of measurement for **antID** and **measurementTypeID**
 )pydoc")
 		.def_static("GetDataInformations",
 		            &fort::myrmidon::Query::GetDataInformations,
@@ -166,14 +165,13 @@ void BindQuery(py::module_ & m) {
 		            &fort::myrmidon::Query::ComputeTagStatistics,
 		            "experiment"_a,
 		            R"pydoc(
-    Computes tag detection statistics in an experiment.
+Computes tag detection statistics in an experiment.
 
-    Args:
-        experiment (py_fort_myrmidon.Experiment): the experiment to
-            query
-    Returns:
-        Dict[int,py_fort_myrmidon.TagStatistics]: the list of
-            TagStatistics indexed by TagID.
+Args:
+    experiment (Experiment): the experiment to query
+
+Returns:
+    Dict[int,TagStatistics]: the list of TagStatistics indexed by TagID.
 )pydoc")
 		.def_static("IdentifyFrames",&QueryIdentifyFrames,
 		            "experiment"_a,
@@ -183,22 +181,17 @@ void BindQuery(py::module_ & m) {
 		            "singleThreaded"_a = identifyArgs.SingleThreaded,
 		            "computeZones"_a = identifyArgs.ComputeZones,
 		            R"pydoc(
-    Gets Ant positions in video frames.
+Gets Ant positions in video frames.
 
-    Args:
-        experiment (py_fort_myrmidon.Experiment): the experiment to
-            query
-        start (py_fort_myrmidon.Time): the first video acquisition
-            time to consider
-        end (py_fort_myrmidon.Time): the last video acquisition
-            time to consider
-        singleThreaded (bool): limits computation to happen in a
-            single thread.
-        computeZones (bool): computes the zone for the Ant, otherwise
-            0 will always be returned for the ants' current ZoneID.
-    Returns:
-        List[py_fort_myrmidon.IdentifiedFrame]: the detected position
-            of the Ant in video frames in [start;end[
+Args:
+    experiment (Experiment): the experiment to query
+    start (Time): the first video acquisition time to consider
+    end (Time): the last video acquisition time to consider
+    singleThreaded (bool): limits computation to happen in a single thread.
+    computeZones (bool): computes the zone for the Ant, otherwise 0 will always be returned for the ants' current ZoneID.
+
+Returns:
+    List[IdentifiedFrame]: the detected position of the Ant in video frames in [**start**;**end**[
 )pydoc")
 		.def_static("CollideFrames",
 		            &QueryCollideFrames,
@@ -209,21 +202,17 @@ void BindQuery(py::module_ & m) {
 		            "collisionsIgnoreZones"_a = collideArgs.CollisionsIgnoreZones,
 		            "singleThreaded"_a = collideArgs.SingleThreaded,
 		            R"pydoc(
-    Gets Ant collision in video frames.
+Gets Ant collision in video frames.
 
-    Args:
-        experiment (py_fort_myrmidon.Experiment): the experiment to
-            query
-        start (py_fort_myrmidon.Time): the first video acquisition
-            time to consider
-        end (py_fort_myrmidon.Time): the last video acquisition
-            time to consider
-        singleThreaded (bool): limits computation to happen in a
-            single thread.
-    Returns:
-        List[Tuple[py_fort_myrmidon.IdentifiedFrame,py_fort_myrmidon.CollisionFrame]]:
-            the detected position and collision of the Ants in video frames in
-            [start;end[
+Args:
+    experiment (Experiment): the experiment to query
+    start (Time): the first video acquisition time to consider
+    end (Time): the last video acquisition time to consider
+    singleThreaded (bool): limits computation to happen in a single thread.
+    collisionsIgnoreZones (bool): collision detection ignore zones definition
+
+Returns:
+    List[Tuple[IdentifiedFrame,CollisionFrame]]: the detected position and collision of the Ants in video frames in [**start**;**end**[
  )pydoc")
 		.def_static("ComputeAntTrajectories",
 		            &QueryComputeAntTrajectories,
@@ -236,27 +225,20 @@ void BindQuery(py::module_ & m) {
 		            "computeZones"_a = trajectoryArgs.ComputeZones,
 		            "singleThreaded"_a = trajectoryArgs.SingleThreaded,
 		            R"pydoc(
-    Conputes Ant Trajectories between two times.
+Conputes Ant Trajectories between two times.
 
-    Args:
-        experiment (py_fort_myrmidon.Experiment): the experiment to
-            query
-        start (py_fort_myrmidon.Time): the first video acquisition
-            time to consider
-        end (py_fort_myrmidon.Time): the last video acquisition
-            time to consider
-        maximumGap (py_fort_myrmidon.Duration): maximum tracking gap
-            allowed in a AntTrajectory object.
-        matcher (py_fort_myrmidon.Matcher): a Matcher that reduces
-            down the query to more specific use case.
-        computeZones (bool): computes the zone of the Ant. Otherwise 0
-            will always be returned.
-        singleThreaded (bool): limits computation to happen in a
-            single thread.
-    Returns:
-        List[py_fort_myrmidon.AntTrajectory]: a list of all
-            AntTrajectory taking place in [start;end[ given the
-            matcher criterion and maximumGap.
+Args:
+    experiment (Experiment): the experiment to query
+    start (Time): the first video acquisition time to consider
+    end (Time): the last video acquisition time to consider
+    maximumGap (Duration): maximum tracking gap allowed in a :class:`AntTrajectory` object.
+    matcher (Matcher): a :class:`Matcher` that reduces down the query to more specific use case.
+    computeZones (bool): computes the zone of the Ant. Otherwise 0 will always be returned.
+    singleThreaded (bool): limits computation to happen in a single thread.
+
+Returns:
+    List[AntTrajectory]: a list of all :class:`AntTrajectory` taking place in [**start**;**end**[ given the **matcher** and **maximumGap** criterions.
+
 )pydoc")
 		.def_static("ComputeAntInteractions",
 		            &QueryComputeAntInteractions,
@@ -270,34 +252,29 @@ void BindQuery(py::module_ & m) {
 		            "reportFullTrajectories"_a = interactionArgs.ReportFullTrajectories,
 		            "singleThreaded"_a = interactionArgs.SingleThreaded,
 		            R"pydoc(
-    Conputes Ant Interctions between two times.
+Conputes Ant Interctions between two times.
 
-    Args:
-        experiment (py_fort_myrmidon.Experiment): the experiment to
-            query
-        start (py_fort_myrmidon.Time): the first video acquisition
-            time to consider
-        end (py_fort_myrmidon.Time): the last video acquisition
-            time to consider
-        maximumGap (py_fort_myrmidon.Duration): maximum tracking gap
-            allowed in a AntTrajectory object.
-        matcher (py_fort_myrmidon.Matcher): a Matcher that reduces
-            down the query to more specific use case.
-        reportFullTrajectories (bool): if true, full AntTrajectory
-            will be computed and returned. Otherwise, none will be
-            returned and only the average Ants position will be
-            returned in AntTrajectorySegment.
-        singleThreaded (bool): limits computation to happen in a
-            single thread.
-    Returns:
-        List[py_fort_myrmidon.AntTrajectory]: a list of all
-            AntTrajectory taking place in [start;end[ given the
-            matcher criterion and maximumGap if reportFullTrajectories
-            is `true`. Otherwise it will be an empty list.
-        List[py_fort_myrmidon.AntInteraction]: a list of all
-            AntInteraction taking place in [start;end[ given the
-            matcher criterion and maximumGap
-  )pydoc")
+Args:
+    experiment (Experiment): the experiment to query
+    start (Time): the first video acquisition time to consider
+    end (Time): the last video acquisition time to consider
+    maximumGap (Duration): maximum tracking gap allowed in  :class:`AntInteraction` or :class:`AntTrajectory` objects.
+    matcher (Matcher): a Matcher that reduces down the query to more specific use case.
+    reportFullTrajectories (bool): if true, full AntTrajectories
+        will be computed and returned. Otherwise, none will be
+        returned and only the average Ants position will be
+        returned in AntTrajectorySegment.
+    singleThreaded (bool): limits computation to happen in a single thread.
+
+Returns:
+    Tuple[List[AntTrajectory],List[AntInteraction]]:
+        * a list of all AntTrajectory taking place in [start;end[
+          given the matcher criterion and maximumGap if
+          reportFullTrajectories is `true`. Otherwise it will be an
+          empty list.
+        * a list of all AntInteraction taking place
+          in [start;end[ given the matcher criterion and maximumGap
+)pydoc")
 		.def_static("FindVideoSegments",
 		            &FindVideoSegments,
 		            "experiment"_a,
@@ -306,7 +283,37 @@ void BindQuery(py::module_ & m) {
 		            "start"_a = fort::Time::SinceEver(),
 		            "end"_a = fort::Time::Forever(),
 		            R"pydoc(
+Finds :class:`VideoSegment` in a time range
 
+Args:
+    experiment (Experiment): the Experiment to query
+    space (int): the SpaceID to ask videos for
+    start (Time): the first time to query a video frame
+    end (Time): the last time to query a video frame
+
+Returns:
+    VideoSegmentList: list of :class:`VideoSegment` in **space** that covers [**start**;**end**].
+)pydoc")
+		.def_static("GetMetaDataKeyRanges",
+		            &fort::myrmidon::Query::GetMetaDataKeyRanges,
+		            "experiment"_a,
+		            py::kw_only(),
+		            "key"_a,
+		            "value"_a,
+		            R"pydoc(
+Gets the time ranges where metadata key has a given value
+
+Args:
+    experiment (Experiment): the Experiment to query
+    key (str): the metadata key to test
+    value (str): the value to test for equality
+
+Returns:
+    List[Tuple[int,Time,Time]]: time ranges for each AntID where **key** == **value**
+
+Raises:
+    IndexError: if **key** is not defined in Experiment
+    ValueError: if **value** is not the right type for **key**
 )pydoc")
 		;
 

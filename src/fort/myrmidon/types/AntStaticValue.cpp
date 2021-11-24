@@ -35,3 +35,24 @@ std::ostream & operator<<(std::ostream & out, const fort::myrmidon::AntStaticVal
 	out.flags(flags);
 	return out;
 }
+
+template <typename T>
+inline static bool Equals(const fort::myrmidon::AntStaticValue & a,
+                          const T & b) {
+	return std::get<T>(a) == b;
+}
+
+bool operator==(const fort::myrmidon::AntStaticValue & a,
+                const fort::myrmidon::AntStaticValue & b) {
+
+
+	if ( a.index() != b.index() ) {
+		return false;
+	}
+	if ( a.index() == std::variant_npos ) {
+		return true;
+	}
+	return std::visit([&](auto && arg) -> bool {
+		                  return Equals(a,arg);
+	                  },b);
+}

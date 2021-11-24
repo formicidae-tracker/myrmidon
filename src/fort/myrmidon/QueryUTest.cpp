@@ -304,5 +304,38 @@ TEST_F(QueryUTest,FrameSelection) {
 }
 
 
+TEST_F(QueryUTest,GetMetaDataKeyRanges) {
+	experiment = Experiment::Create(TestSetup::UTestData().Basedir() / "foo.myrmidon");
+	experiment->SetMetaDataKey("alive",true);
+	auto a = experiment->CreateAnt();
+	a = experiment->CreateAnt();
+	a->SetValue("alive",false,Time());
+	a = experiment->CreateAnt();
+	a->SetValue("alive",false,Time::SinceEver());
+	a->SetValue("alive",true,Time());
+	a->SetValue("alive",true,Time().Add(1));
+	a->SetValue("alive",false,Time().Add(2));
+	a->SetValue("alive",true,Time().Add(3));
+
+	std::vector<std::tuple<AntID,Time,Time>> ranges;
+	EXPECT_NO_THROW({
+			ranges = Query::GetMetaDataKeyRanges(*experiment,"alive",true);
+		});
+	EXPECT_EQ(ranges.size(),4);
+	EXPECT_EQ(ranges[0],std::make_tuple(1,Time::SinceEver(),Time::Forever()));
+	EXPECT_EQ(ranges[1],std::make_tuple(2,Time::SinceEver(),Time()));
+	EXPECT_EQ(ranges[2],std::make_tuple(3,Time(),Time().Add(2)));
+	EXPECT_EQ(ranges[3],std::make_tuple(3,Time().Add(3),Time::Forever()));
+
+	EXPECT_THROW({
+			ranges = Query::GetMetaDataKeyRanges(*experiment,"isDead",false);
+		},std::out_of_range);
+
+	EXPECT_THROW({
+			ranges = Query::GetMetaDataKeyRanges(*experiment,"alive",Time());
+		},std::invalid_argument);
+
+}
+
 } // namespace myrmidon
 } // namespace fort

@@ -182,5 +182,41 @@ void Query::FindVideoSegments(const Experiment & experiment,
 	                               end);
 }
 
+std::vector<std::tuple<AntID,Time,Time>>
+Query::GetMetaDataKeyRanges(const Experiment & e,
+                            const std::string & key,
+                            const AntStaticValue & value) {
+	std::vector<std::tuple<AntID,Time,Time>> res;
+	if ( e.MetaDataKeys().count(key) == 0 ) {
+		throw std::out_of_range("Invalid key '" + key + "'");
+	}
+	if ( e.MetaDataKeys().at(key).index() != value.index() ) {
+		throw std::invalid_argument("Value is not of the right type");
+	}
+
+	for ( const auto & [antID,ant] : e.Ants() ) {
+		const auto & values = ant->GetValues(key);
+		for ( auto iter = values.begin();
+		      iter != values.end();
+		      ++iter) {
+			if ( !(iter->second == value) ) {
+				continue;
+			}
+			auto next = iter;
+			while ( next != values.end() && next->second == value ) {
+				++next;
+			}
+			if ( next == values.end() ) {
+				res.push_back({antID,iter->first,Time::Forever()});
+			} else {
+				res.push_back({antID,iter->first,next->first});
+			}
+			iter = --next;
+		}
+	}
+	return res;
+}
+
+
 } // namespace myrmidon
 } // namespace fort

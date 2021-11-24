@@ -70,10 +70,10 @@
 
 	check(aExpr,bExpr,a,b,Trajectories.size());
 	for ( size_t i = 0; i < b.Trajectories.size(); ++i) {
-		tmp == AssertAntTrajectoryEqual(("*" + std::string(aExpr) + ".Trajectories[" + std::to_string(i) + "]").c_str(),
-		                                ("*" + std::string(bExpr) + ".Trajectories[" + std::to_string(i) + "]").c_str(),
-		                                *a.Trajectories[i],
-		                                *b.Trajectories[i]);
+		tmp = AssertAntTrajectoryEqual(("*" + std::string(aExpr) + ".Trajectories[" + std::to_string(i) + "]").c_str(),
+		                               ("*" + std::string(bExpr) + ".Trajectories[" + std::to_string(i) + "]").c_str(),
+		                               *a.Trajectories[i],
+		                               *b.Trajectories[i]);
 		if (!tmp) {
 			return tmp;
 		}
@@ -82,8 +82,8 @@
 	check(aExpr,bExpr,a,b,Interactions.size());
 
 	for ( size_t i = 0; i < b.Interactions.size(); ++i) {
-		tmp == AssertAntInteractionEqual(("*" + std::string(aExpr) + ".Interactions[" + std::to_string(i) + "]").c_str(),
-		                                 ("*" + std::string(bExpr) + ".Interactions[" + std::to_string(i) + "]").c_str(),
+		tmp = AssertAntInteractionEqual(("*" + std::string(aExpr) + ".Interactions[" + std::to_string(i) + "]").c_str(),
+		                                ("*" + std::string(bExpr) + ".Interactions[" + std::to_string(i) + "]").c_str(),
 		                                *a.Interactions[i],
 		                                *b.Interactions[i]);
 		if (!tmp) {

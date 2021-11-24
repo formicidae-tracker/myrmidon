@@ -60,3 +60,7 @@ AntMetaDataType TypeForAntStaticValue(const AntStaticValue & value);
  * @return a reference to out
  */
 std::ostream & operator<<(std::ostream & out, const fort::myrmidon::AntStaticValue & v);
+
+
+bool operator==(const fort::myrmidon::AntStaticValue & a,
+                const fort::myrmidon::AntStaticValue & b);

@@ -13,6 +13,8 @@
 #include <fort/myrmidon/types/Collision.hpp>
 #include <fort/myrmidon/types/AntTrajectory.hpp>
 #include <fort/myrmidon/types/AntInteraction.hpp>
+#include <fort/myrmidon/types/AntStaticValue.hpp>
+
 
 namespace fort {
 namespace myrmidon {
@@ -334,6 +336,25 @@ public:
 	                               SpaceID space,
 	                               const fort::Time & start,
 	                               const fort::Time & end);
+
+	/**
+	 * Gets the time ranges where metadata key has a given value.
+	 *
+	 * @param e the Experiment to query for
+	 * @param key the key to query for
+	 * @param value the value to check equality to
+	 *
+	 * @return a vector of tuple of AntID and time range where key is
+	 * equal to value.
+	 *
+	 * @throws std::out_of_range if key is not defined in Experiment
+	 * @throws std::invalid_argument if value is not of the right type for key
+	 */
+
+	static std::vector<std::tuple<AntID,Time,Time>>
+	GetMetaDataKeyRanges(const Experiment & e,
+	                     const std::string & key,
+	                     const AntStaticValue & value);
 };
 
 
