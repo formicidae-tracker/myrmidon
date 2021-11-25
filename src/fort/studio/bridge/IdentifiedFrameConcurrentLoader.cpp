@@ -11,6 +11,7 @@
 #include <fort/myrmidon/priv/TrackingDataDirectory.hpp>
 #include <fort/myrmidon/priv/CollisionSolver.hpp>
 
+#include <fort/studio/MyrmidonTypes/Time.hpp>
 #include <fort/studio/MyrmidonTypes/Experiment.hpp>
 
 
@@ -36,6 +37,7 @@ IdentifiedFrameConcurrentLoader::IdentifiedFrameConcurrentLoader(QObject * paren
 	, d_currentLoadingID(-1)
 	, d_connectionType(Qt::QueuedConnection) {
 	qRegisterMetaType<fmp::Experiment::ConstPtr>();
+	qRegisterMetaType<fort::Time>();
 }
 
 IdentifiedFrameConcurrentLoader::~IdentifiedFrameConcurrentLoader() {
@@ -91,7 +93,8 @@ IdentifiedFrameConcurrentLoader::collisionAt(fmp::MovieFrameID movieID) const {
 
 void IdentifiedFrameConcurrentLoader::loadMovieSegment(quint32 spaceID,
                                                        const fmp::TrackingDataDirectory::Ptr & tdd,
-                                                       const fmp::MovieSegment::ConstPtr & segment) {
+                                                       const fmp::MovieSegment::ConstPtr & segment,
+                                                       fort::Duration expectedFrameDuration) {
 	if ( !d_experiment ) {
 		return;
 	}
@@ -103,6 +106,7 @@ void IdentifiedFrameConcurrentLoader::loadMovieSegment(quint32 spaceID,
 	}
 
 	clear();
+	d_expectedFrameDuration = expectedFrameDuration;
 	auto identifier = fmp::Identifier::Compile(d_experiment->Identifier());
 	auto solver = d_experiment->CompileCollisionSolver(false);
 
@@ -268,32 +272,73 @@ void IdentifiedFrameConcurrentLoader::addDone(int done) {
 	setProgress(d_done + done,d_toDo);
 }
 
-quint64 IdentifiedFrameConcurrentLoader::findAnt(quint32 antID,
-                                                 quint64 frameID,
-                                                 int direction) {
+fort::Duration
+IdentifiedFrameConcurrentLoader::findAnt(quint32 antID,
+                                         quint64 frameID,
+                                         int direction) {
 	auto fi = d_frames.find(frameID + 1);
 	if ( d_done == false || fi == d_frames.end() ) {
-		return std::numeric_limits<quint64>::max();
+		return -1;
 	}
-
+	const auto & start = d_frames.at(1)->FrameTime;
 
 	if ( direction > 0 ) {
 		for ( ; fi != d_frames.end(); ++fi ) {
 			if( fi->second->Contains(antID) == true ) {
-				return fi->first - 1;
+				return fi->second->FrameTime.Sub(start);
 			}
 		}
-		return std::numeric_limits<quint64>::max();
+		return -1;
 	}
 
 
 	for ( ; fi != d_frames.begin(); --fi) {
 		if( fi->second->Contains(antID) == true ) {
-			return fi->first - 1;
+			return fi->second->FrameTime.Sub(start);
 		}
 	}
 	if ( fi->second->Contains(antID) == true ) {
-		return fi->first - 1;
+		return fi->second->FrameTime.Sub(start);
 	}
-	return std::numeric_limits<quint64>::max();
+	return -1;
+}
+
+fort::Duration IdentifiedFrameConcurrentLoader::duration() const {
+	if ( d_frames.empty() ) {
+		return 0;
+	}
+	return (--d_frames.end())->second->FrameTime.Sub(d_frames.begin()->second->FrameTime);
+}
+
+
+fort::Duration IdentifiedFrameConcurrentLoader::positionAt(fmp::MovieFrameID movieID) const {
+	if ( movieID == 0 ) {
+		return 0;
+	}
+	if ( d_frames.empty() ) {
+		return movieID * d_expectedFrameDuration;
+	}
+	auto begin = d_frames.cbegin();
+	auto inferredStart = begin->second->FrameTime.Add((1 - int(begin->first)) * d_expectedFrameDuration );
+
+	auto lower = d_frames.lower_key(movieID+1);
+	if ( lower == d_frames.cend() ) {
+		auto upper = d_frames.upper_key(movieID+1);
+		// interpolation from the closest;
+		return upper->second->FrameTime.Sub(inferredStart) +  ( movieID - upper->first + 1) * d_expectedFrameDuration;
+	}
+
+	if ( lower->first == (movieID + 1) ) {
+		return lower->second->FrameTime.Sub(inferredStart);
+	}
+	auto upper = d_frames.upper_key(movieID+1);
+
+	if ( upper == d_frames.cend() ) {
+		// interpolation from the closest;
+		return lower->second->FrameTime.Sub(inferredStart) +  ( movieID - lower->first + 1 ) * d_expectedFrameDuration;
+	}
+	// infers frame duration between the two frames
+	fort::Duration inferredFrameDuration = upper->second->FrameTime.Sub(lower->second->FrameTime).Nanoseconds() / ( upper->first - lower->first );
+	// interpolate the closest time
+	return lower->second->FrameTime.Sub(inferredStart) + ( movieID - lower->first + 1 ) * inferredFrameDuration;
 }
