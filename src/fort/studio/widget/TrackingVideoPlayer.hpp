@@ -111,6 +111,8 @@ private slots:
 	void onTimerTimeout();
 
 	void setSeekReady(bool value);
+
+	void setDuration(fort::Duration duration);
 private:
 	const static size_t BUFFER_SIZE = 3;
 
@@ -136,7 +138,7 @@ private:
 	fort::Duration              d_interval;
 	fort::Duration              d_position;
 	fort::Duration              d_duration;
-
+	double                      d_fps;
 	bool                        d_displayNext;
 	bool                        d_scrollMode;
 
@@ -154,7 +156,8 @@ public:
 	explicit TrackingVideoPlayerTask(size_t taskID,
 	                                 const fmp::MovieSegment::ConstPtr & segment,
 	                                 size_t rate,
-	                                 IdentifiedFrameConcurrentLoader * loader);
+	                                 IdentifiedFrameConcurrentLoader * loader,
+	                                 const fort::Time & start);
 
 	virtual ~TrackingVideoPlayerTask();
 
@@ -192,4 +195,5 @@ private:
 	int                               d_width,d_height;
 	size_t                            d_taskID,d_seekID,d_rate;
 	fort::Duration                    d_expectedFrameDuration;
+	fort::Time                        d_start;
 };

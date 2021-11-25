@@ -29,6 +29,8 @@ public:
 
 	void setExperiment(const fmp::Experiment::ConstPtr & experiment);
 
+	fort::Duration positionAt(fmp::MovieFrameID movieID) const;
+	fort::Duration duration() const;
 	const fm::IdentifiedFrame::Ptr & frameAt(fmp::MovieFrameID movieID) const;
 	const fm::CollisionFrame::Ptr & collisionAt(fmp::MovieFrameID movieID) const;
 
@@ -38,15 +40,17 @@ public:
 public slots:
 	void loadMovieSegment(quint32 spaceID,
 	                      const fmp::TrackingDataDirectoryPtr & tdd,
-	                      const fmp::MovieSegmentConstPtr & segment);
+	                      const fmp::MovieSegmentConstPtr & segment,
+	                      fort::Duration expectedFrameDuration);
 	void clear();
 
-	quint64 findAnt(quint32 antID,
-	                quint64 frameID,
-	                int direction);
+	fort::Duration findAnt(quint32 antID,
+	                       quint64 frameID,
+	                       int direction);
 signals:
 	void progressChanged(int done,int toDo);
 	void done(bool);
+	void durationComputed(fort::Duration duration);
 
 private slots:
 	void setExperimentUnsafe(fmp::Experiment::ConstPtr experiment);
@@ -66,6 +70,8 @@ private :
 	FramesByMovieID         d_frames;
 	CollisionsByMovieID     d_collisions;
 	int                     d_done,d_toDo;
+	fort::Duration          d_expectedFrameDuration;
+
 
 	std::shared_ptr<std::atomic<bool>> d_abordFlag;
 	size_t                             d_currentLoadingID;
