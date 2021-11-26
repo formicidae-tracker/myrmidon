@@ -43,6 +43,7 @@ public slots:
 	void setShowID(bool value);
 	void setShowCollisions(bool value);
 
+	void setSelectedTimeRange(const fort::Time & in, const fort::Time & out);
 private slots:
 	void onPlayerPlaybackStateChanged(TrackingVideoPlayer::State state);
 	void onPlayerPlaybackRateChanged(qreal rate);
