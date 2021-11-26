@@ -1,4 +1,4 @@
-#include "IdentifiedFrameConcurrentLoader.hpp"
+#include "ConcurrentFrameLoader.hpp"
 
 #include <QtConcurrent>
 
@@ -21,7 +21,7 @@
 #ifndef FORT_STUDIO_CONC_LOADER_NDEBUG
 #include <mutex>
 std::mutex clDebugMutex;
-#define CONC_LOADER_DEBUG(statements) do{ \
+#define CONC_LOADER_DEBUG(statements) do{	  \
 		std::lock_guard<std::mutex> dlock(clDebugMutex); \
 		statements; \
 	}while(0)
@@ -30,7 +30,7 @@ std::mutex clDebugMutex;
 #endif
 
 
-IdentifiedFrameConcurrentLoader::IdentifiedFrameConcurrentLoader(QObject * parent)
+ConcurrentFrameLoader::ConcurrentFrameLoader(QObject * parent)
 	: QObject(parent)
 	, d_done(0)
 	, d_toDo(-1)
@@ -40,18 +40,18 @@ IdentifiedFrameConcurrentLoader::IdentifiedFrameConcurrentLoader(QObject * paren
 	qRegisterMetaType<fort::Time>();
 }
 
-IdentifiedFrameConcurrentLoader::~IdentifiedFrameConcurrentLoader() {
+ConcurrentFrameLoader::~ConcurrentFrameLoader() {
 	if ( !d_abordFlag == false ) {
 		d_abordFlag->store(true);
 	}
 }
 
 
-bool IdentifiedFrameConcurrentLoader::isDone() const {
+bool ConcurrentFrameLoader::isDone() const {
 	return d_done == d_toDo;
 }
 
-void IdentifiedFrameConcurrentLoader::moveToThread(QThread * thread) {
+void ConcurrentFrameLoader::moveToThread(QThread * thread) {
 	if ( thread != QObject::thread() ) {
 		d_connectionType = Qt::BlockingQueuedConnection;
 	}
@@ -59,12 +59,12 @@ void IdentifiedFrameConcurrentLoader::moveToThread(QThread * thread) {
 }
 
 
-void IdentifiedFrameConcurrentLoader::setExperiment(const fmp::Experiment::ConstPtr & experiment) {
+void ConcurrentFrameLoader::setExperiment(const fmp::Experiment::ConstPtr & experiment) {
 	metaObject()->invokeMethod(this,"setExperimentUnsafe",d_connectionType,
 	                           Q_ARG(fmp::Experiment::ConstPtr,experiment));
 }
 
-void IdentifiedFrameConcurrentLoader::setExperimentUnsafe(fmp::Experiment::ConstPtr experiment) {
+void ConcurrentFrameLoader::setExperimentUnsafe(fmp::Experiment::ConstPtr experiment) {
 	if ( !d_experiment ) {
 		clear();
 	}
@@ -72,7 +72,7 @@ void IdentifiedFrameConcurrentLoader::setExperimentUnsafe(fmp::Experiment::Const
 }
 
 const fm::IdentifiedFrame::Ptr &
-IdentifiedFrameConcurrentLoader::frameAt(fmp::MovieFrameID movieID) const {
+ConcurrentFrameLoader::frameAt(fmp::MovieFrameID movieID) const {
 	static fm::IdentifiedFrame::Ptr empty;
 	auto fi = d_frames.find(movieID+1);
 	if ( fi == d_frames.cend() ) {
@@ -82,7 +82,7 @@ IdentifiedFrameConcurrentLoader::frameAt(fmp::MovieFrameID movieID) const {
 }
 
 const fm::CollisionFrame::Ptr &
-IdentifiedFrameConcurrentLoader::collisionAt(fmp::MovieFrameID movieID) const {
+ConcurrentFrameLoader::collisionAt(fmp::MovieFrameID movieID) const {
 	static fm::CollisionFrame::Ptr empty;
 	auto fi = d_collisions.find(movieID+1);
 	if ( fi == d_collisions.cend() ) {
@@ -91,10 +91,10 @@ IdentifiedFrameConcurrentLoader::collisionAt(fmp::MovieFrameID movieID) const {
 	return fi->second;
 }
 
-void IdentifiedFrameConcurrentLoader::loadMovieSegment(quint32 spaceID,
-                                                       const fmp::TrackingDataDirectory::Ptr & tdd,
-                                                       const fmp::MovieSegment::ConstPtr & segment,
-                                                       fort::Duration expectedFrameDuration) {
+void ConcurrentFrameLoader::loadMovieSegment(quint32 spaceID,
+                                             const fmp::TrackingDataDirectory::Ptr & tdd,
+                                             const fmp::MovieSegment::ConstPtr & segment,
+                                             fort::Duration expectedFrameDuration) {
 	if ( !d_experiment ) {
 		return;
 	}
@@ -234,14 +234,14 @@ void IdentifiedFrameConcurrentLoader::loadMovieSegment(quint32 spaceID,
 	QtConcurrent::run(QThreadPool::globalInstance(),load);
 }
 
-void IdentifiedFrameConcurrentLoader::clear() {
+void ConcurrentFrameLoader::clear() {
 	abordCurrent();
 	d_frames.clear();
 	d_collisions.clear();
 }
 
 
-void IdentifiedFrameConcurrentLoader::abordCurrent() {
+void ConcurrentFrameLoader::abordCurrent() {
 	if ( !d_abordFlag ) {
 		return;
 	}
@@ -249,7 +249,7 @@ void IdentifiedFrameConcurrentLoader::abordCurrent() {
 	d_abordFlag.reset();
 }
 
-void IdentifiedFrameConcurrentLoader::setProgress(int doneValue,int toDo) {
+void ConcurrentFrameLoader::setProgress(int doneValue,int toDo) {
 	CONC_LOADER_DEBUG({
 			std::cerr << "[setProgress]: wantedThread: " << this->thread() << " current: " << QThread::currentThread() <<  std::endl;
 			std::cerr << "[setProgress]: current:" << d_done << "/" << d_toDo << " wants:" << doneValue << "/" << toDo << std::endl;
@@ -268,14 +268,14 @@ void IdentifiedFrameConcurrentLoader::setProgress(int doneValue,int toDo) {
 }
 
 
-void IdentifiedFrameConcurrentLoader::addDone(int done) {
+void ConcurrentFrameLoader::addDone(int done) {
 	setProgress(d_done + done,d_toDo);
 }
 
 fort::Duration
-IdentifiedFrameConcurrentLoader::findAnt(quint32 antID,
-                                         quint64 frameID,
-                                         int direction) {
+ConcurrentFrameLoader::findAnt(quint32 antID,
+                               quint64 frameID,
+                               int direction) {
 	auto fi = d_frames.find(frameID + 1);
 	if ( d_done == false || fi == d_frames.end() ) {
 		return -1;
@@ -303,7 +303,7 @@ IdentifiedFrameConcurrentLoader::findAnt(quint32 antID,
 	return -1;
 }
 
-fort::Duration IdentifiedFrameConcurrentLoader::duration() const {
+fort::Duration ConcurrentFrameLoader::duration() const {
 	if ( d_frames.empty() ) {
 		return 0;
 	}
@@ -311,7 +311,7 @@ fort::Duration IdentifiedFrameConcurrentLoader::duration() const {
 }
 
 
-fort::Duration IdentifiedFrameConcurrentLoader::positionAt(fmp::MovieFrameID movieID) const {
+fort::Duration ConcurrentFrameLoader::positionAt(fmp::MovieFrameID movieID) const {
 	if ( movieID == 0 ) {
 		return 0;
 	}

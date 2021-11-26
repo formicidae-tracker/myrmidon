@@ -162,7 +162,7 @@ void VisualizationWorkspace::initialize(QMainWindow * main,ExperimentBridge * ex
 	        this,
 	        &VisualizationWorkspace::onMovieSegmentActivated);
 
-	d_videoPlayer->setup(experiment->identifiedFrameLoader());
+	d_videoPlayer->setup(experiment->frameLoader());
 	d_ui->trackingVideoWidget->setup(experiment->antDisplay());
 	d_ui->videoControl->setup(d_videoPlayer,experiment);
 

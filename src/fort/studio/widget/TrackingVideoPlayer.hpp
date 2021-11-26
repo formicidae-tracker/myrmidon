@@ -14,7 +14,7 @@
 
 #include "TrackingVideoFrame.hpp"
 
-class IdentifiedFrameConcurrentLoader;
+class ConcurrentFrameLoader;
 class TrackingVideoWidget;
 class QThread;
 
@@ -46,7 +46,7 @@ public:
 	virtual ~TrackingVideoPlayer();
 
 
-	void setup(IdentifiedFrameConcurrentLoader * loader);
+	void setup(ConcurrentFrameLoader * loader);
 
 	qreal playbackRate() const;
 
@@ -127,7 +127,7 @@ private:
 	static size_t computeRate(double rate);
 
 	TrackingVideoPlayerTask             * d_task;
-	IdentifiedFrameConcurrentLoader     * d_loader;
+	ConcurrentFrameLoader     * d_loader;
 
 	State                       d_state;
 	fmp::MovieSegment::ConstPtr d_segment;
@@ -156,7 +156,7 @@ public:
 	explicit TrackingVideoPlayerTask(size_t taskID,
 	                                 const fmp::MovieSegment::ConstPtr & segment,
 	                                 size_t rate,
-	                                 IdentifiedFrameConcurrentLoader * loader,
+	                                 ConcurrentFrameLoader * loader,
 	                                 const fort::Time & start);
 
 	virtual ~TrackingVideoPlayerTask();
@@ -189,11 +189,11 @@ private slots:
 	void setRateUnsafe(size_t rate);
 
 private:
-	fmp::MovieSegment::ConstPtr       d_segment;
-	cv::VideoCapture                  d_capture;
-	IdentifiedFrameConcurrentLoader * d_loader;
-	int                               d_width,d_height;
-	size_t                            d_taskID,d_seekID,d_rate;
-	fort::Duration                    d_expectedFrameDuration;
-	fort::Time                        d_start;
+	fmp::MovieSegment::ConstPtr d_segment;
+	cv::VideoCapture            d_capture;
+	ConcurrentFrameLoader     * d_loader;
+	int                         d_width,d_height;
+	size_t                      d_taskID,d_seekID,d_rate;
+	fort::Duration              d_expectedFrameDuration;
+	fort::Time                  d_start;
 };
