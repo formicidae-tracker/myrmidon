@@ -350,3 +350,50 @@ ConcurrentFrameLoader::moviePositionAt(const FramesByMovieID & frames,
 fort::Duration ConcurrentFrameLoader::positionAt(fmp::MovieFrameID movieID) const {
 	return moviePositionAt(d_frames,d_expectedFrameDuration,movieID);
 }
+
+fmp::MovieFrameID ConcurrentFrameLoader::frameIDAt(fort::Duration position) const {
+	return frameIDAt(d_frames,d_expectedFrameDuration,position);
+}
+
+
+fmp::MovieFrameID
+ConcurrentFrameLoader::frameIDAt(const FramesByMovieID & frames,
+                                 fort::Duration expectedFrameDuration,
+                                 fort::Duration position) {
+
+#define DIV_CLOSEST(a,b) ( ( (a) + (b)/2 ) / (b) )
+
+	if ( frames.empty() ) {
+		return DIV_CLOSEST(position.Nanoseconds(),expectedFrameDuration.Nanoseconds());
+	}
+	// we get or interpolate the start time of the segment.
+	auto begin = frames.cbegin();
+	auto start = begin->second->FrameTime.Add((1 - int(begin->first)) * expectedFrameDuration );
+	auto time = start.Add(position);
+	auto lower = std::lower_bound(frames.cbegin(),frames.cend(),time,
+	                              [](const FramesByMovieID::value_type & elem, const fort::Time & value) -> bool {
+		                              return elem.second->FrameTime > value;
+	                              });
+	if (lower != frames.cend() && lower->second->FrameTime == time ) {
+		return lower->first - 1;
+	}
+	auto upper = std::lower_bound(frames.cbegin(),frames.cend(),time,
+	                              [](const FramesByMovieID::value_type & elem, const fort::Time & value) -> bool {
+		                              return elem.second->FrameTime < value;
+	                              });
+	fort::Duration lowerDiff = std::numeric_limits<int64_t>::max();
+	fort::Duration upperDiff = std::numeric_limits<int64_t>::max();
+	if ( lower != frames.cend() ) {
+		lowerDiff = time.Sub(lower->second->FrameTime);
+	}
+
+	if ( upper != frames.cend() ) {
+		upperDiff = upper->second->FrameTime.Sub(time);
+	}
+
+	if ( lowerDiff < upperDiff) {
+		return lower->first - 1 + DIV_CLOSEST(lowerDiff.Nanoseconds(),expectedFrameDuration.Nanoseconds());
+	} else {
+		return upper->first - 1 - DIV_CLOSEST(upperDiff.Nanoseconds(),expectedFrameDuration.Nanoseconds());
+	}
+}

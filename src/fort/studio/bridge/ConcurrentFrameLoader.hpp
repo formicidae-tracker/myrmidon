@@ -29,6 +29,7 @@ public:
 
 	void setExperiment(const fmp::Experiment::ConstPtr & experiment);
 
+	fmp::MovieFrameID frameIDAt(fort::Duration position) const;
 	fort::Duration positionAt(fmp::MovieFrameID movieID) const;
 	fort::Duration duration() const;
 	const fm::IdentifiedFrame::Ptr & frameAt(fmp::MovieFrameID movieID) const;
@@ -41,6 +42,11 @@ public:
 	moviePositionAt(const fmp::DenseMap<fmp::MovieFrameID,fm::IdentifiedFrame::Ptr> & frames,
 	                fort::Duration expectedFrameDuration,
 	                fmp::MovieFrameID movieID);
+
+	static fmp::MovieFrameID
+	frameIDAt(const fmp::DenseMap<fmp::MovieFrameID,fm::IdentifiedFrame::Ptr> & frames,
+	          fort::Duration expectedFrameDuration,
+	          fort::Duration position);
 
 public slots:
 	void loadMovieSegment(quint32 spaceID,

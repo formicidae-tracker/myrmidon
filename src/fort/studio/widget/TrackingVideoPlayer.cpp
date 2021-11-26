@@ -428,11 +428,7 @@ void TrackingVideoPlayer::jumpPrevFrame() {
 	if ( d_rate != 1.0 ) {
 		setPlaybackRate(1.0);
 	}
-#if CV_MAJOR_VERSION == 4
-	setPosition(d_position - fort::Duration::Millisecond);
-#else
 	setPosition(d_position - d_interval);
-#endif
 }
 
 void TrackingVideoPlayer::skipDuration(fort::Duration duration) {
@@ -483,7 +479,8 @@ void TrackingVideoPlayer::setDuration(fort::Duration duration) {
 void TrackingVideoPlayer::jumpNextVisible(fm::AntID antID, bool backward) {
 	if ( d_task == nullptr
 	     || d_seekReady == false
-	     || d_displayed.Contains(antID) == true ) {
+	     || d_displayed.Contains(antID) == true
+	     || antID == 0 ) {
 		return;
 	}
 
@@ -601,10 +598,11 @@ void TrackingVideoPlayerTask::seekUnsafe(size_t seekID, fort::Duration position)
 		std::cerr << "[task] Current thread: " << QThread::currentThread() << " my thread: " << thread() << std::endl;
 		});
 	d_seekID = seekID;
-	if ( d_capture.get(cv::CAP_PROP_POS_MSEC) * fort::Duration::Millisecond == position ) {
+	auto frameID = d_loader->frameIDAt(position);
+	if ( d_capture.get(cv::CAP_PROP_POS_FRAMES) == frameID ) {
 		return;
 	}
-	d_capture.set(cv::CAP_PROP_POS_MSEC,qint64(position.Milliseconds()));
+	d_capture.set(cv::CAP_PROP_POS_FRAMES,frameID);
 };
 
 void TrackingVideoPlayerTask::startLoadingFrom(quint32 spaceID,

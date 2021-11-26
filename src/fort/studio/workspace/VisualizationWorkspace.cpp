@@ -69,6 +69,10 @@ VisualizationWorkspace::VisualizationWorkspace(QWidget *parent)
 	auto skipForwardLargeShortcut = new QShortcut(tr("Ctrl+Shift+L"),this);
 	auto skipBackwardLargeShortcut = new QShortcut(tr("Ctrl+Shift+J"),this);
 
+
+	auto jumpNextVisibleShortcut = new QShortcut(tr(";"),this);
+	auto jumpPrevVisibleShortcut = new QShortcut(tr("H"),this);
+
 	static fort::Duration small = 10 * fort::Duration::Second;
 	static fort::Duration medium = 1 * fort::Duration::Minute;
 	static fort::Duration large = 10 * fort::Duration::Minute;
@@ -126,6 +130,17 @@ VisualizationWorkspace::VisualizationWorkspace(QWidget *parent)
 		             d_videoPlayer->skipDuration(-large);
 	             });
 
+	connect(jumpNextVisibleShortcut,&QShortcut::activated,
+	        this,[this]() {
+		             d_videoPlayer->jumpNextVisible(d_experiment->selectedAntID(),
+		                                            false);
+	             });
+
+	connect(jumpPrevVisibleShortcut,&QShortcut::activated,
+	        this,[this]() {
+		             d_videoPlayer->jumpNextVisible(d_experiment->selectedAntID(),
+		                                            true);
+	             });
 }
 
 VisualizationWorkspace::~VisualizationWorkspace() {
