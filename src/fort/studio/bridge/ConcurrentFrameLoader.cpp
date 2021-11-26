@@ -264,6 +264,9 @@ void ConcurrentFrameLoader::setProgress(int doneValue,int toDo) {
 	emit progressChanged(d_done,d_toDo);
 	if ( doneState != isDone() ) {
 		emit done(isDone());
+		if (isDone()) {
+			emit durationComputed(duration());
+		}
 	}
 }
 
@@ -307,7 +310,7 @@ fort::Duration ConcurrentFrameLoader::duration() const {
 	if ( d_frames.empty() ) {
 		return 0;
 	}
-	return (--d_frames.end())->second->FrameTime.Sub(d_frames.begin()->second->FrameTime);
+	return (--d_frames.end())->second->FrameTime.Sub(d_frames.begin()->second->FrameTime) + d_expectedFrameDuration;
 }
 
 
