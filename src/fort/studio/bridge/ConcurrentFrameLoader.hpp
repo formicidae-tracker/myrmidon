@@ -37,6 +37,11 @@ public:
 
 	void moveToThread(QThread * thread);
 
+	static fort::Duration
+	moviePositionAt(const fmp::DenseMap<fmp::MovieFrameID,fm::IdentifiedFrame::Ptr> & frames,
+	                fort::Duration expectedFrameDuration,
+	                fmp::MovieFrameID movieID);
+
 public slots:
 	void loadMovieSegment(quint32 spaceID,
 	                      const fmp::TrackingDataDirectoryPtr & tdd,

@@ -4,6 +4,7 @@
 
 #include <fort/studio/bridge/ExperimentBridge.hpp>
 #include <fort/studio/bridge/AntDisplayBridge.hpp>
+#include <fort/studio/bridge/ConcurrentFrameLoader.hpp>
 #include <fort/studio/widget/TrackingVideoWidget.hpp>
 #include <fort/studio/MyrmidonTypes/Conversion.hpp>
 
@@ -136,4 +137,62 @@ TEST_F(TrackingVideoWidgetUTest,AntCollisionAreShown) {
 
 	EXPECT_EQ(res.pixelColor(200,300),
 	          Conversion::colorFromFM(ants[0]->DisplayColor()));
+}
+
+
+TEST_F(TrackingVideoWidgetUTest,FrameConcurrentLoaderPosition) {
+	fort::Duration expectedFrameDuration  = 500;
+	std::vector<fort::Duration> ticks = {0,499,498,502,499};
+	fort::Duration last = 0;
+	for ( auto & t : ticks) {
+		t = t + last;
+		last = t;
+	}
+
+	fmp::DenseMap<fmp::MovieFrameID,fm::IdentifiedFrame::Ptr> frames;
+
+	{
+		// If no frame loaded, falls back to inferring position from frame position
+		SCOPED_TRACE("NOTHING LOADED");
+		EXPECT_EQ(ConcurrentFrameLoader::moviePositionAt(frames,expectedFrameDuration,0),0);
+		EXPECT_EQ(ConcurrentFrameLoader::moviePositionAt(frames,expectedFrameDuration,1),500);
+		EXPECT_EQ(ConcurrentFrameLoader::moviePositionAt(frames,expectedFrameDuration,2),1000);
+		EXPECT_EQ(ConcurrentFrameLoader::moviePositionAt(frames,expectedFrameDuration,3),1500);
+		EXPECT_EQ(ConcurrentFrameLoader::moviePositionAt(frames,expectedFrameDuration,4),2000);
+		EXPECT_EQ(ConcurrentFrameLoader::moviePositionAt(frames,expectedFrameDuration,5),2500);
+	}
+
+	{
+		SCOPED_TRACE("FULLY LOADED");
+		fmp::MovieFrameID movieID = 0;
+		for ( const auto & t : ticks ) {
+			auto time = fort::Time().Add(t);
+			auto frame = std::make_shared<fm::IdentifiedFrame>(fm::IdentifiedFrame{.FrameTime = time});
+			frames.insert({++movieID,
+			               frame});
+		}
+
+		EXPECT_EQ(ConcurrentFrameLoader::moviePositionAt(frames,expectedFrameDuration,0),0);
+		EXPECT_EQ(ConcurrentFrameLoader::moviePositionAt(frames,expectedFrameDuration,1),499);
+		EXPECT_EQ(ConcurrentFrameLoader::moviePositionAt(frames,expectedFrameDuration,2),997);
+		EXPECT_EQ(ConcurrentFrameLoader::moviePositionAt(frames,expectedFrameDuration,3),1499);
+		EXPECT_EQ(ConcurrentFrameLoader::moviePositionAt(frames,expectedFrameDuration,4),1998);
+		EXPECT_EQ(ConcurrentFrameLoader::moviePositionAt(frames,expectedFrameDuration,5),2498);
+
+	}
+
+	{
+		SCOPED_TRACE("PARTIALLY LOADED");
+		frames.erase(1);
+		frames.erase(3);
+		frames.erase(4);
+
+		EXPECT_EQ(ConcurrentFrameLoader::moviePositionAt(frames,expectedFrameDuration,0),0);
+		EXPECT_EQ(ConcurrentFrameLoader::moviePositionAt(frames,expectedFrameDuration,1),500);
+		EXPECT_EQ(ConcurrentFrameLoader::moviePositionAt(frames,expectedFrameDuration,2),999);
+		EXPECT_EQ(ConcurrentFrameLoader::moviePositionAt(frames,expectedFrameDuration,3),1498);
+		EXPECT_EQ(ConcurrentFrameLoader::moviePositionAt(frames,expectedFrameDuration,4),1999);
+		EXPECT_EQ(ConcurrentFrameLoader::moviePositionAt(frames,expectedFrameDuration,5),2499);
+
+	}
 }
