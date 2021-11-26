@@ -311,34 +311,39 @@ fort::Duration ConcurrentFrameLoader::duration() const {
 }
 
 
-fort::Duration ConcurrentFrameLoader::positionAt(fmp::MovieFrameID movieID) const {
-	if ( movieID == 0 ) {
-		return 0;
+fort::Duration
+ConcurrentFrameLoader::moviePositionAt(const FramesByMovieID & frames,
+                                       fort::Duration expectedFrameDuration,
+                                       fmp::MovieFrameID movieID) {
+	if ( frames.empty() ) {
+		return movieID * expectedFrameDuration;
 	}
-	if ( d_frames.empty() ) {
-		return movieID * d_expectedFrameDuration;
-	}
-	auto begin = d_frames.cbegin();
-	auto inferredStart = begin->second->FrameTime.Add((1 - int(begin->first)) * d_expectedFrameDuration );
+	// we get or interpolate the start time of the segment.
+	auto begin = frames.cbegin();
+	auto start = begin->second->FrameTime.Add((1 - int(begin->first)) * expectedFrameDuration );
 
-	auto lower = d_frames.lower_key(movieID+1);
-	if ( lower == d_frames.cend() ) {
-		auto upper = d_frames.upper_key(movieID+1);
+	auto lower = frames.lower_key(movieID+1);
+	if ( lower == frames.cend() ) {
+		auto upper = frames.upper_key(movieID+1);
 		// interpolation from the closest;
-		return upper->second->FrameTime.Sub(inferredStart) +  ( movieID - upper->first + 1) * d_expectedFrameDuration;
+		return upper->second->FrameTime.Sub(start) +  ( movieID - upper->first + 1) * expectedFrameDuration;
 	}
 
 	if ( lower->first == (movieID + 1) ) {
-		return lower->second->FrameTime.Sub(inferredStart);
+		// found the exact frame
+		return lower->second->FrameTime.Sub(start);
 	}
-	auto upper = d_frames.upper_key(movieID+1);
+	auto upper = frames.upper_key(movieID+1);
 
-	if ( upper == d_frames.cend() ) {
+	if ( upper == frames.cend() ) {
 		// interpolation from the closest;
-		return lower->second->FrameTime.Sub(inferredStart) +  ( movieID - lower->first + 1 ) * d_expectedFrameDuration;
+		return lower->second->FrameTime.Sub(start) +  ( movieID - lower->first + 1 ) * expectedFrameDuration;
 	}
-	// infers frame duration between the two frames
-	fort::Duration inferredFrameDuration = upper->second->FrameTime.Sub(lower->second->FrameTime).Nanoseconds() / ( upper->first - lower->first );
-	// interpolate the closest time
-	return lower->second->FrameTime.Sub(inferredStart) + ( movieID - lower->first + 1 ) * inferredFrameDuration;
+	// interpolate between the two frames
+	fort::Duration estimatedFrameDuration = upper->second->FrameTime.Sub(lower->second->FrameTime).Nanoseconds() / ( upper->first - lower->first );
+	return lower->second->FrameTime.Sub(start) + ( movieID - lower->first + 1 ) * estimatedFrameDuration;
+}
+
+fort::Duration ConcurrentFrameLoader::positionAt(fmp::MovieFrameID movieID) const {
+	return moviePositionAt(d_frames,d_expectedFrameDuration,movieID);
 }
