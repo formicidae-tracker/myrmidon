@@ -20,6 +20,8 @@ TrackingVideoControl::TrackingVideoControl(QWidget *parent)
 	d_ui->comboBox->addItem("x 16.00",16.0);
 	d_ui->comboBox->addItem("x 32.00",32.0);
 
+	setSelectedTimeRange(fort::Time::SinceEver(),
+	                     fort::Time::Forever());
 }
 
 TrackingVideoControl::~TrackingVideoControl(){
@@ -264,4 +266,11 @@ void TrackingVideoControl::on_showCheckBox_stateChanged(int value) {
 
 void TrackingVideoControl::on_showCollisionsBox_stateChanged(int value) {
 	emit showCollisions(value == Qt::Checked);
+}
+
+
+void TrackingVideoControl::setSelectedTimeRange(const fort::Time & in, const fort::Time & out) {
+	d_ui->selectedTimeRangeLabel->setText(tr("Selected: [ %1, %2 ]")
+	                                      .arg(in.Round(fort::Duration::Millisecond).Format().c_str())
+	                                      .arg(out.Round(fort::Duration::Millisecond).Format().c_str()));
 }

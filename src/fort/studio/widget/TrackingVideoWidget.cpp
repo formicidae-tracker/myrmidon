@@ -46,7 +46,9 @@ void TrackingVideoWidget::display(TrackingVideoFrame frame) {
 	VIDEO_PLAYER_DEBUG(std::cerr << "[widget] Received frame:" << frame << std::endl);
 	d_frame = frame;
 	setHasTrackingTime(!d_frame.TrackingFrame == false);
-
+	if ( d_frame.TrackingFrame ) {
+		emit trackingTimeChanged(d_frame.TrackingFrame->FrameTime);
+	}
 	update();
 }
 
@@ -332,7 +334,7 @@ bool TrackingVideoWidget::hasTrackingTime() const {
 
 fort::Time TrackingVideoWidget::trackingTime() const {
 	if ( !d_frame.TrackingFrame == true ) {
-		return fort::Time();
+		return fort::Time::SinceEver();
 	}
 	return d_frame.TrackingFrame->FrameTime;
 }
