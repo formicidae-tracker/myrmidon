@@ -13,7 +13,7 @@
 #include "MeasurementBridge.hpp"
 #include "GlobalPropertyBridge.hpp"
 #include "IdentifierBridge.hpp"
-#include "IdentifiedFrameConcurrentLoader.hpp"
+#include "ConcurrentFrameLoader.hpp"
 #include "AntShapeTypeBridge.hpp"
 #include "AntMetadataBridge.hpp"
 #include "MovieBridge.hpp"
@@ -36,7 +36,7 @@ ExperimentBridge::ExperimentBridge(QObject * parent)
 	, d_identifier(new IdentifierBridge(this))
 	, d_antDisplay(new AntDisplayBridge(this))
 	, d_globalProperties(new GlobalPropertyBridge(this))
-	, d_identifiedFrameLoader(new IdentifiedFrameConcurrentLoader(this))
+	, d_frameLoader(new ConcurrentFrameLoader(this))
 	, d_antShapeTypes(new AntShapeTypeBridge(this))
 	, d_antMetadata(new AntMetadataBridge(this))
 	, d_movies(new MovieBridge(this))
@@ -178,8 +178,8 @@ GlobalPropertyBridge * ExperimentBridge::globalProperties() const {
 	return d_globalProperties;
 }
 
-IdentifiedFrameConcurrentLoader * ExperimentBridge::identifiedFrameLoader() const {
-	return d_identifiedFrameLoader;
+ConcurrentFrameLoader * ExperimentBridge::frameLoader() const {
+	return d_frameLoader;
 }
 
 AntShapeTypeBridge *  ExperimentBridge::antShapeTypes() const {
@@ -221,7 +221,7 @@ void ExperimentBridge::setExperiment(const fmp::Experiment::Ptr & experiment) {
 	for ( const auto & child : d_children ) {
 		child->setExperiment(experiment);
 	}
-	d_identifiedFrameLoader->setExperiment(experiment);
+	d_frameLoader->setExperiment(experiment);
 	resetChildModified();
 
 	selectAnt(0);

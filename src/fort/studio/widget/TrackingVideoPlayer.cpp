@@ -7,7 +7,7 @@
 #include <limits>
 
 #include <fort/studio/Format.hpp>
-#include <fort/studio/bridge/IdentifiedFrameConcurrentLoader.hpp>
+#include <fort/studio/bridge/ConcurrentFrameLoader.hpp>
 
 #include "TrackingVideoWidget.hpp"
 
@@ -41,19 +41,19 @@ TrackingVideoPlayer::~TrackingVideoPlayer() {
 	d_movieThread->deleteLater();
 }
 
-void TrackingVideoPlayer::setup(IdentifiedFrameConcurrentLoader * loader) {
+void TrackingVideoPlayer::setup(ConcurrentFrameLoader * loader) {
 	d_loader =  loader;
 	d_loader->setParent(nullptr);
 	connect(d_movieThread,&QThread::finished,
 	        d_loader,&QObject::deleteLater);
-	d_loader->IdentifiedFrameConcurrentLoader::moveToThread(d_movieThread);
+	d_loader->ConcurrentFrameLoader::moveToThread(d_movieThread);
 	connect(d_loader,
-	        &IdentifiedFrameConcurrentLoader::done,
+	        &ConcurrentFrameLoader::done,
 	        this,
 	        &TrackingVideoPlayer::setSeekReady,
 	        Qt::QueuedConnection);
 	connect(d_loader,
-	        &IdentifiedFrameConcurrentLoader::durationComputed,
+	        &ConcurrentFrameLoader::durationComputed,
 	        this,
 	        &TrackingVideoPlayer::setDuration,
 	        Qt::QueuedConnection);
@@ -504,7 +504,7 @@ void TrackingVideoPlayer::jumpNextVisible(fm::AntID antID, bool backward) {
 TrackingVideoPlayerTask::TrackingVideoPlayerTask(size_t taskID,
                                                  const fmp::MovieSegment::ConstPtr & segment,
                                                  size_t rate,
-                                                 IdentifiedFrameConcurrentLoader * loader,
+                                                 ConcurrentFrameLoader * loader,
                                                  const fort::Time & start)
 	: QObject(nullptr)
 	, d_segment(segment)

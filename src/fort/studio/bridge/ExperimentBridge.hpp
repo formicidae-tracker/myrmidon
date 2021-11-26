@@ -7,7 +7,7 @@ class MeasurementBridge;
 class IdentifierBridge;
 class AntDisplayBridge;
 class GlobalPropertyBridge;
-class IdentifiedFrameConcurrentLoader;
+class ConcurrentFrameLoader;
 class AntShapeTypeBridge;
 class AntMetadataBridge;
 class MovieBridge;
@@ -52,7 +52,7 @@ public:
 
 	GlobalPropertyBridge * globalProperties() const;
 
-	IdentifiedFrameConcurrentLoader * identifiedFrameLoader() const;
+	ConcurrentFrameLoader * frameLoader() const;
 
 	AntShapeTypeBridge * antShapeTypes() const;
 
@@ -108,7 +108,7 @@ private:
 	IdentifierBridge                * d_identifier;
 	AntDisplayBridge                * d_antDisplay;
 	GlobalPropertyBridge            * d_globalProperties;
-	IdentifiedFrameConcurrentLoader * d_identifiedFrameLoader;
+	ConcurrentFrameLoader           * d_frameLoader;
 	AntShapeTypeBridge              * d_antShapeTypes;
 	AntMetadataBridge               * d_antMetadata;
 	MovieBridge                     * d_movies;
