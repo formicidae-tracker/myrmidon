@@ -177,12 +177,13 @@ public:
 	}
 
 	const_iterator lower_key(const Key & key) const noexcept {
-		if ( key > d_values.size() || d_values.empty() ){
+		if ( key == 0 || d_values.empty() ){
 			return cend();
 		}
-		if ( key == 0 ) {
-			return cbegin();
+		if ( key > d_values.size() ) {
+			return const_iterator(d_values.end()-1,d_values.cbegin(),d_values.cend());
 		}
+
 		if ( key == 1 ) {
 			return d_values[0].first == 0 ? cend() : cbegin();
 		}
@@ -197,12 +198,12 @@ public:
 	}
 
 	const_iterator upper_key(const Key & key) const noexcept {
-		if ( key > d_values.size() || d_values.empty() ){
+		if ( key > d_values.size()
+		     || d_values.empty()
+		     || key == 0){
 			return cend();
 		}
-		if ( key == 0 ) {
-			return cbegin();
-		}
+
 		for ( auto iter = d_values.cbegin()+(key-1); iter != d_values.cend(); ++iter) {
 			if (iter->first != 0 ) {
 				return const_iterator(iter,d_values.cbegin(),d_values.cend());
