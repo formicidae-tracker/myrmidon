@@ -147,7 +147,7 @@ void TrackingVideoPlayer::setMovieSegment(quint32 spaceID,
 	d_segment = segment;
 
 	try {
-		d_task = new TrackingVideoPlayerTask(d_currentTaskID,d_segment,computeRate(d_rate),d_loader,d_start);
+		d_task = new TrackingVideoPlayerTask(d_currentTaskID,d_segment,computeRate(d_rate),d_loader);
 		d_currentSeekID = 0;
 		d_fps = d_task->fps();
 		d_interval = fort::Duration::Second.Nanoseconds() / d_task->fps();
@@ -504,8 +504,7 @@ void TrackingVideoPlayer::jumpNextVisible(fm::AntID antID, bool backward) {
 TrackingVideoPlayerTask::TrackingVideoPlayerTask(size_t taskID,
                                                  const fmp::MovieSegment::ConstPtr & segment,
                                                  size_t rate,
-                                                 ConcurrentFrameLoader * loader,
-                                                 const fort::Time & start)
+                                                 ConcurrentFrameLoader * loader)
 	: QObject(nullptr)
 	, d_segment(segment)
 	, d_capture(segment->AbsoluteFilePath().c_str())
@@ -519,7 +518,6 @@ TrackingVideoPlayerTask::TrackingVideoPlayerTask(size_t taskID,
 	d_width = d_capture.get(cv::CAP_PROP_FRAME_WIDTH);
 	d_height = d_capture.get(cv::CAP_PROP_FRAME_HEIGHT);
 	d_expectedFrameDuration = double(fort::Duration::Second.Nanoseconds()) / d_capture.get(cv::CAP_PROP_FPS);
-	d_start = start;
 }
 
 TrackingVideoPlayerTask::~TrackingVideoPlayerTask() {

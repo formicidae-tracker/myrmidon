@@ -156,8 +156,7 @@ public:
 	explicit TrackingVideoPlayerTask(size_t taskID,
 	                                 const fmp::MovieSegment::ConstPtr & segment,
 	                                 size_t rate,
-	                                 ConcurrentFrameLoader * loader,
-	                                 const fort::Time & start);
+	                                 ConcurrentFrameLoader * loader);
 
 	virtual ~TrackingVideoPlayerTask();
 
@@ -195,5 +194,4 @@ private:
 	int                         d_width,d_height;
 	size_t                      d_taskID,d_seekID,d_rate;
 	fort::Duration              d_expectedFrameDuration;
-	fort::Time                  d_start;
 };
