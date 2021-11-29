@@ -17,17 +17,10 @@ class TrackingVideoPlayer;
 class QTreeView;
 class QToolBar;
 class QAction;
+class SetAntValueDialog;
 
 class VisualizationWorkspace : public Workspace {
 	Q_OBJECT
-	Q_PROPERTY(fort::Time inTime
-	           READ inTime
-	           WRITE setInTime
-	           NOTIFY inTimeChanged)
-	Q_PROPERTY(fort::Time outTime
-	           READ outTime
-	           WRITE setOutTime
-	           NOTIFY outTimeChanged)
 public:
 	explicit VisualizationWorkspace(QWidget *parent = 0);
 	virtual ~VisualizationWorkspace();
@@ -35,21 +28,12 @@ public:
 	void jumpToTime(uint32_t spaceID,
 	                const fort::Time & time);
 
-	const fort::Time & inTime() const;
-	const fort::Time & outTime() const;
 
-signals:
-	void inTimeChanged(const fort::Time &);
-	void outTimeChanged(const fort::Time &);
 
 protected:
 	void initialize(QMainWindow * main,ExperimentBridge * experiment) override;
 	void setUp(const NavigationAction & actions) override;
 	void tearDown(const NavigationAction & actions) override;
-
-public slots:
-	void setInTime(const fort::Time & v);
-	void setOutTime(const fort::Time & v);
 
 private slots :
 	void onCopyTimeActionTriggered();
@@ -79,5 +63,5 @@ private:
 	QDockWidget                * d_segmentListDock;
 	QToolBar                   * d_toolbar;
 	QAction                    * d_markIn, *d_markOut, *d_clearMarkers, *d_setValue;
-	fort::Time                   d_inTime,d_outTime;
+	SetAntValueDialog          * d_setValueDialog;
 };
