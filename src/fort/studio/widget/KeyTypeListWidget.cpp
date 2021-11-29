@@ -1,18 +1,18 @@
-#include "AntMetadataWidget.hpp"
-#include "ui_AntMetadataWidget.h"
+#include "KeyTypeListWidget.hpp"
+#include "ui_KeyTypeListWidget.h"
 
-#include <fort/studio/bridge/AntMetadataBridge.hpp>
+#include <fort/studio/bridge/AntKeyValueBridge.hpp>
 #include <fort/studio/MyrmidonTypes/AntMetadata.hpp>
 
 #include <QStyledItemDelegate>
 #include <QDebug>
 
 
-class MetadataTypeDelegate : public QStyledItemDelegate {
+class KeyTypeDelegate : public QStyledItemDelegate {
 public:
-	MetadataTypeDelegate(AntMetadataWidget * parent)
+	KeyTypeDelegate(QWidget * parent, AntKeyValueBridge * bridge)
 		: QStyledItemDelegate(parent)
-		, d_widget(parent) {
+		, d_bridge(bridge) {
 	};
 
 protected:
@@ -21,18 +21,18 @@ protected:
 	                        const QStyleOptionViewItem &option,
 	                        const QModelIndex &index ) const override {
 		auto res = new QComboBox(parent);
-		d_widget->buildTypeCombo(res);
+		res->setModel(d_bridge->typeModel());
 		return res;
 	}
 
 	void setEditorData ( QWidget *editor, const QModelIndex &index ) const override {
-		auto column = index.data(Qt::UserRole+1).value<fmp::AntMetadata::Key::Ptr>();
+		auto text = index.data(Qt::DisplayRole).toString();
 		auto combo = qobject_cast<QComboBox*>(editor);
-		if ( combo == nullptr || !column == true ) {
+		if ( combo == nullptr || text.isEmpty() ) {
 			return;
 		}
 
-		combo->setCurrentIndex(int(column->Type()));
+		combo->setCurrentIndex(combo->findText(text));
 	}
 
 	void setModelData ( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const override {
@@ -40,32 +40,35 @@ protected:
 		if ( combo == nullptr ) {
 			return;
 		}
-		model->setData(index,combo->currentData(Qt::UserRole+1),Qt::UserRole+2);
+		auto type = fm::AntMetaDataType(combo->currentData(AntKeyValueBridge::KeyTypeRole).toInt());
+		d_bridge->setKey(index.siblingAtColumn(0).data(Qt::DisplayRole).toString(),
+		                 fmp::AntMetadata::DefaultValue(type));
 	}
+
 private :
-	AntMetadataWidget * d_widget;
+	AntKeyValueBridge * d_bridge;
 };
 
-AntMetadataWidget::AntMetadataWidget(QWidget *parent)
+KeyTypeListWidget::KeyTypeListWidget(QWidget *parent)
 	: QWidget(parent)
-	, d_ui(new Ui::AntMetadataWidget)
-	, d_metadata(nullptr) {
+	, d_ui(new Ui::KeyTypeListWidget)
+	, d_bridge(nullptr) {
 	d_ui->setupUi(this);
 	d_ui->addButton->setEnabled(false);
 	d_ui->removeButton->setEnabled(false);
 	d_ui->comboBox->setEnabled(false);
 }
 
-void AntMetadataWidget::setup(AntMetadataBridge * metadata) {
-	d_metadata = metadata;
-	d_ui->tableView->setModel(d_metadata->columnModel());
-	connect(d_metadata,
-	        &AntMetadataBridge::activated,
+void KeyTypeListWidget::setup(AntKeyValueBridge * metadata) {
+	d_bridge = metadata;
+	d_ui->tableView->setModel(d_bridge->keyModel());
+	connect(d_bridge,
+	        &AntKeyValueBridge::activated,
 	        d_ui->addButton,
 	        &QToolButton::setEnabled);
 
-	connect(d_metadata,
-	        &AntMetadataBridge::activated,
+	connect(d_bridge,
+	        &AntKeyValueBridge::activated,
 	        d_ui->comboBox,
 	        &QComboBox::setEnabled);
 	auto sModel = d_ui->tableView->selectionModel();
@@ -81,32 +84,32 @@ void AntMetadataWidget::setup(AntMetadataBridge * metadata) {
 
 	auto hHeader = d_ui->tableView->horizontalHeader();
 	hHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
-	d_ui->tableView->setItemDelegateForColumn(1,new MetadataTypeDelegate(this));
+	d_ui->tableView->setItemDelegateForColumn(1,new KeyTypeDelegate(this,d_bridge));
 	buildTypeCombo(d_ui->comboBox);
 }
 
-AntMetadataWidget::~AntMetadataWidget() {
+KeyTypeListWidget::~KeyTypeListWidget() {
 	delete d_ui;
 }
 
-void AntMetadataWidget::buildTypeCombo(QComboBox *  combo) {
-	combo->setModel(d_metadata->typeModel());
+void KeyTypeListWidget::buildTypeCombo(QComboBox *  combo) {
+	combo->setModel(d_bridge->typeModel());
 }
 
 
-void AntMetadataWidget::on_addButton_clicked() {
+void KeyTypeListWidget::on_addButton_clicked() {
 	auto newName = tr("Column %1").arg(d_ui->tableView->model()->rowCount()+1);
-	d_metadata->addMetadataColumn(newName,d_ui->comboBox->currentData(Qt::UserRole+1).toInt());
+	auto type = fm::AntMetaDataType(d_ui->comboBox->currentData(AntKeyValueBridge::KeyTypeRole).toInt());
+	d_bridge->setKey(newName,fmp::AntMetadata::DefaultValue(type));
 	d_ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 }
 
 
-void AntMetadataWidget::on_removeButton_clicked() {
+void KeyTypeListWidget::on_removeButton_clicked() {
 	auto rows = d_ui->tableView->selectionModel()->selectedRows();
 	if ( rows.size() != 1 ) {
-		qDebug() << "[AntMetadataWidget]: Invalid selection " << rows.size();
 		return;
 	}
 
-	d_metadata->removeMetadataColumn(rows[0].data(Qt::DisplayRole).toString());
+	d_bridge->removeKey(rows[0].data(Qt::DisplayRole).toString());
 }

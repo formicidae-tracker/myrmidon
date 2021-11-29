@@ -15,7 +15,7 @@
 #include "IdentifierBridge.hpp"
 #include "ConcurrentFrameLoader.hpp"
 #include "AntShapeTypeBridge.hpp"
-#include "AntMetadataBridge.hpp"
+#include "AntKeyValueBridge.hpp"
 #include "MovieBridge.hpp"
 #include "ZoneBridge.hpp"
 #include "StatisticsBridge.hpp"
@@ -38,7 +38,7 @@ ExperimentBridge::ExperimentBridge(QObject * parent)
 	, d_globalProperties(new GlobalPropertyBridge(this))
 	, d_frameLoader(new ConcurrentFrameLoader(this))
 	, d_antShapeTypes(new AntShapeTypeBridge(this))
-	, d_antMetadata(new AntMetadataBridge(this))
+	, d_antKeyValues(new AntKeyValueBridge(this))
 	, d_movies(new MovieBridge(this))
 	, d_zones(new ZoneBridge(this))
 	, d_statistics(new StatisticsBridge(this))
@@ -52,7 +52,7 @@ ExperimentBridge::ExperimentBridge(QObject * parent)
 	              d_antDisplay,
 	              d_globalProperties,
 	              d_antShapeTypes,
-	              d_antMetadata,
+	              d_antKeyValues,
 	              d_movies,
 	              d_zones,
 	              d_statistics,
@@ -186,8 +186,8 @@ AntShapeTypeBridge *  ExperimentBridge::antShapeTypes() const {
 	return d_antShapeTypes;
 }
 
-AntMetadataBridge *  ExperimentBridge::antMetadata() const {
-	return d_antMetadata;
+AntKeyValueBridge *  ExperimentBridge::antKeyValues() const {
+	return d_antKeyValues;
 }
 
 MovieBridge *  ExperimentBridge::movies() const {

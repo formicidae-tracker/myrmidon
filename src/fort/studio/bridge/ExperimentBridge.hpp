@@ -9,7 +9,7 @@ class AntDisplayBridge;
 class GlobalPropertyBridge;
 class ConcurrentFrameLoader;
 class AntShapeTypeBridge;
-class AntMetadataBridge;
+class AntKeyValueBridge;
 class MovieBridge;
 class ZoneBridge;
 class StatisticsBridge;
@@ -56,7 +56,7 @@ public:
 
 	AntShapeTypeBridge * antShapeTypes() const;
 
-	AntMetadataBridge * antMetadata() const;
+	AntKeyValueBridge * antKeyValues() const;
 
 	MovieBridge * movies() const;
 
@@ -110,7 +110,7 @@ private:
 	GlobalPropertyBridge            * d_globalProperties;
 	ConcurrentFrameLoader           * d_frameLoader;
 	AntShapeTypeBridge              * d_antShapeTypes;
-	AntMetadataBridge               * d_antMetadata;
+	AntKeyValueBridge               * d_antKeyValues;
 	MovieBridge                     * d_movies;
 	ZoneBridge                      * d_zones;
 	StatisticsBridge                * d_statistics;
