@@ -98,7 +98,7 @@ void KeyTypeListWidget::buildTypeCombo(QComboBox *  combo) {
 
 
 void KeyTypeListWidget::on_addButton_clicked() {
-	auto newName = tr("Column %1").arg(d_ui->tableView->model()->rowCount()+1);
+	auto newName = tr("key-%1").arg(d_ui->tableView->model()->rowCount()+1);
 	auto type = fm::AntMetaDataType(d_ui->comboBox->currentData(AntKeyValueBridge::KeyTypeRole).toInt());
 	d_bridge->setKey(newName,fmp::AntMetadata::DefaultValue(type));
 	d_ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);

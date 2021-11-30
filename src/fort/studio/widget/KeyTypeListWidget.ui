@@ -38,7 +38,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset theme="list-add-symbolic"/>
+        <iconset theme="list-add-symbolic">
+         <normaloff>.</normaloff>.</iconset>
        </property>
       </widget>
      </item>
@@ -48,7 +49,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset theme="list-remove-symbolic"/>
+        <iconset theme="list-remove-symbolic">
+         <normaloff>.</normaloff>.</iconset>
        </property>
       </widget>
      </item>
@@ -56,6 +58,12 @@
    </item>
    <item>
     <widget class="QTableView" name="tableView">
+     <attribute name="horizontalHeaderMinimumSectionSize">
+      <number>60</number>
+     </attribute>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
      <attribute name="verticalHeaderVisible">
       <bool>false</bool>
      </attribute>
