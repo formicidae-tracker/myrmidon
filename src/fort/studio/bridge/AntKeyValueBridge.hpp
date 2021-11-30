@@ -51,6 +51,6 @@ protected:
 
 private:
 	QStandardItemModel                     * d_typeModel;
-	DataModel                              * d_dataModel;
 	KeyModel                               * d_keyModel;
+	DataModel                              * d_dataModel;
 };

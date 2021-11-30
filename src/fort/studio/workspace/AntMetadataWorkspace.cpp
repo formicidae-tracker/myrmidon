@@ -52,6 +52,17 @@ void AntMetadataWorkspace::initialize(AntKeyValueBridge * bridge) {
 	        this,
 	        &AntMetadataWorkspace::onRemoveButtonClicked);
 
+	connect(bridge->dataModel(),
+	        &QAbstractItemModel::rowsInserted,
+	        [this](const QModelIndex & parent, int first, int last ) {
+		        if ( parent.isValid() == true ) {
+			        return;
+		        }
+		        for ( ; first <= last; ++first ) {
+			        d_ui->dataView->expand(d_keyValues->dataModel()->index(first,0));
+		        }
+	        });
+
 }
 
 
