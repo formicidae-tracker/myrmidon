@@ -43,7 +43,7 @@ keep the relative links working.
 
    # R
    e <- fmExperimentCreate('<exp_path>.myrmidon') # no file created yet
-   e$save(e,'<exp_path>.myrmidon') # file now exists
+   e$save('<exp_path>.myrmidon') # file now exists
 
 .. code-block:: c++
 
