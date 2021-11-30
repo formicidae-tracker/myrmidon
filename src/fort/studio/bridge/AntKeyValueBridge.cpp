@@ -227,6 +227,13 @@ public:
 		return QVariant();
 	}
 
+	int find(const QString & key) const {
+		auto fi = find(ToStdString(key));
+		if ( fi == d_keys.cend() ) {
+			return -1;
+		}
+		return fi - d_keys.cbegin();
+	}
 
 private:
 	bool addKey(const std::string & name,
@@ -264,7 +271,7 @@ private:
 	}
 
 	std::vector<fmp::AntMetadata::Key::Ptr>::const_iterator
-	lower_bound(const std::string & name) {
+	lower_bound(const std::string & name) const {
 		return std::lower_bound(d_keys.cbegin(),
 		                        d_keys.cend(),
 		                        name,
@@ -275,7 +282,7 @@ private:
 	}
 
 	std::vector<fmp::AntMetadata::Key::Ptr>::const_iterator
-	find(const std::string & name) {
+	find(const std::string & name) const {
 		auto fi = lower_bound(name);
 		if ( fi != d_keys.end()
 		     && (*fi)->Name() == name ) {
@@ -327,15 +334,25 @@ public:
 		endResetModel();
 	}
 
-	void setValue(quint32 antID,
+	bool setValue(quint32 antID,
 	              const QString & key,
 	              const fort::Time & time,
 	              const fm::AntStaticValue & value) {
+		int keyIndex = d_keyModel->find(key);
+		if ( keyIndex < 0 ) {
+			return false;
+		}
+		return setValue(antID,keyIndex,time,value);
 	}
 
-	void deleteValue(quint32 antID,
-	                 const QString & value,
+	bool deleteValue(quint32 antID,
+	                 const QString & key,
 	                 const fort::Time & time) {
+		int keyIndex = d_keyModel->find(key);
+		if ( keyIndex < 0 ) {
+			return false;
+		}
+		return deleteValue(antID,keyIndex,time);
 	}
 
 	void setUpExperiment(const fmp::Experiment::Ptr & experiment) {
@@ -382,8 +399,12 @@ public:
 				                   d_pointers.at(std::make_tuple(ant,row,-1)).get());
 			}
 			if ( pPointer->Value < 0 ) {
+				int value = row;
+				if ( hasDefaultValue(*ant,keyNameAt(pPointer->Key)) == true ) {
+					value + 1;
+				}
 				return createIndex(row,column,
-				                   d_pointers.at(std::make_tuple(ant,pPointer->Key,row)).get());
+				                   d_pointers.at(std::make_tuple(ant,pPointer->Key,value)).get());
 			}
 			return QModelIndex();
 		} catch ( const std::exception & e ) {
@@ -423,10 +444,10 @@ public:
 		}
 		if ( p->Key >= 0 ) {
 			try {
-				const auto & ant = *d_ants.at(p->Ant);
-				const auto & keyName = keyNameAt(p->Key);
-				ant.DataMap().at(keyName).size();
-			} catch ( const std::exception & e) {
+				auto ant = d_ants[p->Ant].get();
+				return std::distance(d_pointers.upper_bound(std::make_tuple(ant,p->Key,-1)),
+				                     d_pointers.lower_bound(std::make_tuple(ant,p->Key+1,-1)));
+			} catch (const std::exception &) {
 				return 0;
 			}
 		}
@@ -468,6 +489,81 @@ public:
 
 private slots:
 
+	bool setValue(quint32 antID,
+	              int key,
+	              const fort::Time & time,
+	              const fm::AntStaticValue & value) {
+		if ( key < 0 || key >= d_keyModel->rowCount() ) {
+			return false;
+		}
+		auto fi = find(antID);
+		if ( fi == d_ants.cend() ) {
+			return false;
+		}
+		auto & ant = **fi;
+		auto keyName = keyNameAt(key);
+
+		try {
+			qInfo() << "[AntKeyValueBridge]: Ant{ID: " << fm::FormatAntID(antID).c_str()
+			        << "}.SetValue(key =" << keyName.c_str()
+			        << ",value = " << ToQString(value)
+			        << ", time = " << ToQString(time)
+			        << ")";
+			ant.SetValue(keyName,value,time);
+		} catch ( const std::exception & e ) {
+			qCritical() << "[AntKeyValueBridge]: Ant{ID: " << fm::FormatAntID(antID).c_str()
+			            << "}.SetValue(key =" << keyName.c_str()
+			            << ",value = " << ToQString(value)
+			            << ", time = " << ToQString(time)
+			            << ") error:" << e.what();
+			return false;
+		}
+
+		if ( time.IsInfinite() ) {
+			auto defaultValueIndex = index(key,3,index(fi-d_ants.begin(),0));
+			emit dataChanged(defaultValueIndex,defaultValueIndex);
+			return true;
+		}
+		resetValueModel(*fi,fi - d_ants.cend(),keyName,key);
+		return true;
+	}
+
+	bool deleteValue(quint32 antID,
+	                 int key,
+	                 const fort::Time & time) {
+		if ( key < 0 || key >= d_keyModel->rowCount() ) {
+			return false;
+		}
+		auto fi = find(antID);
+		if ( fi == d_ants.cend() ) {
+			return false;
+		}
+		auto & ant = **fi;
+		auto keyName = keyNameAt(key);
+		try {
+			qInfo() << "[AntKeyValueBridge]:  Ant{ID:" << fm::FormatAntID(antID).c_str()
+			        << ".DeleteValue(key = " << keyName.c_str()
+			        << ", time = " << ToQString(time)
+			        << ")";
+			ant.DeleteValue(keyName,time);
+		} catch ( const std::exception & e ) {
+			qCritical() << "[AntKeyValueBridge]:  Ant{ID:" << fm::FormatAntID(antID).c_str()
+			            << ".DeleteValue(key = " << keyName.c_str()
+			            << ", time = " << ToQString(time)
+			            << ") error:" << e.what();
+			return false;
+		}
+
+		if ( time.IsInfinite() ) {
+			auto defaultValueIndex = index(key,3,index(fi-d_ants.begin(),0));
+			emit dataChanged(defaultValueIndex,defaultValueIndex);
+			return true;
+		}
+		resetValueModel(*fi,fi - d_ants.cend(),keyName,key);
+		return true;
+	}
+
+
 	void onKeyModel_layoutAboutToBeChanged() {
 		beginResetModel();
 	}
@@ -502,6 +598,55 @@ private:
 		int Value;
 	};
 
+	void resetValueModel(const fmp::Ant::Ptr & ant,
+	                     int antIndex,
+	                     const std::string & keyName,
+	                     int keyIndex) {
+		auto qKeyIndex = index(keyIndex,0,index(antIndex,0));
+		int count = rowCount(qKeyIndex);
+		if ( count > 0 ) {
+			beginRemoveRows(qKeyIndex,0,count-1);
+			d_pointers.erase(d_pointers.upper_bound(std::make_tuple(ant.get(),keyIndex,-1)),
+			                 d_pointers.lower_bound(std::make_tuple(ant.get(),keyIndex+1,-1)));
+			endRemoveRows();
+		}
+		count = 0 ;
+		try {
+			const auto & values = ant->DataMap().at(keyName);
+			int count = values.size();
+			if ( count > 0 && values.front().first.IsInfinite() ) {
+				count -= 1;
+			}
+		} catch ( const std::exception & ) {
+		}
+		if ( count == 0 ) {
+			return;
+		}
+		beginInsertRows(qKeyIndex,0,count-1);
+		rebuildValuePointers(ant,antIndex,keyName,keyIndex);
+		endInsertRows();
+	}
+
+	void rebuildValuePointers(const fmp::Ant::Ptr & ant,
+	                          int antIndex,
+	                          const std::string & keyName,
+	                          int keyIndex) {
+		try {
+			int v = -1;
+			for ( const auto & [time,value] : ant->DataMap().at(keyName) ) {
+				++v;
+				if ( time.IsInfinite() ) {
+					continue;
+				}
+				d_pointers.insert({std::make_tuple(ant.get(),keyIndex,v),
+				                   std::make_unique<Pointer>(Pointer{.Ant = antIndex,
+				                                                     .Key = keyIndex,
+				                                                     .Value = v})});
+			}
+		} catch ( const std::exception &) {
+		}
+	}
+
 	void rebuildPointers() {
 		d_ants.clear();
 		d_pointers.clear();
@@ -527,19 +672,34 @@ private:
 				                                                     .Key = k,
 				                                                     .Value = -1})});
 				auto keyName = keyNameAt(k);
-				try {
-					int v = 0;
-					for ( const auto & [time,value] : ant->DataMap().at(keyName) ) {
-						d_pointers.insert({std::make_tuple(ant.get(),k,v),
-						                   std::make_unique<Pointer>(Pointer{.Ant = antIndex,
-						                                                     .Key = k,
-						                                                     .Value = v})});
-						++v;
-					}
-				} catch ( const std::exception &) {
-				}
+				rebuildValuePointers(ant,antIndex,keyName,k);
 			}
 		}
+	}
+
+
+	static bool hasValue(const fmp::Ant & ant,
+	                     const std::string & keyName,
+	                     const fort::Time & time) {
+		try {
+			const auto & values = ant.DataMap().at(keyName);
+			auto fi = std::lower_bound(values.begin(),
+			                           values.end(),
+			                           time,
+			                           [](const fmp::AntTimedValue & v,
+			                              const fort::Time & t) {
+				                           return v.first < t;
+			                           });
+
+			return fi != values.cend() && fi->first == time;
+		} catch ( const std::exception & ) {
+		}
+		return false;
+	}
+
+	static bool hasDefaultValue(const fmp::Ant & ant,
+	                            const std::string & keyName ) {
+		return hasValue(ant,keyName,fort::Time::SinceEver());
 	}
 
 	QVariant keyTypeData(const QModelIndex & index) const {
@@ -677,6 +837,24 @@ AntKeyValueBridge::AntKeyValueBridge(QObject * parent)
 	auto timeItem = new QStandardItem("Time");
 	timeItem->setData(quint32(fm::AntMetaDataType::TIME),KeyTypeRole);
 	d_typeModel->appendRow(timeItem);
+
+	connect(d_keyModel,&QAbstractItemModel::dataChanged,
+	        this,&AntKeyValueBridge::markModified);
+
+	connect(d_keyModel,&QAbstractItemModel::rowsInserted,
+	        this,&AntKeyValueBridge::markModified);
+
+	connect(d_keyModel,&QAbstractItemModel::rowsRemoved,
+	        this,&AntKeyValueBridge::markModified);
+
+	connect(d_dataModel,&QAbstractItemModel::dataChanged,
+	        this,&AntKeyValueBridge::markModified);
+
+	connect(d_dataModel,&QAbstractItemModel::rowsInserted,
+	        this,&AntKeyValueBridge::markModified);
+
+	connect(d_dataModel,&QAbstractItemModel::rowsRemoved,
+	        this,&AntKeyValueBridge::markModified);
 }
 
 AntKeyValueBridge::~AntKeyValueBridge() {
@@ -714,16 +892,32 @@ void AntKeyValueBridge::removeKey(const QString & name) {
 	}
 }
 
+
 void AntKeyValueBridge::setValue(quint32 antID,
                                  const QString & key,
                                  const fort::Time & time,
                                  const fm::AntStaticValue & value) {
+	if ( !d_experiment ) {
+		return;
+	}
+
+	if ( d_dataModel->setValue(antID,key,time,value) == true ) {
+		setModified(true);
+	}
 }
 
 void AntKeyValueBridge::clearValue(quint32 antID,
                                    const QString & key,
                                    const fort::Time & time) {
+	if ( !d_experiment ) {
+		return;
+	}
+
+	if ( d_dataModel->deleteValue(antID,key,time) == true ) {
+		setModified(true);
+	}
 }
+
 
 void AntKeyValueBridge::onAntCreated(quint32 antID) {
 	d_dataModel->resetInternalModel();
@@ -756,4 +950,8 @@ void AntKeyValueBridge::setUpExperiment() {
 	}
 	d_keyModel->setUpExperiment(d_experiment);
 	d_dataModel->setUpExperiment(d_experiment);
+}
+
+void AntKeyValueBridge::markModified() {
+	setModified(true);
 }

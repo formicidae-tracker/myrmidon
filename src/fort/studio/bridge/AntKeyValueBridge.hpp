@@ -44,7 +44,7 @@ public slots:
 private slots:
 	void onAntCreated(quint32);
 	void onAntDeleted(quint32);
-
+	void markModified();
 protected:
 	void setUpExperiment() override;
 	void tearDownExperiment() override;
