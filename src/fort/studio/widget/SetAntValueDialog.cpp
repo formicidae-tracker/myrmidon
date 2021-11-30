@@ -46,12 +46,12 @@ const fort::Time & SetAntValueDialog::outTime() const {
 	return d_outTime;
 }
 
-const fm::AntStaticValue & SetAntValueDialog::value() const {
+fm::AntStaticValue SetAntValueDialog::value() const {
 	return false;
 }
 
-const QString & SetAntValueDialog::key() const {
-	return "";
+QString SetAntValueDialog::key() const {
+	return d_ui->keyComboBox->currentText();
 }
 
 
@@ -83,7 +83,7 @@ void SetAntValueDialog::updateState() {
 }
 
 
-void SetAntValueDialog::on_keyComboBox_currentIndexChanged() {
+void SetAntValueDialog::on_keyComboBox_currentIndexChanged(int) {
 	d_ui->valueEdit->clear();
 
 

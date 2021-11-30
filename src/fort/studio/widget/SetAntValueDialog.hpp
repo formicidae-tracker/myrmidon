@@ -32,8 +32,8 @@ public:
 	const fort::Time & inTime() const;
 	const fort::Time & outTime() const;
 
-	const fm::AntStaticValue & value() const;
-	const QString & key() const;
+	fm::AntStaticValue value() const;
+	QString key() const;
 
 public slots:
 	void setInTime(const fort::Time & v);
@@ -41,7 +41,7 @@ public slots:
 
 private slots:
 	void updateState();
-	void on_keyComboBox_currentIndexChanged();
+	void on_keyComboBox_currentIndexChanged(int);
 signals:
 	void inTimeChanged(const fort::Time &);
 	void outTimeChanged(const fort::Time &);

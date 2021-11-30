@@ -74,36 +74,36 @@ public:
 		auto sOldKey = ToStdString(oldKey);
 		auto sNewKey = ToStdString(newKey);
 		auto fi = find(sOldKey);
-		if ( fi == d_keys.end() ) {
+		if ( oldKey == newKey || fi == d_keys.end() ) {
 			return false;
 		}
 		auto dest = lower_bound(sNewKey);
 		try {
-			qInfo() << "[AntKeyValueBridge]: Renaming key '" << oldKey
-			        <<"' to '" << newKey << "'";
+			qInfo() << "[AntKeyValueBridge]: Renaming key " << oldKey
+			        <<" to " << newKey;
 			d_experiment->RenameMetaDataKey(sOldKey,sNewKey);
 		} catch ( const std::exception & e ) {
-			qCritical() << "[AntKeyValueBridge]: Could not rename key '" << oldKey
-			            <<"' to '" << newKey << "': " << e.what();
+			qCritical() << "[AntKeyValueBridge]: Could not rename key " << oldKey
+			            <<" to " << newKey << ": " << e.what();
 			return false;
 		}
 
-		int posSrc = fi - d_keys.begin();
-		int posDest = dest - d_keys.end();
-		if ( posDest < posSrc || posDest > posSrc + 1 ) {
+		int srcPos = fi - d_keys.begin();
+		int destPos = dest - d_keys.end();
+		int finalPos = destPos > srcPos ? destPos - 1 : destPos;
+		if ( finalPos != srcPos ) {
 			beginMoveRows(QModelIndex(),
-			              posSrc,
-			              posSrc,
+			              srcPos,
+			              srcPos,
 			              QModelIndex(),
-			              posDest);
+			              destPos);
 			std::sort(d_keys.begin(),d_keys.end(),
 			          [](const fmp::AntMetadata::Key::Ptr & a,const fmp::AntMetadata::Key::Ptr & b) {
 				          return a->Name() < b->Name();
 			          });
 			endMoveRows();
-		} else {
-			emit dataChanged(index(posSrc,0),index(posSrc,0));
 		}
+		emit dataChanged(index(finalPos,0),index(finalPos,0));
 		return true;
 	}
 
