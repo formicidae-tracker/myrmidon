@@ -10,6 +10,8 @@
 #include <fort/studio/bridge/ExperimentBridge.hpp>
 
 
+static std::vector<std::string> MetaDataTypeNames = { "Bool","Int","Double","String","Time" };
+
 class KeyModel : public QAbstractItemModel {
 public:
 	KeyModel(QObject * parent)
@@ -21,8 +23,8 @@ public:
 	bool setKey(const QString & name,
 	            const fm::AntStaticValue & defaultValue) {
 		auto sname = ToStdString(name);
-		auto fi = lower_bound(sname);
-		if ( fi == d_keys.end() || (*fi)->Name() != sname ) {
+		auto fi = find(sname);
+		if ( fi == d_keys.end() ) {
 			return addKey(sname,defaultValue);
 		}
 
@@ -41,13 +43,14 @@ public:
 
 		int pos = std::distance(d_keys.cbegin(),fi);
 		emit dataChanged(index(pos,1),index(pos,2));
+
 		return true;
 	}
 
 	bool removeKey(const QString & name) {
 		auto sname = ToStdString(name);
-		auto fi = lower_bound(sname);
-		if ( fi == d_keys.end() || (*fi)->Name() != sname) {
+		auto fi = find(sname);
+		if ( fi == d_keys.end() ) {
 			return false;
 		}
 		try {
@@ -60,9 +63,47 @@ public:
 		}
 
 		int pos = std::distance(d_keys.cbegin(),fi);
-		beginRemoveRows(QModelIndex(), pos, pos+1);
+		beginRemoveRows(QModelIndex(), pos, pos);
 		d_keys.erase(fi);
 		endRemoveRows();
+		return true;
+	}
+
+
+	bool renameKey(const QString & oldKey, const QString & newKey) {
+		auto sOldKey = ToStdString(oldKey);
+		auto sNewKey = ToStdString(newKey);
+		auto fi = find(sOldKey);
+		if ( fi == d_keys.end() ) {
+			return false;
+		}
+		auto dest = lower_bound(sNewKey);
+		try {
+			qInfo() << "[AntKeyValueBridge]: Renaming key '" << oldKey
+			        <<"' to '" << newKey << "'";
+			d_experiment->RenameMetaDataKey(sOldKey,sNewKey);
+		} catch ( const std::exception & e ) {
+			qCritical() << "[AntKeyValueBridge]: Could not rename key '" << oldKey
+			            <<"' to '" << newKey << "': " << e.what();
+			return false;
+		}
+
+		int posSrc = fi - d_keys.begin();
+		int posDest = dest - d_keys.end();
+		if ( posDest < posSrc || posDest > posSrc + 1 ) {
+			beginMoveRows(QModelIndex(),
+			              posSrc,
+			              posSrc,
+			              QModelIndex(),
+			              posDest);
+			std::sort(d_keys.begin(),d_keys.end(),
+			          [](const fmp::AntMetadata::Key::Ptr & a,const fmp::AntMetadata::Key::Ptr & b) {
+				          return a->Name() < b->Name();
+			          });
+			endMoveRows();
+		} else {
+			emit dataChanged(index(posSrc,0),index(posSrc,0));
+		}
 		return true;
 	}
 
@@ -74,7 +115,7 @@ public:
 			return;
 		}
 		const auto & keys = experiment->AntMetadataPtr()->Keys();
-		beginInsertRows(QModelIndex(),0,keys.size());
+		beginInsertRows(QModelIndex(),0,keys.size()-1);
 		for ( const auto & [name,k] : keys ) {
 			d_keys.push_back(k);
 		}
@@ -104,29 +145,86 @@ public:
 	}
 
 	int rowCount(const QModelIndex & parent) const override {
+		if ( parent.isValid() ) {
+			return 0;
+		}
 		return d_keys.size();
 	}
+
 	int columnCount(const QModelIndex & child) const override {
 		return 3;
 	};
 
 	QVariant data(const QModelIndex & index, int role) const override {
-		if ( check(index.row(),index.column(),index.parent()) == false || role != Qt::DisplayRole ) {
+		if ( check(index.row(),index.column(),index.parent()) == false ) {
 			return QVariant();
 		}
+		const auto & key = d_keys[index.row()];
 
-		auto key = d_keys[index.row()];
-		switch ( index.column() ) {
-		case 0:
-			return QVariant(key->Name().c_str());
+		if ( role == Qt::DisplayRole || role == Qt::EditRole ) {
+			return displayData(key,index.column());
+		}
+
+		if ( role == AntKeyValueBridge::KeyTypeRole ) {
+			return QVariant::fromValue(int(key->Type()));
+		}
+
+		return QVariant();
+	}
+
+	Qt::ItemFlags flags(const QModelIndex &index) const override {
+		if ( check(index.row(),index.column(),index.parent() ) == false ) {
+			return 0;
+		}
+		return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable;
+	}
+
+	bool setData(const QModelIndex & index,const QVariant & value, int role ) {
+		if ( check(index.row(),index.column(),index.parent()) == false ) {
+			return false;
+		}
+		const auto & key = d_keys[index.row()];
+		if ( index.column() == 0 ) {
+			return renameKey(key->Name().c_str(),value.toString());
+		}
+		if ( index.column() == 2 ) {
+			return setDefaultValue(*key,value.toString());
+		}
+		return false;
+	}
+
+	bool setDefaultValue(const fmp::AntMetadata::Key & key,
+	                     const QString & value) {
+		try {
+			auto v = fmp::AntMetadata::FromString(key.Type(),ToStdString(value));
+			return setKey(key.Name().c_str(),v);
+		} catch ( const std::exception & e) {
+			qCritical() << "Could not parse " << value << ": " << e.what();
+			return false;
+		}
+		return true;
+	}
+
+	QVariant headerData(int section, Qt::Orientation orientation, int role) const override {
+		if ( role != Qt::DisplayRole
+		     || orientation != Qt::Horizontal ) {
+			return QVariant();
+		}
+		switch ( section ) {
+		case 0 :
+			return tr("Key");
 		case 1:
-			return QVariant("");
+			return tr("Type");
 		case 2:
-			return QVariant(ToQString(key->DefaultValue()));
+			return tr("Default");
 		}
 		return QVariant();
 	}
+
+
 private:
+
+
 	bool check(int row,int column, const QModelIndex & parent) const {
 		return !parent.isValid() && column < 3 && row < d_keys.size();
 	}
@@ -146,19 +244,44 @@ private:
 		}
 		auto lower = lower_bound(name);
 		auto pos = std::distance(d_keys.cbegin(),lower);
-		beginInsertRows(QModelIndex(),pos,pos+1);
+		beginInsertRows(QModelIndex(),pos,pos);
 		d_keys.insert(lower,res);
 		endInsertRows();
 		return true;
 	}
 
-	std::vector<fmp::AntMetadata::Key::Ptr>::const_iterator lower_bound(const std::string & name) {
+	QVariant displayData(const fmp::AntMetadata::Key::Ptr & k,
+	                     int column) const {
+		switch (column) {
+		case 0:
+			return k->Name().c_str();
+		case 1:
+			return MetaDataTypeNames[int(k->Type())].c_str();
+		case 2:
+			return ToQString(k->DefaultValue());
+		}
+		return QVariant();
+	}
+
+	std::vector<fmp::AntMetadata::Key::Ptr>::const_iterator
+	lower_bound(const std::string & name) {
 		return std::lower_bound(d_keys.cbegin(),
 		                        d_keys.cend(),
 		                        name,
-		                        [](const fmp::AntMetadata::Key::Ptr & k, const std::string & name) {
+		                        [](const fmp::AntMetadata::Key::Ptr & k,
+		                           const std::string & name) {
 			                        return k->Name() < name;
 		                        });
+	}
+
+	std::vector<fmp::AntMetadata::Key::Ptr>::const_iterator
+	find(const std::string & name) {
+		auto fi = lower_bound(name);
+		if ( fi != d_keys.end()
+		     && (*fi)->Name() == name ) {
+			return fi;
+		}
+		return d_keys.cend();
 	}
 
 	fmp::Experiment::Ptr                    d_experiment;
