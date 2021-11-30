@@ -173,11 +173,12 @@ void MainWindow::setUpAbsoluteFilePathHandling() {
 		        pushRecentFile(d_lastPath);
 		        d_lastPath = filepath;
 	        });
-
+	setWindowTitle(tr("FORmicidae Tracker Studio"));
 }
 
 void MainWindow::pushRecentFile(const QString & path) {
-	if ( path.isEmpty() || path == d_recentPaths.front() ) {
+	if ( path.isEmpty()
+	     || (d_recentPaths.empty() == false && path == d_recentPaths.front())) {
 		return;
 	}
 
@@ -338,6 +339,7 @@ void MainWindow::closeEvent(QCloseEvent *e) {
 		if ( d_loggerWidget ) {
 			d_loggerWidget->close();
 		}
+		pushRecentFile(d_lastPath);
 		e->accept();
 		return;
 	} else if ( cancelled == true ) {
@@ -364,36 +366,6 @@ void MainWindow::closeEvent(QCloseEvent *e) {
 	}
 
 }
-
-/*void MainWindow::pushRecent() {
-	QString newPath = d_experiment->absoluteFilePath().c_str();
-
-	//if already in the vector, just move it to the top
-	if (!d_recentPaths.empty() && d_recentPaths[0] == newPath ) {
-		return;
-	}
-
-	auto fi =  std::find(d_recentPaths.begin(),d_recentPaths.end(),newPath);
-	if (fi != d_recentPaths.end() ) {
-		d_recentPaths.erase(fi);
-	}
-
-	d_recentPaths.push_front(newPath);
-
-	if ( d_recentPaths.size() > 5 ) {
-		d_recentPaths.resize(5);
-	}
-	QSettings settings;
-	for ( size_t i = 0; i < 5; ++i ) {
-		QString data;
-		if ( i < d_recentPaths.size() ) {
-			data = d_recentPaths[i];
-		}
-
-	}
-
-	rebuildRecentsFiles();
-	}*/
 
 
 void MainWindow::loadSettings() {
