@@ -16,6 +16,7 @@
 static std::vector<std::string> MetaDataTypeNames = { "Bool","Int","Double","String","Time" };
 
 class KeyModel : public QAbstractItemModel {
+	Q_OBJECT
 public:
 	KeyModel(QObject * parent)
 		: QAbstractItemModel(parent) {
@@ -288,21 +289,51 @@ private:
 };
 
 class DataModel : public QAbstractItemModel {
+	Q_OBJECT
 public:
 	DataModel(KeyModel * keyModel, QObject * parent)
 		: QAbstractItemModel(parent)
 		, d_keyModel(keyModel) {
+
+		connect(d_keyModel,&QAbstractItemModel::rowsAboutToBeInserted,
+		        this,&DataModel::onKeyModel_layoutAboutToBeChanged);
+
+		connect(d_keyModel,&QAbstractItemModel::rowsAboutToBeMoved,
+		        this,&DataModel::onKeyModel_layoutAboutToBeChanged);
+
+		connect(d_keyModel,&QAbstractItemModel::rowsAboutToBeRemoved,
+		        this,&DataModel::onKeyModel_layoutAboutToBeChanged);
+
+
+		connect(d_keyModel,&QAbstractItemModel::rowsInserted,
+		        this,&DataModel::onKeyModel_layoutChanged);
+
+		connect(d_keyModel,&QAbstractItemModel::rowsMoved,
+		        this,&DataModel::onKeyModel_layoutChanged);
+
+		connect(d_keyModel,&QAbstractItemModel::rowsRemoved,
+		        this,&DataModel::onKeyModel_layoutChanged);
+
+		connect(d_keyModel,&QAbstractItemModel::dataChanged,
+		        this,&DataModel::onKeyModel_dataChanged);
+
 	}
 	virtual ~DataModel() {
 	}
 
-	void SetValue(quint32 antID,
+	void resetInternalModel() {
+		beginResetModel();
+		rebuildPointers();
+		endResetModel();
+	}
+
+	void setValue(quint32 antID,
 	              const QString & key,
 	              const fort::Time & time,
 	              const fm::AntStaticValue & value) {
 	}
 
-	void DeleteValue(quint32 antID,
+	void deleteValue(quint32 antID,
 	                 const QString & value,
 	                 const fort::Time & time) {
 	}
@@ -314,39 +345,10 @@ public:
 		if ( experiment == nullptr ) {
 			return;
 		}
-		const auto & ants = experiment->Identifier()->Ants();
-		auto antSize = ants.size();
-		beginInsertRows(QModelIndex(),0,antSize - 1);
+		beginResetModel();
 		d_experiment = experiment;
-		d_ants.reserve(antSize);
-		auto numberOfKeys = d_keyModel->rowCount();
-		for ( const auto & [antID,ant] : ants ) {
-			int antIndex = int(d_ants.size());
-			d_ants.push_back(ant);
-			d_pointers.insert({std::make_tuple(ant.get(),-1,-1),
-			                   std::make_unique<Pointer>(Pointer{.Ant = antIndex,
-			                                                     .Key = -1,
-			                                                     .Value = -1})});
-			for ( int k = 0; k < numberOfKeys; ++k ) {
-				d_pointers.insert({std::make_tuple(ant.get(),k,-1),
-				                   std::make_unique<Pointer>(Pointer{.Ant = antIndex,
-				                                                     .Key = k,
-				                                                     .Value = -1})});
-				auto keyName = keyNameAt(k);
-				try {
-					int v = 0;
-					for ( const auto & [time,value] : ant->DataMap().at(keyName) ) {
-						d_pointers.insert({std::make_tuple(ant.get(),k,v),
-						                   std::make_unique<Pointer>(Pointer{.Ant = antIndex,
-						                                                     .Key = k,
-						                                                     .Value = v})});
-						++v;
-					}
-				} catch ( const std::exception &) {
-				}
-			}
-		}
-		endInsertRows();
+		rebuildPointers();
+		endResetModel();
 	}
 
 	void tearDownExperiment() {
@@ -363,7 +365,7 @@ public:
 		endRemoveRows();
 	}
 
-	QModelIndex index(int row, int column, const QModelIndex & parent) const override {
+	QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex() ) const override {
 		if ( !hasIndex(row,column,parent) ) {
 			return QModelIndex();
 		}
@@ -464,6 +466,34 @@ public:
 		return QVariant();
 	}
 
+private slots:
+
+	void onKeyModel_layoutAboutToBeChanged() {
+		beginResetModel();
+	}
+
+	void onKeyModel_layoutChanged() {
+		rebuildPointers();
+		endResetModel();
+	}
+
+	void onKeyModel_dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight) {
+		auto inRange = [&](int column) { return topLeft.column() <= column && column <= bottomRight.column(); };
+		if ( inRange(0) ) {
+			for ( size_t i = 0; i < d_ants.size(); ++i ) {
+				auto keyIndex = index(topLeft.row(),1,index(i,0));
+				emit dataChanged(keyIndex,keyIndex);
+			}
+		}
+		if ( inRange(2) || inRange(1) ) {
+			for ( size_t i = 0; i < d_ants.size();++i ) {
+				auto defaultValueIndex = index(topLeft.row(),3,index(i,0));
+				emit dataChanged(defaultValueIndex,defaultValueIndex);
+			}
+		}
+	}
+
+
 
 private:
 	struct Pointer {
@@ -471,6 +501,46 @@ private:
 		int Key;
 		int Value;
 	};
+
+	void rebuildPointers() {
+		d_ants.clear();
+		d_pointers.clear();
+
+		if ( d_experiment == nullptr ) {
+			return;
+		}
+
+		const auto & ants = d_experiment->Identifier()->Ants();
+		auto antSize = ants.size();
+		d_ants.reserve(antSize);
+		auto numberOfKeys = d_keyModel->rowCount();
+		for ( const auto & [antID,ant] : ants ) {
+			int antIndex = int(d_ants.size());
+			d_ants.push_back(ant);
+			d_pointers.insert({std::make_tuple(ant.get(),-1,-1),
+			                   std::make_unique<Pointer>(Pointer{.Ant = antIndex,
+			                                                     .Key = -1,
+			                                                     .Value = -1})});
+			for ( int k = 0; k < numberOfKeys; ++k ) {
+				d_pointers.insert({std::make_tuple(ant.get(),k,-1),
+				                   std::make_unique<Pointer>(Pointer{.Ant = antIndex,
+				                                                     .Key = k,
+				                                                     .Value = -1})});
+				auto keyName = keyNameAt(k);
+				try {
+					int v = 0;
+					for ( const auto & [time,value] : ant->DataMap().at(keyName) ) {
+						d_pointers.insert({std::make_tuple(ant.get(),k,v),
+						                   std::make_unique<Pointer>(Pointer{.Ant = antIndex,
+						                                                     .Key = k,
+						                                                     .Value = v})});
+						++v;
+					}
+				} catch ( const std::exception &) {
+				}
+			}
+		}
+	}
 
 	QVariant keyTypeData(const QModelIndex & index) const {
 		if ( index.isValid() == false ) {
@@ -554,12 +624,32 @@ private:
 		return ToStdString(d_keyModel->index(key,0).data(Qt::DisplayRole).toString());
 	}
 
+	std::vector<fmp::Ant::Ptr>::const_iterator lower_bound(quint32 antID) const {
+		return std::lower_bound(d_ants.begin(),
+		                        d_ants.end(),
+		                        antID,
+		                        [](const fmp::Ant::Ptr & a , quint32 antID) {
+			                        return a->AntID() < antID;
+		                        });
+	}
+
+	std::vector<fmp::Ant::Ptr>::const_iterator find(quint32 antID) const {
+		auto fi = lower_bound(antID);
+		if ( fi != d_ants.cend() && (*fi)->AntID() == antID ) {
+			return fi;
+		}
+		return d_ants.cend();
+	}
+
 	fmp::Experiment::Ptr                     d_experiment;
 	KeyModel                               * d_keyModel;
 	std::vector<fmp::Ant::Ptr>               d_ants;
 	std::map<std::tuple<fmp::Ant*,int,int>,
 	         std::unique_ptr<Pointer>>       d_pointers;
 };
+
+
+#include "AntKeyValueBridge.moc"
 
 
 AntKeyValueBridge::AntKeyValueBridge(QObject * parent)
@@ -636,11 +726,11 @@ void AntKeyValueBridge::clearValue(quint32 antID,
 }
 
 void AntKeyValueBridge::onAntCreated(quint32 antID) {
-
+	d_dataModel->resetInternalModel();
 }
 
 void AntKeyValueBridge::onAntDeleted(quint32 antID) {
-
+	d_dataModel->resetInternalModel();
 }
 
 void AntKeyValueBridge::initialize(ExperimentBridge * experiment) {
