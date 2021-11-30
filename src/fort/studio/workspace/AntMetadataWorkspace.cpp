@@ -63,6 +63,14 @@ void AntMetadataWorkspace::initialize(AntKeyValueBridge * bridge) {
 		        }
 	        });
 
+		connect(bridge->dataModel(),
+		        &QAbstractItemModel::modelReset,
+		        [this]() {
+			        auto model = d_keyValues->dataModel();
+			        for ( size_t i = 0;i < model->rowCount(); ++i ) {
+				        d_ui->dataView->expand(model->index(i,0));
+			        }
+		        });
 }
 
 
