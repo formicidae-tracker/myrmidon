@@ -13,9 +13,9 @@
 #include "MeasurementBridge.hpp"
 #include "GlobalPropertyBridge.hpp"
 #include "IdentifierBridge.hpp"
-#include "IdentifiedFrameConcurrentLoader.hpp"
+#include "ConcurrentFrameLoader.hpp"
 #include "AntShapeTypeBridge.hpp"
-#include "AntMetadataBridge.hpp"
+#include "AntKeyValueBridge.hpp"
 #include "MovieBridge.hpp"
 #include "ZoneBridge.hpp"
 #include "StatisticsBridge.hpp"
@@ -36,9 +36,9 @@ ExperimentBridge::ExperimentBridge(QObject * parent)
 	, d_identifier(new IdentifierBridge(this))
 	, d_antDisplay(new AntDisplayBridge(this))
 	, d_globalProperties(new GlobalPropertyBridge(this))
-	, d_identifiedFrameLoader(new IdentifiedFrameConcurrentLoader(this))
+	, d_frameLoader(new ConcurrentFrameLoader(this))
 	, d_antShapeTypes(new AntShapeTypeBridge(this))
-	, d_antMetadata(new AntMetadataBridge(this))
+	, d_antKeyValues(new AntKeyValueBridge(this))
 	, d_movies(new MovieBridge(this))
 	, d_zones(new ZoneBridge(this))
 	, d_statistics(new StatisticsBridge(this))
@@ -52,7 +52,7 @@ ExperimentBridge::ExperimentBridge(QObject * parent)
 	              d_antDisplay,
 	              d_globalProperties,
 	              d_antShapeTypes,
-	              d_antMetadata,
+	              d_antKeyValues,
 	              d_movies,
 	              d_zones,
 	              d_statistics,
@@ -178,16 +178,16 @@ GlobalPropertyBridge * ExperimentBridge::globalProperties() const {
 	return d_globalProperties;
 }
 
-IdentifiedFrameConcurrentLoader * ExperimentBridge::identifiedFrameLoader() const {
-	return d_identifiedFrameLoader;
+ConcurrentFrameLoader * ExperimentBridge::frameLoader() const {
+	return d_frameLoader;
 }
 
 AntShapeTypeBridge *  ExperimentBridge::antShapeTypes() const {
 	return d_antShapeTypes;
 }
 
-AntMetadataBridge *  ExperimentBridge::antMetadata() const {
-	return d_antMetadata;
+AntKeyValueBridge *  ExperimentBridge::antKeyValues() const {
+	return d_antKeyValues;
 }
 
 MovieBridge *  ExperimentBridge::movies() const {
@@ -221,7 +221,7 @@ void ExperimentBridge::setExperiment(const fmp::Experiment::Ptr & experiment) {
 	for ( const auto & child : d_children ) {
 		child->setExperiment(experiment);
 	}
-	d_identifiedFrameLoader->setExperiment(experiment);
+	d_frameLoader->setExperiment(experiment);
 	resetChildModified();
 
 	selectAnt(0);

@@ -45,6 +45,8 @@ signals:
 	void hasTrackingTimeChanged(bool value);
 
 	void togglePlayPause();
+
+	void trackingTimeChanged(fort::Time time);
 public slots:
 	void display(TrackingVideoFrame image);
 

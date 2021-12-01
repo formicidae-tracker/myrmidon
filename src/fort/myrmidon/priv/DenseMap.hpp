@@ -176,6 +176,42 @@ public:
 		return const_iterator(d_values.cend(),d_values.begin(),d_values.cend());
 	}
 
+	const_iterator lower_key(const Key & key) const noexcept {
+		if ( key == 0 || d_values.empty() ){
+			return cend();
+		}
+		if ( key > d_values.size() ) {
+			return const_iterator(d_values.end()-1,d_values.cbegin(),d_values.cend());
+		}
+
+		if ( key == 1 ) {
+			return d_values[0].first == 0 ? cend() : cbegin();
+		}
+
+		for ( auto iter = d_values.cbegin()+(key-1); iter != d_values.cbegin(); --iter) {
+			if (iter->first != 0 ) {
+				return const_iterator(iter,d_values.cbegin(),d_values.cend());
+			}
+		}
+
+		return cend();
+	}
+
+	const_iterator upper_key(const Key & key) const noexcept {
+		if ( key > d_values.size()
+		     || d_values.empty()
+		     || key == 0){
+			return cend();
+		}
+
+		for ( auto iter = d_values.cbegin()+(key-1); iter != d_values.cend(); ++iter) {
+			if (iter->first != 0 ) {
+				return const_iterator(iter,d_values.cbegin(),d_values.cend());
+			}
+		}
+		return cend();
+	}
+
 	bool empty() const noexcept {
 		return d_values.empty();
 	}
@@ -248,7 +284,7 @@ public:
 		erase(iterator(d_values.begin() + (key-1),d_values.begin(),d_values.end()));
 		return 1;
 	}
-
+\
 	const_iterator find( const key_type & key) const {
 		if ( key == 0 || key > d_values.size() || d_values[key-1].first == 0) {
 			return cend();

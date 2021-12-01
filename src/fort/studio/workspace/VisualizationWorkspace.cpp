@@ -4,9 +4,11 @@
 #include <fort/studio/bridge/ExperimentBridge.hpp>
 #include <fort/studio/bridge/MovieBridge.hpp>
 #include <fort/studio/bridge/UniverseBridge.hpp>
+#include <fort/studio/bridge/AntKeyValueBridge.hpp>
 
 #include <fort/studio/widget/TrackingVideoPlayer.hpp>
 #include <fort/studio/widget/AntListWidget.hpp>
+#include <fort/studio/widget/SetAntValueDialog.hpp>
 
 #include <QAction>
 #include <QShortcut>
@@ -22,6 +24,9 @@
 #include <QTreeView>
 #include <QDebug>
 #include <QHeaderView>
+#include <QToolBar>
+#include <QShortcut>
+#include <QKeySequence>
 
 #include <fort/studio/Format.hpp>
 
@@ -46,11 +51,75 @@ void VisualizationWorkspace::setUpUI() {
 	d_segmentListDock->setWidget(widget);
 }
 
+
+void VisualizationWorkspace::setUpActions() {
+	d_toolbar = new QToolBar(this);
+	d_markIn = d_toolbar->addAction(tr("Set In Time Marker"));
+	auto markInShortcut = new QShortcut(tr("I"),this);
+	connect(markInShortcut,&QShortcut::activated,
+	        d_markIn,&QAction::trigger);
+	d_markIn->setToolTip(tr("Set the 'In' Time for time selection (I)"));
+	d_markIn->setStatusTip(d_markIn->toolTip());
+
+	d_markOut = d_toolbar->addAction(tr("Set Out Time Marker"));
+	auto markOutShortcut = new QShortcut(tr("O"),this);
+	connect(markOutShortcut,&QShortcut::activated,
+	        d_markOut,&QAction::trigger);
+	d_markOut->setToolTip(tr("Set the 'Out' Time for time selection (I)"));
+	d_markOut->setStatusTip(d_markOut->toolTip());
+
+	d_clearMarkers = d_toolbar->addAction(tr("Clear Time Selection"));
+	d_clearMarkers->setShortcut(QKeySequence(tr("Ctrl+Shift+U")));
+	d_clearMarkers->setToolTip(tr("Clear Time Markers (Ctrl+Shift+U)"));
+	d_clearMarkers->setStatusTip(d_clearMarkers->toolTip());
+
+	d_setValue = d_toolbar->addAction(tr("Set Value For Ant on Time Region"));
+	d_setValue->setShortcut(QKeySequence(tr("Ctrl+K")));
+	d_setValue->setToolTip(tr("Set value for Ant on Selected Region"));
+	d_setValue->setStatusTip(d_setValue->toolTip());
+
+	connect(d_setValueDialog,&SetAntValueDialog::inTimeChanged,
+	        this,&VisualizationWorkspace::updateActionsStates);
+
+	connect(d_setValueDialog,&SetAntValueDialog::outTimeChanged,
+	        this,&VisualizationWorkspace::updateActionsStates);
+
+	connect(d_ui->trackingVideoWidget,&TrackingVideoWidget::hasTrackingTimeChanged,
+	        this,&VisualizationWorkspace::updateActionsStates);
+
+	connect(d_ui->trackingVideoWidget,&TrackingVideoWidget::trackingTimeChanged,
+	        this,&VisualizationWorkspace::updateActionsStates);
+
+	connect(d_markIn,&QAction::triggered,
+	        this,&VisualizationWorkspace::onActionSetInTime);
+
+	connect(d_markOut,&QAction::triggered,
+	        this,&VisualizationWorkspace::onActionSetOutTime);
+
+	connect(d_clearMarkers,&QAction::triggered,
+	        this,&VisualizationWorkspace::onActionClearMarkers);
+
+	connect(d_setValue,&QAction::triggered,
+	        this,&VisualizationWorkspace::onActionSetValue);
+
+	auto updateTimeRange = [this]() {
+		                       d_ui->videoControl->setSelectedTimeRange(d_setValueDialog->inTime(),d_setValueDialog->outTime());
+	                       };
+
+	connect(d_setValueDialog,&SetAntValueDialog::inTimeChanged,
+	        this,updateTimeRange);
+	connect(d_setValueDialog,&SetAntValueDialog::outTimeChanged,
+	        this,updateTimeRange);
+
+	updateActionsStates();
+};
+
 VisualizationWorkspace::VisualizationWorkspace(QWidget *parent)
 	: Workspace(true,parent)
 	, d_experiment(nullptr)
 	, d_ui(new Ui::VisualizationWorkspace)
-	, d_videoPlayer(new TrackingVideoPlayer(this)) {
+	, d_videoPlayer(new TrackingVideoPlayer(this))
+	, d_setValueDialog(new SetAntValueDialog(this)) {
 	setUpUI();
 
 	d_ui->setupUi(this);
@@ -68,6 +137,10 @@ VisualizationWorkspace::VisualizationWorkspace(QWidget *parent)
 
 	auto skipForwardLargeShortcut = new QShortcut(tr("Ctrl+Shift+L"),this);
 	auto skipBackwardLargeShortcut = new QShortcut(tr("Ctrl+Shift+J"),this);
+
+
+	auto jumpNextVisibleShortcut = new QShortcut(tr(";"),this);
+	auto jumpPrevVisibleShortcut = new QShortcut(tr("H"),this);
 
 	static fort::Duration small = 10 * fort::Duration::Second;
 	static fort::Duration medium = 1 * fort::Duration::Minute;
@@ -126,6 +199,18 @@ VisualizationWorkspace::VisualizationWorkspace(QWidget *parent)
 		             d_videoPlayer->skipDuration(-large);
 	             });
 
+	connect(jumpNextVisibleShortcut,&QShortcut::activated,
+	        this,[this]() {
+		             d_videoPlayer->jumpNextVisible(d_experiment->selectedAntID(),
+		                                            false);
+	             });
+
+	connect(jumpPrevVisibleShortcut,&QShortcut::activated,
+	        this,[this]() {
+		             d_videoPlayer->jumpNextVisible(d_experiment->selectedAntID(),
+		                                            true);
+	             });
+	setUpActions();
 }
 
 VisualizationWorkspace::~VisualizationWorkspace() {
@@ -139,6 +224,7 @@ void VisualizationWorkspace::onMovieSegmentActivated ( const QModelIndex & index
 		return;
 	}
 	d_videoPlayer->setMovieSegment(spaceID,tdd,segment,start);
+	onActionClearMarkers();
 	d_videoPlayer->play();
 }
 
@@ -156,13 +242,16 @@ void VisualizationWorkspace::initialize(QMainWindow * main,ExperimentBridge * ex
 
 	connect(movieBridge,&Bridge::activated,
 	        d_videoPlayer,&TrackingVideoPlayer::clearMovieSegment);
+	connect(movieBridge,&Bridge::activated,
+	        this,&VisualizationWorkspace::onActionClearMarkers);
+
 
 	connect(d_treeView,
 	        &QAbstractItemView::activated,
 	        this,
 	        &VisualizationWorkspace::onMovieSegmentActivated);
 
-	d_videoPlayer->setup(experiment->identifiedFrameLoader());
+	d_videoPlayer->setup(experiment->frameLoader());
 	d_ui->trackingVideoWidget->setup(experiment->antDisplay());
 	d_ui->videoControl->setup(d_videoPlayer,experiment);
 
@@ -208,6 +297,14 @@ void VisualizationWorkspace::initialize(QMainWindow * main,ExperimentBridge * ex
 	int antDisplayHeight = 0.5 * height;
 	int segmentListHeight = 0.5 * height;
 	main->resizeDocks({d_antDisplayDock,d_segmentListDock},{antDisplayHeight,segmentListHeight},Qt::Vertical);
+
+	main->addToolBar(d_toolbar);
+	d_toolbar->hide();
+
+	connect(experiment,&ExperimentBridge::antSelected,
+	        this,&VisualizationWorkspace::updateActionsStates);
+
+	d_setValueDialog->initialize(experiment);
 }
 
 void VisualizationWorkspace::onCopyTimeActionTriggered() {
@@ -237,6 +334,7 @@ void VisualizationWorkspace::setUp(const NavigationAction & actions) {
 	actions.JumpToTime->setEnabled(true);
 	d_antDisplayDock->show();
 	d_segmentListDock->show();
+	d_toolbar->show();
 }
 
 void VisualizationWorkspace::tearDown(const NavigationAction & actions) {
@@ -257,6 +355,7 @@ void VisualizationWorkspace::tearDown(const NavigationAction & actions) {
 	actions.JumpToTime->setEnabled(false);
 	d_antDisplayDock->hide();
 	d_segmentListDock->hide();
+	d_toolbar->hide();
 }
 
 
@@ -347,4 +446,65 @@ void VisualizationWorkspace::jumpToTime(uint32_t spaceID,
 	    d_videoPlayer->setMovieSegment(spaceID,tdd,segment,start);
     }
     d_videoPlayer->setTime(time);
+}
+
+
+void VisualizationWorkspace::updateActionsStates() {
+	if ( d_ui->trackingVideoWidget->hasTrackingTime() == false ) {
+		d_markIn->setEnabled(false);
+		d_markOut->setEnabled(false);
+		d_clearMarkers->setEnabled(false);
+		d_setValue->setEnabled(false);
+		return;
+	}
+	auto time = d_ui->trackingVideoWidget->trackingTime();
+	const auto & inTime = d_setValueDialog->inTime();
+	const auto & outTime = d_setValueDialog->outTime();
+	d_markIn->setEnabled(time < outTime && time.Equals(inTime) == false );
+	d_markOut->setEnabled(time > inTime && time.Equals(outTime) == false );
+	d_clearMarkers->setEnabled(d_setValueDialog->hasTime());
+	d_setValue->setEnabled(d_experiment->selectedAntID() != 0 && d_setValueDialog->hasTime());
+}
+
+void VisualizationWorkspace::onActionSetInTime() {
+	if ( d_ui->trackingVideoWidget->hasTrackingTime() == false )  {
+		return;
+	}
+	d_setValueDialog->setInTime(d_ui->trackingVideoWidget->trackingTime());
+}
+
+void VisualizationWorkspace::onActionSetOutTime() {
+	if ( d_ui->trackingVideoWidget->hasTrackingTime() == false )  {
+		return;
+	}
+	d_setValueDialog->setOutTime(d_ui->trackingVideoWidget->trackingTime());
+}
+
+void VisualizationWorkspace::onActionClearMarkers() {
+	d_setValueDialog->setInTime(fort::Time::SinceEver());
+	d_setValueDialog->setOutTime(fort::Time::Forever());
+}
+
+void VisualizationWorkspace::onActionSetValue() {
+	d_videoPlayer->pause();
+	if ( d_setValueDialog->exec() == QDialog::Rejected
+	     || d_setValueDialog->hasTime() == false
+	     || d_setValueDialog->hasKey() == false
+	     || d_setValueDialog->hasValue() == false) {
+		return;
+	}
+	auto keyValues = d_experiment->antKeyValues();
+	keyValues->setValue(d_experiment->selectedAntID(),
+	                    d_setValueDialog->key(),
+	                    d_setValueDialog->inTime(),
+	                    d_setValueDialog->value());
+
+	if ( d_setValueDialog->outTime().IsInfinite() == false ) {
+		keyValues->setValue(d_experiment->selectedAntID(),
+		                    d_setValueDialog->key(),
+		                    d_setValueDialog->outTime(),
+		                    keyValues->defaultValue(d_setValueDialog->key()));
+	}
+
+	onActionClearMarkers();
 }

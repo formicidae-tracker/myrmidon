@@ -149,6 +149,7 @@ if(IS_MAIN AND ENABLE_COVERAGE)
 	                          LCOV_OPTIONS --exclude "'*UTest.*'"
 	                                       --exclude "main-check.cpp"
 	                                       --include "'${PROJECT_SOURCE_DIR}/src/fort/myrmidon/*'"
+#	                                       --include "'${PROJECT_SOURCE_DIR}/src/fort/studio/*'"
 	                          )
 endif(IS_MAIN AND ENABLE_COVERAGE)
 

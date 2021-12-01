@@ -6,7 +6,7 @@ namespace Ui {
 class AntMetadataWorkspace;
 }
 
-class AntMetadataBridge;
+class AntKeyValueBridge;
 
 class AntMetadataWorkspace : public Workspace {
 	Q_OBJECT
@@ -22,17 +22,14 @@ protected:
 
 
 private slots:
-	void on_dataView_activated(const QModelIndex & index);
 	void onAddButtonClicked();
 	void onRemoveButtonClicked();
-
-	void onSelectedAntID(quint32 ID);
-
+	void onSelectionChanged();
 
 private:
-	void initialize(AntMetadataBridge * metadata);
+	void initialize(AntKeyValueBridge * metadata);
 
 
 	Ui::AntMetadataWorkspace * d_ui;
-	AntMetadataBridge  * d_metadata;
+	AntKeyValueBridge        * d_keyValues;
 };

@@ -1,4 +1,4 @@
-#include "IdentifiedFrameConcurrentLoader.hpp"
+#include "ConcurrentFrameLoader.hpp"
 
 #include <QtConcurrent>
 
@@ -11,6 +11,7 @@
 #include <fort/myrmidon/priv/TrackingDataDirectory.hpp>
 #include <fort/myrmidon/priv/CollisionSolver.hpp>
 
+#include <fort/studio/MyrmidonTypes/Time.hpp>
 #include <fort/studio/MyrmidonTypes/Experiment.hpp>
 
 
@@ -20,7 +21,7 @@
 #ifndef FORT_STUDIO_CONC_LOADER_NDEBUG
 #include <mutex>
 std::mutex clDebugMutex;
-#define CONC_LOADER_DEBUG(statements) do{ \
+#define CONC_LOADER_DEBUG(statements) do{	  \
 		std::lock_guard<std::mutex> dlock(clDebugMutex); \
 		statements; \
 	}while(0)
@@ -29,27 +30,28 @@ std::mutex clDebugMutex;
 #endif
 
 
-IdentifiedFrameConcurrentLoader::IdentifiedFrameConcurrentLoader(QObject * parent)
+ConcurrentFrameLoader::ConcurrentFrameLoader(QObject * parent)
 	: QObject(parent)
 	, d_done(0)
 	, d_toDo(-1)
 	, d_currentLoadingID(-1)
 	, d_connectionType(Qt::QueuedConnection) {
 	qRegisterMetaType<fmp::Experiment::ConstPtr>();
+	qRegisterMetaType<fort::Time>();
 }
 
-IdentifiedFrameConcurrentLoader::~IdentifiedFrameConcurrentLoader() {
+ConcurrentFrameLoader::~ConcurrentFrameLoader() {
 	if ( !d_abordFlag == false ) {
 		d_abordFlag->store(true);
 	}
 }
 
 
-bool IdentifiedFrameConcurrentLoader::isDone() const {
+bool ConcurrentFrameLoader::isDone() const {
 	return d_done == d_toDo;
 }
 
-void IdentifiedFrameConcurrentLoader::moveToThread(QThread * thread) {
+void ConcurrentFrameLoader::moveToThread(QThread * thread) {
 	if ( thread != QObject::thread() ) {
 		d_connectionType = Qt::BlockingQueuedConnection;
 	}
@@ -57,12 +59,12 @@ void IdentifiedFrameConcurrentLoader::moveToThread(QThread * thread) {
 }
 
 
-void IdentifiedFrameConcurrentLoader::setExperiment(const fmp::Experiment::ConstPtr & experiment) {
+void ConcurrentFrameLoader::setExperiment(const fmp::Experiment::ConstPtr & experiment) {
 	metaObject()->invokeMethod(this,"setExperimentUnsafe",d_connectionType,
 	                           Q_ARG(fmp::Experiment::ConstPtr,experiment));
 }
 
-void IdentifiedFrameConcurrentLoader::setExperimentUnsafe(fmp::Experiment::ConstPtr experiment) {
+void ConcurrentFrameLoader::setExperimentUnsafe(fmp::Experiment::ConstPtr experiment) {
 	if ( !d_experiment ) {
 		clear();
 	}
@@ -70,7 +72,7 @@ void IdentifiedFrameConcurrentLoader::setExperimentUnsafe(fmp::Experiment::Const
 }
 
 const fm::IdentifiedFrame::Ptr &
-IdentifiedFrameConcurrentLoader::frameAt(fmp::MovieFrameID movieID) const {
+ConcurrentFrameLoader::frameAt(fmp::MovieFrameID movieID) const {
 	static fm::IdentifiedFrame::Ptr empty;
 	auto fi = d_frames.find(movieID+1);
 	if ( fi == d_frames.cend() ) {
@@ -80,7 +82,7 @@ IdentifiedFrameConcurrentLoader::frameAt(fmp::MovieFrameID movieID) const {
 }
 
 const fm::CollisionFrame::Ptr &
-IdentifiedFrameConcurrentLoader::collisionAt(fmp::MovieFrameID movieID) const {
+ConcurrentFrameLoader::collisionAt(fmp::MovieFrameID movieID) const {
 	static fm::CollisionFrame::Ptr empty;
 	auto fi = d_collisions.find(movieID+1);
 	if ( fi == d_collisions.cend() ) {
@@ -89,9 +91,10 @@ IdentifiedFrameConcurrentLoader::collisionAt(fmp::MovieFrameID movieID) const {
 	return fi->second;
 }
 
-void IdentifiedFrameConcurrentLoader::loadMovieSegment(quint32 spaceID,
-                                                       const fmp::TrackingDataDirectory::Ptr & tdd,
-                                                       const fmp::MovieSegment::ConstPtr & segment) {
+void ConcurrentFrameLoader::loadMovieSegment(quint32 spaceID,
+                                             const fmp::TrackingDataDirectory::Ptr & tdd,
+                                             const fmp::MovieSegment::ConstPtr & segment,
+                                             fort::Duration expectedFrameDuration) {
 	if ( !d_experiment ) {
 		return;
 	}
@@ -103,6 +106,7 @@ void IdentifiedFrameConcurrentLoader::loadMovieSegment(quint32 spaceID,
 	}
 
 	clear();
+	d_expectedFrameDuration = expectedFrameDuration;
 	auto identifier = fmp::Identifier::Compile(d_experiment->Identifier());
 	auto solver = d_experiment->CompileCollisionSolver(false);
 
@@ -230,14 +234,14 @@ void IdentifiedFrameConcurrentLoader::loadMovieSegment(quint32 spaceID,
 	QtConcurrent::run(QThreadPool::globalInstance(),load);
 }
 
-void IdentifiedFrameConcurrentLoader::clear() {
+void ConcurrentFrameLoader::clear() {
 	abordCurrent();
 	d_frames.clear();
 	d_collisions.clear();
 }
 
 
-void IdentifiedFrameConcurrentLoader::abordCurrent() {
+void ConcurrentFrameLoader::abordCurrent() {
 	if ( !d_abordFlag ) {
 		return;
 	}
@@ -245,7 +249,7 @@ void IdentifiedFrameConcurrentLoader::abordCurrent() {
 	d_abordFlag.reset();
 }
 
-void IdentifiedFrameConcurrentLoader::setProgress(int doneValue,int toDo) {
+void ConcurrentFrameLoader::setProgress(int doneValue,int toDo) {
 	CONC_LOADER_DEBUG({
 			std::cerr << "[setProgress]: wantedThread: " << this->thread() << " current: " << QThread::currentThread() <<  std::endl;
 			std::cerr << "[setProgress]: current:" << d_done << "/" << d_toDo << " wants:" << doneValue << "/" << toDo << std::endl;
@@ -260,40 +264,136 @@ void IdentifiedFrameConcurrentLoader::setProgress(int doneValue,int toDo) {
 	emit progressChanged(d_done,d_toDo);
 	if ( doneState != isDone() ) {
 		emit done(isDone());
+		if (isDone()) {
+			emit durationComputed(duration());
+		}
 	}
 }
 
 
-void IdentifiedFrameConcurrentLoader::addDone(int done) {
+void ConcurrentFrameLoader::addDone(int done) {
 	setProgress(d_done + done,d_toDo);
 }
 
-quint64 IdentifiedFrameConcurrentLoader::findAnt(quint32 antID,
-                                                 quint64 frameID,
-                                                 int direction) {
+fort::Duration
+ConcurrentFrameLoader::findAnt(quint32 antID,
+                               quint64 frameID,
+                               int direction) {
 	auto fi = d_frames.find(frameID + 1);
 	if ( d_done == false || fi == d_frames.end() ) {
-		return std::numeric_limits<quint64>::max();
+		return -1;
 	}
-
+	const auto & start = d_frames.at(1)->FrameTime;
 
 	if ( direction > 0 ) {
 		for ( ; fi != d_frames.end(); ++fi ) {
 			if( fi->second->Contains(antID) == true ) {
-				return fi->first - 1;
+				return fi->second->FrameTime.Sub(start);
 			}
 		}
-		return std::numeric_limits<quint64>::max();
+		return -1;
 	}
 
 
 	for ( ; fi != d_frames.begin(); --fi) {
 		if( fi->second->Contains(antID) == true ) {
-			return fi->first - 1;
+			return fi->second->FrameTime.Sub(start);
 		}
 	}
 	if ( fi->second->Contains(antID) == true ) {
-		return fi->first - 1;
+		return fi->second->FrameTime.Sub(start);
 	}
-	return std::numeric_limits<quint64>::max();
+	return -1;
+}
+
+fort::Duration ConcurrentFrameLoader::duration() const {
+	if ( d_frames.empty() ) {
+		return 0;
+	}
+	return (--d_frames.end())->second->FrameTime.Sub(d_frames.begin()->second->FrameTime) + d_expectedFrameDuration;
+}
+
+
+fort::Duration
+ConcurrentFrameLoader::moviePositionAt(const FramesByMovieID & frames,
+                                       fort::Duration expectedFrameDuration,
+                                       fmp::MovieFrameID movieID) {
+	if ( frames.empty() ) {
+		return movieID * expectedFrameDuration;
+	}
+	// we get or interpolate the start time of the segment.
+	auto begin = frames.cbegin();
+	auto start = begin->second->FrameTime.Add((1 - int(begin->first)) * expectedFrameDuration );
+
+	auto lower = frames.lower_key(movieID+1);
+	if ( lower == frames.cend() ) {
+		auto upper = frames.upper_key(movieID+1);
+		// interpolation from the closest;
+		return upper->second->FrameTime.Sub(start) +  ( movieID - upper->first + 1) * expectedFrameDuration;
+	}
+
+	if ( lower->first == (movieID + 1) ) {
+		// found the exact frame
+		return lower->second->FrameTime.Sub(start);
+	}
+	auto upper = frames.upper_key(movieID+1);
+
+	if ( upper == frames.cend() ) {
+		// interpolation from the closest;
+		return lower->second->FrameTime.Sub(start) +  ( movieID - lower->first + 1 ) * expectedFrameDuration;
+	}
+	// interpolate between the two frames
+	fort::Duration estimatedFrameDuration = upper->second->FrameTime.Sub(lower->second->FrameTime).Nanoseconds() / ( upper->first - lower->first );
+	return lower->second->FrameTime.Sub(start) + ( movieID - lower->first + 1 ) * estimatedFrameDuration;
+}
+
+fort::Duration ConcurrentFrameLoader::positionAt(fmp::MovieFrameID movieID) const {
+	return moviePositionAt(d_frames,d_expectedFrameDuration,movieID);
+}
+
+fmp::MovieFrameID ConcurrentFrameLoader::frameIDAt(fort::Duration position) const {
+	return frameIDAt(d_frames,d_expectedFrameDuration,position);
+}
+
+
+fmp::MovieFrameID
+ConcurrentFrameLoader::frameIDAt(const FramesByMovieID & frames,
+                                 fort::Duration expectedFrameDuration,
+                                 fort::Duration position) {
+
+#define DIV_CLOSEST(a,b) ( ( (a) + (b)/2 ) / (b) )
+
+	if ( frames.empty() ) {
+		return DIV_CLOSEST(position.Nanoseconds(),expectedFrameDuration.Nanoseconds());
+	}
+	// we get or interpolate the start time of the segment.
+	auto begin = frames.cbegin();
+	auto start = begin->second->FrameTime.Add((1 - int(begin->first)) * expectedFrameDuration );
+	auto time = start.Add(position);
+	auto lower = std::lower_bound(frames.cbegin(),frames.cend(),time,
+	                              [](const FramesByMovieID::value_type & elem, const fort::Time & value) -> bool {
+		                              return elem.second->FrameTime > value;
+	                              });
+	if (lower != frames.cend() && lower->second->FrameTime == time ) {
+		return lower->first - 1;
+	}
+	auto upper = std::lower_bound(frames.cbegin(),frames.cend(),time,
+	                              [](const FramesByMovieID::value_type & elem, const fort::Time & value) -> bool {
+		                              return elem.second->FrameTime < value;
+	                              });
+	fort::Duration lowerDiff = std::numeric_limits<int64_t>::max();
+	fort::Duration upperDiff = std::numeric_limits<int64_t>::max();
+	if ( lower != frames.cend() ) {
+		lowerDiff = time.Sub(lower->second->FrameTime);
+	}
+
+	if ( upper != frames.cend() ) {
+		upperDiff = upper->second->FrameTime.Sub(time);
+	}
+
+	if ( lowerDiff < upperDiff) {
+		return lower->first - 1 + DIV_CLOSEST(lowerDiff.Nanoseconds(),expectedFrameDuration.Nanoseconds());
+	} else {
+		return upper->first - 1 - DIV_CLOSEST(upperDiff.Nanoseconds(),expectedFrameDuration.Nanoseconds());
+	}
 }

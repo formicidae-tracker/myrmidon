@@ -14,7 +14,7 @@
 
 #include "TrackingVideoFrame.hpp"
 
-class IdentifiedFrameConcurrentLoader;
+class ConcurrentFrameLoader;
 class TrackingVideoWidget;
 class QThread;
 
@@ -46,7 +46,7 @@ public:
 	virtual ~TrackingVideoPlayer();
 
 
-	void setup(IdentifiedFrameConcurrentLoader * loader);
+	void setup(ConcurrentFrameLoader * loader);
 
 	qreal playbackRate() const;
 
@@ -111,6 +111,8 @@ private slots:
 	void onTimerTimeout();
 
 	void setSeekReady(bool value);
+
+	void setDuration(fort::Duration duration);
 private:
 	const static size_t BUFFER_SIZE = 3;
 
@@ -125,7 +127,7 @@ private:
 	static size_t computeRate(double rate);
 
 	TrackingVideoPlayerTask             * d_task;
-	IdentifiedFrameConcurrentLoader     * d_loader;
+	ConcurrentFrameLoader     * d_loader;
 
 	State                       d_state;
 	fmp::MovieSegment::ConstPtr d_segment;
@@ -136,7 +138,7 @@ private:
 	fort::Duration              d_interval;
 	fort::Duration              d_position;
 	fort::Duration              d_duration;
-
+	double                      d_fps;
 	bool                        d_displayNext;
 	bool                        d_scrollMode;
 
@@ -154,7 +156,7 @@ public:
 	explicit TrackingVideoPlayerTask(size_t taskID,
 	                                 const fmp::MovieSegment::ConstPtr & segment,
 	                                 size_t rate,
-	                                 IdentifiedFrameConcurrentLoader * loader);
+	                                 ConcurrentFrameLoader * loader);
 
 	virtual ~TrackingVideoPlayerTask();
 
@@ -186,10 +188,10 @@ private slots:
 	void setRateUnsafe(size_t rate);
 
 private:
-	fmp::MovieSegment::ConstPtr       d_segment;
-	cv::VideoCapture                  d_capture;
-	IdentifiedFrameConcurrentLoader * d_loader;
-	int                               d_width,d_height;
-	size_t                            d_taskID,d_seekID,d_rate;
-	fort::Duration                    d_expectedFrameDuration;
+	fmp::MovieSegment::ConstPtr d_segment;
+	cv::VideoCapture            d_capture;
+	ConcurrentFrameLoader     * d_loader;
+	int                         d_width,d_height;
+	size_t                      d_taskID,d_seekID,d_rate;
+	fort::Duration              d_expectedFrameDuration;
 };

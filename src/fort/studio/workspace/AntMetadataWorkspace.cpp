@@ -3,7 +3,7 @@
 
 #include <fort/studio/Format.hpp>
 #include <fort/studio/bridge/ExperimentBridge.hpp>
-#include <fort/studio/bridge/AntMetadataBridge.hpp>
+#include <fort/studio/bridge/AntKeyValueBridge.hpp>
 
 
 #include <fort/studio/MyrmidonTypes/AntMetadata.hpp>
@@ -17,7 +17,6 @@ AntMetadataWorkspace::AntMetadataWorkspace(QWidget *parent)
 	, d_ui(new Ui::AntMetadataWorkspace) {
 	d_ui->setupUi(this);
 	d_ui->removeButton->setEnabled(false);
-	onSelectedAntID(0);
 }
 
 AntMetadataWorkspace::~AntMetadataWorkspace() {
@@ -25,32 +24,21 @@ AntMetadataWorkspace::~AntMetadataWorkspace() {
 }
 
 void AntMetadataWorkspace::initialize(QMainWindow * main,ExperimentBridge * experiment) {
-	initialize(experiment->antMetadata());
+	initialize(experiment->antKeyValues());
 }
 
-void AntMetadataWorkspace::initialize(AntMetadataBridge * metadata) {
-	d_metadata = metadata;
+void AntMetadataWorkspace::initialize(AntKeyValueBridge * bridge) {
+	d_keyValues = bridge;
 
-	d_ui->metadataEditor->setup(metadata);
+	d_ui->keyTypeEditor->setup(bridge);
 
-	d_ui->dataView->setModel(metadata->dataModel());
-	d_ui->dataView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+	d_ui->dataView->setModel(bridge->dataModel());
+	d_ui->dataView->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+	d_ui->dataView->setSelectionMode(QAbstractItemView::SingleSelection);
 
-	d_ui->timeView->setModel(metadata->timedChangeModel());
-	d_ui->timeView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-
-	d_ui->comboBox->setModel(metadata->columnModel());
-
-	connect(d_metadata,
-	        &AntMetadataBridge::selectedAntIDChanged,
-	        this,
-	        &AntMetadataWorkspace::onSelectedAntID);
-	d_ui->timeView->setSelectionMode(QAbstractItemView::SingleSelection);
-	connect(d_ui->timeView->selectionModel(),
+	connect(d_ui->dataView->selectionModel(),
 	        &QItemSelectionModel::selectionChanged,
-	        [this]() {
-		        d_ui->removeButton->setEnabled(d_ui->timeView->selectionModel()->hasSelection());
-	        });
+	        this,&AntMetadataWorkspace::onSelectionChanged);
 
 	connect(d_ui->addButton,
 	        &QToolButton::clicked,
@@ -62,45 +50,49 @@ void AntMetadataWorkspace::initialize(AntMetadataBridge * metadata) {
 	        this,
 	        &AntMetadataWorkspace::onRemoveButtonClicked);
 
+	connect(bridge->dataModel(),
+	        &QAbstractItemModel::rowsInserted,
+	        [this](const QModelIndex & parent, int first, int last ) {
+		        if ( parent.isValid() == true ) {
+			        return;
+		        }
+		        for ( ; first <= last; ++first ) {
+			        d_ui->dataView->expand(d_keyValues->dataModel()->index(first,0));
+		        }
+	        });
+
+	connect(bridge->dataModel(),
+	        &QAbstractItemModel::modelReset,
+	        [this]() {
+		        auto model = d_keyValues->dataModel();
+		        for ( size_t i = 0;i < model->rowCount(); ++i ) {
+			        d_ui->dataView->expand(model->index(i,0));
+		        }
+	        });
+	onSelectionChanged();
 }
 
-
-void AntMetadataWorkspace::on_dataView_activated(const QModelIndex & index) {
-	d_metadata->selectRow(index.row());
-}
-
-void AntMetadataWorkspace::onSelectedAntID(quint32 ID) {
-	if ( ID == 0 ) {
-		d_ui->addButton->setEnabled(false);
-		d_ui->comboBox->setEnabled(false);
-		d_ui->timeBox->setTitle(tr("Timed Changes - No Ant Selected"));
-
-		return;
-	}
-	d_ui->addButton->setEnabled(true);
-	d_ui->comboBox->setEnabled(true);
-	d_ui->timeBox->setTitle(tr("Timed Changes for Ant %1").arg(ToQString(fm::FormatAntID(ID))));
-}
 
 
 void AntMetadataWorkspace::onAddButtonClicked() {
-	auto column = d_ui->comboBox->currentData(Qt::UserRole+1).value<fmp::AntMetadata::Key::Ptr>();
-	if (!column || d_metadata->selectedAntID() == 0 ) {
-		return;
-	}
-
-	d_metadata->addTimedChange(d_metadata->selectedAntID(),
-	                           ToQString(column->Name()));
-	d_ui->timeView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+	auto index = d_ui->dataView->selectionModel()->selectedRows().front();
+	auto antID = index.data(AntKeyValueBridge::AntIDRole).toInt();
+	auto key = index.data(AntKeyValueBridge::KeyNameRole).toString();
+	d_keyValues->appendDefaultValue(antID,key);
 }
 
 void AntMetadataWorkspace::onRemoveButtonClicked() {
-	auto sModel = d_ui->timeView->selectionModel();
-	qWarning() << "coucou " << sModel->selectedIndexes();
-	if ( sModel->hasSelection() == false ) {
-		return;
+	auto index = d_ui->dataView->selectionModel()->selectedRows().front();
+	auto antID = index.data(AntKeyValueBridge::AntIDRole).toInt();
+	auto key = index.data(AntKeyValueBridge::KeyNameRole).toString();
+	try {
+		auto time = fort::Time::Parse(ToStdString(index.data(AntKeyValueBridge::TimeRole).toString()));
+		d_keyValues->deleteValue(antID,key,time);
+	} catch ( const std::exception & e) {
+		qCritical() << "Could not remove {Ant=" << fm::FormatAntID(antID).c_str()
+		            << ", key=" << key
+		            << ", time=" << index.data(AntKeyValueBridge::TimeRole).toString();
 	}
-	d_metadata->removeTimedChange(sModel->selectedIndexes()[0]);
 }
 
 
@@ -110,4 +102,35 @@ void AntMetadataWorkspace::setUp(const NavigationAction & actions) {
 
 void AntMetadataWorkspace::tearDown(const NavigationAction & actions) {
 
+}
+
+
+void AntMetadataWorkspace::onSelectionChanged() {
+	auto selectionModel = d_ui->dataView->selectionModel();
+
+	if ( selectionModel->hasSelection() == false ) {
+		d_ui->addButton->setEnabled(false);
+		d_ui->removeButton->setEnabled(false);
+		return;
+	}
+
+	auto index = selectionModel->selectedRows().front();
+	if ( index.parent().isValid() == false ) {
+		d_ui->addButton->setEnabled(false);
+		d_ui->removeButton->setEnabled(false);
+		return;
+	}
+	if ( index.parent().parent().isValid() == false ) {
+		d_ui->addButton->setEnabled(true);
+		d_ui->removeButton->setEnabled(false);
+		return;
+	}
+	if ( index.parent().parent().parent().isValid() == false ) {
+		d_ui->addButton->setEnabled(true);
+		d_ui->removeButton->setEnabled(true);
+		return;
+	}
+
+	d_ui->addButton->setEnabled(false);
+	d_ui->removeButton->setEnabled(false);
 }

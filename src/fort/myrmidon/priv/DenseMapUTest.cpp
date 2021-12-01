@@ -16,6 +16,7 @@ class DenseMapUTest : public::testing::Test {};
 
 typedef DenseMap<uint32_t,uint32_t> DM;
 typedef DenseMap<uint32_t,std::shared_ptr<uint32_t>> DMOfPtr;
+
 TEST_F(DenseMapUTest,TestInsertion) {
 	DM map;
 	EXPECT_THROW({
@@ -189,6 +190,91 @@ TEST_F(DenseMapUTest,ConsistencyAndTiming) {
 	    << "std::map mean random access time: " << meanMapTime << "μs "
 	    << " DenseMap mean random access time: " << meanDenseMapTime << "μs";
 #endif
+}
+
+TEST_F(DenseMapUTest,UpperLowerKey) {
+
+	struct TestData {
+		uint32_t Key,ExpectedLower,ExpectedUpper;
+	};
+	 auto performTests =
+		 [](const std::vector<TestData> & testdata,
+		    const DM & m) {
+			 for ( const auto & d : testdata ) {
+				 SCOPED_TRACE("Key: "+std::to_string(d.Key));
+				 bool noError = true;
+				 auto res = m.lower_key(d.Key);
+				 EXPECT_EQ(res == m.cend(),d.ExpectedLower == 0)
+					 << (noError = false);
+				 if ( noError && d.ExpectedLower != 0 ) {
+					 EXPECT_EQ(res->first,d.ExpectedLower);
+				 }
+				 noError = true;
+				 res = m.upper_key(d.Key);
+				 EXPECT_EQ(res == m.cend(),d.ExpectedUpper == 0)
+					 << (noError = false);
+				 if ( noError && d.ExpectedUpper != 0 ) {
+					 EXPECT_EQ(res->first,d.ExpectedUpper);
+				 }
+			 }
+		 };
+
+
+	DM m;
+
+	std::vector<TestData> testdata
+		= {
+		   {0,0,0},
+		   {1,0,0},
+		   {42,0,0},
+	};
+	{
+		SCOPED_TRACE("Empty DenseMap");
+		performTests(testdata,m);
+	}
+
+	m.insert({2,2});
+	m.insert({4,4});
+	m.insert({5,5});
+	m.insert({6,6});
+
+	testdata = {
+		   {0,0,0},
+		   {1,0,2},
+		   {2,2,2},
+		   {3,2,4},
+		   {4,4,4},
+		   {5,5,5},
+		   {6,6,6},
+		   {7,6,0},
+	};
+
+	{
+		SCOPED_TRACE("Not Fully DenseMap");
+		performTests(testdata,m);
+	}
+
+	m.insert({1,1});
+	m.insert({3,3});
+
+	testdata = {
+		   {0,0,0},
+		   {1,1,1},
+		   {2,2,2},
+		   {3,3,3},
+		   {4,4,4},
+		   {5,5,5},
+		   {6,6,6},
+		   {7,6,0},
+	};
+
+
+	{
+		SCOPED_TRACE("Fully DenseMap");
+		performTests(testdata,m);
+	}
+
+
 }
 
 

@@ -27,9 +27,9 @@ set(SRC_FILES Format.cpp
               bridge/TagCloseUpBridge.cpp
 			  bridge/GlobalPropertyBridge.cpp
 			  bridge/ExperimentBridge.cpp
-			  bridge/IdentifiedFrameConcurrentLoader.cpp
+			  bridge/ConcurrentFrameLoader.cpp
 			  bridge/AntShapeTypeBridge.cpp
-			  bridge/AntMetadataBridge.cpp
+			  bridge/AntKeyValueBridge.cpp
 			  bridge/MovieBridge.cpp
 			  bridge/ZoneBridge.cpp
 			  bridge/StatisticsBridge.cpp
@@ -57,7 +57,7 @@ set(SRC_FILES Format.cpp
 			  widget/AntListWidget.cpp
 			  widget/AntShapeTypeEditorWidget.cpp
 			  widget/FrameFinderDialog.cpp
-			  widget/AntMetadataWidget.cpp
+			  widget/KeyTypeListWidget.cpp
 			  widget/TrackingVideoFrame.cpp
 			  widget/TrackingVideoWidget.cpp
 			  widget/TrackingVideoPlayer.cpp
@@ -68,6 +68,7 @@ set(SRC_FILES Format.cpp
 			  widget/CloseUpScroller.cpp
 			  widget/TagCloseUpExplorer.cpp
 			  widget/IdentificationListWidget.cpp
+			  widget/SetAntValueDialog.cpp
 			  workspace/Workspace.cpp
 			  workspace/TagStatisticsWorkspace.cpp
 			  workspace/GeneralWorkspace.cpp
@@ -105,9 +106,9 @@ set(HDR_FILES Format.hpp
 			  bridge/IdentifierBridge.hpp
 			  bridge/AntDisplayBridge.hpp
 			  bridge/ExperimentBridge.hpp
-			  bridge/IdentifiedFrameConcurrentLoader.hpp
+			  bridge/ConcurrentFrameLoader.hpp
 			  bridge/AntShapeTypeBridge.hpp
-			  bridge/AntMetadataBridge.hpp
+			  bridge/AntKeyValueBridge.hpp
 			  bridge/MovieBridge.hpp
 			  bridge/ZoneBridge.hpp
 			  bridge/StatisticsBridge.hpp
@@ -135,7 +136,7 @@ set(HDR_FILES Format.hpp
 			  widget/AntListWidget.hpp
 			  widget/AntShapeTypeEditorWidget.hpp
 			  widget/FrameFinderDialog.hpp
-			  widget/AntMetadataWidget.hpp
+			  widget/KeyTypeListWidget.hpp
 			  widget/TrackingVideoFrame.hpp
 			  widget/TrackingVideoWidget.hpp
 			  widget/TrackingVideoPlayer.hpp
@@ -146,6 +147,7 @@ set(HDR_FILES Format.hpp
 			  widget/CloseUpScroller.hpp
 			  widget/TagCloseUpExplorer.hpp
 			  widget/IdentificationListWidget.hpp
+			  widget/SetAntValueDialog.hpp
 			  workspace/Workspace.hpp
 			  workspace/TagStatisticsWorkspace.cpp
 			  workspace/GeneralWorkspace.cpp
@@ -166,13 +168,14 @@ set(UI_FILES widget/GlobalPropertyWidget.ui
              widget/base/TimeEditorWidget.ui
              widget/AntShapeTypeEditorWidget.ui
              widget/FrameFinderDialog.ui
-             widget/AntMetadataWidget.ui
+             widget/KeyTypeListWidget.ui
              widget/TrackingVideoControl.ui
              widget/ZonesEditorWidget.ui
              widget/CloneShapeDialog.ui
              widget/TagStatisticsWidget.ui
              widget/TagCloseUpExplorer.ui
              widget/IdentificationListWidget.ui
+             widget/SetAntValueDialog.ui
              workspace/GeneralWorkspace.ui
              workspace/TagStatisticsWorkspace.ui
              workspace/IdentificationWorkspace.ui
