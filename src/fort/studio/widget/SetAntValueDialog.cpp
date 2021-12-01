@@ -10,6 +10,7 @@
 SetAntValueDialog::SetAntValueDialog(QWidget *parent)
 	: QDialog(parent)
 	, d_ui(new Ui::SetAntValueDialog)
+	, d_keyValues(nullptr)
 	, d_inTime(fort::Time::SinceEver())
 	, d_outTime(fort::Time::Forever())
 	, d_hasValue(false) {
@@ -37,7 +38,8 @@ SetAntValueDialog::~SetAntValueDialog() {
 }
 
 void SetAntValueDialog::initialize(ExperimentBridge * experiment) {
-	d_ui->keyComboBox->setModel(experiment->antKeyValues()->keyModel());
+	d_keyValues = experiment->antKeyValues();
+	d_ui->keyComboBox->setModel(d_keyValues->keyModel());
 	connect(experiment,&ExperimentBridge::antSelected,
 	        this,[this](quint32 antID) {
 		             setWindowTitle(tr("Set Value for Ant %1").arg(fm::FormatAntID(antID).c_str()));
@@ -85,16 +87,27 @@ void SetAntValueDialog::setOutTime(const fort::Time & v) {
 
 void SetAntValueDialog::showEvent(QShowEvent * event) {
 	QDialog::showEvent(event);
-	QApplication::beep();
+	updateValidatorAndCompleter();
 }
 
 void SetAntValueDialog::updateState() {
 	d_ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(hasTime() && hasKey() && hasValue());
 }
 
+void SetAntValueDialog::updateValidatorAndCompleter() {
+	if ( d_ui->keyComboBox->currentIndex() >= 0 ) {
+		auto type = fm::ValueType(d_ui->keyComboBox->currentData(AntKeyValueBridge::KeyTypeRole).toInt());
+		d_ui->valueEdit->setValidator(d_keyValues->validatorForType(type));
+		d_ui->valueEdit->setCompleter(d_keyValues->completerForType(type));
+	} else {
+		d_ui->valueEdit->setValidator(nullptr);
+		d_ui->valueEdit->setCompleter(nullptr);
+	}
+}
+
 void SetAntValueDialog::on_keyComboBox_currentIndexChanged(int) {
 	d_ui->valueEdit->clear();
-
+	updateValidatorAndCompleter();
 	updateState();
 }
 

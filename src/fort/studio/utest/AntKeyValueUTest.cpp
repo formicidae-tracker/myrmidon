@@ -9,6 +9,9 @@
 
 #include <QTest>
 #include <QSignalSpy>
+#include <QValidator>
+#include <QRegularExpressionValidator>
+#include <QCompleter>
 
 class AntKeyValueUTest : public ::testing::Test {
 protected :
@@ -267,8 +270,90 @@ TEST_F(AntKeyValueUTest,DataModel) {
 	          "false");
 	EXPECT_EQ(ToStdString(timedIndex.siblingAtColumn(2).data().toString()),
 	          fort::Time().Add(-2).Format());
+}
+
+
+void TestValidator(QValidator * validator,
+                   QString value,
+                   QValidator::State expected) {
+	SCOPED_TRACE(ToStdString(value));
+	int pos;
+	EXPECT_EQ(validator->validate(value,pos),
+	          expected);
+}
 
 
 
+TEST_F(AntKeyValueUTest,Validators) {
+	{
+		SCOPED_TRACE("validatorForType(fm::ValueType::BOOL)");
+		TestValidator(bridge->validatorForType(fm::ValueType::BOOL),
+		              "true",
+		              QValidator::Acceptable);
+		TestValidator(bridge->validatorForType(fm::ValueType::BOOL),
+	              "false",
+		              QValidator::Acceptable);
+		TestValidator(bridge->validatorForType(fm::ValueType::BOOL),
+		              "fal",
+		              QValidator::Intermediate);
+		TestValidator(bridge->validatorForType(fm::ValueType::BOOL),
+		              "tru",
+		              QValidator::Intermediate);
+		TestValidator(bridge->validatorForType(fm::ValueType::BOOL),
+		              "fal1",
+		              QValidator::Invalid);
+		TestValidator(bridge->validatorForType(fm::ValueType::BOOL),
+		              "tru1",
+		              QValidator::Invalid);
+	}
+	EXPECT_EQ(ToStdString(bridge->validatorForType(fm::ValueType::INT)->metaObject()->className()),
+	          "QIntValidator");
+	EXPECT_EQ(ToStdString(bridge->validatorForType(fm::ValueType::DOUBLE)->metaObject()->className()),
+	          "QDoubleValidator");
+	EXPECT_EQ(bridge->validatorForType(fm::ValueType::STRING),
+	          nullptr);
+	{
+		SCOPED_TRACE("validatorForType(fm::ValueType::TIME)");
+		auto v = dynamic_cast<QRegularExpressionValidator*>(bridge->validatorForType(fm::ValueType::TIME));
+		ASSERT_TRUE(v != nullptr);
+		EXPECT_EQ(ToStdString(v->regularExpression().errorString()),
+		          "no error");
+		TestValidator(bridge->validatorForType(fm::ValueType::TIME),
+		              "1970-01-01T23:59:59.123456Z",
+		              QValidator::Acceptable);
+		TestValidator(bridge->validatorForType(fm::ValueType::TIME),
+		              "1970-01-01T23:59:59.123456+01:00",
+		              QValidator::Acceptable);
+		TestValidator(bridge->validatorForType(fm::ValueType::TIME),
+		              "1970-01-01T23:59:59.123456-01:30",
+		              QValidator::Acceptable);
+		TestValidator(bridge->validatorForType(fm::ValueType::TIME),
+		              "1970-01-01T23:59",
+		              QValidator::Intermediate);
+		TestValidator(bridge->validatorForType(fm::ValueType::TIME),
+		              "1970-01-01T33:59:59.123456-01:30",
+		              QValidator::Invalid);
+	}
+
+
+}
+
+
+TEST_F(AntKeyValueUTest,Completer) {
+	EXPECT_EQ(bridge->completerForType(fm::ValueType::INT),
+	          nullptr);
+	EXPECT_EQ(bridge->completerForType(fm::ValueType::DOUBLE),
+	          nullptr);
+
+	EXPECT_EQ(bridge->completerForType(fm::ValueType::TIME),
+	          nullptr);
+	{
+		SCOPED_TRACE("completerForType(fm::ValueType::BOOL)");
+		ASSERT_FALSE(bridge->completerForType(fm::ValueType::BOOL) == nullptr);
+		auto m = bridge->completerForType(fm::ValueType::BOOL)->model();
+		EXPECT_EQ(m->rowCount(),2);
+		EXPECT_EQ(ToStdString(m->index(0,0).data().toString()),"false");
+		EXPECT_EQ(ToStdString(m->index(1,0).data().toString()),"true");
+	}
 
 }

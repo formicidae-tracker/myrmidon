@@ -13,6 +13,8 @@ class QAbstractItemModel;
 
 class DataModel;
 class KeyModel;
+class QValidator;
+class QCompleter;
 
 class AntKeyValueBridge : public GlobalBridge {
 	Q_OBJECT
@@ -32,6 +34,9 @@ public :
 	void initialize(ExperimentBridge * experiment) override;
 
 	const fm::Value & defaultValue(const QString & key) const;
+
+	QValidator * validatorForType(fm::ValueType type);
+	QCompleter * completerForType(fm::ValueType type);
 
 public slots:
 	void setKey(const QString & key, const fm::Value & defaultValue);
@@ -57,8 +62,17 @@ protected:
 	void setUpExperiment() override;
 	void tearDownExperiment() override;
 
+
 private:
+	void pushCompletion(const fm::Value & value);
+	void initializeCompletions();
+	void clearCompletions();
+
 	QStandardItemModel                     * d_typeModel;
 	KeyModel                               * d_keyModel;
 	DataModel                              * d_dataModel;
+	std::vector<QValidator*>                 d_validators;
+	std::vector<QCompleter*>                 d_completers;
+	QStandardItemModel                     * d_stringCompletion;
+	std::set<std::string>                    d_stringValues;
 };

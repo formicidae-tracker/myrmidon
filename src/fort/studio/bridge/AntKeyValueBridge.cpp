@@ -2,6 +2,11 @@
 
 #include <QStandardItemModel>
 #include <QDebug>
+#include <QRegularExpressionValidator>
+#include <QIntValidator>
+#include <QDoubleValidator>
+#include <QCompleter>
+
 #include <fort/studio/Format.hpp>
 
 
@@ -1063,6 +1068,25 @@ AntKeyValueBridge::AntKeyValueBridge(QObject * parent)
 	connect(d_dataModel,&QAbstractItemModel::dataChanged,
 	        this,&AntKeyValueBridge::markModified);
 
+	d_validators =
+		{
+		 new QRegularExpressionValidator(QRegularExpression("true|false"),this),
+		 new QIntValidator(this),
+		 new QDoubleValidator(this),
+		 nullptr,
+		 new QRegularExpressionValidator(QRegularExpression("\\d{4}-\\d{2}-\\d{2}T[0-2]\\d:[0-5]\\d:[0-5]\\d(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})"),this)
+		};
+
+	d_stringCompletion = new QStandardItemModel(this);
+	d_completers =
+		{
+		 new QCompleter({"false","true"},this),
+		 nullptr,
+		 nullptr,
+		 new QCompleter(d_stringCompletion,this),
+		 nullptr,
+		};
+
 }
 
 AntKeyValueBridge::~AntKeyValueBridge() {
@@ -1111,6 +1135,7 @@ void AntKeyValueBridge::setValue(quint32 antID,
 
 	if ( d_dataModel->setValue(antID,key,time,value) == true ) {
 		setModified(true);
+		pushCompletion(value);
 	}
 }
 
@@ -1160,6 +1185,7 @@ void AntKeyValueBridge::initialize(ExperimentBridge * experiment) {
 }
 
 void AntKeyValueBridge::tearDownExperiment() {
+	clearCompletions();
 	d_dataModel->tearDownExperiment();
 	d_keyModel->tearDownExperiment();
 }
@@ -1170,6 +1196,7 @@ void AntKeyValueBridge::setUpExperiment() {
 	}
 	d_keyModel->setUpExperiment(d_experiment);
 	d_dataModel->setUpExperiment(d_experiment);
+	initializeCompletions();
 }
 
 void AntKeyValueBridge::markModified() {
@@ -1178,4 +1205,50 @@ void AntKeyValueBridge::markModified() {
 
 const fm::Value & AntKeyValueBridge::defaultValue(const QString & key) const {
 	return d_keyModel->defaultValue(key);
+}
+
+
+QValidator * AntKeyValueBridge::validatorForType(fm::ValueType type) {
+	try {
+		return d_validators.at(int(type));
+	} catch ( const std::exception & ) {
+	}
+	return nullptr;
+}
+
+QCompleter * AntKeyValueBridge::completerForType(fm::ValueType type) {
+	try {
+		return d_completers.at(int(type));
+	} catch ( const std::exception & ) {
+	}
+	return nullptr;
+}
+
+void AntKeyValueBridge::pushCompletion(const fm::Value & value) {
+	if ( fm::ValueUtils::Type(value) != fm::ValueType::STRING ) {
+		return;
+	}
+	auto s = std::get<std::string>(value);
+	if ( d_stringValues.count(s) != 0 ) {
+		return;
+	}
+	d_stringValues.insert(s);
+	d_stringCompletion->appendRow(new QStandardItem(ToQString(s)));
+}
+void AntKeyValueBridge::initializeCompletions() {
+	if ( d_experiment == nullptr ) {
+		return;
+	}
+	for ( const auto & [antID,ant] : d_experiment->Identifier()->Ants() ) {
+		for ( const auto & [name,values] : ant->DataMap() ) {
+			for ( const auto & [time, value] : values ) {
+				pushCompletion(value);
+			}
+		}
+	}
+}
+
+void AntKeyValueBridge::clearCompletions() {
+	d_stringValues.clear();
+	d_stringCompletion->removeRows(0,d_stringCompletion->rowCount());
 }
