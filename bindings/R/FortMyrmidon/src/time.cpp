@@ -190,7 +190,7 @@ fort::Time fmTimeSinceEver() {
 //' @family fmTime methods
 // [[Rcpp::export]]
 fort::Time fmTimeParse(const std::string  & input) {
-	return fort::Time::SinceEver();
+	return fort::Time::Parse(input);
 }
 
 
