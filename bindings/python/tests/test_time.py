@@ -20,7 +20,6 @@ class TimeTestCase(unittest.TestCase):
         self.assertFalse(m.Time.SinceEver().IsForever())
         self.assertTrue(m.Time.SinceEver().IsSinceEver())
 
-
     def test_has_math_support(self):
         t = m.Time.Now().Round(m.Duration.Second)
 
@@ -144,3 +143,16 @@ class TimeTestCase(unittest.TestCase):
         self.assertFalse(m.Time.SinceEver() > m.Time.SinceEver())
         self.assertFalse(m.Time.SinceEver() < m.Time.SinceEver())
         self.assertTrue(m.Time.SinceEver() == m.Time.SinceEver())
+
+    def test_time_parsing(self):
+
+        self.assertEqual(m.Time.Parse("1970-01-02T01:02:03.004Z"),
+                         m.Time().Add(25 * m.Duration.Hour
+                                      + 2 * m.Duration.Minute
+                                      + 3 * m.Duration.Second
+                                      + 4 * m.Duration.Millisecond))
+
+        with self.assertRaises(RuntimeError):
+            m.Time.Parse("-∞")
+        with self.assertRaises(RuntimeError):
+            m.Time.Parse("+∞")
