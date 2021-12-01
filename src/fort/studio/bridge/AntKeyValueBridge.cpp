@@ -96,7 +96,6 @@ public:
 		int destPos = dest - d_keys.begin();
 		int finalPos = destPos > srcPos ? destPos - 1 : destPos;
 		if ( finalPos != srcPos ) {
-			qInfo() << " Moving " << srcPos << "-" << srcPos << "to" << destPos;
 			beginMoveRows(QModelIndex(),
 			              srcPos,
 			              srcPos,
@@ -401,7 +400,7 @@ public:
 			if ( pPointer->Value < 0 ) {
 				int value = row;
 				if ( hasDefaultValue(*ant,keyNameAt(pPointer->Key)) == true ) {
-					value + 1;
+					value += 1;
 				}
 				return createIndex(row,column,
 				                   d_pointers.at(std::make_tuple(ant,pPointer->Key,value)).get());
@@ -445,8 +444,10 @@ public:
 		if ( p->Key >= 0 ) {
 			try {
 				auto ant = d_ants[p->Ant].get();
-				return std::distance(d_pointers.upper_bound(std::make_tuple(ant,p->Key,-1)),
-				                     d_pointers.lower_bound(std::make_tuple(ant,p->Key+1,-1)));
+
+				auto count = std::distance(d_pointers.upper_bound(std::make_tuple(ant,p->Key,-1)),
+				                           d_pointers.lower_bound(std::make_tuple(ant,p->Key+1,-1)));
+				return count;
 			} catch (const std::exception &) {
 				return 0;
 			}
@@ -461,6 +462,7 @@ public:
 	QVariant data(const QModelIndex & index, int role) const override {
 		switch(role) {
 		case Qt::DisplayRole:
+		case Qt::EditRole:
 			return displayData(index);
 		case AntKeyValueBridge::KeyTypeRole:
 			return keyTypeData(index);
@@ -538,7 +540,7 @@ private slots:
 		}
 		auto & ant = **fi;
 		auto keyName = keyNameAt(key);
-		int valueIdx = valueIndex(ant,keyName,time);
+		bool added = hasValue(ant,keyName,time) == false;
 		try {
 			qInfo() << "[AntKeyValueBridge]: Ant{ID: " << fm::FormatAntID(antID).c_str()
 			        << "}.SetValue(key =" << keyName.c_str()
@@ -558,14 +560,16 @@ private slots:
 		if ( time.IsInfinite() ) {
 			auto defaultValueIndex = index(key,3,index(fi-d_ants.cbegin(),0));
 			emit dataChanged(defaultValueIndex,defaultValueIndex);
-			return true;
-		}
-		if ( valueIdx >= 0 ) {
-			auto i = index(valueIdx,3,index(key,0,index(fi-d_ants.cbegin(),0)));
+		} else if( added == false ) {
+			const auto & data = ant.DataMap().at(keyName);
+			int row = valueRow(ant,keyName,time);
+			auto i = index(row,3,index(key,0,index(fi-d_ants.cbegin(),0)));
 			emit dataChanged(i,i);
-			return true;
 		}
-		resetValueModel(*fi,fi - d_ants.begin(),keyName,key);
+
+		if ( added == true ) {
+			resetValueModel(*fi,fi - d_ants.cbegin(),keyName,key);
+		}
 		return true;
 	}
 
@@ -598,7 +602,6 @@ private slots:
 		if ( time.IsInfinite() ) {
 			auto defaultValueIndex = index(key,3,index(fi-d_ants.begin(),0));
 			emit dataChanged(defaultValueIndex,defaultValueIndex);
-			return true;
 		}
 		resetValueModel(*fi,fi - d_ants.cbegin(),keyName,key);
 		return true;
@@ -647,16 +650,24 @@ private:
 		if ( p->Value < 0 ) {
 			return false;
 		}
-		try {
-			auto newTime = fort::Time::Parse(ToStdString(value));
 
-			auto & ant = *d_ants.at(p->Ant);
+		try {
+			const auto & ant = *d_ants.at(p->Ant);
+			int key = p->Key;
+			auto newTime = fort::Time::Parse(ToStdString(value));
 			auto [oldTime,currentValue] = ant.DataMap().at(keyNameAt(p->Key)).at(p->Value);
-			if ( deleteValue(ant.AntID(),p->Key,oldTime) == false ) {
+
+			qInfo() << "Changing time of {Ant=" << fm::FormatAntID(ant.AntID()).c_str()
+			        << ", key=" << keyNameAt(p->Key).c_str()
+			        << ", time=" << ToQString(oldTime)
+			        << "} to" << ToQString(newTime);
+
+			if ( deleteValue(ant.AntID(),key,oldTime) == false ) {
 				return false;
 			}
-			return setValue(ant.AntID(),p->Key,newTime,currentValue);
-		} catch(const std::exception & ) {
+			return setValue(ant.AntID(),key,newTime,currentValue);
+		} catch(const std::exception & e) {
+			qCritical() << "[AntKeyValueBridge]: Could set new time " << value << ":" << e.what();
 		}
 		return false;
 	}
@@ -697,7 +708,6 @@ private:
 			auto v = fmp::AntMetadata::FromString(keyType,ToStdString(value));
 			return setValue(ant.AntID(),p->Key,fort::Time::SinceEver(),v);
 		} catch(const std::exception & e) {
-			qInfo() << "exception " << e.what();
 		}
 		return false;
 	}
@@ -717,11 +727,11 @@ private:
 		count = 0 ;
 		try {
 			const auto & values = ant->DataMap().at(keyName);
-			int count = values.size();
+			count = values.size();
 			if ( count > 0 && values.front().first.IsInfinite() ) {
 				count -= 1;
 			}
-		} catch ( const std::exception & ) {
+		} catch ( const std::exception & e) {
 		}
 		if ( count == 0 ) {
 			return;
@@ -782,9 +792,9 @@ private:
 	}
 
 
-	static int valueIndex(const fmp::Ant & ant,
-	                      const std::string & keyName,
-	                      const fort::Time & time) {
+	static int valueRow(const fmp::Ant & ant,
+	                    const std::string & keyName,
+	                    const fort::Time & time) {
 		try {
 			const auto & values = ant.DataMap().at(keyName);
 			auto fi = std::lower_bound(values.begin(),
@@ -796,7 +806,7 @@ private:
 			                           });
 			if ( fi != values.cend()
 			     && fi->first == time) {
-				return fi - values.cbegin();
+				return fi - values.cbegin() + values.front().first.IsSinceEver() ? -1 : 0;
 			}
 		} catch ( const std::exception & ) {
 		}
@@ -806,7 +816,19 @@ private:
 	static bool hasValue(const fmp::Ant & ant,
 	                     const std::string & keyName,
 	                     const fort::Time & time) {
-		return valueIndex(ant,keyName,time) >= 0;
+		try {
+			const auto & values = ant.DataMap().at(keyName);
+			auto fi = std::lower_bound(values.begin(),
+			                           values.end(),
+			                           time,
+			                           [](const fmp::AntTimedValue & v,
+			                              const fort::Time & t) {
+				                           return v.first < t;
+			                           });
+			return fi != values.cend() && fi->first == time;
+		} catch ( const std::exception &) {
+		}
+		return false;
 	}
 
 	static bool hasDefaultValue(const fmp::Ant & ant,
