@@ -31,6 +31,8 @@ public :
 
 	void initialize(ExperimentBridge * experiment) override;
 
+	const fm::AntStaticValue & defaultValue(const QString & key) const;
+
 public slots:
 	void setKey(const QString & key, const fm::AntStaticValue & defaultValue);
 	void removeKey(const QString & key);

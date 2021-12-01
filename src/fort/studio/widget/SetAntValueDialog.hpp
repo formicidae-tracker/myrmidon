@@ -37,6 +37,9 @@ public:
 
 	QString key() const;
 
+	bool hasTime() const;
+	bool hasKey() const;
+
 public slots:
 	void setInTime(const fort::Time & v);
 	void setOutTime(const fort::Time & v);

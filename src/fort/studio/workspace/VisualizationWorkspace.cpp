@@ -4,6 +4,7 @@
 #include <fort/studio/bridge/ExperimentBridge.hpp>
 #include <fort/studio/bridge/MovieBridge.hpp>
 #include <fort/studio/bridge/UniverseBridge.hpp>
+#include <fort/studio/bridge/AntKeyValueBridge.hpp>
 
 #include <fort/studio/widget/TrackingVideoPlayer.hpp>
 #include <fort/studio/widget/AntListWidget.hpp>
@@ -461,9 +462,8 @@ void VisualizationWorkspace::updateActionsStates() {
 	const auto & outTime = d_setValueDialog->outTime();
 	d_markIn->setEnabled(time < outTime && time.Equals(inTime) == false );
 	d_markOut->setEnabled(time > inTime && time.Equals(outTime) == false );
-	bool hasAMarker = inTime.IsInfinite() == false || outTime.IsInfinite() == false;
-	d_clearMarkers->setEnabled(hasAMarker);
-	d_setValue->setEnabled(d_experiment->selectedAntID() != 0 && hasAMarker);
+	d_clearMarkers->setEnabled(d_setValueDialog->hasTime());
+	d_setValue->setEnabled(d_experiment->selectedAntID() != 0 && d_setValueDialog->hasTime());
 }
 
 void VisualizationWorkspace::onActionSetInTime() {
@@ -486,5 +486,25 @@ void VisualizationWorkspace::onActionClearMarkers() {
 }
 
 void VisualizationWorkspace::onActionSetValue() {
-	d_setValueDialog->exec();
+	d_videoPlayer->pause();
+	if ( d_setValueDialog->exec() == QDialog::Rejected
+	     || d_setValueDialog->hasTime() == false
+	     || d_setValueDialog->hasKey() == false
+	     || d_setValueDialog->hasValue() == false) {
+		return;
+	}
+	auto keyValues = d_experiment->antKeyValues();
+	keyValues->setValue(d_experiment->selectedAntID(),
+	                    d_setValueDialog->key(),
+	                    d_setValueDialog->inTime(),
+	                    d_setValueDialog->value());
+
+	if ( d_setValueDialog->outTime().IsInfinite() == false ) {
+		keyValues->setValue(d_experiment->selectedAntID(),
+		                    d_setValueDialog->key(),
+		                    d_setValueDialog->outTime(),
+		                    keyValues->defaultValue(d_setValueDialog->key()));
+	}
+
+	onActionClearMarkers();
 }

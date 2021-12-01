@@ -125,8 +125,8 @@ public:
 
 	const fm::AntStaticValue & defaultValue(int key) const {
 		if ( key < 0 || key >= d_keys.size() ) {
-			static fm::AntStaticValue empty;
-			return empty;
+			static fm::AntStaticValue invalid = fort::Time::Forever();
+			return invalid;
 		}
 		return d_keys.at(key)->DefaultValue();
 	}
@@ -1176,4 +1176,8 @@ void AntKeyValueBridge::setUpExperiment() {
 
 void AntKeyValueBridge::markModified() {
 	setModified(true);
+}
+
+const fm::AntStaticValue & AntKeyValueBridge::defaultValue(const QString & key) const {
+	return d_keyModel->defaultValue(key);
 }
