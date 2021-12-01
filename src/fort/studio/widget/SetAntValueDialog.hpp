@@ -6,6 +6,7 @@
 #include <fort/studio/MyrmidonTypes/Value.hpp>
 
 class ExperimentBridge;
+class AntKeyValueBridge;
 
 namespace Ui {
 class SetAntValueDialog;
@@ -48,7 +49,7 @@ private slots:
 	void updateState();
 	void on_keyComboBox_currentIndexChanged(int);
 	void on_valueEdit_textChanged(const QString & text);
-
+	void updateValidatorAndCompleter();
 
 signals:
 	void inTimeChanged(const fort::Time &);
@@ -60,6 +61,7 @@ protected:
 	void showEvent(QShowEvent * event) override;
 
     Ui::SetAntValueDialog * d_ui;
+	AntKeyValueBridge     * d_keyValues;
 	fort::Time              d_inTime,d_outTime;
 	fm::Value               d_value;
 	bool                    d_hasValue;
