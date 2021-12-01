@@ -7,7 +7,7 @@
 #include <fort/time/Time.hpp>
 
 #include <fort/myrmidon/types/Typedefs.hpp>
-#include <fort/myrmidon/types/AntStaticValue.hpp>
+#include <fort/myrmidon/types/Value.hpp>
 
 
 namespace fort {
@@ -123,7 +123,7 @@ public:
 	 *
 	 * @return a Matcher that matches Ant with key is value.
 	 */
-	static Ptr AntMetaData(const std::string & key, const AntStaticValue & value);
+	static Ptr AntMetaData(const std::string & key, const Value & value);
 
 	/**
 	 * Matches a distance between two Ants

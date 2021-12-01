@@ -159,7 +159,7 @@ int IOUtils::SaveAntDisplayState(Ant::DisplayState s) {
 }
 
 
-AntStaticValue IOUtils::LoadAntStaticValue(const pb::AntStaticValue & pb) {
+Value IOUtils::LoadValue(const pb::AntStaticValue & pb) {
 	switch(pb.type()) {
 	case 0:
 		return pb.boolvalue();
@@ -176,7 +176,7 @@ AntStaticValue IOUtils::LoadAntStaticValue(const pb::AntStaticValue & pb) {
 	}
 }
 
-void IOUtils::SaveAntStaticValue(pb::AntStaticValue * pb, const AntStaticValue & value) {
+void IOUtils::SaveValue(pb::AntStaticValue * pb, const Value & value) {
 	pb->Clear();
 	pb->set_type(pb::AntStaticValue_Type(value.index()));
 	switch ( value.index() ) {
@@ -196,7 +196,7 @@ void IOUtils::SaveAntStaticValue(pb::AntStaticValue * pb, const AntStaticValue &
 		std::get<Time>(value).ToTimestamp(pb->mutable_timevalue());
 		break;
 	default:
-		throw std::logic_error("Unknown AntStaticValue index " + std::to_string(value.index()));
+		throw std::logic_error("Unknown Value index " + std::to_string(value.index()));
 	}
 }
 
@@ -220,7 +220,7 @@ void IOUtils::LoadAnt(Experiment & e, const fort::myrmidon::pb::AntDescription &
 		if ( v.has_time() ) {
 			time = Time::FromTimestamp(v.time());
 		}
-		antData[v.name()].push_back(std::make_pair(time,LoadAntStaticValue(v.value())));
+		antData[v.name()].push_back(std::make_pair(time,LoadValue(v.value())));
 	}
 	ant->SetValues(antData);
 }
@@ -249,7 +249,7 @@ void IOUtils::SaveAnt(fort::myrmidon::pb::AntDescription * pb, const Ant & ant) 
 			if ( time.IsSinceEver() == false ) {
 				time.ToTimestamp(vPb->mutable_time());
 			}
-			SaveAntStaticValue(vPb->mutable_value(),value);
+			SaveValue(vPb->mutable_value(),value);
 		}
 	}
 }
@@ -417,7 +417,7 @@ void IOUtils::LoadExperiment(Experiment & e,
 	}
 
 	for (const auto & column : pb.antmetadata() ) {
-		auto defaultValue = LoadAntStaticValue(column.defaultvalue());
+		auto defaultValue = LoadValue(column.defaultvalue());
 		auto c = e.SetMetaDataKey(column.name(),defaultValue);
 	}
 }
@@ -447,7 +447,7 @@ void IOUtils::SaveExperiment(fort::myrmidon::pb::Experiment * pb, const Experime
 	for ( const auto & [name,key] : e.AntMetadataPtr()->Keys() ) {
 		auto cPb = pb->add_antmetadata();
 		cPb->set_name(key->Name());
-		SaveAntStaticValue(cPb->mutable_defaultvalue(),key->DefaultValue());
+		SaveValue(cPb->mutable_defaultvalue(),key->DefaultValue());
 	}
 
 }

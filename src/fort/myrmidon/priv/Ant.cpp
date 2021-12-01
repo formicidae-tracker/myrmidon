@@ -79,16 +79,17 @@ Ant::DisplayState Ant::DisplayStatus() const {
 	return d_displayState;
 }
 
-const AntStaticValue & Ant::GetValue(const std::string & name,
+const Value & Ant::GetValue(const std::string & name,
                                      const Time & time) const {
 	return d_compiledData.At(name,time);
 }
 
-AntStaticValue Ant::GetBaseValue(const std::string & name) const {
+Value Ant::GetBaseValue(const std::string & name) const {
 	const auto & values = d_data.at(name);
 	auto it = std::find_if(values.cbegin(),
 	                       values.cend(),
-	                       [](const AntTimedValue & item ) {
+	                       []
+	                       (const TimedValue & item ) {
 		                       return item.first.IsSinceEver();
 	                       });
 	if ( it == values.cend() ) {
@@ -97,18 +98,18 @@ AntStaticValue Ant::GetBaseValue(const std::string & name) const {
 	return it->second;
 }
 
-std::vector<AntTimedValue>::iterator Ant::Find(const AntDataMap::iterator & iter,
+std::vector<TimedValue>::iterator Ant::Find(const AntDataMap::iterator & iter,
                                                const Time & time) {
 	return std::find_if(iter->second.begin(),
 	                    iter->second.end(),
-	                    [time]( const AntTimedValue & tValue) -> bool {
+	                    [time]( const TimedValue & tValue) -> bool {
 		                    return time.Equals(tValue.first);
 	                    });
 }
 
 
 void Ant::SetValue(const std::string & name,
-                   const AntStaticValue & value,
+                   const Value & value,
                    const Time & time,
                    bool noOverwrite) {
 	if ( time.IsForever() ) {
@@ -118,10 +119,12 @@ void Ant::SetValue(const std::string & name,
 	if ( fi == d_metadata->Keys().end() ) {
 		throw std::out_of_range("Unknown meta data key '" + name + "'");
 	}
-	AntMetadata::CheckType(fi->second->Type(),value);
+	if ( ValueUtils::Type(value) != fi->second->Type() ) {
+		throw std::runtime_error("Value is not of the right type");
+	}
 	auto vi = d_data.find(name);
 	if ( vi == d_data.end() ) {
-		auto res = d_data.insert(std::make_pair(name,std::vector<AntTimedValue>()));
+		auto res = d_data.insert(std::make_pair(name,std::vector<TimedValue>()));
 		vi = res.first;
 	}
 	auto ti = Find(vi,time);
@@ -134,7 +137,7 @@ void Ant::SetValue(const std::string & name,
 		vi->second.push_back(std::make_pair(time,value));
 		std::sort(vi->second.begin(),
 		          vi->second.end(),
-		          [](const AntTimedValue & a, const AntTimedValue & b) -> bool {
+		          [](const TimedValue & a, const TimedValue & b) -> bool {
 			          return a.first < b.first;
 		          });
 	}
@@ -146,7 +149,7 @@ void Ant::SetValues(const AntDataMap & map) {
 	for ( auto & [name,tValues] : d_data ) {
 		std::sort(tValues.begin(),
 		          tValues.end(),
-		          [](const AntTimedValue & a, const AntTimedValue & b) -> bool {
+		          [](const TimedValue & a, const TimedValue & b) -> bool {
 			          return a.first < b.first;
 		          });
 	}
@@ -176,7 +179,7 @@ const AntDataMap & Ant::DataMap() const {
 }
 
 void Ant::CompileData() {
-	std::map<std::string,AntStaticValue> defaults;
+	std::map<std::string,Value> defaults;
 	for ( const auto & [name,column] : d_metadata->Keys() ) {
 		defaults.insert(std::make_pair(name,column->DefaultValue()));
 	}
@@ -197,7 +200,7 @@ void Ant::CompileData() {
 
 }
 
-const std::map<Time,AntStaticValue> & Ant::GetValues(const std::string & key) const {
+const std::map<Time,Value> & Ant::GetValues(const std::string & key) const {
 	try {
 		return d_compiledData.Values(key);
 	} catch ( const std::out_of_range & ) {

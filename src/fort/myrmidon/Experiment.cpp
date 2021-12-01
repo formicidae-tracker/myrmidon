@@ -209,7 +209,7 @@ void Experiment::DeleteAntShapeType(AntShapeTypeID antShapeTypeID) {
 
 
 void Experiment::SetMetaDataKey(const std::string & name,
-                                AntStaticValue defaultValue) {
+                                Value defaultValue) {
 	d_p->Get().SetMetaDataKey(name,defaultValue);
 }
 
@@ -218,9 +218,9 @@ void Experiment::DeleteMetaDataKey(const std::string & key) {
 }
 
 
-std::map<std::string,AntStaticValue>
+std::map<std::string,Value>
 Experiment::MetaDataKeys() const {
-	std::map<std::string,AntStaticValue> res;
+	std::map<std::string,Value> res;
 	for ( const auto & [name,key] : d_p->Get().AntMetadataPtr()->Keys() ) {
 		res.insert(std::make_pair(name,key->DefaultValue()));
 	}

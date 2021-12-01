@@ -82,7 +82,7 @@ set(SRC_FILES Format.cpp
 
 set(HDR_FILES Format.hpp
               MyrmidonTypes/Ant.hpp
-              MyrmidonTypes/AntMetadata.hpp
+              MyrmidonTypes/Value.hpp
               MyrmidonTypes/AntShapeType.hpp
               MyrmidonTypes/Color.hpp
               MyrmidonTypes/Conversion.hpp

@@ -6,7 +6,7 @@
 
 #include <google/protobuf/message.h>
 
-#include <fort/myrmidon/types/AntStaticValue.hpp>
+#include <fort/myrmidon/types/Value.hpp>
 #include <fort/myrmidon/types/TagStatistics.hpp>
 
 namespace fort {
@@ -74,12 +74,12 @@ class AntInteraction;
 #define EXPECT_SHAPE_EQ(a,b) EXPECT_PRED_FORMAT2(AssertShapeEqual,a,b)
 
 
-::testing::AssertionResult AssertAntStaticValueEqual(const char * aExpr,
-                                                     const char * bExpr,
-                                                     const fort::myrmidon::AntStaticValue &a,
-                                                     const fort::myrmidon::AntStaticValue &b);
+::testing::AssertionResult AssertValueEqual(const char * aExpr,
+                                               const char * bExpr,
+                                               const fort::myrmidon::Value &a,
+                                               const fort::myrmidon::Value &b);
 
-#define EXPECT_ANT_STATIC_VALUE_EQ(a,b) EXPECT_PRED_FORMAT2(AssertAntStaticValueEqual,a,b)
+#define EXPECT_VALUE_EQ(a,b) EXPECT_PRED_FORMAT2(AssertValueEqual,a,b)
 
 ::testing::AssertionResult AssertAABBAlmostEqual(const char * aExpr,
                                                  const char * bExpr,

@@ -54,10 +54,9 @@ const fort::Time & SetAntValueDialog::outTime() const {
 	return d_outTime;
 }
 
-const fm::AntStaticValue & SetAntValueDialog::value() const {
+const fm::Value & SetAntValueDialog::value() const {
 	return d_value;
 }
-
 
 
 QString SetAntValueDialog::key() const {
@@ -105,8 +104,8 @@ void SetAntValueDialog::on_valueEdit_textChanged(const QString & text) {
 		return;
 	}
 	try {
-		auto type = fm::AntMetaDataType(d_ui->keyComboBox->currentData(AntKeyValueBridge::KeyTypeRole).toInt());
-		d_value = fmp::AntMetadata::FromString(type,text.toUtf8().constData());
+		auto type = fm::ValueType(d_ui->keyComboBox->currentData(AntKeyValueBridge::KeyTypeRole).toInt());
+		d_value = fm::ValueUtils::Parse(type,text.toUtf8().constData());
 		setHasValue(true);
 	} catch ( const std::exception & ) {
 		setHasValue(false);

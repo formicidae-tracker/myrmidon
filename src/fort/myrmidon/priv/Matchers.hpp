@@ -7,7 +7,7 @@
 
 #include <fort/myrmidon/types/Typedefs.hpp>
 #include <fort/myrmidon/types/Collision.hpp>
-#include <fort/myrmidon/types/AntStaticValue.hpp>
+#include <fort/myrmidon/types/Value.hpp>
 
 #include "ForwardDeclaration.hpp"
 
@@ -26,7 +26,7 @@ public:
 
 	static Ptr AntIDMatcher(AntID ID);
 
-	static Ptr AntColumnMatcher(const std::string & name, const AntStaticValue & value);
+	static Ptr AntColumnMatcher(const std::string & name, const Value & value);
 
 	static Ptr AntDistanceSmallerThan(double distance);
 

@@ -11,64 +11,64 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// pfmAntStaticValueType
-int pfmAntStaticValueType(const fort::myrmidon::AntStaticValue& v);
-RcppExport SEXP _FortMyrmidon_pfmAntStaticValueType(SEXP vSEXP) {
+// pfmValueType
+int pfmValueType(const fort::myrmidon::Value& v);
+RcppExport SEXP _FortMyrmidon_pfmValueType(SEXP vSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const fort::myrmidon::AntStaticValue& >::type v(vSEXP);
-    rcpp_result_gen = Rcpp::wrap(pfmAntStaticValueType(v));
+    Rcpp::traits::input_parameter< const fort::myrmidon::Value& >::type v(vSEXP);
+    rcpp_result_gen = Rcpp::wrap(pfmValueType(v));
     return rcpp_result_gen;
 END_RCPP
 }
-// pfmAntStaticBool
-fort::myrmidon::AntStaticValue pfmAntStaticBool();
-RcppExport SEXP _FortMyrmidon_pfmAntStaticBool() {
+// pfmBool
+fort::myrmidon::Value pfmBool();
+RcppExport SEXP _FortMyrmidon_pfmBool() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(pfmAntStaticBool());
+    rcpp_result_gen = Rcpp::wrap(pfmBool());
     return rcpp_result_gen;
 END_RCPP
 }
-// pfmAntStaticInt
-fort::myrmidon::AntStaticValue pfmAntStaticInt();
-RcppExport SEXP _FortMyrmidon_pfmAntStaticInt() {
+// pfmInt
+fort::myrmidon::Value pfmInt();
+RcppExport SEXP _FortMyrmidon_pfmInt() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(pfmAntStaticInt());
+    rcpp_result_gen = Rcpp::wrap(pfmInt());
     return rcpp_result_gen;
 END_RCPP
 }
-// pfmAntStaticDouble
-fort::myrmidon::AntStaticValue pfmAntStaticDouble();
-RcppExport SEXP _FortMyrmidon_pfmAntStaticDouble() {
+// pfmDouble
+fort::myrmidon::Value pfmDouble();
+RcppExport SEXP _FortMyrmidon_pfmDouble() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(pfmAntStaticDouble());
+    rcpp_result_gen = Rcpp::wrap(pfmDouble());
     return rcpp_result_gen;
 END_RCPP
 }
-// pfmAntStaticString
-fort::myrmidon::AntStaticValue pfmAntStaticString();
-RcppExport SEXP _FortMyrmidon_pfmAntStaticString() {
+// pfmString
+fort::myrmidon::Value pfmString();
+RcppExport SEXP _FortMyrmidon_pfmString() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(pfmAntStaticString());
+    rcpp_result_gen = Rcpp::wrap(pfmString());
     return rcpp_result_gen;
 END_RCPP
 }
-// pfmAntStaticTime
-fort::myrmidon::AntStaticValue pfmAntStaticTime();
-RcppExport SEXP _FortMyrmidon_pfmAntStaticTime() {
+// pfmTime
+fort::myrmidon::Value pfmTime();
+RcppExport SEXP _FortMyrmidon_pfmTime() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(pfmAntStaticTime());
+    rcpp_result_gen = Rcpp::wrap(pfmTime());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -202,13 +202,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // fmMatcherAntMetaData
-fort::myrmidon::Matcher::Ptr fmMatcherAntMetaData(const std::string& key, const fort::myrmidon::AntStaticValue& value);
+fort::myrmidon::Matcher::Ptr fmMatcherAntMetaData(const std::string& key, const fort::myrmidon::Value& value);
 RcppExport SEXP _FortMyrmidon_fmMatcherAntMetaData(SEXP keySEXP, SEXP valueSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::string& >::type key(keySEXP);
-    Rcpp::traits::input_parameter< const fort::myrmidon::AntStaticValue& >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< const fort::myrmidon::Value& >::type value(valueSEXP);
     rcpp_result_gen = Rcpp::wrap(fmMatcherAntMetaData(key, value));
     return rcpp_result_gen;
 END_RCPP
@@ -548,12 +548,12 @@ RcppExport SEXP _rcpp_module_boot_utestdata();
 RcppExport SEXP _rcpp_module_boot_zone();
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_FortMyrmidon_pfmAntStaticValueType", (DL_FUNC) &_FortMyrmidon_pfmAntStaticValueType, 1},
-    {"_FortMyrmidon_pfmAntStaticBool", (DL_FUNC) &_FortMyrmidon_pfmAntStaticBool, 0},
-    {"_FortMyrmidon_pfmAntStaticInt", (DL_FUNC) &_FortMyrmidon_pfmAntStaticInt, 0},
-    {"_FortMyrmidon_pfmAntStaticDouble", (DL_FUNC) &_FortMyrmidon_pfmAntStaticDouble, 0},
-    {"_FortMyrmidon_pfmAntStaticString", (DL_FUNC) &_FortMyrmidon_pfmAntStaticString, 0},
-    {"_FortMyrmidon_pfmAntStaticTime", (DL_FUNC) &_FortMyrmidon_pfmAntStaticTime, 0},
+    {"_FortMyrmidon_pfmValueType", (DL_FUNC) &_FortMyrmidon_pfmValueType, 1},
+    {"_FortMyrmidon_pfmBool", (DL_FUNC) &_FortMyrmidon_pfmBool, 0},
+    {"_FortMyrmidon_pfmInt", (DL_FUNC) &_FortMyrmidon_pfmInt, 0},
+    {"_FortMyrmidon_pfmDouble", (DL_FUNC) &_FortMyrmidon_pfmDouble, 0},
+    {"_FortMyrmidon_pfmString", (DL_FUNC) &_FortMyrmidon_pfmString, 0},
+    {"_FortMyrmidon_pfmTime", (DL_FUNC) &_FortMyrmidon_pfmTime, 0},
     {"_FortMyrmidon_fmDefaultPalette", (DL_FUNC) &_FortMyrmidon_fmDefaultPalette, 0},
     {"_FortMyrmidon_fmDefaultPaletteColor", (DL_FUNC) &_FortMyrmidon_fmDefaultPaletteColor, 1},
     {"_FortMyrmidon_fmVector2dListCreate", (DL_FUNC) &_FortMyrmidon_fmVector2dListCreate, 1},

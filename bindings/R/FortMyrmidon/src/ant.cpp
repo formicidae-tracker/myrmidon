@@ -20,7 +20,7 @@ IMPLEMENT_METHOD(Ant,
                  IdentifiedAt,
                  const fort::Time &, time);
 IMPLEMENT_METHOD(Ant,
-                 fort::myrmidon::AntStaticValue,
+                 fort::myrmidon::Value,
                  GetValue,
                  const std::string &, key,
                  const fort::Time &, time);
@@ -28,7 +28,7 @@ IMPLEMENT_METHOD(Ant,
 IMPLEMENT_VOID_METHOD(Ant,
                       SetValue,
                       const std::string &, key,
-                      fort::myrmidon::AntStaticValue, value,
+                      fort::myrmidon::Value, value,
                       const fort::Time &, time);
 
 IMPLEMENT_VOID_METHOD(Ant,
@@ -116,7 +116,7 @@ RCPP_MODULE(ant) {
 
 
 namespace Rcpp {
-template <> fort::myrmidon::AntStaticValue as(SEXP s) {
+template <> fort::myrmidon::Value as(SEXP s) {
 	if ( is<bool>(s) ) {
 		return as<bool>(s);
 	}
@@ -135,7 +135,7 @@ template <> fort::myrmidon::AntStaticValue as(SEXP s) {
 	throw std::runtime_error("Could not convert to either BOOLEAN, Integer, Numerical, character or fmTime");
 }
 
-template <> SEXP wrap(const fort::myrmidon::AntStaticValue & v) {
+template <> SEXP wrap(const fort::myrmidon::Value & v) {
 	switch(v.index()) {
 	case 0:
 		return wrap<bool>(std::get<bool>(v));
@@ -148,7 +148,7 @@ template <> SEXP wrap(const fort::myrmidon::AntStaticValue & v) {
 	case 4:
 		return wrap<fort::Time>(std::get<fort::Time>(v));
 	default:
-		throw std::runtime_error("Non exhaistive switch in fmAntStaticValue conversion");
+		throw std::runtime_error("Non exhaistive switch in fmValue conversion");
 	}
 }
 
@@ -164,31 +164,31 @@ template <> SEXP wrap(const fort::myrmidon::TypedCapsuleList & l) {
 }
 
 //[[Rcpp::export]]
-int pfmAntStaticValueType(const fort::myrmidon::AntStaticValue & v) {
+int pfmValueType(const fort::myrmidon::Value & v) {
 	return v.index();
 }
 
 //[[Rcpp::export]]
-fort::myrmidon::AntStaticValue pfmAntStaticBool() {
+fort::myrmidon::Value pfmBool() {
 	return false;
 }
 
 //[[Rcpp::export]]
-fort::myrmidon::AntStaticValue pfmAntStaticInt() {
+fort::myrmidon::Value pfmInt() {
 	return 0;
 }
 
 //[[Rcpp::export]]
-fort::myrmidon::AntStaticValue pfmAntStaticDouble() {
+fort::myrmidon::Value pfmDouble() {
 	return 0.0;
 }
 
 //[[Rcpp::export]]
-fort::myrmidon::AntStaticValue pfmAntStaticString() {
+fort::myrmidon::Value pfmString() {
 	return std::string();
 }
 
 //[[Rcpp::export]]
-fort::myrmidon::AntStaticValue pfmAntStaticTime() {
+fort::myrmidon::Value pfmTime() {
 	return fort::Time();
 }

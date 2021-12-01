@@ -24,7 +24,7 @@ Matcher::Ptr Matcher::AntID(fort::myrmidon::AntID ID) {
 }
 
 Matcher::Ptr Matcher::AntMetaData(const std::string & key,
-                                  const AntStaticValue & value) {
+                                  const Value & value) {
 	return Matcher::Ptr(new Matcher(priv::Matcher::AntColumnMatcher(key,value)));
 }
 

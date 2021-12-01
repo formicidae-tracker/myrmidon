@@ -55,8 +55,8 @@ Experiment::Experiment(const fs::path & filepath )
 
 	auto onTypeChange =
 		[this](const std::string & name,
-		       AntMetaDataType oldType,
-		       AntMetaDataType newType) {
+		       ValueType oldType,
+		       ValueType newType) {
 			if ( oldType == newType ) {
 				return;
 			}
@@ -69,8 +69,8 @@ Experiment::Experiment(const fs::path & filepath )
 
 	auto onDefaultChange =
 		[this](const std::string & name,
-		       const AntStaticValue &,
-		       const AntStaticValue &) {
+		       const Value &,
+		       const Value &) {
 			for ( const auto & [aID,ant] : d_identifier->Ants() ) {
 				ant->CompileData();
 			}
@@ -557,7 +557,7 @@ const fort::myrmidon::priv::AntMetadataPtr & Experiment::AntMetadataPtr() const 
 
 AntMetadata::Key::Ptr
 Experiment::SetMetaDataKey(const std::string & name,
-                           AntStaticValue defaultValue) {
+                           const Value & defaultValue) {
 	auto res = AntMetadata::SetKey(d_antMetadata,name,defaultValue);
 
 	for ( const auto & [aID,a] : d_identifier->Ants() ) {

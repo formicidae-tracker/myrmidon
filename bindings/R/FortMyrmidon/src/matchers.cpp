@@ -89,7 +89,7 @@ fort::myrmidon::Matcher::Ptr fmMatcherAntID(fort::myrmidon::AntID antID) {
 //' @family fmMatcher methods
 //[[Rcpp::export]]
 fort::myrmidon::Matcher::Ptr fmMatcherAntMetaData(const std::string & key,
-                                                  const fort::myrmidon::AntStaticValue & value) {
+                                                  const fort::myrmidon::Value & value) {
 	return fort::myrmidon::Matcher::AntMetaData(key,value);
 }
 

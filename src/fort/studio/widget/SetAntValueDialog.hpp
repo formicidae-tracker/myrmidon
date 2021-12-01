@@ -3,7 +3,7 @@
 #include <QDialog>
 
 #include <fort/studio/MyrmidonTypes/Time.hpp>
-#include <fort/studio/MyrmidonTypes/AntMetadata.hpp>
+#include <fort/studio/MyrmidonTypes/Value.hpp>
 
 class ExperimentBridge;
 
@@ -32,7 +32,7 @@ public:
 	const fort::Time & inTime() const;
 	const fort::Time & outTime() const;
 
-	const fm::AntStaticValue & value() const;
+	const fm::Value & value() const;
 	bool hasValue() const;
 
 	QString key() const;
@@ -61,6 +61,6 @@ protected:
 
     Ui::SetAntValueDialog * d_ui;
 	fort::Time              d_inTime,d_outTime;
-	fm::AntStaticValue      d_value;
+	fm::Value               d_value;
 	bool                    d_hasValue;
 };

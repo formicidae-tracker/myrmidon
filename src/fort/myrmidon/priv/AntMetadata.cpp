@@ -21,7 +21,7 @@ void AntMetadata::CheckName(const std::string & name) const {
 
 AntMetadata::Key::Ptr AntMetadata::SetKey(const Ptr & itself,
                                           const std::string & name,
-                                          AntStaticValue defaultValue) {
+                                          Value defaultValue) {
 	auto fi = itself->d_keys.find(name);
 	if ( fi != itself->d_keys.cend() ) {
 		fi->second->SetDefaultValue(defaultValue);
@@ -43,8 +43,8 @@ void AntMetadata::Delete(const std::string & name) {
 
 AntMetadata::AntMetadata()
 	: d_onNameChange([](const std::string &, const std::string) {} )
-	, d_onTypeChange([](const std::string &, AntMetaDataType, AntMetaDataType) {})
-	, d_onDefaultChange([](const std::string &, const AntStaticValue &, const AntStaticValue &) {} ) {
+	, d_onTypeChange([](const std::string &, ValueType, ValueType) {})
+	, d_onDefaultChange([](const std::string &, const Value &, const Value &) {} ) {
 }
 
 AntMetadata::AntMetadata(const NameChangeCallback & onNameChange,
@@ -65,7 +65,7 @@ size_t AntMetadata::Count(const std::string & name) const {
 
 
 
-AntMetadata::Validity AntMetadata::Validate(AntMetaDataType type, const std::string & value) {
+AntMetadata::Validity AntMetadata::Validate(ValueType type, const std::string & value) {
 	std::vector<std::function< Validity (const std::string & value) > > validators =
 		{
 		 [](const std::string & value) {
@@ -123,53 +123,6 @@ AntMetadata::Validity AntMetadata::Validate(AntMetaDataType type, const std::str
 	return validators[idx](value);
 }
 
-void AntMetadata::CheckType(AntMetaDataType type, const AntStaticValue & data) {
-	static std::vector<std::function<void (const AntStaticValue &)>> checkers =
-		{
-		 [](const AntStaticValue & data) { std::get<bool>(data); },
-		 [](const AntStaticValue & data) { std::get<int32_t>(data); },
-		 [](const AntStaticValue & data) { std::get<double>(data); },
-		 [](const AntStaticValue & data) { std::get<std::string>(data); },
-		 [](const AntStaticValue & data) { std::get<Time>(data); },
-		};
-	size_t idx = size_t(type);
-	if ( idx >= checkers.size() ) {
-		throw std::invalid_argument("Unknown AntMetadata::Type value " + std::to_string(idx));
-	}
-	checkers[idx](data);
-}
-
-AntStaticValue AntMetadata::FromString(AntMetaDataType type, const std::string & value) {
-	static std::vector<std::function<AntStaticValue (const std::string &)>> converters =
-		{
-		 [](const std::string & value ) ->  AntStaticValue {
-			 std::istringstream iss(value);
-			 bool res;
-			 iss >> std::boolalpha >> res;
-			 if ( iss.good() == false ) {
-				 throw std::invalid_argument("Invalid string '" + value + "' for AntMetadata::Value");
-			 }
-			 return res;
-		 },
-		 [](const std::string & value ) ->  AntStaticValue {
-			 return std::stoi(value);
-		 },
-		 [](const std::string & value ) ->  AntStaticValue {
-			 return std::stod(value);
-		 },
-		 [](const std::string & value ) ->  AntStaticValue {
-			 return value;
-		 },
-		 [](const std::string & value ) ->  AntStaticValue {
-			 return Time::Parse(value);
-		 },
-		};
-	size_t idx = size_t(type);
-	if ( idx >= converters.size() ) {
-		throw std::invalid_argument("Unknown AntMetadata::Type value " + std::to_string(idx));
-	}
-	return converters[idx](value);
-}
 
 
 
@@ -194,52 +147,35 @@ void AntMetadata::Key::SetName(const std::string & name) {
 	d_name = name;
 }
 
-AntMetaDataType AntMetadata::Key::Type() const {
-	return fort::myrmidon::AntMetaDataType(d_default.index());
+ValueType AntMetadata::Key::Type() const {
+	return fort::myrmidon::ValueType(d_default.index());
 }
 
-AntStaticValue AntMetadata::DefaultValue(AntMetaDataType type) {
-	static std::vector<AntStaticValue> defaults =
-		{
-		 false,
-		 0,
-		 0.0,
-		 std::string(""),
-		 Time(),
-		};
-
-	size_t idx = size_t(type);
-	if ( idx >= defaults.size() ) {
-		throw std::invalid_argument("Unknown AntMetadata::Type value " + std::to_string(idx));
-	}
-
-	return defaults[idx];
-}
 
 AntMetadata::Key::Key(const std::weak_ptr<AntMetadata> & metadata,
                       const std::string & name,
-                      const AntStaticValue & defaultValue)
+                      const Value & defaultValue)
 	: d_metadata(metadata)
 	, d_name(name)
 	, d_default(defaultValue) {
 	if ( d_default.index() == std::variant_npos) {
-		throw std::runtime_error("Invalid AntStaticValue passed as default value");
+		throw std::runtime_error("Invalid Value passed as default value");
 	}
 }
 
-const AntStaticValue & AntMetadata::Key::DefaultValue() const {
+const Value & AntMetadata::Key::DefaultValue() const {
 	return d_default;
 }
 
-void AntMetadata::Key::SetDefaultValue(const AntStaticValue & value) {
+void AntMetadata::Key::SetDefaultValue(const Value & value) {
 	auto metadata = d_metadata.lock();
 	if ( !metadata ) {
 		throw DeletedReference<AntMetadata>();
 	}
 	if ( value.index() != d_default.index() ) {
 		metadata->d_onTypeChange(d_name,
-		                         AntMetaDataType(d_default.index()),
-		                         AntMetaDataType(value.index()));
+		                         ValueType(d_default.index()),
+		                         ValueType(value.index()));
 	}
 
 	metadata->d_onDefaultChange(d_name,d_default,value);

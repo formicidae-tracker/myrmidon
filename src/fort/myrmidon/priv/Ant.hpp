@@ -107,11 +107,11 @@ public:
 
 	void SetDisplayStatus(DisplayState s);
 
-	const AntStaticValue & GetValue(const std::string & name,
+	const Value & GetValue(const std::string & name,
 	                                const Time & time) const;
 
 	void SetValue(const std::string & name,
-	              const AntStaticValue & value,
+	              const Value & value,
 	              const Time & time,
 	              bool noOverwrite = false);
 
@@ -120,9 +120,9 @@ public:
 	void DeleteValue(const std::string & name,
 	                 const Time & time);
 
-	const std::map<Time,AntStaticValue> & GetValues(const std::string & key) const;
+	const std::map<Time,Value> & GetValues(const std::string & key) const;
 
-	AntStaticValue GetBaseValue(const std::string & name) const;
+	Value GetBaseValue(const std::string & name) const;
 
 	const AntDataMap & DataMap() const;
 
@@ -145,8 +145,8 @@ private:
 	Ant(const Ant&)  = delete;
 
 
-	static std::vector<AntTimedValue>::iterator Find(const AntDataMap::iterator & iter,
-	                                                 const Time & time);
+	static std::vector<TimedValue>::iterator Find(const AntDataMap::iterator & iter,
+	                                              const Time & time);
 
 	fort::myrmidon::AntID   d_ID;
 	Identification::List    d_identifications;
@@ -157,8 +157,8 @@ private:
 	AntShapeTypeContainerConstPtr d_shapeTypes;
 	AntMetadataConstPtr           d_metadata;
 
-	AntDataMap                          d_data;
-	TimeMap<std::string,AntStaticValue> d_compiledData;
+	AntDataMap                 d_data;
+	TimeMap<std::string,Value> d_compiledData;
 };
 
 } //namespace priv

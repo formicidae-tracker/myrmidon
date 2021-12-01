@@ -7,7 +7,7 @@
 #include <fort/myrmidon/types/Typedefs.hpp>
 #include <fort/myrmidon/types/ForwardDeclaration.hpp>
 #include <fort/myrmidon/types/Color.hpp>
-#include <fort/myrmidon/types/AntStaticValue.hpp>
+#include <fort/myrmidon/types/Value.hpp>
 
 #include "Shapes.hpp"
 
@@ -184,18 +184,18 @@ public:
 	 * SetValue(). If no value is sets prior to Time (including -∞),
 	 * the Experiment default value for key will be returned.
 	 *
-	 * @return the wanted AntStaticValue for key at time, or the Experiment default one
+	 * @return the wanted Value for key at time, or the Experiment default one
 	 *
 	 * @throws std::out_of_range if name is not a defined metadata key in Experiment.
 	 */
-	const AntStaticValue & GetValue(const std::string & key,
+	const Value & GetValue(const std::string & key,
 	                                const Time & time) const;
 
 	/**
 	 *  Sets a user defined timed metadata
 	 *
 	 * @param key the metadata key to set
-	 * @param value the desired AntStaticValue
+	 * @param value the desired Value
 	 * @param time the first Time after which name will be set to
 	 *        value. It can be Time::SinceEver().
 	 *
@@ -205,11 +205,11 @@ public:
 	 *
 	 * @throws std::out_of_range if name is not a defined key in Experiment
 	 * @throws std::invalid_argument if time is Time::Forever()
-	 * @throws std::bad_variant_access if value is not of the right type for key
+	 * @throws std::runtime_error if value is not of the right type for key
 	 *
 	 */
 	void SetValue(const std::string & key,
-	              const AntStaticValue & value,
+	              const Value & value,
 	              const Time & time);
 
 	/**
@@ -232,7 +232,7 @@ public:
 	 * @param key the key to list
 	 * @return the values of key over the time
 	 */
-	const std::map<Time,AntStaticValue> & GetValues(const std::string & key) const;
+	const std::map<Time,Value> & GetValues(const std::string & key) const;
 
 	/**
 	 *  Adds a Capsule to the Ant virtual shape list.

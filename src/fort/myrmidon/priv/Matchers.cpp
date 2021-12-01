@@ -130,16 +130,16 @@ Matcher::Ptr Matcher::AntIDMatcher(AntID ID) {
 	return std::make_shared<AntIDMatcher>(ID);
 }
 
-Matcher::Ptr Matcher::AntColumnMatcher(const std::string & name, const AntStaticValue & value) {
+Matcher::Ptr Matcher::AntColumnMatcher(const std::string & name, const Value & value) {
 	class AntColumnMatcher : public Matcher {
 	private:
-		std::string    d_name;
-		AntStaticValue d_value;
-		AntByID        d_ants;
-		Time           d_time;
+		std::string d_name;
+		Value    d_value;
+		AntByID     d_ants;
+		Time        d_time;
 	public:
 		AntColumnMatcher (const std::string & name,
-		                  const AntStaticValue & value)
+		                  const Value & value)
 			: d_name(name)
 			, d_value(value){
 		}

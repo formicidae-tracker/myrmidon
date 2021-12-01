@@ -61,28 +61,28 @@ TEST_F(AntKeyValueUTest,TypeModel) {
 	EXPECT_EQ(ToStdString(m->index(0,0).data(Qt::DisplayRole).toString()),
 	          "Bool");
 	EXPECT_EQ(m->index(0,0).data(AntKeyValueBridge::KeyTypeRole).toInt(),
-	          int(fmp::AntMetaDataType::BOOL));
+	          int(fmp::ValueType::BOOL));
 
 	EXPECT_EQ(ToStdString(m->index(1,0).data(Qt::DisplayRole).toString()),
 	          "Int");
 	EXPECT_EQ(m->index(1,0).data(AntKeyValueBridge::KeyTypeRole).toInt(),
-	          int(fmp::AntMetaDataType::INT));
+	          int(fmp::ValueType::INT));
 
 	EXPECT_EQ(ToStdString(m->index(2,0).data(Qt::DisplayRole).toString()),
 	          "Double");
 	EXPECT_EQ(m->index(2,0).data(AntKeyValueBridge::KeyTypeRole).toInt(),
-	          int(fmp::AntMetaDataType::DOUBLE));
+	          int(fmp::ValueType::DOUBLE));
 
 
 	EXPECT_EQ(ToStdString(m->index(3,0).data(Qt::DisplayRole).toString()),
 	          "String");
 	EXPECT_EQ(m->index(3,0).data(AntKeyValueBridge::KeyTypeRole).toInt(),
-	          int(fmp::AntMetaDataType::STRING));
+	          int(fmp::ValueType::STRING));
 
 	EXPECT_EQ(ToStdString(m->index(4,0).data(Qt::DisplayRole).toString()),
 	          "Time");
 	EXPECT_EQ(m->index(4,0).data(AntKeyValueBridge::KeyTypeRole).toInt(),
-	          int(fmp::AntMetaDataType::TIME));
+	          int(fmp::ValueType::TIME));
 }
 
 TEST_F(AntKeyValueUTest,ModificationTest) {
@@ -105,7 +105,7 @@ TEST_F(AntKeyValueUTest,ModificationTest) {
 	EXPECT_EQ(ToStdString(m->index(0,1).data(Qt::DisplayRole).toString()),
 	          "Double");
 	EXPECT_EQ(m->index(0,1).data(AntKeyValueBridge::KeyTypeRole).toInt(),
-	          quint32(fmp::AntMetaDataType::DOUBLE));
+	          quint32(fmp::ValueType::DOUBLE));
 
 	bridge->setKey("bar",std::string(""));
 	EXPECT_EQ(modified.count(),1);
@@ -114,7 +114,7 @@ TEST_F(AntKeyValueUTest,ModificationTest) {
 	EXPECT_EQ(ToStdString(m->index(0,1).data(Qt::DisplayRole).toString()),
 	          "String");
 	EXPECT_EQ(m->index(0,1).data(AntKeyValueBridge::KeyTypeRole).toInt(),
-	          quint32(fmp::AntMetaDataType::STRING));
+	          quint32(fmp::ValueType::STRING));
 
 	EXPECT_EQ(m->rowCount(),2);
 
@@ -141,7 +141,7 @@ TEST_F(AntKeyValueUTest,ModificationTest) {
 	EXPECT_EQ(ToStdString(m->index(0,1).data(Qt::DisplayRole).toString()),
 	          "Time");
 	EXPECT_EQ(m->index(0,1).data(AntKeyValueBridge::KeyTypeRole).toInt(),
-	          quint32(fmp::AntMetaDataType::TIME));
+	          quint32(fmp::ValueType::TIME));
 
 	ASSERT_NO_THROW({
 			auto ant = experiment->CreateAnt();
@@ -164,6 +164,6 @@ TEST_F(AntKeyValueUTest,ModificationTest) {
 	EXPECT_EQ(ToStdString(m->index(0,1).data(Qt::DisplayRole).toString()),
 	          "Time");
 	EXPECT_EQ(m->index(0,1).data(AntKeyValueBridge::KeyTypeRole).toInt(),
-	          quint32(fmp::AntMetaDataType::TIME));
+	          quint32(fmp::ValueType::TIME));
 
 }

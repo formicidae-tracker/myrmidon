@@ -8,7 +8,7 @@
 
 #include <fort/studio/MyrmidonTypes/Time.hpp>
 #include <fort/myrmidon/priv/Identifier.hpp>
-#include <fort/studio/MyrmidonTypes/AntMetadata.hpp>
+#include <fort/studio/MyrmidonTypes/Value.hpp>
 
 #include <fort/studio/bridge/ExperimentBridge.hpp>
 
@@ -25,7 +25,7 @@ public:
 	}
 
 	bool setKey(const QString & name,
-	            const fm::AntStaticValue & defaultValue) {
+	            const fm::Value & defaultValue) {
 		auto sname = ToStdString(name);
 		auto fi = find(sname);
 		if ( fi == d_keys.end() ) {
@@ -119,13 +119,13 @@ public:
 		return fi - d_keys.cbegin();
 	}
 
-	const fm::AntStaticValue & defaultValue(const QString & key) const {
+	const fm::Value & defaultValue(const QString & key) const {
 		return defaultValue(find(key));
 	}
 
-	const fm::AntStaticValue & defaultValue(int key) const {
+	const fm::Value & defaultValue(int key) const {
 		if ( key < 0 || key >= d_keys.size() ) {
-			static fm::AntStaticValue invalid = fort::Time::Forever();
+			static fm::Value invalid = fort::Time::Forever();
 			return invalid;
 		}
 		return d_keys.at(key)->DefaultValue();
@@ -241,7 +241,7 @@ public:
 	bool setDefaultValue(const fmp::AntMetadata::Key & key,
 	                     const QString & value) {
 		try {
-			auto v = fmp::AntMetadata::FromString(key.Type(),ToStdString(value));
+			auto v = fm::ValueUtils::Parse(key.Type(),ToStdString(value));
 			return setKey(key.Name().c_str(),v);
 		} catch ( const std::exception & e) {
 			qCritical() << "Could not parse " << value << ": " << e.what();
@@ -253,7 +253,7 @@ public:
 
 private:
 	bool addKey(const std::string & name,
-	            const fm::AntStaticValue & defaultValue) {
+	            const fm::Value & defaultValue) {
 		fmp::AntMetadata::Key::Ptr res;
 		try {
 			qInfo() << "[AntKeyValueBridge]: Adding key '" << name.c_str()
@@ -376,7 +376,7 @@ public:
 	bool setValue(quint32 antID,
 	              const QString & key,
 	              const fort::Time & time,
-	              const fm::AntStaticValue & value) {
+	              const fm::Value & value) {
 		int keyIndex = d_keyModel->find(key);
 		if ( keyIndex < 0 ) {
 			return false;
@@ -576,7 +576,7 @@ private slots:
 	bool setValue(quint32 antID,
 	              int key,
 	              const fort::Time & time,
-	              const fm::AntStaticValue & value) {
+	              const fm::Value & value) {
 		if ( key < 0 || key >= d_keyModel->rowCount() ) {
 			return false;
 		}
@@ -727,8 +727,8 @@ private:
 			return false;
 		}
 		try {
-			auto keyType = fm::AntMetaDataType(d_keyModel->index(p->Key,0).data(AntKeyValueBridge::KeyTypeRole).toInt());
-			auto v = fmp::AntMetadata::FromString(keyType,ToStdString(value));
+			auto keyType = fm::ValueType(d_keyModel->index(p->Key,0).data(AntKeyValueBridge::KeyTypeRole).toInt());
+			auto v = fm::ValueUtils::Parse(keyType,ToStdString(value));
 			auto & ant = *d_ants.at(p->Ant);
 			auto time = ant.DataMap().at(keyNameAt(p->Key)).at(p->Value).first;
 			return setValue(ant.AntID(),p->Key,time,v);
@@ -750,8 +750,8 @@ private:
 			if ( value.isEmpty() ) {
 				return deleteValue(ant.AntID(),p->Key,fort::Time::SinceEver());
 			}
-			auto keyType = fm::AntMetaDataType(d_keyModel->index(p->Key,0).data(AntKeyValueBridge::KeyTypeRole).toInt());
-			auto v = fmp::AntMetadata::FromString(keyType,ToStdString(value));
+			auto keyType = fm::ValueType(d_keyModel->index(p->Key,0).data(AntKeyValueBridge::KeyTypeRole).toInt());
+			auto v = fm::ValueUtils::Parse(keyType,ToStdString(value));
 			return setValue(ant.AntID(),p->Key,fort::Time::SinceEver(),v);
 		} catch(const std::exception & e) {
 		}
@@ -846,7 +846,7 @@ private:
 			auto fi = std::lower_bound(values.begin(),
 			                           values.end(),
 			                           time,
-			                           [](const fmp::AntTimedValue & v,
+			                           [](const fmp::TimedValue & v,
 			                              const fort::Time & t) {
 				                           return v.first < t;
 			                           });
@@ -867,7 +867,7 @@ private:
 			auto fi = std::lower_bound(values.begin(),
 			                           values.end(),
 			                           time,
-			                           [](const fmp::AntTimedValue & v,
+			                           [](const fmp::TimedValue & v,
 			                              const fort::Time & t) {
 				                           return v.first < t;
 			                           });
@@ -1039,11 +1039,11 @@ AntKeyValueBridge::AntKeyValueBridge(QObject * parent)
 	, d_dataModel(new DataModel(d_keyModel,this))
 	, d_typeModel(new QStandardItemModel(parent)){
 	qRegisterMetaType<fort::Time>();
-	qRegisterMetaType<fm::AntStaticValue>();
+	qRegisterMetaType<fm::Value>();
 
 #define add_item_type(t,T,tT) do {	  \
 		auto  item = new QStandardItem(#tT); \
-		item->setData(quint32(fm::AntMetaDataType::T),KeyTypeRole); \
+		item->setData(quint32(fm::ValueType::T),KeyTypeRole); \
 		d_typeModel->appendRow(item); \
 	}while(0)
 	add_item_type(bool,BOOL,Bool);
@@ -1052,11 +1052,11 @@ AntKeyValueBridge::AntKeyValueBridge(QObject * parent)
 #undef add_item_type
 
 	auto stringItem = new QStandardItem("String");
-	stringItem->setData(quint32(fm::AntMetaDataType::STRING),KeyTypeRole);
+	stringItem->setData(quint32(fm::ValueType::STRING),KeyTypeRole);
 	d_typeModel->appendRow(stringItem);
 
 	auto timeItem = new QStandardItem("Time");
-	timeItem->setData(quint32(fm::AntMetaDataType::TIME),KeyTypeRole);
+	timeItem->setData(quint32(fm::ValueType::TIME),KeyTypeRole);
 	d_typeModel->appendRow(timeItem);
 
 	connect(d_keyModel,&QAbstractItemModel::dataChanged,
@@ -1082,7 +1082,7 @@ QAbstractItemModel * AntKeyValueBridge::typeModel() {
 	return d_typeModel;
 }
 
-void AntKeyValueBridge::setKey(const QString & name, const fm::AntStaticValue & defaultValue) {
+void AntKeyValueBridge::setKey(const QString & name, const fm::Value & defaultValue) {
 	if ( !d_experiment ) {
 		return;
 	}
@@ -1106,7 +1106,7 @@ void AntKeyValueBridge::removeKey(const QString & name) {
 void AntKeyValueBridge::setValue(quint32 antID,
                                  const QString & key,
                                  const fort::Time & time,
-                                 const fm::AntStaticValue & value) {
+                                 const fm::Value & value) {
 	if ( !d_experiment ) {
 		return;
 	}
@@ -1178,6 +1178,6 @@ void AntKeyValueBridge::markModified() {
 	setModified(true);
 }
 
-const fm::AntStaticValue & AntKeyValueBridge::defaultValue(const QString & key) const {
+const fm::Value & AntKeyValueBridge::defaultValue(const QString & key) const {
 	return d_keyModel->defaultValue(key);
 }

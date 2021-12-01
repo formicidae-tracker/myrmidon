@@ -6,9 +6,7 @@
 #include <fort/studio/bridge/AntKeyValueBridge.hpp>
 
 
-#include <fort/studio/MyrmidonTypes/AntMetadata.hpp>
-
-
+#include <fort/studio/MyrmidonTypes/Value.hpp>
 
 #include <QDebug>
 

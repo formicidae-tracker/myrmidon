@@ -59,7 +59,7 @@ test_that("it has a display status",{
     expect_equal(a$displayStatus,fmAnt.DisplayState[['HIDDEN']])
 })
 
-test_that("it has static values",{
+test_that("it has values",{
     d <- local_data()
     a <- d$experiment$createAnt()
     t <- fmTimeNow()
@@ -73,7 +73,7 @@ test_that("it has static values",{
     },"Unknown meta data key 'isDead'")
     expect_error({
         a$setValue("alive",42L, t)
-    },'Unexpected index')
+    },'Value is not of the right type')
     expect_error({
         a$setValue("alive",FALSE, fmTimeForever())
     },'Time cannot be +∞', fixed=TRUE)

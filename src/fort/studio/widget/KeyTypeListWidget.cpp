@@ -2,7 +2,7 @@
 #include "ui_KeyTypeListWidget.h"
 
 #include <fort/studio/bridge/AntKeyValueBridge.hpp>
-#include <fort/studio/MyrmidonTypes/AntMetadata.hpp>
+#include <fort/studio/MyrmidonTypes/Value.hpp>
 
 #include <QStyledItemDelegate>
 #include <QDebug>
@@ -40,9 +40,9 @@ protected:
 		if ( combo == nullptr ) {
 			return;
 		}
-		auto type = fm::AntMetaDataType(combo->currentData(AntKeyValueBridge::KeyTypeRole).toInt());
+		auto type = fm::ValueType(combo->currentData(AntKeyValueBridge::KeyTypeRole).toInt());
 		d_bridge->setKey(index.siblingAtColumn(0).data(Qt::DisplayRole).toString(),
-		                 fmp::AntMetadata::DefaultValue(type));
+		                 fm::ValueUtils::Default(type));
 	}
 
 private :
@@ -99,8 +99,8 @@ void KeyTypeListWidget::buildTypeCombo(QComboBox *  combo) {
 
 void KeyTypeListWidget::on_addButton_clicked() {
 	auto newName = tr("key-%1").arg(d_ui->tableView->model()->rowCount()+1);
-	auto type = fm::AntMetaDataType(d_ui->comboBox->currentData(AntKeyValueBridge::KeyTypeRole).toInt());
-	d_bridge->setKey(newName,fmp::AntMetadata::DefaultValue(type));
+	auto type = fm::ValueType(d_ui->comboBox->currentData(AntKeyValueBridge::KeyTypeRole).toInt());
+	d_bridge->setKey(newName,fm::ValueUtils::Default(type));
 	d_ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 }
 

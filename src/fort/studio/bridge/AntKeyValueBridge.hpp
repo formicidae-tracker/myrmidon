@@ -6,7 +6,7 @@
 
 #include <fort/studio/MyrmidonTypes/Experiment.hpp>
 #include <fort/studio/MyrmidonTypes/Time.hpp>
-#include <fort/studio/MyrmidonTypes/AntMetadata.hpp>
+#include <fort/studio/MyrmidonTypes/Value.hpp>
 
 class QStandardItemModel;
 class QAbstractItemModel;
@@ -31,17 +31,17 @@ public :
 
 	void initialize(ExperimentBridge * experiment) override;
 
-	const fm::AntStaticValue & defaultValue(const QString & key) const;
+	const fm::Value & defaultValue(const QString & key) const;
 
 public slots:
-	void setKey(const QString & key, const fm::AntStaticValue & defaultValue);
+	void setKey(const QString & key, const fm::Value & defaultValue);
 	void removeKey(const QString & key);
 
 
 	void setValue(quint32 antID,
 	              const QString & key,
 	              const fort::Time & time,
-	              const fm::AntStaticValue & value);
+	              const fm::Value & value);
 
 	void deleteValue(quint32 antID,
 	                 const QString & key,

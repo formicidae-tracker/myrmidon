@@ -3,7 +3,7 @@
 #include <fort/time/Time.hpp>
 
 #include <fort/myrmidon/types/ComputedMeasurement.hpp>
-#include <fort/myrmidon/types/AntStaticValue.hpp>
+#include <fort/myrmidon/types/Value.hpp>
 #include <fort/myrmidon/types/TagStatistics.hpp>
 #include <fort/myrmidon/types/IdentifiedFrame.hpp>
 #include <fort/myrmidon/types/Collision.hpp>
@@ -331,24 +331,24 @@ void BindTypes(py::module_ & m) {
 	BindTime(m);
 
 	using namespace fort::myrmidon;
-	py::class_<AntStaticValue>(m,"AntStaticValue")
+	py::class_<Value>(m,"Value")
 		.def(py::init<bool>())
 		.def(py::init<int>())
 		.def(py::init<double>())
 		.def(py::init<std::string>())
 		.def(py::init<fort::Time>())
 		;
-	py::implicitly_convertible<bool,AntStaticValue>();
-	py::implicitly_convertible<int,AntStaticValue>();
-	py::implicitly_convertible<double,AntStaticValue>();
-	py::implicitly_convertible<std::string,AntStaticValue>();
-	py::implicitly_convertible<fort::Time,AntStaticValue>();
-	py::enum_<AntMetaDataType>(m,"AntMetaDataType")
-		.value("BOOL",AntMetaDataType::BOOL)
-		.value("INT",AntMetaDataType::INT)
-		.value("DOUBLE",AntMetaDataType::DOUBLE)
-		.value("STRING",AntMetaDataType::STRING)
-		.value("TIME",AntMetaDataType::TIME)
+	py::implicitly_convertible<bool,Value>();
+	py::implicitly_convertible<int,Value>();
+	py::implicitly_convertible<double,Value>();
+	py::implicitly_convertible<std::string,Value>();
+	py::implicitly_convertible<fort::Time,Value>();
+	py::enum_<ValueType>(m,"ValueType")
+		.value("BOOL",ValueType::BOOL)
+		.value("INT",ValueType::INT)
+		.value("DOUBLE",ValueType::DOUBLE)
+		.value("STRING",ValueType::STRING)
+		.value("TIME",ValueType::TIME)
 		;
 	BindColor(m);
 

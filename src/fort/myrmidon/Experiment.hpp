@@ -492,7 +492,7 @@ public:
 	 *         * at least one Ant has a value registered for **key**
 	 */
 	void SetMetaDataKey(const std::string & key,
-	                    AntStaticValue defaultValue);
+	                    Value defaultValue);
 
 	/**
 	 * Removes a meta data key.
@@ -509,10 +509,9 @@ public:
 	/**
 	 * Gets the meta data keys for this Experiment
 	 *
-	 * @return a pairs of AntMetadataType and AntStaticValue
-	 *          indexed by key
+	 * @return default Value indexed by key
 	 */
-	std::map<std::string,AntStaticValue > MetaDataKeys() const;
+	std::map<std::string,Value> MetaDataKeys() const;
 
 	/**
 	 * Renames a meta data key
