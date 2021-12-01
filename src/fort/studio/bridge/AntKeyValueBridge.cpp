@@ -516,78 +516,14 @@ public:
 		if ( p->Value >= 0 && index.column() == 3 ) {
 			return editValue(index,value.toString());
 		}
+
 		if (p->Key >= 0 && index.column() == 3 ) {
 			return editDefaultValue(index,value.toString());
 		}
 		return false;
 	}
 
-
 private slots:
-	bool editValueTime(const QModelIndex & index, const QString & value) {
-		if ( index.isValid() == false ) {
-			return false;
-		}
-		auto p = static_cast<Pointer*>(index.internalPointer());
-		if ( p->Value < 0 ) {
-			return false;
-		}
-		try {
-			auto newTime = fort::Time::Parse(ToStdString(value));
-
-			auto & ant = *d_ants.at(p->Ant);
-			auto [oldTime,currentValue] = ant.DataMap().at(keyNameAt(p->Key)).at(p->Value);
-			if ( deleteValue(ant.AntID(),p->Key,oldTime) == false ) {
-				return false;
-			}
-			return setValue(ant.AntID(),p->Key,newTime,currentValue);
-		} catch(const std::exception & ) {
-		}
-		return false;
-	}
-
-	bool editValue(const QModelIndex & index, const QString & value) {
-		if ( index.isValid() == false ) {
-			return false;
-		}
-		auto p = static_cast<Pointer*>(index.internalPointer());
-		if ( p->Value < 0 || p->Key >= d_keyModel->rowCount()) {
-			return false;
-		}
-		try {
-			auto keyType = fm::AntMetaDataType(d_keyModel->index(p->Key,0).data(AntKeyValueBridge::KeyTypeRole).toInt());
-			auto v = fmp::AntMetadata::FromString(keyType,ToStdString(value));
-			auto & ant = *d_ants.at(p->Ant);
-			auto time = ant.DataMap().at(keyNameAt(p->Key)).at(p->Value).first;
-			return setValue(ant.AntID(),p->Key,time,v);
-		} catch(const std::exception & ) {
-		}
-		return false;
-	}
-
-	bool editDefaultValue(const QModelIndex & index, const QString & value) {
-		if ( index.isValid() == false ) {
-			return false;
-		}
-		auto p = static_cast<Pointer*>(index.internalPointer());
-		if ( p->Value < 0 || p->Key >= d_keyModel->rowCount()) {
-			return false;
-		}
-		try {
-			auto & ant = *d_ants.at(p->Ant);
-			auto time = ant.DataMap().at(keyNameAt(p->Key)).at(p->Value).first;
-			if ( value.isEmpty() ) {
-				return deleteValue(ant.AntID(),p->Key,fort::Time::SinceEver());
-			}
-			auto keyType = fm::AntMetaDataType(d_keyModel->index(p->Key,0).data(AntKeyValueBridge::KeyTypeRole).toInt());
-			auto v = fmp::AntMetadata::FromString(keyType,ToStdString(value));
-			return setValue(ant.AntID(),p->Key,fort::Time::SinceEver(),v);
-		} catch(const std::exception & ) {
-		}
-		return false;
-	}
-
-
 
 	bool setValue(quint32 antID,
 	              int key,
@@ -647,13 +583,13 @@ private slots:
 		auto keyName = keyNameAt(key);
 		try {
 			qInfo() << "[AntKeyValueBridge]:  Ant{ID:" << fm::FormatAntID(antID).c_str()
-			        << ".DeleteValue(key = " << keyName.c_str()
+			        << "}.DeleteValue(key = " << keyName.c_str()
 			        << ", time = " << ToQString(time)
 			        << ")";
 			ant.DeleteValue(keyName,time);
 		} catch ( const std::exception & e ) {
 			qCritical() << "[AntKeyValueBridge]:  Ant{ID:" << fm::FormatAntID(antID).c_str()
-			            << ".DeleteValue(key = " << keyName.c_str()
+			            << "}.DeleteValue(key = " << keyName.c_str()
 			            << ", time = " << ToQString(time)
 			            << ") error:" << e.what();
 			return false;
@@ -702,6 +638,69 @@ private:
 		int Key;
 		int Value;
 	};
+
+	bool editValueTime(const QModelIndex & index, const QString & value) {
+		if ( index.isValid() == false ) {
+			return false;
+		}
+		auto p = static_cast<Pointer*>(index.internalPointer());
+		if ( p->Value < 0 ) {
+			return false;
+		}
+		try {
+			auto newTime = fort::Time::Parse(ToStdString(value));
+
+			auto & ant = *d_ants.at(p->Ant);
+			auto [oldTime,currentValue] = ant.DataMap().at(keyNameAt(p->Key)).at(p->Value);
+			if ( deleteValue(ant.AntID(),p->Key,oldTime) == false ) {
+				return false;
+			}
+			return setValue(ant.AntID(),p->Key,newTime,currentValue);
+		} catch(const std::exception & ) {
+		}
+		return false;
+	}
+
+	bool editValue(const QModelIndex & index, const QString & value) {
+		if ( index.isValid() == false ) {
+			return false;
+		}
+		auto p = static_cast<Pointer*>(index.internalPointer());
+		if ( p->Value < 0 || p->Key >= d_keyModel->rowCount()) {
+			return false;
+		}
+		try {
+			auto keyType = fm::AntMetaDataType(d_keyModel->index(p->Key,0).data(AntKeyValueBridge::KeyTypeRole).toInt());
+			auto v = fmp::AntMetadata::FromString(keyType,ToStdString(value));
+			auto & ant = *d_ants.at(p->Ant);
+			auto time = ant.DataMap().at(keyNameAt(p->Key)).at(p->Value).first;
+			return setValue(ant.AntID(),p->Key,time,v);
+		} catch(const std::exception & ) {
+		}
+		return false;
+	}
+
+	bool editDefaultValue(const QModelIndex & index, const QString & value) {
+		if ( index.isValid() == false ) {
+			return false;
+		}
+		auto p = static_cast<Pointer*>(index.internalPointer());
+		if ( p->Key >= d_keyModel->rowCount()) {
+			return false;
+		}
+		try {
+			auto & ant = *d_ants.at(p->Ant);
+			if ( value.isEmpty() ) {
+				return deleteValue(ant.AntID(),p->Key,fort::Time::SinceEver());
+			}
+			auto keyType = fm::AntMetaDataType(d_keyModel->index(p->Key,0).data(AntKeyValueBridge::KeyTypeRole).toInt());
+			auto v = fmp::AntMetadata::FromString(keyType,ToStdString(value));
+			return setValue(ant.AntID(),p->Key,fort::Time::SinceEver(),v);
+		} catch(const std::exception & e) {
+			qInfo() << "exception " << e.what();
+		}
+		return false;
+	}
 
 	void resetValueModel(const fmp::Ant::Ptr & ant,
 	                     int antIndex,

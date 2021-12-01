@@ -38,9 +38,7 @@ void AntMetadataWorkspace::initialize(AntKeyValueBridge * bridge) {
 
 	connect(d_ui->dataView->selectionModel(),
 	        &QItemSelectionModel::selectionChanged,
-	        [this]() {
-		        d_ui->removeButton->setEnabled(d_ui->dataView->selectionModel()->hasSelection());
-	        });
+	        this,onSelectionChanged);
 
 	connect(d_ui->addButton,
 	        &QToolButton::clicked,
@@ -63,14 +61,15 @@ void AntMetadataWorkspace::initialize(AntKeyValueBridge * bridge) {
 		        }
 	        });
 
-		connect(bridge->dataModel(),
-		        &QAbstractItemModel::modelReset,
-		        [this]() {
-			        auto model = d_keyValues->dataModel();
-			        for ( size_t i = 0;i < model->rowCount(); ++i ) {
-				        d_ui->dataView->expand(model->index(i,0));
-			        }
-		        });
+	connect(bridge->dataModel(),
+	        &QAbstractItemModel::modelReset,
+	        [this]() {
+		        auto model = d_keyValues->dataModel();
+		        for ( size_t i = 0;i < model->rowCount(); ++i ) {
+			        d_ui->dataView->expand(model->index(i,0));
+		        }
+	        });
+	onSelectionChanged();
 }
 
 
@@ -87,5 +86,19 @@ void AntMetadataWorkspace::setUp(const NavigationAction & actions) {
 }
 
 void AntMetadataWorkspace::tearDown(const NavigationAction & actions) {
+
+}
+
+
+void AntMetadataWorkspace::onSelectionChanged() {
+	auto selectionModel = d_ui->dataView->selectionModel();
+
+	if ( selectionModel->hasSelection() == false ) {
+		d_ui->addButton->setEnabled(false);
+		d_ui->removeButton->setEnabled(false);
+		return;
+	}
+
+
 
 }

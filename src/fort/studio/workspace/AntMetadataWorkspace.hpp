@@ -24,7 +24,7 @@ protected:
 private slots:
 	void onAddButtonClicked();
 	void onRemoveButtonClicked();
-
+	void onSelectionChanged();
 
 private:
 	void initialize(AntKeyValueBridge * metadata);
