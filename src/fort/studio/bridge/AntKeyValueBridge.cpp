@@ -13,8 +13,6 @@
 #include <fort/studio/bridge/ExperimentBridge.hpp>
 
 
-static std::vector<std::string> MetaDataTypeNames = { "Bool","Int","Double","String","Time" };
-
 class KeyModel : public QAbstractItemModel {
 	Q_OBJECT
 public:
@@ -279,7 +277,7 @@ private:
 		case 0:
 			return k->Name().c_str();
 		case 1:
-			return MetaDataTypeNames[int(k->Type())].c_str();
+			return ToQString(fm::ValueUtils::TypeName(k->Type()));
 		case 2:
 			return ToQString(k->DefaultValue());
 		}

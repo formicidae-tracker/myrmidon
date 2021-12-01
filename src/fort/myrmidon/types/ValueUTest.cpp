@@ -98,6 +98,21 @@ TEST_F(ValueUTest,HasEqualityOperator) {
 	EXPECT_FALSE(Value(false) == Value(0));
 }
 
+TEST_F(ValueUTest,HasTypeName) {
+	EXPECT_EQ(ValueUtils::TypeName(ValueType::BOOL),"Bool");
+	EXPECT_EQ(ValueUtils::TypeName(ValueType::INT),"Int");
+	EXPECT_EQ(ValueUtils::TypeName(ValueType::DOUBLE),"Double");
+	EXPECT_EQ(ValueUtils::TypeName(ValueType::STRING),"String");
+	EXPECT_EQ(ValueUtils::TypeName(ValueType::TIME),"Time");
+	EXPECT_THROW(ValueUtils::TypeName(ValueType(42)),std::invalid_argument);
+	EXPECT_EQ(ValueUtils::TypeName(true),"Bool");
+	EXPECT_EQ(ValueUtils::TypeName(0),"Int");
+	EXPECT_EQ(ValueUtils::TypeName(0.0),"Double");
+	EXPECT_EQ(ValueUtils::TypeName(std::string()),"String");
+	EXPECT_EQ(ValueUtils::TypeName(Time()),"Time");
+
+}
+
 
 } // namespace myrmidon
 } // namespace fort

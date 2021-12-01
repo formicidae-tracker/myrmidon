@@ -26,6 +26,21 @@ ValueType ValueUtils::Type(const Value & value) {
 	}, value);
 }
 
+const std::string & ValueUtils::TypeName(ValueType type) {
+	static std::vector<std::string> names =
+		{ "Bool","Int","Double","String","Time"};
+	size_t idx = size_t(type);
+	if ( idx >= names.size() ) {
+		throw std::invalid_argument("Unknown ValueType value "
+		                            + std::to_string(idx));
+	}
+	return names.at(idx);
+}
+
+std::string ValueUtils::TypeName(const Value & value) {
+	return TypeName(Type(value));
+}
+
 
 Value ValueUtils::Default(ValueType type) {
 	static std::vector<Value> defaults =
@@ -39,7 +54,7 @@ Value ValueUtils::Default(ValueType type) {
 
 	size_t idx = size_t(type);
 	if ( idx >= defaults.size() ) {
-		throw std::invalid_argument("Unknown AntMetadata::Type value "
+		throw std::invalid_argument("Unknown ValueType value "
 		                            + std::to_string(idx));
 	}
 
