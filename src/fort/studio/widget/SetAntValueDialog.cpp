@@ -4,11 +4,15 @@
 #include <fort/studio/bridge/ExperimentBridge.hpp>
 #include <fort/studio/bridge/AntKeyValueBridge.hpp>
 
+#include <QPushButton>
+
+
 SetAntValueDialog::SetAntValueDialog(QWidget *parent)
 	: QDialog(parent)
 	, d_ui(new Ui::SetAntValueDialog)
 	, d_inTime(fort::Time::SinceEver())
-	, d_outTime(fort::Time::Forever()) {
+	, d_outTime(fort::Time::Forever())
+	, d_hasValue(false) {
 	d_ui->setupUi(this);
 
 	connect(this,&SetAntValueDialog::inTimeChanged,
@@ -22,6 +26,10 @@ SetAntValueDialog::SetAntValueDialog(QWidget *parent)
 		        updateState();
 	        });
 
+	connect(this,&SetAntValueDialog::hasValueChanged,
+	        this,&SetAntValueDialog::updateState);
+
+	updateState();
 }
 
 SetAntValueDialog::~SetAntValueDialog() {
@@ -46,9 +54,11 @@ const fort::Time & SetAntValueDialog::outTime() const {
 	return d_outTime;
 }
 
-fm::AntStaticValue SetAntValueDialog::value() const {
-	return false;
+const fm::AntStaticValue & SetAntValueDialog::value() const {
+	return d_value;
 }
+
+
 
 QString SetAntValueDialog::key() const {
 	return d_ui->keyComboBox->currentText();
@@ -80,11 +90,40 @@ void SetAntValueDialog::showEvent(QShowEvent * event) {
 }
 
 void SetAntValueDialog::updateState() {
+	bool hasTime = d_inTime.IsInfinite() == false || d_outTime.IsInfinite() == false;
+	bool hasKey = d_ui->keyComboBox->currentIndex() >= 0;
+	d_ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(hasTime && hasKey && hasValue());
 }
 
 
 void SetAntValueDialog::on_keyComboBox_currentIndexChanged(int) {
 	d_ui->valueEdit->clear();
 
+	updateState();
+}
 
+void SetAntValueDialog::on_valueEdit_textChanged(const QString & text) {
+	if ( d_ui->keyComboBox->currentIndex() < 0 ) {
+		setHasValue(false);
+		return;
+	}
+	try {
+		auto type = fm::AntMetaDataType(d_ui->keyComboBox->currentData(AntKeyValueBridge::KeyTypeRole).toInt());
+		d_value = fmp::AntMetadata::FromString(type,text.toUtf8().constData());
+		setHasValue(true);
+	} catch ( const std::exception & ) {
+		setHasValue(false);
+	}
+}
+
+void SetAntValueDialog::setHasValue(bool valid) {
+	if ( d_hasValue == valid ) {
+		return;
+	}
+	d_hasValue = valid;
+	emit hasValueChanged(valid);
+}
+
+bool SetAntValueDialog::hasValue() const {
+	return d_hasValue;
 }

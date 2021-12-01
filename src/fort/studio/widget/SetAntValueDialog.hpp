@@ -32,7 +32,9 @@ public:
 	const fort::Time & inTime() const;
 	const fort::Time & outTime() const;
 
-	fm::AntStaticValue value() const;
+	const fm::AntStaticValue & value() const;
+	bool hasValue() const;
+
 	QString key() const;
 
 public slots:
@@ -42,15 +44,20 @@ public slots:
 private slots:
 	void updateState();
 	void on_keyComboBox_currentIndexChanged(int);
+	void on_valueEdit_textChanged(const QString & text);
+
+
 signals:
 	void inTimeChanged(const fort::Time &);
 	void outTimeChanged(const fort::Time &);
-
+	void hasValueChanged(bool valid);
 protected:
+	void setHasValue(bool valid);
+
 	void showEvent(QShowEvent * event) override;
 
-private:
     Ui::SetAntValueDialog * d_ui;
 	fort::Time              d_inTime,d_outTime;
 	fm::AntStaticValue      d_value;
+	bool                    d_hasValue;
 };
