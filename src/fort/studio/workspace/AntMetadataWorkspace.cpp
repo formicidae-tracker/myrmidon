@@ -38,7 +38,7 @@ void AntMetadataWorkspace::initialize(AntKeyValueBridge * bridge) {
 
 	connect(d_ui->dataView->selectionModel(),
 	        &QItemSelectionModel::selectionChanged,
-	        this,onSelectionChanged);
+	        this,&AntMetadataWorkspace::onSelectionChanged);
 
 	connect(d_ui->addButton,
 	        &QToolButton::clicked,
@@ -75,9 +75,24 @@ void AntMetadataWorkspace::initialize(AntKeyValueBridge * bridge) {
 
 
 void AntMetadataWorkspace::onAddButtonClicked() {
+	auto index = d_ui->dataView->selectionModel()->selectedRows().front();
+	auto antID = index.data(AntKeyValueBridge::AntIDRole).toInt();
+	auto key = index.data(AntKeyValueBridge::KeyNameRole).toString();
+	d_keyValues->appendDefaultValue(antID,key);
 }
 
 void AntMetadataWorkspace::onRemoveButtonClicked() {
+	auto index = d_ui->dataView->selectionModel()->selectedRows().front();
+	auto antID = index.data(AntKeyValueBridge::AntIDRole).toInt();
+	auto key = index.data(AntKeyValueBridge::KeyNameRole).toString();
+	try {
+		auto time = fort::Time::Parse(ToStdString(index.data(AntKeyValueBridge::TimeRole).toString()));
+		d_keyValues->deleteValue(antID,key,time);
+	} catch ( const std::exception & e) {
+		qCritical() << "Could not remove {Ant=" << fm::FormatAntID(antID).c_str()
+		            << ", key=" << key
+		            << ", time=" << index.data(AntKeyValueBridge::TimeRole).toString();
+	}
 }
 
 
@@ -99,6 +114,23 @@ void AntMetadataWorkspace::onSelectionChanged() {
 		return;
 	}
 
+	auto index = selectionModel->selectedRows().front();
+	if ( index.parent().isValid() == false ) {
+		d_ui->addButton->setEnabled(false);
+		d_ui->removeButton->setEnabled(false);
+		return;
+	}
+	if ( index.parent().parent().isValid() == false ) {
+		d_ui->addButton->setEnabled(true);
+		d_ui->removeButton->setEnabled(false);
+		return;
+	}
+	if ( index.parent().parent().parent().isValid() == false ) {
+		d_ui->addButton->setEnabled(true);
+		d_ui->removeButton->setEnabled(true);
+		return;
+	}
 
-
+	d_ui->addButton->setEnabled(false);
+	d_ui->removeButton->setEnabled(false);
 }
