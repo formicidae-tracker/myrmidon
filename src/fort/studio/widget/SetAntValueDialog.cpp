@@ -90,11 +90,8 @@ void SetAntValueDialog::showEvent(QShowEvent * event) {
 }
 
 void SetAntValueDialog::updateState() {
-	bool hasTime = d_inTime.IsInfinite() == false || d_outTime.IsInfinite() == false;
-	bool hasKey = d_ui->keyComboBox->currentIndex() >= 0;
-	d_ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(hasTime && hasKey && hasValue());
+	d_ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(hasTime() && hasKey() && hasValue());
 }
-
 
 void SetAntValueDialog::on_keyComboBox_currentIndexChanged(int) {
 	d_ui->valueEdit->clear();
@@ -126,4 +123,11 @@ void SetAntValueDialog::setHasValue(bool valid) {
 
 bool SetAntValueDialog::hasValue() const {
 	return d_hasValue;
+}
+
+bool SetAntValueDialog::hasTime() const {
+	return d_inTime.IsInfinite() == false || d_outTime.IsInfinite() == false;
+}
+bool SetAntValueDialog::hasKey() const {
+	return d_ui->keyComboBox->currentIndex() >= 0;
 }
