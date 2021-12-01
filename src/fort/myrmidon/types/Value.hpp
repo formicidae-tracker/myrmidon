@@ -11,15 +11,16 @@ namespace fort {
 namespace myrmidon {
 
 /**
- * C++ type for named values.
+ * Can hold any kind of value in object.
  *
- * A c++ type that can hold only one of any ValueType.
+ * A c++ variant for the data that can be associated with certain
+ * fields, such as Ant timed Key/Values.
  */
 typedef std::variant<bool,int32_t,double,std::string,Time> Value;
 
 
 /**
- * AntMetaDataType enumerates possible type for Value
+ * Enumerates possible types for Value
  *
  */
 enum class ValueType {
@@ -64,6 +65,10 @@ struct ValueUtils  {
 	 * Parses to an Value
 	 */
 	static Value Parse(ValueType type, const std::string & name);
+
+	static const std::string & TypeName(ValueType type);
+
+	static std::string TypeName(const Value & value);
 };
 
 
