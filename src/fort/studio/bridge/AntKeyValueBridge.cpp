@@ -111,6 +111,26 @@ public:
 		return true;
 	}
 
+	int find(const QString & key) const {
+		auto fi = find(ToStdString(key));
+		if ( fi == d_keys.cend() ) {
+			return -1;
+		}
+		return fi - d_keys.cbegin();
+	}
+
+	const fm::AntStaticValue & defaultValue(const QString & key) const {
+		return defaultValue(find(key));
+	}
+
+	const fm::AntStaticValue & defaultValue(int key) const {
+		if ( key < 0 || key >= d_keys.size() ) {
+			static fm::AntStaticValue empty;
+			return empty;
+		}
+		return d_keys.at(key)->DefaultValue();
+	}
+
 	void setUpExperiment(const fmp::Experiment::Ptr & experiment) {
 		if ( d_experiment != nullptr ) {
 			tearDownExperiment();
@@ -174,6 +194,10 @@ public:
 			return QVariant::fromValue(int(key->Type()));
 		}
 
+		if ( role == AntKeyValueBridge::KeyNameRole ) {
+			return ToQString(key->Name());
+		}
+
 		return QVariant();
 	}
 
@@ -226,13 +250,6 @@ public:
 		return true;
 	}
 
-	int find(const QString & key) const {
-		auto fi = find(ToStdString(key));
-		if ( fi == d_keys.cend() ) {
-			return -1;
-		}
-		return fi - d_keys.cbegin();
-	}
 
 private:
 	bool addKey(const std::string & name,
@@ -331,6 +348,29 @@ public:
 		beginResetModel();
 		rebuildPointers();
 		endResetModel();
+	}
+
+	bool appendDefaultValue(quint32 antID,
+	                        const QString & key) {
+		auto fi = find(antID);
+		if ( fi == d_ants.cend() ) {
+			return false;
+		}
+		const auto & ant = **fi;
+		auto keyRow = d_keyModel->find(key);
+		if ( keyRow < 0) {
+			return false;
+		}
+		fort::Time time;
+		try {
+			const auto & values = ant.DataMap().at(ToStdString(key));
+			if ( values.empty() == false
+			     && values.back().first.IsInfinite() == false ) {
+				time = values.back().first.Add(fort::Duration::Minute);
+			}
+		} catch ( const std::exception &) {
+		}
+		return setValue(antID,keyRow,time,d_keyModel->defaultValue(keyRow));
 	}
 
 	bool setValue(quint32 antID,
@@ -466,6 +506,12 @@ public:
 			return displayData(index);
 		case AntKeyValueBridge::KeyTypeRole:
 			return keyTypeData(index);
+		case AntKeyValueBridge::KeyNameRole:
+			return keyNameData(index);
+		case AntKeyValueBridge::AntIDRole:
+			return antIDData(index);
+		case AntKeyValueBridge::TimeRole:
+			return timeData(index);
 		default:
 			return QVariant();
 		}
@@ -847,6 +893,47 @@ private:
 		return d_keyModel->index(p->Key,1).data(AntKeyValueBridge::KeyTypeRole);
 	}
 
+	QVariant keyNameData(const QModelIndex & index) const {
+		if ( index.isValid() == false ) {
+			return QVariant();
+		}
+		auto p = static_cast<Pointer*>(index.internalPointer());
+		if ( p->Key < 0 || p->Key >= d_keyModel->rowCount() ) {
+			return QVariant();
+		}
+		return d_keyModel->index(p->Key,0).data(Qt::DisplayRole);
+	}
+
+	QVariant antIDData(const QModelIndex & index) const {
+		if ( index.isValid() == false ) {
+			return QVariant();
+		}
+		auto p = static_cast<Pointer*>(index.internalPointer());
+		try {
+			return d_ants.at(p->Ant)->AntID();
+		} catch ( const std::exception &) {
+		}
+		return QVariant();
+	}
+
+	QVariant timeData(const QModelIndex & index) const {
+		if ( index.isValid() == false ) {
+			return QVariant();
+		}
+		auto p = static_cast<Pointer*>(index.internalPointer());
+		if ( p->Value < 0 ) {
+			return QVariant();
+		}
+		try {
+			const auto & ant = d_ants.at(p->Ant);
+			const auto & values = ant->DataMap().at(keyNameAt(p->Key));
+			return ToQString(values.at(p->Value).first.Format());
+		} catch ( const std::exception & ) {
+		}
+		return QVariant();
+	}
+
+
 	QVariant displayData(const QModelIndex & index) const {
 		if ( index.isValid() == false ) {
 			return QVariant();
@@ -1029,9 +1116,9 @@ void AntKeyValueBridge::setValue(quint32 antID,
 	}
 }
 
-void AntKeyValueBridge::clearValue(quint32 antID,
-                                   const QString & key,
-                                   const fort::Time & time) {
+void AntKeyValueBridge::deleteValue(quint32 antID,
+                                    const QString & key,
+                                    const fort::Time & time) {
 	if ( !d_experiment ) {
 		return;
 	}
@@ -1040,6 +1127,18 @@ void AntKeyValueBridge::clearValue(quint32 antID,
 		setModified(true);
 	}
 }
+
+void AntKeyValueBridge::appendDefaultValue(quint32 antID,
+                                           const QString & key) {
+	if ( !d_experiment ) {
+		return;
+	}
+
+	if ( d_dataModel->appendDefaultValue(antID,key) == true ) {
+		setModified(true);
+	}
+}
+
 
 
 void AntKeyValueBridge::onAntCreated(quint32 antID) {
