@@ -22,8 +22,8 @@ protected:
 		antMetadata = std::make_shared<AntMetadata>();
 		auto dead = AntMetadata::SetKey(antMetadata,"dead",false);
 		auto group = AntMetadata::SetKey(antMetadata,"group",std::string());
-		ASSERT_EQ(dead->Type(),AntMetaDataType::BOOL);
-		ASSERT_EQ(group->Type(),AntMetaDataType::STRING);
+		ASSERT_EQ(dead->Type(),ValueType::BOOL);
+		ASSERT_EQ(group->Type(),ValueType::STRING);
 		ant = std::make_shared<Ant>(shapeTypes,
 		                            antMetadata,
 		                            1);
@@ -74,7 +74,7 @@ TEST_F(AntUTest,StaticDataTest) {
 	}
 
 	EXPECT_THROW(ant->SetValue("isQueen",true,Time::SinceEver()),std::out_of_range);
-	EXPECT_THROW(ant->SetValue("dead",0,Time::SinceEver()),std::bad_variant_access);
+	EXPECT_THROW(ant->SetValue("dead",0,Time::SinceEver()),std::runtime_error);
 	EXPECT_THROW({ant->SetValue("dead",false,Time::Forever());},std::invalid_argument);
 	EXPECT_NO_THROW({
 			ant->SetValue("dead",true,Time::SinceEver());

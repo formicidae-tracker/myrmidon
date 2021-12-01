@@ -42,18 +42,18 @@ void Ant::SetDisplayStatus(DisplayState s) {
 	d_p->Get().SetDisplayStatus(s);
 }
 
-const AntStaticValue & Ant::GetValue(const std::string & name,
+const Value & Ant::GetValue(const std::string & name,
                                       const Time & time) const {
 	return d_p->Get().GetValue(name,time);
 }
 
 void Ant::SetValue(const std::string & name,
-                   const AntStaticValue & value,
+                   const Value & value,
                    const Time & time) {
 	d_p->Get().SetValue(name,value,time);
 }
 
-const std::map<Time,AntStaticValue> & Ant::GetValues(const std::string & key) const {
+const std::map<Time,Value> & Ant::GetValues(const std::string & key) const {
 	return d_p->Get().GetValues(key);
 }
 

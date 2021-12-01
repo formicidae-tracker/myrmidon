@@ -119,7 +119,7 @@ inline SEXP fmExperiment_MetaDataKeys(ExperimentPtr * e) {
 IMPLEMENT_VOID_METHOD_X(fmExperiment,ExperimentPtr,
                         SetMetaDataKey,
                         const std::string &, key,
-                        const fort::myrmidon::AntStaticValue &, value);
+                        const fort::myrmidon::Value &, value);
 
 IMPLEMENT_VOID_METHOD_X(fmExperiment,ExperimentPtr,
                         DeleteMetaDataKey,

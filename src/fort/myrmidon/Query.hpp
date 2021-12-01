@@ -13,7 +13,7 @@
 #include <fort/myrmidon/types/Collision.hpp>
 #include <fort/myrmidon/types/AntTrajectory.hpp>
 #include <fort/myrmidon/types/AntInteraction.hpp>
-#include <fort/myrmidon/types/AntStaticValue.hpp>
+#include <fort/myrmidon/types/Value.hpp>
 
 
 namespace fort {
@@ -354,7 +354,7 @@ public:
 	static std::vector<std::tuple<AntID,Time,Time>>
 	GetMetaDataKeyRanges(const Experiment & e,
 	                     const std::string & key,
-	                     const AntStaticValue & value);
+	                     const Value & value);
 };
 
 

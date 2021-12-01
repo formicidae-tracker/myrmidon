@@ -119,9 +119,9 @@ public:
 
 	static int SaveAntDisplayState(myrmidon::Ant::DisplayState s);
 
-	static AntStaticValue LoadAntStaticValue(const pb::AntStaticValue & pb);
+	static Value LoadValue(const pb::AntStaticValue & pb);
 
-	static void SaveAntStaticValue(pb::AntStaticValue * pb, const AntStaticValue & value);
+	static void SaveValue(pb::AntStaticValue * pb, const Value & value);
 
 
 	// Loads an Ant from a protobuf message

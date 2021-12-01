@@ -185,7 +185,7 @@ void Query::FindVideoSegments(const Experiment & experiment,
 std::vector<std::tuple<AntID,Time,Time>>
 Query::GetMetaDataKeyRanges(const Experiment & e,
                             const std::string & key,
-                            const AntStaticValue & value) {
+                            const Value & value) {
 	std::vector<std::tuple<AntID,Time,Time>> res;
 	if ( e.MetaDataKeys().count(key) == 0 ) {
 		throw std::out_of_range("Invalid key '" + key + "'");

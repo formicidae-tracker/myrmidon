@@ -628,8 +628,8 @@ TEST_F(ExperimentUTest,AntShapeTypeManipulation) {
 TEST_F(ExperimentUTest,AntMetadataManipulation) {
 	auto alive = e->SetMetaDataKey("alive",true);
 	auto group = e->SetMetaDataKey("group",std::string());
-	ASSERT_EQ(alive->Type(),AntMetaDataType::BOOL);
-	ASSERT_EQ(group->Type(),AntMetaDataType::STRING);
+	ASSERT_EQ(alive->Type(),ValueType::BOOL);
+	ASSERT_EQ(group->Type(),ValueType::STRING);
 	auto ant = e->CreateAnt();
 	EXPECT_NO_THROW({
 			ant->SetValue("group",std::string("nurse"),Time::SinceEver());
@@ -638,10 +638,10 @@ TEST_F(ExperimentUTest,AntMetadataManipulation) {
 	EXPECT_THROW(group->SetDefaultValue(12),std::runtime_error);
 	//OK to change a column without any values
 	EXPECT_NO_THROW(alive->SetDefaultValue(0));
-	ASSERT_EQ(alive->Type(),AntMetaDataType::INT);
+	ASSERT_EQ(alive->Type(),ValueType::INT);
 	// Adding a column marks adds a default value to all Ant immediatly
 	auto ageInDays = e->SetMetaDataKey("age",0.0);
-	ASSERT_EQ(ageInDays->Type(),AntMetaDataType::DOUBLE);
+	ASSERT_EQ(ageInDays->Type(),ValueType::DOUBLE);
 	EXPECT_NO_THROW({
 			EXPECT_EQ(std::get<double>(ant->GetValue("age",Time())),0.0);
 		});

@@ -98,13 +98,13 @@ TEST_F(PublicAntUTest,AntHaveStaticValue) {
 	auto values = a->GetValues("alive");
 	EXPECT_EQ(values.size(),1);
 	ASSERT_EQ(values.count(Time::SinceEver()),1);
-	EXPECT_ANT_STATIC_VALUE_EQ(values.at(Time::SinceEver()),true);
+	EXPECT_VALUE_EQ(values.at(Time::SinceEver()),true);
 
 
 	EXPECT_THROW(a->GetValue("isDead",t),std::out_of_range);
 
 	EXPECT_THROW(a->SetValue("isDead",true,t),std::out_of_range);
-	EXPECT_THROW(a->SetValue("alive",42,t),std::bad_variant_access);
+	EXPECT_THROW(a->SetValue("alive",42,t),std::runtime_error);
 	EXPECT_THROW(a->SetValue("alive",false,Time::Forever()),std::invalid_argument);
 
 
@@ -114,30 +114,30 @@ TEST_F(PublicAntUTest,AntHaveStaticValue) {
 	EXPECT_EQ(values.size(),2);
 	ASSERT_EQ(values.count(Time::SinceEver()),1);
 	ASSERT_EQ(values.count(t),1);
-	EXPECT_ANT_STATIC_VALUE_EQ(values.at(Time::SinceEver()),true);
-	EXPECT_ANT_STATIC_VALUE_EQ(values.at(t),false);
+	EXPECT_VALUE_EQ(values.at(Time::SinceEver()),true);
+	EXPECT_VALUE_EQ(values.at(t),false);
 
 	EXPECT_THROW(a->GetValues("isDead"),std::out_of_range);
 
 
-	EXPECT_ANT_STATIC_VALUE_EQ(a->GetValue("alive",Time::SinceEver()),true);
-	EXPECT_ANT_STATIC_VALUE_EQ(a->GetValue("alive",t.Add(-1)),true);
-	EXPECT_ANT_STATIC_VALUE_EQ(a->GetValue("alive",t),false);
-	EXPECT_ANT_STATIC_VALUE_EQ(a->GetValue("alive",Time::Forever()),false);
+	EXPECT_VALUE_EQ(a->GetValue("alive",Time::SinceEver()),true);
+	EXPECT_VALUE_EQ(a->GetValue("alive",t.Add(-1)),true);
+	EXPECT_VALUE_EQ(a->GetValue("alive",t),false);
+	EXPECT_VALUE_EQ(a->GetValue("alive",Time::Forever()),false);
 
 	EXPECT_THROW(a->DeleteValue("isDead",t),std::out_of_range);
 	EXPECT_THROW(a->DeleteValue("alive",t.Add(1)),std::out_of_range);
 
 	EXPECT_NO_THROW(a->DeleteValue("alive",t));
-	EXPECT_ANT_STATIC_VALUE_EQ(a->GetValue("alive",t),true);
-	EXPECT_ANT_STATIC_VALUE_EQ(a->GetValue("alive",Time::Forever()),true);
+	EXPECT_VALUE_EQ(a->GetValue("alive",t),true);
+	EXPECT_VALUE_EQ(a->GetValue("alive",Time::Forever()),true);
 
 	e->SetMetaDataKey("alive",false);
 
-	EXPECT_ANT_STATIC_VALUE_EQ(a->GetValue("alive",Time::SinceEver()),false);
-	EXPECT_ANT_STATIC_VALUE_EQ(a->GetValue("alive",t.Add(-1)),false);
-	EXPECT_ANT_STATIC_VALUE_EQ(a->GetValue("alive",t),false);
-	EXPECT_ANT_STATIC_VALUE_EQ(a->GetValue("alive",Time::Forever()),false);
+	EXPECT_VALUE_EQ(a->GetValue("alive",Time::SinceEver()),false);
+	EXPECT_VALUE_EQ(a->GetValue("alive",t.Add(-1)),false);
+	EXPECT_VALUE_EQ(a->GetValue("alive",t),false);
+	EXPECT_VALUE_EQ(a->GetValue("alive",Time::Forever()),false);
 }
 
 

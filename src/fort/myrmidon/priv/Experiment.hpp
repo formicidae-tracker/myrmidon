@@ -226,7 +226,7 @@ public :
 
 	const AntMetadata::Ptr & AntMetadataPtr() const ;
 
-	AntMetadata::Key::Ptr SetMetaDataKey(const std::string & name, AntStaticValue type);
+	AntMetadata::Key::Ptr SetMetaDataKey(const std::string & name, const Value & type);
 
 	void DeleteMetaDataKey(const std::string & name);
 

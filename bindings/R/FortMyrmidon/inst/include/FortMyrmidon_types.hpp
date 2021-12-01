@@ -32,8 +32,8 @@ template <> SEXP wrap(const fort::myrmidon::AntByID & );
 
 template <> SEXP wrap(const fort::myrmidon::IdentificationList &);
 
-template <> fort::myrmidon::AntStaticValue as(SEXP);
-template <> SEXP wrap(const fort::myrmidon::AntStaticValue & );
+template <> fort::myrmidon::Value as(SEXP);
+template <> SEXP wrap(const fort::myrmidon::Value & );
 
 
 template <> SEXP wrap(const fort::myrmidon::TypedCapsuleList & );

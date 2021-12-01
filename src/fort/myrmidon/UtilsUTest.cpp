@@ -5,7 +5,7 @@
 #include <Eigen/Geometry>
 
 #include <fort/myrmidon/Shapes.hpp>
-#include <fort/myrmidon/types/AntStaticValue.hpp>
+#include <fort/myrmidon/types/Value.hpp>
 #include <fort/myrmidon/types/IdentifiedFrame.hpp>
 #include <fort/myrmidon/types/AntTrajectory.hpp>
 #include <fort/myrmidon/types/AntInteraction.hpp>
@@ -211,10 +211,10 @@ testing::AssertionResult AssertShapeEqual(const char * aExpr,
 	return ::testing::AssertionFailure() << "unsupported shape type";
 }
 
-::testing::AssertionResult AssertAntStaticValueEqual(const char * aExpr,
-                                                     const char * bExpr,
-                                                     const fort::myrmidon::AntStaticValue &a,
-                                                     const fort::myrmidon::AntStaticValue &b) {
+::testing::AssertionResult AssertValueEqual(const char * aExpr,
+                                               const char * bExpr,
+                                               const fort::myrmidon::Value &a,
+                                               const fort::myrmidon::Value &b) {
 	if ( a.index() != b.index() ) {
 		return failure_helper(aExpr,bExpr,a,b,index());
 	}

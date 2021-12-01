@@ -106,8 +106,8 @@ Raises:
     IndexError: if **key** is not defined in :class:`Experiment`
 )pydoc")
 		.def("GetValues",
-		     [](const Ant & self, const std::string & key) -> std::vector<std::pair<fort::Time,AntStaticValue>> {
-			     std::vector<std::pair<fort::Time,AntStaticValue>> res;
+		     [](const Ant & self, const std::string & key) -> std::vector<std::pair<fort::Time,Value>> {
+			     std::vector<std::pair<fort::Time,Value>> res;
 			     const auto & values = self.GetValues(key);
 			     std::copy(values.begin(),values.end(),std::back_inserter(res));
 			     return res;

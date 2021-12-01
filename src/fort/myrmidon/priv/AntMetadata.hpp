@@ -4,7 +4,7 @@
 #include <string>
 #include <map>
 
-#include <fort/myrmidon/types/AntStaticValue.hpp>
+#include <fort/myrmidon/types/Value.hpp>
 
 
 namespace fort {
@@ -31,21 +31,21 @@ public:
 
 		Key(const std::weak_ptr<AntMetadata> & metadata,
 		    const std::string & name,
-		    const AntStaticValue & defaultValue);
+		    const Value & defaultValue);
 
 		const std::string & Name() const;
 		void SetName(const std::string & name);
 
-		AntMetaDataType Type() const;
+		ValueType Type() const;
 
-		const AntStaticValue & DefaultValue() const;
+		const Value & DefaultValue() const;
 
-		void SetDefaultValue( const AntStaticValue & value);
+		void SetDefaultValue( const Value & value);
 
 	private:
 		std::weak_ptr<AntMetadata> d_metadata;
 		std::string                d_name;
-		AntStaticValue             d_default;
+		Value             d_default;
 	};
 
 	typedef std::map<std::string,Key::Ptr> KeysByName;
@@ -53,23 +53,19 @@ public:
 	typedef std::function<void (const std::string &,
 	                            const std::string &)>    NameChangeCallback;
 	typedef std::function<void (const std::string &,
-	                            AntMetaDataType,
-	                            AntMetaDataType)>        TypeChangeCallback;
+	                            ValueType,
+	                            ValueType)>        TypeChangeCallback;
 	typedef std::function<void (const std::string &,
-	                            const AntStaticValue &,
-	                            const AntStaticValue &)> DefaultChangeCallback;
+	                            const Value &,
+	                            const Value &)> DefaultChangeCallback;
 
-	static AntStaticValue DefaultValue(AntMetaDataType type);
 
-	static AntMetadata::Validity Validate(AntMetaDataType type, const std::string & value);
+	static AntMetadata::Validity Validate(ValueType type, const std::string & value);
 
-	static void CheckType(AntMetaDataType type, const AntStaticValue & data);
-
-	static AntStaticValue FromString(AntMetaDataType type, const std::string & name);
 
 	static Key::Ptr SetKey(const Ptr & itself,
 	                       const std::string & name,
-	                       AntStaticValue defaultValue);
+	                       Value defaultValue);
 
 	AntMetadata();
 

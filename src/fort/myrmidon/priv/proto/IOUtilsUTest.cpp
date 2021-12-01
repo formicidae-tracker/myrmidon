@@ -326,8 +326,8 @@ TEST_F(IOUtilsUTest,ShapeIO) {
 }
 
 
-TEST_F(IOUtilsUTest,AntStaticValueIO) {
-	std::vector<AntStaticValue> testdata =
+TEST_F(IOUtilsUTest,ValueIO) {
+	std::vector<Value> testdata =
 		{
 		 false,
 		 true,
@@ -344,10 +344,10 @@ TEST_F(IOUtilsUTest,AntStaticValueIO) {
 	for ( const auto & d : testdata ) {
 		pb::AntStaticValue pb,expected;
 		expected.set_type(pb::AntStaticValue_Type(d.index()));
-		IOUtils::SaveAntStaticValue(&pb,d);
+		IOUtils::SaveValue(&pb,d);
 		EXPECT_EQ(pb.type(),expected.type());
-		auto res = IOUtils::LoadAntStaticValue(pb);
-		EXPECT_ANT_STATIC_VALUE_EQ(res,d);
+		auto res = IOUtils::LoadValue(pb);
+		EXPECT_VALUE_EQ(res,d);
 	}
 
 }
@@ -414,8 +414,8 @@ TEST_F(IOUtilsUTest,AntIO) {
 	auto e = Experiment::Create(TestSetup::UTestData().Basedir() / "test-ant-io.myrmidon");
 	auto alive = e->SetMetaDataKey("alive",true);
 	auto group = e->SetMetaDataKey("group",std::string());
-	ASSERT_EQ(alive->Type(),AntMetaDataType::BOOL);
-	ASSERT_EQ(group->Type(),AntMetaDataType::STRING);
+	ASSERT_EQ(alive->Type(),ValueType::BOOL);
+	ASSERT_EQ(group->Type(),ValueType::STRING);
 	auto shapeType = e->CreateAntShapeType("whole-body");
 	for(auto & d: testdata) {
 		auto dA = e->CreateAnt();
@@ -456,7 +456,7 @@ TEST_F(IOUtilsUTest,AntIO) {
 			for ( const auto & [time,value] : tValues ) {
 				auto ev = expected.add_namedvalues();
 				ev->set_name(name);
-				IOUtils::SaveAntStaticValue(ev->mutable_value(),value);
+				IOUtils::SaveValue(ev->mutable_value(),value);
 				if ( time.IsSinceEver() == false ) {
 					time.ToTimestamp(ev->mutable_time());
 				}
@@ -623,11 +623,11 @@ TEST_F(IOUtilsUTest,ExperimentIO) {
 			e->SetMetaDataKey("alive",false);
 			auto c = expected.add_antmetadata();
 			c->set_name("alive");
-			IOUtils::SaveAntStaticValue(c->mutable_defaultvalue(),AntStaticValue(false));
+			IOUtils::SaveValue(c->mutable_defaultvalue(),Value(false));
 			e->SetMetaDataKey("group",std::string());
 			c = expected.add_antmetadata();
 			c->set_name("group");
-			IOUtils::SaveAntStaticValue(c->mutable_defaultvalue(),AntStaticValue(std::string()));
+			IOUtils::SaveValue(c->mutable_defaultvalue(),Value(std::string()));
 
 
 		});

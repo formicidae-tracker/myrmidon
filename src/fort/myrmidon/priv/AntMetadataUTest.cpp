@@ -31,7 +31,7 @@ TEST_F(AntMetadataUTest,KeyHaveUniqueName) {
 	EXPECT_NO_THROW(bar = AntMetadata::SetKey(metadata,"bar",12););
 	EXPECT_NO_THROW(baz = AntMetadata::SetKey(metadata,"baz",std::string()););
 
-	ASSERT_EQ(baz->Type(), AntMetaDataType::STRING);
+	ASSERT_EQ(baz->Type(), ValueType::STRING);
 
 	EXPECT_THROW({
 			foo->SetName("bar");
@@ -43,9 +43,9 @@ TEST_F(AntMetadataUTest,KeyHaveUniqueName) {
 
 TEST_F(AntMetadataUTest,ColumnAdditionDeletion) {
 	AntMetadata::Key::Ptr foo,bar,baz;
-	EXPECT_NO_THROW(foo = AntMetadata::SetKey(metadata,"foo",AntMetadata::DefaultValue(AntMetaDataType::BOOL)););
-	EXPECT_NO_THROW(bar = AntMetadata::SetKey(metadata,"bar",AntMetadata::DefaultValue(AntMetaDataType::INT)););
-	EXPECT_NO_THROW(baz = AntMetadata::SetKey(metadata,"baz",AntMetadata::DefaultValue(AntMetaDataType::STRING)););
+	EXPECT_NO_THROW(foo = AntMetadata::SetKey(metadata,"foo",ValueUtils::Default(ValueType::BOOL)););
+	EXPECT_NO_THROW(bar = AntMetadata::SetKey(metadata,"bar",ValueUtils::Default(ValueType::INT)););
+	EXPECT_NO_THROW(baz = AntMetadata::SetKey(metadata,"baz",ValueUtils::Default(ValueType::STRING)););
 
 	EXPECT_EQ(metadata->Keys().size(),3);
 
@@ -73,106 +73,36 @@ TEST_F(AntMetadataUTest,ColumnAdditionDeletion) {
 	EXPECT_EQ(metadata->Keys().size(),2);
 }
 
-TEST_F(AntMetadataUTest,DataTypeChecking) {
-	EXPECT_NO_THROW(AntMetadata::CheckType(AntMetaDataType::BOOL,true));
-	EXPECT_THROW(AntMetadata::CheckType(AntMetaDataType::BOOL,0),std::bad_variant_access);
-	EXPECT_THROW(AntMetadata::CheckType(AntMetaDataType::BOOL,0.0),std::bad_variant_access);
-	EXPECT_THROW(AntMetadata::CheckType(AntMetaDataType::BOOL,std::string("foo")),std::bad_variant_access);
-	EXPECT_THROW(AntMetadata::CheckType(AntMetaDataType::BOOL,Time::FromTimeT(0)),std::bad_variant_access);
-
-	EXPECT_THROW(AntMetadata::CheckType(AntMetaDataType::INT,true),std::bad_variant_access);
-	EXPECT_NO_THROW(AntMetadata::CheckType(AntMetaDataType::INT,0));
-	EXPECT_THROW(AntMetadata::CheckType(AntMetaDataType::INT,0.0),std::bad_variant_access);
-	EXPECT_THROW(AntMetadata::CheckType(AntMetaDataType::INT,std::string("foo")),std::bad_variant_access);
-	EXPECT_THROW(AntMetadata::CheckType(AntMetaDataType::INT,Time::FromTimeT(0)),std::bad_variant_access);
-
-	EXPECT_THROW(AntMetadata::CheckType(AntMetaDataType::DOUBLE,true),std::bad_variant_access);
-	EXPECT_THROW(AntMetadata::CheckType(AntMetaDataType::DOUBLE,0),std::bad_variant_access);
-	EXPECT_NO_THROW(AntMetadata::CheckType(AntMetaDataType::DOUBLE,0.0));
-	EXPECT_THROW(AntMetadata::CheckType(AntMetaDataType::DOUBLE,std::string("foo")),std::bad_variant_access);
-	EXPECT_THROW(AntMetadata::CheckType(AntMetaDataType::DOUBLE,Time::FromTimeT(0)),std::bad_variant_access);
-
-	EXPECT_THROW(AntMetadata::CheckType(AntMetaDataType::STRING,true),std::bad_variant_access);
-	EXPECT_THROW(AntMetadata::CheckType(AntMetaDataType::STRING,0),std::bad_variant_access);
-	EXPECT_THROW(AntMetadata::CheckType(AntMetaDataType::STRING,0.0),std::bad_variant_access);
-	EXPECT_NO_THROW(AntMetadata::CheckType(AntMetaDataType::STRING,std::string("foo")));
-	EXPECT_THROW(AntMetadata::CheckType(AntMetaDataType::STRING,Time::FromTimeT(0)),std::bad_variant_access);
-
-	EXPECT_THROW(AntMetadata::CheckType(AntMetaDataType::TIME,true),std::bad_variant_access);
-	EXPECT_THROW(AntMetadata::CheckType(AntMetaDataType::TIME,0),std::bad_variant_access);
-	EXPECT_THROW(AntMetadata::CheckType(AntMetaDataType::TIME,0.0),std::bad_variant_access);
-	EXPECT_THROW(AntMetadata::CheckType(AntMetaDataType::TIME,std::string("foo")),std::bad_variant_access);
-	EXPECT_NO_THROW(AntMetadata::CheckType(AntMetaDataType::TIME,Time::FromTimeT(0)));
-
-	EXPECT_THROW(AntMetadata::CheckType(AntMetaDataType(42),true),std::invalid_argument);
-}
-
-
-TEST_F(AntMetadataUTest,DataTypeStringConversion) {
-
-	EXPECT_NO_THROW({
-			EXPECT_TRUE(std::get<bool>(AntMetadata::FromString(AntMetaDataType::BOOL,"true")));
-		});
-	EXPECT_NO_THROW({
-			EXPECT_FALSE(std::get<bool>(AntMetadata::FromString(AntMetaDataType::BOOL,"false")));
-		});
-	EXPECT_THROW({AntMetadata::FromString(AntMetaDataType::BOOL,"");},std::invalid_argument);
-
-
-	EXPECT_NO_THROW({
-			EXPECT_EQ(std::get<int>(AntMetadata::FromString(AntMetaDataType::INT,"-12345")),-12345);
-		});
-	EXPECT_THROW({AntMetadata::FromString(AntMetaDataType::INT,"foo");},std::invalid_argument);
-
-
-	EXPECT_NO_THROW({
-			EXPECT_DOUBLE_EQ(std::get<double>(AntMetadata::FromString(AntMetaDataType::DOUBLE,"0.69e-6")),0.69e-6);
-		});
-	EXPECT_THROW({AntMetadata::FromString(AntMetaDataType::DOUBLE,"foo");},std::invalid_argument);
-
-	EXPECT_NO_THROW({
-			EXPECT_EQ(std::get<std::string>(AntMetadata::FromString(AntMetaDataType::STRING,"foobar")),"foobar");
-		});
-
-	EXPECT_NO_THROW({
-			auto dateStr = "2019-11-02T23:46:23.000Z";
-			EXPECT_TIME_EQ(std::get<Time>(AntMetadata::FromString(AntMetaDataType::TIME,dateStr)),Time::Parse(dateStr));
-		});
-	EXPECT_THROW({AntMetadata::FromString(AntMetaDataType::DOUBLE,"foo");},std::invalid_argument);
-
-	EXPECT_THROW(AntMetadata::FromString(AntMetaDataType(42),"foo"),std::invalid_argument);
-
-}
 
 
 TEST_F(AntMetadataUTest,DataTypeStringValidation) {
-	EXPECT_EQ(AntMetadata::Validate(AntMetaDataType::BOOL,"true"),AntMetadata::Validity::Valid);
-	EXPECT_EQ(AntMetadata::Validate(AntMetaDataType::BOOL,"false"),AntMetadata::Validity::Valid);
-	EXPECT_EQ(AntMetadata::Validate(AntMetaDataType::BOOL,"true2"),AntMetadata::Validity::Invalid);
-	EXPECT_EQ(AntMetadata::Validate(AntMetaDataType::BOOL,"tru"),AntMetadata::Validity::Intermediate);
+	EXPECT_EQ(AntMetadata::Validate(ValueType::BOOL,"true"),AntMetadata::Validity::Valid);
+	EXPECT_EQ(AntMetadata::Validate(ValueType::BOOL,"false"),AntMetadata::Validity::Valid);
+	EXPECT_EQ(AntMetadata::Validate(ValueType::BOOL,"true2"),AntMetadata::Validity::Invalid);
+	EXPECT_EQ(AntMetadata::Validate(ValueType::BOOL,"tru"),AntMetadata::Validity::Intermediate);
 
 
-	EXPECT_EQ(AntMetadata::Validate(AntMetaDataType::INT,"123456"),AntMetadata::Validity::Valid);
-	EXPECT_EQ(AntMetadata::Validate(AntMetaDataType::INT,"+123456"),AntMetadata::Validity::Valid);
-	EXPECT_EQ(AntMetadata::Validate(AntMetaDataType::INT,"-123456"),AntMetadata::Validity::Valid);
-	EXPECT_EQ(AntMetadata::Validate(AntMetaDataType::INT,"+"),AntMetadata::Validity::Intermediate);
-	EXPECT_EQ(AntMetadata::Validate(AntMetaDataType::INT,"-"),AntMetadata::Validity::Intermediate);
-	EXPECT_EQ(AntMetadata::Validate(AntMetaDataType::INT,"foo"),AntMetadata::Validity::Invalid);
+	EXPECT_EQ(AntMetadata::Validate(ValueType::INT,"123456"),AntMetadata::Validity::Valid);
+	EXPECT_EQ(AntMetadata::Validate(ValueType::INT,"+123456"),AntMetadata::Validity::Valid);
+	EXPECT_EQ(AntMetadata::Validate(ValueType::INT,"-123456"),AntMetadata::Validity::Valid);
+	EXPECT_EQ(AntMetadata::Validate(ValueType::INT,"+"),AntMetadata::Validity::Intermediate);
+	EXPECT_EQ(AntMetadata::Validate(ValueType::INT,"-"),AntMetadata::Validity::Intermediate);
+	EXPECT_EQ(AntMetadata::Validate(ValueType::INT,"foo"),AntMetadata::Validity::Invalid);
 
-	EXPECT_EQ(AntMetadata::Validate(AntMetaDataType::DOUBLE,"1.2345e-6"),AntMetadata::Validity::Valid);
-	EXPECT_EQ(AntMetadata::Validate(AntMetaDataType::DOUBLE,"+123456"),AntMetadata::Validity::Valid);
-	EXPECT_EQ(AntMetadata::Validate(AntMetaDataType::DOUBLE,"-1.234e-6"),AntMetadata::Validity::Valid);
-	EXPECT_EQ(AntMetadata::Validate(AntMetaDataType::DOUBLE,"1.234e-"),AntMetadata::Validity::Intermediate);
-	EXPECT_EQ(AntMetadata::Validate(AntMetaDataType::DOUBLE,"-"),AntMetadata::Validity::Intermediate);
-	EXPECT_EQ(AntMetadata::Validate(AntMetaDataType::DOUBLE,"foo"),AntMetadata::Validity::Invalid);
+	EXPECT_EQ(AntMetadata::Validate(ValueType::DOUBLE,"1.2345e-6"),AntMetadata::Validity::Valid);
+	EXPECT_EQ(AntMetadata::Validate(ValueType::DOUBLE,"+123456"),AntMetadata::Validity::Valid);
+	EXPECT_EQ(AntMetadata::Validate(ValueType::DOUBLE,"-1.234e-6"),AntMetadata::Validity::Valid);
+	EXPECT_EQ(AntMetadata::Validate(ValueType::DOUBLE,"1.234e-"),AntMetadata::Validity::Intermediate);
+	EXPECT_EQ(AntMetadata::Validate(ValueType::DOUBLE,"-"),AntMetadata::Validity::Intermediate);
+	EXPECT_EQ(AntMetadata::Validate(ValueType::DOUBLE,"foo"),AntMetadata::Validity::Invalid);
 
-	EXPECT_EQ(AntMetadata::Validate(AntMetaDataType::STRING,"sdbi wi \n fo"),AntMetadata::Validity::Valid);
+	EXPECT_EQ(AntMetadata::Validate(ValueType::STRING,"sdbi wi \n fo"),AntMetadata::Validity::Valid);
 
-	EXPECT_EQ(AntMetadata::Validate(AntMetaDataType::TIME,"2019-11-02T23:56:02.123456Z"),AntMetadata::Validity::Valid);
+	EXPECT_EQ(AntMetadata::Validate(ValueType::TIME,"2019-11-02T23:56:02.123456Z"),AntMetadata::Validity::Valid);
 
-	EXPECT_EQ(AntMetadata::Validate(AntMetaDataType::TIME,"<any-string>"),AntMetadata::Validity::Intermediate);
+	EXPECT_EQ(AntMetadata::Validate(ValueType::TIME,"<any-string>"),AntMetadata::Validity::Intermediate);
 
-	EXPECT_THROW(AntMetadata::Validate(AntMetaDataType(42), ""),std::invalid_argument);
+	EXPECT_THROW(AntMetadata::Validate(ValueType(42), ""),std::invalid_argument);
 }
 
 
@@ -180,8 +110,8 @@ TEST_F(AntMetadataUTest,ColumnPropertyCallbacks) {
 	class MockAntMetadataCallback {
 	public:
 		MOCK_METHOD(void,OnNameChange,(const std::string &, const std::string),());
-		MOCK_METHOD(void,OnTypeChange,(const std::string &, AntMetaDataType, AntMetaDataType),());
-		MOCK_METHOD(void,OnDefaultChange,(const std::string &, const AntStaticValue &, const AntStaticValue&),());
+		MOCK_METHOD(void,OnTypeChange,(const std::string &, ValueType, ValueType),());
+		MOCK_METHOD(void,OnDefaultChange,(const std::string &, const Value &, const Value&),());
 	};
 
 	MockAntMetadataCallback callbacks;
@@ -190,13 +120,13 @@ TEST_F(AntMetadataUTest,ColumnPropertyCallbacks) {
 		                                         callbacks.OnNameChange(oldName,newName);
 	                                         },
 	                                         [&callbacks](const std::string & name,
-	                                                     AntMetaDataType oldType,
-	                                                     AntMetaDataType newType) {
+	                                                     ValueType oldType,
+	                                                     ValueType newType) {
 		                                         callbacks.OnTypeChange(name,oldType,newType);
 	                                         },
 	                                         [&callbacks](const std::string & name,
-	                                                      const AntStaticValue & oldDefault,
-	                                                      const AntStaticValue & newDefault) {
+	                                                      const Value & oldDefault,
+	                                                      const Value & newDefault) {
 		                                         callbacks.OnDefaultChange(name,oldDefault,newDefault);
 	                                         });
 
@@ -204,17 +134,17 @@ TEST_F(AntMetadataUTest,ColumnPropertyCallbacks) {
 	auto column = AntMetadata::SetKey(metadata,
 	                                  "foo",
 	                                  false);
-	EXPECT_CALL(callbacks,OnDefaultChange("foo",AntStaticValue(false),AntStaticValue(true))).Times(1);
+	EXPECT_CALL(callbacks,OnDefaultChange("foo",Value(false),Value(true))).Times(1);
 	column->SetDefaultValue(true);
 
 
 	EXPECT_CALL(callbacks,OnNameChange("foo","bar")).Times(1);
-	EXPECT_CALL(callbacks,OnTypeChange("bar",AntMetaDataType::BOOL,AntMetaDataType::INT)).Times(1);
-	EXPECT_CALL(callbacks,OnDefaultChange("bar",AntStaticValue(true),AntStaticValue(0))).Times(1);
+	EXPECT_CALL(callbacks,OnTypeChange("bar",ValueType::BOOL,ValueType::INT)).Times(1);
+	EXPECT_CALL(callbacks,OnDefaultChange("bar",Value(true),Value(0))).Times(1);
 	column->SetName("bar");
 	ASSERT_EQ(column->Name(),"bar");
 	column->SetDefaultValue(0);
-	ASSERT_EQ(column->Type(),AntMetaDataType::INT);
+	ASSERT_EQ(column->Type(),ValueType::INT);
 
 
 	auto toDel = AntMetadata::SetKey(metadata,"foo",false);
@@ -244,11 +174,11 @@ TEST_F(AntMetadataUTest,ColumnHaveDefaults) {
 			timeCol = AntMetadata::SetKey(metadata,"timeCol",fort::Time());
 		});
 
-	EXPECT_EQ(boolCol->DefaultValue(),AntStaticValue(false));
-	EXPECT_EQ(intCol->DefaultValue(),AntStaticValue(0));
-	EXPECT_EQ(doubleCol->DefaultValue(),AntStaticValue(0.0));
-	EXPECT_EQ(stringCol->DefaultValue(),AntStaticValue(std::string()));
-	EXPECT_EQ(timeCol->DefaultValue(),AntStaticValue(Time()));
+	EXPECT_EQ(boolCol->DefaultValue(),Value(false));
+	EXPECT_EQ(intCol->DefaultValue(),Value(0));
+	EXPECT_EQ(doubleCol->DefaultValue(),Value(0.0));
+	EXPECT_EQ(stringCol->DefaultValue(),Value(std::string()));
+	EXPECT_EQ(timeCol->DefaultValue(),Value(Time()));
 
 	EXPECT_NO_THROW({
 			boolCol->SetDefaultValue(true);
@@ -262,19 +192,10 @@ TEST_F(AntMetadataUTest,ColumnHaveDefaults) {
 			boolCol->SetDefaultValue(fort::Time());
 		});
 
-	EXPECT_EQ(boolCol->DefaultValue(),AntStaticValue(Time()));
+	EXPECT_EQ(boolCol->DefaultValue(),Value(Time()));
 
 }
 
-
-TEST_F(AntMetadataUTest,DefinesDefaultValue) {
-	EXPECT_EQ(AntMetadata::DefaultValue(AntMetaDataType::BOOL),AntStaticValue(false));
-	EXPECT_EQ(AntMetadata::DefaultValue(AntMetaDataType::INT),AntStaticValue(0));
-	EXPECT_EQ(AntMetadata::DefaultValue(AntMetaDataType::DOUBLE),AntStaticValue(0.0));
-	EXPECT_EQ(AntMetadata::DefaultValue(AntMetaDataType::STRING),AntStaticValue(std::string()));
-	EXPECT_EQ(AntMetadata::DefaultValue(AntMetaDataType::TIME),AntStaticValue(Time()));
-	EXPECT_THROW(AntMetadata::DefaultValue(AntMetaDataType(int(AntMetaDataType::TIME)+1)),std::invalid_argument);
-}
 
 
 

@@ -127,7 +127,7 @@ TEST_F(MatchersUTest,ColumnMatcher) {
 
 	auto experiment = Experiment::Create(TestSetup::UTestData().Basedir() / "matcher.myrmidon");
 	auto bar = experiment->SetMetaDataKey("bar",int(0));
-	ASSERT_EQ(bar->Type(),AntMetaDataType::INT);
+	ASSERT_EQ(bar->Type(),ValueType::INT);
 
 	auto a = experiment->CreateAnt();
 	a->SetValue("bar",42,Time::SinceEver());
