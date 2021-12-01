@@ -86,3 +86,9 @@ test_that("can be rounded", {
     expect_true(t$round(fmHour(1)) == fmTimeParse("2020-03-20T16:00:00Z"))
     expect_true(t$round(fmHour(24)) == fmTimeParse("2020-03-21T00:00:00Z"))
 })
+
+test_that("can be parsed", {
+    expect_true( fmTimeParse("1970-01-02T01:02:03.004Z") == fmTimeCreate()$add(fmHour(25)+fmMinute(2)+fmSecond(3)+fmMillisecond(4)) )
+    expect_error(fmTimeParse("-∞"))
+    expect_error(fmTimeParse("+∞"))
+})
