@@ -196,7 +196,7 @@ set(SRC_UTEST_FILES utest/main.cpp
                     utest/MeasurementUTest.cpp
                     utest/IdentifierUTest.cpp
                     utest/AntShapeTypeUTest.cpp
-                    utest/AntMetadataUTest.cpp
+                    utest/AntKeyValueUTest.cpp
                     utest/ZoneUTest.cpp
                     utest/AntMeasurementUTest.cpp
 					utest/AntShapeUTest.cpp
@@ -213,7 +213,6 @@ set(HDR_UTEST_FILES utest/GlobalPropertyUTest.hpp
                     utest/MeasurementUTest.hpp
                     utest/IdentifierUTest.hpp
                     utest/AntShapeTypeUTest.hpp
-                    utest/AntMetadataUTest.hpp
                     utest/ZoneUTest.hpp
                     utest/AntMeasurementUTest.hpp
                     utest/AntShapeUTest.hpp
