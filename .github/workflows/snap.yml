@@ -17,12 +17,16 @@ jobs:
       - name: Fetches all tags
         run: git fetch --prune --unshallow --tags -f
       - uses: snapcore/action-build@v1
-      - name: Login to snap
-        run: |
-          echo "${{ secrets.SNAPCRAFT_TOKEN}}" | snapcraft login --with -
-      - name: Upload on edge
+        id: build
+      - uses: snapcore/action-publish@v1
+        with:
+          store_login: ${{ secrets.SNAPCRAFT_TOKEN }}
+          snap: ${{ steps.build.outputs.snap }}
+          release: edge
         if: ${{ github.event_name == 'push' }}
-        run: snapcraft upload --release edge fort-studio*.snap
-      - name: Upload on beta
+      - uses: snapcore/action-publish@v1
+        with:
+          store_login: ${{ secrets.SNAPCRAFT_TOKEN }}
+          snap: ${{ steps.build.outputs.snap }}
+          release: candidate
         if: ${{ github.event_name == 'release' }}
-        run: snapcraft upload --release candidate fort-studio*.snap
