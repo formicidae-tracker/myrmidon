@@ -156,7 +156,7 @@ TEST_F(ValueUtilsUTest,BuildValuedTimeRange) {
 
 }
 
-TEST_F(ValueUtilsUTest,IntersectsValuedTimeRange) {
+TEST_F(ValueUtilsUTest,IntersectionsOfValuedTimeRange) {
 	ValueUtils::ValuedTimeRangeList ranges
 		= {
 		   {
@@ -238,7 +238,7 @@ TEST_F(ValueUtilsUTest,IntersectsValuedTimeRange) {
 
 	for ( const auto & d : testdata ) {
 		SCOPED_TRACE(d.FormatInput());
-		d.Expect(ValueUtils::Intersects(ranges,d.Range));
+		d.Expect(ValueUtils::IntersectionOf(ranges,d.Range));
 	}
 }
 
