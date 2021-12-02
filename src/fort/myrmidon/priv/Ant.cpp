@@ -174,9 +174,14 @@ void Ant::DeleteValue(const std::string & name,
 	CompileData();
 }
 
+AntDataMap & Ant::DataMap() {
+	return d_data;
+}
+
 const AntDataMap & Ant::DataMap() const {
 	return d_data;
 }
+
 
 void Ant::CompileData() {
 	std::map<std::string,Value> defaults;

@@ -69,9 +69,17 @@ Experiment::Experiment(const fs::path & filepath )
 
 	auto onDefaultChange =
 		[this](const std::string & name,
-		       const Value &,
-		       const Value &) {
+		       const Value & oldValue,
+		       const Value & newValue) {
 			for ( const auto & [aID,ant] : d_identifier->Ants() ) {
+				try {
+					for ( auto & [time,value] : ant->DataMap().at(name) ) {
+						if ( value == oldValue ) {
+							value = newValue;
+						}
+					}
+				} catch ( const std::exception & ) {
+				}
 				ant->CompileData();
 			}
 		};

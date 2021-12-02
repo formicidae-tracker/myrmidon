@@ -124,6 +124,8 @@ public:
 
 	Value GetBaseValue(const std::string & name) const;
 
+	AntDataMap & DataMap();
+
 	const AntDataMap & DataMap() const;
 
 	void CompileData();

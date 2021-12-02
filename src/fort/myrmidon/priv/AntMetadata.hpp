@@ -51,10 +51,10 @@ public:
 	typedef std::map<std::string,Key::Ptr> KeysByName;
 
 	typedef std::function<void (const std::string &,
-	                            const std::string &)>    NameChangeCallback;
+	                            const std::string &)> NameChangeCallback;
 	typedef std::function<void (const std::string &,
 	                            ValueType,
-	                            ValueType)>        TypeChangeCallback;
+	                            ValueType)> TypeChangeCallback;
 	typedef std::function<void (const std::string &,
 	                            const Value &,
 	                            const Value &)> DefaultChangeCallback;
