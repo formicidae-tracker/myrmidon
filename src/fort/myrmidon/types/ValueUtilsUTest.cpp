@@ -142,7 +142,7 @@ TEST_F(ValueUtilsUTest,BuildValuedTimeRange) {
 		                 {
 		                  .Value = 2,
 		                  .Start = fort::Time().Add(2),
-		                  .End = fort::Time::SinceEver(),
+		                  .End = fort::Time::Forever(),
 		                 },
 			   },
 		   },

@@ -1,13 +1,16 @@
 #include "Query.hpp"
 
-#include "handle/ExperimentHandle.hpp"
+#include <fort/myrmidon/handle/ExperimentHandle.hpp>
 
 #include "Experiment.hpp"
+#include <fort/myrmidon/types/ValueUtils.hpp>
 
-#include "priv/Experiment.hpp"
-#include "priv/TrackingDataDirectory.hpp"
-#include "priv/Space.hpp"
-#include "priv/Query.hpp"
+#include <fort/myrmidon/priv/Experiment.hpp>
+#include <fort/myrmidon/priv/TrackingDataDirectory.hpp>
+#include <fort/myrmidon/priv/Space.hpp>
+#include <fort/myrmidon/priv/Query.hpp>
+
+
 
 namespace fort {
 namespace myrmidon {
@@ -195,23 +198,10 @@ Query::GetMetaDataKeyRanges(const Experiment & e,
 	}
 
 	for ( const auto & [antID,ant] : e.Ants() ) {
-		const auto & values = ant->GetValues(key);
-		for ( auto iter = values.begin();
-		      iter != values.end();
-		      ++iter) {
-			if ( !(iter->second == value) ) {
-				continue;
+		for( const auto & range : ValueUtils::BuildRanges(ant->GetValues(key)) ) {
+			if ( range.Value == value ) {
+				res.push_back({antID,range.Start,range.End});
 			}
-			auto next = iter;
-			while ( next != values.end() && next->second == value ) {
-				++next;
-			}
-			if ( next == values.end() ) {
-				res.push_back({antID,iter->first,Time::Forever()});
-			} else {
-				res.push_back({antID,iter->first,next->first});
-			}
-			iter = --next;
 		}
 	}
 	return res;

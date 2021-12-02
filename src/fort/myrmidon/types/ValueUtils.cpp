@@ -92,26 +92,28 @@ Value ValueUtils::Parse(ValueType type, const std::string & str) {
 
 ValueUtils::ValuedTimeRangeList
 ValueUtils::BuildRanges(const std::map<Time,Value> & values) {
-	return {};
-	/*
-	for ( auto iter = values.begin();
-	      iter != values.end();
-	      ++iter) {
-		if ( !(iter->second == value) ) {
+	if ( values.empty() ) {
+		return {};
+	}
+	ValuedTimeRangeList res;
+	res.reserve(values.size()+1);
+
+	using M = std::map<Time,Value>;
+	M::const_iterator prev = values.cbegin();
+	for ( auto it = values.cbegin()++; it != values.cend(); ++it) {
+		if ( prev->second == it->second ) {
 			continue;
 		}
-		auto next = iter;
-		while ( next != values.end() && next->second == value ) {
-			++next;
-		}
-		if ( next == values.end() ) {
-			res.push_back({antID,iter->first,Time::Forever()});
-		} else {
-			res.push_back({antID,iter->first,next->first});
-		}
-		iter = --next;
+		res.push_back({.Value = prev->second,
+		               .Start = prev->first,
+		               .End = it->first});
+		prev = it;
 	}
-	*/
+
+	res.push_back({.Value = prev->second,
+	               .Start = prev->first,
+	               .End = fort::Time::Forever()});
+	return res;
 }
 
 
