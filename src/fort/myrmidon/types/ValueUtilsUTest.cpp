@@ -156,5 +156,94 @@ TEST_F(ValueUtilsUTest,BuildValuedTimeRange) {
 
 }
 
+TEST_F(ValueUtilsUTest,IntersectsValuedTimeRange) {
+	ValueUtils::ValuedTimeRangeList ranges
+		= {
+		   {
+		    .Start = fort::Time::SinceEver(),
+		    .End = fort::Time(),
+		   },
+		   {
+		    .Start = fort::Time(),
+		    .End = fort::Time().Add(10),
+		   },
+		   {
+		    .Start = fort::Time().Add(10),
+		    .End = fort::Time().Add(20),
+		   },
+		   {
+		    .Start = fort::Time().Add(20),
+		    .End = fort::Time().Add(30),
+		   },
+		   {
+		    .Start = fort::Time().Add(30),
+		    .End = fort::Time::Forever(),
+		   },
+	};
+
+	struct TestData {
+		ValueUtils::ValuedTimeRange     Range;
+		ValueUtils::ValuedTimeRangeList Expected;
+
+		std::string FormatInput() const {
+			return "{Start:" + Range.Start.Format() + ", End: " + Range.End.Format();
+		}
+
+		void Expect(const ValueUtils::ValuedTimeRangeList & result) const {
+			EXPECT_EQ(result.size(),Expected.size());
+			for ( size_t i = 0; i < std::min(result.size(),Expected.size()); ++i) {
+				SCOPED_TRACE(i);
+				EXPECT_TIME_EQ(result[i].Start,Expected[i].Start);
+				EXPECT_TIME_EQ(result[i].End,Expected[i].End);
+			}
+		}
+	};
+
+	std::vector<TestData> testdata
+		= {
+		   {
+		    .Range = { .Start = Time(), .End = Time() },
+		    .Expected = {
+		   	   },
+		   },
+		   {
+		    .Range = { .Start = Time(), .End = Time().Add(1) },
+		    .Expected = {
+		                 { .Start = Time(), .End = Time().Add(10) },
+			   },
+		   },
+
+		   {
+		    .Range = { .Start = Time().Add(5), .End = Time().Add(25) },
+		    .Expected = {
+		                 { .Start = Time(), .End = Time().Add(10) },
+		                 { .Start = Time().Add(10), .End = Time().Add(20) },
+		                 { .Start = Time().Add(20), .End = Time().Add(30) },
+			   },
+		   },
+		   {
+		    .Range = { .Start = Time(), .End = Time().Add(35) },
+		    .Expected = {
+		                 { .Start = Time(), .End = Time().Add(10) },
+		                 { .Start = Time().Add(10), .End = Time().Add(20) },
+		                 { .Start = Time().Add(20), .End = Time().Add(30) },
+		                 { .Start = Time().Add(30), .End = Time::Forever() },
+			   },
+		   },
+		   {
+		    .Range = { .Start = Time::SinceEver(), .End = Time::Forever() },
+		    .Expected = ranges
+		   },
+	};
+
+	for ( const auto & d : testdata ) {
+		SCOPED_TRACE(d.FormatInput());
+		d.Expect(ValueUtils::Intersects(ranges,d.Range));
+	}
+}
+
+
+
+
 } // namespace myrmidon
 } // namespace fort

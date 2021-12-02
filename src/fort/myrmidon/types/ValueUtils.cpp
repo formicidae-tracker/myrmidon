@@ -117,6 +117,19 @@ ValueUtils::BuildRanges(const std::map<Time,Value> & values) {
 }
 
 
+ValueUtils::ValuedTimeRangeList
+ValueUtils::Intersects(const ValuedTimeRangeList & ranges,
+                       const ValuedTimeRange & r) {
+	ValueUtils::ValuedTimeRangeList res;
+	res.reserve(ranges.size());
+	for ( const auto & u : ranges ) {
+		if ( r.End <= u.Start || u.End <= r.Start ) {
+			continue;
+		}
+		res.push_back(u);
+	}
+	return res;
+}
 
 
 
