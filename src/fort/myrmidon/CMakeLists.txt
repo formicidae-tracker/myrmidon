@@ -99,6 +99,7 @@ set(HDR_PRIVATE_FILES utils/StringManipulation.hpp
 
 set(HDR_PUBLIC_FILES types/AntInteraction.hpp
                      types/Value.hpp
+                     types/ValueUtils.hpp
                      types/AntTrajectory.hpp
                      types/Collision.hpp
                      types/Color.hpp
@@ -177,6 +178,7 @@ set(SRC_PRIVATE_FILES utils/StringManipulation.cpp
 
 set(SRC_FILES types/AntInteraction.cpp
               types/Value.cpp
+              types/ValueUtils.cpp
               types/AntTrajectory.cpp
               types/Collision.cpp
               types/Color.cpp
@@ -256,6 +258,7 @@ set(SRC_UTEST_FILES main-check.cpp
                     types/TraitsUTest.cpp
                     types/ColorUTest.cpp
                     types/ValueUTest.cpp
+                    types/ValueUtilsUTest.cpp
                     )
 
 

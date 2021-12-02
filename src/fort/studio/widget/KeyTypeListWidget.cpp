@@ -1,6 +1,8 @@
 #include "KeyTypeListWidget.hpp"
 #include "ui_KeyTypeListWidget.h"
 
+#include <fort/myrmidon/types/ValueUtils.hpp>
+
 #include <fort/studio/bridge/AntKeyValueBridge.hpp>
 #include <fort/studio/MyrmidonTypes/Value.hpp>
 

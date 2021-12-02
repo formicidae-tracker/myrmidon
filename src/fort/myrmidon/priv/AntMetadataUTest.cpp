@@ -4,6 +4,7 @@
 #include "AntMetadata.hpp"
 
 #include <fort/myrmidon/UtilsUTest.hpp>
+#include <fort/myrmidon/types/ValueUtils.hpp>
 #include <fort/myrmidon/priv/DeletedReference.hpp>
 
 

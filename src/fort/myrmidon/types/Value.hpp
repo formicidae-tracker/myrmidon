@@ -3,7 +3,6 @@
 #include <variant>
 #include <cstdint>
 #include <string>
-#include <iostream>
 
 #include <fort/time/Time.hpp>
 
@@ -44,31 +43,6 @@ enum class ValueType {
                        * a Time
                        */
                       TIME,
-};
-
-/**
- * Utilites function for Value
- */
-
-struct ValueUtils  {
-	/**
-	 * Returns the type of a value.
-	 */
-	static ValueType Type(const Value & value);
-
-	/**
-	 * Returns the default value for an Value
-	 */
-	static Value Default(ValueType type);
-
-	/**
-	 * Parses to an Value
-	 */
-	static Value Parse(ValueType type, const std::string & name);
-
-	static const std::string & TypeName(ValueType type);
-
-	static std::string TypeName(const Value & value);
 };
 
 
