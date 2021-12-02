@@ -1,6 +1,8 @@
 #include "SetAntValueDialog.hpp"
 #include "ui_SetAntValueDialog.h"
 
+#include <fort/myrmidon/types/ValueUtils.hpp>
+
 #include <fort/studio/bridge/ExperimentBridge.hpp>
 #include <fort/studio/bridge/AntKeyValueBridge.hpp>
 

@@ -5,7 +5,7 @@
 
 #include "AntShapeType.hpp"
 #include "AntMetadata.hpp"
-
+#include <fort/myrmidon/types/ValueUtils.hpp>
 
 namespace fort {
 namespace myrmidon {
