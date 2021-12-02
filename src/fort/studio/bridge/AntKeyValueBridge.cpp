@@ -151,11 +151,11 @@ public:
 	}
 
 	void tearDownExperiment() {
-		if ( d_experiment == nullptr || d_experiment->AntMetadataPtr()->Keys().empty() ) {
+		if ( d_experiment == nullptr || d_keys.empty() ) {
 			d_experiment = nullptr;
 			return;
 		}
-		beginRemoveRows(QModelIndex(),0,d_keys.size());
+		beginRemoveRows(QModelIndex(),0,d_keys.size()-1);
 		d_keys.clear();
 		d_experiment = nullptr;
 		endRemoveRows();
@@ -607,7 +607,8 @@ private slots:
 		}
 
 		if ( time.IsInfinite() ) {
-			auto defaultValueIndex = index(key,3,index(fi-d_ants.cbegin(),0));
+			auto keyIndex = index(key,0,index(fi-d_ants.cbegin(),0));
+			auto defaultValueIndex = keyIndex.siblingAtColumn(3);
 			emit dataChanged(defaultValueIndex,defaultValueIndex);
 		} else if( added == false ) {
 			const auto & data = ant.DataMap().at(keyName);
@@ -676,8 +677,13 @@ private slots:
 		}
 		if ( inRange(2) || inRange(1) ) {
 			for ( size_t i = 0; i < d_ants.size();++i ) {
-				auto defaultValueIndex = index(topLeft.row(),3,index(i,0));
+				auto keyIndex = index(topLeft.row(),0,index(i,0));
+				auto defaultValueIndex = keyIndex.siblingAtColumn(3);
 				emit dataChanged(defaultValueIndex,defaultValueIndex);
+				auto childCount = rowCount(keyIndex);
+				if ( childCount > 0 ) {
+					emit dataChanged(index(0,3,keyIndex),index(childCount-1,3,keyIndex));
+				}
 			}
 		}
 	}

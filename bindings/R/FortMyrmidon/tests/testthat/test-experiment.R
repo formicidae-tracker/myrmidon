@@ -250,13 +250,22 @@ test_that("it can manipulate meta data keys", {
     d$experiment$renameMetaDataKey("alive","death-date")
     d$experiment$setMetaDataKey("death-date",fmTimeForever())
     d$experiment$deleteMetaDataKey("death-date")
-    d$experiment$setMetaDataKey("group","nurse")
+    d$experiment$setMetaDataKey("group","forager")
 
     expect_error({
         d$experiment$setMetaDataKey("group",42L)
     },"Could not change type for key 'group': Ant{ID:001} contains timed data",fixed = TRUE)
 
+    a$setValue("group", "forager", fmTimeCreate())
+    a$setValue("group", "worker", fmTimeCreate()$add(1))
+    d$experiment$setMetaDataKey("group","worker")
+    expect_equal(a$getValue("group",fmTimeCreate()),"worker")
+    expect_equal(a$getValue("group",fmTimeCreate()$add(1)),"worker")
+
+
     a$deleteValue("group",fmTimeSinceEver())
+    a$deleteValue("group",fmTimeCreate())
+    a$deleteValue("group",fmTimeCreate()$add(1))
     d$experiment$setMetaDataKey("group",42L)
     expect_equal(d$experiment$metaDataKeys[['group']],42L)
 

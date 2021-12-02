@@ -444,7 +444,7 @@ TEST_F(PublicExperimentUTest,MetaDataKeyManipulation) {
 			experiment->RenameMetaDataKey("alive","death-date");
 			experiment->SetMetaDataKey("death-date",Time::Forever());
 			experiment->DeleteMetaDataKey("death-date");
-			experiment->SetMetaDataKey("group",std::string("nurse"));
+			experiment->SetMetaDataKey("group",std::string("forager"));
 		});
 
 
@@ -452,10 +452,27 @@ TEST_F(PublicExperimentUTest,MetaDataKeyManipulation) {
 			experiment->SetMetaDataKey("group",int(1));
 		},std::runtime_error);
 
+	// changing default value of key change ant values
+	EXPECT_NO_THROW({
+			a->SetValue("group",std::string("forager"),fort::Time());
+			a->SetValue("group",std::string("worker"),fort::Time().Add(1));
+			experiment->SetMetaDataKey("group",std::string("worker"));
+		});
+	EXPECT_EQ(a->GetValue("group",Time::SinceEver()),
+	          Value(std::string("nurse")));
+	EXPECT_EQ(a->GetValue("group",Time()),
+	          Value(std::string("worker")));
+	EXPECT_EQ(a->GetValue("group",Time().Add(1)),
+	          Value(std::string("worker")));
+
 	EXPECT_NO_THROW({
 			a->DeleteValue("group",Time::SinceEver());
+			a->DeleteValue("group",Time());
+			a->DeleteValue("group",Time().Add(1));
 			experiment->SetMetaDataKey("group",int(1));
 		});
+
+
 }
 
 
