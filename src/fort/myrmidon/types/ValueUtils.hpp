@@ -78,8 +78,8 @@ struct ValueUtils  {
 	 * @param r the ValuedTimeRange to find any intersection
 	 * @return the ValuedTimeRange in ranges that intersects with r
 	 */
-	static ValuedTimeRangeList Intersects(const ValuedTimeRangeList & ranges,
-	                                      const ValuedTimeRange & r);
+	static ValuedTimeRangeList IntersectionOf(const ValuedTimeRangeList & ranges,
+	                                          const ValuedTimeRange & r);
 
 	/**
 	 * Represents the list of operation to perform with
