@@ -3,6 +3,7 @@
 
 #include <fort/myrmidon/types/ValueUtils.hpp>
 
+#include <fort/studio/Format.hpp>
 #include <fort/studio/bridge/ExperimentBridge.hpp>
 #include <fort/studio/bridge/AntKeyValueBridge.hpp>
 
@@ -12,6 +13,7 @@
 SetAntValueDialog::SetAntValueDialog(QWidget *parent)
 	: QDialog(parent)
 	, d_ui(new Ui::SetAntValueDialog)
+	, d_experiment(nullptr)
 	, d_keyValues(nullptr)
 	, d_inTime(fort::Time::SinceEver())
 	, d_outTime(fort::Time::Forever())
@@ -31,6 +33,7 @@ SetAntValueDialog::SetAntValueDialog(QWidget *parent)
 
 	connect(this,&SetAntValueDialog::hasValueChanged,
 	        this,&SetAntValueDialog::updateState);
+	d_ui->conflictTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
 	updateState();
 }
@@ -40,6 +43,7 @@ SetAntValueDialog::~SetAntValueDialog() {
 }
 
 void SetAntValueDialog::initialize(ExperimentBridge * experiment) {
+	d_experiment = experiment;
 	d_keyValues = experiment->antKeyValues();
 	d_ui->keyComboBox->setModel(d_keyValues->keyModel());
 	connect(experiment,&ExperimentBridge::antSelected,
@@ -93,8 +97,39 @@ void SetAntValueDialog::showEvent(QShowEvent * event) {
 }
 
 void SetAntValueDialog::updateState() {
-	d_ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(hasTime() && hasKey() && hasValue());
+	d_ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(hasAnt() && hasTime() && hasKey() && hasValue());
+	updateConflicts();
 }
+
+void SetAntValueDialog::updateConflicts() {
+	fm::ValueUtils::ValuedTimeRangeList conflicts = findConflicts();
+
+	if ( conflicts.empty() ) {
+		d_ui->conflictTable->setRowCount(0);
+		d_ui->conflictSection->setEnabled(false);
+		d_ui->mergeButton->setText(tr("Apply *value* only on ranges where *key* is the *default value*"));
+		this->adjustSize();
+		return;
+	}
+
+	d_ui->conflictTable->setRowCount(conflicts.size());
+	int row = -1;
+	for ( const auto & vr : conflicts ) {
+		++row;
+		d_ui->conflictTable->setItem(row,0,new QTableWidgetItem(ToQString(vr.Start.Round(fort::Duration::Millisecond))));
+		d_ui->conflictTable->setItem(row,1,new QTableWidgetItem(ToQString(vr.End.Round(fort::Duration::Millisecond))));
+		d_ui->conflictTable->setItem(row,2,new QTableWidgetItem(ToQString(vr.Value)));
+	}
+	auto keyName = d_ui->keyComboBox->currentText();
+	auto defaultValue = d_keyValues->defaultValue(keyName);
+	d_ui->mergeButton->setText(tr("Apply '%1' only on ranges where '%2' is '%3'")
+	                           .arg(ToQString(d_value))
+	                           .arg(keyName)
+	                           .arg(ToQString(defaultValue)));
+	d_ui->conflictSection->setEnabled(true);
+	this->adjustSize();
+}
+
 
 void SetAntValueDialog::updateValidatorAndCompleter() {
 	if ( d_ui->keyComboBox->currentIndex() >= 0 ) {
@@ -116,6 +151,7 @@ void SetAntValueDialog::on_keyComboBox_currentIndexChanged(int) {
 void SetAntValueDialog::on_valueEdit_textChanged(const QString & text) {
 	if ( d_ui->keyComboBox->currentIndex() < 0 ) {
 		setHasValue(false);
+		updateState();
 		return;
 	}
 	try {
@@ -125,6 +161,7 @@ void SetAntValueDialog::on_valueEdit_textChanged(const QString & text) {
 	} catch ( const std::exception & ) {
 		setHasValue(false);
 	}
+	updateState();
 }
 
 void SetAntValueDialog::setHasValue(bool valid) {
@@ -144,4 +181,36 @@ bool SetAntValueDialog::hasTime() const {
 }
 bool SetAntValueDialog::hasKey() const {
 	return d_ui->keyComboBox->currentIndex() >= 0;
+}
+
+bool SetAntValueDialog::hasAnt() const {
+	return d_experiment != nullptr && d_experiment->selectedAntID() != 0;
+}
+#include <QDebug>
+
+fm::ValueUtils::ValuedTimeRangeList SetAntValueDialog::findConflicts() {
+	if ( !hasAnt() || !hasKey() || !hasValue() ) {
+		return {};
+	}
+
+	auto key = d_ui->keyComboBox->currentText();
+
+
+	const auto & values = d_keyValues->getValues(d_experiment->selectedAntID(),
+	                                             key);
+	qInfo() << "FOOOOOOOO";
+	qInfo() << key << ToQString(d_keyValues->defaultValue(key)) << ToQString(d_value);
+	for ( const auto & [time,value] : values ) {
+		qInfo() << "++" << ToQString(time) << ToQString(value);
+	}
+	auto res = fm::ValueUtils::FindConflicts(values,
+	                                         d_keyValues->defaultValue(key),
+	                                         {.Value = d_value,
+	                                          .Start = d_inTime,
+	                                          .End = d_outTime});
+
+	for ( const auto & rv : res ) {
+		qInfo() << "--" << ToQString(rv.Start) << ToQString(rv.End) << ToQString(rv.Value);
+	}
+	return res;
 }
