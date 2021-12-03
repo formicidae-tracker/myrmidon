@@ -315,9 +315,9 @@ void printFrames (const std::deque<TrackingVideoFrame> & frames ) {
 #endif
 
 void TrackingVideoPlayer::onTimerTimeout() {
-	d_position = d_position + d_interval * computeRate(d_rate);
-	VIDEO_PLAYER_DEBUG(std::cerr << "[Player] Current position is " << d_position << std::endl);
-	emit positionChanged(d_position);
+	auto expectedPosition = d_position + d_interval * computeRate(d_rate);
+	VIDEO_PLAYER_DEBUG(std::cerr << "[Player] Expected position is " << expectedPosition << std::endl);
+
 
 	VIDEO_PLAYER_DEBUG({
 			std::cerr << "[Player] === BEFORE SORT ===" << std::endl;
@@ -333,8 +333,8 @@ void TrackingVideoPlayer::onTimerTimeout() {
 	std::deque<TrackingVideoFrame> deleted;
 	auto last = std::remove_if(d_frames.begin(),
 	                           d_frames.end(),
-	                           [this,&deleted](const TrackingVideoFrame & a) {
-		                           if ( a.EndPos <= d_position ) {
+	                           [this,&deleted,expectedPosition](const TrackingVideoFrame & a) {
+		                           if ( a.EndPos <= expectedPosition ) {
 			                           deleted.push_back(a);
 			                           return true;
 		                           }
@@ -353,7 +353,7 @@ void TrackingVideoPlayer::onTimerTimeout() {
 	     && deleted.empty() == false
 	     && computeRate(d_rate) > 1 ) {
 		VIDEO_PLAYER_DEBUG(std::cerr << "[Player] reset time to " << deleted.back().StartPos << std::endl);
-		d_position = deleted.back().StartPos;
+		expectedPosition = deleted.back().StartPos;
 	}
 
 
@@ -374,14 +374,20 @@ void TrackingVideoPlayer::onTimerTimeout() {
 		if ( d_stagging.empty() == false ) {
 			stop();
 		}
+		d_position = expectedPosition;
+		emit positionChanged(d_position);
 		return;
 	}
 
-	if ( d_frames.front().StartPos > d_position ) {
+	if ( d_frames.front().StartPos > expectedPosition ) {
+		d_position = expectedPosition;
+		emit positionChanged(d_position);
 		return;
 	}
 
 	displayVideoFrameImpl(d_frames.front());
+	d_position = d_frames.front().StartPos;
+	emit positionChanged(d_position);
 	d_frames.pop_front();
 }
 
