@@ -73,13 +73,15 @@ struct ValueUtils  {
 	static ValuedTimeRangeList BuildRanges(const std::map<Time,Value> & values);
 
 	/**
-	 * Finds the intersection of a ValuedTimeRange and a ValuedTimeRangeList
-	 * @param ranges the ranges to find any intersection
-	 * @param r the ValuedTimeRange to find any intersection
-	 * @return the ValuedTimeRange in ranges that intersects with r
+	 * Finds ValuedTimeRange that conflicts with a set of timed Value
+	 * @param values a set of timed values as returned by Ant::GetValues()
+	 * @param defaultValue the value that is considered a default value
+	 * @param r the ValuedTimeRange to find any conflict with
+	 * @return the ValuedTimeRange that conflict with r
 	 */
-	static ValuedTimeRangeList IntersectionOf(const ValuedTimeRangeList & ranges,
-	                                          const ValuedTimeRange & r);
+	static ValuedTimeRangeList FindConflicts(const std::map<Time,Value> & values,
+	                                         const Value & defaultValue,
+	                                         const ValuedTimeRange & r);
 
 	/**
 	 * Represents the list of operation to perform with
@@ -97,7 +99,7 @@ struct ValueUtils  {
 		/**
 		 * Arguments to feed on Ant::DeleteValue()
 		 */
-		std::vector<Time>                   ToRemove;
+		std::vector<Time>                   ToDelete;
 	};
 
 	/**
@@ -112,23 +114,22 @@ struct ValueUtils  {
 	 * @param r the range to merge
 	 * @return the Operations to actually perform the merge
 	 */
-	static Operations MergeByReducingRange(const ValuedTimeRangeList & ranges,
-	                                       const Value & defaultValue,
-	                                       const ValuedTimeRange & r);
+	static Operations MergeRanges(const std::map<Time,Value> & values,
+	                              const Value & defaultValue,
+	                              const ValuedTimeRange & r);
 	/**
-	 * Merges a ValuedTimeRange with a ValuedTimeRangeList by modifying the latter.
+	 * Merges a ValuedTimeRange with a set of timed values, modifiying the latter
 	 *
 	 * Once done, the range r would be left unmodified, but
-	 * ValuedTimeRange in ranges can be modified or suppressed.
+	 * some range in BuildRanges(values) will be modified.
 	 *
-	 * @param ranges the ranges to merge
+	 * @param values the values to merge with r
 	 * @param defaultValue value to be considered as an empty range
 	 * @param r the range to merge
 	 * @return the Operations to actually perform the merge
 	 */
-	static Operations MergeByOverwrittingRanges(const ValuedTimeRangeList & ranges,
-	                                            const Value & defaultValue,
-	                                            const ValuedTimeRange & r);
+	static Operations OverwriteRanges(const std::map<Time,Value> & values,
+	                                  const ValuedTimeRange & r);
 
 };
 
