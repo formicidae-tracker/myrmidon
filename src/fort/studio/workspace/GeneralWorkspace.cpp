@@ -17,6 +17,7 @@ GeneralWorkspace::GeneralWorkspace(QWidget *parent)
 	d_antList = new AntSimpleListWidget(this);
 
 	d_antListDock = new QDockWidget(tr("Ants"),this);
+	d_antListDock->setObjectName("generalAntDock");
 	d_antListDock->setWidget(d_antList);
 }
 

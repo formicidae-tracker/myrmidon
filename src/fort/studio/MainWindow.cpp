@@ -99,6 +99,7 @@ void MainWindow::setUpWorkspacesActions() {
 
 void MainWindow::setUpNavigationActions() {
 	addToolBar(d_navigationActions.NavigationToolBar);
+	d_navigationActions.NavigationToolBar->setObjectName("mainwindowCloseUpNavigationToolbar");
 
 	d_ui->menuMove->addAction(d_navigationActions.NextCloseUp);
 	d_ui->menuMove->addAction(d_navigationActions.PreviousCloseUp);
@@ -154,8 +155,9 @@ void MainWindow::setUpWorkspacesSelectionActions() {
 	connect(d_ui->workspaceSelector,&QTabWidget::currentChanged,
 	comboBox,&QComboBox::setCurrentIndex);
 
-	auto tb = new QToolBar(this);
+	auto tb = new QToolBar("Workspace",this);
 	tb->addWidget(new QLabel(tr("Workspace:")));
+	tb->setObjectName("mainwindowWorkspaceToolbar");
 	tb->addWidget(comboBox);
 	addToolBar(tb);
 }

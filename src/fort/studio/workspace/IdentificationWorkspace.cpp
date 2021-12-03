@@ -38,9 +38,9 @@ IdentificationWorkspace::IdentificationWorkspace(QWidget *parent)
 	, d_addIdentificationAction(nullptr)
 	, d_deletePoseAction(nullptr)
 	, d_copyTimeAction(nullptr)
-	, d_actionToolBar(new QToolBar(this))
+	, d_actionToolBar(new QToolBar("Identification",this))
 	, d_navigationToolBar(nullptr) {
-
+	d_actionToolBar->setObjectName("identificationToolBar");
 
 #define set_action(res,legendStr,shortCutStr,toolTipStr) do { \
 		(res) = d_actionToolBar->addAction(tr(legendStr)); \
@@ -120,6 +120,7 @@ IdentificationWorkspace::IdentificationWorkspace(QWidget *parent)
 
 
     d_tagExplorer = new QDockWidget(tr("Tag Close-Ups"),this);
+    d_tagExplorer->setObjectName("identificationTagCloseUpDock");
     auto tagExplorer = new TagCloseUpExplorer(this);
     d_tagExplorer->setWidget(tagExplorer);
 	connect(tagExplorer,
@@ -138,6 +139,7 @@ IdentificationWorkspace::IdentificationWorkspace(QWidget *parent)
 
 	auto identificationList = new IdentificationListWidget(this);
 	d_identificationList = new QDockWidget(tr("Identifications"),this);
+	d_identificationList->setObjectName("identificationListDock");
 	d_identificationList->setWidget(identificationList);
 	//TODO connection
 
@@ -149,8 +151,8 @@ IdentificationWorkspace::IdentificationWorkspace(QWidget *parent)
 
 	auto tagStatistics = new TagStatisticsWidget(this);
 	d_tagStatistics = new QDockWidget(tr("Tag Statistics"),this);
+	d_tagStatistics->setObjectName("identificationTagStatsDock");
 	d_tagStatistics->setWidget(tagStatistics);
-
 
     updateActionStates();
 }
@@ -519,7 +521,7 @@ void IdentificationWorkspace::setUp(const NavigationAction & actions ) {
 	actions.CopyCurrentTime->setEnabled(!d_tcu == false);
 	d_copyTimeAction = actions.CopyCurrentTime;
 
-
+	actions.NavigationToolBar->show();
 	d_actionToolBar->show();
 	d_tagExplorer->show();
 	d_identificationList->show();
@@ -540,7 +542,7 @@ void IdentificationWorkspace::tearDown(const NavigationAction & actions ) {
 	disconnect(actions.CopyCurrentTime,&QAction::triggered,
 	           this,&IdentificationWorkspace::onCopyTime);
 
-
+	actions.NavigationToolBar->hide();
 	actions.NextTag->setEnabled(false);
 	actions.PreviousTag->setEnabled(false);
 	actions.NextCloseUp->setEnabled(false);

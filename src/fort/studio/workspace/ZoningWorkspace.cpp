@@ -25,7 +25,8 @@
 
 
 void ZoningWorkspace::setUpUI() {
-	d_toolBar = new QToolBar(this);
+	d_toolBar = new QToolBar("Geometry",this);
+	d_toolBar->setObjectName("zoningGeometryToolBar");
 	d_editAction = d_toolBar->addAction(QIcon(":/icons/cursor.svg"),
 	                                    tr("Edit Shapes"));
 	d_editAction->setToolTip(tr("Transform and move shapes"));
@@ -65,6 +66,7 @@ void ZoningWorkspace::setUpUI() {
 	widget->setLayout(layout);
 
 	d_fullFramesDock = new QDockWidget(tr("Space's Full-Frames"));
+	d_fullFramesDock->setObjectName("zoningFullFrameDock");
 	d_fullFramesDock->setWidget(widget);
 	d_fullFramesDock->setMaximumSize(QSize(500,65535));
 
@@ -200,6 +202,7 @@ void ZoningWorkspace::setUp(const NavigationAction & actions) {
 	connect(actions.CopyCurrentTime,&QAction::triggered,
 	        this,&ZoningWorkspace::onCopyTime);
 
+	actions.NavigationToolBar->show();
 	actions.NextCloseUp->setEnabled(true);
 	actions.PreviousCloseUp->setEnabled(true);
 	actions.CopyCurrentTime->setEnabled(!d_fullframe == false);
@@ -218,6 +221,7 @@ void ZoningWorkspace::tearDown(const NavigationAction & actions) {
 	disconnect(actions.CopyCurrentTime,&QAction::triggered,
 	           this,&ZoningWorkspace::onCopyTime);
 
+	actions.NavigationToolBar->hide();
 	actions.NextCloseUp->setEnabled(false);
 	actions.PreviousCloseUp->setEnabled(false);
 	actions.CopyCurrentTime->setEnabled(false);
