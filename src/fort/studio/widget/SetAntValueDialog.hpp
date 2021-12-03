@@ -4,6 +4,7 @@
 
 #include <fort/studio/MyrmidonTypes/Time.hpp>
 #include <fort/studio/MyrmidonTypes/Value.hpp>
+#include <fort/myrmidon/types/ValueUtils.hpp>
 
 class ExperimentBridge;
 class AntKeyValueBridge;
@@ -50,17 +51,22 @@ private slots:
 	void on_keyComboBox_currentIndexChanged(int);
 	void on_valueEdit_textChanged(const QString & text);
 	void updateValidatorAndCompleter();
+	void updateConflicts();
 
 signals:
 	void inTimeChanged(const fort::Time &);
 	void outTimeChanged(const fort::Time &);
 	void hasValueChanged(bool valid);
 protected:
+	bool hasAnt() const;
 	void setHasValue(bool valid);
 
 	void showEvent(QShowEvent * event) override;
 
+	fm::ValueUtils::ValuedTimeRangeList findConflicts();
+
     Ui::SetAntValueDialog * d_ui;
+	ExperimentBridge      * d_experiment;
 	AntKeyValueBridge     * d_keyValues;
 	fort::Time              d_inTime,d_outTime;
 	fm::Value               d_value;

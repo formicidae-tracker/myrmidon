@@ -1258,3 +1258,15 @@ void AntKeyValueBridge::clearCompletions() {
 	d_stringValues.clear();
 	d_stringCompletion->removeRows(0,d_stringCompletion->rowCount());
 }
+
+
+const std::map<fort::Time,fm::Value> &
+AntKeyValueBridge::getValues(quint32 antID,
+                             const QString & key) {
+	try {
+		return d_experiment->Identifier()->Ants().at(antID)->GetValues(ToStdString(key));
+	} catch ( const std::exception & ) {
+	}
+	static std::map<fort::Time,fm::Value> empty;
+	return empty;
+}

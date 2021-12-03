@@ -31,6 +31,9 @@ public :
 	QAbstractItemModel * dataModel();
 	QAbstractItemModel * typeModel();
 
+	const std::map<fort::Time,fm::Value> & getValues(quint32 antID,
+	                                                 const QString & key);
+
 	void initialize(ExperimentBridge * experiment) override;
 
 	const fm::Value & defaultValue(const QString & key) const;
