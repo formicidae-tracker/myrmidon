@@ -19,7 +19,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Identifying Ants" href="identifying_ants.html" />
+    <link rel="next" title="Linking Tracking Data" href="linking_tdata.html" />
     <link rel="prev" title="Performing Queries" href="../performing_queries.html" /> 
 </head>
 
@@ -54,7 +54,11 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">fort-studio Manual</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#interface-organization">Interface Organization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="linking_tdata.html">Linking Tracking Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="identifying_ants.html">Identifying Ants</a></li>
 <li class="toctree-l1"><a class="reference internal" href="defining_ant_shapes.html">Defining Ant Shapes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="measuring_ants.html">Measuring Ants</a></li>
@@ -100,7 +104,42 @@
              
   <section id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h1>
-<p>TODO</p>
+<p><strong>fort-studio</strong> is a graphical interface used for the edition of
+<code class="docutils literal notranslate"><span class="pre">.myrmidon</span></code> files, and the visualization of the tracking data.</p>
+<p>It follows a workflow similar to <strong>fort-myrmidon</strong> but allows
+graphical edition of <em>Identification Ant Poses</em>, <em>Ant virtual shapes</em>,
+<em>Ant measurements</em> and <em>Zone geometries</em>.</p>
+<section id="interface-organization">
+<h2>Interface Organization<a class="headerlink" href="#interface-organization" title="Permalink to this headline"></a></h2>
+<p><strong>fort-studio</strong> is organized by <em>workspaces</em>, i.e. views that focus on a specific tasks:</p>
+<ul class="simple">
+<li><p><em>General</em> workspace (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Alt</span> <span class="pre">+</span> <span class="pre">1</span></code>) : General information on the
+experiment, ant listing and space / tracking data directory setup.</p></li>
+<li><p><em>Statistics</em> workspace (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Alt</span> <span class="pre">+</span> <span class="pre">2</span></code>): Displays statistics on tag
+detection count</p></li>
+<li><p><em>Identification</em> workspace (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Alt</span> <span class="pre">+</span> <span class="pre">3</span></code>): Edit ant identification
+definition and geometric pose</p></li>
+<li><p><em>Ant shape</em> workspace (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Alt</span> <span class="pre">+</span> <span class="pre">4</span></code>): Edit ant’s virtual shape</p></li>
+<li><p><em>Measurement</em> workspace (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Alt</span> <span class="pre">+</span> <span class="pre">5</span></code>): Perform diverse measurement
+on each Ant</p></li>
+<li><p><em>Zoning</em> workspace (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Alt</span> <span class="pre">+</span> <span class="pre">6</span></code>): Defines geometric zone for each space</p></li>
+<li><p><em>Ant Metadata</em> workspace (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Alt</span> <span class="pre">+</span> <span class="pre">7</span></code>): Defines Ant timed
+Key/Value pairs</p></li>
+<li><p><em>Visualization</em> workspace (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Alt</span> <span class="pre">+</span> <span class="pre">8</span></code>): Visualizes
+identifications and collisions during the experiment, edit ant
+metadata based on tracking video.</p></li>
+</ul>
+<p>Workspace can be selected through the <code class="xref py py-obj docutils literal notranslate"><span class="pre">Workspace</span></code> menu or
+toolbar, or through the mentioned shortcut.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Shortcuts in <strong>fort-studio</strong> are organized between <em>action
+shortcuts</em> (which modifies the experiment data) and <em>navigation
+and selection shortcuts</em>. The <em>action shortcuts</em> always use the
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">Ctrl</span></code> modifier. The <em>navigation shortcuts</em> uses the <code class="xref py py-obj docutils literal notranslate"><span class="pre">Alt</span></code>
+modifier, or no modifier at all.</p>
+</div>
+</section>
 </section>
 
 
@@ -108,7 +147,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../performing_queries.html" class="btn btn-neutral float-left" title="Performing Queries" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="identifying_ants.html" class="btn btn-neutral float-right" title="Identifying Ants" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="linking_tdata.html" class="btn btn-neutral float-right" title="Linking Tracking Data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

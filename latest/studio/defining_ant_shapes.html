@@ -55,8 +55,12 @@
 <p class="caption" role="heading"><span class="caption-text">fort-studio Manual</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linking_tdata.html">Linking Tracking Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="identifying_ants.html">Identifying Ants</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Defining Ant Shapes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Defining Ant Shapes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#shortcuts">Shortcuts</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="measuring_ants.html">Measuring Ants</a></li>
 <li class="toctree-l1"><a class="reference internal" href="metadata_edition.html">Ant Metadata Edition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="visualization.html">Tracking Data Visualization</a></li>
@@ -100,7 +104,45 @@
              
   <section id="defining-ant-shapes">
 <h1>Defining Ant Shapes<a class="headerlink" href="#defining-ant-shapes" title="Permalink to this headline"></a></h1>
-<p>TODO</p>
+<figure class="align-center" id="ant-shape-workspace-fig">
+<img alt="The *Ant Shape* workspace" src="../_images/ant_shape_workspace.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 4 </span><span class="caption-text"><strong>fort-studio</strong> <em>Ant Shape</em> workspace</span><a class="headerlink" href="#ant-shape-workspace-fig" title="Permalink to this image"></a></p>
+<div class="legend">
+<p>[1]: <em>Ant Close-Up View</em> that allow to specify the virtual shape of
+a given Ant. [2]: <em>Ant Close-Ups List</em>, similarly to the <em>Tag
+Close-Up List</em>, allows to select a Close-Up for an Ant, but here
+organize Close-Up per Ant instead of per Tag. [3]: The toolbar that
+allow the edition of the Capsules defining the shape of the
+Ant. [4] <em>Ant Shape Type List</em> is used to define the list of shape
+types for the Experiment.</p>
+</div>
+</figcaption>
+</figure>
+<p>The <em>Ant Shape</em> workspace is used to define, view and edit the virtual
+shape of any Ant.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>fort-studio</strong> defines no default list of ant shape type. Before
+drawing any shape, one must define the wanted shape type for the
+experiment in the <em>Ant Shape Type List</em> (see figure
+<a class="reference internal" href="#ant-shape-workspace-fig"><span class="std std-numref">Fig. 4</span></a>).</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To avoid defining the same shape for every single ant in the
+experiment, the <code class="xref py py-obj docutils literal notranslate"><span class="pre">Edit</span> <span class="pre">&gt;</span> <span class="pre">Clone</span> <span class="pre">Current</span> <span class="pre">Ant</span> <span class="pre">Shape</span></code> action can be
+used. Individual shapes can still be edited afterwards.</p>
+</div>
+<section id="shortcuts">
+<h2>Shortcuts<a class="headerlink" href="#shortcuts" title="Permalink to this headline"></a></h2>
+<p>The same navigation shortcuts from the <em>Identification</em> workspace are
+available:</p>
+<ul class="simple">
+<li><p>Move to previous/next tag: <code class="xref py py-obj docutils literal notranslate"><span class="pre">Alt+W</span></code>/<code class="xref py py-obj docutils literal notranslate"><span class="pre">Alt+S</span></code></p></li>
+<li><p>Move to previous/next close-up: <code class="xref py py-obj docutils literal notranslate"><span class="pre">Alt+A</span></code>/<code class="xref py py-obj docutils literal notranslate"><span class="pre">Alt+D</span></code></p></li>
+</ul>
+</section>
 </section>
 
 
