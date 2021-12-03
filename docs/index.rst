@@ -24,6 +24,7 @@ Table of Contents
    :caption: fort-studio Manual
 
    studio/introduction
+   studio/linking_tdata
    studio/identifying_ants
    studio/defining_ant_shapes
    studio/measuring_ants
