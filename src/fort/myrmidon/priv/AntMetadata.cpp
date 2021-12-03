@@ -177,13 +177,8 @@ void AntMetadata::Key::SetDefaultValue(const Value & value) {
 		                         ValueType(d_default.index()),
 		                         ValueType(value.index()));
 	}
-	auto oldValue = d_default;
+	metadata->d_onDefaultChange(d_name,d_default,value);
 	d_default = value;
-	try {
-		metadata->d_onDefaultChange(d_name,oldValue,value);
-	} catch ( const std::exception & ) {
-		d_default = oldValue;
-	}
 }
 
 

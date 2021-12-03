@@ -567,11 +567,9 @@ AntMetadata::Key::Ptr
 Experiment::SetMetaDataKey(const std::string & name,
                            const Value & defaultValue) {
 	auto res = AntMetadata::SetKey(d_antMetadata,name,defaultValue);
-
-	for ( const auto & [aID,a] : d_identifier->Ants() ) {
-		a->CompileData();
+	for ( const auto & [antID,ant] : d_identifier->Ants() ) {
+		ant->CompileData();
 	}
-
 	return res;
 }
 

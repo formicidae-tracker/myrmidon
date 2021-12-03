@@ -642,9 +642,7 @@ TEST_F(ExperimentUTest,AntMetadataManipulation) {
 	// Adding a column marks adds a default value to all Ant immediatly
 	auto ageInDays = e->SetMetaDataKey("age",0.0);
 	ASSERT_EQ(ageInDays->Type(),ValueType::DOUBLE);
-	EXPECT_NO_THROW({
-			EXPECT_EQ(std::get<double>(ant->GetValue("age",Time())),0.0);
-		});
+	EXPECT_VALUE_EQ(ant->GetValue("age",Time()),0.0);
 	// always possible to change the column name, even if there are existing values
 	EXPECT_NO_THROW({
 			ageInDays->SetName("age-in-days");

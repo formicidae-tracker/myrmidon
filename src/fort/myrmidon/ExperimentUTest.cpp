@@ -444,7 +444,9 @@ TEST_F(PublicExperimentUTest,MetaDataKeyManipulation) {
 			experiment->RenameMetaDataKey("alive","death-date");
 			experiment->SetMetaDataKey("death-date",Time::Forever());
 			experiment->DeleteMetaDataKey("death-date");
+			auto a2 = experiment->CreateAnt();
 			experiment->SetMetaDataKey("group",std::string("forager"));
+			EXPECT_VALUE_EQ(a2->GetValue("group",Time()),std::string("forager"));
 		});
 
 

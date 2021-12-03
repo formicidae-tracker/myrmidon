@@ -39,7 +39,7 @@ public:
 			qInfo() << "[AntKeyValueBridge]: Setting default value of '"
 			        << name << "' to '"
 			        << ToQString(defaultValue) << "'";
-			(*fi)->SetDefaultValue(defaultValue);
+			d_experiment->SetMetaDataKey((*fi)->Name(),defaultValue);
 		} catch ( const std::exception & e ) {
 			qCritical() << "[AntKeyValueBridge]: Could not set default value of '"
 			            << name << "' to '"
