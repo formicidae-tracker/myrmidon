@@ -42,6 +42,8 @@ public:
 	bool hasTime() const;
 	bool hasKey() const;
 
+	void apply() const;
+
 public slots:
 	void setInTime(const fort::Time & v);
 	void setOutTime(const fort::Time & v);
@@ -64,6 +66,9 @@ protected:
 	void showEvent(QShowEvent * event) override;
 
 	fm::ValueUtils::ValuedTimeRangeList findConflicts();
+
+	fm::ValueUtils::Operations getOperations() const;
+	void apply(const fm::ValueUtils::Operations & operations) const;
 
     Ui::SetAntValueDialog * d_ui;
 	ExperimentBridge      * d_experiment;

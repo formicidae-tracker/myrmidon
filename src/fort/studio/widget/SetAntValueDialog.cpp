@@ -186,7 +186,6 @@ bool SetAntValueDialog::hasKey() const {
 bool SetAntValueDialog::hasAnt() const {
 	return d_experiment != nullptr && d_experiment->selectedAntID() != 0;
 }
-#include <QDebug>
 
 fm::ValueUtils::ValuedTimeRangeList SetAntValueDialog::findConflicts() {
 	if ( !hasAnt() || !hasKey() || !hasValue() ) {
@@ -198,19 +197,53 @@ fm::ValueUtils::ValuedTimeRangeList SetAntValueDialog::findConflicts() {
 
 	const auto & values = d_keyValues->getValues(d_experiment->selectedAntID(),
 	                                             key);
-	qInfo() << "FOOOOOOOO";
-	qInfo() << key << ToQString(d_keyValues->defaultValue(key)) << ToQString(d_value);
-	for ( const auto & [time,value] : values ) {
-		qInfo() << "++" << ToQString(time) << ToQString(value);
-	}
-	auto res = fm::ValueUtils::FindConflicts(values,
-	                                         d_keyValues->defaultValue(key),
-	                                         {.Value = d_value,
-	                                          .Start = d_inTime,
-	                                          .End = d_outTime});
+	return fm::ValueUtils::FindConflicts(values,
+	                                     d_keyValues->defaultValue(key),
+	                                     {.Value = d_value,
+	                                      .Start = d_inTime,
+	                                      .End = d_outTime});
+}
 
-	for ( const auto & rv : res ) {
-		qInfo() << "--" << ToQString(rv.Start) << ToQString(rv.End) << ToQString(rv.Value);
+void SetAntValueDialog::apply() const {
+	apply(getOperations());
+}
+
+fm::ValueUtils::Operations SetAntValueDialog::getOperations() const {
+	if ( !hasAnt() || !hasKey() || !hasValue() || !hasTime() ) {
+		return {};
 	}
-	return res;
+
+	auto antID = d_experiment->selectedAntID();
+	const auto & values = d_keyValues->getValues(antID,
+	                                             key());
+	fm::ValueUtils::ValuedTimeRange range
+		= {
+		   .Value = d_value,
+		   .Start = d_inTime,
+		   .End = d_outTime,
+	};
+
+	if ( d_ui->overwriteButton->isChecked() ) {
+		return fm::ValueUtils::OverwriteRanges(values,
+		                                       range);
+	} else {
+		auto defaultValue = d_keyValues->defaultValue(key());
+		return fm::ValueUtils::MergeRanges(values,
+		                                   defaultValue,
+		                                   range);
+	}
+}
+
+
+void SetAntValueDialog::apply(const fm::ValueUtils::Operations & operations) const {
+	if ( !hasAnt() || !hasKey() ) {
+		return;
+	}
+	auto antID = d_experiment->selectedAntID();
+	for ( const auto & [time,value] : operations.ToSet ) {
+		d_keyValues->setValue(antID,key(),time,value);
+	}
+	for ( const auto & time : operations.ToDelete ) {
+		d_keyValues->deleteValue(antID,key(),time);
+	}
 }

@@ -493,18 +493,6 @@ void VisualizationWorkspace::onActionSetValue() {
 	     || d_setValueDialog->hasValue() == false) {
 		return;
 	}
-	auto keyValues = d_experiment->antKeyValues();
-	keyValues->setValue(d_experiment->selectedAntID(),
-	                    d_setValueDialog->key(),
-	                    d_setValueDialog->inTime(),
-	                    d_setValueDialog->value());
-
-	if ( d_setValueDialog->outTime().IsInfinite() == false ) {
-		keyValues->setValue(d_experiment->selectedAntID(),
-		                    d_setValueDialog->key(),
-		                    d_setValueDialog->outTime(),
-		                    keyValues->defaultValue(d_setValueDialog->key()));
-	}
-
+	d_setValueDialog->apply();
 	onActionClearMarkers();
 }
