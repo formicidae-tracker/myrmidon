@@ -49,10 +49,12 @@ test_that("has math support",{
 })
 
 test_that("converts to and from POSIXct",{
-    nowR <- Sys.time()
-    nowFM <- fmTimeNow()
-    expect_true(nowFM$sub(fmTimeCreate(nowR)) < fmMillisecond(10))
-    expect_true((nowFM$asPOSIXct() - nowR) < 1.0e-3)
+    asR <- as.POSIXct("2019-11-02 23:03:04",tz="UTC")
+    # needed as otherwise we get an error
+    attr(asR,"tzone") <- NULL
+    asFM <- fmTimeParse("2019-11-02T23:03:04Z")
+    expect_equal(asFM$asPOSIXct(),asR)
+    expect_true(fmTimeCreate(asR) == asFM)
 })
 
 

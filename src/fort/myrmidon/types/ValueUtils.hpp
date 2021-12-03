@@ -103,30 +103,30 @@ struct ValueUtils  {
 	};
 
 	/**
-	 * Merges a ValuedTimeRange with a ValuedTimeRangeList by modifying the former.
+	 * Merges a ValuedTimeRange with a list of timed value.
 	 *
-	 * Once done, the ranges time boundaries not equal to defaultValue
-	 * will not modified. However the range r may be modified or even
-	 * splitted in several part.
+	 * This operation will kept the ValuedTimeRange defined by values
+	 * which are not defaultValue intact. However r may have its
+	 * boundaries modified, or be split in several ValuedTimeRange.
 	 *
-	 * @param ranges the ranges to merge
-	 * @param defaultValue value to be considered as an empty range
-	 * @param r the range to merge
+	 * @param values the values to merge
+	 * @param defaultValue the Value to be considered as an empty ValuedTimeRange
+	 * @param r the ValuedTimeRange to merge
 	 * @return the Operations to actually perform the merge
 	 */
 	static Operations MergeRanges(const std::map<Time,Value> & values,
 	                              const Value & defaultValue,
 	                              const ValuedTimeRange & r);
 	/**
-	 * Merges a ValuedTimeRange with a set of timed values, modifiying the latter
+	 * Overwrites a list of timed values to contain a ValuedTimeRange
 	 *
-	 * Once done, the range r would be left unmodified, but
-	 * some range in BuildRanges(values) will be modified.
+	 * This operation will modifies values to ensure that the wanted
+	 * ValuedTimeRange::Value is set over
+	 * [ValuedTimeRange::Start;ValuedTimeRange::End[.
 	 *
 	 * @param values the values to merge with r
-	 * @param defaultValue value to be considered as an empty range
-	 * @param r the range to merge
-	 * @return the Operations to actually perform the merge
+	 * @param r the range to ensure existance
+	 * @return the Operations to actually perform the overwrite
 	 */
 	static Operations OverwriteRanges(const std::map<Time,Value> & values,
 	                                  const ValuedTimeRange & r);
