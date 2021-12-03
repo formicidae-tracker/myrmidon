@@ -313,6 +313,14 @@ TEST_F(ValueUtilsUTest,OverwriteRanges) {
 			   }
 		   },
 		   {
+		    .Values = {{Time::SinceEver(), true}},
+		    .Range = { .Value = false, .Start = Time(), .End = Time::Forever() },
+		    .Expected = {
+		                 .ToSet = { {Time(),false} },
+		                 .ToDelete = { },
+			   }
+		   },
+		   {
 		    .Values = {{Time::SinceEver(), true},{Time().Add(10),false}},
 		    .Range = { .Value = false, .Start = Time(), .End = Time().Add(10) },
 		    .Expected = {
@@ -358,6 +366,19 @@ TEST_F(ValueUtilsUTest,OverwriteRanges) {
 		                 .ToDelete = { },
 			   },
 		   },
+		   {
+		    .Values = {
+		               {Time::SinceEver(), 0},
+		               {Time(), 1},
+		               {Time().Add(10), 0},
+			   },
+		    .Range = { .Value = 2, .Start = Time::SinceEver(), .End = Time::Forever() },
+		    .Expected = {
+		                 .ToSet = {{Time::SinceEver(),2}},
+		                 .ToDelete = {Time(),Time().Add(10)},
+			   },
+		   },
+
 	};
 	for ( const auto & d : testdata ) {
 		d.Expect(ValueUtils::OverwriteRanges(d.Values,
@@ -391,6 +412,16 @@ TEST_F(ValueUtilsUTest,MergeRanges) {
 		   {
 		    .Values = {
 		               {Time::SinceEver(), 0},
+			   },
+		    .Range = { .Value = 1, .Start = Time(), .End = Time::Forever() },
+		    .Expected = {
+		                 .ToSet = {{Time(),1}},
+		                 .ToDelete = {},
+			   },
+		   },
+		   {
+		    .Values = {
+		               {Time::SinceEver(), 0},
 		               {Time(), 1},
 			   },
 		    .Range = { .Value = 1, .Start = Time(), .End = Time().Add(10) },
@@ -411,8 +442,6 @@ TEST_F(ValueUtilsUTest,MergeRanges) {
 		                 .ToDelete = {Time().Add(10)},
 			   },
 		   },
-
-
 		   {
 		    .Values = {
 		               {Time::SinceEver(), 0},
@@ -426,6 +455,18 @@ TEST_F(ValueUtilsUTest,MergeRanges) {
 		    .Expected = {
 		                 .ToSet = { {Time(),1},{Time().Add(30),1},{Time().Add(50),1},{Time().Add(60),0}},
 		                 .ToDelete = { Time().Add(10) },
+			   },
+		   },
+		   {
+		    .Values = {
+		               {Time::SinceEver(), 0},
+		               {Time(), 1},
+		               {Time().Add(10), 0},
+			   },
+		    .Range = { .Value = 2, .Start = Time::SinceEver(), .End = Time::Forever() },
+		    .Expected = {
+		                 .ToSet = {{Time::SinceEver(),2},{Time().Add(10),2}},
+		                 .ToDelete = {},
 			   },
 		   },
 	};

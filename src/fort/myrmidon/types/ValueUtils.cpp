@@ -194,7 +194,8 @@ ValueUtils::OverwriteRanges(const std::map<Time,Value> & values,
 	for (++it; it != values.lower_bound(r.End); ++it) {
 		res.ToDelete.push_back(it->first);
 	}
-	if ( it == values.end() || r.End < it->first ) {
+	if ( r.End.IsForever() == false
+	     && ( it == values.end() || r.End < it->first ) ) {
 		res.ToSet.push_back({r.End,std::prev(it)->second});
 	}
 	CleanUp(values,res);
@@ -227,6 +228,7 @@ ValueUtils::MergeRanges(const std::map<Time,Value> & values,
 	}
 
 	if ( lastWasSet == true
+	     && r.End.IsForever() == false
 	     && ( it == values.end() || r.End < it->first ) ) {
 		res.ToSet.push_back({r.End,defaultValue});
 	}
