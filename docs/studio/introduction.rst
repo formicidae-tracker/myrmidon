@@ -2,11 +2,11 @@ Introduction
 ============
 
 **fort-studio** is a graphical interface used for the edition of
- ``.myrmidon`` files, and the visualization of the tracking data.
+``.myrmidon`` files, and the visualization of the tracking data.
 
- It follows a workflow similar to **fort-myrmidon** but allows
- graphical edition of *Identification Ant Poses*, *Ant virtual
- shapes*, *Ant measurements* and *Zone geometries*.
+It follows a workflow similar to **fort-myrmidon** but allows
+graphical edition of *Identification Ant Poses*, *Ant virtual shapes*,
+*Ant measurements* and *Zone geometries*.
 
 
 Interface Organization
