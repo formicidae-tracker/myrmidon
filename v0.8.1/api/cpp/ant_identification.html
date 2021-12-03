@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ants and Identifications &mdash; fort-myrmidon  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/../version_dropdown.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Spaces and Zones" href="space_zone.html" />
+    <link rel="prev" title="API Entry Point" href="experiment.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> fort-myrmidon
+          </a>
+              <div class="version">
+                placeholder
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-myrmidon Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defining_ant_metadata.html">Defining Ant Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../performing_queries.html">Performing Queries</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-studio Manual</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/defining_ant_shapes.html">Defining Ant Shapes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/measuring_ants.html">Measuring Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/metadata_edition.html">Ant Metadata Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/visualization.html">Tracking Data Visualization</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../space_zoning.html">Segmenting Spaces in Zones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matching_video.html">Matching Video and Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../time.html">Time Representation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API References</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Python</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html#c">C++</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="experiment.html">API Entry Point</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Ants and Identifications</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fort-myrmidon-ant">fort::myrmidon::Ant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fort-myrmidon-identification">fort::myrmidon::Identification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fort-myrmidon-overlappingidentification">fort::myrmidon::OverlappingIdentification</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="space_zone.html">Spaces and Zones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="queries_matchers.html">Queries And Matchers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="time.html">Time Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shapes.html">2D Geometric Shapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video.html">Video Sequence Matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef.html">API generic types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html#r">R</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fort-myrmidon</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Python</a> &raquo;</li>
+      <li>Ants and Identifications</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/api/cpp/ant_identification.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ants-and-identifications">
+<h1>Ants and Identifications<a class="headerlink" href="#ants-and-identifications" title="Permalink to this headline"></a></h1>
+<section id="fort-myrmidon-ant">
+<h2>fort::myrmidon::Ant<a class="headerlink" href="#fort-myrmidon-ant" title="Permalink to this headline"></a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon3AntE">
+<span id="_CPPv3N4fort8myrmidon3AntE"></span><span id="_CPPv2N4fort8myrmidon3AntE"></span><span id="fort::myrmidon::Ant"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Ant</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon3AntE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Main object of interest of any <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p>
+<p><a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> are the main object of interest of an <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. They are identified from tags with <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a>, have a virtual shape to perform collision and interaction detection, and holds user defined metadata.</p>
+<p><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> can only be created from an <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> with <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment_1aa29e102b024913b692fffc4cc7ceb611"><span class="std std-ref">Experiment::CreateAnt()</span></a>.</p>
+</div>
+</p>
+<section id="classfort_1_1myrmidon_1_1Ant_1autotoc_md3">
+<h3>Naming<a class="headerlink" href="#classfort_1_1myrmidon_1_1Ant_1autotoc_md3" title="Permalink to this headline"></a></h3>
+<p id="classfort_1_1myrmidon_1_1Ant_1autotoc_md3"><a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> are uniquely identified by their ID. By convention we use decimal notation with up to two <code class="docutils literal notranslate"><span class="pre">0</span></code> prefix to display an ID, as returned by AntFormatID.</p>
+</section>
+<section id="classfort_1_1myrmidon_1_1Ant_1autotoc_md4">
+<h3>Identification<a class="headerlink" href="#classfort_1_1myrmidon_1_1Ant_1autotoc_md4" title="Permalink to this headline"></a></h3>
+<p id="classfort_1_1myrmidon_1_1Ant_1autotoc_md4">Instead of working directly with TagID <strong>fort-myrmidon</strong> uses <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> to relates TagID to an <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>. An <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> could have different <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a>, allowing us to use different TagID to refer to the same individual. One would use <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant_1a8d7ebec214bfca8c22316ba01b449ca6"><span class="std std-ref">IdentifiedAt()</span></a> to obtain the TagID that identifies an <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> at a given <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a>.</p>
+</section>
+<section id="classfort_1_1myrmidon_1_1Ant_1autotoc_md5">
+<h3>Ant Virtual Shape<a class="headerlink" href="#classfort_1_1myrmidon_1_1Ant_1autotoc_md5" title="Permalink to this headline"></a></h3>
+<p id="classfort_1_1myrmidon_1_1Ant_1autotoc_md5">Each <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> has an associated virtual shape that is used to compute instantaneous <a class="reference internal" href="queries_matchers.html#structfort_1_1myrmidon_1_1Collision"><span class="std std-ref">Collision</span></a> detection ( Query::CollideFrame() ), or timed <a class="reference internal" href="queries_matchers.html#structfort_1_1myrmidon_1_1AntInteraction"><span class="std std-ref">AntInteraction</span></a> ( Query::ComputeAntInteraction ). These shape can be defined manually in <code class="docutils literal notranslate"><span class="pre">fort-studio</span></code> or programmatically accessed and modified with <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant_1a1ccfc16f641241234fb72c6791325e7d"><span class="std std-ref">Capsules()</span></a>, AddCaspule(), <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant_1a98a78c5ed425d2c9f92dc983ee1d3f4f"><span class="std std-ref">DeleteCapsule()</span></a> and <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant_1a2a998b30f884295882365b93b988d395"><span class="std std-ref">ClearCapsules()</span></a>.</p>
+</section>
+<section id="classfort_1_1myrmidon_1_1Ant_1autotoc_md6">
+<h3>Visualization meta-data<a class="headerlink" href="#classfort_1_1myrmidon_1_1Ant_1autotoc_md6" title="Permalink to this headline"></a></h3>
+<p id="classfort_1_1myrmidon_1_1Ant_1autotoc_md6">Basic visualization of <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> data can be done through <strong>fort-studio</strong>. Ants are displayed according to their <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant_1aea63f802d023f20cc525867f6098f0e4"><span class="std std-ref">DisplayStatus()</span></a> and <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant_1aa464763733561e9dc1b4504362f393e2"><span class="std std-ref">DisplayColor()</span></a>, which can be programmaticaly modified using <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant_1a630db371cd51bc1a7ebbab55e383bede"><span class="std std-ref">SetDisplayStatus()</span></a> and <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant_1a0e76f7924d52ec40653810b73bfa0b4f"><span class="std std-ref">SetDisplayColor()</span></a>.</p>
+</section>
+<section id="classfort_1_1myrmidon_1_1Ant_1autotoc_md7">
+<h3>User defined meta-data (named values)<a class="headerlink" href="#classfort_1_1myrmidon_1_1Ant_1autotoc_md7" title="Permalink to this headline"></a></h3>
+<p id="classfort_1_1myrmidon_1_1Ant_1autotoc_md7"><a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> can stores timed user defined metadata. These are modifiable using <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant_1ab15ae0f99b1ad4db9112b74d997a6650"><span class="std std-ref">SetValue()</span></a> and <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant_1a8abe79d02db27729e72b7d5073517342"><span class="std std-ref">DeleteValue()</span></a> and accesible through <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant_1a698379ee9cacbf858a7136182d85e00c"><span class="std std-ref">GetValue()</span></a>. </p>
+</section>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon3Ant12DisplayStateE">
+<span id="_CPPv3N4fort8myrmidon3Ant12DisplayStateE"></span><span id="_CPPv2N4fort8myrmidon3Ant12DisplayStateE"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant_1a5a0a9e1dc212db96ce4c4168cc55f0af"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DisplayState</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon3Ant12DisplayStateE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>The DisplayState of an <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> in an <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon3Ant12DisplayState7VISIBLEE">
+<span id="_CPPv3N4fort8myrmidon3Ant12DisplayState7VISIBLEE"></span><span id="_CPPv2N4fort8myrmidon3Ant12DisplayState7VISIBLEE"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant_1a5a0a9e1dc212db96ce4c4168cc55f0afa510222cdd4bc0b765486ba35b2775e54"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">VISIBLE</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon3Ant12DisplayState7VISIBLEE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> is visible </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon3Ant12DisplayState6HIDDENE">
+<span id="_CPPv3N4fort8myrmidon3Ant12DisplayState6HIDDENE"></span><span id="_CPPv2N4fort8myrmidon3Ant12DisplayState6HIDDENE"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant_1a5a0a9e1dc212db96ce4c4168cc55f0afa347e628a8f72626a0611ef842fe9d304"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">HIDDEN</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon3Ant12DisplayState6HIDDENE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> is hidden </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon3Ant12DisplayState4SOLOE">
+<span id="_CPPv3N4fort8myrmidon3Ant12DisplayState4SOLOE"></span><span id="_CPPv2N4fort8myrmidon3Ant12DisplayState4SOLOE"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant_1a5a0a9e1dc212db96ce4c4168cc55f0afaca17c443abc74bd2419fbc922fc0c32e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SOLO</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon3Ant12DisplayState4SOLOE" title="Permalink to this definition"></a><br /></dt>
+<dd><p><a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> is visible and all non-SOLO <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> will be hidden. </p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon3Ant3PtrE">
+<span id="_CPPv3N4fort8myrmidon3Ant3PtrE"></span><span id="_CPPv2N4fort8myrmidon3Ant3PtrE"></span><span id="fort::myrmidon::Ant::Ptr"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant_1a67c991837ab6661bcd5b479a4c94e973"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon3AntE" title="fort::myrmidon::Ant"><span class="n"><span class="pre">Ant</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Ptr</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon3Ant3PtrE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>A pointer to an <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon3Ant12IdentifiedAtERK4Time">
+<span id="_CPPv3NK4fort8myrmidon3Ant12IdentifiedAtERK4Time"></span><span id="_CPPv2NK4fort8myrmidon3Ant12IdentifiedAtERK4Time"></span><span id="fort::myrmidon::Ant::IdentifiedAt__TimeCRC"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant_1a8d7ebec214bfca8c22316ba01b449ca6"></span><a class="reference internal" href="typedef.html#_CPPv4N4fort8myrmidon5TagIDE" title="fort::myrmidon::TagID"><span class="n"><span class="pre">TagID</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IdentifiedAt</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">time</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon3Ant12IdentifiedAtERK4Time" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the <a class="reference internal" href="typedef.html#namespacefort_1_1myrmidon_1a4740c5497efc77ef02c54023ca2a7d6d"><span class="std std-ref">TagID</span></a> identifying this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> at a given time. </p>
+<p>
+Gets the <a class="reference internal" href="typedef.html#namespacefort_1_1myrmidon_1a4740c5497efc77ef02c54023ca2a7d6d"><span class="std std-ref">TagID</span></a> identifying this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> at a given <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a>. If no <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> are valid for this time, an an exception will be thrown.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>time</strong> – the <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> for which we want the identification</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if there no valid <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> for this time. </p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a <a class="reference internal" href="typedef.html#namespacefort_1_1myrmidon_1a4740c5497efc77ef02c54023ca2a7d6d"><span class="std std-ref">TagID</span></a> that identify this ant at this time.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon3Ant15IdentificationsEv">
+<span id="_CPPv3NK4fort8myrmidon3Ant15IdentificationsEv"></span><span id="_CPPv2NK4fort8myrmidon3Ant15IdentificationsEv"></span><span id="fort::myrmidon::Ant::IdentificationsC"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant_1a4809ca00600023334e31dbaad2a0df0e"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">IdentificationList</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">Identifications</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon3Ant15IdentificationsEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> targetting this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>. </p>
+<p>Gets the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> targetting this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>. These <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> will always be sorted in <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> and never overlaps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>an Identification::List of <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> that target this object. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon3Ant2IDEv">
+<span id="_CPPv3NK4fort8myrmidon3Ant2IDEv"></span><span id="_CPPv2NK4fort8myrmidon3Ant2IDEv"></span><span id="fort::myrmidon::Ant::IDC"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant_1a7d1be4e44099b4c169fb6e25df77a193"></span><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="typedef.html#_CPPv4N4fort8myrmidon5AntIDE" title="fort::myrmidon::AntID"><span class="n"><span class="pre">AntID</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ID</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon3Ant2IDEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the AntID of an <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>. </p>
+<p>Ants gets an unique ID in an <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>, with a minimal value of <code class="docutils literal notranslate"><span class="pre">1</span></code>. <code class="docutils literal notranslate"><span class="pre">0</span></code> is an invalid/undefined <a class="reference internal" href="typedef.html#namespacefort_1_1myrmidon_1a93ee51c34fda526044d99551b5ceba71"><span class="std std-ref">AntID</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the <a class="reference internal" href="typedef.html#namespacefort_1_1myrmidon_1a93ee51c34fda526044d99551b5ceba71"><span class="std std-ref">AntID</span></a> of the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon3Ant12DisplayColorEv">
+<span id="_CPPv3NK4fort8myrmidon3Ant12DisplayColorEv"></span><span id="_CPPv2NK4fort8myrmidon3Ant12DisplayColorEv"></span><span id="fort::myrmidon::Ant::DisplayColorC"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant_1aa464763733561e9dc1b4504362f393e2"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Color</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">DisplayColor</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon3Ant12DisplayColorEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the Display Color of an <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>. </p>
+<p>Each <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> has a defined Color for display in <code class="docutils literal notranslate"><span class="pre">fort-studio</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a const reference to the Color used to display the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> in <code class="docutils literal notranslate"><span class="pre">fort-studio</span></code>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon3Ant15SetDisplayColorERK5Color">
+<span id="_CPPv3N4fort8myrmidon3Ant15SetDisplayColorERK5Color"></span><span id="_CPPv2N4fort8myrmidon3Ant15SetDisplayColorERK5Color"></span><span id="fort::myrmidon::Ant::SetDisplayColor__ColorCR"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant_1a0e76f7924d52ec40653810b73bfa0b4f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetDisplayColor</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Color</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">color</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon3Ant15SetDisplayColorERK5Color" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Sets the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> display color. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>color</strong> – the new Color to use to display the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> in <code class="docutils literal notranslate"><span class="pre">fort-studio</span></code>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon3Ant13DisplayStatusEv">
+<span id="_CPPv3NK4fort8myrmidon3Ant13DisplayStatusEv"></span><span id="_CPPv2NK4fort8myrmidon3Ant13DisplayStatusEv"></span><span id="fort::myrmidon::Ant::DisplayStatusC"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant_1aea63f802d023f20cc525867f6098f0e4"></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon3Ant12DisplayStateE" title="fort::myrmidon::Ant::DisplayState"><span class="n"><span class="pre">DisplayState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DisplayStatus</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon3Ant13DisplayStatusEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> display state. </p>
+<p>When visualizing ant in <code class="docutils literal notranslate"><span class="pre">fort-studio</span></code>, any <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> has different DisplayState :</p>
+<p><ul class="simple">
+<li><p><a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant_1a5a0a9e1dc212db96ce4c4168cc55f0afa510222cdd4bc0b765486ba35b2775e54"><span class="std std-ref">DisplayState::VISIBLE</span></a>: the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> is visible if they are no other <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> which are in <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant_1a5a0a9e1dc212db96ce4c4168cc55f0afaca17c443abc74bd2419fbc922fc0c32e"><span class="std std-ref">DisplayState::SOLO</span></a></p></li>
+<li><p><a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant_1a5a0a9e1dc212db96ce4c4168cc55f0afa347e628a8f72626a0611ef842fe9d304"><span class="std std-ref">DisplayState::HIDDEN</span></a>: the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> is not displayed</p></li>
+<li><p><a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant_1a5a0a9e1dc212db96ce4c4168cc55f0afaca17c443abc74bd2419fbc922fc0c32e"><span class="std std-ref">DisplayState::SOLO</span></a>: the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> is visible as any other <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> which are in <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant_1a5a0a9e1dc212db96ce4c4168cc55f0afaca17c443abc74bd2419fbc922fc0c32e"><span class="std std-ref">DisplayState::SOLO</span></a>.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the DisplayState for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon3Ant16SetDisplayStatusE12DisplayState">
+<span id="_CPPv3N4fort8myrmidon3Ant16SetDisplayStatusE12DisplayState"></span><span id="_CPPv2N4fort8myrmidon3Ant16SetDisplayStatusE12DisplayState"></span><span id="fort::myrmidon::Ant::SetDisplayStatus__DisplayState"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant_1a630db371cd51bc1a7ebbab55e383bede"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetDisplayStatus</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4fort8myrmidon3Ant12DisplayStateE" title="fort::myrmidon::Ant::DisplayState"><span class="n"><span class="pre">DisplayState</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">s</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon3Ant16SetDisplayStatusE12DisplayState" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Sets the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> display state. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>s</strong> – the wanted DisplayState </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon3Ant8GetValueERKNSt6stringERK4Time">
+<span id="_CPPv3NK4fort8myrmidon3Ant8GetValueERKNSt6stringERK4Time"></span><span id="_CPPv2NK4fort8myrmidon3Ant8GetValueERKNSt6stringERK4Time"></span><span id="fort::myrmidon::Ant::GetValue__ssCR.TimeCRC"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant_1a698379ee9cacbf858a7136182d85e00c"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="typedef.html#_CPPv4N4fort8myrmidon5ValueE" title="fort::myrmidon::Value"><span class="n"><span class="pre">Value</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetValue</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">time</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon3Ant8GetValueERKNSt6stringERK4Time" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets user defined timed metadata. </p>
+<p>
+Gets the value for a key at time. Values are set with <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant_1ab15ae0f99b1ad4db9112b74d997a6650"><span class="std std-ref">SetValue()</span></a>. If no value is sets prior to <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> (including -∞), the <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> default value for key will be returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – the key of the user defined key in <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> </p></li>
+<li><p><strong>time</strong> – the <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> we want the value for (infinite <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> are valid)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if name is not a defined metadata key in <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the wanted Value for key at time, or the <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> default one</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon3Ant8SetValueERKNSt6stringERK5ValueRK4Time">
+<span id="_CPPv3N4fort8myrmidon3Ant8SetValueERKNSt6stringERK5ValueRK4Time"></span><span id="_CPPv2N4fort8myrmidon3Ant8SetValueERKNSt6stringERK5ValueRK4Time"></span><span id="fort::myrmidon::Ant::SetValue__ssCR.ValueCR.TimeCR"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant_1ab15ae0f99b1ad4db9112b74d997a6650"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetValue</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="typedef.html#_CPPv4N4fort8myrmidon5ValueE" title="fort::myrmidon::Value"><span class="n"><span class="pre">Value</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">value</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">time</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon3Ant8SetValueERKNSt6stringERK5ValueRK4Time" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Sets a user defined timed metadata. </p>
+<p>
+Sets key to value starting from time. If time is <a class="reference internal" href="time.html#classfort_1_1Time_1a9593a5d95440d83965255957deb60226"><span class="std std-ref">Time::SinceEver()</span></a>, sets the starting value for name instead of the <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>’s default value for key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – the metadata key to set </p></li>
+<li><p><strong>value</strong> – the desired Value </p></li>
+<li><p><strong>time</strong> – the first <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> after which name will be set to value. It can be <a class="reference internal" href="time.html#classfort_1_1Time_1a9593a5d95440d83965255957deb60226"><span class="std std-ref">Time::SinceEver()</span></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if name is not a defined key in <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if time is <a class="reference internal" href="time.html#classfort_1_1Time_1a0f13c9a8cc26f34ca49c006c115dc845"><span class="std std-ref">Time::Forever()</span></a> </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if value is not of the right type for key </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon3Ant11DeleteValueERKNSt6stringERK4Time">
+<span id="_CPPv3N4fort8myrmidon3Ant11DeleteValueERKNSt6stringERK4Time"></span><span id="_CPPv2N4fort8myrmidon3Ant11DeleteValueERKNSt6stringERK4Time"></span><span id="fort::myrmidon::Ant::DeleteValue__ssCR.TimeCR"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant_1a8abe79d02db27729e72b7d5073517342"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DeleteValue</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">time</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon3Ant11DeleteValueERKNSt6stringERK4Time" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Removes any user defined value at a given time. </p>
+<p>
+Removes any value defined at a time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – the key to remove </p></li>
+<li><p><strong>time</strong> – the <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> to remove. It can be <a class="reference internal" href="time.html#classfort_1_1Time_1a9593a5d95440d83965255957deb60226"><span class="std std-ref">Time::SinceEver()</span></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if no value for key at time have been previously set with <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant_1ab15ae0f99b1ad4db9112b74d997a6650"><span class="std std-ref">SetValue()</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon3Ant9GetValuesERKNSt6stringE">
+<span id="_CPPv3NK4fort8myrmidon3Ant9GetValuesERKNSt6stringE"></span><span id="_CPPv2NK4fort8myrmidon3Ant9GetValuesERKNSt6stringE"></span><span id="fort::myrmidon::Ant::GetValues__ssCRC"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant_1aaacc50609b0253c0dd0052ff745d43a0"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">map</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="typedef.html#_CPPv4N4fort8myrmidon5ValueE" title="fort::myrmidon::Value"><span class="n"><span class="pre">Value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">GetValues</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">key</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon3Ant9GetValuesERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets all metadata key value changes over time. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> – the key to list </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the values of key over the time </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon3Ant10AddCapsuleE14AntShapeTypeIDRKNSt10shared_ptrI7CapsuleEE">
+<span id="_CPPv3N4fort8myrmidon3Ant10AddCapsuleE14AntShapeTypeIDRKNSt10shared_ptrI7CapsuleEE"></span><span id="_CPPv2N4fort8myrmidon3Ant10AddCapsuleE14AntShapeTypeIDRKNSt10shared_ptrI7CapsuleEE"></span><span id="fort::myrmidon::Ant::AddCapsule__AntShapeTypeID.std::shared_ptr:Capsule:CR"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant_1a150cff43fd2695fca9514ea44cd11e2b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AddCapsule</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="typedef.html#_CPPv4N4fort8myrmidon14AntShapeTypeIDE" title="fort::myrmidon::AntShapeTypeID"><span class="n"><span class="pre">AntShapeTypeID</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">shapeTypeID</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="shapes.html#_CPPv4N4fort8myrmidon7CapsuleE" title="fort::myrmidon::Capsule"><span class="n"><span class="pre">Capsule</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">capsule</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon3Ant10AddCapsuleE14AntShapeTypeIDRKNSt10shared_ptrI7CapsuleEE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Adds a <a class="reference internal" href="shapes.html#classfort_1_1myrmidon_1_1Capsule"><span class="std std-ref">Capsule</span></a> to the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> virtual shape list. </p>
+<p>
+Adds a <a class="reference internal" href="shapes.html#classfort_1_1myrmidon_1_1Capsule"><span class="std std-ref">Capsule</span></a> to the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> virtual shape, associated with the shapeTypeID body part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shapeTypeID</strong> – the AntShapeTypeID for the <a class="reference internal" href="shapes.html#classfort_1_1myrmidon_1_1Capsule"><span class="std std-ref">Capsule</span></a> </p></li>
+<li><p><strong>capsule</strong> – the <a class="reference internal" href="shapes.html#classfort_1_1myrmidon_1_1Capsule"><span class="std std-ref">Capsule</span></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if shapeTypeID is not defined in <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon3Ant8CapsulesEv">
+<span id="_CPPv3NK4fort8myrmidon3Ant8CapsulesEv"></span><span id="_CPPv2NK4fort8myrmidon3Ant8CapsulesEv"></span><span id="fort::myrmidon::Ant::CapsulesC"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant_1a1ccfc16f641241234fb72c6791325e7d"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="typedef.html#_CPPv4N4fort8myrmidon16TypedCapsuleListE" title="fort::myrmidon::TypedCapsuleList"><span class="n"><span class="pre">TypedCapsuleList</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">Capsules</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon3Ant8CapsulesEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets all capsules for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a TypedCapsuleList representing the virtual shape of the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon3Ant13DeleteCapsuleEK6size_t">
+<span id="_CPPv3N4fort8myrmidon3Ant13DeleteCapsuleEK6size_t"></span><span id="_CPPv2N4fort8myrmidon3Ant13DeleteCapsuleEK6size_t"></span><span id="fort::myrmidon::Ant::DeleteCapsule__sC"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant_1a98a78c5ed425d2c9f92dc983ee1d3f4f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DeleteCapsule</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon3Ant13DeleteCapsuleEK6size_t" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Delete one of the virtual shape. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> – the index in the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant_1a1ccfc16f641241234fb72c6791325e7d"><span class="std std-ref">Capsules()</span></a> to remove</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if index is greate or equal to the size of <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant_1a1ccfc16f641241234fb72c6791325e7d"><span class="std std-ref">Capsules()</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon3Ant13ClearCapsulesEv">
+<span id="_CPPv3N4fort8myrmidon3Ant13ClearCapsulesEv"></span><span id="_CPPv2N4fort8myrmidon3Ant13ClearCapsulesEv"></span><span id="fort::myrmidon::Ant::ClearCapsules"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant_1a2a998b30f884295882365b93b988d395"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ClearCapsules</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon3Ant13ClearCapsulesEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Deletes all virtual shape parts. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="fort-myrmidon-identification">
+<h2>fort::myrmidon::Identification<a class="headerlink" href="#fort-myrmidon-identification" title="Permalink to this headline"></a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon14IdentificationE">
+<span id="_CPPv3N4fort8myrmidon14IdentificationE"></span><span id="_CPPv2N4fort8myrmidon14IdentificationE"></span><span id="fort::myrmidon::Identification"></span><span class="target" id="classfort_1_1myrmidon_1_1Identification"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Identification</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14IdentificationE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Relates tags to <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>. </p>
+<p>An <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> relates a <a class="reference internal" href="typedef.html#namespacefort_1_1myrmidon_1a4740c5497efc77ef02c54023ca2a7d6d"><span class="std std-ref">TagID</span></a> to an <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>, with <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> validity data and geometric data.</p>
+<p><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> can only be created from an <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> with <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment_1af4e5a8197f0011fc5e5a8641dc699fbb"><span class="std std-ref">Experiment::AddIdentification</span></a>.</p>
+</div>
+</p>
+<section id="classfort_1_1myrmidon_1_1Identification_1autotoc_md0">
+<h3>Time validy<a class="headerlink" href="#classfort_1_1myrmidon_1_1Identification_1autotoc_md0" title="Permalink to this headline"></a></h3>
+<p id="classfort_1_1myrmidon_1_1Identification_1autotoc_md0"><a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> are bounded in <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> in the range [<a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification_1aa20561607f2d2d43a77294426b2f42a2"><span class="std std-ref">Start()</span></a>,<a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification_1a983c8e6cb73f057c57bb1eed3519b91a"><span class="std std-ref">End()</span></a>[. <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification_1aa20561607f2d2d43a77294426b2f42a2"><span class="std std-ref">Start()</span></a> can be <a class="reference internal" href="time.html#classfort_1_1Time_1a9593a5d95440d83965255957deb60226"><span class="std std-ref">Time::SinceEver()</span></a> and <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification_1a983c8e6cb73f057c57bb1eed3519b91a"><span class="std std-ref">End()</span></a> can be Time::ForEver(). These value are modifiable with SetStart() and <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification_1a1c8bf02e07b17ea6c3acc1fc0a19648e"><span class="std std-ref">SetEnd()</span></a>.</p>
+<p>Internally <code class="docutils literal notranslate"><span class="pre">fort-myrmidon</span></code> ensure time validity of <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a>. It means that:</p>
+<p><ul class="simple">
+<li><p>Two <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> using the same TagValue cannot overlap in <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a>.</p></li>
+<li><p>Two <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> pointing to the same <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> cannot overlap in <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a>.</p></li>
+</ul>
+</p>
+</section>
+<section id="classfort_1_1myrmidon_1_1Identification_1autotoc_md1">
+<h3>Pose information<a class="headerlink" href="#classfort_1_1myrmidon_1_1Identification_1autotoc_md1" title="Permalink to this headline"></a></h3>
+<p id="classfort_1_1myrmidon_1_1Identification_1autotoc_md1"><a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> also contains geometric information on how the detected tag is related to the observed <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>. These are the translation and rotation of the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>, in the tag coordinate reference.</p>
+<p>Usually, this information is automatically generated from the manual measurement <a class="reference internal" href="typedef.html#namespacefort_1_1myrmidon_1a160328db24e8a6a82a110a42674001bd"><span class="std std-ref">HEAD_TAIL_MEASUREMENT_TYPE</span></a> made in <code class="docutils literal notranslate"><span class="pre">fort-studio</span></code>. Alternatively, users can override this behavior by setting themselves the relative pose using <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification_1a532b4676510381aef6e174f25a595211"><span class="std std-ref">SetUserDefinedAntPose()</span></a>. <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification_1aa4cb5c9a81bcb6a976d95befb6baf992"><span class="std std-ref">ClearUserDefinedAntPose()</span></a> can be used to revert to the internally computed pose.</p>
+<p><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Any angle is measured in radians, with a standard mathematical convention. Since in image processing the y-axis is pointing from the top of the image to the bottom, positive angles appears clockwise.</p>
+</div>
+</p>
+</section>
+<section id="classfort_1_1myrmidon_1_1Identification_1autotoc_md2">
+<h3>Tag Size<a class="headerlink" href="#classfort_1_1myrmidon_1_1Identification_1autotoc_md2" title="Permalink to this headline"></a></h3>
+<p id="classfort_1_1myrmidon_1_1Identification_1autotoc_md2">Identifications also contains the information of the physical tag size used to identify the individual. It can be accessed and set with TagSize and SetTagSize. The value DEFAULT_TAG_SIZE (i.e. 0.0) indicates that the <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment_1a7182fd0798e8a16860f163ad586c9f33"><span class="std std-ref">Experiment::DefaultTagSize</span></a> should be used. Therefore, for most <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>, this field should be kept to DEFAULT_TAG_SIZE, appart for a few individuals, for examples, Queens. </p>
+</section>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon14Identification3PtrE">
+<span id="_CPPv3N4fort8myrmidon14Identification3PtrE"></span><span id="_CPPv2N4fort8myrmidon14Identification3PtrE"></span><span id="fort::myrmidon::Identification::Ptr"></span><span class="target" id="classfort_1_1myrmidon_1_1Identification_1a37e2d6c2eb3e1b1c67fca1c8cdd56487"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon14IdentificationE" title="fort::myrmidon::Identification"><span class="n"><span class="pre">Identification</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Ptr</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14Identification3PtrE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>A pointer to an <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a>. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon14Identification8TagValueEv">
+<span id="_CPPv3NK4fort8myrmidon14Identification8TagValueEv"></span><span id="_CPPv2NK4fort8myrmidon14Identification8TagValueEv"></span><span id="fort::myrmidon::Identification::TagValueC"></span><span class="target" id="classfort_1_1myrmidon_1_1Identification_1acd2129232db20af37204500659839fdc"></span><a class="reference internal" href="typedef.html#_CPPv4N4fort8myrmidon5TagIDE" title="fort::myrmidon::TagID"><span class="n"><span class="pre">TagID</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TagValue</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon14Identification8TagValueEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the TagID of this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a>. </p>
+<p>The associated TagID of an <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> is immuable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the TagID used by this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon14Identification6SetEndERK4Time">
+<span id="_CPPv3N4fort8myrmidon14Identification6SetEndERK4Time"></span><span id="_CPPv2N4fort8myrmidon14Identification6SetEndERK4Time"></span><span id="fort::myrmidon::Identification::SetEnd__TimeCR"></span><span class="target" id="classfort_1_1myrmidon_1_1Identification_1a1c8bf02e07b17ea6c3acc1fc0a19648e"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetEnd</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">end</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14Identification6SetEndERK4Time" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Sets the ending validity time for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a>. </p>
+<p>
+Sets the ending validity <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a>, i.e. the first <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> where this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> becomes invalid (<a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> are valid for [<a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification_1aa20561607f2d2d43a77294426b2f42a2"><span class="std std-ref">Start()</span></a>,<a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification_1a983c8e6cb73f057c57bb1eed3519b91a"><span class="std std-ref">End()</span></a>[).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>end</strong> – the ending <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a>. It can be <a class="reference internal" href="time.html#classfort_1_1Time_1a0f13c9a8cc26f34ca49c006c115dc845"><span class="std std-ref">Time::Forever()</span></a>.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="#_CPPv4N4fort8myrmidon25OverlappingIdentificationE" title="fort::myrmidon::OverlappingIdentification"><span class="n">OverlappingIdentification</span></a></span></span> – if end will make two <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> overlap in <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon14Identification5StartEv">
+<span id="_CPPv3NK4fort8myrmidon14Identification5StartEv"></span><span id="_CPPv2NK4fort8myrmidon14Identification5StartEv"></span><span id="fort::myrmidon::Identification::StartC"></span><span class="target" id="classfort_1_1myrmidon_1_1Identification_1aa20561607f2d2d43a77294426b2f42a2"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">Start</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon14Identification5StartEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the starting validity time. </p>
+<p>First <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> where this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> becomes valid. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> where where this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> becomes valid. It can return <a class="reference internal" href="time.html#classfort_1_1Time_1a9593a5d95440d83965255957deb60226"><span class="std std-ref">Time::SinceEver()</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon14Identification3EndEv">
+<span id="_CPPv3NK4fort8myrmidon14Identification3EndEv"></span><span id="_CPPv2NK4fort8myrmidon14Identification3EndEv"></span><span id="fort::myrmidon::Identification::EndC"></span><span class="target" id="classfort_1_1myrmidon_1_1Identification_1a983c8e6cb73f057c57bb1eed3519b91a"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">End</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon14Identification3EndEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the ending validity time. </p>
+<p>First <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> where this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> becomes unvalid. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the first <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> where this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> becomes unvalid. It can return <a class="reference internal" href="time.html#classfort_1_1Time_1a0f13c9a8cc26f34ca49c006c115dc845"><span class="std std-ref">Time::Forever()</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon14Identification11AntPositionEv">
+<span id="_CPPv3NK4fort8myrmidon14Identification11AntPositionEv"></span><span id="_CPPv2NK4fort8myrmidon14Identification11AntPositionEv"></span><span id="fort::myrmidon::Identification::AntPositionC"></span><span class="target" id="classfort_1_1myrmidon_1_1Identification_1a79a60e2c2de3bdbe24e26fb547c4b8fa"></span><span class="n"><span class="pre">Eigen</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Vector2d</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AntPosition</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon14Identification11AntPositionEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> center position relatively to the tag center. </p>
+<p>Gets the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> center position relatively to the tag center. This offset is expressed in the tag reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>an Eigen::Vector2d of the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> center relative to the tag center. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon14Identification8AntAngleEv">
+<span id="_CPPv3NK4fort8myrmidon14Identification8AntAngleEv"></span><span id="_CPPv2NK4fort8myrmidon14Identification8AntAngleEv"></span><span id="fort::myrmidon::Identification::AntAngleC"></span><span class="target" id="classfort_1_1myrmidon_1_1Identification_1a928711cfdd94457d36e68af5c6faf06b"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AntAngle</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon14Identification8AntAngleEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> angle relatively to the tag rotation. </p>
+<p>Gets the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> position relatively to the tag center. This offset is expressed in the tag reference frame.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Angles use standard mathematical orientation. One has to remember that the y-axis in image processing is pointing from top to bottom, so when looking at the image, positive angle are clockwise, which is the opposite of most mathematical drawing when y is pointing from bottom to top.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the angle in radian between the tag orientation and the ant orientation. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon14Identification21HasUserDefinedAntPoseEv">
+<span id="_CPPv3NK4fort8myrmidon14Identification21HasUserDefinedAntPoseEv"></span><span id="_CPPv2NK4fort8myrmidon14Identification21HasUserDefinedAntPoseEv"></span><span id="fort::myrmidon::Identification::HasUserDefinedAntPoseC"></span><span class="target" id="classfort_1_1myrmidon_1_1Identification_1a3e22d98c06513096e9a7eb7b859a5ebe"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">HasUserDefinedAntPose</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon14Identification21HasUserDefinedAntPoseEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Indicates if <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> has a user defined pose. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> has a user defined pose set with <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification_1a532b4676510381aef6e174f25a595211"><span class="std std-ref">SetUserDefinedAntPose()</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon14Identification21SetUserDefinedAntPoseERKN5Eigen8Vector2dEd">
+<span id="_CPPv3N4fort8myrmidon14Identification21SetUserDefinedAntPoseERKN5Eigen8Vector2dEd"></span><span id="_CPPv2N4fort8myrmidon14Identification21SetUserDefinedAntPoseERKN5Eigen8Vector2dEd"></span><span id="fort::myrmidon::Identification::SetUserDefinedAntPose__Eigen::Vector2dCR.double"></span><span class="target" id="classfort_1_1myrmidon_1_1Identification_1a532b4676510381aef6e174f25a595211"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetUserDefinedAntPose</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Eigen</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Vector2d</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">antPosition</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">antAngle</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14Identification21SetUserDefinedAntPoseERKN5Eigen8Vector2dEd" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Sets a user defined <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> pose. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>antPosition</strong> – the offset, from the tag center to the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> center, expressed in the tag reference frame. </p></li>
+<li><p><strong>antAngle</strong> – the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> angle, relative to the tag angle. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon14Identification23ClearUserDefinedAntPoseEv">
+<span id="_CPPv3N4fort8myrmidon14Identification23ClearUserDefinedAntPoseEv"></span><span id="_CPPv2N4fort8myrmidon14Identification23ClearUserDefinedAntPoseEv"></span><span id="fort::myrmidon::Identification::ClearUserDefinedAntPose"></span><span class="target" id="classfort_1_1myrmidon_1_1Identification_1aa4cb5c9a81bcb6a976d95befb6baf992"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ClearUserDefinedAntPose</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14Identification23ClearUserDefinedAntPoseEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Clears any user defined pose. </p>
+<p>Clears any user defined pose for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a>. <code class="docutils literal notranslate"><span class="pre">fort-myrmidon</span></code> will re-compute the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> pose from <a class="reference internal" href="typedef.html#namespacefort_1_1myrmidon_1a160328db24e8a6a82a110a42674001bd"><span class="std std-ref">HEAD_TAIL_MEASUREMENT_TYPE</span></a> measurement made in <code class="docutils literal notranslate"><span class="pre">fort-studio</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon14Identification10SetTagSizeEd">
+<span id="_CPPv3N4fort8myrmidon14Identification10SetTagSizeEd"></span><span id="_CPPv2N4fort8myrmidon14Identification10SetTagSizeEd"></span><span id="fort::myrmidon::Identification::SetTagSize__double"></span><span class="target" id="classfort_1_1myrmidon_1_1Identification_1a4d946ba1dc6c7e45467e3e1e748c87ff"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetTagSize</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14Identification10SetTagSizeEd" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Sets the tag size for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>size</strong> – the tag size in millimeters for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a>. Can be <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification_1adfe64e84b6377708662244961128b5a1"><span class="std std-ref">Identification::DEFAULT_TAG_SIZE</span></a> to force the use of the <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment_1a7182fd0798e8a16860f163ad586c9f33"><span class="std std-ref">Experiment::DefaultTagSize()</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon14Identification7TagSizeEv">
+<span id="_CPPv3NK4fort8myrmidon14Identification7TagSizeEv"></span><span id="_CPPv2NK4fort8myrmidon14Identification7TagSizeEv"></span><span id="fort::myrmidon::Identification::TagSizeC"></span><span class="target" id="classfort_1_1myrmidon_1_1Identification_1acc92d014b6aaf01bc0a13b847146fde9"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TagSize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon14Identification7TagSizeEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the tag size for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>size the tag size in millimeters for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a>. If equal to <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification_1adfe64e84b6377708662244961128b5a1"><span class="std std-ref">Identification::DEFAULT_TAG_SIZE</span></a> the <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment_1a7182fd0798e8a16860f163ad586c9f33"><span class="std std-ref">Experiment::DefaultTagSize()</span></a> is used instead. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon14Identification17HasDefaultTagSizeEv">
+<span id="_CPPv3NK4fort8myrmidon14Identification17HasDefaultTagSizeEv"></span><span id="_CPPv2NK4fort8myrmidon14Identification17HasDefaultTagSizeEv"></span><span id="fort::myrmidon::Identification::HasDefaultTagSizeC"></span><span class="target" id="classfort_1_1myrmidon_1_1Identification_1ac841ad966563756c4489dafb6a8bbf6b"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">HasDefaultTagSize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon14Identification17HasDefaultTagSizeEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Checks if <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment_1a7182fd0798e8a16860f163ad586c9f33"><span class="std std-ref">Experiment::DefaultTagSize()</span></a> is used. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> uses <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment_1a7182fd0798e8a16860f163ad586c9f33"><span class="std std-ref">Experiment::DefaultTagSize()</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon14Identification16DEFAULT_TAG_SIZEE">
+<span id="_CPPv3N4fort8myrmidon14Identification16DEFAULT_TAG_SIZEE"></span><span id="_CPPv2N4fort8myrmidon14Identification16DEFAULT_TAG_SIZEE"></span><span id="fort::myrmidon::Identification::DEFAULT_TAG_SIZE__doubleC"></span><span class="target" id="classfort_1_1myrmidon_1_1Identification_1adfe64e84b6377708662244961128b5a1"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DEFAULT_TAG_SIZE</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14Identification16DEFAULT_TAG_SIZEE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Value use to mark the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> to use the <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment_1a7182fd0798e8a16860f163ad586c9f33"><span class="std std-ref">Experiment::DefaultTagSize()</span></a> </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="fort-myrmidon-overlappingidentification">
+<h2>fort::myrmidon::OverlappingIdentification<a class="headerlink" href="#fort-myrmidon-overlappingidentification" title="Permalink to this headline"></a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon25OverlappingIdentificationE">
+<span id="_CPPv3N4fort8myrmidon25OverlappingIdentificationE"></span><span id="_CPPv2N4fort8myrmidon25OverlappingIdentificationE"></span><span id="fort::myrmidon::OverlappingIdentification"></span><span class="target" id="classfort_1_1myrmidon_1_1OverlappingIdentification"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OverlappingIdentification</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">runtime_error</span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon25OverlappingIdentificationE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Exception when two <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> overlaps in time. </p>
+<p>Two <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> overlaps in time if they have overlapping boundary and they either use the same TagID or targets the same <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>. This is an invariant condition that should never happen and modification that will break this invariant will throw this exception. </p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="experiment.html" class="btn btn-neutral float-left" title="API Entry Point" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="space_zone.html" class="btn btn-neutral float-right" title="Spaces and Zones" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Université de Lausanne.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

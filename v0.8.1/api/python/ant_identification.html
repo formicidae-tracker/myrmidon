@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ants and Identifications &mdash; fort-myrmidon  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/../version_dropdown.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Spaces and Zones" href="space_zone.html" />
+    <link rel="prev" title="API Entry Point" href="experiment.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> fort-myrmidon
+          </a>
+              <div class="version">
+                placeholder
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-myrmidon Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defining_ant_metadata.html">Defining Ant Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../performing_queries.html">Performing Queries</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-studio Manual</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/defining_ant_shapes.html">Defining Ant Shapes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/measuring_ants.html">Measuring Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/metadata_edition.html">Ant Metadata Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/visualization.html">Tracking Data Visualization</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../space_zoning.html">Segmenting Spaces in Zones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matching_video.html">Matching Video and Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../time.html">Time Representation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API References</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Python</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="experiment.html">API Entry Point</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Ants and Identifications</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#py-fort-myrmidon-ant">py_fort_myrmidon.Ant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#py-fort-myrmidon-identification">py_fort_myrmidon.Identification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#py-fort-myrmidon-overlappingidentification">py_fort_myrmidon.OverlappingIdentification</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="space_zone.html">Spaces and Zones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="queries_matchers.html">Queries And Matchers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="time.html">Time Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shapes.html">2D Geometric Shapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video.html">Video Sequence Matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="misc.html">Miscanellous</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html#c">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html#r">R</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fort-myrmidon</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Python</a> &raquo;</li>
+      <li>Ants and Identifications</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/api/python/ant_identification.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ants-and-identifications">
+<h1>Ants and Identifications<a class="headerlink" href="#ants-and-identifications" title="Permalink to this headline"></a></h1>
+<section id="py-fort-myrmidon-ant">
+<h2>py_fort_myrmidon.Ant<a class="headerlink" href="#py-fort-myrmidon-ant" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Ant">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">Ant</span></span><a class="headerlink" href="#py_fort_myrmidon.Ant" title="Permalink to this definition"></a></dt>
+<dd><p>Ant are the main object of interest of an <a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">Experiment</span></code></a>. They
+are identified from tags with <a class="reference internal" href="#py_fort_myrmidon.Identification" title="py_fort_myrmidon.Identification"><code class="xref py py-class docutils literal notranslate"><span class="pre">Identification</span></code></a>, have a virtual
+shape to perform collision and interaction detection, and holds user
+defined metadata.</p>
+<p>Ant can only be created from an <a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">Experiment</span></code></a> with
+<a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment.CreateAnt" title="py_fort_myrmidon.Experiment.CreateAnt"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Experiment.CreateAnt()</span></code></a>.</p>
+<p>Ant are uniquely identified by an <a class="reference internal" href="#py_fort_myrmidon.Ant.ID" title="py_fort_myrmidon.Ant.ID"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ID</span></code></a>. By convention we use
+decimal notation with up to two <code class="docutils literal notranslate"><span class="pre">0</span></code> prefix to display these AntID, as
+returned by <a class="reference internal" href="misc.html#py_fort_myrmidon.FormatAntID" title="py_fort_myrmidon.FormatAntID"><code class="xref py py-func docutils literal notranslate"><span class="pre">FormatAntID()</span></code></a>.</p>
+<p>Instead of working directly with TagID <strong>fort-myrmidon</strong> uses
+<a class="reference internal" href="#py_fort_myrmidon.Identification" title="py_fort_myrmidon.Identification"><code class="xref py py-class docutils literal notranslate"><span class="pre">Identification</span></code></a> to relate a tag value to an Ant. An Ant could
+have different Identifications, allowing us to use different tag ID to
+refer to the same individual. One would use <a class="reference internal" href="#py_fort_myrmidon.Ant.IdentifiedAt" title="py_fort_myrmidon.Ant.IdentifiedAt"><code class="xref py py-meth docutils literal notranslate"><span class="pre">IdentifiedAt()</span></code></a> to
+obtain the tag ID that identifies an Ant at a given <a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">Time</span></code></a>.</p>
+<p>Each Ant has an associated virtual shape that is used to compute
+instantaneous collision detection ( <code class="xref py py-func docutils literal notranslate"><span class="pre">Query.CollideFrame()</span></code> ), or
+timed ant interactions ( <code class="xref py py-func docutils literal notranslate"><span class="pre">Query.ComputeAntInteraction()</span></code> ). These
+shapes can be defined manually in <strong>fort-studio</strong> or programmatically
+accessed and modified with <a class="reference internal" href="#py_fort_myrmidon.Ant.Capsules" title="py_fort_myrmidon.Ant.Capsules"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Capsules</span></code></a>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">AddCaspule()</span></code>,
+<a class="reference internal" href="#py_fort_myrmidon.Ant.DeleteCapsule" title="py_fort_myrmidon.Ant.DeleteCapsule"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DeleteCapsule()</span></code></a> and <a class="reference internal" href="#py_fort_myrmidon.Ant.ClearCapsules" title="py_fort_myrmidon.Ant.ClearCapsules"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ClearCapsules()</span></code></a>.</p>
+<p>Basic visualization of Experiment data can be done through
+<strong>fort-studio</strong>. Ants are displayed according to their
+<a class="reference internal" href="#py_fort_myrmidon.Ant.DisplayStatus" title="py_fort_myrmidon.Ant.DisplayStatus"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DisplayStatus</span></code></a> and <a class="reference internal" href="#py_fort_myrmidon.Ant.DisplayColor" title="py_fort_myrmidon.Ant.DisplayColor"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DisplayColor</span></code></a>.</p>
+<p>Ant can stores timed user defined metadata. These are modifiable
+using <a class="reference internal" href="#py_fort_myrmidon.Ant.SetValue" title="py_fort_myrmidon.Ant.SetValue"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SetValue()</span></code></a> and <a class="reference internal" href="#py_fort_myrmidon.Ant.DeleteValue" title="py_fort_myrmidon.Ant.DeleteValue"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DeleteValue()</span></code></a> and accesible through
+<a class="reference internal" href="#py_fort_myrmidon.Ant.GetValue" title="py_fort_myrmidon.Ant.GetValue"><code class="xref py py-meth docutils literal notranslate"><span class="pre">GetValue()</span></code></a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Ant.AddCapsule">
+<span class="sig-name descname"><span class="pre">AddCapsule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant"><span class="pre">py_fort_myrmidon.Ant</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">shapeTypeID</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">capsule</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="shapes.html#py_fort_myrmidon.Capsule" title="py_fort_myrmidon.Capsule"><span class="pre">py_fort_myrmidon.Capsule</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Ant.AddCapsule" title="Permalink to this definition"></a></dt>
+<dd><p>Adds a Capsule to the Ant virtual shape.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shapeTypeID</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the AntShapeTypeID associated with the capsule</p></li>
+<li><p><strong>capsule</strong> (<a class="reference internal" href="shapes.html#py_fort_myrmidon.Capsule" title="py_fort_myrmidon.Capsule"><em>Capsule</em></a>) – the capsule to add</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if <strong>shapeTypeID</strong> is not defined in the
+    <a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">Experiment</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Ant.Capsules">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Capsules</span></span><a class="headerlink" href="#py_fort_myrmidon.Ant.Capsules" title="Permalink to this definition"></a></dt>
+<dd><p>a list of capsules and their type</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>,<a class="reference internal" href="shapes.html#py_fort_myrmidon.Capsule" title="py_fort_myrmidon.Capsule">Capsule</a>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Ant.ClearCapsules">
+<span class="sig-name descname"><span class="pre">ClearCapsules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant"><span class="pre">py_fort_myrmidon.Ant</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Ant.ClearCapsules" title="Permalink to this definition"></a></dt>
+<dd><p>Removes all capsules for this Ant.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Ant.DeleteCapsule">
+<span class="sig-name descname"><span class="pre">DeleteCapsule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant"><span class="pre">py_fort_myrmidon.Ant</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Ant.DeleteCapsule" title="Permalink to this definition"></a></dt>
+<dd><p>Removes one of the shape</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the index to remove in <a class="reference internal" href="#py_fort_myrmidon.Ant.Capsules" title="py_fort_myrmidon.Ant.Capsules"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Capsules</span></code></a></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – if <code class="docutils literal notranslate"><span class="pre">index</span> <span class="pre">&gt;=</span> <span class="pre">len(self.Capsules())</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Ant.DeleteValue">
+<span class="sig-name descname"><span class="pre">DeleteValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant"><span class="pre">py_fort_myrmidon.Ant</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><span class="pre">py_fort_myrmidon.Time</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Ant.DeleteValue" title="Permalink to this definition"></a></dt>
+<dd><p>Clears a user defined timed metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the key to clear</p></li>
+<li><p><strong>time</strong> (<a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><em>Time</em></a>) – the time to clear a value for key</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – if <strong>key</strong> was not previously set for <strong>time</strong> with
+    <a class="reference internal" href="#py_fort_myrmidon.Ant.SetValue" title="py_fort_myrmidon.Ant.SetValue"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SetValue()</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Ant.DisplayColor">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DisplayColor</span></span><a class="headerlink" href="#py_fort_myrmidon.Ant.DisplayColor" title="Permalink to this definition"></a></dt>
+<dd><p>the color used to display the Ant in <strong>fort-studio</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Ant.DisplayState">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DisplayState</span></span><a class="headerlink" href="#py_fort_myrmidon.Ant.DisplayState" title="Permalink to this definition"></a></dt>
+<dd><p>Enumerates the possible display state for an Ant</p>
+<p>Members:</p>
+<blockquote>
+<div><p>VISIBLE : the Ant is visible</p>
+<p>HIDDEN : the Ant is hidden</p>
+<p>SOLO : the Ant is visible and all other non-solo ant are hidden</p>
+</div></blockquote>
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Ant.DisplayState.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#py_fort_myrmidon.Ant.DisplayState.name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Ant.DisplayStatus">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DisplayStatus</span></span><a class="headerlink" href="#py_fort_myrmidon.Ant.DisplayStatus" title="Permalink to this definition"></a></dt>
+<dd><p>the DisplayState in <strong>fort-studio</strong> for this Ant</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#py_fort_myrmidon.Ant.DisplayState" title="py_fort_myrmidon.Ant.DisplayState">Ant.DisplayState</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Ant.GetValue">
+<span class="sig-name descname"><span class="pre">GetValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant"><span class="pre">py_fort_myrmidon.Ant</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><span class="pre">py_fort_myrmidon.Time</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><span class="pre">py_fort_myrmidon.Time</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#py_fort_myrmidon.Ant.GetValue" title="Permalink to this definition"></a></dt>
+<dd><p>Gets user defined timed metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the key to query</p></li>
+<li><p><strong>time</strong> (<a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><em>Time</em></a>) – the time, possibly infinite to query for</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the value for <strong>key</strong> at <strong>time</strong>,
+if defined, or the Experiment’s default value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a> or <a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time">Time</a></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – if <strong>key</strong> is not defined in <a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">Experiment</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Ant.GetValues">
+<span class="sig-name descname"><span class="pre">GetValues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant"><span class="pre">py_fort_myrmidon.Ant</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><span class="pre">py_fort_myrmidon.Time</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><span class="pre">py_fort_myrmidon.Time</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#py_fort_myrmidon.Ant.GetValues" title="Permalink to this definition"></a></dt>
+<dd><p>Gets metadata key changes over time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the key to list changes</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – if <strong>key</strong> is not defined in <a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">Experiment</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Ant.ID">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ID</span></span><a class="headerlink" href="#py_fort_myrmidon.Ant.ID" title="Permalink to this definition"></a></dt>
+<dd><p>the AntID for this Ant</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Ant.Identifications">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Identifications</span></span><a class="headerlink" href="#py_fort_myrmidon.Ant.Identifications" title="Permalink to this definition"></a></dt>
+<dd><p>all Identification that target this Ant, ordered by validity time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="#py_fort_myrmidon.Identification" title="py_fort_myrmidon.Identification">Identification</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Ant.IdentifiedAt">
+<span class="sig-name descname"><span class="pre">IdentifiedAt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant"><span class="pre">py_fort_myrmidon.Ant</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><span class="pre">py_fort_myrmidon.Time</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Ant.IdentifiedAt" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the TagID identifiying this Ant at a given time</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>time</strong> (<a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><em>Time</em></a>) – the time we want an identification for</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the TagID that identifies this Ant at time.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Error</strong> – if no tag identifies this Ant at <strong>time</strong>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Ant.SetValue">
+<span class="sig-name descname"><span class="pre">SetValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant"><span class="pre">py_fort_myrmidon.Ant</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><span class="pre">py_fort_myrmidon.Time</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><span class="pre">py_fort_myrmidon.Time</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Ant.SetValue" title="Permalink to this definition"></a></dt>
+<dd><p>Sets a user defined timed metadata</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the key to defined</p></li>
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><em>Time</em></a>) – the wanted
+value.</p></li>
+<li><p><strong>time</strong> (<a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><em>Time</em></a>) – the first Time where <strong>key</strong> will be set to
+<strong>value</strong>. It can be <a class="reference internal" href="time.html#py_fort_myrmidon.Time.SinceEver" title="py_fort_myrmidon.Time.SinceEver"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Time.SinceEver()</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – if <strong>key</strong> is not defined in the <a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">Experiment</span></code></a></p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if <strong>time</strong> is <a class="reference internal" href="time.html#py_fort_myrmidon.Time.Forever" title="py_fort_myrmidon.Time.Forever"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Time.Forever()</span></code></a></p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.10)"><strong>RuntimeError</strong></a> – if <strong>value</strong> is not of the right type for <strong>key</strong></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="py-fort-myrmidon-identification">
+<h2>py_fort_myrmidon.Identification<a class="headerlink" href="#py-fort-myrmidon-identification" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Identification">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">Identification</span></span><a class="headerlink" href="#py_fort_myrmidon.Identification" title="Permalink to this definition"></a></dt>
+<dd><p>Identifications relates tag to <a class="reference internal" href="#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant"><code class="xref py py-class docutils literal notranslate"><span class="pre">Ant</span></code></a> with <a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">Time</span></code></a> and geometric
+data.</p>
+<p>Identification can only be created from an <a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">Experiment</span></code></a> with
+<a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment.AddIdentification" title="py_fort_myrmidon.Experiment.AddIdentification"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Experiment.AddIdentification()</span></code></a>.</p>
+<p>Identifications are bounded in <a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">Time</span></code></a> in the range
+[ <a class="reference internal" href="#py_fort_myrmidon.Identification.Start" title="py_fort_myrmidon.Identification.Start"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Start</span></code></a> , <a class="reference internal" href="#py_fort_myrmidon.Identification.End" title="py_fort_myrmidon.Identification.End"><code class="xref py py-attr docutils literal notranslate"><span class="pre">End</span></code></a> [. These attributes can respectively be set
+to <a class="reference internal" href="time.html#py_fort_myrmidon.Time.SinceEver" title="py_fort_myrmidon.Time.SinceEver"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Time.SinceEver()</span></code></a> and <a class="reference internal" href="time.html#py_fort_myrmidon.Time.Forever" title="py_fort_myrmidon.Time.Forever"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Time.Forever()</span></code></a>. Internally
+<strong>fort-myrmidon</strong> ensure the validity of all Identifications. It means
+that:</p>
+<ul class="simple">
+<li><p>Two Identifications using the same TagValue cannot overlap in Time.</p></li>
+<li><p>Two Identifications using targeting the same <a class="reference internal" href="#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant"><code class="xref py py-class docutils literal notranslate"><span class="pre">Ant</span></code></a> cannot overlap in Time.</p></li>
+</ul>
+<p>If any modification through
+<a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment.AddIdentification" title="py_fort_myrmidon.Experiment.AddIdentification"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Experiment.AddIdentification()</span></code></a>, <a class="reference internal" href="#py_fort_myrmidon.Identification.Start" title="py_fort_myrmidon.Identification.Start"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Start</span></code></a> or <a class="reference internal" href="#py_fort_myrmidon.Identification.End" title="py_fort_myrmidon.Identification.End"><code class="xref py py-attr docutils literal notranslate"><span class="pre">End</span></code></a> would
+violate one of these conditions, an <a class="reference internal" href="#py_fort_myrmidon.OverlappingIdentification" title="py_fort_myrmidon.OverlappingIdentification"><code class="xref py py-class docutils literal notranslate"><span class="pre">OverlappingIdentification</span></code></a>
+exception will be raised.</p>
+<p>Identifications also contains geometric informations on how the
+detected tag is related to the observed <a class="reference internal" href="#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant"><code class="xref py py-class docutils literal notranslate"><span class="pre">Ant</span></code></a>. These are the
+translation and rotation of the Ant, expressed in the tag coordinate
+reference. Usually, this information is automatically generated from
+the manual measurement of type
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">Experiment.HEAD_TAIL_MEASUREMENT_TYPE</span></code> made in
+<strong>fort-studio</strong>. Alternatively, users can override this behavior by
+setting themselves this pose using
+<a class="reference internal" href="#py_fort_myrmidon.Identification.SetUserDefinedAntPose" title="py_fort_myrmidon.Identification.SetUserDefinedAntPose"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SetUserDefinedAntPose()</span></code></a>. <a class="reference internal" href="#py_fort_myrmidon.Identification.ClearUserDefinedAntPose" title="py_fort_myrmidon.Identification.ClearUserDefinedAntPose"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ClearUserDefinedAntPose()</span></code></a> can be
+used to revert to the internally computed pose.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Any angle is measured in radians, with a standard mathematical
+convention. Since in image processing the y-axis is pointing from
+the top of the image to the bottom, positive angles appears
+clockwise.</p>
+</div>
+<p>Identifications also contains the information of the physical tag size
+used to identify the individual. It can be accessed and set with
+<a class="reference internal" href="#py_fort_myrmidon.Identification.TagSize" title="py_fort_myrmidon.Identification.TagSize"><code class="xref py py-attr docutils literal notranslate"><span class="pre">TagSize</span></code></a>. The value <a class="reference internal" href="#py_fort_myrmidon.Identification.DEFAULT_TAG_SIZE" title="py_fort_myrmidon.Identification.DEFAULT_TAG_SIZE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DEFAULT_TAG_SIZE</span></code></a> (i.e. <code class="docutils literal notranslate"><span class="pre">0.0</span></code>)
+indicates that the <a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment.DefaultTagSize" title="py_fort_myrmidon.Experiment.DefaultTagSize"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Experiment.DefaultTagSize</span></code></a> should be
+used. Therefore, for most Ant, this field should be kept to
+<a class="reference internal" href="#py_fort_myrmidon.Identification.DEFAULT_TAG_SIZE" title="py_fort_myrmidon.Identification.DEFAULT_TAG_SIZE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DEFAULT_TAG_SIZE</span></code></a>, excepted for a few individuals, for
+examples, Queens.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Identification.DEFAULT_TAG_SIZE">
+<span class="sig-name descname"><span class="pre">DEFAULT_TAG_SIZE</span></span><a class="headerlink" href="#py_fort_myrmidon.Identification.DEFAULT_TAG_SIZE" title="Permalink to this definition"></a></dt>
+<dd><p>a value of <code class="docutils literal notranslate"><span class="pre">0.0</span></code> that indicates that the
+<a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment.DefaultTagSize" title="py_fort_myrmidon.Experiment.DefaultTagSize"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Experiment.DefaultTagSize</span></code></a> should be used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Identification.AntAngle">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AntAngle</span></span><a class="headerlink" href="#py_fort_myrmidon.Identification.AntAngle" title="Permalink to this definition"></a></dt>
+<dd><p>orientation difference between the ant orientation and its physical tag, expressed in radians.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Identification.AntPosition">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AntPosition</span></span><a class="headerlink" href="#py_fort_myrmidon.Identification.AntPosition" title="Permalink to this definition"></a></dt>
+<dd><p>Ant center position relative to the tag center. (float64, size[2,1])</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Identification.ClearUserDefinedAntPose">
+<span class="sig-name descname"><span class="pre">ClearUserDefinedAntPose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Identification" title="py_fort_myrmidon.Identification"><span class="pre">py_fort_myrmidon.Identification</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Identification.ClearUserDefinedAntPose" title="Permalink to this definition"></a></dt>
+<dd><p>Removes any user-defined ant-tag relative geometry data and re-enable
+the one computed from manual measurement made in <strong>fort-studio</strong>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Identification.End">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">End</span></span><a class="headerlink" href="#py_fort_myrmidon.Identification.End" title="Permalink to this definition"></a></dt>
+<dd><p>the first invalid Time fort this identification, it can be <a class="reference internal" href="time.html#py_fort_myrmidon.Time.Forever" title="py_fort_myrmidon.Time.Forever"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Time.Forever()</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time">Time</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Identification.HasDefaultTagSize">
+<span class="sig-name descname"><span class="pre">HasDefaultTagSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Identification" title="py_fort_myrmidon.Identification"><span class="pre">py_fort_myrmidon.Identification</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Identification.HasDefaultTagSize" title="Permalink to this definition"></a></dt>
+<dd><p>Indicates if the <a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment.DefaultTagSize" title="py_fort_myrmidon.Experiment.DefaultTagSize"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Experiment.DefaultTagSize</span></code></a> is used</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if this Identification uses
+<a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment.DefaultTagSize" title="py_fort_myrmidon.Experiment.DefaultTagSize"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Experiment.DefaultTagSize</span></code></a>, i.e. when <a class="reference internal" href="#py_fort_myrmidon.Identification.TagSize" title="py_fort_myrmidon.Identification.TagSize"><code class="xref py py-attr docutils literal notranslate"><span class="pre">TagSize</span></code></a> ==
+<a class="reference internal" href="#py_fort_myrmidon.Identification.DEFAULT_TAG_SIZE" title="py_fort_myrmidon.Identification.DEFAULT_TAG_SIZE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DEFAULT_TAG_SIZE</span></code></a></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Identification.HasUserDefinedAntPose">
+<span class="sig-name descname"><span class="pre">HasUserDefinedAntPose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Identification" title="py_fort_myrmidon.Identification"><span class="pre">py_fort_myrmidon.Identification</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Identification.HasUserDefinedAntPose" title="Permalink to this definition"></a></dt>
+<dd><p>Indicates if the user overrided the computed pose.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the ant position relatively to the tag has
+been set by the user.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Identification.SetUserDefinedAntPose">
+<span class="sig-name descname"><span class="pre">SetUserDefinedAntPose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Identification" title="py_fort_myrmidon.Identification"><span class="pre">py_fort_myrmidon.Identification</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">antPosition</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">2</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">antAngle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Identification.SetUserDefinedAntPose" title="Permalink to this definition"></a></dt>
+<dd><p>Sets an user defined ant position relatively to the tag, overiding
+the one computed from manual measurements.</p>
+<p>To revert to the automatically computed ones, use
+<a class="reference internal" href="#py_fort_myrmidon.Identification.ClearUserDefinedAntPose" title="py_fort_myrmidon.Identification.ClearUserDefinedAntPose"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ClearUserDefinedAntPose()</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>antPosition</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><em>numpy.ndarray</em></a><em>[</em><em>numpy.float64</em><em>[</em><em>2</em><em>,</em><em>1</em><em>]</em><em>]</em>) – the position
+of the ant relatively to the tag center, in the tag
+reference frame</p></li>
+<li><p><strong>antAngle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – the ant angle relatively to the tag angle,
+in radians</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Identification.Start">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Start</span></span><a class="headerlink" href="#py_fort_myrmidon.Identification.Start" title="Permalink to this definition"></a></dt>
+<dd><p>the first valid Time fort this identification, it can be <a class="reference internal" href="time.html#py_fort_myrmidon.Time.SinceEver" title="py_fort_myrmidon.Time.SinceEver"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Time.SinceEver()</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time">Time</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Identification.TagSize">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TagSize</span></span><a class="headerlink" href="#py_fort_myrmidon.Identification.TagSize" title="Permalink to this definition"></a></dt>
+<dd><p>the Identification tag size in millimeters, could be <a class="reference internal" href="#py_fort_myrmidon.Identification.DEFAULT_TAG_SIZE" title="py_fort_myrmidon.Identification.DEFAULT_TAG_SIZE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DEFAULT_TAG_SIZE</span></code></a> to use <a class="reference internal" href="experiment.html#py_fort_myrmidon.Experiment.DefaultTagSize" title="py_fort_myrmidon.Experiment.DefaultTagSize"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Experiment.DefaultTagSize</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Identification.TagValue">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TagValue</span></span><a class="headerlink" href="#py_fort_myrmidon.Identification.TagValue" title="Permalink to this definition"></a></dt>
+<dd><p>the associated TagID of this identification</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Identification.TargetAntID">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TargetAntID</span></span><a class="headerlink" href="#py_fort_myrmidon.Identification.TargetAntID" title="Permalink to this definition"></a></dt>
+<dd><p>the associated AntID of this identification</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="py-fort-myrmidon-overlappingidentification">
+<h2>py_fort_myrmidon.OverlappingIdentification<a class="headerlink" href="#py-fort-myrmidon-overlappingidentification" title="Permalink to this headline"></a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="py_fort_myrmidon.OverlappingIdentification">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">OverlappingIdentification</span></span><a class="headerlink" href="#py_fort_myrmidon.OverlappingIdentification" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="experiment.html" class="btn btn-neutral float-left" title="API Entry Point" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="space_zone.html" class="btn btn-neutral float-right" title="Spaces and Zones" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Université de Lausanne.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

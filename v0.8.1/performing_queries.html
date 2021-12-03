@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Performing Queries &mdash; fort-myrmidon  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script src="_static/../version_dropdown.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Introduction" href="studio/introduction.html" />
+    <link rel="prev" title="Defining Ant Metadata" href="defining_ant_metadata.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> fort-myrmidon
+          </a>
+              <div class="version">
+                placeholder
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-myrmidon Basics</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="defining_ant_metadata.html">Defining Ant Metadata</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Performing Queries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#instantaneous-queries">Instantaneous Queries</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#identifying-frames">Identifying Frames</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#collision-detection">Collision Detection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#interaction-types">Interaction Types</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#time-spanning-queries">Time-spanning Queries</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ant-trajectories">Ant Trajectories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ant-interactions">Ant Interactions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#full-vs-summarized-trajectory-report">Full vs Summarized Trajectory Report</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#building-complex-queries-with-matchers">Building Complex Queries with Matchers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#miscellaneous-queries">Miscellaneous Queries</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-studio Manual</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="studio/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/defining_ant_shapes.html">Defining Ant Shapes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/measuring_ants.html">Measuring Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/metadata_edition.html">Ant Metadata Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/visualization.html">Tracking Data Visualization</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="space_zoning.html">Segmenting Spaces in Zones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matching_video.html">Matching Video and Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="time.html">Time Representation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html#c">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html#r">R</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fort-myrmidon</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Performing Queries</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/performing_queries.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="performing-queries">
+<h1>Performing Queries<a class="headerlink" href="#performing-queries" title="Permalink to this headline"></a></h1>
+<p>The main purpose of <strong>fort-myrmidon</strong> is to allow user to perform
+<em>queries</em> <a class="footnote-reference brackets" href="#query" id="id1">1</a>, i.e. computations on the whole set of tracking
+data. These queries can only be performed once Ant are properly
+defined and in some case (such as for collisions and interactions)
+their wanted virtual shape are defined.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Here the python and C++ API quite diverges from the R API. While
+the two first reports <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">std::vector</span></code> of object,
+the latter only reports <code class="xref py py-obj docutils literal notranslate"><span class="pre">data.frame</span></code> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">slist</span></code> of
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">data.frame</span></code> with only native R types.</p>
+</div>
+<section id="instantaneous-queries">
+<h2>Instantaneous Queries<a class="headerlink" href="#instantaneous-queries" title="Permalink to this headline"></a></h2>
+<section id="identifying-frames">
+<h3>Identifying Frames<a class="headerlink" href="#identifying-frames" title="Permalink to this headline"></a></h3>
+<p>The simplest query that could be performed on a tracking data set is
+<em>identifying frames</em> <a class="footnote-reference brackets" href="#identifyframes" id="id2">2</a>. It is a simple
+translation of the raw tracking data from the Identification. It
+simply returns for each acquired video frame the position and
+orientation of each ant, taking into account the geometry relation
+between a tag position and orientation and the virtual ant desired
+position and orientation.</p>
+<p>This query return a list of <code class="xref py py-obj docutils literal notranslate"><span class="pre">IdentifiedFrame</span></code> <a class="footnote-reference brackets" href="#identifiedframe" id="id3">6</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Python</span>
+<span class="n">frames</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Query</span><span class="o">.</span><span class="n">IdentifyFrames</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Got Frame at </span><span class="si">%s</span><span class="s2"> in space </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">FrameTime</span><span class="p">,</span><span class="n">f</span><span class="o">.</span><span class="n">Space</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;AntID, X, Y, Angle, Zone&quot;</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">Positions</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="c1"># R</span>
+<span class="n">d</span> <span class="o">=</span> <span class="nf">fmQueryIdentifyFrames</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
+<span class="n">d</span><span class="o">$</span><span class="n">frames</span> <span class="c1"># a data frame summarizing for each frame its dimension, space and acquisition time</span>
+<span class="n">d</span><span class="o">$</span><span class="n">positions</span> <span class="c1"># a list of data frame with each ant position.</span>
+</pre></div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// C++</span>
+<span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">IdentifyFramesQueryArgs</span> <span class="n">args</span><span class="p">;</span>
+<span class="c1">// modify here default args;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">IdentifiedFrame</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&gt;</span> <span class="n">frames</span><span class="p">;</span>
+<span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">Query</span><span class="o">::</span><span class="n">IdentifyFrame</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">frames</span><span class="p">,</span><span class="n">args</span><span class="p">);</span>
+
+<span class="k">for</span> <span class="p">(</span> <span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span> <span class="nl">f</span> <span class="p">:</span> <span class="n">frames</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Got frame at &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">f</span><span class="o">-&gt;</span><span class="n">FrameTime</span>
+              <span class="o">&lt;&lt;</span> <span class="s">&quot; in space &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">f</span><span class="o">-&gt;</span><span class="n">Space</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span>
+              <span class="o">&lt;&lt;</span> <span class="s">&quot;AntID, X, Y, Angle, Zone&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span>
+              <span class="o">&lt;&lt;</span> <span class="n">f</span><span class="o">-&gt;</span><span class="n">Positions</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The main parameters for this query are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>the starting and ending time of the query</em>: in order to select only
+a range of the acquired tracking data. Since dataset tends to grow
+larger than the available RAM, it is important to only work on
+part of the dataset at a time to keep the memory usage low enough.</p></li>
+<li><p><em>Zone reporting</em>: Choose if the actual zone the ant lies should be
+reported, see <a class="reference internal" href="space_zoning.html"><span class="doc">Segmenting Spaces in Zones</span></a></p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="collision-detection">
+<h3>Collision Detection<a class="headerlink" href="#collision-detection" title="Permalink to this headline"></a></h3>
+<p>Instead of just reporting the ant position, <strong>fort-myrmidon</strong> can also
+report any collision detection between ant shapes by <em>colliding
+frames</em> <a class="footnote-reference brackets" href="#collideframes" id="id4">3</a>.</p>
+<p>This query returns a collection of <code class="xref py py-obj docutils literal notranslate"><span class="pre">IdentifiedFrame</span></code> and
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">CollisionFrame</span></code> <a class="footnote-reference brackets" href="#collisionframe" id="id5">7</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#python</span>
+<span class="n">frames</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Query</span><span class="o">.</span><span class="n">CollideFrame</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">identified</span><span class="p">,</span><span class="n">collided</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Collisions at $s in Space </span><span class="si">%d</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="p">(</span> <span class="n">collided</span><span class="o">.</span><span class="n">FrameTime</span><span class="p">,</span> <span class="n">collided</span><span class="o">.</span><span class="n">Space</span><span class="p">)</span> <span class="p">)</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">collided</span><span class="o">.</span><span class="n">Collisions</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Ants </span><span class="si">%s</span><span class="s2"> and </span><span class="si">%s</span><span class="s2"> collides.&quot;</span> <span class="o">%</span> <span class="p">(</span> <span class="n">fm</span><span class="o">.</span><span class="n">FormatAntID</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">IDs</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">fm</span><span class="o">.</span><span class="n">FormatAntID</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">IDs</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">Types</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="c1">#R</span>
+<span class="n">d</span> <span class="o">=</span> <span class="nf">fmQueryCollideFrames</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="n">d</span><span class="o">$</span><span class="n">frames</span> <span class="c1"># a data.frame that summarizes frame time, dimensions and space</span>
+<span class="n">d</span><span class="o">$</span><span class="n">positions</span> <span class="c1"># a list of data.frame with the ant position for each frame</span>
+<span class="n">d</span><span class="o">$</span><span class="n">collisions</span> <span class="c1"># a data.frame of all collisions in the selected time range. the field frame_row_index refers to the row in frames or the index in positions.</span>
+</pre></div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">//C++</span>
+<span class="k">auto</span> <span class="n">args</span> <span class="o">=</span> <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">Query</span><span class="o">::</span><span class="n">CollideFramesArgs</span><span class="p">();</span>
+<span class="c1">// modify here default arguments;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">IdentifiedFrame</span><span class="o">::</span><span class="n">Ptr</span><span class="p">,</span>
+                      <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">CollisionFrame</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&gt;&gt;</span> <span class="n">frames</span><span class="p">;</span>
+<span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">CollideFrames</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">frames</span><span class="p">,</span><span class="n">args</span><span class="p">);</span>
+
+<span class="k">for</span> <span class="p">(</span> <span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span> <span class="p">[</span><span class="n">identified</span><span class="p">,</span><span class="n">collided</span><span class="p">]</span> <span class="o">:</span> <span class="n">frames</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Collisions at &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">collided</span><span class="o">-&gt;</span><span class="n">FrameTime</span>
+              <span class="o">&lt;&lt;</span> <span class="s">&quot; in space &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">collided</span><span class="o">-&gt;</span><span class="n">Space</span>
+              <span class="o">&lt;&lt;</span> <span class="s">&quot;: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span> <span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span> <span class="nl">c</span> <span class="p">:</span> <span class="n">collided</span><span class="o">-&gt;</span><span class="n">Collisions</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Ants &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">FormatAntID</span><span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">IDs</span><span class="p">.</span><span class="n">first</span><span class="p">)</span>
+                  <span class="o">&lt;&lt;</span> <span class="s">&quot; and &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">FormatAntID</span><span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">IDs</span><span class="p">.</span><span class="n">second</span><span class="p">)</span>
+                  <span class="o">&lt;&lt;</span> <span class="s">&quot; collides.&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span>
+                  <span class="o">&lt;&lt;</span> <span class="n">c</span><span class="p">.</span><span class="n">Types</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The parameters are the same than for <a class="reference internal" href="#identifying-frames">Identifying Frames</a>, excepted
+than zone are always reported. Indeed zoning is used to prune
+undesired collisions as described in <a class="reference internal" href="space_zoning.html"><span class="doc">Segmenting Spaces in Zones</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>By convention, the order of the <code class="xref py py-obj docutils literal notranslate"><span class="pre">AntID</span></code> in the <code class="xref py py-obj docutils literal notranslate"><span class="pre">IDs</span></code> field
+is always sorted from the smallest to the highest to ensure uniqueness.</p>
+</div>
+<section id="interaction-types">
+<h4>Interaction Types<a class="headerlink" href="#interaction-types" title="Permalink to this headline"></a></h4>
+<p>As capsules are typed, for each collision the <code class="xref py py-obj docutils literal notranslate"><span class="pre">InteractionTypes</span></code>
+<a class="footnote-reference brackets" href="#interactiontypes" id="id6">12</a> are reported. In Python and C++ it is a Nx2
+matrix with each column representing the type of each ant which are
+colliding with the other one.</p>
+<p>For example the matrix:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{bmatrix}
+1 &amp; 1\\
+2 &amp; 1
+\end{bmatrix}\end{split}\]</div>
+<p>Means body type <strong>1</strong> for the second Ant touches both body type <strong>1</strong>
+and <strong>2</strong> of the first ant, but the body type <strong>2</strong> of the second ant
+collide with no other parts.</p>
+<p>In R, this matrix will be returned as a character: <code class="docutils literal notranslate"><span class="pre">'1-1,2-1'</span></code>.</p>
+</section>
+</section>
+</section>
+<section id="time-spanning-queries">
+<h2>Time-spanning Queries<a class="headerlink" href="#time-spanning-queries" title="Permalink to this headline"></a></h2>
+<p>The next two main queries, instead of report data for a single time,
+reports data over a time range. This time range is not predetermined
+and is found as the tracking data is parsed: Indeed as it is not
+possible to avoid detection losses, each of these queries accepts a
+<em>maximumGap</em> parameter. If tracking is lost for a duration larger than
+this parameter, the considered result (i.e. the trajectory or
+interaction) is considered done, and any latter detection or collision
+found later will become part of a new result.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If this behavior of segmenting results according to the
+<em>maximumGap</em> parameter wants to be avoided, one can set it to a
+large value, e.g. one year.</p>
+</div>
+<section id="ant-trajectories">
+<h3>Ant Trajectories<a class="headerlink" href="#ant-trajectories" title="Permalink to this headline"></a></h3>
+<p>Instead of reporting instantaneous detection, <em>computing ant
+trajectories</em> <a class="footnote-reference brackets" href="#computeanttrajectories" id="id7">4</a> will report for each
+individual the time ranges where it was continuously detected,
+accordingly to the <em>maximumGap</em> parameter.</p>
+<p>Results are a list of <code class="xref py py-obj docutils literal notranslate"><span class="pre">AntTrajectory</span></code> <a class="footnote-reference brackets" href="#anttrajectory" id="id8">8</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Python</span>
+<span class="n">trajectories</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Query</span><span class="o">.</span><span class="n">ComputeAntTrajectories</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">maximumGap</span> <span class="o">=</span> <span class="mi">500</span> <span class="o">*</span> <span class="n">fm</span><span class="o">.</span><span class="n">Duration</span><span class="o">.</span><span class="n">Millisecond</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">trajectories</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Ant </span><span class="si">%s</span><span class="s2"> Trajectory from </span><span class="si">%s</span><span class="s2"> to </span><span class="si">%s</span><span class="s2"> in space </span><span class="si">%d</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fm</span><span class="o">.</span><span class="n">FormatAntID</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">Ant</span><span class="p">),</span><span class="n">t</span><span class="o">.</span><span class="n">Start</span><span class="p">,</span><span class="n">t</span><span class="o">.</span><span class="n">End</span><span class="p">(),</span><span class="n">t</span><span class="o">.</span><span class="n">Space</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">Positions</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="c1"># R</span>
+<span class="n">d</span> <span class="o">=</span> <span class="nf">fmQueryComputeAntTrajectories</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">maximumGap</span> <span class="o">=</span> <span class="nf">fmMillisecond</span><span class="p">(</span><span class="m">500</span><span class="p">))</span>
+<span class="n">d</span><span class="o">$</span><span class="n">trajectories_summary</span> <span class="c1"># a data.frame with the ant, space and starting time of each trajectories</span>
+<span class="n">d</span><span class="o">$</span><span class="n">trajectories</span> <span class="c1"># a list of data.frame with each ant position for each trajectories</span>
+</pre></div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// C++</span>
+<span class="k">auto</span> <span class="n">args</span> <span class="o">=</span> <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">Query</span><span class="o">::</span><span class="n">ComputeAntTrajectoryArgs</span><span class="p">();</span>
+<span class="c1">// modify here default arguments</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">AntTrajectory</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&gt;</span> <span class="n">trajectories</span><span class="p">;</span>
+<span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">Query</span><span class="o">::</span><span class="n">ComputeAntTrajectories</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">trajectories</span><span class="p">,</span><span class="n">args</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>As I the case of <a class="reference internal" href="#identifying-frames">Identifying Frames</a>, the user can choose if the ant
+zone should be reported with the <em>computeZone</em> argument.</p>
+</section>
+<section id="ant-interactions">
+<h3>Ant Interactions<a class="headerlink" href="#ant-interactions" title="Permalink to this headline"></a></h3>
+<p>Instead of just looking at iNstantaneous collision, one can <em>compute
+ant interactions</em> <a class="footnote-reference brackets" href="#computeantinteractions" id="id9">5</a>, i.e. time ranges where ant
+collides.</p>
+<p>Both <code class="xref py py-obj docutils literal notranslate"><span class="pre">AntTrajectory</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">AntInteraction</span></code> <a class="footnote-reference brackets" href="#antinteraction" id="id10">9</a>
+may be reported.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Python</span>
+<span class="n">trajectories</span><span class="p">,</span><span class="n">interactions</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Query</span><span class="o">.</span><span class="n">ComputeAntInteractions</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">interactions</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Ant </span><span class="si">%s</span><span class="s2"> and </span><span class="si">%s</span><span class="s2"> interacts from </span><span class="si">%s</span><span class="s2"> to </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fm</span><span class="o">.</span><span class="n">FormatAntID</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">IDs</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="n">fm</span><span class="o">.</span><span class="n">FormatAntID</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">IDs</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="n">i</span><span class="o">.</span><span class="n">Start</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">End</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="c1"># R</span>
+<span class="n">d</span> <span class="o">=</span> <span class="nf">fmQueryComputeAntInteractions</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="n">d</span><span class="o">$</span><span class="n">trajectory_summaries</span> <span class="c1"># the summary of trajectory like for fmQueryComputeAntTrajectories</span>
+<span class="n">d</span><span class="o">$</span><span class="n">trajectories</span> <span class="c1"># the trajectory positions like for fmQueryComputeAntTrajectories</span>
+<span class="n">d</span><span class="o">$</span><span class="n">interactions</span> <span class="c1"># a data.frame with all interactions.</span>
+</pre></div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// C++</span>
+<span class="k">auto</span> <span class="n">args</span> <span class="o">=</span> <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">Query</span><span class="o">::</span><span class="n">ComputeAntInteractionArgs</span><span class="p">();</span>
+<span class="c1">// modify here default arguments;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">AntTrajectory</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&gt;</span> <span class="n">trajectories</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">AntInteraction</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&gt;</span> <span class="n">interactions</span><span class="p">;</span>
+<span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">Query</span><span class="o">::</span><span class="n">ComputeAntInteractions</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">trajectories</span><span class="p">,</span><span class="n">interactions</span><span class="p">,</span><span class="n">args</span><span class="p">);</span>
+
+<span class="k">for</span> <span class="p">(</span> <span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span> <span class="nl">i</span> <span class="p">:</span> <span class="n">interactions</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Ant &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">FormatAntID</span><span class="p">(</span><span class="n">i</span><span class="o">-&gt;</span><span class="n">IDs</span><span class="p">.</span><span class="n">first</span><span class="p">)</span>
+              <span class="o">&lt;&lt;</span> <span class="s">&quot; and &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">FormatAntID</span><span class="p">(</span><span class="n">i</span><span class="o">-&gt;</span><span class="n">IDs</span><span class="p">.</span><span class="n">second</span><span class="p">)</span>
+              <span class="o">&lt;&lt;</span> <span class="s">&quot; interacts from &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="o">-&gt;</span><span class="n">Start</span>
+              <span class="o">&lt;&lt;</span> <span class="s">&quot; to &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="o">-&gt;</span><span class="n">End</span>
+              <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<section id="full-vs-summarized-trajectory-report">
+<h4>Full vs Summarized Trajectory Report<a class="headerlink" href="#full-vs-summarized-trajectory-report" title="Permalink to this headline"></a></h4>
+<p>As shown by the API, by default, the <code class="xref py py-obj docutils literal notranslate"><span class="pre">ComputeAntInteractions</span></code>
+query returns both interactions and trajectories. In that case each
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">AntInteraction</span></code> object contains a pair of
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">AntTrajectorySegment</span></code> <a class="footnote-reference brackets" href="#anttrajectorysegment" id="id11">10</a> that points to a
+part of the <code class="xref py py-obj docutils literal notranslate"><span class="pre">AntTrajectory</span></code> corresponding to the current
+interaction.</p>
+<p>Alternatively to simplify the results and to save memory, one can
+disable the report of the full trajectory with the
+<em>reportFullTrajectories</em> parameter. In that case the list of returned
+trajectory will be empty, and instead <code class="xref py py-obj docutils literal notranslate"><span class="pre">AntTrajectorySummary</span></code>
+<a class="footnote-reference brackets" href="#anttrajectorysummary" id="id12">11</a> will be reported. These object contains the
+mean position of the ant, and the list of zone traversed during the
+interaction.</p>
+<p>The case of R is a bit more complex. If full trajectories are
+reported, the <code class="docutils literal notranslate"><span class="pre">$interactions</span></code> <code class="xref py py-obj docutils literal notranslate"><span class="pre">data.frame</span></code> will report the
+<code class="docutils literal notranslate"><span class="pre">$trajectories</span></code> index and first and last rows corresponding to the
+trajectory segment. Otherwise, only a single <code class="xref py py-obj docutils literal notranslate"><span class="pre">data.frame</span></code> is
+returned, with the mean position and zone for each ant.</p>
+</section>
+</section>
+<section id="building-complex-queries-with-matchers">
+<h3>Building Complex Queries with Matchers<a class="headerlink" href="#building-complex-queries-with-matchers" title="Permalink to this headline"></a></h3>
+<p>Time-spanning queries accepts a <em>matcher</em> <a class="footnote-reference brackets" href="#matcher" id="id13">13</a> parameter that
+could be used to customize the behavior of these queries.</p>
+<p>For example one can select only <cite>1-1</cite> interactions type:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Python</span>
+<span class="n">trajectories</span><span class="p">,</span><span class="n">interactions</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Query</span><span class="o">.</span><span class="n">ComputeAntInteractions</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">matcher</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Matcher</span><span class="o">.</span><span class="n">InteractionType</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="c1"># R</span>
+<span class="n">d</span> <span class="o">=</span> <span class="nf">fmQueryComputeAntInteractions</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">matcher</span> <span class="o">=</span> <span class="nf">fmMatcherInteractionType</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// C++</span>
+<span class="k">auto</span> <span class="n">args</span> <span class="o">=</span> <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">ComputeAntInteractionsArgs</span><span class="p">();</span>
+<span class="n">args</span><span class="p">.</span><span class="n">Matcher</span> <span class="o">=</span> <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">Matcher</span><span class="o">::</span><span class="n">InteractionType</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">AntTrajectory</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&gt;</span> <span class="n">trajectories</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">AntInteraction</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&gt;</span> <span class="n">interactions</span><span class="p">;</span>
+<span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">Query</span><span class="o">::</span><span class="n">ComputeAntInteractions</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">trajectories</span><span class="p">,</span><span class="n">interactions</span><span class="p">,</span><span class="n">args</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Or one can prune out interactions were one of the ant have a large
+displacement over a given duration:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Python</span>
+<span class="n">trajectories</span><span class="p">,</span><span class="n">interactions</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Query</span><span class="o">.</span><span class="n">ComputeAntInteractions</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">matcher</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Matcher</span><span class="o">.</span><span class="n">AntDisplacement</span><span class="p">(</span><span class="n">under</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">minimumGap</span> <span class="o">=</span> <span class="mi">500</span> <span class="o">*</span> <span class="n">fm</span><span class="o">.</span><span class="n">Duration</span><span class="o">.</span><span class="n">Millisecond</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="c1"># R</span>
+<span class="n">d</span> <span class="o">=</span> <span class="nf">fmQueryComputeAntInteractions</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">matcher</span> <span class="o">=</span> <span class="nf">fmMatcherAntDisplacement</span><span class="p">(</span><span class="n">under</span> <span class="o">=</span> <span class="m">100</span><span class="p">,</span> <span class="n">minimumGap</span> <span class="o">=</span> <span class="nf">fmMillisecond</span><span class="p">(</span><span class="m">500</span><span class="p">)))</span>
+</pre></div>
+</div>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// C++</span>
+<span class="k">auto</span> <span class="n">args</span> <span class="o">=</span> <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">ComputeAntInteractionsArgs</span><span class="p">();</span>
+<span class="n">args</span><span class="p">.</span><span class="n">Matcher</span> <span class="o">=</span> <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">Matcher</span><span class="o">::</span><span class="n">AntDisplacement</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">500</span> <span class="o">*</span> <span class="n">fort</span><span class="o">::</span><span class="n">Duration</span><span class="o">::</span><span class="n">Millisecond</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">AntTrajectory</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&gt;</span> <span class="n">trajectories</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">AntInteraction</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&gt;</span> <span class="n">interactions</span><span class="p">;</span>
+<span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">Query</span><span class="o">::</span><span class="n">ComputeAntInteractions</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">trajectories</span><span class="p">,</span><span class="n">interactions</span><span class="p">,</span><span class="n">args</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>More complex matcher can be combined together. Here we only look at
+interactions with ant <code class="docutils literal notranslate"><span class="pre">001</span></code> and the two above matcher combined:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Python</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Matcher</span><span class="o">.</span><span class="n">And</span><span class="p">(</span><span class="n">fm</span><span class="o">.</span><span class="n">Matcher</span><span class="o">.</span><span class="n">AntID</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">fm</span><span class="o">.</span><span class="n">Matcher</span><span class="o">.</span><span class="n">InteractionType</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">fm</span><span class="o">.</span><span class="n">Matcher</span><span class="o">.</span><span class="n">AntDisplacement</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">500</span> <span class="o">*</span> <span class="n">fm</span><span class="o">.</span><span class="n">Duration</span><span class="o">.</span><span class="n">Millisecond</span><span class="p">))</span>
+<span class="n">trajectories</span><span class="p">,</span><span class="n">interactions</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Query</span><span class="o">.</span><span class="n">ComputeAntInteractions</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">matcher</span> <span class="o">=</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="c1"># R</span>
+<span class="n">m</span> <span class="o">&lt;-</span> <span class="nf">fmMatcherAnd</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="nf">fmMatcherAntID</span><span class="p">(</span><span class="m">1</span><span class="p">),</span><span class="nf">fmMatcherInteractionType</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">),</span><span class="nf">fmMatcherAntDisplacement</span><span class="p">(</span><span class="m">100</span><span class="p">,</span><span class="nf">fmMillisecond</span><span class="p">(</span><span class="m">500</span><span class="p">))))</span>
+<span class="n">d</span> <span class="o">&lt;-</span> <span class="nf">fmQueryComputeAntInteractions</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">matcher</span> <span class="o">=</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// C++</span>
+<span class="k">auto</span> <span class="n">args</span> <span class="o">=</span> <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">ComputeAntInteractionsArgs</span><span class="p">();</span>
+<span class="n">args</span><span class="p">.</span><span class="n">Matcher</span> <span class="o">=</span> <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">Matcher</span><span class="o">::</span><span class="n">And</span><span class="p">({</span><span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">Matcher</span><span class="o">::</span><span class="n">AntID</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+                                             <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">Matcher</span><span class="o">::</span><span class="n">InteractionType</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
+                                                                                             <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">Matcher</span><span class="o">::</span><span class="n">AntDisplacement</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="n">fmMillisecond</span><span class="p">(</span><span class="mi">500</span><span class="p">))});</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">AntTrajectory</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&gt;</span> <span class="n">trajectories</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">AntInteraction</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&gt;</span> <span class="n">interactions</span><span class="p">;</span>
+<span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">Query</span><span class="o">::</span><span class="n">ComputeAntInteractions</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">trajectories</span><span class="p">,</span><span class="n">interactions</span><span class="p">,</span><span class="n">args</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>More matchers can be found in the <code class="xref py py-obj docutils literal notranslate"><span class="pre">Matcher</span></code> class definition
+<a class="footnote-reference brackets" href="#matcher" id="id14">13</a>.</p>
+</section>
+</section>
+<section id="miscellaneous-queries">
+<h2>Miscellaneous Queries<a class="headerlink" href="#miscellaneous-queries" title="Permalink to this headline"></a></h2>
+<p>TODO</p>
+<dl class="footnote brackets">
+<dt class="label" id="query"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Python: <a class="reference internal" href="api/python/queries_matchers.html#py_fort_myrmidon.Query" title="py_fort_myrmidon.Query"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Query</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmQuery</span></code>, C++: <a class="reference internal" href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5QueryE" title="fort::myrmidon::Query"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::Query</span></code></a></p>
+</dd>
+<dt class="label" id="identifyframes"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dd><p>Python: <a class="reference internal" href="api/python/queries_matchers.html#py_fort_myrmidon.Query.IdentifyFrames" title="py_fort_myrmidon.Query.IdentifyFrames"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Query.IdentifyFrames()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmQueryIdentifyFrames()</span></code>, C++: <a class="reference internal" href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query14IdentifyFramesERK10ExperimentRNSt6vectorIN15IdentifiedFrame3PtrEEERK18IdentifyFramesArgs" title="fort::myrmidon::Query::IdentifyFrames"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Query::IdentifyFrames()</span></code></a></p>
+</dd>
+<dt class="label" id="collideframes"><span class="brackets"><a class="fn-backref" href="#id4">3</a></span></dt>
+<dd><p>Python: <a class="reference internal" href="api/python/queries_matchers.html#py_fort_myrmidon.Query.CollideFrames" title="py_fort_myrmidon.Query.CollideFrames"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Query.CollideFrames()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmQueryCollideFrames()</span></code>, C++: <a class="reference internal" href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query13CollideFramesERK10ExperimentRNSt6vectorI13CollisionDataEERK17CollideFramesArgs" title="fort::myrmidon::Query::CollideFrames"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Query::CollideFrames()</span></code></a></p>
+</dd>
+<dt class="label" id="computeanttrajectories"><span class="brackets"><a class="fn-backref" href="#id7">4</a></span></dt>
+<dd><p>Python: <a class="reference internal" href="api/python/queries_matchers.html#py_fort_myrmidon.Query.ComputeAntTrajectories" title="py_fort_myrmidon.Query.ComputeAntTrajectories"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Query.ComputeAntTrajectories()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmQueryComputeAntTrajectories()</span></code>, C++: <a class="reference internal" href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query22ComputeAntTrajectoriesERK10ExperimentRNSt6vectorIN13AntTrajectory3PtrEEERK26ComputeAntTrajectoriesArgs" title="fort::myrmidon::Query::ComputeAntTrajectories"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Query::ComputeAntTrajectories()</span></code></a></p>
+</dd>
+<dt class="label" id="computeantinteractions"><span class="brackets"><a class="fn-backref" href="#id9">5</a></span></dt>
+<dd><p>Python: <a class="reference internal" href="api/python/queries_matchers.html#py_fort_myrmidon.Query.ComputeAntInteractions" title="py_fort_myrmidon.Query.ComputeAntInteractions"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Query.ComputeAntInteractions()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmQueryComputeAntInteractions()</span></code>, C++: <a class="reference internal" href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query22ComputeAntInteractionsERK10ExperimentRNSt6vectorIN13AntTrajectory3PtrEEERNSt6vectorIN14AntInteraction3PtrEEERK26ComputeAntInteractionsArgs" title="fort::myrmidon::Query::ComputeAntInteractions"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Query::ComputeAntInteractions()</span></code></a></p>
+</dd>
+<dt class="label" id="identifiedframe"><span class="brackets"><a class="fn-backref" href="#id3">6</a></span></dt>
+<dd><p>Python: <a class="reference internal" href="api/python/queries_matchers.html#py_fort_myrmidon.IdentifiedFrame" title="py_fort_myrmidon.IdentifiedFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.IdentifiedFrame</span></code></a>, R: see return value of <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmQueryIdentifyFrames()</span></code>, C++: <a class="reference internal" href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon15IdentifiedFrameE" title="fort::myrmidon::IdentifiedFrame"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::IdentifiedFrame</span></code></a></p>
+</dd>
+<dt class="label" id="collisionframe"><span class="brackets"><a class="fn-backref" href="#id5">7</a></span></dt>
+<dd><p>Python: <a class="reference internal" href="api/python/queries_matchers.html#py_fort_myrmidon.CollisionFrame" title="py_fort_myrmidon.CollisionFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.CollisionFrame</span></code></a>, R: see return value of <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmQueryCollideFrames()</span></code>, C++: <a class="reference internal" href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon14CollisionFrameE" title="fort::myrmidon::CollisionFrame"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::CollisionFrame</span></code></a></p>
+</dd>
+<dt class="label" id="anttrajectory"><span class="brackets"><a class="fn-backref" href="#id8">8</a></span></dt>
+<dd><p>Python: <a class="reference internal" href="api/python/queries_matchers.html#py_fort_myrmidon.AntTrajectory" title="py_fort_myrmidon.AntTrajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.AntTrajectory</span></code></a>, R: see return value of <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmQueryComputeAntTrajectories()</span></code>, C++: <a class="reference internal" href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon13AntTrajectoryE" title="fort::myrmidon::AntTrajectory"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::AntTrajectory</span></code></a></p>
+</dd>
+<dt class="label" id="antinteraction"><span class="brackets"><a class="fn-backref" href="#id10">9</a></span></dt>
+<dd><p>Python: <a class="reference internal" href="api/python/queries_matchers.html#py_fort_myrmidon.AntInteraction" title="py_fort_myrmidon.AntInteraction"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.AntInteraction</span></code></a>, R: see return value of <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmQueryComputeAntInteractions()</span></code>, C++: <a class="reference internal" href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon14AntInteractionE" title="fort::myrmidon::AntInteraction"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::AntInteraction</span></code></a></p>
+</dd>
+<dt class="label" id="anttrajectorysegment"><span class="brackets"><a class="fn-backref" href="#id11">10</a></span></dt>
+<dd><p>Python: <a class="reference internal" href="api/python/queries_matchers.html#py_fort_myrmidon.AntTrajectorySegment" title="py_fort_myrmidon.AntTrajectorySegment"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.AntTrajectorySegment</span></code></a>, R: see return value of <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmQueryComputeAntInteractions()</span></code>, C++: <a class="reference internal" href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon20AntTrajectorySegmentE" title="fort::myrmidon::AntTrajectorySegment"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::AntTrajectorySegment</span></code></a></p>
+</dd>
+<dt class="label" id="anttrajectorysummary"><span class="brackets"><a class="fn-backref" href="#id12">11</a></span></dt>
+<dd><p>Python: <a class="reference internal" href="api/python/queries_matchers.html#py_fort_myrmidon.AntTrajectorySummary" title="py_fort_myrmidon.AntTrajectorySummary"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.AntTrajectorySummary</span></code></a>, R: see return value of <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmQueryComputeAntInteractions()</span></code>, C++: <a class="reference internal" href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon20AntTrajectorySummaryE" title="fort::myrmidon::AntTrajectorySummary"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::AntTrajectorySummary</span></code></a></p>
+</dd>
+<dt class="label" id="interactiontypes"><span class="brackets"><a class="fn-backref" href="#id6">12</a></span></dt>
+<dd><p>Python: <a class="reference internal" href="api/python/queries_matchers.html#py_fort_myrmidon.Collision.Types" title="py_fort_myrmidon.Collision.Types"><code class="xref py py-attr docutils literal notranslate"><span class="pre">py_fort_myrmidon.Collision.Types</span></code></a>, R: N.A., C++: <a class="reference internal" href="api/cpp/typedef.html#_CPPv4N4fort8myrmidon16InteractionTypesE" title="fort::myrmidon::InteractionTypes"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">fort::myrmidon::InteractionTypes</span></code></a></p>
+</dd>
+<dt class="label" id="matcher"><span class="brackets">13</span><span class="fn-backref">(<a href="#id13">1</a>,<a href="#id14">2</a>)</span></dt>
+<dd><p>Python: <a class="reference internal" href="api/python/queries_matchers.html#py_fort_myrmidon.Matcher" title="py_fort_myrmidon.Matcher"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Matcher</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmMatcher</span></code>, C++: <a class="reference internal" href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon7MatcherE" title="fort::myrmidon::Matcher"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::Matcher</span></code></a></p>
+</dd>
+</dl>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="defining_ant_metadata.html" class="btn btn-neutral float-left" title="Defining Ant Metadata" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="studio/introduction.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Université de Lausanne.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
