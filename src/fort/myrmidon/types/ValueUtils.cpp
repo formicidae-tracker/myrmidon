@@ -118,12 +118,15 @@ ValueUtils::BuildRanges(const std::map<Time,Value> & values) {
 
 
 ValueUtils::ValuedTimeRangeList
-ValueUtils::IntersectionOf(const ValuedTimeRangeList & ranges,
-                           const ValuedTimeRange & r) {
+ValueUtils::FindConflicts(const std::map<Time,Value> & values,
+                          const Value & defaultValue,
+                          const ValuedTimeRange & r) {
 	ValueUtils::ValuedTimeRangeList res;
-	res.reserve(ranges.size());
-	for ( const auto & u : ranges ) {
+	for ( const auto & u : BuildRanges(values) ) {
 		if ( r.End <= u.Start || u.End <= r.Start ) {
+			continue;
+		}
+		if ( u.Value == defaultValue || u.Value == r.Value ) {
 			continue;
 		}
 		res.push_back(u);
@@ -131,6 +134,106 @@ ValueUtils::IntersectionOf(const ValuedTimeRangeList & ranges,
 	return res;
 }
 
+std::map<Time,Value>::const_iterator
+previous(const std::map<Time,Value> & values,
+         const fort::Time & time) {
+	if ( values.empty() || values.begin()->first.IsSinceEver() == false ) {
+		throw std::invalid_argument("values does not contain -∞ time");
+	}
+	return std::prev(values.upper_bound(time));
+}
+
+
+void CleanUp(const std::map<Time,Value> & values,
+             ValueUtils::Operations & operations) {
+	std::map<Time,Value> finalValues = values;
+	for ( const auto & [time,value] : operations.ToSet ) {
+		finalValues[time] = value;
+	}
+	for ( const auto & time : operations.ToDelete ) {
+		finalValues.erase(time);
+	}
+
+	if ( finalValues.empty() ) {
+		return;
+	}
+	auto prev = finalValues.begin();
+	for ( auto it = std::next(prev);
+	      it != finalValues.end();
+	      ++it) {
+		if ( ! ( prev->second == it->second ) ) {
+			prev = it;
+			continue;
+		}
+		// duplicate value found
+		operations.ToSet.erase(std::remove_if(operations.ToSet.begin(),
+		                                      operations.ToSet.end(),
+		                                      [&it](const std::tuple<Time,Value> & t) {
+			                                      return std::get<0>(t) == it->first;
+		                                      }),
+		                       operations.ToSet.end());
+		if ( values.count(it->first) ) {
+			operations.ToDelete.push_back(it->first);
+		}
+	}
+
+	std::sort(operations.ToDelete.begin(),
+	          operations.ToDelete.end());
+}
+
+
+ValueUtils::Operations
+ValueUtils::OverwriteRanges(const std::map<Time,Value> & values,
+                            const ValuedTimeRange & r) {
+	Operations res;
+	if ( r.Start == r.End ) {
+		return res;
+	}
+	res.ToSet.push_back({r.Start,r.Value});
+	auto it = previous(values,r.Start);
+	for (++it; it != values.lower_bound(r.End); ++it) {
+		res.ToDelete.push_back(it->first);
+	}
+	if ( it == values.end() || r.End < it->first ) {
+		res.ToSet.push_back({r.End,std::prev(it)->second});
+	}
+	CleanUp(values,res);
+	return res;
+}
+
+ValueUtils::Operations
+ValueUtils::MergeRanges(const std::map<Time,Value> & values,
+                        const Value & defaultValue,
+                        const ValuedTimeRange & r) {
+
+	Operations res;
+	if ( r.Start == r.End || r.Value == defaultValue ) {
+		return res;
+	}
+	auto it = previous(values,r.Start);
+	bool lastWasSet = false;
+	if ( it->second == defaultValue ) {
+		lastWasSet = true;
+		res.ToSet.push_back({r.Start,r.Value});
+	}
+
+	for(++it; it != values.lower_bound(r.End); ++it) {
+		if ( it->second == defaultValue ) {
+			lastWasSet = true;
+			res.ToSet.push_back({it->first,r.Value});
+		} else {
+			lastWasSet = false;
+		}
+	}
+
+	if ( lastWasSet == true
+	     && ( it == values.end() || r.End < it->first ) ) {
+		res.ToSet.push_back({r.End,defaultValue});
+	}
+
+	CleanUp(values,res);
+	return res;
+}
 
 
 } // namespace myrmidon

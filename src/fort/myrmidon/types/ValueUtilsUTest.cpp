@@ -156,29 +156,15 @@ TEST_F(ValueUtilsUTest,BuildValuedTimeRange) {
 
 }
 
-TEST_F(ValueUtilsUTest,IntersectionsOfValuedTimeRange) {
-	ValueUtils::ValuedTimeRangeList ranges
+
+TEST_F(ValueUtilsUTest,FindConflicts) {
+	std::map<Time,Value> values
 		= {
-		   {
-		    .Start = fort::Time::SinceEver(),
-		    .End = fort::Time(),
-		   },
-		   {
-		    .Start = fort::Time(),
-		    .End = fort::Time().Add(10),
-		   },
-		   {
-		    .Start = fort::Time().Add(10),
-		    .End = fort::Time().Add(20),
-		   },
-		   {
-		    .Start = fort::Time().Add(20),
-		    .End = fort::Time().Add(30),
-		   },
-		   {
-		    .Start = fort::Time().Add(30),
-		    .End = fort::Time::Forever(),
-		   },
+		   {fort::Time::SinceEver(),true},
+		   {fort::Time(),false},
+		   {fort::Time().Add(10),true},
+		   {fort::Time().Add(20),true},
+		   {fort::Time().Add(30),false},
 	};
 
 	struct TestData {
@@ -186,13 +172,21 @@ TEST_F(ValueUtilsUTest,IntersectionsOfValuedTimeRange) {
 		ValueUtils::ValuedTimeRangeList Expected;
 
 		std::string FormatInput() const {
-			return "{Start:" + Range.Start.Format() + ", End: " + Range.End.Format();
+			std::ostringstream oss;
+			oss << std::endl
+			    << "{ Value: " << Range.Value
+			    << ", Start:" << Range.Start
+			    << ", End: " <<  Range.End
+			    << "}";
+			return oss.str();
 		}
 
 		void Expect(const ValueUtils::ValuedTimeRangeList & result) const {
+			SCOPED_TRACE(FormatInput());
 			EXPECT_EQ(result.size(),Expected.size());
 			for ( size_t i = 0; i < std::min(result.size(),Expected.size()); ++i) {
 				SCOPED_TRACE(i);
+				EXPECT_VALUE_EQ(result[i].Value,Expected[i].Value);
 				EXPECT_TIME_EQ(result[i].Start,Expected[i].Start);
 				EXPECT_TIME_EQ(result[i].End,Expected[i].End);
 			}
@@ -202,48 +196,246 @@ TEST_F(ValueUtilsUTest,IntersectionsOfValuedTimeRange) {
 	std::vector<TestData> testdata
 		= {
 		   {
-		    .Range = { .Start = Time(), .End = Time() },
-		    .Expected = {
-		   	   },
+		    .Range = { .Value = true, .Start = Time(), .End = Time() },
+		    .Expected = {},
 		   },
 		   {
-		    .Range = { .Start = Time(), .End = Time().Add(1) },
+		    .Range = { .Value = false, .Start = Time(), .End = Time().Add(1) },
+		    .Expected = {},
+		   },
+		   {
+		    .Range = { .Value = true, .Start = Time(), .End = Time().Add(1) },
 		    .Expected = {
-		                 { .Start = Time(), .End = Time().Add(10) },
+		                 { .Value = false, .Start = Time(), .End = Time().Add(10) },
+			   },
+		   },
+		   {
+		    .Range = { .Value = false,  .Start = Time().Add(5), .End = Time().Add(25) },
+		    .Expected = {
+			   },
+		   },
+		   {
+		    .Range = { .Value = true,  .Start = Time().Add(5), .End = Time().Add(30) },
+		    .Expected = {
+		                 { .Value = false, .Start = Time(), .End = Time().Add(10) },
+			   },
+		   },
+		   {
+		    .Range = { .Value = false, .Start = Time::SinceEver(), .End = Time::Forever() },
+		    .Expected = {
+			   }
+		   },
+		   {
+		    .Range = { .Value = true, .Start = Time::SinceEver(), .End = Time::Forever() },
+		    .Expected = {
+		                 { .Value = false, .Start = Time(), .End = Time().Add(10) },
+		                 { .Value = false, .Start = Time().Add(30), .End = Time::Forever() },
+			   }
+		   },
+
+	};
+
+	for ( const auto & d : testdata ) {
+		d.Expect(ValueUtils::FindConflicts(values,true,d.Range));
+	}
+}
+
+struct MergeData {
+	std::map<Time,Value>        Values;
+	ValueUtils::ValuedTimeRange Range;
+	ValueUtils::Operations      Expected;
+
+	std::string FormatData() const {
+		std::ostringstream oss;
+		oss << std::endl
+		    << "Values:{" << std::endl;
+		for ( const auto & [time,value] : Values ) {
+			oss << "  {" << time << ", " << value << "}," << std::endl;
+		}
+		oss << "}" << std::endl
+		    << "Range:{ Value: " << Range.Value
+		    << ", Start:" << Range.Start
+		    << ", End: " <<  Range.End
+		    << "}" << std::endl
+		    << "Expected:{" << std::endl
+		    << "  ToSet:{" << std::endl;
+		for ( const auto & [time,value] : Expected.ToSet ) {
+			oss << "    {" << time << ", " << value << "}," << std::endl;
+		}
+		oss << "  }" << std::endl
+		    << "  ToDelete:{" << std::endl;
+		for ( const auto & time : Expected.ToDelete ) {
+			oss << "    " << time << "," << std::endl;
+		}
+		oss << "  }" << std::endl
+		    << "}" << std::endl;
+		return oss.str();
+	}
+
+	void Expect(const ValueUtils::Operations & operations) const {
+		SCOPED_TRACE(FormatData());
+		EXPECT_EQ(operations.ToSet.size(),Expected.ToSet.size());
+		EXPECT_EQ(operations.ToDelete.size(),Expected.ToDelete.size());
+		for ( size_t i = 0; i < std::min(operations.ToSet.size(),Expected.ToSet.size()); ++i) {
+			EXPECT_TIME_EQ(std::get<0>(operations.ToSet[i]),
+			               std::get<0>(Expected.ToSet[i]));
+			EXPECT_VALUE_EQ(std::get<1>(operations.ToSet[i]),
+			                std::get<1>(Expected.ToSet[i]));
+		}
+		for ( size_t i = 0; i < std::min(operations.ToDelete.size(),Expected.ToDelete.size()); ++i) {
+			EXPECT_TIME_EQ(operations.ToDelete[i],
+			               Expected.ToDelete[i]);
+		}
+	}
+};
+
+
+TEST_F(ValueUtilsUTest,OverwriteRanges) {
+	std::vector<MergeData> testdata
+		= {
+		   {
+		    .Values = {{Time::SinceEver(), true}},
+		    .Range = { .Value = false, .Start = Time(), .End = Time() },
+		    .Expected = { }
+		   },
+		   {
+		    .Values = {{Time::SinceEver(), true}},
+		    .Range = { .Value = true, .Start = Time(), .End = Time().Add(10) },
+		    .Expected = {
+			   }
+		   },
+		   {
+		    .Values = {{Time::SinceEver(), true}},
+		    .Range = { .Value = false, .Start = Time(), .End = Time().Add(10) },
+		    .Expected = {
+		                 .ToSet = { {Time(),false}, {Time().Add(10),true} },
+		                 .ToDelete = { },
+			   }
+		   },
+		   {
+		    .Values = {{Time::SinceEver(), true},{Time().Add(10),false}},
+		    .Range = { .Value = false, .Start = Time(), .End = Time().Add(10) },
+		    .Expected = {
+		                 .ToSet = { {Time(),false}},
+		                 .ToDelete = { Time().Add(10) },
+			   }
+		   },
+		   {
+		    .Values = {
+		               {Time::SinceEver(), true},
+		               {Time().Add(10),false},
+		               {Time().Add(20),true}},
+		    .Range = { .Value = false, .Start = Time().Add(20), .End = Time().Add(30) },
+		    .Expected = {
+		                 .ToSet = { {Time().Add(30),true}},
+		                 .ToDelete = { Time().Add(20) },
+			   }
+		   },
+		   {
+		    .Values = {
+		               {Time::SinceEver(), true},
+		               {Time().Add(10),false},
+		               {Time().Add(20),true},
+		               {Time().Add(30),false},
+		               {Time().Add(40),true},
+			   },
+		    .Range = { .Value = false, .Start = Time().Add(10), .End = Time().Add(40) },
+		    .Expected = {
+		                 .ToSet = {{Time().Add(10),false}},
+		                 .ToDelete = { fort::Time().Add(20),
+		                               fort::Time().Add(30)},
+			   }
+		   },
+		   {
+		    .Values = {
+		               {Time::SinceEver(), 0},
+		               {Time().Add(10),2},
+		               {Time().Add(20),0},
+			   },
+		    .Range = { .Value = 1, .Start = Time(), .End = Time().Add(10) },
+		    .Expected = {
+		                 .ToSet = {{Time(),1}},
+		                 .ToDelete = { },
+			   },
+		   },
+	};
+	for ( const auto & d : testdata ) {
+		d.Expect(ValueUtils::OverwriteRanges(d.Values,
+		                                     d.Range));
+	}
+}
+
+TEST_F(ValueUtilsUTest,MergeRanges) {
+	std::vector<MergeData> testdata
+		= {
+		   {
+		    .Values = {
+		               {Time::SinceEver(), 0}
+			   },
+		    .Range = { .Value = 1, .Start = Time(), .End = Time() },
+		    .Expected = {
+		                 .ToSet = {},
+		                 .ToDelete = {},
+			   },
+		   },
+		   {
+		    .Values = {
+		               {Time::SinceEver(), 0},
+			   },
+		    .Range = { .Value = 1, .Start = Time(), .End = Time().Add(10) },
+		    .Expected = {
+		                 .ToSet = {{Time(),1},{Time().Add(10),0}},
+		                 .ToDelete = {},
+			   },
+		   },
+		   {
+		    .Values = {
+		               {Time::SinceEver(), 0},
+		               {Time(), 1},
+			   },
+		    .Range = { .Value = 1, .Start = Time(), .End = Time().Add(10) },
+		    .Expected = {
+		                 .ToSet = {},
+		                 .ToDelete = {},
+			   },
+		   },
+		   {
+		    .Values = {
+		               {Time::SinceEver(), 0},
+		               {Time(), 1},
+		               {Time().Add(10), 0},
+			   },
+		    .Range = { .Value = 1, .Start = Time(), .End = Time().Add(30) },
+		    .Expected = {
+		                 .ToSet = {{Time().Add(30),0}},
+		                 .ToDelete = {Time().Add(10)},
 			   },
 		   },
 
+
 		   {
-		    .Range = { .Start = Time().Add(5), .End = Time().Add(25) },
-		    .Expected = {
-		                 { .Start = Time(), .End = Time().Add(10) },
-		                 { .Start = Time().Add(10), .End = Time().Add(20) },
-		                 { .Start = Time().Add(20), .End = Time().Add(30) },
+		    .Values = {
+		               {Time::SinceEver(), 0},
+		               {Time().Add(10),1},
+		               {Time().Add(20),2},
+		               {Time().Add(30),0},
+		               {Time().Add(40),3},
+		               {Time().Add(50),0},
 			   },
-		   },
-		   {
-		    .Range = { .Start = Time(), .End = Time().Add(35) },
+		    .Range = { .Value = 1, .Start = Time(), .End = Time().Add(60) },
 		    .Expected = {
-		                 { .Start = Time(), .End = Time().Add(10) },
-		                 { .Start = Time().Add(10), .End = Time().Add(20) },
-		                 { .Start = Time().Add(20), .End = Time().Add(30) },
-		                 { .Start = Time().Add(30), .End = Time::Forever() },
+		                 .ToSet = { {Time(),1},{Time().Add(30),1},{Time().Add(50),1},{Time().Add(60),0}},
+		                 .ToDelete = { Time().Add(10) },
 			   },
-		   },
-		   {
-		    .Range = { .Start = Time::SinceEver(), .End = Time::Forever() },
-		    .Expected = ranges
 		   },
 	};
 
 	for ( const auto & d : testdata ) {
-		SCOPED_TRACE(d.FormatInput());
-		d.Expect(ValueUtils::IntersectionOf(ranges,d.Range));
+		d.Expect(ValueUtils::MergeRanges(d.Values,
+		                                 0,
+		                                 d.Range));
 	}
 }
-
-
-
 
 } // namespace myrmidon
 } // namespace fort
