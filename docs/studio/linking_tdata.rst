@@ -5,7 +5,7 @@ Linking Tracking Data
 
 .. figure:: ../_static/images/general_workspace.png
    :name: general_workspace_fig
-   :alt: The general workspace
+   :alt: The *General* workspace
    :align: center
 
    **fort-studio** *General* workspace
