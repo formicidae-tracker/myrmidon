@@ -22,7 +22,7 @@ NavigationAction::NavigationAction(QWidget * parent)
 	, JumpToTime(nullptr)
 	, NavigationToolBar(nullptr) {
 
-	NavigationToolBar = new QToolBar(parent);
+	NavigationToolBar = new QToolBar("Close-Up Navigation",parent);
 
 #define set_button(res,symbolStr,legendStr,shortCutStr,toolTipStr) do {	  \
 		(res) = NavigationToolBar->addAction(QIcon::fromTheme(symbolStr), \

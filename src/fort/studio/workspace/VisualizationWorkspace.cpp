@@ -33,6 +33,7 @@
 void VisualizationWorkspace::setUpUI() {
 	d_antDisplay = new AntDisplayListWidget(this);
 	d_antDisplayDock = new QDockWidget(tr("Ants Display States"));
+	d_antDisplayDock->setObjectName("visualizationAntDisplayDock");
 	d_antDisplayDock->setWidget(d_antDisplay);
 	d_antDisplay->setMaximumSize(QSize(400,65535));
 
@@ -48,12 +49,14 @@ void VisualizationWorkspace::setUpUI() {
 	widget->setMaximumSize(QSize(400,65535));
 
 	d_segmentListDock = new QDockWidget(tr("Movie Segments"),this);
+	d_segmentListDock->setObjectName("visulizationMovieSegmentsDock");
 	d_segmentListDock->setWidget(widget);
 }
 
 
 void VisualizationWorkspace::setUpActions() {
-	d_toolbar = new QToolBar(this);
+	d_toolbar = new QToolBar("Value Marking",this);
+	d_toolbar->setObjectName("visualizationToolbar");
 	d_markIn = d_toolbar->addAction(tr("Set In Time Marker"));
 	auto markInShortcut = new QShortcut(tr("I"),this);
 	connect(markInShortcut,&QShortcut::activated,
@@ -331,6 +334,7 @@ void VisualizationWorkspace::setUp(const NavigationAction & actions) {
 
 	actions.CopyCurrentTime->setEnabled(d_ui->trackingVideoWidget->hasTrackingTime());
 
+	actions.NavigationToolBar->show();
 	actions.JumpToTime->setEnabled(true);
 	d_antDisplayDock->show();
 	d_segmentListDock->show();
@@ -351,6 +355,7 @@ void VisualizationWorkspace::tearDown(const NavigationAction & actions) {
 	disconnect(actions.JumpToTime,&QAction::triggered,
 	        this,&VisualizationWorkspace::jumpToTimeAction);
 
+	actions.NavigationToolBar->hide();
 	actions.CopyCurrentTime->setEnabled(false);
 	actions.JumpToTime->setEnabled(false);
 	d_antDisplayDock->hide();

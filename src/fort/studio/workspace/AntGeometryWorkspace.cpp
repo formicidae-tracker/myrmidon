@@ -124,13 +124,14 @@ void AntGeometryWorkspace::setUp(const NavigationAction & actions ) {
 
 	d_copyTimeAction = actions.CopyCurrentTime;
 	d_editToolBar->show();
+	actions.NavigationToolBar->show();
 }
 
 void AntGeometryWorkspace::tearDown(const NavigationAction & actions ) {
 	disconnect(actions.CopyCurrentTime,&QAction::triggered,
 	           this,&AntGeometryWorkspace::onCopyTime);
 
-
+	actions.NavigationToolBar->hide();
 	d_copyTimeAction = nullptr;
 	d_editToolBar->hide();
 }
@@ -255,6 +256,9 @@ void AntGeometryWorkspace::updateCloseUpLabels(const fmp::TagCloseUp::ConstPtr &
 AntMeasurementWorkspace::AntMeasurementWorkspace(QWidget * parent)
 	: AntGeometryWorkspace(parent) {
 
+	d_editToolBar->setWindowTitle("Ant Measurement");
+	d_editToolBar->setObjectName("antMeasurementEditToolbar");
+
 	d_editAction->setText(tr("Edit Measurement Tool"));
 	d_editAction->setToolTip(tr("Move and delete measurements with the mouse"));
 	d_editAction->setStatusTip(d_editAction->toolTip());
@@ -271,11 +275,13 @@ AntMeasurementWorkspace::AntMeasurementWorkspace(QWidget * parent)
 	d_measurementTypes->setObjectName("measurementTypes");
 
 	d_closeUpsDock = new QDockWidget(tr("Ant Close-Ups"),this);
+	d_closeUpsDock->setObjectName("antMeasurementCloseUpDock");
 	d_closeUpsDock->setWidget(d_antCloseUps);
 	connect(d_antCloseUps, &AntMeasurementListWidget::currentCloseUpChanged,
 	        this,&AntGeometryWorkspace::setTagCloseUp);
 
 	d_measurementTypesDock = new QDockWidget(tr("Measurement Types"),this);
+	d_measurementTypesDock->setObjectName("antMeasurementTypesDock");
 	d_measurementTypesDock->setWidget(d_measurementTypes);
 
 	connect(d_vectorialScene,
@@ -554,6 +560,10 @@ void AntMeasurementWorkspace::changeVectorType(Vector * vector,
 AntShapeWorkspace::AntShapeWorkspace(QWidget *parent)
 	:  AntGeometryWorkspace(parent) {
 
+	d_editToolBar->setWindowTitle("Ant Shape");
+	d_editToolBar->setObjectName("antShapeEditToolbar");
+
+
 	d_editAction->setText(tr("Edit Capsule Tool"));
 	d_editAction->setToolTip(tr("Move and delete capsules with the mouse"));
 	d_editAction->setStatusTip(d_editAction->toolTip());
@@ -571,11 +581,13 @@ AntShapeWorkspace::AntShapeWorkspace(QWidget *parent)
 	d_shapeTypes->setObjectName("shapeTypes");
 
 	d_closeUpsDock = new QDockWidget(tr("Ant Close-Ups"),this);
+	d_closeUpsDock->setObjectName("antShapeCloseUp");
 	d_closeUpsDock->setWidget(d_antCloseUps);
 	connect(d_antCloseUps, &AntShapeListWidget::currentCloseUpChanged,
 	        this,&AntGeometryWorkspace::setTagCloseUp);
 
 	d_shapeTypesDock = new QDockWidget(tr("Ant Shape Types"),this);
+	d_shapeTypesDock->setObjectName("antShapeTypeDocks");
 	d_shapeTypesDock->setWidget(d_shapeTypes);
 
 	connect(d_vectorialScene,
