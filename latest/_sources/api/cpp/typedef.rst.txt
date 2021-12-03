@@ -22,9 +22,12 @@ Simple typedefs
 
 .. doxygentypedef:: fort::myrmidon::Vector2dList
 
-.. doxygenenum:: fort::myrmidon::AntMetaDataType
+.. doxygenenum:: fort::myrmidon::ValueType
 
-.. doxygentypedef:: fort::myrmidon::AntStaticValue
+.. doxygentypedef:: fort::myrmidon::Value
+
+.. doxygenstruct:: fort::myrmidon::ValueUtils
+   :members:
 
 .. doxygentypedef:: fort::myrmidon::TypedCapsuleList
 
