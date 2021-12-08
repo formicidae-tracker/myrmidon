@@ -105,6 +105,7 @@ set(HDR_PUBLIC_FILES types/AntInteraction.hpp
                      types/Color.hpp
                      types/ComputedMeasurement.hpp
                      types/ExperimentDataInfo.hpp
+                     types/FixableError.hpp
                      types/ForwardDeclaration.hpp
                      types/IdentifiedFrame.hpp
                      types/MaybeDeref.hpp
@@ -184,6 +185,7 @@ set(SRC_FILES types/AntInteraction.cpp
               types/Color.cpp
               types/ComputedMeasurement.cpp
               types/ExperimentDataInfo.cpp
+              types/FixableError.cpp
               types/ForwardDeclaration.cpp
               types/IdentifiedFrame.cpp
               types/TagStatistics.cpp
