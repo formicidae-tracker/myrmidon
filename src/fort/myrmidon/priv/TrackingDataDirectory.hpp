@@ -5,12 +5,15 @@
 #include <map>
 #include <utility>
 #include <functional>
+#include <tuple>
+
 
 #include <fort/tags/options.hpp>
 
 #include <fort/hermes/FileContext.hpp>
 
 #include <fort/myrmidon/utils/FileSystem.hpp>
+#include <fort/myrmidon/types/FixableError.hpp>
 
 #include "MovieSegment.hpp"
 #include "SegmentIndexer.hpp"
@@ -100,9 +103,10 @@ public:
 	// populate its data form its actual content. This function will
 	// look for tracking data file open the first and last segment to
 	// obtain infoirmation on the first and last frame.
-	static TrackingDataDirectory::Ptr Open(const fs::path & TDpath,
-	                                       const fs::path & experimentRoot,
-	                                       const ProgressCallback & progress = [](int,int){});
+	static std::tuple<TrackingDataDirectory::Ptr,FixableErrorList>
+	Open(const fs::path & TDpath,
+	     const fs::path & experimentRoot,
+	     const ProgressCallback & progress = [](int,int){});
 
 	static TrackingDataDirectory::Ptr Create(const std::string & uri,
 	                                         const fs::path & absoluteFilePath,

@@ -6,6 +6,7 @@
 #include <fort/tags/fort-tags.hpp>
 
 #include <fort/myrmidon/types/Typedefs.hpp>
+#include <fort/myrmidon/types/FixableError.hpp>
 
 #include "Ant.hpp"
 #include "Space.hpp"
@@ -223,8 +224,9 @@ public:
 	 * @throws std::invalid_argument if the tracking data directory
 	 *         is already in use in this experiment.
 	 */
-	std::string AddTrackingDataDirectory(SpaceID spaceID,
-	                                     const std::string & filepath);
+	std::tuple<std::string,FixableErrorList>
+	AddTrackingDataDirectory(SpaceID spaceID,
+	                         const std::string & filepath);
 	/**
 	 * Removes a Tracking Data Directory from the Experiment.
 	 *

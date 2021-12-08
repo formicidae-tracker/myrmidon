@@ -35,8 +35,8 @@ void ExperimentDataLessUTest::SetUpTestSuite() {
 	auto foraging = experiment->CreateSpace("foraging");
 
 	for ( const auto & tddInfo : TestSetup::UTestData().NestDataDirs() ) {
-		auto tdd = TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,
-		                                       TestSetup::UTestData().Basedir());
+		auto [tdd,errors] = TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,
+		                                                TestSetup::UTestData().Basedir());
 		experiment->AddTrackingDataDirectory(nest,tdd);
 
 	}
@@ -44,8 +44,9 @@ void ExperimentDataLessUTest::SetUpTestSuite() {
 
 
 	for ( const auto & tddInfo : TestSetup::UTestData().ForagingDataDirs() ) {
-		auto tdd = TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,
-		                                       TestSetup::UTestData().Basedir());
+		auto [tdd,errors] = TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,
+		                                                TestSetup::UTestData().Basedir());
+		EXPECT_TRUE(errors.empty());
 		experiment->AddTrackingDataDirectory(foraging,tdd);
 	}
 

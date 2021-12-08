@@ -364,7 +364,7 @@ void IOUtils::LoadSpace(Experiment & e,
 		return;
 	}
 	for ( const auto & tddRelPath : pb.trackingdatadirectories() ) {
-		auto tdd = TrackingDataDirectory::Open(e.Basedir() / tddRelPath, e.Basedir());
+		auto [tdd,errors] = TrackingDataDirectory::Open(e.Basedir() / tddRelPath, e.Basedir());
 		e.AddTrackingDataDirectory(s,tdd);
 	}
 }

@@ -15,8 +15,11 @@ void AntMeasurementUTest::SetUp() {
 			auto experiment = fmp::Experiment::Create(TestSetup::UTestData().Basedir() / "ant-measurement-bridge.myrmidon");
 			auto s = experiment->CreateSpace("foo");
 			auto & tddInfo = TestSetup::UTestData().NestDataDirs().back();
-			auto tdd = fmp::TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,
-			                                            TestSetup::UTestData().Basedir());
+			fmp::TrackingDataDirectory::Ptr tdd;
+			fm::FixableErrorList errors;
+			std::tie(tdd,errors) = fmp::TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,
+			                                                     TestSetup::UTestData().Basedir());
+
 			if ( tdd->TagCloseUpsComputed() == false ) {
 				for (const auto & l : tdd->PrepareTagCloseUpsLoaders() ) {
 					l();

@@ -32,13 +32,15 @@ TEST_F(TDDCacheUTest,CacheIO) {
 		},std::runtime_error);
 
 	TrackingDataDirectory::Ptr opened,cached;
+	FixableErrorList openedErrors;
 	ASSERT_NO_THROW({
 			//will open it one first, and saving the cache
-			opened = TrackingDataDirectory::Open(cacheURI,
-			                                     basedir);
+			std::tie(opened,openedErrors) = TrackingDataDirectory::Open(cacheURI,
+			                                                            basedir);
+
 			cached = TDDCache::Load(cacheURI, basedir);
 		});
-
+	EXPECT_TRUE(openedErrors.empty());
 
 	//Craft a special cache to throw an exception
 	pb::TrackingDataDirectory h;

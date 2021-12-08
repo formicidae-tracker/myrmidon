@@ -17,8 +17,11 @@ std::vector<fort::myrmidon::priv::TrackingDataDirectory::Ptr> UniverseUTest::s_n
 void UniverseUTest::SetUpTestSuite() {
 	for ( const auto & tddInfo : TestSetup::UTestData().NestDataDirs() ) {
 		ASSERT_NO_THROW({
-				auto tdd = fmp::priv::TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,
-				                                                  TestSetup::UTestData().Basedir());
+				fmp::TrackingDataDirectory::Ptr tdd;
+				fm::FixableErrorList errors;
+				std::tie(tdd,errors) = fmp::priv::TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,
+				                                                              TestSetup::UTestData().Basedir());
+				EXPECT_TRUE(errors.empty());
 				s_nest.push_back(tdd);
 			});
 	}

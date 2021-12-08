@@ -48,8 +48,8 @@ void ReadAll(const fs::path & a, std::vector<uint8_t> & data) {
 TEST_F(ExperimentUTest,CanAddTrackingDataDirectory) {
 	try {
 		auto s = e->CreateSpace("nest");
-		auto tdd = TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
-		                                       TestSetup::UTestData().Basedir());
+		auto [tdd,errors] = TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
+		                                                TestSetup::UTestData().Basedir());
 
 		e->AddTrackingDataDirectory(s,tdd);
 
@@ -58,9 +58,9 @@ TEST_F(ExperimentUTest,CanAddTrackingDataDirectory) {
 		EXPECT_THROW({
 				auto artagData = TrackingDataDirectory::Open(TestSetup::UTestData().ARTagDataDir().AbsoluteFilePath,
 				                                             TestSetup::UTestData().Basedir());
-				ASSERT_EQ(artagData->DetectionSettings().Family,tags::Family::Tag36ARTag);
+				ASSERT_EQ(std::get<0>(artagData)->DetectionSettings().Family,tags::Family::Tag36ARTag);
 				// Could not add wrong family to experiment
-				e->AddTrackingDataDirectory(s,artagData);
+				e->AddTrackingDataDirectory(s,std::get<0>(artagData));
 			},std::invalid_argument);
 
 
@@ -148,15 +148,18 @@ void ListAllMeasurements(const Experiment::MeasurementByTagCloseUp & measurement
 
 TEST_F(ExperimentUTest,MeasurementEndToEnd) {
 	TrackingDataDirectory::Ptr nest0,nest1;
+	FixableErrorList errors;
 	Space::Ptr s;
 	ASSERT_NO_THROW({
 			e = Experiment::Create(TestSetup::UTestData().Basedir() / "measurement-e2e.myrmidon");
 			e->Save(TestSetup::UTestData().Basedir() / "measurement-e2e.myrmidon");
 			s = e->CreateSpace("box");
-			nest0 = TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs()[0].AbsoluteFilePath,
-			                                    TestSetup::UTestData().Basedir());
-			nest1 = TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs()[1].AbsoluteFilePath,
-			                                    TestSetup::UTestData().Basedir());
+			std::tie(nest0,errors) = TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs()[0].AbsoluteFilePath,
+			                                                     TestSetup::UTestData().Basedir());
+			EXPECT_TRUE(errors.empty());
+			std::tie(nest1,errors) = TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs()[1].AbsoluteFilePath,
+			                                                     TestSetup::UTestData().Basedir());
+			EXPECT_TRUE(errors.empty());
 
 			e->AddTrackingDataDirectory(s,nest0);
 			e->AddTrackingDataDirectory(s,nest1);
@@ -487,16 +490,18 @@ TEST_F(ExperimentUTest,MeasurementEndToEnd) {
 
 TEST_F(ExperimentUTest,TooSmallHeadTailMeasurementAreNotPermitted) {
 	TrackingDataDirectory::Ptr nest0;
+	FixableErrorList errors;
 	Space::Ptr s;
 	ASSERT_NO_THROW({
 			e = Experiment::Create(TestSetup::UTestData().Basedir() / "small-head-tail-measurement-failure.myrmidon");
 			e->Save(TestSetup::UTestData().Basedir() / "small-head-tail-measurement-failure.myrmidon");
-			nest0 = TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
-			                                    TestSetup::UTestData().Basedir());
+			std::tie(nest0,errors) = TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
+			                                                     TestSetup::UTestData().Basedir());
 			s = e->CreateSpace("nest");
 			e->AddTrackingDataDirectory(s,nest0);
 			e->SetDefaultTagSize(1.0);
 		});
+	EXPECT_TRUE(errors.empty());
 
 	auto ant = e->CreateAnt();
 	auto ident = Identifier::AddIdentification(e->Identifier(),
@@ -667,8 +672,13 @@ TEST_F(ExperimentUTest,AntMetadataManipulation) {
 
 
 TEST_F(ExperimentUTest,AntCloning) {
-	auto nest0 = TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
-	                                         TestSetup::UTestData().Basedir());
+	TrackingDataDirectory::Ptr nest0;
+	FixableErrorList errors;
+	ASSERT_NO_THROW({
+			std::tie(nest0,errors) = TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
+			                                                     TestSetup::UTestData().Basedir());
+		});
+	EXPECT_TRUE(errors.empty());
 	auto s = e->CreateSpace("nest");
 	e->AddTrackingDataDirectory(s,nest0);
 

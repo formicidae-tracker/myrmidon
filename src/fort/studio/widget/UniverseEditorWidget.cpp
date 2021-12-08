@@ -85,7 +85,7 @@ fmp::TrackingDataDirectory::Ptr UniverseEditorWidget::openTDD(const QString & pa
 	                                     dialog,
 	                                     this]() {
 	                                        try {
-		                                        res = fmp::TrackingDataDirectory::Open(path.toUtf8().constData(),
+		                                        auto [res,errors] = fmp::TrackingDataDirectory::Open(path.toUtf8().constData(),
 			         d_universe->basepath().toUtf8().constData(),
 			         [dialog](int done, int total ) {
 				         QMetaObject::invokeMethod(dialog, "setMaximum", Qt::QueuedConnection,
