@@ -1,5 +1,11 @@
 #include "TrackingDataDirectoryError.hpp"
 
+#include <fort/hermes/Header.pb.h>
+#include <fort/hermes/FrameReadout.pb.h>
+
+
+#include <fort/myrmidon/priv/proto/FileReadWriter.hpp>
+
 namespace fort {
 namespace myrmidon {
 namespace priv {
@@ -31,7 +37,46 @@ std::string CorruptedHermesFileError::FixDescription() const noexcept {
 }
 
 void CorruptedHermesFileError::Fix() {
-	//TODO: implement
+	typedef proto::FileReadWriter<hermes::Header,hermes::FileLine> RW;
+	fort::hermes::Header header;
+	std::vector<RW::LineWriter> lineWriters;
+
+	uint64_t last = 0;
+	RW::Read(d_file,
+	         [&header] ( const hermes::Header & h ) {
+		         header.CheckTypeAndMergeFrom(h);
+	         },
+	         [&last,&lineWriters,this]( const hermes::FileLine & line) {
+		         if ( line.has_readout() == false || line.readout().frameid() > d_until) {
+			         return;
+		         }
+		         hermes::FrameReadout ro;
+		         ro.CheckTypeAndMergeFrom(line.readout());
+		         lineWriters.push_back([ro](hermes::FileLine & wline) {
+			                               wline.mutable_readout()->CheckTypeAndMergeFrom(ro);
+		                               });
+		         if ( line.readout().has_time() ) {
+			         last = line.readout().frameid();
+		         }
+	         });
+
+	if ( d_until != std::numeric_limits<uint64_t>::max()
+	     && last < d_until ) {
+		throw std::runtime_error("could not read '"
+		                         + d_file.string()
+		                         + "' until expected frame "
+		                         + std::to_string(d_until));
+	}
+	lineWriters.push_back([](hermes::FileLine & line) {
+		                      // create an empty footer for the last message
+		                      line.mutable_footer();
+	                      });
+
+	auto backupName =  d_file.parent_path() / (d_file.filename().string() + ".bak");
+	fs::rename(d_file,backupName);
+	RW::Write(d_file,
+	          header,
+	          lineWriters);
 }
 
 
