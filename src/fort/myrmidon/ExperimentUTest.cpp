@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 #include "Experiment.hpp"
 #include "Query.hpp"
@@ -481,16 +482,33 @@ TEST_F(PublicExperimentUTest,MetaDataKeyManipulation) {
 }
 
 TEST_F(PublicExperimentUTest,CanOpenCorruptedDataDir) {
+	using testing::MatchesRegex;
 	std::string URI;
 	FixableErrorList errors;
-	EXPECT_NO_THROW({
-			auto s = experiment->CreateSpace("main");
-			std::tie(URI,errors) = experiment->AddTrackingDataDirectory(s->ID(),
-			                                                            TestSetup::UTestData().CorruptedDataDir().AbsoluteFilePath);
-		});
-	EXPECT_FALSE(errors.empty());
-
-
+	try{
+		auto s = experiment->CreateSpace("main");
+		std::tie(URI,errors) = experiment->AddTrackingDataDirectory(s->ID(),
+		                                                            TestSetup::UTestData().CorruptedDataDir().AbsoluteFilePath);
+	} catch ( const std::exception & e ) {
+		ADD_FAILURE() << "unexpected error: " << e.what();
+	}
+	EXPECT_TRUE(errors.size() > 1);
+	bool noError = true;
+	EXPECT_FALSE(errors.front() == nullptr) << (noError = false);
+	if ( noError == true ) {
+		EXPECT_THAT(errors.front()->what(),MatchesRegex("could not read last frame from '.*': .*"));
+		EXPECT_THAT(errors.front()->FixDescription(),MatchesRegex("rewrite '.*' up to frame .* and to be the last of the sequence"));
+	}
+	for ( auto it = std::next(errors.begin());
+	      it != errors.end();
+	      ++it) {
+		noError = true;
+		EXPECT_FALSE(*it == nullptr) << (noError = false);
+		if ( noError == true ) {
+			EXPECT_THAT((*it)->what(),MatchesRegex("could not access acquisition time for '.*': .*"));
+			EXPECT_THAT((*it)->FixDescription(),MatchesRegex("rename '.*' to '.*'"));
+		}
+	}
 }
 
 

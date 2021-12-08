@@ -338,7 +338,7 @@ TrackingDataDirectory::BuildIndexes(const std::string & URI,
 				                                                   + f.string()
 				                                                   + "': "
 				                                                   + e.what(),
-				                                                   last,-1);
+				                                                   last,std::numeric_limits<uint64_t>::max());
 				fc = std::make_shared<fort::hermes::FileContext>(last);
 				break;
 			}
@@ -463,12 +463,6 @@ TrackingDataDirectory::OpenFromFiles(const fs::path & absoluteFilePath,
 		throw std::invalid_argument(absoluteFilePath.string() + " does not contains any .hermes file");
 	}
 
-	auto movies = LoadMovieSegments(moviesPaths,URI);
-	for(const auto & m : movies) {
-		referenceCache->insert(std::make_pair(m->StartFrame(),FrameReference(URI,0,Time())));
-		referenceCache->insert(std::make_pair(m->EndFrame(),FrameReference(URI,0,Time())));
-	}
-
 
 	Time::MonoclockID monoID = GetUID(absoluteFilePath);
 
@@ -496,6 +490,21 @@ TrackingDataDirectory::OpenFromFiles(const fs::path & absoluteFilePath,
 			referenceCache->insert(std::make_pair(frameID,FrameReference(URI,0,Time())));
 		}
 	}
+
+	auto movies = LoadMovieSegments(moviesPaths,URI);
+	movies.erase(std::remove_if(movies.begin(),
+	                            movies.end(),
+	                            [endFrame]( const MovieSegment::Ptr & ms ) {
+		                            return ms->StartFrame() > endFrame;
+	                            }),
+	             movies.end());
+	for(const auto & m : movies) {
+		referenceCache->insert(std::make_pair(m->StartFrame(),FrameReference(URI,0,Time())));
+		if ( m->EndFrame() <= endFrame ) {
+			referenceCache->insert(std::make_pair(m->EndFrame(),FrameReference(URI,0,Time())));
+		}
+	}
+
 
 
 	BuildFrameReferenceCache(URI,

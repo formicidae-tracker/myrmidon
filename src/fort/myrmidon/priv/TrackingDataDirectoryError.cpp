@@ -38,7 +38,7 @@ void CorruptedHermesFileError::Fix() {
 
 NoKnownAcquisitionTimeFor::NoKnownAcquisitionTimeFor(const std::string & reason,
                                                      const fs::path & filepath)
-	: FixableError(filepath)
+	: FixableError(reason)
 	, d_filepath(filepath) {
 	if ( d_filepath.is_absolute() == false ) {
 		throw std::invalid_argument("needed an absolute filepath");
@@ -50,7 +50,7 @@ NoKnownAcquisitionTimeFor::~NoKnownAcquisitionTimeFor() {
 }
 
 std::string NoKnownAcquisitionTimeFor::FixDescription() const noexcept {
-	return "rename '" + d_filepath.string() + "' to '" + d_disabledPath.string();
+	return "rename '" + d_filepath.string() + "' to '" + d_disabledPath.string() + "'";
 }
 
 void NoKnownAcquisitionTimeFor::Fix() {
