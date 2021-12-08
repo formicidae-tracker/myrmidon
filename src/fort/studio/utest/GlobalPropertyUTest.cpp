@@ -106,8 +106,11 @@ TEST_F(GlobalPropertyUTest,SignalStateTest) {
 	ASSERT_EQ(tagFamilySignal.count(),5);
 	ASSERT_NO_THROW({
 			auto s = experiment->CreateSpace("foo");
-			auto tdd = fmp::TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
-			                                            TestSetup::UTestData().Basedir() );
+			fmp::TrackingDataDirectory::Ptr tdd;
+			fm::FixableErrorList errors;
+			std::tie(tdd,errors) = fmp::TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
+			                                                        TestSetup::UTestData().Basedir());
+			EXPECT_TRUE(errors.empty());
 			experiment->AddTrackingDataDirectory(s,tdd);
 		});
 	globalProperties.onTDDModified();
@@ -182,8 +185,11 @@ TEST_F(GlobalPropertyUTest,WidgetTest) {
 	          "undefined");
 	ASSERT_NO_THROW({
 			auto s = experiment->CreateSpace("foo");
-			auto tdd = fmp::TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
-			                                            TestSetup::UTestData().Basedir() );
+			fmp::TrackingDataDirectory::Ptr tdd;
+			fm::FixableErrorList errors;
+			std::tie(tdd,errors) = fmp::TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
+			                                                        TestSetup::UTestData().Basedir() );
+			EXPECT_TRUE(errors.empty());
 			experiment->AddTrackingDataDirectory(s,tdd);
 		});
 	globalProperties->onTDDModified();

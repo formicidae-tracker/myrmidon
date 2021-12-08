@@ -398,9 +398,10 @@ TrackingDataDirectory::ListTagCloseUpFiles(const fs::path & path) {
 
 
 
-TrackingDataDirectory::Ptr TrackingDataDirectory::Open(const fs::path & filepath,
-                                                       const fs::path & experimentRoot,
-                                                       const ProgressCallback & progress) {
+std::tuple<TrackingDataDirectory::Ptr,FixableErrorList>
+TrackingDataDirectory::Open(const fs::path & filepath,
+                            const fs::path & experimentRoot,
+                            const ProgressCallback & progress) {
 	CheckPaths(filepath,experimentRoot);
 
 	auto absoluteFilePath = fs::weakly_canonical(fs::absolute(filepath));
@@ -420,7 +421,7 @@ TrackingDataDirectory::Ptr TrackingDataDirectory::Open(const fs::path & filepath
 	res->LoadComputedFromCache();
 	res->LoadDetectionSettings();
 
-	return res;
+	return std::make_tuple(res,FixableErrorList());
 }
 
 

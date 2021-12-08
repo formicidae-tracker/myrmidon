@@ -28,8 +28,9 @@ TEST_F(TagCloseUpUTest,ListTagsForNewFolder) {
 
 	auto tddInfo = TestSetup::UTestData().NestDataDirs().back();
 
-	auto foo = fmp::TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,
-	                                            TestSetup::UTestData().Basedir());
+	auto [foo,errors] = fmp::TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,
+	                                                     TestSetup::UTestData().Basedir());
+	EXPECT_TRUE(errors.empty());
 	auto loaders = foo->PrepareTagCloseUpsLoaders();
 	for ( const auto & l : loaders ) {
 		EXPECT_NO_THROW({

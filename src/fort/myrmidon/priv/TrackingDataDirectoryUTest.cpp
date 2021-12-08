@@ -30,10 +30,11 @@ TEST_F(TrackingDataDirectoryUTest,ExtractInfoFromTrackingDatadirectories) {
 		const auto & tddInfo = TestSetup::UTestData().NestDataDirs().back();
 		auto startOpen = Time::Now();
 
-		auto tdd = TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,TestSetup::UTestData().Basedir());
+		auto [tdd,errors] = TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,TestSetup::UTestData().Basedir());
 		auto endOpen = Time::Now();
 		std::cerr << "Opening " <<  tddInfo.AbsoluteFilePath << " took " << endOpen.Sub(startOpen) << std::endl;
 		EXPECT_EQ(tdd->URI(),tddInfo.AbsoluteFilePath.filename());
+		EXPECT_TRUE(errors.empty());
 		EXPECT_EQ(tdd->StartFrame(),tddInfo.StartFrame);
 		EXPECT_EQ(tdd->EndFrame(),tddInfo.EndFrame);
 		EXPECT_TIME_EQ(tdd->Start(),
@@ -182,7 +183,8 @@ TEST_F(TrackingDataDirectoryUTest,HaveConstructorChecks) {
 
 TEST_F(TrackingDataDirectoryUTest,AlmostRandomAccess) {
 	auto tddPath = TestSetup::UTestData().NestDataDirs().back().AbsoluteFilePath;
-	auto tdd = TrackingDataDirectory::Open(tddPath,TestSetup::UTestData().Basedir());
+	auto [tdd,errors] = TrackingDataDirectory::Open(tddPath,TestSetup::UTestData().Basedir());
+	EXPECT_TRUE(errors.empty());
 	EXPECT_NO_THROW({
 			FrameID middle = (tdd->StartFrame() + tdd->EndFrame()) / 2;
 
@@ -219,10 +221,12 @@ TEST_F(TrackingDataDirectoryUTest,AlmostRandomAccess) {
 
 TEST_F(TrackingDataDirectoryUTest,CanBeFormatted) {
 	TrackingDataDirectory::Ptr nest;
+	FixableErrorList errors;
 	EXPECT_NO_THROW({
-			nest = TrackingDataDirectory::Open(TestSetup::UTestData().Basedir() / "nest.0000",
-			                                   TestSetup::UTestData().Basedir() / "foraging.0000");
+			std::tie(nest,errors) = TrackingDataDirectory::Open(TestSetup::UTestData().Basedir() / "nest.0000",
+			                                                    TestSetup::UTestData().Basedir() / "foraging.0000");
 		});
+	EXPECT_TRUE(errors.empty());
 	std::ostringstream oss;
 	oss << *nest;
 	EXPECT_EQ(oss.str(),
@@ -277,14 +281,17 @@ TEST_F(TrackingDataDirectoryUTest,CanBeFormatted) {
 
 TEST_F(TrackingDataDirectoryUTest,ParsesDetectionSettings) {
 	TrackingDataDirectory::Ptr nest,noFamily;
+	FixableErrorList errors;
 	EXPECT_NO_THROW({
-			nest = TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
-			                                   TestSetup::UTestData().Basedir());
+			std::tie(nest,errors) = TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
+			                                                    TestSetup::UTestData().Basedir());
 		});
-	//EXPECT_NO_THROW({
-			noFamily = TrackingDataDirectory::Open(TestSetup::UTestData().NoFamilyDataDir().AbsoluteFilePath,
-			                                       TestSetup::UTestData().Basedir());
-			// });
+	EXPECT_TRUE(errors.empty());
+	EXPECT_NO_THROW({
+			std::tie(noFamily,errors) = TrackingDataDirectory::Open(TestSetup::UTestData().NoFamilyDataDir().AbsoluteFilePath,
+			                                                        TestSetup::UTestData().Basedir());
+		});
+	EXPECT_TRUE(errors.empty());
 	tags::ApriltagOptions expected;
 	EXPECT_TRUE(ApriltagOptionsEqual(noFamily->DetectionSettings(),expected));
 
@@ -297,12 +304,13 @@ TEST_F(TrackingDataDirectoryUTest,ParsesDetectionSettings) {
 
 TEST_F(TrackingDataDirectoryUTest,ComputesAndCacheTagStatistics) {
 	TrackingDataDirectory::Ptr tdd;
+	FixableErrorList errors;
 	auto tddPath = TestSetup::UTestData().NestDataDirs().back().AbsoluteFilePath;
 	ASSERT_NO_THROW({
 			UTestData::ClearCachedData(tddPath);
-			tdd = TrackingDataDirectory::Open(tddPath,TestSetup::UTestData().Basedir());
+			std::tie(tdd,errors) = TrackingDataDirectory::Open(tddPath,TestSetup::UTestData().Basedir());
 		});
-
+	EXPECT_TRUE(errors.empty());
 	EXPECT_FALSE(tdd->TagStatisticsComputed());
 	EXPECT_THROW({
 			tdd->TagStatistics();
@@ -324,9 +332,10 @@ TEST_F(TrackingDataDirectoryUTest,ComputesAndCacheTagStatistics) {
 
 	tdd.reset();
 	ASSERT_NO_THROW({
-			tdd = TrackingDataDirectory::Open(tddPath,TestSetup::UTestData().Basedir());
+			std::tie(tdd,errors) = TrackingDataDirectory::Open(tddPath,TestSetup::UTestData().Basedir());
 			cachedStats = tdd->TagStatistics();
 		});
+	EXPECT_TRUE(errors.empty());
 	EXPECT_TRUE(tdd->TagStatisticsComputed());
 	EXPECT_PRED_FORMAT2(AssertTimedStatsEqual,cachedStats,computedStats);
 
@@ -335,11 +344,12 @@ TEST_F(TrackingDataDirectoryUTest,ComputesAndCacheTagStatistics) {
 TEST_F(TrackingDataDirectoryUTest,ComputesAndCacheFullFrames) {
 	auto tddPath = TestSetup::UTestData().WithVideoDataDir().AbsoluteFilePath;
 	TrackingDataDirectory::Ptr tdd;
+	FixableErrorList errors;
 	ASSERT_NO_THROW({
 			UTestData::ClearCachedData(tddPath);
-			tdd = TrackingDataDirectory::Open(tddPath,TestSetup::UTestData().Basedir());
+			std::tie(tdd,errors) = TrackingDataDirectory::Open(tddPath,TestSetup::UTestData().Basedir());
 		});
-
+	EXPECT_TRUE(errors.empty());
 	EXPECT_FALSE(tdd->FullFramesComputed());
 	EXPECT_THROW({
 			tdd->FullFrames();
@@ -358,9 +368,10 @@ TEST_F(TrackingDataDirectoryUTest,ComputesAndCacheFullFrames) {
 
 	EXPECT_TRUE(tdd->FullFramesComputed());
 	ASSERT_NO_THROW({
-			tdd = TrackingDataDirectory::Open(tddPath,TestSetup::UTestData().Basedir());
+			std::tie(tdd,errors) = TrackingDataDirectory::Open(tddPath,TestSetup::UTestData().Basedir());
 			EXPECT_EQ(tdd->FullFrames().size(),1);
 		});
+	EXPECT_TRUE(errors.empty());
 	EXPECT_TRUE(tdd->FullFramesComputed());
 
 }
@@ -395,12 +406,13 @@ TEST_F(TrackingDataDirectoryUTest,ComputesAndCacheTagCloseUps) {
 	const auto & tddInfo = TestSetup::UTestData().NestDataDirs().back();
 	auto tddPath = tddInfo.AbsoluteFilePath;
 	TrackingDataDirectory::Ptr tdd;
+	FixableErrorList errors;
 	ASSERT_NO_THROW({
 			UTestData::ClearCachedData(tddPath);
-			tdd = TrackingDataDirectory::Open(tddPath,
-			                                  TestSetup::UTestData().Basedir());
+			std::tie(tdd,errors) = TrackingDataDirectory::Open(tddPath,
+			                                                   TestSetup::UTestData().Basedir());
 		});
-
+	EXPECT_TRUE(errors.empty());
 	EXPECT_FALSE(tdd->TagCloseUpsComputed());
 	EXPECT_THROW({
 			tdd->TagCloseUps();
@@ -422,11 +434,12 @@ TEST_F(TrackingDataDirectoryUTest,ComputesAndCacheTagCloseUps) {
 
 	ASSERT_NO_THROW({
 			computed = tdd->TagCloseUps();
-			tdd = TrackingDataDirectory::Open(tddPath,
-			                                  TestSetup::UTestData().Basedir());
+			std::tie(tdd,errors) = TrackingDataDirectory::Open(tddPath,
+			                                                   TestSetup::UTestData().Basedir());
 			ASSERT_FALSE(tdd->TagCloseUps().empty());
 			cached = tdd->TagCloseUps();
 		});
+	EXPECT_TRUE(errors.empty());
 	EXPECT_TRUE(tdd->TagCloseUpsComputed());
 
 	ASSERT_EQ(cached.size(),tddInfo.TagCloseUps.size());

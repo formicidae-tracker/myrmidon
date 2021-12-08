@@ -24,8 +24,8 @@ std::vector<TrackingDataDirectory::Ptr> SpaceUTest::s_nest;
 void SpaceUTest::SetUpTestSuite() {
 	for ( const auto & tddInfo : TestSetup::UTestData().NestDataDirs()) {
 		try {
-			auto tdd = TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,
-			                                       TestSetup::UTestData().Basedir());
+			auto [tdd,errors] = TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,
+			                                                TestSetup::UTestData().Basedir());
 			s_nest.push_back(tdd);
 		} catch ( const std::exception & e ) {
 			ADD_FAILURE() << "Could not open " << tddInfo.AbsoluteFilePath << ": " << e.what();

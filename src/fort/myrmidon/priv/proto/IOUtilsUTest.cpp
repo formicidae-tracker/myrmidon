@@ -581,7 +581,7 @@ TEST_F(IOUtilsUTest,ExperimentIO) {
 	pb::Experiment ePb,expected;
 
 	TrackingDataDirectory::Ptr tdd;
-
+	FixableErrorList errors;
 	EXPECT_NO_THROW({
 			e->SetAuthor("Someone");
 			expected.set_author("Someone");
@@ -592,8 +592,8 @@ TEST_F(IOUtilsUTest,ExperimentIO) {
 			e->SetDefaultTagSize(1.6);
 			expected.set_tagsize(1.6);
 
-			tdd = TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
-			                                  TestSetup::UTestData().Basedir());
+			std::tie(tdd,errors) = TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
+			                                                   TestSetup::UTestData().Basedir());
 			auto s = e->CreateSpace("box");
 			e->AddTrackingDataDirectory(s,tdd);
 
@@ -628,10 +628,8 @@ TEST_F(IOUtilsUTest,ExperimentIO) {
 			c = expected.add_antmetadata();
 			c->set_name("group");
 			IOUtils::SaveValue(c->mutable_defaultvalue(),Value(std::string()));
-
-
 		});
-
+	EXPECT_TRUE(errors.empty());
 
 	ePb.Clear();
 
@@ -722,8 +720,9 @@ TEST_F(IOUtilsUTest,SpaceIO) {
 	auto e2 = Experiment::Create(TestSetup::UTestData().Basedir() / "space2-io.myrmidon");
 	auto dS = e->CreateSpace("foo");
 	auto tddPath = TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath;
-	auto tdd = TrackingDataDirectory::Open(tddPath,
-	                                       TestSetup::UTestData().Basedir() );
+	auto [tdd,errors] = TrackingDataDirectory::Open(tddPath,
+	                                                TestSetup::UTestData().Basedir() );
+	EXPECT_TRUE(errors.empty());
 	e->AddTrackingDataDirectory(dS,tdd);
 	auto z =dS->CreateZone("bar");
 	pb::Space expected,s;

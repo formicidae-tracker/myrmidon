@@ -165,6 +165,7 @@ TEST_F(PublicExperimentUTest,TDDManipulation) {
 	fs::path badTDDPath = TestSetup::UTestData().Basedir() / "does-not-exist.0000";
 
 	std::string URI;
+	FixableErrorList errors;
 	EXPECT_THROW({
 			experiment->AddTrackingDataDirectory(42,
 			                                     foragingTDDPath);
@@ -176,8 +177,9 @@ TEST_F(PublicExperimentUTest,TDDManipulation) {
 		},std::runtime_error);
 
 	EXPECT_NO_THROW({
-			URI = experiment->AddTrackingDataDirectory(foragingID,foragingTDDPath);
+			std::tie(URI,errors) = experiment->AddTrackingDataDirectory(foragingID,foragingTDDPath);
 		});
+	EXPECT_TRUE(errors.empty());
 	EXPECT_EQ(URI,foragingTDDPath.filename());
 
 	// Note nestTDDPath and goodTDDPath overlaps in time
@@ -193,8 +195,9 @@ TEST_F(PublicExperimentUTest,TDDManipulation) {
 		},std::invalid_argument);
 
 	EXPECT_NO_THROW({
-			URI = experiment->AddTrackingDataDirectory(nestID,nestTDDPath);
+			std::tie(URI,errors) = experiment->AddTrackingDataDirectory(nestID,nestTDDPath);
 		});
+	EXPECT_TRUE(errors.empty());
 	EXPECT_EQ(URI,nestTDDPath.filename());
 
 	EXPECT_THROW({
