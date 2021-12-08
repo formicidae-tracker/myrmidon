@@ -32,6 +32,9 @@ public slots:
 
 
 private:
+
+	void promptForFix(const QString & path,fm::FixableErrorList errors );
+
 	friend class UniverseUTest_WidgetTest_Test;
 
 	fmp::TrackingDataDirectory::Ptr openTDD(const QString & path);
