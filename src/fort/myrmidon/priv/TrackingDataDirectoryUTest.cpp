@@ -187,9 +187,12 @@ TEST_F(TrackingDataDirectoryUTest,AlmostRandomAccess) {
 	EXPECT_TRUE(errors.empty());
 	EXPECT_NO_THROW({
 			FrameID middle = (tdd->StartFrame() + tdd->EndFrame()) / 2;
-
 			tdd->FrameReferenceAt(middle);
 	});
+
+	EXPECT_NO_THROW({
+			EXPECT_EQ(tdd->FrameAt(tdd->EndFrame()+1),tdd->end());
+		});
 
 	EXPECT_THROW({
 			tdd->FrameReferenceAt(tdd->EndFrame()+1);
@@ -209,6 +212,11 @@ TEST_F(TrackingDataDirectoryUTest,AlmostRandomAccess) {
 	EXPECT_THROW({
 			auto iterEnd = tdd->FrameAfter(tdd->Start().Add(-1));
 		}, std::out_of_range);
+
+	EXPECT_THROW({
+			tdd->FrameReferenceAfter(tdd->End());
+		}, std::out_of_range);
+
 
 	EXPECT_NO_THROW({
 			auto ref = tdd->FrameReferenceAfter(tdd->Start());

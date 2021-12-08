@@ -142,6 +142,11 @@ void ConcurrentFrameLoader::loadMovieSegment(quint32 spaceID,
 				auto lastFrame = segment->StartFrame() - 1;
 				while( abordFlag->load() != true ) {
 					if ( start == tdd->end() ) {
+						CONC_LOADER_DEBUG(std::cerr << "marking " <<segment->EndFrame() - lastFrame << " done" << std::endl);
+						//mark all jumped frame done
+						this->metaObject()->invokeMethod(this,"addDone",Qt::QueuedConnection,
+						                                 Q_ARG(int,int(segment->EndFrame() - lastFrame)));
+
 						break;
 					}
 
@@ -153,7 +158,7 @@ void ConcurrentFrameLoader::loadMovieSegment(quint32 spaceID,
 						CONC_LOADER_DEBUG(std::cerr << "marking " <<segment->EndFrame() - lastFrame << " done" << std::endl);
 						//mark all jumped frame done
 						this->metaObject()->invokeMethod(this,"addDone",Qt::QueuedConnection,
-						                                 Q_ARG(int,segment->EndFrame() - lastFrame));
+						                                 Q_ARG(int,int(segment->EndFrame() - lastFrame)));
 						break;
 					}
 					auto frameID = rawFrame->Frame().FrameID();
@@ -161,7 +166,7 @@ void ConcurrentFrameLoader::loadMovieSegment(quint32 spaceID,
 					CONC_LOADER_DEBUG(std::cerr << "advanced " << frameID - lastFrame << std::endl);
 					if ( (frameID - lastFrame) > 1 ) {
 						this->metaObject()->invokeMethod(this,"addDone",Qt::QueuedConnection,
-						                                 Q_ARG(int,frameID - lastFrame - 1));
+						                                 Q_ARG(int,int(frameID - lastFrame - 1)));
 					}
 					lastFrame = frameID;
 

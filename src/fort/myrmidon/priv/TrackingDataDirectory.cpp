@@ -606,9 +606,7 @@ TrackingDataDirectory::const_iterator TrackingDataDirectory::end() const {
 
 TrackingDataDirectory::const_iterator TrackingDataDirectory::FrameAt(uint64_t frameID) const {
 	if ( frameID < d_startFrame || frameID > d_endFrame ) {
-		std::ostringstream os;
-		os << "Could not find frame " << frameID << " in [" << d_startFrame << ";" << d_endFrame << "]";
-		throw std::out_of_range(os.str());
+		return end();
 	}
 	return const_iterator(Itself(),frameID);
 }
@@ -640,7 +638,18 @@ FrameReference TrackingDataDirectory::FrameReferenceAt(FrameID frameID) const {
 	if ( fi != d_referencesByFID->cend() ) {
 		return fi->second;
 	}
-	return (*FrameAt(frameID))->Frame();
+	auto it = FrameAt(frameID);
+	if ( it == end() ) {
+		throw std::out_of_range("Could not find frame "
+		                        + std::to_string(frameID)
+		                        + " in ["
+		                        + std::to_string(d_startFrame)
+		                        + ";"
+		                        + std::to_string(d_endFrame)
+		                        +  "]");
+	}
+
+	return (*it)->Frame();
 }
 
 FrameReference TrackingDataDirectory::FrameReferenceAfter(const Time & t) const {
@@ -648,7 +657,17 @@ FrameReference TrackingDataDirectory::FrameReferenceAfter(const Time & t) const 
 	if ( fi != d_frameIDByTime.cend() ) {
 		return FrameReferenceAt(fi->second);
 	}
-	return (*FrameAfter(t))->Frame();
+	auto it = FrameAfter(t);
+	if ( it == end() ) {
+		throw std::out_of_range("Could not find frame after "
+		                        + t.Format()
+		                        + " in ["
+		                        + d_start.Format()
+		                        + ";"
+		                        + d_end.Format()
+		                        +  "[");
+	}
+	return (*it)->Frame();
 }
 
 
