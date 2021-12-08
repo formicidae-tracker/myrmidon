@@ -507,7 +507,8 @@ void UTestData::WriteTDD(TDDInfo & tddInfo,SpaceID spaceID) {
 	WriteSegmentedData(tddInfo,spaceID,writers);
 
 	if ( tddInfo.IsCorrupted == true ) {
-		TruncateFile(tddInfo.AbsoluteFilePath / std::prev(tddInfo.Segments.end())->RelativePath,10);
+		TruncateFile(tddInfo.AbsoluteFilePath / std::prev(tddInfo.Segments.end(),2)->RelativePath,10);
+		fs::remove(tddInfo.AbsoluteFilePath / std::prev(tddInfo.Segments.end())->RelativePath);
 	}
 }
 
