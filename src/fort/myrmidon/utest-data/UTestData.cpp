@@ -63,6 +63,10 @@ const std::vector<UTestData::TDDInfo> & UTestData::ForagingDataDirs() const {
 	return d_foragingTDDs;
 }
 
+const UTestData::TDDInfo & UTestData::CorruptedDataDir() const {
+	return d_corruptedDir;
+}
+
 const UTestData::TDDInfo & UTestData::NoConfigDataDir() const {
 	return d_noConfigDir;
 }
@@ -444,6 +448,10 @@ private:
 };
 
 void TruncateFile(const std::filesystem::path & filepath, int bytes) {
+#ifndef NDEBUG
+	std::cerr << "Truncating " << bytes << " bytes of " << filepath << std::endl;
+#endif //NDEBUG
+
 	FILE * file = fopen(filepath.c_str(),"r+");
 	if ( file == nullptr ) {
 		throw std::runtime_error("open('"
@@ -460,6 +468,8 @@ void TruncateFile(const std::filesystem::path & filepath, int bytes) {
 		                         + std::to_string(errno));
 	}
 	auto offset = ftello(file);
+	std::cerr << "File is " << offset + bytes << " bytes " << std::endl;
+
 	if ( ftruncate(fileno(file),offset) != 0 ) {
 				throw std::runtime_error("ftruncate('" + filepath.string()
 				                         + "',"
@@ -497,7 +507,7 @@ void UTestData::WriteTDD(TDDInfo & tddInfo,SpaceID spaceID) {
 	WriteSegmentedData(tddInfo,spaceID,writers);
 
 	if ( tddInfo.IsCorrupted == true ) {
-		TruncateFile(tddInfo.AbsoluteFilePath / std::prev(tddInfo.Segments.end(),2)->RelativePath,1);
+		TruncateFile(tddInfo.AbsoluteFilePath / std::prev(tddInfo.Segments.end())->RelativePath,10);
 	}
 }
 

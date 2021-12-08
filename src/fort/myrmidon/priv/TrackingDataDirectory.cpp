@@ -26,7 +26,7 @@
 #include "TagCloseUp.hpp"
 #include "TimeUtils.hpp"
 #include "RawFrame.hpp"
-
+#include "TrackingDataDirectoryError.hpp"
 
 
 #ifdef MYRMIDON_USE_BOOST_FILESYSTEM
@@ -162,9 +162,11 @@ void TrackingDataDirectory::CheckPaths(const fs::path & path,
 }
 
 
-void TrackingDataDirectory::LookUpFiles(const fs::path & absoluteFilePath,
-                                        std::vector<fs::path> & hermesFiles,
-                                        std::map<uint32_t,std::pair<fs::path,fs::path> > & moviesPaths) {
+std::tuple<std::vector<fs::path>,
+           std::map<uint32_t,std::pair<fs::path,fs::path>>>
+ TrackingDataDirectory::LookUpFiles(const fs::path & absoluteFilePath) {
+	std::vector<fs::path>  hermesFiles;
+	std::map<uint32_t,std::pair<fs::path,fs::path> >  moviesPaths;
 	auto extractID =
 		[](const fs::path & p) -> uint32_t {
 			std::istringstream iss(p.stem().extension().string());
@@ -196,12 +198,13 @@ void TrackingDataDirectory::LookUpFiles(const fs::path & absoluteFilePath,
 	}
 
 	std::sort(hermesFiles.begin(),hermesFiles.end());
-
+	return {hermesFiles,moviesPaths};
 }
 
-void TrackingDataDirectory::LoadMovieSegments(const std::map<uint32_t,std::pair<fs::path,fs::path> > & moviesPaths,
-                                              const std::string & parentURI,
-                                              MovieSegment::List & movies ){
+MovieSegment::List
+TrackingDataDirectory::LoadMovieSegments(const std::map<uint32_t,std::pair<fs::path,fs::path> > & moviesPaths,
+                                         const std::string & parentURI ){
+	MovieSegment::List movies;
 	for ( const auto & [id,paths] : moviesPaths ) {
 		if ( !paths.first.empty() && !paths.second.empty() ) {
 			movies.push_back(MovieSegment::Open(id,paths.first,paths.second,parentURI));
@@ -212,6 +215,7 @@ void TrackingDataDirectory::LoadMovieSegments(const std::map<uint32_t,std::pair<
 	                                         const MovieSegment::Ptr & b) {
 		                                      return a->StartFrame() < b->StartFrame();
 	                                      });
+	return movies;
 }
 
 void TrackingDataDirectory::BuildFrameReferenceCache(const std::string & URI,
@@ -294,7 +298,7 @@ void TrackingDataDirectory::BuildFrameReferenceCache(const std::string & URI,
 }
 
 
-std::pair<TrackingDataDirectory::TimedFrame,TrackingDataDirectory::TimedFrame>
+std::tuple<TrackingDataDirectory::TimedFrame,TrackingDataDirectory::TimedFrame,FixableError::Ptr>
 TrackingDataDirectory::BuildIndexes(const std::string & URI,
                                     Time::MonoclockID monoID,
                                     const std::vector<fs::path> & hermesFiles,
@@ -307,6 +311,8 @@ TrackingDataDirectory::BuildIndexes(const std::string & URI,
 	bool first = true;
 	std::shared_ptr<fort::hermes::FileContext> fc;
 
+	FixableError::Ptr error;
+	std::string last = "";
 	for (const auto & f : hermesFiles ) {
 		try {
 			fc = std::make_shared<fort::hermes::FileContext>(f.string());
@@ -323,8 +329,19 @@ TrackingDataDirectory::BuildIndexes(const std::string & URI,
 			FrameReference curReference(URI,curFrameID,startTime);
 			trackingIndexer->Insert(curReference,
 			                        f.filename().generic_string());
+			last = f.string();
 		} catch ( const std::exception & e) {
-			throw std::runtime_error("Could not extract frame from " +  f.string() + ": " + e.what());
+			if ( last.empty() ) {
+				throw std::runtime_error("Could not read first frame from " +  f.string() + ": " + e.what());
+			} else {
+				error = std::make_unique<CorruptedHermesFileError>("could not read first frame from '"
+				                                                   + f.string()
+				                                                   + "': "
+				                                                   + e.what(),
+				                                                   last,-1);
+				fc = std::make_shared<fort::hermes::FileContext>(last);
+				break;
+			}
 		}
 	}
 
@@ -342,14 +359,19 @@ TrackingDataDirectory::BuildIndexes(const std::string & URI,
 		}
 	} catch ( const fort::hermes::EndOfFile &) {
 		//DO nothing, we just reached EOF
+	} catch ( const fort::hermes::UnexpectedEndOfFileSequence & e ) {
+		error = std::make_unique<CorruptedHermesFileError>("could not read last frame from '"
+		                                                   + last
+		                                                   + "': "
+		                                                   + e.what(),
+		                                                   last,end);
 	} catch ( const std::exception & e) {
-		throw std::runtime_error("Could not extract last frame from " +  hermesFiles.back().string() + ": " + e.what());
+		throw std::runtime_error("could not extract last frame from " +  last + ": " + e.what());
 	}
 
-
-
-	return std::make_pair(std::make_pair(start,startDate),
-	                      std::make_pair(end,endDate));
+	return std::make_tuple(std::make_pair(start,startDate),
+	                       std::make_pair(end,endDate),
+	                       std::move(error));
 
 }
 
@@ -408,11 +430,11 @@ TrackingDataDirectory::Open(const fs::path & filepath,
 	auto URI = fs::relative(absoluteFilePath,fs::absolute(experimentRoot));
 
 	Ptr res;
-
+	FixableErrorList errors;
 	try {
 		res = LoadFromCache(absoluteFilePath,URI.generic_string());
 	} catch (const std::exception & e ) {
-		res = OpenFromFiles(absoluteFilePath,URI.generic_string(),progress);
+		std::tie(res,errors) = OpenFromFiles(absoluteFilePath,URI.generic_string(),progress);
 		try {
 			res->SaveToCache();
 		} catch ( const std::exception & e) {}
@@ -421,44 +443,60 @@ TrackingDataDirectory::Open(const fs::path & filepath,
 	res->LoadComputedFromCache();
 	res->LoadDetectionSettings();
 
-	return std::make_tuple(res,FixableErrorList());
+	return std::make_tuple(res,std::move(errors));
 }
 
 
-TrackingDataDirectory::Ptr TrackingDataDirectory::OpenFromFiles(const fs::path & absoluteFilePath,
-                                                                const std::string & URI,
-                                                                const ProgressCallback & progress) {
+std::tuple<TrackingDataDirectory::Ptr,FixableErrorList>
+TrackingDataDirectory::OpenFromFiles(const fs::path & absoluteFilePath,
+                                     const std::string & URI,
+                                     const ProgressCallback & progress) {
 
 
-	std::vector<fs::path> hermesFiles;
-	std::map<uint32_t,std::pair<fs::path,fs::path> > moviesPaths;
-	MovieSegment::List movies;
 	auto ti = std::make_shared<TrackingIndex>();
 	auto mi = std::make_shared<MovieIndex>();
 	auto referenceCache = std::make_shared<FrameReferenceCache>();
+	FixableErrorList errors;
 
-	LookUpFiles(absoluteFilePath,hermesFiles,moviesPaths);
+	auto [hermesFiles,moviesPaths] = LookUpFiles(absoluteFilePath);
 	if ( hermesFiles.empty() ) {
 		throw std::invalid_argument(absoluteFilePath.string() + " does not contains any .hermes file");
 	}
 
-	LoadMovieSegments(moviesPaths,URI,movies);
+	auto movies = LoadMovieSegments(moviesPaths,URI);
 	for(const auto & m : movies) {
 		referenceCache->insert(std::make_pair(m->StartFrame(),FrameReference(URI,0,Time())));
 		referenceCache->insert(std::make_pair(m->EndFrame(),FrameReference(URI,0,Time())));
 	}
 
-	auto snapshots = ListTagCloseUpFiles(absoluteFilePath / "ants");
-	for(const auto & [frameID,s] : snapshots) {
-		referenceCache->insert(std::make_pair(frameID,FrameReference(URI,0,Time())));
-	}
 
 	Time::MonoclockID monoID = GetUID(absoluteFilePath);
 
-	auto bounds = BuildIndexes(URI,
-	                           monoID,
-	                           hermesFiles,
-	                           ti);
+	auto [start,end,error]
+		= BuildIndexes(URI,
+		               monoID,
+		               hermesFiles,
+		               ti);
+	auto [startFrame,startDate] = start;
+	auto [endFrame,endDate] = end;
+
+	if ( error != nullptr ) {
+		errors.push_back(std::move(error));
+	}
+
+	for(const auto & [frameID,s] : ListTagCloseUpFiles(absoluteFilePath / "ants") ) {
+		auto [ filepath,filter ] = s;
+		if ( frameID > endFrame ) {
+			errors.push_back(std::make_unique<NoKnownAcquisitionTimeFor>("could not access acquisition time for '"
+			                                                             + filepath.string()
+			                                                             + "': last readable TrackingFrameID is "
+			                                                             + std::to_string(endFrame),
+			                                                             filepath));
+		} else {
+			referenceCache->insert(std::make_pair(frameID,FrameReference(URI,0,Time())));
+		}
+	}
+
 
 	BuildFrameReferenceCache(URI,
 	                         monoID,
@@ -467,10 +505,10 @@ TrackingDataDirectory::Ptr TrackingDataDirectory::OpenFromFiles(const fs::path &
 	                         *referenceCache,
 	                         progress);
 	// caches the last frame
-	referenceCache->insert(std::make_pair(bounds.second.first,
+	referenceCache->insert(std::make_pair(endFrame,
 	                                      FrameReference(URI,
-	                                                     bounds.second.first,
-	                                                     bounds.second.second.Add(-1))));
+	                                                     endFrame,
+	                                                     endDate.Add(-1))));
 	Time emptyTime;
 
 	for(const auto & m : movies) {
@@ -497,15 +535,15 @@ TrackingDataDirectory::Ptr TrackingDataDirectory::OpenFromFiles(const fs::path &
 		referenceCache->erase(frameID);
 	}
 
-	return TrackingDataDirectory::Create(URI,
-	                                     absoluteFilePath,
-	                                     bounds.first.first,
-	                                     bounds.second.first,
-	                                     bounds.first.second,
-	                                     bounds.second.second,
-	                                     ti,
-	                                     mi,
-	                                     referenceCache);
+	return {TrackingDataDirectory::Create(URI,
+	                                      absoluteFilePath,
+	                                      startFrame,
+	                                      endFrame,
+	                                      startDate,
+	                                      endDate,
+	                                      ti,
+	                                      mi,
+	                                      referenceCache),std::move(errors)};
 }
 
 
@@ -574,7 +612,10 @@ const RawFrameConstPtr & TrackingDataDirectory::const_iterator::operator*() {
 		try {
 			d_file->Read(&d_message);
 			d_frame = RawFrame::Create(parent->d_URI,d_message,parent->d_uid);
-
+		} catch( const fort::hermes::UnexpectedEndOfFileSequence & ) {
+			d_current = parent->d_endFrame + 1;
+			d_frame.reset();
+			return NULLPTR;
 		} catch( const fort::hermes::EndOfFile & ) {
 			d_current = parent->d_endFrame + 1;
 			d_frame.reset();
@@ -709,7 +750,7 @@ TrackingDataDirectory::EnumerateFullFrames(const fs::path & subpath) const noexc
 		auto listing = ListTagCloseUpFiles(dirpath);
 		auto res = std::make_shared<std::map<FrameReference,fs::path>>();
 		for(const auto & [frameID,fileAndFilter] : listing) {
-			if ( !fileAndFilter.second == true ) {
+			if ( frameID <= d_endFrame && fileAndFilter.second == nullptr ) {
 				res->insert(std::make_pair(FrameReferenceAt(frameID),fileAndFilter.first));
 			}
 		}
@@ -877,6 +918,10 @@ private:
 std::vector<TrackingDataDirectory::Loader>
 TrackingDataDirectory::PrepareTagCloseUpsLoaders() {
 	auto tagCloseUpFiles = ListTagCloseUpFiles(AbsoluteFilePath() / "ants");
+
+	// we discard all close-up which are out-of-range
+	tagCloseUpFiles.erase(tagCloseUpFiles.upper_bound(d_endFrame),
+	                      tagCloseUpFiles.end());
 
 	if ( tagCloseUpFiles.empty() || d_detectionSettings.Family == tags::Family::Undefined ) {
 		d_tagCloseUps = std::make_shared<std::vector<TagCloseUp::ConstPtr>>();

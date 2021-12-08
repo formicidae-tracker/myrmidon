@@ -224,18 +224,19 @@ private:
 	static void CheckPaths(const fs::path & path,
 	                       const fs::path & experimentRoot);
 
-	static void LookUpFiles(const fs::path & absoluteFilePath,
-	                        std::vector<fs::path> & hermesFile,
-	                        std::map<uint32_t,std::pair<fs::path,fs::path> > & moviesPaths);
+	static
+	std::tuple<std::vector<fs::path>,
+	           std::map<uint32_t,std::pair<fs::path,fs::path>>>
+	LookUpFiles(const fs::path & absoluteFilePath);
 
-	static void LoadMovieSegments(const std::map<uint32_t,std::pair<fs::path,fs::path> > & moviesPaths,
-	                              const std::string & parentURI,
-	                              MovieSegment::List & movies);
+	static
+	MovieSegment::List LoadMovieSegments(const std::map<uint32_t,std::pair<fs::path,fs::path> > & moviesPaths,
+	                                     const std::string & parentURI);
 
 	static TrackingDataDirectory::Ptr LoadFromCache(const fs::path & absoluteFilePath,
 	                                                const std::string & URI);
 
-	static std::pair<TimedFrame,TimedFrame>
+	static std::tuple<TimedFrame,TimedFrame,FixableError::Ptr>
 	BuildIndexes(const std::string & URI,
 	             Time::MonoclockID monoID,
 	             const std::vector<fs::path> & hermesFile,
@@ -249,7 +250,7 @@ private:
 	                         FrameReferenceCache & cache,
 	                         const ProgressCallback & progress);
 
-	static Ptr
+	static std::tuple<Ptr,FixableErrorList>
 	OpenFromFiles(const fs::path & absoluteFilePath,
 	              const std::string & URI,
 	              const ProgressCallback & progress);
