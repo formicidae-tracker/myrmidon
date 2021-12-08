@@ -69,6 +69,7 @@ set(SRC_FILES Format.cpp
 			  widget/TagCloseUpExplorer.cpp
 			  widget/IdentificationListWidget.cpp
 			  widget/SetAntValueDialog.cpp
+			  widget/FixableErrorDialog.cpp
 			  workspace/Workspace.cpp
 			  workspace/TagStatisticsWorkspace.cpp
 			  workspace/GeneralWorkspace.cpp
@@ -96,6 +97,7 @@ set(HDR_FILES Format.hpp
               MyrmidonTypes/Types.hpp
               MyrmidonTypes/Zone.hpp
               MyrmidonTypes/Capsule.hpp
+              MyrmidonTypes/FixableError.hpp
               Utils.hpp
               bridge/AntGlobalModel.cpp
 			  bridge/Bridge.hpp
@@ -148,6 +150,7 @@ set(HDR_FILES Format.hpp
 			  widget/TagCloseUpExplorer.hpp
 			  widget/IdentificationListWidget.hpp
 			  widget/SetAntValueDialog.hpp
+			  widget/FixableErrorDialog.hpp
 			  workspace/Workspace.hpp
 			  workspace/TagStatisticsWorkspace.cpp
 			  workspace/GeneralWorkspace.cpp
@@ -176,6 +179,7 @@ set(UI_FILES widget/GlobalPropertyWidget.ui
              widget/TagCloseUpExplorer.ui
              widget/IdentificationListWidget.ui
              widget/SetAntValueDialog.ui
+             widget/FixableErrorDialog.ui
              workspace/GeneralWorkspace.ui
              workspace/TagStatisticsWorkspace.ui
              workspace/IdentificationWorkspace.ui
