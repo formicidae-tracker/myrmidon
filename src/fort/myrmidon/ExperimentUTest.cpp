@@ -480,6 +480,19 @@ TEST_F(PublicExperimentUTest,MetaDataKeyManipulation) {
 
 }
 
+TEST_F(PublicExperimentUTest,CanOpenCorruptedDataDir) {
+	std::string URI;
+	FixableErrorList errors;
+	EXPECT_NO_THROW({
+			auto s = experiment->CreateSpace("main");
+			std::tie(URI,errors) = experiment->AddTrackingDataDirectory(s->ID(),
+			                                                            TestSetup::UTestData().CorruptedDataDir().AbsoluteFilePath);
+		});
+	EXPECT_FALSE(errors.empty());
+
+
+}
+
 
 } // namespace myrmidon
 } // namespace fort

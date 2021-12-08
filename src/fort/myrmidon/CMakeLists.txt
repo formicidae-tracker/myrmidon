@@ -57,6 +57,7 @@ set(HDR_PRIVATE_FILES utils/StringManipulation.hpp
                       priv/Identification.hpp
                       priv/SegmentIndexer.hpp
                       priv/TrackingDataDirectory.hpp
+                      priv/TrackingDataDirectoryError.hpp
                       priv/RawFrame.hpp
                       priv/DeletedReference.hpp
                       priv/ExperimentReadWriter.hpp
@@ -143,6 +144,7 @@ set(SRC_PRIVATE_FILES utils/StringManipulation.cpp
                       priv/SegmentIndexer.cpp
                       priv/Identification.cpp
                       priv/TrackingDataDirectory.cpp
+                      priv/TrackingDataDirectoryError.cpp
                       priv/RawFrame.cpp
                       priv/DeletedReference.cpp
                       priv/ExperimentReadWriter.cpp
