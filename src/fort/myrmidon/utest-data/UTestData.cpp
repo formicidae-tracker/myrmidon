@@ -271,6 +271,7 @@ void UTestData::GenerateTDDStructure() {
 		                      .HasFullFrame = tdd.HasFullFrame,
 		                      .HasMovie = tdd.HasMovie,
 		                      .HasConfig = tdd.HasConfig,
+		                      .IsCorrupted = false,
 		                      .Start = tdd.Start,
 		                      .End = tdd.End,
 			});
@@ -283,6 +284,7 @@ void UTestData::GenerateTDDStructure() {
 		                          .HasFullFrame = tdd.HasFullFrame,
 		                          .HasMovie = tdd.HasMovie,
 		                          .HasConfig = tdd.HasConfig,
+		                          .IsCorrupted = false,
 		                          .Start = tdd.Start,
 		                          .End = tdd.End,
 			});
@@ -296,6 +298,7 @@ void UTestData::GenerateTDDStructure() {
 		 .HasFullFrame = false,
 		 .HasMovie = false,
 		 .HasConfig = false,
+		 .IsCorrupted = false,
 		 .Start = d_config.Start,
 		 .End = d_config.Start.Add(10*Duration::Second),
 		};
@@ -306,9 +309,23 @@ void UTestData::GenerateTDDStructure() {
 		 .HasFullFrame = false,
 		 .HasMovie = false,
 		 .HasConfig = true,
+		 .IsCorrupted = false,
 		 .Start = d_config.Start,
 		 .End = d_config.Start.Add(10*Duration::Second),
 		};
+
+	d_corruptedDir =
+		{
+		 .AbsoluteFilePath =  d_basedir / "corrupted.0000",
+		 .Family = fort::tags::Family::Tag36h11,
+		 .HasFullFrame = true,
+		 .HasMovie = true,
+		 .HasConfig = true,
+  		 .IsCorrupted = true,
+		 .Start = d_config.Start,
+		 .End = d_config.Start.Add(9*Duration::Second),
+		};
+
 
 	d_ARTagDir =
 		{
@@ -317,6 +334,7 @@ void UTestData::GenerateTDDStructure() {
 		 .HasFullFrame = false,
 		 .HasMovie = false,
 		 .HasConfig = true,
+		 .IsCorrupted = false,
 		 .Start = d_config.Start,
 		 .End = d_config.Start.Add(10*Duration::Second),
 		};
@@ -364,6 +382,7 @@ void UTestData::WriteTDDs() {
 	WriteTDD(d_noConfigDir,2);
 	WriteTDD(d_ARTagDir,2);
 	WriteTDD(d_noFamilyDir,2);
+	WriteTDD(d_corruptedDir,1);
 }
 
 
@@ -424,6 +443,34 @@ private:
 	uint64_t d_startFrame,d_endFrame;
 };
 
+void TruncateFile(const std::filesystem::path & filepath, int bytes) {
+	FILE * file = fopen(filepath.c_str(),"r+");
+	if ( file == nullptr ) {
+		throw std::runtime_error("open('"
+		                         + filepath.string()
+		                         + "',O_CREAT | O_TRUNC | O_RDWR | O_BINARY): "
+		                         + std::to_string(errno));
+	}
+	if ( fseeko(file,-bytes,SEEK_END) != 0 ) {
+		throw std::runtime_error("fseeko('"
+		                         + filepath.string()
+		                         + "',"
+		                         + std::to_string(-bytes)
+		                         + ",SEEK_END): "
+		                         + std::to_string(errno));
+	}
+	auto offset = ftello(file);
+	if ( ftruncate(fileno(file),offset) != 0 ) {
+				throw std::runtime_error("ftruncate('" + filepath.string()
+				                         + "',"
+				                         + std::to_string(offset)
+				                         + "): "
+				                         + std::to_string(errno));
+	}
+
+	fclose(file);
+}
+
 void UTestData::WriteTDD(TDDInfo & tddInfo,SpaceID spaceID) {
 	fs::create_directories(tddInfo.AbsoluteFilePath / "ants");
 	if ( tddInfo.HasConfig ) {
@@ -449,7 +496,12 @@ void UTestData::WriteTDD(TDDInfo & tddInfo,SpaceID spaceID) {
 
 	WriteSegmentedData(tddInfo,spaceID,writers);
 
+	if ( tddInfo.IsCorrupted == true ) {
+		TruncateFile(tddInfo.AbsoluteFilePath / std::prev(tddInfo.Segments.end(),2)->RelativePath,1);
+	}
 }
+
+
 
 void UTestData::WriteSegmentedData(TDDInfo & tddInfo,
                                    SpaceID spaceID,
@@ -458,10 +510,12 @@ void UTestData::WriteSegmentedData(TDDInfo & tddInfo,
 	size_t i = 0;
 	uint64_t frameID(0);
 
+	Duration increment = tddInfo.IsCorrupted ? (tddInfo.End.Sub(tddInfo.Start).Nanoseconds() / 3) : d_config.Segment;
+
 	for ( Time current = tddInfo.Start;
 	      current.Before(tddInfo.End);
-	      current = current.Add(d_config.Segment) ) {
-		auto endTime = std::min(current.Add(d_config.Segment),tddInfo.End);
+	      current = current.Add(increment) ) {
+		auto endTime = std::min(current.Add(increment),tddInfo.End);
 		auto begin = std::find_if(d_frames.begin(),
 		                          d_frames.end(),
 		                          [&](const std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr> & it ) {
