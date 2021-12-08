@@ -59,6 +59,7 @@ public:
 		bool               HasFullFrame;
 		bool               HasMovie;
 		bool               HasConfig;
+		bool               IsCorrupted;
 		Time               Start,End;
 		uint64_t           StartFrame,EndFrame;
 
@@ -99,6 +100,8 @@ public:
 	const TDDInfo & NoFamilyDataDir() const;
 
 	const TDDInfo & ARTagDataDir() const;
+
+	const TDDInfo & CorruptedDataDir() const;
 
 	const TDDInfo & WithVideoDataDir() const;
 
@@ -164,7 +167,7 @@ private:
 	Config   d_config;
 
 	std::vector<TDDInfo> d_nestTDDs,d_foragingTDDs;
-	TDDInfo              d_noConfigDir,d_ARTagDir,d_noFamilyDir;
+	TDDInfo              d_noConfigDir,d_ARTagDir,d_noFamilyDir,d_corruptedDir;
 	std::vector<ExperimentInfo> d_experiments;
 
 	std::vector<ExpectedResult> d_results;
