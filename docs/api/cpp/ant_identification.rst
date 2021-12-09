@@ -16,10 +16,3 @@ fort::myrmidon::Identification
 
 .. doxygenclass:: fort::myrmidon::Identification
    :members:
-
-
-fort::myrmidon::OverlappingIdentification
-+++++++++++++++++++++++++++++++++++++++++
-
-.. doxygenclass:: fort::myrmidon::OverlappingIdentification
-   :members:

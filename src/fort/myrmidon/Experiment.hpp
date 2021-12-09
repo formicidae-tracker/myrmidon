@@ -211,8 +211,9 @@ public:
 	 *
 	 * @param spaceID the Space the data directory should be associated with
 	 * @param filepath path to the directory we want to add
-	 * @param fixCorruptedData silently fix any corrupted
-	 *        data. Otherwise a FixableErrors will be thrown.
+	 * @param fixCorruptedData silently fix any corrupted data,with
+	 *        potentially loss of a large chunk of data. Otherwise a
+	 *        FixableErrors will be thrown.
 	 *
 	 * @return the URI used to designate the tracking data directory
 	 *

@@ -174,6 +174,7 @@ Raises:
 		     &Experiment::AddTrackingDataDirectory,
 		     py::arg("spaceID"),
 		     py::arg("filepath"),
+		     py::arg("fixCorruptedData") = false,
 		     R"pydoc(
 Adds a tracking data directory to the Experiment.
 
@@ -181,6 +182,10 @@ Args:
     spaceID (int): the space to add the tracking data directory
         to.
     filepath (str): the filepath to the tracking data directory.
+    fixCorruptedData (bool): In the event that some tracking data is
+        corrupted, if False a FixableError will be raised. Otherwise
+        an attempt to recover as much data as possible eill be made,
+        but it may potentially remove a large chunk of data.
 
 Returns:
     str: the relative path from self.AbsoluteFilePath to **filepath**,
@@ -190,6 +195,8 @@ Raises:
     IndexError: if **spaceID** is not valid for this Experiment
     RuntimeError: if **filepath** is not a valid tracking data
         directory.
+    FixableError: if **fixCorruptedData** is False and any data
+        corruption is found.
     RuntimeError: if the data will overlap in time with another
         directory in the same space
     RuntimeError: if the data is used by another space
@@ -478,4 +485,7 @@ Returns:
     TrackingSolver: the compiled tracking solver.
 )pydoc")
 
-		; }
+		;
+
+	py::register_exception<FixableError>(m,"FixableError",PyExc_RuntimeError);
+}
