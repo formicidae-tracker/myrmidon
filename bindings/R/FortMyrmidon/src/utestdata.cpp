@@ -139,6 +139,7 @@ RCPP_MODULE(utestdata) {
 		.property("NoConfigDataDir",&UTestData::NoConfigDataDir,"")
 		.property("ARTagDataDir",&UTestData::ARTagDataDir,"")
 		.property("WithVideoDataDir",&UTestData::WithVideoDataDir,"")
+		.property("CorruptedDataDir",&UTestData::CorruptedDataDir,"")
 		.property("CurrentVersionFile",&UTestData::CurrentVersionFile,"")
 		.property("ExpectedTagStatistics",&UTestData::ExpectedTagStatistics,"")
 		.property("ExpectedFrames",&pfmUTestData_ExpectedFrames,"")
