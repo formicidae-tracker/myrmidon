@@ -211,6 +211,8 @@ public:
 	 *
 	 * @param spaceID the Space the data directory should be associated with
 	 * @param filepath path to the directory we want to add
+	 * @param fixCorruptedData silently fix any corrupted
+	 *        data. Otherwise a FixableErrors will be thrown.
 	 *
 	 * @return the URI used to designate the tracking data directory
 	 *
@@ -218,15 +220,17 @@ public:
 	 *         Experiment
 	 * @throws std::runtime_error if **filepath** is not a valid tracking
 	 *         data directory
+	 * @throws FixableErrors if the directory contains corrupted data,
+	 *         and fixCorruptedData is false.
 	 * @throws std::domain_error if **filepath** contains data that
 	 *         would overlap in Time with another tracking data
 	 *         directory associated with the same space.
 	 * @throws std::invalid_argument if the tracking data directory
 	 *         is already in use in this experiment.
 	 */
-	std::tuple<std::string,FixableErrorList>
-	AddTrackingDataDirectory(SpaceID spaceID,
-	                         const std::string & filepath);
+	std::string AddTrackingDataDirectory(SpaceID spaceID,
+	                                     const std::string & filepath,
+	                                     bool fixCorruptedData = false);
 	/**
 	 * Removes a Tracking Data Directory from the Experiment.
 	 *

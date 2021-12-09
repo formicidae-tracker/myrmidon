@@ -53,9 +53,9 @@ const SpaceByID & Experiment::Spaces() const {
 	return d_p->Spaces();
 }
 
-std::tuple<std::string,FixableErrorList>
-Experiment::AddTrackingDataDirectory(SpaceID spaceID,
-                                     const std::string & filepath) {
+std::string Experiment::AddTrackingDataDirectory(SpaceID spaceID,
+                                                 const std::string & filepath,
+                                                 bool fixCorruptedData) {
 	auto fi  = d_p->Get().Spaces().find(spaceID);
 	if ( fi == d_p->Get().Spaces().end() ) {
 		throw std::out_of_range("Unknown SpaceID " + std::to_string(spaceID));
@@ -67,8 +67,15 @@ Experiment::AddTrackingDataDirectory(SpaceID spaceID,
 	} catch ( const std::exception & e ) {
 		throw std::runtime_error(e.what());
 	}
+	if ( errors.empty() == false ) {
+		if ( fixCorruptedData == false ) {
+			throw FixableErrors(std::move(errors));
+		} else {
+			FixableErrors(std::move(errors)).Fix();
+		}
+	}
 	d_p->Get().AddTrackingDataDirectory(fi->second,tdd);
-	return {tdd->URI(),std::move(errors)};
+	return tdd->URI();
 }
 
 void Experiment::RemoveTrackingDataDirectory(const std::string & URI) {
