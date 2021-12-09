@@ -340,3 +340,16 @@ class ExperimentTestCase(unittest.TestCase, assertions.CustomAssertion):
         a.DeleteValue("group", m.Time().Add(1))
         self.experiment.SetMetaDataKey("group", 42)
         self.assertEqual(self.experiment.MetaDataKeys["group"], 42)
+
+    def test_can_open_corrupted_data_dir(self):
+        s = self.experiment.CreateSpace("main")
+        corruptedPath = str(ud.UData().CorruptedDataDir.AbsoluteFilePath)
+        with self.assertRaises(m.FixableError):
+            self.experiment.AddTrackingDataDirectory(spaceID = s.ID,
+                                                     filepath = corruptedPath)
+
+        URI = self.experiment.AddTrackingDataDirectory(spaceID = s.ID,
+                                                       filepath = corruptedPath,
+                                                       fixCorruptedData = True)
+        self.experiment.RemoveTrackingDataDirectory(URI)
+        self.experiment.AddTrackingDataDirectory(spaceID = s.ID,filepath = corruptedPath)

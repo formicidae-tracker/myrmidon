@@ -96,6 +96,11 @@ void BindUTestData(py::module_ & m) {
 	                                &UTestData::WithVideoDataDir,
 	                                py::return_value_policy::reference);
 
+	utestdata.def_property_readonly("CorruptedDataDir",
+	                                &UTestData::CorruptedDataDir,
+	                                py::return_value_policy::reference);
+
+
 
 }
 

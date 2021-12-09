@@ -7,9 +7,15 @@
 \item{spaceID}{the $ID of the fmSpace to associate data with}
 
 \item{filepath}{the filepath to the tracking data directory}
+
+\item{fixCorruptedData}{if FALSE, in the event the tracking data is
+corrupted an error will occur. If TRUE \strong{fort-myrmidon} will
+try to fix the data corruption ( with some permanent data loss)
+instead.}
 }
 \value{
-the URI used to designate this directory in this fmExperiment
+the URI used to designate this directory in this
+fmExperiment
 }
 \description{
 Associates a tracking data directory to a

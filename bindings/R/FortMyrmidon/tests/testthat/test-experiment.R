@@ -39,7 +39,8 @@ test_that("it can manipulate spaces",{
 
     tddInfo <- ud$ForagingDataDirs[[1]]
     d$experiment$addTrackingDataDirectory(spaces[[2]]$ID,
-                                          tddInfo$AbsoluteFilePath)
+                                          tddInfo$AbsoluteFilePath,
+                                          FALSE)
     expect_error({
         d$experiment$deleteSpace(spaces[[2]]$ID)
     }, "Space{ID:2, Name:'foraging'} is not empty (contains:{'foraging.0000'})",fixed = TRUE)
@@ -53,17 +54,17 @@ test_that("it can manipulate tracking data directory",{
     nestTDDPath <- ud$NestDataDirs[[1]]$AbsoluteFilePath
     badTDDPath <- file.path(ud$Basedir,"does-not-exist.9999")
     expect_error({
-        d$experiment$addTrackingDataDirectory(42,foragingTDDPath)
+        d$experiment$addTrackingDataDirectory(42,foragingTDDPath,FALSE)
     },'Unknown SpaceID 42')
     expect_error({
-        d$experiment$addTrackingDataDirectory(foragingID,badTDDPath)
+        d$experiment$addTrackingDataDirectory(foragingID,badTDDPath,FALSE)
     },'.* is not a directory')
-    URI <- d$experiment$addTrackingDataDirectory(foragingID,foragingTDDPath)
+    URI <- d$experiment$addTrackingDataDirectory(foragingID,foragingTDDPath,FALSE)
     expect_equal(URI,basename(foragingTDDPath))
     expect_error({
-        d$experiment$addTrackingDataDirectory(foragingID,nestTDDPath)
+        d$experiment$addTrackingDataDirectory(foragingID,nestTDDPath,FALSE)
     },'TDD.* and TDD.* overlaps in time')
-    URI <- d$experiment$addTrackingDataDirectory(nestID,nestTDDPath)
+    URI <- d$experiment$addTrackingDataDirectory(nestID,nestTDDPath,FALSE)
     expect_equal(URI,basename(nestTDDPath))
     expect_error({
         d$experiment$removeTrackingDataDirectory(basename(badTDDPath))
@@ -157,7 +158,8 @@ test_that("it can manipulate its fields",{
     tddInfo <- ud$ForagingDataDirs[[1]]
 
     d$experiment$addTrackingDataDirectory(spaceID,
-                                          tddInfo$AbsoluteFilePath)
+                                          tddInfo$AbsoluteFilePath,
+                                          FALSE)
 
     expect_equal(d$experiment$family,tddInfo$Family)
     expect_equal(names(which(fmTagFamily == d$experiment$family)),
@@ -269,4 +271,16 @@ test_that("it can manipulate meta data keys", {
     d$experiment$setMetaDataKey("group",42L)
     expect_equal(d$experiment$metaDataKeys[['group']],42L)
 
+})
+
+test_that("it can open corrupted data", {
+    d <- local_data()
+    s <- d$experiment$createSpace("main")
+    corruptedPath <- ud$CorruptedDataDir$AbsoluteFilePath
+    expect_error({
+        d$experiment$addTrackingDataDirectory(s$ID,corruptedPath,FALSE)
+    })
+    URI <- d$experiment$addTrackingDataDirectory(s$ID,corruptedPath,TRUE)
+    d$experiment$removeTrackingDataDirectory(URI)
+    d$experiment$addTrackingDataDirectory(s$ID,corruptedPath,FALSE)
 })
