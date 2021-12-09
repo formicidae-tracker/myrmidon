@@ -43,7 +43,7 @@ std::string FixableErrors::FixDescription() const noexcept {
 	return oss.str();
 }
 
-void FixableErrors::Fix() const {
+void FixableErrors::Fix() {
 	for ( const auto & e : d_errors ) {
 		e->Fix();
 	}

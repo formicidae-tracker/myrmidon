@@ -166,7 +166,6 @@ TEST_F(PublicExperimentUTest,TDDManipulation) {
 	fs::path badTDDPath = TestSetup::UTestData().Basedir() / "does-not-exist.0000";
 
 	std::string URI;
-	FixableErrorList errors;
 	EXPECT_THROW({
 			experiment->AddTrackingDataDirectory(42,
 			                                     foragingTDDPath);
@@ -178,9 +177,8 @@ TEST_F(PublicExperimentUTest,TDDManipulation) {
 		},std::runtime_error);
 
 	EXPECT_NO_THROW({
-			std::tie(URI,errors) = experiment->AddTrackingDataDirectory(foragingID,foragingTDDPath);
+			URI = experiment->AddTrackingDataDirectory(foragingID,foragingTDDPath);
 		});
-	EXPECT_TRUE(errors.empty());
 	EXPECT_EQ(URI,foragingTDDPath.filename());
 
 	// Note nestTDDPath and goodTDDPath overlaps in time
@@ -196,9 +194,8 @@ TEST_F(PublicExperimentUTest,TDDManipulation) {
 		},std::invalid_argument);
 
 	EXPECT_NO_THROW({
-			std::tie(URI,errors) = experiment->AddTrackingDataDirectory(nestID,nestTDDPath);
+			URI = experiment->AddTrackingDataDirectory(nestID,nestTDDPath);
 		});
-	EXPECT_TRUE(errors.empty());
 	EXPECT_EQ(URI,nestTDDPath.filename());
 
 	EXPECT_THROW({
@@ -484,31 +481,42 @@ TEST_F(PublicExperimentUTest,MetaDataKeyManipulation) {
 TEST_F(PublicExperimentUTest,CanOpenCorruptedDataDir) {
 	using testing::MatchesRegex;
 	std::string URI;
-	FixableErrorList errors;
+	auto corruptedPath = TestSetup::UTestData().CorruptedDataDir().AbsoluteFilePath;
+	auto s = experiment->CreateSpace("main");
 	try{
-		auto s = experiment->CreateSpace("main");
-		std::tie(URI,errors) = experiment->AddTrackingDataDirectory(s->ID(),
-		                                                            TestSetup::UTestData().CorruptedDataDir().AbsoluteFilePath);
+		URI = experiment->AddTrackingDataDirectory(s->ID(),
+		                                           corruptedPath);
+	} catch ( const FixableErrors & e ) {
+		const auto & errors = e.Errors();
+		EXPECT_TRUE(errors.size() > 1);
+		bool noError = true;
+		EXPECT_FALSE(errors.front() == nullptr) << (noError = false);
+		if ( noError == true ) {
+			EXPECT_THAT(errors.front()->what(),MatchesRegex("could not read last frame from '.*': .*"));
+			EXPECT_THAT(errors.front()->FixDescription(),MatchesRegex("rewrite '.*' up to frame .* and to be the last of the sequence"));
+		}
+		for ( auto it = std::next(errors.begin());
+		      it != errors.end();
+		      ++it) {
+			noError = true;
+			EXPECT_FALSE(*it == nullptr) << (noError = false);
+			if ( noError == true ) {
+				EXPECT_THAT((*it)->what(),MatchesRegex("could not access acquisition time for '.*': .*"));
+				EXPECT_THAT((*it)->FixDescription(),MatchesRegex("rename '.*' to '.*'"));
+			}
+		}
 	} catch ( const std::exception & e ) {
 		ADD_FAILURE() << "unexpected error: " << e.what();
 	}
-	EXPECT_TRUE(errors.size() > 1);
-	bool noError = true;
-	EXPECT_FALSE(errors.front() == nullptr) << (noError = false);
-	if ( noError == true ) {
-		EXPECT_THAT(errors.front()->what(),MatchesRegex("could not read last frame from '.*': .*"));
-		EXPECT_THAT(errors.front()->FixDescription(),MatchesRegex("rewrite '.*' up to frame .* and to be the last of the sequence"));
+
+	try{
+		URI = experiment->AddTrackingDataDirectory(s->ID(),corruptedPath,true);
+		experiment->RemoveTrackingDataDirectory(URI);
+		URI = experiment->AddTrackingDataDirectory(s->ID(),corruptedPath,false);
+	} catch ( const std::exception & e) {
+		ADD_FAILURE() << "Unexpected error: " << e.what();
 	}
-	for ( auto it = std::next(errors.begin());
-	      it != errors.end();
-	      ++it) {
-		noError = true;
-		EXPECT_FALSE(*it == nullptr) << (noError = false);
-		if ( noError == true ) {
-			EXPECT_THAT((*it)->what(),MatchesRegex("could not access acquisition time for '.*': .*"));
-			EXPECT_THAT((*it)->FixDescription(),MatchesRegex("rename '.*' to '.*'"));
-		}
-	}
+
 
 }
 

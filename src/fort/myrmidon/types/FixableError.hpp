@@ -31,7 +31,7 @@ public:
 
 	std::string FixDescription() const noexcept override;
 
-	void Fix() const;
+	void Fix() override;
 
 private:
 	static std::string BuildReason(const FixableErrorList & errors) noexcept;
