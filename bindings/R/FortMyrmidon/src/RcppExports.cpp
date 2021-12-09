@@ -385,6 +385,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// fmQueryGetMetaDataKeyRanges
+Rcpp::DataFrame fmQueryGetMetaDataKeyRanges(const ExperimentPtr& experiment, const std::string& key, const fort::myrmidon::Value& value);
+RcppExport SEXP _FortMyrmidon_fmQueryGetMetaDataKeyRanges(SEXP experimentSEXP, SEXP keySEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const ExperimentPtr& >::type experiment(experimentSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type key(keySEXP);
+    Rcpp::traits::input_parameter< const fort::myrmidon::Value& >::type value(valueSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmQueryGetMetaDataKeyRanges(experiment, key, value));
+    return rcpp_result_gen;
+END_RCPP
+}
 // fmShapeListCreate
 fort::myrmidon::Shape::List fmShapeListCreate(SEXP shapes);
 RcppExport SEXP _FortMyrmidon_fmShapeListCreate(SEXP shapesSEXP) {
@@ -580,6 +593,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FortMyrmidon_pfmQueryComputeAntTrajectories", (DL_FUNC) &_FortMyrmidon_pfmQueryComputeAntTrajectories, 8},
     {"_FortMyrmidon_pfmQueryComputeAntInteractions", (DL_FUNC) &_FortMyrmidon_pfmQueryComputeAntInteractions, 9},
     {"_FortMyrmidon_fmQueryGetDataInformations", (DL_FUNC) &_FortMyrmidon_fmQueryGetDataInformations, 1},
+    {"_FortMyrmidon_fmQueryGetMetaDataKeyRanges", (DL_FUNC) &_FortMyrmidon_fmQueryGetMetaDataKeyRanges, 3},
     {"_FortMyrmidon_fmShapeListCreate", (DL_FUNC) &_FortMyrmidon_fmShapeListCreate, 1},
     {"_FortMyrmidon_pfmIWantAShapeList", (DL_FUNC) &_FortMyrmidon_pfmIWantAShapeList, 1},
     {"_FortMyrmidon_fmTimeCreate", (DL_FUNC) &_FortMyrmidon_fmTimeCreate, 1},

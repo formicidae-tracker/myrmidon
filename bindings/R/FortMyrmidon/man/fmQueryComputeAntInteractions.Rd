@@ -80,6 +80,7 @@ Other fmQuery methods:
 \code{\link{fmQueryComputeMeasurementFor}()},
 \code{\link{fmQueryComputeTagStatistics}()},
 \code{\link{fmQueryGetDataInformations}()},
+\code{\link{fmQueryGetMetaDataKeyRanges}()},
 \code{\link{fmQueryIdentifyFrames}()},
 \code{\link{fmQuery}}
 }

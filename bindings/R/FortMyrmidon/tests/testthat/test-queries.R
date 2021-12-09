@@ -73,3 +73,35 @@ test_that("it can compute ant interactions",{
         expect_equal(result,expectedResult$summarized_interactions)
     }
 })
+
+test_that("it can get metadata key ranges",{
+    experiment <- fmExperimentCreate("foo.myrmidon")
+    experiment$setMetaDataKey("alive",TRUE)
+    experiment$createAnt()
+    a2 <- experiment$createAnt()
+    a2$setValue("alive",FALSE,fmTimeCreate())
+    a3 <- experiment$createAnt()
+    a3$setValue("alive",FALSE,fmTimeSinceEver())
+    a3$setValue("alive",TRUE,fmTimeCreate())
+    a3$setValue("alive",TRUE,fmTimeCreate(1e-09))
+    a3$setValue("alive",FALSE,fmTimeCreate(2e-09))
+    a3$setValue("alive",TRUE,fmTimeCreate(3e-09))
+
+    expectedStartTime = c(NA,NA,0.0,3.0e-09)
+    attr(expectedStartTime,"class") = "POSIXct"
+    expectedEndTime = c(NA,0.0,2.0e-09,NA)
+    attr(expectedEndTime,"class") = "POSIXct"
+
+    expect_equal(fmQueryGetMetaDataKeyRanges(experiment,"alive",TRUE),
+                 data.frame("antID" = c(1,2,3,3),
+                            "start" = expectedStartTime,
+                            "end" = expectedEndTime))
+
+    expect_error({
+        fmQueryGetMetaDataKeyRanges(experiment,"isDead",TRUE)
+    }, "Invalid key 'isDead'")
+
+    expect_error({
+        fmQueryGetMetaDataKeyRanges(experiment,"alive","alive")
+    }, 'Value is not of the right type')
+})

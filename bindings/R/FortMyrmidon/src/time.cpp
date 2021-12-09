@@ -3,6 +3,11 @@
 #include "Rcpp.h"
 
 Rcpp::Datetime fmTime_asR(const fort::Time & t) {
+	if ( t.IsSinceEver() ) {
+		return -std::numeric_limits<double>::infinity();
+	} else if ( t.IsForever() ) {
+		return std::numeric_limits<double>::infinity();
+	}
 	return Rcpp::Datetime(t.Sub(fort::Time()).Seconds());
 }
 

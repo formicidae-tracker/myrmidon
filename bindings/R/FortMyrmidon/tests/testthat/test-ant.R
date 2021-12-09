@@ -63,8 +63,14 @@ test_that("it has values",{
     d <- local_data()
     a <- d$experiment$createAnt()
     t <- fmTimeNow()
-
+    expectedTimes <- numeric()
+    expectedTimes[[1]] = NA
+    attr(expectedTimes,'class') = 'POSIXct'
+    
     d$experiment$setMetaDataKey("alive",TRUE)
+    values <- a$getValues("alive")
+    expect_equal(values,data.frame("times" = expectedTimes,"values" = c(TRUE)));
+
     expect_error({
         a$getValue("isDead",t)
     },'Invalid key')
@@ -79,6 +85,13 @@ test_that("it has values",{
     },'Time cannot be +∞', fixed=TRUE)
 
     a$setValue('alive',FALSE, t)
+    expectedTimes[[2]] = t$asPOSIXct()
+    expect_equal(a$getValues("alive"),
+                 data.frame("times" = expectedTimes,
+                            "values" = c(TRUE,FALSE)))
+    
+    expect_error({a$getValues("isDead")},"Invalid key 'isDead'")
+    
     expect_equal(a$getValue('alive',fmTimeSinceEver()),TRUE)
     expect_equal(a$getValue('alive',t$add(fmNanosecond(-1))),TRUE)
     expect_equal(a$getValue('alive',t),FALSE)

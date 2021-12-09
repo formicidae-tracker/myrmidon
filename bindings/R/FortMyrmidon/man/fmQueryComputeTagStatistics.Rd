@@ -23,6 +23,7 @@ Other fmQuery methods:
 \code{\link{fmQueryComputeAntTrajectories}()},
 \code{\link{fmQueryComputeMeasurementFor}()},
 \code{\link{fmQueryGetDataInformations}()},
+\code{\link{fmQueryGetMetaDataKeyRanges}()},
 \code{\link{fmQueryIdentifyFrames}()},
 \code{\link{fmQuery}}
 }
