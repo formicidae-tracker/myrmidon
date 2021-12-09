@@ -6,6 +6,7 @@
 #include "Rcpp.h"
 
 #include "helper.h"
+#include "time.h"
 
 void fmAnt_show(const fort::myrmidon::Ant::Ptr * a) {
 	Rcpp::Rcout << "fmAnt( $ID = " << (*a)->ID()
@@ -64,6 +65,11 @@ inline uint64_t fmAnt_get(const fort::myrmidon::Ant::Ptr * a) {
 	return uint64_t(a->get());
 }
 
+std::map<fort::Time,fort::myrmidon::Value> fmAnt_GetValues(fort::myrmidon::Ant::Ptr *a, const std::string & key) {
+	return (*a)->GetValues(key);
+}
+
+
 RCPP_MODULE(ant) {
 	Rcpp::class_<fort::myrmidon::Ant::Ptr>("fmAnt")
 		.const_method("show",
@@ -107,6 +113,9 @@ RCPP_MODULE(ant) {
 		.method("clearCapsules",
 		        &fmAnt_ClearCapsules,
 		        "Deletes all ants capsules")
+		.method("getValues",
+		        &fmAnt_GetValues,
+		        "Get values for a key.")
 		.const_method("get",
 		              &fmAnt_get)
 		;
@@ -160,6 +169,70 @@ template <> SEXP wrap(const fort::myrmidon::TypedCapsuleList & l) {
 	}
 	return res;
 }
+
+static DatetimeVector importKeys(const std::map<fort::Time,fort::myrmidon::Value> & values) {
+	DatetimeVector res(values.size());
+	size_t i = 0;
+	for ( const auto & [t,v] : values ) {
+		res[i++] = fmTime_asR(t);
+	}
+	res.attr("class") = "POSIXct";
+	return res;
+};
+
+template <typename Container,typename T>
+static SEXP importValues(const std::map<fort::Time,fort::myrmidon::Value> & values) {
+	Container res(values.size());
+	size_t i = 0;
+	for ( const auto & [k,v] : values ) {
+		res[i++] = std::get<T>(v);
+	}
+	return res;
+}
+
+template <>
+SEXP importValues<DatetimeVector,fort::Time>(const std::map<fort::Time,fort::myrmidon::Value> & values) {
+	DatetimeVector res(values.size());
+	size_t i = 0;
+	for ( const auto & [k,v] : values ) {
+		res[i++] = fmTime_asR(std::get<fort::Time>(v));
+	}
+	res.attr("class") = "POSIXct";
+	return res;
+}
+
+template<class> inline constexpr bool always_false_v = false;
+
+template <> SEXP wrap(const std::map<fort::Time,fort::myrmidon::Value> & values) {
+	using namespace fort;
+	using namespace fort::myrmidon;
+
+	if ( values.empty() ) {
+		return R_NilValue;
+	}
+	fort::myrmidon::Value f = values.cbegin()->second;
+	SEXP rValues = std::visit([&](auto&& arg) -> SEXP {
+		using T = std::decay_t<decltype(arg)>;
+		if constexpr (std::is_same_v<T, bool>) {
+			return importValues<LogicalVector,bool>(values);
+		} else if constexpr (std::is_same_v<T, int>) {
+			return importValues<IntegerVector,int>(values);
+		} else if constexpr (std::is_same_v<T, double>) {
+			return importValues<NumericVector,double>(values);
+		} else if constexpr (std::is_same_v<T, std::string>) {
+			return importValues<CharacterVector,std::string>(values);
+		} else if constexpr (std::is_same_v<T, fort::Time>) {
+			return importValues<DatetimeVector,fort::Time>(values);
+		} else {
+			static_assert(always_false_v<T>, "non-exhaustive visitor!");
+			return R_NilValue;
+		}
+	}, f);
+
+	return DataFrame::create( _["times"]  = importKeys(values),
+	                          _["values"]  = rValues);
+}
+
 
 }
 

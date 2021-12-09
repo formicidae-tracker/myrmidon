@@ -250,6 +250,17 @@ fmQueryGetDataInformations <- function(experiment) {
     .Call(`_FortMyrmidon_fmQueryGetDataInformations`, experiment)
 }
 
+#' get time ranges where a metadata key has a given value
+#' @param experiment the \code{\link{fmExperiment}} to query
+#' @param key the key to query for
+#' @param value the value to test for
+#' @return a data.frame with the antID, and the start and end time
+#'    where key is equal to value.
+#' @family fmQuery methods
+fmQueryGetMetaDataKeyRanges <- function(experiment, key, value) {
+    .Call(`_FortMyrmidon_fmQueryGetMetaDataKeyRanges`, experiment, key, value)
+}
+
 #' Creates a fmShapeList
 #' @param shapes the shape in the list. should be a list of fmCircle,
 #'   fmCapsule or fmPolygon.

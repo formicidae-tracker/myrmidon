@@ -540,6 +540,42 @@ fort::myrmidon::ExperimentDataInfo fmQueryGetDataInformations(const ExperimentPt
 	return fort::myrmidon::Query::GetDataInformations(*experiment);
 }
 
+template <std::size_t Index,typename Container,typename TupleType>
+SEXP importVectorOfTuple(const std::vector<TupleType> & values) {
+	Container res(values.size());
+	for ( size_t i = 0; i < values.size(); ++i) {
+		if constexpr (std::is_same_v<std::tuple_element_t<Index,TupleType>,fort::Time>) {
+			res[i] = fmTime_asR(std::get<Index>(values[i]));
+		} else {
+			res[i] = std::get<Index>(values[i]);
+		}
+	}
+	if constexpr( std::is_same_v<Container,Rcpp::DatetimeVector>) {
+		res.attr("class") = "POSIXct";
+	}
+	return res;
+}
+
+
+//' get time ranges where a metadata key has a given value
+//' @param experiment the \code{\link{fmExperiment}} to query
+//' @param key the key to query for
+//' @param value the value to test for
+//' @return a data.frame with the antID, and the start and end time
+//'    where key is equal to value.
+//' @family fmQuery methods
+//[[Rcpp::export]]
+Rcpp::DataFrame fmQueryGetMetaDataKeyRanges(const ExperimentPtr & experiment,
+                                            const std::string & key,
+                                            const fort::myrmidon::Value & value) {
+	auto res = fort::myrmidon::Query::GetMetaDataKeyRanges(*experiment,key,value);
+	return Rcpp::DataFrame::create(Rcpp::_["antID"]  = importVectorOfTuple<0,Rcpp::IntegerVector,std::tuple<uint32_t,fort::Time,fort::Time>>(res),
+	                               Rcpp::_["start"] = importVectorOfTuple<1,Rcpp::DatetimeVector,std::tuple<uint32_t,fort::Time,fort::Time>>(res),
+	                               Rcpp::_["end"] = importVectorOfTuple<2,Rcpp::DatetimeVector,std::tuple<uint32_t,fort::Time,fort::Time>>(res));
+}
+
+
+
 namespace Rcpp {
 
 template <> SEXP wrap(const fort::myrmidon::ExperimentDataInfo & infos) {
