@@ -42,7 +42,8 @@ IMPLEMENT_METHOD_X(fmExperiment,ExperimentPtr,
                    std::string,
                    AddTrackingDataDirectory,
                    fort::myrmidon::SpaceID, spaceID,
-                   const std::string &, filepath);
+                   const std::string &, filepath,
+                   bool, fixCorruptedData);
 
 IMPLEMENT_VOID_METHOD_X(fmExperiment,ExperimentPtr,
                         RemoveTrackingDataDirectory,

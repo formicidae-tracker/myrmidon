@@ -103,7 +103,12 @@ NULL
 #'     other directory associated in this experiment.  }
 #' @param spaceID the $ID of the fmSpace to associate data with
 #' @param filepath the filepath to the tracking data directory
-#' @return the URI used to designate this directory in this fmExperiment
+#' @param fixCorruptedData if FALSE, in the event the tracking data is
+#'     corrupted an error will occur. If TRUE **fort-myrmidon** will
+#'     try to fix the data corruption ( with some permanent data loss)
+#'     instead.
+#' @return the URI used to designate this directory in this
+#'     fmExperiment
 #' @family fmExperiment methods
 NULL
 
