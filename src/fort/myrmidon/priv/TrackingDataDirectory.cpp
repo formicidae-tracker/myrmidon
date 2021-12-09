@@ -315,7 +315,8 @@ TrackingDataDirectory::BuildIndexes(const std::string & URI,
 	std::string last = "";
 	for (const auto & f : hermesFiles ) {
 		try {
-			fc = std::make_shared<fort::hermes::FileContext>(f.string());
+			// we only read a single file
+			fc = std::make_shared<fort::hermes::FileContext>(f.string(),false);
 			fc->Read(&ro);
 			Time startTime = TimeFromFrameReadout(ro,monoID);
 
@@ -339,7 +340,10 @@ TrackingDataDirectory::BuildIndexes(const std::string & URI,
 				                                                   + "': "
 				                                                   + e.what(),
 				                                                   last,std::numeric_limits<uint64_t>::max());
-				fc = std::make_shared<fort::hermes::FileContext>(last);
+				// very important, we only read a single file, we do
+				// not try to read the next one: it will most likely
+				// fail !
+				fc = std::make_shared<fort::hermes::FileContext>(last,false);
 				break;
 			}
 		}
