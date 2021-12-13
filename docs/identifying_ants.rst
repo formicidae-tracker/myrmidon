@@ -157,8 +157,8 @@ found in the targeted *ant listing of identifications* [#antIdentifications]_:
    #R
    for (a in ants) {
        printf("Ant %s is identified by:\n", fmFormatAntID(a$ID))
-	   for (i in a.Identifications){
-	       printf(" * %s\n", i)
+	   for (i in a$identifications){
+	       printf(" * %s\n", capture.output(i))
 	   }
    }
    # outputs:
@@ -222,9 +222,9 @@ information should be set for every identification of an Ant.
 .. code-block:: R
 
    #R
-   ants[1]$setUserDefinedAntPose(c(0,0), 0.0)
-   print("Ant %d has pose %s and angle %f", fmFormatAntID(ants[[1]]$ID), ants[[1]]$antPosition,ants[[1]]$antAngle)
-   # outputs: Ant 001 has pose [0.0 0.0] and angle 0.0
+   ants[[1]]$identifications[[1]]$setUserDefinedAntPose(c(0,0), 0.0)
+   printf("Ant %s has pose %s and angle %f", fmFormatAntID(ants[[1]]$ID),paste(ants[[1]]$identifications[[1]]$antPosition,collapse=","),ants[[1]]$identifications[[1]]$antAngle)
+   # outputs: Ant 001 has pose 0,0 and angle 0.000000
 
 .. code-block:: c++
 
