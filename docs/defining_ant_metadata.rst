@@ -64,16 +64,16 @@ Capsule are defined in the ant reference frame.
    bodyID = e$createAntShapeType("body")
 
 
-   a$addCapsule(headID,fmCapsule(c1 = c(1,2), c2 = (3,4), r1 = 0.5, r2 = 1.0 ))
-   a$addCapsule(antennaID,fmCapsule(c1 = c(1,2), c2 = (3,4), r1 = 0.5, r2 = 1.0 ))
-   a$addCapsule(antennaID,fmCapsule(c1 = c(1,2), c2 = (3,4), r1 = 0.5, r2 = 1.0 ))
-   a$addCapsule(bodyID,fmCapsule(c1 = c(1,2), c2 = (3,4), r1 = 0.5, r2 = 1.0 ))
-   a$addCapsule(bodyID,fmCapsule(c1 = c(1,2), c2 = (3,4), r1 = 0.5, r2 = 1.0 ))
+   a$addCapsule(headID,fmCapsuleCreate(c1 = c(1,2), c2 = c(3,4), r1 = 0.5, r2 = 1.0 ))
+   a$addCapsule(antennaID,fmCapsuleCreate(c1 = c(1,2), c2 = c(3,4), r1 = 0.5, r2 = 1.0 ))
+   a$addCapsule(antennaID,fmCapsuleCreate(c1 = c(1,2), c2 = c(3,4), r1 = 0.5, r2 = 1.0 ))
+   a$addCapsule(bodyID,fmCapsuleCreate(c1 = c(1,2), c2 = c(3,4), r1 = 0.5, r2 = 1.0 ))
+   a$addCapsule(bodyID,fmCapsuleCreate(c1 = c(1,2), c2 = c(3,4), r1 = 0.5, r2 = 1.0 ))
 
-   a$capsules # a data.frame with all capsules data
+   a$capsules # a list with all capsules data
 
    for ( typedCapsule in a$capsules ) {
-       print(typedCapsule$type,typedCapsule$capsule)
+       print(paste(typedCapsule$type,capture.output(typedCapsule$capsule)))
    }
 
 
