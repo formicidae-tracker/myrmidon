@@ -59,7 +59,9 @@ void TrackingVideoWidgetUTest::SetUp() {
 	c->Collisions.front().Types << 1 ,1;
 	frame.TrackingFrame = i;
 	frame.CollisionFrame = c;
-	widget->setZoomFocus(0,1.0);
+	widget->setFocus(0);
+	widget->setZoom(1.0);
+	widget->setROI(0);
 	widget->setOpacity(255);
 }
 

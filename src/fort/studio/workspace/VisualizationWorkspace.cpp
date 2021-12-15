@@ -259,9 +259,19 @@ void VisualizationWorkspace::initialize(QMainWindow * main,ExperimentBridge * ex
 	d_ui->videoControl->setup(d_videoPlayer,experiment);
 
 	connect(d_ui->videoControl,
-	        &TrackingVideoControl::zoomFocusChanged,
+	        &TrackingVideoControl::zoomChanged,
 	        d_ui->trackingVideoWidget,
-	        &TrackingVideoWidget::setZoomFocus);
+	        &TrackingVideoWidget::setZoom);
+
+	connect(d_ui->videoControl,
+	        &TrackingVideoControl::roiChanged,
+	        d_ui->trackingVideoWidget,
+	        &TrackingVideoWidget::setROI);
+
+	connect(d_ui->videoControl,
+	        &TrackingVideoControl::focusChanged,
+	        d_ui->trackingVideoWidget,
+	        &TrackingVideoWidget::setFocus);
 
 	connect(d_ui->videoControl,
 	        &TrackingVideoControl::showID,

@@ -95,6 +95,9 @@ void TrackingVideoControl::setup(TrackingVideoPlayer * player,
 		                                  true);
 	        });
 
+	connect(d_ui->ROISpinBox,qOverload<int>(&QSpinBox::valueChanged),
+	        this,&TrackingVideoControl::roiChanged);
+
 }
 
 
@@ -214,36 +217,32 @@ void TrackingVideoControl::onAntSelection(quint32  antID) {
 		d_ui->zoomSlider->setEnabled(false);
 		d_ui->skipForwardButton->setEnabled(false);
 		d_ui->skipBackwardButton->setEnabled(false);
-		emit zoomFocusChanged(0,1.0);
 	} else {
 		d_ui->zoomCheckBox->setEnabled(true);
 		d_ui->zoomCheckBox->setText(tr("Zoom on Ant %1").arg(ToQString(fm::FormatAntID(antID))));
 		d_ui->zoomSlider->setEnabled(true);
 		d_ui->skipForwardButton->setEnabled(true);
 		d_ui->skipBackwardButton->setEnabled(true);
-
-		if ( d_ui->zoomCheckBox->checkState() == Qt::Checked) {
-			emit zoomFocusChanged(antID,zoomValue());
-		} else {
-			emit zoomFocusChanged(0,1.0);
-		}
 	}
+	emit focusChanged(antID);
 }
 
 
 void TrackingVideoControl::on_zoomCheckBox_stateChanged(int value) {
-	if ( value == Qt::Checked && d_experiment != nullptr ) {
-		emit zoomFocusChanged(d_experiment->selectedAntID(),zoomValue());
+	if ( value == Qt::Checked ) {
+		emit zoomChanged(zoomValue());
 	} else {
-		emit zoomFocusChanged(0,1.0);
+		emit zoomChanged(1.0);
 	}
 }
 
 void TrackingVideoControl::on_zoomSlider_valueChanged(int value) {
 	auto zoom  = zoomValue();
 	d_ui->zoomLabel->setText(tr("%1%").arg(int(zoom* 100),5));
-	if ( d_experiment != nullptr && d_ui->zoomCheckBox->checkState() == Qt::Checked) {
-		emit zoomFocusChanged(d_experiment->selectedAntID(),zoom);
+	if ( d_ui->zoomCheckBox->checkState() == Qt::Checked) {
+		emit zoomChanged(zoom);
+	} else {
+		emit zoomChanged(1.0);
 	}
 }
 

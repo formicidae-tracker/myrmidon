@@ -34,7 +34,10 @@ signals:
 
 	void playbackSpeedChanged(qreal value);
 
-	void zoomFocusChanged(quint32 antID,qreal zoom);
+	void zoomChanged(qreal zoom);
+	void roiChanged(quint32 roi);
+	void focusChanged(quint32 antID);
+
 
 	void showID(bool value);
 	void showCollisions(bool value);
