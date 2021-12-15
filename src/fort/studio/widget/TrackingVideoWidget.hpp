@@ -52,7 +52,12 @@ public slots:
 
 	void hideLoadingBanner(bool hide);
 
-	void setZoomFocus(quint32 antID,qreal value);
+	void setZoom(qreal value);
+
+	void setROI(quint32 ROI);
+
+	void setFocus(quint32 antID);
+
 
 	void setShowID(bool show);
 	void setShowCollisions(bool show);
@@ -65,6 +70,8 @@ protected:
 	void paint(QPainter * painter);
 
 	void paintAntsAndCollisions(QPainter * painter, const QRectF & focusRectangle);
+
+	void paintROI(QPainter * painter);
 
 	void paintAnts(QPainter * painter, double ratio, const QRectF & focusRectangle, bool hasSolo);
 	void paintCollisions(QPainter * painter, double ratio, const QRectF & focusRectangle, bool hasSolo);
@@ -85,6 +92,7 @@ private:
 	bool               d_hasTrackingTime;
 	quint32            d_focusedAntID;
 	qreal              d_zoom;
+	quint32            d_roi;
 	QPointF            d_lastFocus;
 	int                d_opacity;
 };

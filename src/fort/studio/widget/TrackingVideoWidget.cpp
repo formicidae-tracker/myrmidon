@@ -97,6 +97,7 @@ void TrackingVideoWidget::paint(QPainter * painter) {
 		imagePainter.setRenderHint(QPainter::Antialiasing,true);
 		imagePainter.setRenderHint(QPainter::TextAntialiasing,true);
 		paintAntsAndCollisions(&imagePainter,sourceRect);
+		paintROI(&imagePainter);
 	}
 
 
@@ -254,6 +255,23 @@ void TrackingVideoWidget::paintAntsAndCollisions(QPainter * painter, const QRect
 	paintAnts(painter,ratio,focusRectangle,hasSolo);
 }
 
+void TrackingVideoWidget::paintROI(QPainter * painter) {
+	if ( d_roi == 0 || d_focusedAntID == 0 ) {
+		return;
+	}
+	auto device= painter->device();
+	QPainterPath path;
+	path.addRect(d_lastFocus.x() - d_roi/2,
+	             d_lastFocus.y() - d_roi/2,
+	             d_roi,
+	             d_roi);
+	path.addRect(-5,-5,device->width()+10,device->height()-10);
+
+	painter->setPen(QPen(QColor(255,255,255,127),2,Qt::SolidLine));
+	painter->setBrush(QColor(0,0,0,127));
+	painter->drawPath(path);
+}
+
 void TrackingVideoWidget::hideLoadingBanner(bool hide) {
 	if ( hide == d_hideLoadingBanner ) {
 		return;
@@ -263,21 +281,39 @@ void TrackingVideoWidget::hideLoadingBanner(bool hide) {
 }
 
 
-void TrackingVideoWidget::setZoomFocus(quint32 antID,qreal value) {
-	if ( d_zoom == value && antID == d_focusedAntID ) {
+void TrackingVideoWidget::setZoom(qreal value) {
+	if ( d_zoom == value ) {
 		return;
 	}
 
-	if ( antID != d_focusedAntID ) {
-		focusAnt(antID,true);
-	}
-
-	d_focusedAntID = antID;
 	d_zoom = std::max(1.0,value);
 
 	update();
 }
 
+
+void TrackingVideoWidget::setFocus(quint32 antID) {
+	if ( antID == d_focusedAntID ) {
+		return;
+	}
+
+	focusAnt(antID,true);
+	d_focusedAntID = antID;
+
+	update();
+}
+
+
+void TrackingVideoWidget::setROI(quint32 ROI) {
+	if ( ROI == d_roi ) {
+		return;
+	}
+	d_roi = ROI;
+	if ( d_focusedAntID == 0 ) {
+		return;
+	}
+	update();
+}
 
 void TrackingVideoWidget::focusAnt(quint32 antID, bool reset) {
 	if ( !d_frame.Image == true || !d_frame.TrackingFrame ) {
