@@ -30,6 +30,7 @@ public:
 		Duration            MaximumGap;
 		priv::Matcher::Ptr  Matcher;
 		bool                SummarizeSegment;
+		bool                SegmentOnMatcherValueChange;
 	};
 
 	DataSegmenter(const Args & args);
@@ -45,13 +46,15 @@ private:
 		std::shared_ptr<AntTrajectory> Trajectory;
 
 		Time                  Last;
+		uint64_t              LastValue;
 		std::vector<double>   DataPoints;
 		bool                  ForceKeep;
 
 		std::set<BuildingInteraction*> Interactions;
 
 		BuildingTrajectory(const IdentifiedFrame & frame,
-		                   const PositionedAntConstRef & ant);
+		                   const PositionedAntConstRef & ant,
+		                   uint64_t currentValue);
 
 		void Append(const IdentifiedFrame & frame,
 		            const PositionedAntConstRef & ant);
@@ -63,6 +66,8 @@ private:
 		size_t FindIndexFor(const Time & time,
 		                    size_t low,
 		                    size_t high);
+
+		bool Matches(const Matcher & m);
 
 		inline Eigen::Map<const Eigen::Matrix<double,Eigen::Dynamic,5,Eigen::RowMajor>> Mapped() const {
 			return Eigen::Map<const Eigen::Matrix<double,Eigen::Dynamic,5,Eigen::RowMajor>>(&DataPoints[0],Size(),5);
@@ -76,6 +81,8 @@ private:
 		typedef std::unique_ptr<BuildingInteraction> Ptr;
 		InteractionID IDs;
 		Time          Start,Last;
+		uint64_t      LastValue;
+
 
 		std::pair<size_t,size_t>                                   SegmentStarts,MinEnd,MaxEnd;
 		std::pair<BuildingTrajectory::Ptr,BuildingTrajectory::Ptr> Trajectories;
@@ -86,7 +93,8 @@ private:
 
 		BuildingInteraction(const Collision & collision,
 		                    const Time & curTime,
-							std::pair<BuildingTrajectory::Ptr,BuildingTrajectory::Ptr> trajectories);
+		                    std::pair<BuildingTrajectory::Ptr,BuildingTrajectory::Ptr> trajectories,
+		                    uint64_t currentValue);
 
 		void Append(const Collision & collision,
 		            const Time & curTime);
@@ -96,7 +104,7 @@ private:
 		                            size_t begin,
 		                            size_t end);
 
-
+		bool Matches(const Matcher & m);
 
 		AntInteraction::Ptr Terminate(bool summarize);
 	};

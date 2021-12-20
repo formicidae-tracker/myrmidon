@@ -228,12 +228,12 @@ pfmQueryCollideFrames <- function(experiment, start, end, collisionsIgnoreZones,
     .Call(`_FortMyrmidon_pfmQueryCollideFrames`, experiment, start, end, collisionsIgnoreZones, showProgress, singleThreaded)
 }
 
-pfmQueryComputeAntTrajectories <- function(experiment, start, end, maximumGap, matcher, computeZones, showProgress, singleThreaded) {
-    .Call(`_FortMyrmidon_pfmQueryComputeAntTrajectories`, experiment, start, end, maximumGap, matcher, computeZones, showProgress, singleThreaded)
+pfmQueryComputeAntTrajectories <- function(experiment, start, end, maximumGap, matcher, computeZones, segmentOnMatcherValueChange, showProgress, singleThreaded) {
+    .Call(`_FortMyrmidon_pfmQueryComputeAntTrajectories`, experiment, start, end, maximumGap, matcher, computeZones, segmentOnMatcherValueChange, showProgress, singleThreaded)
 }
 
-pfmQueryComputeAntInteractions <- function(experiment, start, end, maximumGap, matcher, collisionsIgnoreZones, reportFullTrajectories, showProgress, singleThreaded) {
-    .Call(`_FortMyrmidon_pfmQueryComputeAntInteractions`, experiment, start, end, maximumGap, matcher, collisionsIgnoreZones, reportFullTrajectories, showProgress, singleThreaded)
+pfmQueryComputeAntInteractions <- function(experiment, start, end, maximumGap, matcher, collisionsIgnoreZones, reportFullTrajectories, segmentOnMatcherValueChange, showProgress, singleThreaded) {
+    .Call(`_FortMyrmidon_pfmQueryComputeAntInteractions`, experiment, start, end, maximumGap, matcher, collisionsIgnoreZones, reportFullTrajectories, segmentOnMatcherValueChange, showProgress, singleThreaded)
 }
 
 #' Collects tracking data information on the fmExperiment

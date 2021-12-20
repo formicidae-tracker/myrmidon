@@ -62,6 +62,7 @@ py::list QueryComputeAntTrajectories(const fort::myrmidon::Experiment & experime
                                      fort::Duration maximumGap,
                                      const fort::myrmidon::Matcher::Ptr & matcher,
                                      bool computeZones,
+                                     bool segmentOnMatcherValueChange,
                                      bool singleThreaded) {
 
 	py::list res;
@@ -73,6 +74,7 @@ py::list QueryComputeAntTrajectories(const fort::myrmidon::Experiment & experime
 	args.ComputeZones = computeZones;
 	args.SingleThreaded = singleThreaded;
 	args.AllocationInCurrentThread = false;
+	args.SegmentOnMatcherValueChange = segmentOnMatcherValueChange;
 	fort::myrmidon::Query::ComputeAntTrajectoriesFunctor(experiment,
 	                                                     [&res](const fort::myrmidon::AntTrajectory::Ptr & t) {
 		                                                     res.append(t);
@@ -89,6 +91,7 @@ py::tuple QueryComputeAntInteractions(const fort::myrmidon::Experiment & experim
                                       const fort::myrmidon::Matcher::Ptr & matcher,
                                       bool collisionsIgnoreZones,
                                       bool reportFullTrajectories,
+                                      bool segmentOnMatcherValueChange,
                                       bool singleThreaded) {
 
 	py::list trajectories;
@@ -103,6 +106,7 @@ py::tuple QueryComputeAntInteractions(const fort::myrmidon::Experiment & experim
 	args.SingleThreaded = singleThreaded;
 	args.AllocationInCurrentThread = false;
 	args.CollisionsIgnoreZones = collisionsIgnoreZones;
+	args.SegmentOnMatcherValueChange = segmentOnMatcherValueChange;
 	fort::myrmidon::Query::ComputeAntInteractionsFunctor(experiment,
 	                                                     [&trajectories](const fort::myrmidon::AntTrajectory::Ptr & t) {
 		                                                     trajectories.append(t);
@@ -223,6 +227,7 @@ Returns:
 		            "maximumGap"_a = trajectoryArgs.MaximumGap,
 		            "matcher"_a = trajectoryArgs.Matcher,
 		            "computeZones"_a = trajectoryArgs.ComputeZones,
+		            "segmentOnMatcherValueChange"_a = trajectoryArgs.SegmentOnMatcherValueChange,
 		            "singleThreaded"_a = trajectoryArgs.SingleThreaded,
 		            R"pydoc(
 Conputes Ant Trajectories between two times.
@@ -235,7 +240,9 @@ Args:
     matcher (Matcher): a :class:`Matcher` that reduces down the query to more specific use case.
     computeZones (bool): computes the zone of the Ant. Otherwise 0 will always be returned.
     singleThreaded (bool): limits computation to happen in a single thread.
-
+    segmentOnMatcherValueChange (bool): if True, when a combined
+        matcher ( "behavior" == "grooming" || "behavior" = "sleeping"
+        ) value change, create a new trajectory.
 Returns:
     List[AntTrajectory]: a list of all :class:`AntTrajectory` taking place in [**start**;**end**[ given the **matcher** and **maximumGap** criterions.
 
@@ -250,6 +257,7 @@ Returns:
 		            "matcher"_a = interactionArgs.Matcher,
 		            "collisionsIgnoreZones"_a = interactionArgs.CollisionsIgnoreZones,
 		            "reportFullTrajectories"_a = interactionArgs.ReportFullTrajectories,
+		            "segmentOnMatcherValueChange"_a = interactionArgs.SegmentOnMatcherValueChange,
 		            "singleThreaded"_a = interactionArgs.SingleThreaded,
 		            R"pydoc(
 Conputes Ant Interctions between two times.
@@ -265,7 +273,9 @@ Args:
         returned and only the average Ants position will be
         returned in AntTrajectorySegment.
     singleThreaded (bool): limits computation to happen in a single thread.
-
+    segmentOnMatcherValueChange (bool): if True, when a combined
+        matcher ( "behavior" == "grooming" || "behavior" = "sleeping"
+        ) value change, create a new trajectory.
 Returns:
     Tuple[List[AntTrajectory],List[AntInteraction]]:
         * a list of all AntTrajectory taking place in [start;end[

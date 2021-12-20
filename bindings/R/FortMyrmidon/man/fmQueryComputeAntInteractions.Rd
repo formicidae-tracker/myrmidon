@@ -12,6 +12,7 @@ fmQueryComputeAntInteractions(
   matcher = fmMatcherAny(),
   collisionsIgnoreZones = FALSE,
   reportFullTrajectories = FALSE,
+  segmentOnMatcherValueChange = FALSE,
   showProgress = TRUE,
   singleThreaded = FALSE
 )
@@ -37,8 +38,15 @@ match anything.}
 detection. All ants can collide regardless of their current
 zone.}
 
-\item{reportFullTrajectories}{computes the zone of the
-Ant. Otherwise \code{0} will always be reported.}
+\item{reportFullTrajectories}{if TRUE will report for each
+interaction the full sub-trajectory, otherwise just a
+summary. see the return value.}
+
+\item{segmentOnMatcherValueChange}{if TRUE, when a combined matcher
+( AntMetadata("behavior" == "grooming") ||
+AntMetadata("behavior" == "sleeping" ) change values ( goes
+from "grooming" to "sleeping" ) it will create a new trajectory
+or interaction.}
 
 \item{showProgress}{display query progress in the console}
 

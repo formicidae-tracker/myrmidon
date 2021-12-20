@@ -101,15 +101,20 @@ fmQueryCollideFrames <- function(experiment,
 #'     match anything.
 #' @param computeZones computes the zone of the Ant. Otherwise
 #'     \code{0} will always be reported.
+#' @param segmentOnMatcherValueChange if TRUE, when a combined matcher
+#'     ( AntMetadata("behavior" == "grooming") ||
+#'     AntMetadata("behavior" == "sleeping" ) change values ( goes
+#'     from "grooming" to "sleeping" ) it will create a new trajectory
+#'     or interaction.
 #' @param showProgress display query progress in the console
 #' @param singleThreaded enforce the use of a single thread.
 #' @return a named list of two elements:
 #'     \itemize{\code{$trajectories_summary}: a \code{data.frame}
 #'     summarizing the ant, space and starting time of the
-#'     trajectory.\item\code{$trajectories} a list of \code{data.frame}
-#'     with the position of the ant during the trajectory \code{$time}
-#'     is the offset from the trajectory \code{$start} time in
-#'     seconds.}
+#'     trajectory.\item\code{$trajectories} a list of
+#'     \code{data.frame} with the position of the ant during the
+#'     trajectory \code{$time} is the offset from the trajectory
+#'     \code{$start} time in seconds.}
 #' @family fmQuery methods
 fmQueryComputeAntTrajectories <- function(experiment,
                                           start = fmTimeSinceEver(),
@@ -117,6 +122,7 @@ fmQueryComputeAntTrajectories <- function(experiment,
                                           maximumGap = fmMillisecond(500),
                                           matcher = fmMatcherAny(),
                                           computeZones = FALSE,
+                                          segmentOnMatcherValueChange = FALSE,
                                           showProgress = TRUE,
                                           singleThreaded = FALSE) {
     pfmQueryComputeAntTrajectories(experiment,
@@ -125,6 +131,7 @@ fmQueryComputeAntTrajectories <- function(experiment,
                                    maximumGap,
                                    matcher,
                                    computeZones,
+                                   segmentOnMatcherValueChange,
                                    showProgress,
                                    singleThreaded)
 }
@@ -152,8 +159,14 @@ fmQueryComputeAntTrajectories <- function(experiment,
 #' @param collisionsIgnoreZones if TRUE zones won't affect collision
 #'     detection. All ants can collide regardless of their current
 #'     zone.
-#' @param reportFullTrajectories computes the zone of the
-#'     Ant. Otherwise \code{0} will always be reported.
+#' @param reportFullTrajectories if TRUE will report for each
+#'     interaction the full sub-trajectory, otherwise just a
+#'     summary. see the return value.
+#' @param segmentOnMatcherValueChange if TRUE, when a combined matcher
+#'     ( AntMetadata("behavior" == "grooming") ||
+#'     AntMetadata("behavior" == "sleeping" ) change values ( goes
+#'     from "grooming" to "sleeping" ) it will create a new trajectory
+#'     or interaction.
 #' @param showProgress display query progress in the console
 #' @param singleThreaded enforce the use of a single thread.
 #' @return Depending on **reportFullTrajectories**:\itemize{\item if
@@ -182,6 +195,7 @@ fmQueryComputeAntInteractions <- function(experiment,
                                           matcher = fmMatcherAny(),
                                           collisionsIgnoreZones = FALSE,
                                           reportFullTrajectories = FALSE,
+                                          segmentOnMatcherValueChange = FALSE,
                                           showProgress = TRUE,
                                           singleThreaded = FALSE) {
     pfmQueryComputeAntInteractions(experiment,
@@ -191,6 +205,7 @@ fmQueryComputeAntInteractions <- function(experiment,
                                    matcher,
                                    collisionsIgnoreZones,
                                    reportFullTrajectories,
+                                   segmentOnMatcherValueChange,
                                    showProgress,
                                    singleThreaded)
 }

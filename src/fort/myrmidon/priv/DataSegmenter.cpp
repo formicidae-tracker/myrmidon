@@ -5,9 +5,11 @@ namespace myrmidon {
 namespace priv {
 
 DataSegmenter::BuildingTrajectory::BuildingTrajectory(const IdentifiedFrame & frame,
-													  const PositionedAntConstRef & ant)
+                                                      const PositionedAntConstRef & ant,
+                                                      uint64_t currentValue)
 	: Trajectory(std::make_shared<AntTrajectory>())
 	, Last(frame.FrameTime)
+	, LastValue(currentValue)
 	, DataPoints({0.0,ant(0,1),ant(0,2),ant(0,3),ant(0,4)})
 	, ForceKeep(false) {
 	Trajectory->Ant = ant(0,0);
@@ -50,10 +52,12 @@ AntTrajectory::Ptr DataSegmenter::BuildingTrajectory::Terminate() {
 
 DataSegmenter::BuildingInteraction::BuildingInteraction(const Collision & collision,
 														const Time & curTime,
-														std::pair<BuildingTrajectory::Ptr,BuildingTrajectory::Ptr> trajectories)
+                                                        std::pair<BuildingTrajectory::Ptr,BuildingTrajectory::Ptr> trajectories,
+                                                        uint64_t currentValue)
 	: IDs(collision.IDs)
 	, Start(curTime)
 	, Last(curTime)
+	, LastValue(currentValue)
 	, Trajectories(trajectories) {
 	Trajectories.first->Interactions.insert(this);
 	Trajectories.second->Interactions.insert(this);
@@ -207,7 +211,7 @@ DataSegmenter::~DataSegmenter() {
 
 	for ( auto & [antID,trajectory] : d_trajectories ) {
 		if ( d_args.Matcher
-		     && d_args.Matcher->Match(antID,0,{}) == false
+		     && d_args.Matcher->Match(antID,0,{}) == 0
 		     && trajectory->ForceKeep == false) {
 			continue;
 		}
@@ -249,31 +253,37 @@ void DataSegmenter::BuildTrajectories(const IdentifiedFrame::Ptr & identified,
                                       bool conserveAllTrajectory) {
 	for ( size_t i = 0; i < identified->Positions.rows(); ++i ) {
 		AntID antID = identified->Positions(i,0);
+		uint64_t matchValue = d_args.Matcher ? d_args.Matcher->Match(antID,0,{}) : 1;
 		if ( conserveAllTrajectory == false
-			 && d_args.Matcher
-			 && d_args.Matcher->Match(antID,0,{}) == false ) {
+			 && matchValue == 0 ) {
 			continue;
 		}
-
+		if ( d_args.SegmentOnMatcherValueChange == false ) {
+			matchValue = matchValue > 0 ? 1 : 0;
+		}
 
 		auto fi = d_trajectories.find(antID);
 		if ( fi == d_trajectories.end() ) {
 			d_trajectories.insert(std::make_pair(antID,
 												 std::make_shared<BuildingTrajectory>(*identified,
-												                                      identified->Positions.row(i))));
+												                                      identified->Positions.row(i),
+												                                      matchValue)));
 			continue;
 		}
 
 		bool maximumGapReached = identified->FrameTime.Sub(fi->second->Last) > d_args.MaximumGap;
 		bool spaceChanged =  identified->Space != fi->second->Trajectory->Space;
+		bool matchValueMismatch = matchValue != fi->second->LastValue;
 		if ( MonoIDMismatch(identified->FrameTime,fi->second->Last)
+		     || matchValueMismatch
 			 || maximumGapReached
 			 || spaceChanged ) {
 
 
 			TerminateTrajectory(fi->second);
 			fi->second = std::make_shared<BuildingTrajectory>(*identified,
-			                                                  identified->Positions.row(i));
+			                                                  identified->Positions.row(i),
+			                                                  matchValue);
 		} else {
 			fi->second->Append(*identified,identified->Positions.row(i));
 		}
@@ -327,11 +337,16 @@ void DataSegmenter::TerminateTrajectory(const BuildingTrajectory::Ptr & trajecto
 
 void DataSegmenter::BuildInteractions(const CollisionFrame::Ptr & collisions) {
 	for ( const auto & collision : collisions->Collisions ) {
-		if ( d_args.Matcher
-			 && d_args.Matcher->Match(collision.IDs.first,
-									  collision.IDs.second,
-									  collision.Types) == false ) {
+		uint64_t matchValue = d_args.Matcher
+			? d_args.Matcher->Match(collision.IDs.first,
+			                        collision.IDs.second,
+			                        collision.Types)
+			: 1;
+		if ( matchValue == 0 ) {
 			continue;
+		}
+		if ( d_args.SegmentOnMatcherValueChange == false ) {
+			matchValue = 1;
 		}
 
 		auto fi = d_interactions.find(collision.IDs);
@@ -342,13 +357,15 @@ void DataSegmenter::BuildInteractions(const CollisionFrame::Ptr & collisions) {
 				d_interactions.insert(std::make_pair(collision.IDs,
 				                                     std::make_unique<BuildingInteraction>(collision,
 					     collisions->FrameTime,
-					     trajectories)));
+					     trajectories,
+					     matchValue)));
 			} catch ( const std::exception & e ) {
 			}
 			continue;
 		}
 
 		if ( MonoIDMismatch(collisions->FrameTime,fi->second->Last) == true
+		     || matchValue != fi->second->LastValue
 			 || collisions->FrameTime.Sub(fi->second->Last) > d_args.MaximumGap ) {
 			auto i = fi->second->Terminate(d_args.SummarizeSegment);
 			if ( i != nullptr ) {
@@ -359,7 +376,8 @@ void DataSegmenter::BuildInteractions(const CollisionFrame::Ptr & collisions) {
 												   d_trajectories.at(collision.IDs.second));
 				fi->second = std::make_unique<BuildingInteraction>(collision,
 				                                                   collisions->FrameTime,
-				                                                   trajectories);
+				                                                   trajectories,
+				                                                   matchValue);
 			} catch ( const std::exception & e ) {
 				d_interactions.erase(fi);
 			}

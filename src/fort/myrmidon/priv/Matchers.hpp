@@ -44,11 +44,14 @@ public:
 
 	virtual void SetUpOnce(const priv::AntByID & ants) = 0;
 
+	virtual uint8_t Depth() const { return 1; };
+
+
 	virtual void SetUp(const IdentifiedFrame & identifiedFrame) = 0;
 
-	virtual bool Match(fort::myrmidon::AntID ant1,
-	                   fort::myrmidon::AntID ant2,
-	                   const fort::myrmidon::InteractionTypes & types) = 0;
+	virtual uint64_t Match(fort::myrmidon::AntID ant1,
+	                       fort::myrmidon::AntID ant2,
+	                       const fort::myrmidon::InteractionTypes & types) = 0;
 
 	virtual void Format(std::ostream & out) const = 0;
 

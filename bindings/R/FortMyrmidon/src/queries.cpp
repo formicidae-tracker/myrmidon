@@ -303,6 +303,7 @@ SEXP pfmQueryComputeAntTrajectories(const ExperimentPtr & experiment,
                                     const fort::Duration & maximumGap,
                                     const fort::myrmidon::Matcher::Ptr & matcher,
                                     bool computeZones,
+                                    bool segmentOnMatcherValueChange,
                                     bool showProgress,
                                     bool singleThreaded) {
 	std::vector<int32_t> antID,space;
@@ -317,7 +318,7 @@ SEXP pfmQueryComputeAntTrajectories(const ExperimentPtr & experiment,
 	args.ComputeZones = computeZones;
 	args.SingleThreaded = singleThreaded;
 	args.AllocationInCurrentThread = true;
-
+	args.SegmentOnMatcherValueChange = segmentOnMatcherValueChange;
 	FmProgress progress(*experiment,start,end,showProgress);
 	try {
 		Query::ComputeAntTrajectoriesFunctor(*experiment,
@@ -345,6 +346,7 @@ SEXP pfmQueryComputeAntInteractionsFull(const ExperimentPtr & experiment,
                                         const fort::Duration & maximumGap,
                                         const fort::myrmidon::Matcher::Ptr & matcher,
                                         bool collisionsIgnoreZones,
+                                        bool segmentOnMatcherValueChange,
                                         bool showProgress,
                                         bool singleThreaded) {
 
@@ -362,6 +364,7 @@ SEXP pfmQueryComputeAntInteractionsFull(const ExperimentPtr & experiment,
 	args.ReportFullTrajectories = true;
 	args.AllocationInCurrentThread = true;
 	args.CollisionsIgnoreZones = collisionsIgnoreZones;
+	args.SegmentOnMatcherValueChange = segmentOnMatcherValueChange;
 
 	FmProgress progress(*experiment,start,end,showProgress);
 	std::map<AntTrajectory*,std::pair<std::vector<size_t>,std::vector<size_t>>> needsIndexing;
@@ -440,6 +443,7 @@ SEXP pfmQueryComputeAntInteractionsSummarized(const ExperimentPtr & experiment,
                                               const fort::Duration & maximumGap,
                                               const fort::myrmidon::Matcher::Ptr & matcher,
                                               bool collisionsIgnoreZones,
+                                              bool segmentOnMatcherValueChange,
                                               bool showProgress,
                                               bool singleThreaded) {
 	std::vector<int32_t> tAnt,iAnt1,iAnt2,tSpace,iSpace;
@@ -456,6 +460,7 @@ SEXP pfmQueryComputeAntInteractionsSummarized(const ExperimentPtr & experiment,
 	args.ReportFullTrajectories = false;
 	args.AllocationInCurrentThread = true;
 	args.CollisionsIgnoreZones = collisionsIgnoreZones;
+	args.SegmentOnMatcherValueChange = segmentOnMatcherValueChange;
 
 	FmProgress progress(*experiment,start,end,showProgress);
 	auto storeTrajectories =
@@ -517,12 +522,13 @@ SEXP pfmQueryComputeAntInteractions(const ExperimentPtr & experiment,
                                     const fort::myrmidon::Matcher::Ptr & matcher,
                                     bool collisionsIgnoreZones,
                                     bool reportFullTrajectories,
+                                    bool segmentOnMatcherValueChange,
                                     bool showProgress,
                                     bool singleThreaded) {
 	if ( reportFullTrajectories == true ) {
-		return pfmQueryComputeAntInteractionsFull(experiment,start,end,maximumGap,matcher,collisionsIgnoreZones,showProgress,singleThreaded);
+		return pfmQueryComputeAntInteractionsFull(experiment,start,end,maximumGap,matcher,collisionsIgnoreZones,segmentOnMatcherValueChange,showProgress,singleThreaded);
 	}
-	return pfmQueryComputeAntInteractionsSummarized(experiment,start,end,maximumGap,matcher,collisionsIgnoreZones,showProgress,singleThreaded);
+	return pfmQueryComputeAntInteractionsSummarized(experiment,start,end,maximumGap,matcher,collisionsIgnoreZones,segmentOnMatcherValueChange,showProgress,singleThreaded);
 }
 
 //' Collects tracking data information on the fmExperiment
