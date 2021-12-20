@@ -11,6 +11,7 @@ fmQueryComputeAntTrajectories(
   maximumGap = fmMillisecond(500),
   matcher = fmMatcherAny(),
   computeZones = FALSE,
+  segmentOnMatcherValueChange = FALSE,
   showProgress = TRUE,
   singleThreaded = FALSE
 )
@@ -35,6 +36,12 @@ match anything.}
 \item{computeZones}{computes the zone of the Ant. Otherwise
 \code{0} will always be reported.}
 
+\item{segmentOnMatcherValueChange}{if TRUE, when a combined matcher
+( AntMetadata("behavior" == "grooming") ||
+AntMetadata("behavior" == "sleeping" ) change values ( goes
+from "grooming" to "sleeping" ) it will create a new trajectory
+or interaction.}
+
 \item{showProgress}{display query progress in the console}
 
 \item{singleThreaded}{enforce the use of a single thread.}
@@ -43,10 +50,10 @@ match anything.}
 a named list of two elements:
 \itemize{\code{$trajectories_summary}: a \code{data.frame}
 summarizing the ant, space and starting time of the
-trajectory.\item\code{$trajectories} a list of \code{data.frame}
-with the position of the ant during the trajectory \code{$time}
-is the offset from the trajectory \code{$start} time in
-seconds.}
+trajectory.\item\code{$trajectories} a list of
+\code{data.frame} with the position of the ant during the
+trajectory \code{$time} is the offset from the trajectory
+\code{$start} time in seconds.}
 }
 \description{
 Computes ant trajectories for the fmExperiment. A

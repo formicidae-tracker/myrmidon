@@ -201,6 +201,9 @@ public:
 		//! Computes the zone of each Ant (default: false)
 		bool ComputeZones;
 
+		//! If a combined matcher value changes, create a new object
+		bool SegmentOnMatcherValueChange;
+
 		// Builds default arguments
 		ComputeAntTrajectoriesArgs();
 	};
@@ -264,6 +267,9 @@ public:
 		//! Collisions, and therefore interactions, happens over
 		//! different zones.
 		bool CollisionsIgnoreZones;
+
+		//! If a combined matcher value changes, create a new object
+		bool SegmentOnMatcherValueChange;
 
 		//! Builds default arguments
 		ComputeAntInteractionsArgs();

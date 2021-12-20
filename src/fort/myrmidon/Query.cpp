@@ -121,7 +121,8 @@ void Query::CollideFrames(const Experiment & experiment,
 
 Query::ComputeAntTrajectoriesArgs::ComputeAntTrajectoriesArgs()
 	: MaximumGap(1 * Duration::Second)
-	, ComputeZones(false) {
+	, ComputeZones(false)
+	, SegmentOnMatcherValueChange(false){
 }
 
 
@@ -146,7 +147,9 @@ void Query::ComputeAntTrajectories(const Experiment & experiment,
 
 Query::ComputeAntInteractionsArgs::ComputeAntInteractionsArgs()
 	: MaximumGap(1 * Duration::Second)
-	, ReportFullTrajectories(true) {
+	, ReportFullTrajectories(true)
+	, CollisionsIgnoreZones(false)
+	, SegmentOnMatcherValueChange(false) {
 }
 
 void Query::ComputeAntInteractionsFunctor(const Experiment & experiment,

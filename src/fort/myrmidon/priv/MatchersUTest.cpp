@@ -32,10 +32,10 @@ public:
 	void SetUp(const IdentifiedFrame & identifiedFrame) override{
 	};
 
-	bool Match(fort::myrmidon::AntID ant1,
-	           fort::myrmidon::AntID ant2,
-	           const fort::myrmidon::InteractionTypes & types) override {
-		return d_value;
+	uint64_t Match(fort::myrmidon::AntID ant1,
+	               fort::myrmidon::AntID ant2,
+	               const fort::myrmidon::InteractionTypes & types) override {
+		return d_value ? 1 : 0;
 	};
 
 	void Format(std::ostream & out) const override {
@@ -52,9 +52,9 @@ class MockMatcher : public Matcher {
 public:
 	MOCK_METHOD(void,SetUpOnce,(const AntByID & ants),(override));
 	MOCK_METHOD(void,SetUp,(const IdentifiedFrame & f),(override));
-	MOCK_METHOD(bool,Match,(fort::myrmidon::AntID a,
-	                        fort::myrmidon::AntID b,
-	                        const fort::myrmidon::InteractionTypes & types), (override));
+	MOCK_METHOD(uint64_t,Match,(fort::myrmidon::AntID a,
+	                            fort::myrmidon::AntID b,
+	                            const fort::myrmidon::InteractionTypes & types), (override));
 	MOCK_METHOD(void,Format,(std::ostream & out), (const override));
 };
 
