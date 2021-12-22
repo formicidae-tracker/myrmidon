@@ -132,20 +132,27 @@ FindVideoSegments(const fort::myrmidon::Experiment & e,
 }
 
 
-py::object GetTagCloseUps(const fort::myrmidon::Experiment & e) {
+py::object GetTagCloseUps(const fort::myrmidon::Experiment & e,
+                          bool verbose) {
 	using namespace fort::myrmidon;
 	using namespace pybind11::literals;
 
 	py::object pd = py::module_::import("pandas");
-	py::object progress;
 
-
+	std::mutex m;
 	const auto & [paths,IDs,data]
 		= Query::GetTagCloseUps(e,
 		                        [&](int current,int total) {
 			                        if ( PyErr_CheckSignals() != 0 ) {
 				                        throw py::error_already_set();
 			                        }
+		                        },
+		                        [&](const char * what) {
+			                        if ( verbose == false ) {
+				                        return;
+			                        }
+			                        std::lock_guard<std::mutex> lock(m);
+			                        std::cerr << what << std::endl;
 		                        });
 
 	py::object df = pd.attr("DataFrame")("data"_a = py::dict("path"_a = paths,
@@ -362,6 +369,7 @@ Raises:
 		.def_static("GetTagCloseUps",
 		            &GetTagCloseUps,
 		            "experiment"_a,
+		            "verbose"_a = false,
 		            R"pydoc(
 Gets the tag close-up in this experiment
 
