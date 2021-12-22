@@ -592,10 +592,13 @@ Rcpp::DataFrame fmQueryGetTagCloseUps(const ExperimentPtr & experiment) {
 	std::vector<std::string> cppPaths;
 	std::vector<TagID> cppIDs;
 	Eigen::MatrixXd data;
+	std::mutex m;
 	try {
 		std::tie(cppPaths,cppIDs,data) =
 			Query::GetTagCloseUps(*experiment,
 			                      [](int current,int total){
+			                      },
+			                      [](const char *) {
 			                      });
 	} catch ( const FmProgress::StopIteration & ) {
 		return R_NilValue;

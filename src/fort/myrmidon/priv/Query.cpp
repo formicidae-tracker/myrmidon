@@ -223,7 +223,8 @@ void Query::FindVideoSegments(const Experiment & experiment,
 }
 
 static void EnsureTagCloseUpsAreLoaded(const Experiment & e,
-                                       const std::function<void(int,int)> & progressCallback) {
+                                       const std::function<void(int,int)> & progressCallback,
+                                       const std::function<void(const char *)> & onError) {
 	std::vector<TrackingDataDirectory::Loader> loaders;
 	for ( const auto & [uri,tdd] : e.TrackingDataDirectories() ) {
 		if ( tdd->TagCloseUpsComputed() == true ) {
@@ -236,19 +237,25 @@ static void EnsureTagCloseUpsAreLoaded(const Experiment & e,
 	std::atomic<int> loaded(0);
 
 	tbb::parallel_for(tbb::blocked_range<size_t>(0,loaders.size()),
-	                  [&loaders,&loaded,&progressCallback](const tbb::blocked_range<size_t> & range) {
+	                  [&](const tbb::blocked_range<size_t> & range) {
 			                  for ( size_t idx = range.begin();
 			                        idx != range.end();
 			                        ++idx ) {
-				                  loaders[idx]();
+				                  try {
+					                  loaders[idx]();
+				                  } catch ( const std::exception & e) {
+					                  onError(e.what());
+				                  }
 				                  progressCallback(loaded.fetch_add(1)+1,loaders.size());
 			                  }
 	                  });
 }
 
 std::tuple<std::vector<std::string>,std::vector<TagID>,Eigen::MatrixXd>
-Query::GetTagCloseUps(const Experiment & e,const std::function<void(int,int)> & progressCallback) {
-	EnsureTagCloseUpsAreLoaded(e,progressCallback);
+Query::GetTagCloseUps(const Experiment & e,
+                      const std::function<void(int,int)> & progressCallback,
+                      const std::function<void(const char *)> & onError) {
+	EnsureTagCloseUpsAreLoaded(e,progressCallback,onError);
 
 	std::vector<std::string> paths;
 	std::vector<TagID> IDs;

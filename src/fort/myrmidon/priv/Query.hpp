@@ -43,7 +43,8 @@ public:
 
 	static std::tuple<std::vector<std::string>,std::vector<TagID>,Eigen::MatrixXd>
 	GetTagCloseUps(const Experiment & e,
-	               const std::function<void(int,int)> & progressCallback);
+	               const std::function<void(int,int)> & progressCallback,
+	               const std::function<void(const char *)> & onError);
 
 private:
 
