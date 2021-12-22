@@ -29,6 +29,7 @@ Other fmQuery methods:
 \code{\link{fmQueryComputeMeasurementFor}()},
 \code{\link{fmQueryComputeTagStatistics}()},
 \code{\link{fmQueryGetMetaDataKeyRanges}()},
+\code{\link{fmQueryGetTagCloseUps}()},
 \code{\link{fmQueryIdentifyFrames}()},
 \code{\link{fmQuery}}
 }

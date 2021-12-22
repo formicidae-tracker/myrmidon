@@ -132,6 +132,40 @@ FindVideoSegments(const fort::myrmidon::Experiment & e,
 }
 
 
+py::object GetTagCloseUps(const fort::myrmidon::Experiment & e) {
+	using namespace fort::myrmidon;
+	using namespace pybind11::literals;
+
+	py::object pd = py::module_::import("pandas");
+	py::object progress;
+
+
+	const auto & [paths,IDs,data]
+		= Query::GetTagCloseUps(e,
+		                        [&](int current,int total) {
+			                        if ( PyErr_CheckSignals() != 0 ) {
+				                        throw py::error_already_set();
+			                        }
+		                        });
+
+	py::object df = pd.attr("DataFrame")("data"_a = py::dict("path"_a = paths,
+	                                                         "ID"_a = IDs));
+	py::list cols;
+	cols.append("X");
+	cols.append("Y");
+	cols.append("Theta");
+	cols.append("c0_X");
+	cols.append("c0_Y");
+	cols.append("c1_X");
+	cols.append("c1_Y");
+	cols.append("c2_X");
+	cols.append("c2_Y");
+	cols.append("c3_X");
+	cols.append("c3_Y");
+	return df.attr("join")(pd.attr("DataFrame")("data"_a = data,
+	                                            "columns"_a = cols));
+}
+
 
 void BindQuery(py::module_ & m) {
 	using namespace pybind11::literals;
@@ -325,6 +359,19 @@ Raises:
     IndexError: if **key** is not defined in Experiment
     ValueError: if **value** is not the right type for **key**
 )pydoc")
+		.def_static("GetTagCloseUps",
+		            &GetTagCloseUps,
+		            "experiment"_a,
+		            R"pydoc(
+Gets the tag close-up in this experiment
+
+Args:
+    experiment (Experiment): the Experiment to query
+
+Returns:
+    pandas.DataFrame: the close-up data in the experiment
+)pydoc")
+
 		;
 
 

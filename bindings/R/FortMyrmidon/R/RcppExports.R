@@ -261,6 +261,14 @@ fmQueryGetMetaDataKeyRanges <- function(experiment, key, value) {
     .Call(`_FortMyrmidon_fmQueryGetMetaDataKeyRanges`, experiment, key, value)
 }
 
+#' Gets close-ups available in the experiment
+#' @param experiment the \code{\link{fmExperiment}} to query
+#' @return a data.frame with the closeup
+#' @family fmQuery methods
+fmQueryGetTagCloseUps <- function(experiment) {
+    .Call(`_FortMyrmidon_fmQueryGetTagCloseUps`, experiment)
+}
+
 #' Creates a fmShapeList
 #' @param shapes the shape in the list. should be a list of fmCircle,
 #'   fmCapsule or fmPolygon.

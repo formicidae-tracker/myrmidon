@@ -581,6 +581,57 @@ Rcpp::DataFrame fmQueryGetMetaDataKeyRanges(const ExperimentPtr & experiment,
 }
 
 
+//' Gets close-ups available in the experiment
+//' @param experiment the \code{\link{fmExperiment}} to query
+//' @return a data.frame with the closeup
+//' @family fmQuery methods
+//[[Rcpp::export]]
+Rcpp::DataFrame fmQueryGetTagCloseUps(const ExperimentPtr & experiment) {
+	using namespace fort::myrmidon;
+	using namespace Rcpp;
+	std::vector<std::string> cppPaths;
+	std::vector<TagID> cppIDs;
+	Eigen::MatrixXd data;
+	try {
+		std::tie(cppPaths,cppIDs,data) =
+			Query::GetTagCloseUps(*experiment,
+			                      [](int current,int total){
+			                      });
+	} catch ( const FmProgress::StopIteration & ) {
+		return R_NilValue;
+	}
+
+	auto paths = CharacterVector::import(cppPaths.begin(),cppPaths.end());
+	auto IDs = IntegerVector::import(cppIDs.begin(),cppIDs.end());
+
+	#define Vectorize(...) {__VA_ARGS__}
+#define CreateDataFrameOptimized(VarName,elements,names,nrows ) \
+	Rcpp::List VarName(elements); \
+	VarName.attr("names") = Rcpp::CharacterVector(names); \
+	VarName.attr("row.names") = Rcpp::IntegerVector::create(NA_INTEGER,(nrows)); \
+	VarName.attr("class") = "data.frame"
+
+#define VectorFromEigen(Type,Var,Mat,Col,Size) Rcpp::Type Var(&((Mat)(0,Col)),&((Mat)(0,Col))+Size)
+	VectorFromEigen(NumericVector,X,data,0,data.rows());
+	VectorFromEigen(NumericVector,Y,data,1,data.rows());
+	VectorFromEigen(NumericVector,Theta,data,2,data.rows());
+	VectorFromEigen(NumericVector,c0_X,data,3,data.rows());
+	VectorFromEigen(NumericVector,c0_Y,data,4,data.rows());
+	VectorFromEigen(NumericVector,c1_X,data,5,data.rows());
+	VectorFromEigen(NumericVector,c1_Y,data,6,data.rows());
+	VectorFromEigen(NumericVector,c2_X,data,7,data.rows());
+	VectorFromEigen(NumericVector,c2_Y,data,8,data.rows());
+	VectorFromEigen(NumericVector,c3_X,data,9,data.rows());
+	VectorFromEigen(NumericVector,c3_Y,data,10,data.rows());
+
+	CreateDataFrameOptimized(df,
+	                         Vectorize(paths,IDs,X,Y,Theta,c0_X,c0_Y,c1_X,c1_Y,c2_X,c2_Y,c3_X,c3_Y),
+	                         Vectorize("path","ID","X","Y","Theta","c0_X","c0_Y","c1_X","c1_Y","c2_X","c2_Y","c3_X","c3_Y"),
+	                         cppIDs.size());
+	return df;
+}
+
+
 
 namespace Rcpp {
 

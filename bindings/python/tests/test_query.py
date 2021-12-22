@@ -4,6 +4,7 @@ import py_fort_myrmidon_utestdata as ud
 import assertions
 import functools
 import os
+import pandas as pd
 
 
 class QueryTestCase(unittest.TestCase, assertions.CustomAssertion):
@@ -148,3 +149,9 @@ class QueryTestCase(unittest.TestCase, assertions.CustomAssertion):
 
         with self.assertRaises(ValueError):
             m.Query.GetMetaDataKeyRanges(experiment, key="alive", value=42.0)
+
+    def test_get_closeup_ranges(self):
+        res = m.Query.GetTagCloseUps(self.experiment)
+        self.assertTrue((res.columns == ["path", "ID", "X", "Y", "Theta",
+                                         "c0_X", "c0_Y", "c1_X", "c1_Y", "c2_X", "c2_Y", "c3_X", "c3_Y"]).all())
+        self.assertTrue(res.shape[0] > 0)

@@ -18,6 +18,7 @@
 #include "DataSegmenter.hpp"
 #include "Space.hpp"
 #include "Experiment.hpp"
+#include "TagCloseUp.hpp"
 
 namespace fort {
 namespace myrmidon {
@@ -221,6 +222,56 @@ void Query::FindVideoSegments(const Experiment & experiment,
 	}
 }
 
+static void EnsureTagCloseUpsAreLoaded(const Experiment & e,
+                                       const std::function<void(int,int)> & progressCallback) {
+	std::vector<TrackingDataDirectory::Loader> loaders;
+	for ( const auto & [uri,tdd] : e.TrackingDataDirectories() ) {
+		if ( tdd->TagCloseUpsComputed() == true ) {
+			continue;
+		}
+		auto localLoaders = tdd->PrepareTagCloseUpsLoaders();
+		loaders.insert(loaders.end(),localLoaders.begin(),localLoaders.end());
+	}
+	progressCallback(0,loaders.size());
+	std::atomic<int> loaded(0);
+
+	tbb::parallel_for(tbb::blocked_range<size_t>(0,loaders.size()),
+	                  [&loaders,&loaded,&progressCallback](const tbb::blocked_range<size_t> & range) {
+			                  for ( size_t idx = range.begin();
+			                        idx != range.end();
+			                        ++idx ) {
+				                  loaders[idx]();
+				                  progressCallback(loaded.fetch_add(1)+1,loaders.size());
+			                  }
+	                  });
+}
+
+std::tuple<std::vector<std::string>,std::vector<TagID>,Eigen::MatrixXd>
+Query::GetTagCloseUps(const Experiment & e,const std::function<void(int,int)> & progressCallback) {
+	EnsureTagCloseUpsAreLoaded(e,progressCallback);
+
+	std::vector<std::string> paths;
+	std::vector<TagID> IDs;
+	Eigen::MatrixXd positions;
+	std::size_t i = -1;
+	for ( const auto & [URI,tdd] : e.TrackingDataDirectories() ) {
+		const auto & closeUps = tdd->TagCloseUps();
+		paths.reserve(paths.size()+closeUps.size());
+		IDs.reserve(paths.size()+closeUps.size());
+		positions.conservativeResize(positions.rows()+closeUps.size(),11);
+		for ( const auto &  cu : closeUps) {
+			++i;
+			paths.push_back(cu->AbsoluteFilePath());
+			IDs.push_back(cu->TagValue());
+			positions.block<1,2>(i,0) = cu->TagPosition().transpose();
+			positions(i,2) = cu->TagAngle();
+			for ( size_t j = 0 ; j < 4; ++j) {
+				positions.block<1,2>(i,2*j+3) = cu->Corners()[j].transpose();
+			}
+		}
+	}
+	return {paths,IDs,positions};
+}
 
 } // namespace priv
 } // namespace myrmidon

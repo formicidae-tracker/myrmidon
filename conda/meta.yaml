@@ -119,6 +119,8 @@ outputs:
         - numpy =1.21.2
         - libstdcxx-ng {{ c_compiler_version }} [linux]
         - opencv {{ opencv }}
+        - pandas
+        - tqdm
       run:
         - python {{python}}
         - {{ pin_subpackage('libfort-myrmidon',exact=True) }}
@@ -127,6 +129,8 @@ outputs:
         - yaml-cpp =0.6.3
         - numpy =1.21.2
         - libstdcxx-ng {{ c_compiler_version }} [linux]
+        - pandas
+        - tqdm
     test:
       files:
         - test-py-fort-myrmidon.py

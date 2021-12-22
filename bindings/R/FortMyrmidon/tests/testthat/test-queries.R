@@ -105,3 +105,10 @@ test_that("it can get metadata key ranges",{
         fmQueryGetMetaDataKeyRanges(experiment,"alive","alive")
     }, 'Value is not of the right type')
 })
+
+
+test_that("it can get tag close-ups",{
+    d <- local_data()
+    res <- fmQueryGetTagCloseUps(d$experiment)
+    expect_equal(names(res),c("path","ID","X","Y","Theta","c0_X","c0_Y","c1_X","c1_Y","c2_X","c2_Y","c3_X","c3_Y"))
+})

@@ -211,6 +211,13 @@ Query::GetMetaDataKeyRanges(const Experiment & e,
 }
 
 
+std::tuple<std::vector<std::string>,std::vector<TagID>,Eigen::MatrixXd>
+Query::GetTagCloseUps(const Experiment & e,const std::function<void(int,int)> & progressCallback) {
+	return priv::Query::GetTagCloseUps(e.d_p->Get(),progressCallback);
+}
+
+
+
 
 } // namespace myrmidon
 } // namespace fort

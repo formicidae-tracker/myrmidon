@@ -69,6 +69,7 @@ Other fmQuery methods:
 \code{\link{fmQueryComputeTagStatistics}()},
 \code{\link{fmQueryGetDataInformations}()},
 \code{\link{fmQueryGetMetaDataKeyRanges}()},
+\code{\link{fmQueryGetTagCloseUps}()},
 \code{\link{fmQueryIdentifyFrames}()},
 \code{\link{fmQuery}}
 }
