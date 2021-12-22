@@ -39,7 +39,8 @@ jobs:
                           sphinx_rtd_theme>=1.0.0 \
                           breathe \
                           numpy \
-                          pybind11
+                          pybind11 \
+                          pandas
         - name: Uses ccache
           uses: hendrikmuhs/ccache-action@v1
         - name: Configure
