@@ -97,6 +97,7 @@ jobs:
           ln -sf ../_static latest/_static
           rsync -avh _build/_static/ _static
           ./linkVersion.sh
+          rm -f _static/_static
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.5
         if: ${{ github.event_name == 'push' }}
