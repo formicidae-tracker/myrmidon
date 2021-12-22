@@ -240,7 +240,10 @@ static void EnsureTagCloseUpsAreLoaded(const Experiment & e,
 			                  for ( size_t idx = range.begin();
 			                        idx != range.end();
 			                        ++idx ) {
-				                  loaders[idx]();
+				                  try {
+					                  loaders[idx]();
+				                  } catch ( const std::exception & e ) {
+				                  }
 				                  progressCallback(loaded.fetch_add(1)+1,loaders.size());
 			                  }
 	                  });
