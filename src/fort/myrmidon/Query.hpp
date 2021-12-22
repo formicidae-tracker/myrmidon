@@ -361,6 +361,17 @@ public:
 	GetMetaDataKeyRanges(const Experiment & e,
 	                     const std::string & key,
 	                     const Value & value);
+
+	/**
+	 * Gets the tag close-up in the experiment
+	 *
+	 * @param e the Experiment to query for
+	 *
+	 * @return a tuple of a vector of string, TagID, and an Eigen::Matrix
+	 */
+	static std::tuple<std::vector<std::string>,std::vector<TagID>,Eigen::MatrixXd>
+	GetTagCloseUps(const Experiment & e,
+	               const std::function<void(int,int)> & progressCallback);
 };
 
 

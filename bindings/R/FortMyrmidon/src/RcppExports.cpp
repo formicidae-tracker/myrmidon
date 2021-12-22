@@ -400,6 +400,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// fmQueryGetTagCloseUps
+Rcpp::DataFrame fmQueryGetTagCloseUps(const ExperimentPtr& experiment);
+RcppExport SEXP _FortMyrmidon_fmQueryGetTagCloseUps(SEXP experimentSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const ExperimentPtr& >::type experiment(experimentSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmQueryGetTagCloseUps(experiment));
+    return rcpp_result_gen;
+END_RCPP
+}
 // fmShapeListCreate
 fort::myrmidon::Shape::List fmShapeListCreate(SEXP shapes);
 RcppExport SEXP _FortMyrmidon_fmShapeListCreate(SEXP shapesSEXP) {
@@ -596,6 +607,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FortMyrmidon_pfmQueryComputeAntInteractions", (DL_FUNC) &_FortMyrmidon_pfmQueryComputeAntInteractions, 10},
     {"_FortMyrmidon_fmQueryGetDataInformations", (DL_FUNC) &_FortMyrmidon_fmQueryGetDataInformations, 1},
     {"_FortMyrmidon_fmQueryGetMetaDataKeyRanges", (DL_FUNC) &_FortMyrmidon_fmQueryGetMetaDataKeyRanges, 3},
+    {"_FortMyrmidon_fmQueryGetTagCloseUps", (DL_FUNC) &_FortMyrmidon_fmQueryGetTagCloseUps, 1},
     {"_FortMyrmidon_fmShapeListCreate", (DL_FUNC) &_FortMyrmidon_fmShapeListCreate, 1},
     {"_FortMyrmidon_pfmIWantAShapeList", (DL_FUNC) &_FortMyrmidon_pfmIWantAShapeList, 1},
     {"_FortMyrmidon_fmTimeCreate", (DL_FUNC) &_FortMyrmidon_fmTimeCreate, 1},
