@@ -76,7 +76,6 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Ants and Identifications</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#fort-myrmidon-ant">fort::myrmidon::Ant</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fort-myrmidon-identification">fort::myrmidon::Identification</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#fort-myrmidon-overlappingidentification">fort::myrmidon::OverlappingIdentification</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="space_zone.html">Spaces and Zones</a></li>
@@ -84,6 +83,7 @@
 <li class="toctree-l2"><a class="reference internal" href="time.html">Time Representation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shapes.html">2D Geometric Shapes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="video.html">Video Sequence Matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors.html">Errors</a></li>
 <li class="toctree-l2"><a class="reference internal" href="typedef.html">API generic types</a></li>
 </ul>
 </li>
@@ -483,7 +483,7 @@ Sets the ending validity <a class="reference internal" href="time.html#classfort
 <dd class="field-odd"><p><strong>end</strong> – the ending <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a>. It can be <a class="reference internal" href="time.html#classfort_1_1Time_1a0f13c9a8cc26f34ca49c006c115dc845"><span class="std std-ref">Time::Forever()</span></a>.</p>
 </dd>
 <dt class="field-even">Throws</dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="#_CPPv4N4fort8myrmidon25OverlappingIdentificationE" title="fort::myrmidon::OverlappingIdentification"><span class="n">OverlappingIdentification</span></a></span></span> – if end will make two <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> overlap in <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a>. </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="errors.html#_CPPv4N4fort8myrmidon25OverlappingIdentificationE" title="fort::myrmidon::OverlappingIdentification"><span class="n">OverlappingIdentification</span></a></span></span> – if end will make two <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> overlap in <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a>. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -615,16 +615,6 @@ Sets the ending validity <a class="reference internal" href="time.html#classfort
 </dd></dl>
 
 </div>
-</dd></dl>
-
-</section>
-<section id="fort-myrmidon-overlappingidentification">
-<h2>fort::myrmidon::OverlappingIdentification<a class="headerlink" href="#fort-myrmidon-overlappingidentification" title="Permalink to this headline"></a></h2>
-<dl class="cpp class">
-<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon25OverlappingIdentificationE">
-<span id="_CPPv3N4fort8myrmidon25OverlappingIdentificationE"></span><span id="_CPPv2N4fort8myrmidon25OverlappingIdentificationE"></span><span id="fort::myrmidon::OverlappingIdentification"></span><span class="target" id="classfort_1_1myrmidon_1_1OverlappingIdentification"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OverlappingIdentification</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">runtime_error</span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon25OverlappingIdentificationE" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Exception when two <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> overlaps in time. </p>
-<p>Two <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> overlaps in time if they have overlapping boundary and they either use the same TagID or targets the same <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>. This is an invariant condition that should never happen and modification that will break this invariant will throw this exception. </p>
 </dd></dl>
 
 </section>

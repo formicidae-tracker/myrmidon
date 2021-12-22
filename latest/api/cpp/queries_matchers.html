@@ -95,6 +95,7 @@
 <li class="toctree-l2"><a class="reference internal" href="time.html">Time Representation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shapes.html">2D Geometric Shapes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="video.html">Video Sequence Matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors.html">Errors</a></li>
 <li class="toctree-l2"><a class="reference internal" href="typedef.html">API generic types</a></li>
 </ul>
 </li>
@@ -398,6 +399,20 @@ Computes ant interactions, i.e. time intervals where two Ants collides. These wi
 </dl>
 </dd></dl>
 
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5Query14GetTagCloseUpsERK10ExperimentRKNSt8functionIFviiEEE">
+<span id="_CPPv3N4fort8myrmidon5Query14GetTagCloseUpsERK10ExperimentRKNSt8functionIFviiEEE"></span><span id="_CPPv2N4fort8myrmidon5Query14GetTagCloseUpsERK10ExperimentRKNSt8functionIFviiEEE"></span><span class="target" id="classfort_1_1myrmidon_1_1Query_1a98a16e0b43ef4e049db458d999b68f9b"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef.html#_CPPv4N4fort8myrmidon5TagIDE" title="fort::myrmidon::TagID"><span class="n"><span class="pre">TagID</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Eigen</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">MatrixXd</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetTagCloseUps</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="experiment.html#_CPPv4N4fort8myrmidon10ExperimentE" title="fort::myrmidon::Experiment"><span class="n"><span class="pre">Experiment</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">e</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">(</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">progressCallback</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5Query14GetTagCloseUpsERK10ExperimentRKNSt8functionIFviiEEE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the tag close-up in the experiment. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>e</strong> – the <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> to query for</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a tuple of a vector of string, TagID, and an Eigen::Matrix </p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5Query17CollideFramesArgsE">
@@ -457,6 +472,12 @@ Computes ant interactions, i.e. time intervals where two Ants collides. These wi
 <dd><p>Collisions, and therefore interactions, happens over different zones. </p>
 </dd></dl>
 
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5Query26ComputeAntInteractionsArgs27SegmentOnMatcherValueChangeE">
+<span id="_CPPv3N4fort8myrmidon5Query26ComputeAntInteractionsArgs27SegmentOnMatcherValueChangeE"></span><span id="_CPPv2N4fort8myrmidon5Query26ComputeAntInteractionsArgs27SegmentOnMatcherValueChangeE"></span><span id="fort::myrmidon::Query::ComputeAntInteractionsArgs::SegmentOnMatcherValueChange__b"></span><span class="target" id="structfort_1_1myrmidon_1_1Query_1_1ComputeAntInteractionsArgs_1a303d0a3af5f2bf439305dd6048047f61"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SegmentOnMatcherValueChange</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5Query26ComputeAntInteractionsArgs27SegmentOnMatcherValueChangeE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>If a combined matcher value changes, create a new object. </p>
+</dd></dl>
+
 </div>
 </dd></dl>
 
@@ -484,6 +505,12 @@ Computes ant interactions, i.e. time intervals where two Ants collides. These wi
 <dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5Query26ComputeAntTrajectoriesArgs12ComputeZonesE">
 <span id="_CPPv3N4fort8myrmidon5Query26ComputeAntTrajectoriesArgs12ComputeZonesE"></span><span id="_CPPv2N4fort8myrmidon5Query26ComputeAntTrajectoriesArgs12ComputeZonesE"></span><span id="fort::myrmidon::Query::ComputeAntTrajectoriesArgs::ComputeZones__b"></span><span class="target" id="structfort_1_1myrmidon_1_1Query_1_1ComputeAntTrajectoriesArgs_1a25c2c0756443cf859beaf6cf16f686e7"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ComputeZones</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5Query26ComputeAntTrajectoriesArgs12ComputeZonesE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Computes the zone of each <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> (default: false) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5Query26ComputeAntTrajectoriesArgs27SegmentOnMatcherValueChangeE">
+<span id="_CPPv3N4fort8myrmidon5Query26ComputeAntTrajectoriesArgs27SegmentOnMatcherValueChangeE"></span><span id="_CPPv2N4fort8myrmidon5Query26ComputeAntTrajectoriesArgs27SegmentOnMatcherValueChangeE"></span><span id="fort::myrmidon::Query::ComputeAntTrajectoriesArgs::SegmentOnMatcherValueChange__b"></span><span class="target" id="structfort_1_1myrmidon_1_1Query_1_1ComputeAntTrajectoriesArgs_1ad5cb5286897c9a4833e98f2fcd69ebd1"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SegmentOnMatcherValueChange</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5Query26ComputeAntTrajectoriesArgs27SegmentOnMatcherValueChangeE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>If a combined matcher value changes, create a new object. </p>
 </dd></dl>
 
 </div>

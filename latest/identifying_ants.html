@@ -241,8 +241,8 @@ found in the targeted <em>ant listing of identifications</em> <a class="footnote
 <div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="c1">#R</span>
 <span class="nf">for </span><span class="p">(</span><span class="n">a</span> <span class="n">in</span> <span class="n">ants</span><span class="p">)</span> <span class="p">{</span>
     <span class="nf">printf</span><span class="p">(</span><span class="s">&quot;Ant %s is identified by:\n&quot;</span><span class="p">,</span> <span class="nf">fmFormatAntID</span><span class="p">(</span><span class="n">a</span><span class="o">$</span><span class="n">ID</span><span class="p">))</span>
-        <span class="nf">for </span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="n">a.Identifications</span><span class="p">){</span>
-            <span class="nf">printf</span><span class="p">(</span><span class="s">&quot; * %s\n&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+        <span class="nf">for </span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="n">a</span><span class="o">$</span><span class="n">identifications</span><span class="p">){</span>
+            <span class="nf">printf</span><span class="p">(</span><span class="s">&quot; * %s\n&quot;</span><span class="p">,</span> <span class="nf">capture.output</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
         <span class="p">}</span>
 <span class="p">}</span>
 <span class="c1"># outputs:</span>
@@ -301,9 +301,9 @@ vision, the y-axis is conventionally going from top to bottom,
 </pre></div>
 </div>
 <div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="c1">#R</span>
-<span class="n">ants[1]</span><span class="o">$</span><span class="nf">setUserDefinedAntPose</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">),</span> <span class="m">0.0</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="s">&quot;Ant %d has pose %s and angle %f&quot;</span><span class="p">,</span> <span class="nf">fmFormatAntID</span><span class="p">(</span><span class="n">ants[[1]]</span><span class="o">$</span><span class="n">ID</span><span class="p">),</span> <span class="n">ants[[1]]</span><span class="o">$</span><span class="n">antPosition</span><span class="p">,</span><span class="n">ants[[1]]</span><span class="o">$</span><span class="n">antAngle</span><span class="p">)</span>
-<span class="c1"># outputs: Ant 001 has pose [0.0 0.0] and angle 0.0</span>
+<span class="n">ants[[1]]</span><span class="o">$</span><span class="n">identifications[[1]]</span><span class="o">$</span><span class="nf">setUserDefinedAntPose</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">),</span> <span class="m">0.0</span><span class="p">)</span>
+<span class="nf">printf</span><span class="p">(</span><span class="s">&quot;Ant %s has pose %s and angle %f&quot;</span><span class="p">,</span> <span class="nf">fmFormatAntID</span><span class="p">(</span><span class="n">ants[[1]]</span><span class="o">$</span><span class="n">ID</span><span class="p">),</span><span class="nf">paste</span><span class="p">(</span><span class="n">ants[[1]]</span><span class="o">$</span><span class="n">identifications[[1]]</span><span class="o">$</span><span class="n">antPosition</span><span class="p">,</span><span class="n">collapse</span><span class="o">=</span><span class="s">&quot;,&quot;</span><span class="p">),</span><span class="n">ants[[1]]</span><span class="o">$</span><span class="n">identifications[[1]]</span><span class="o">$</span><span class="n">antAngle</span><span class="p">)</span>
+<span class="c1"># outputs: Ant 001 has pose 0,0 and angle 0.000000</span>
 </pre></div>
 </div>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">//C++</span>

@@ -11,6 +11,7 @@ Python
    python/time
    python/shapes
    python/video
+   python/errors
    python/misc
 
 C++
@@ -25,6 +26,7 @@ C++
    cpp/time
    cpp/shapes
    cpp/video
+   cpp/errors
    cpp/typedef
 
 

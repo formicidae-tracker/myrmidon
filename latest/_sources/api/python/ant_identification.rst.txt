@@ -21,6 +21,3 @@ py_fort_myrmidon.Identification
 
 py_fort_myrmidon.OverlappingIdentification
 ++++++++++++++++++++++++++++++++++++++++++
-
-.. autoexception:: py_fort_myrmidon.OverlappingIdentification
-   :members:

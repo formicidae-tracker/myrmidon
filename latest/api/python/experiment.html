@@ -81,6 +81,7 @@
 <li class="toctree-l2"><a class="reference internal" href="time.html">Time Representation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shapes.html">2D Geometric Shapes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="video.html">Video Sequence Matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors.html">Errors</a></li>
 <li class="toctree-l2"><a class="reference internal" href="misc.html">Miscanellous</a></li>
 </ul>
 </li>
@@ -196,7 +197,7 @@ data directory to be present on the filesystem.</p>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
 <li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – if <strong>antID</strong> is not valid for the Experiment</p></li>
-<li><p><a class="reference internal" href="ant_identification.html#py_fort_myrmidon.OverlappingIdentification" title="py_fort_myrmidon.OverlappingIdentification"><strong>OverlappingIdentification</strong></a> – if the resulting Identification would
+<li><p><a class="reference internal" href="errors.html#py_fort_myrmidon.OverlappingIdentification" title="py_fort_myrmidon.OverlappingIdentification"><strong>OverlappingIdentification</strong></a> – if the resulting Identification would
     overlap in time with another one, either for a given <strong>antID</strong>
     or <strong>tagID</strong>.</p></li>
 </ul>
@@ -206,7 +207,7 @@ data directory to be present on the filesystem.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="py_fort_myrmidon.Experiment.AddTrackingDataDirectory">
-<span class="sig-name descname"><span class="pre">AddTrackingDataDirectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">spaceID</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.AddTrackingDataDirectory" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">AddTrackingDataDirectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><span class="pre">py_fort_myrmidon.Experiment</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">spaceID</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixCorruptedData</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.Experiment.AddTrackingDataDirectory" title="Permalink to this definition"></a></dt>
 <dd><p>Adds a tracking data directory to the Experiment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -214,6 +215,10 @@ data directory to be present on the filesystem.</p>
 <li><p><strong>spaceID</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the space to add the tracking data directory
 to.</p></li>
 <li><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the filepath to the tracking data directory.</p></li>
+<li><p><strong>fixCorruptedData</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – In the event that some tracking data is
+corrupted, if False a FixableError will be raised. Otherwise
+an attempt to recover as much data as possible eill be made,
+but it may potentially remove a large chunk of data.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -231,6 +236,8 @@ to.</p></li>
 <li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.10)"><strong>IndexError</strong></a> – if <strong>spaceID</strong> is not valid for this Experiment</p></li>
 <li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.10)"><strong>RuntimeError</strong></a> – if <strong>filepath</strong> is not a valid tracking data
     directory.</p></li>
+<li><p><a class="reference internal" href="errors.html#py_fort_myrmidon.FixableError" title="py_fort_myrmidon.FixableError"><strong>FixableError</strong></a> – if <strong>fixCorruptedData</strong> is False and any data
+    corruption is found.</p></li>
 <li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.10)"><strong>RuntimeError</strong></a> – if the data will overlap in time with another
     directory in the same space</p></li>
 <li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.10)"><strong>RuntimeError</strong></a> – if the data is used by another space</p></li>
