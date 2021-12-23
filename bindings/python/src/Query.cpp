@@ -1,5 +1,8 @@
 #include "BindTypes.hpp"
 
+#include <condition_variable>
+#include <thread>
+
 #include <fort/myrmidon/Query.hpp>
 #include <fort/myrmidon/Matchers.hpp>
 #include <fort/myrmidon/Experiment.hpp>
@@ -138,22 +141,55 @@ py::object GetTagCloseUps(const fort::myrmidon::Experiment & e,
 	using namespace pybind11::literals;
 
 	py::object pd = py::module_::import("pandas");
-
+	py::object tqdm = py::module_::import("tqdm");
+	py::object progress;
+	int total(0),current(0);
 	std::mutex m;
-	const auto & [paths,IDs,data]
-		= Query::GetTagCloseUps(e,
-		                        [&](int current,int total) {
-			                        if ( PyErr_CheckSignals() != 0 ) {
-				                        throw py::error_already_set();
-			                        }
-		                        },
-		                        [&](const char * what) {
-			                        if ( verbose == false ) {
-				                        return;
-			                        }
-			                        std::lock_guard<std::mutex> lock(m);
-			                        std::cerr << what << std::endl;
-		                        });
+	std::condition_variable cv;
+
+	std::vector<std::string> paths;
+	std::vector<TagID> IDs;
+	Eigen::MatrixXd data;
+
+	std::thread op([&](){
+		               std::tie(paths,IDs,data)
+			               = Query::GetTagCloseUps(e,
+			                                       [&](int current_,int total_) {
+				                                       if ( PyErr_CheckSignals() != 0 ) {
+					                                       throw py::error_already_set();
+				                                       }
+				                                       {
+					                                       std::lock_guard<std::mutex> lock(m);
+					                                       current = current_;
+					                                       total = total_;
+				                                       }
+				                                       cv.notify_one();
+			                                       },
+			                                       [&](const char * what) {
+				                                       if ( verbose == false ) {
+					                                       return;
+				                                       }
+				                                       std::lock_guard<std::mutex> lock(m);
+				                                       std::cerr << what << std::endl;
+			                                       });
+	               });
+
+	bool set = false;
+	do {
+		std::unique_lock<std::mutex> lock(m);
+		cv.wait(lock,[&]() { return total > 0; });
+		if ( set == false ) {
+			set = true;
+			progress = tqdm.attr("tqdm")("total"_a = total);
+		} else if ( current > 0 ) {
+			progress.attr("update")("n"_a = 1);
+		}
+		if ( current == total ) {
+			break;
+		}
+	} while( true );
+	progress.attr("close")();
+	op.join();
 
 	py::object df = pd.attr("DataFrame")("data"_a = py::dict("path"_a = paths,
 	                                                         "ID"_a = IDs));
