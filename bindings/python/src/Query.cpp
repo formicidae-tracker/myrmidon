@@ -142,8 +142,8 @@ py::object GetTagCloseUps(const fort::myrmidon::Experiment & e,
 
 	py::object pd = py::module_::import("pandas");
 	py::object tqdm = py::module_::import("tqdm");
-	py::object progress;
 	int total(0),current(0);
+	bool done(false);
 	std::mutex m;
 	std::condition_variable cv;
 
@@ -172,23 +172,32 @@ py::object GetTagCloseUps(const fort::myrmidon::Experiment & e,
 				                                       std::lock_guard<std::mutex> lock(m);
 				                                       std::cerr << what << std::endl;
 			                                       });
+		               {
+			               std::lock_guard<std::mutex> lock(m);
+			               done = true;
+		               }
+		               cv.notify_all();
+
 	               });
 
 	bool set = false;
+	py::object progress;
 	do {
 		std::unique_lock<std::mutex> lock(m);
-		cv.wait(lock,[&]() { return total > 0; });
+		cv.wait(lock,[&]() { return total > 0 || done == true; });
+		if ( done == true ) {
+			if ( set == true ) {
+				progress.attr("close")();
+			}
+			break;
+		}
 		if ( set == false ) {
 			set = true;
 			progress = tqdm.attr("tqdm")("total"_a = total);
 		} else if ( current > 0 ) {
 			progress.attr("update")("n"_a = 1);
 		}
-		if ( current == total ) {
-			break;
-		}
 	} while( true );
-	progress.attr("close")();
 	op.join();
 
 	py::object df = pd.attr("DataFrame")("data"_a = py::dict("path"_a = paths,
