@@ -155,9 +155,6 @@ py::object GetTagCloseUps(const fort::myrmidon::Experiment & e,
 		               std::tie(paths,IDs,data)
 			               = Query::GetTagCloseUps(e,
 			                                       [&](int current_,int total_) {
-				                                       // if ( PyErr_CheckSignals() != 0 ) {
-					                                   //     throw py::error_already_set();
-				                                       // }
 				                                       {
 					                                       std::lock_guard<std::mutex> lock(m);
 					                                       current = current_;
@@ -191,6 +188,9 @@ py::object GetTagCloseUps(const fort::myrmidon::Experiment & e,
 				progress.attr("close")();
 			}
 			break;
+		}
+		if ( PyErr_CheckSignals() != 0 ) {
+		    throw py::error_already_set();
 		}
 		if ( progress.is_none() == true ) {
 			progress = tqdm.attr("tqdm")("total"_a = total,
