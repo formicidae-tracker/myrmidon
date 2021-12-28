@@ -155,9 +155,9 @@ py::object GetTagCloseUps(const fort::myrmidon::Experiment & e,
 		               std::tie(paths,IDs,data)
 			               = Query::GetTagCloseUps(e,
 			                                       [&](int current_,int total_) {
-				                                       if ( PyErr_CheckSignals() != 0 ) {
-					                                       throw py::error_already_set();
-				                                       }
+				                                       // if ( PyErr_CheckSignals() != 0 ) {
+					                                   //     throw py::error_already_set();
+				                                       // }
 				                                       {
 					                                       std::lock_guard<std::mutex> lock(m);
 					                                       current = current_;
