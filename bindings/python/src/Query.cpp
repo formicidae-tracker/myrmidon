@@ -180,22 +180,26 @@ py::object GetTagCloseUps(const fort::myrmidon::Experiment & e,
 
 	               });
 
-	bool set = false;
-	py::object progress;
+	py::object progress = pybind11::none();
+	int lastCurrent = 0;
 	do {
+
 		std::unique_lock<std::mutex> lock(m);
 		cv.wait(lock,[&]() { return total > 0 || done == true; });
 		if ( done == true ) {
-			if ( set == true ) {
+			if ( progress.is_none() == false ) {
 				progress.attr("close")();
 			}
 			break;
 		}
-		if ( set == false ) {
-			set = true;
-			progress = tqdm.attr("tqdm")("total"_a = total);
-		} else if ( current > 0 ) {
-			progress.attr("update")("n"_a = 1);
+		if ( progress.is_none() == true ) {
+			progress = tqdm.attr("tqdm")("total"_a = total,
+			                             "desc"_a = "Computing Close-Ups",
+			                             "ncols"_a = 80);
+		}
+		if ( current != lastCurrent ) {
+			progress.attr("update")("n"_a = current - lastCurrent);
+			lastCurrent = current;
 		}
 	} while( true );
 	op.join();
