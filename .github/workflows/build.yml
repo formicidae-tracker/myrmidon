@@ -35,10 +35,11 @@ jobs:
                                lcov \
                                doxygen \
                                ccache
+              pip install --upgrade pip
               pip install sphinx>=4.2.0 \
                           sphinx_rtd_theme>=1.0.0 \
                           breathe \
-                          numpy \
+                          numpy>=1.18.5 \
                           pybind11 \
                           pandas
         - name: Uses ccache
