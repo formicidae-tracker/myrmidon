@@ -27,7 +27,7 @@ py::list QueryIdentifyFrames(const fort::myrmidon::Experiment & experiment,
 	args.End = end;
 	args.SingleThreaded = singleThreaded;
 	args.ComputeZones = computeZones;
-	args.AllocationInCurrentThread = false;
+	args.AllocationInCurrentThread = true;
 	fort::myrmidon::Query::IdentifyFramesFunctor(experiment,
 	                                             [&res](const fort::myrmidon::IdentifiedFrame::Ptr & f) {
 		                                             res.append(f);
@@ -47,7 +47,7 @@ py::list QueryCollideFrames(const fort::myrmidon::Experiment & experiment,
 	args.Start = start;
 	args.End = end;
 	args.SingleThreaded = singleThreaded;
-	args.AllocationInCurrentThread = false;
+	args.AllocationInCurrentThread = true;
 	args.CollisionsIgnoreZones = collisionsIgnoreZones;
 	fort::myrmidon::Query::CollideFramesFunctor(experiment,
 	                                            [&res](const fort::myrmidon::CollisionData & d) {
@@ -76,7 +76,7 @@ py::list QueryComputeAntTrajectories(const fort::myrmidon::Experiment & experime
 	args.Matcher = matcher;
 	args.ComputeZones = computeZones;
 	args.SingleThreaded = singleThreaded;
-	args.AllocationInCurrentThread = false;
+	args.AllocationInCurrentThread = true;
 	args.SegmentOnMatcherValueChange = segmentOnMatcherValueChange;
 	fort::myrmidon::Query::ComputeAntTrajectoriesFunctor(experiment,
 	                                                     [&res](const fort::myrmidon::AntTrajectory::Ptr & t) {
@@ -107,7 +107,7 @@ py::tuple QueryComputeAntInteractions(const fort::myrmidon::Experiment & experim
 	args.Matcher = matcher;
 	args.ReportFullTrajectories = reportFullTrajectories;
 	args.SingleThreaded = singleThreaded;
-	args.AllocationInCurrentThread = false;
+	args.AllocationInCurrentThread = true;
 	args.CollisionsIgnoreZones = collisionsIgnoreZones;
 	args.SegmentOnMatcherValueChange = segmentOnMatcherValueChange;
 	fort::myrmidon::Query::ComputeAntInteractionsFunctor(experiment,
