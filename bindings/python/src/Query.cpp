@@ -16,22 +16,82 @@ namespace py = pybind11;
 		} \
 	} while(0)
 
+class QueryProgress {
+private:
+	py::object d_progress;
+	fort::Time d_start;
+	uint64_t d_lastMinuteReported;
+public:
+	QueryProgress(const fort::myrmidon::Experiment & e,
+	           fort::Time start,
+	           fort::Time end,
+	           const std::string & description,
+	           bool verbose = true)
+		: d_progress(pybind11::none()) {
+		if ( verbose == false) {
+			return;
+		}
+		if ( start.IsInfinite() || end.IsInfinite() ) {
+			auto dataInfo = fort::myrmidon::Query::GetDataInformations(e);
+			if ( start.IsInfinite() ) {
+				start = dataInfo.Start;
+			}
+			if ( end.IsInfinite() ) {
+				end = dataInfo.End;
+			}
+		}
+
+		using namespace pybind11::literals;
+
+		d_start = start;
+		uint64_t minutes =  std::ceil(end.Sub(start).Minutes());
+		d_lastMinuteReported = 0;
+
+		d_progress = py::module_::import("tqdm").attr("tqdm")("total"_a = minutes,
+		                                                      "desc"_a = description,
+		                                                      "ncols"_a = 80,
+		                                                      "unit"_a = "tracked min");
+	}
+
+	~QueryProgress() {
+		if ( d_progress.is_none() == false ) {
+			d_progress.attr("close")();
+		}
+	}
+
+	void Update(const fort::Time & t) {
+		check_py_interrupt();
+		if ( d_progress.is_none() == true ) {
+			return;
+		}
+		using namespace pybind11::literals;
+
+		uint64_t minuteEllapsed = std::floor(t.Sub(d_start).Minutes());
+		if ( minuteEllapsed > d_lastMinuteReported) {
+			d_lastMinuteReported = minuteEllapsed;
+			d_progress.attr("update")("n"_a = minuteEllapsed - d_lastMinuteReported);
+		}
+	}
+};
+
 py::list QueryIdentifyFrames(const fort::myrmidon::Experiment & experiment,
                              fort::Time start,
                              fort::Time end,
                              bool singleThreaded,
-                             bool computeZones) {
+                             bool computeZones,
+                             bool reportProgress) {
 	py::list res;
 	fort::myrmidon::Query::IdentifyFramesArgs args;
 	args.Start = start;
 	args.End = end;
 	args.SingleThreaded = singleThreaded;
 	args.ComputeZones = computeZones;
-	args.AllocationInCurrentThread = true;
+	args.AllocationInCurrentThread = reportProgress;
+	QueryProgress progress(experiment,start,end,"Identifiying frames",reportProgress);
 	fort::myrmidon::Query::IdentifyFramesFunctor(experiment,
-	                                             [&res](const fort::myrmidon::IdentifiedFrame::Ptr & f) {
+	                                             [&res,&progress](const fort::myrmidon::IdentifiedFrame::Ptr & f) {
 		                                             res.append(f);
-		                                             check_py_interrupt();
+		                                             progress.Update(f->FrameTime);
 	                                             },
 	                                             args);
 	return res;
@@ -41,18 +101,20 @@ py::list QueryCollideFrames(const fort::myrmidon::Experiment & experiment,
                             fort::Time start,
                             fort::Time end,
                             bool collisionsIgnoreZones,
-                            bool singleThreaded) {
+                            bool singleThreaded,
+                            bool reportProgress) {
 	py::list res;
 	fort::myrmidon::Query::CollideFramesArgs args;
 	args.Start = start;
 	args.End = end;
 	args.SingleThreaded = singleThreaded;
-	args.AllocationInCurrentThread = true;
+	args.AllocationInCurrentThread = reportProgress;
 	args.CollisionsIgnoreZones = collisionsIgnoreZones;
+	QueryProgress progress(experiment,start,end,"Colliding frames",reportProgress);
 	fort::myrmidon::Query::CollideFramesFunctor(experiment,
-	                                            [&res](const fort::myrmidon::CollisionData & d) {
+	                                            [&](const fort::myrmidon::CollisionData & d) {
 		                                             res.append(d);
-		                                             check_py_interrupt();
+		                                             progress.Update(std::get<0>(d)->FrameTime);
 	                                             },
 	                                             args);
 	return res;
@@ -66,7 +128,8 @@ py::list QueryComputeAntTrajectories(const fort::myrmidon::Experiment & experime
                                      const fort::myrmidon::Matcher::Ptr & matcher,
                                      bool computeZones,
                                      bool segmentOnMatcherValueChange,
-                                     bool singleThreaded) {
+                                     bool singleThreaded,
+                                     bool reportProgress) {
 
 	py::list res;
 	fort::myrmidon::Query::ComputeAntTrajectoriesArgs args;
@@ -76,12 +139,13 @@ py::list QueryComputeAntTrajectories(const fort::myrmidon::Experiment & experime
 	args.Matcher = matcher;
 	args.ComputeZones = computeZones;
 	args.SingleThreaded = singleThreaded;
-	args.AllocationInCurrentThread = true;
+	args.AllocationInCurrentThread = reportProgress;
 	args.SegmentOnMatcherValueChange = segmentOnMatcherValueChange;
+	QueryProgress progress(experiment,start,end,"Computing ant trajectories",reportProgress);
 	fort::myrmidon::Query::ComputeAntTrajectoriesFunctor(experiment,
-	                                                     [&res](const fort::myrmidon::AntTrajectory::Ptr & t) {
+	                                                     [&](const fort::myrmidon::AntTrajectory::Ptr & t) {
 		                                                     res.append(t);
-		                                                     check_py_interrupt();
+		                                                     progress.Update(t->End());
 	                                                     },
 	                                                     args);
 	return res;
@@ -95,7 +159,8 @@ py::tuple QueryComputeAntInteractions(const fort::myrmidon::Experiment & experim
                                       bool collisionsIgnoreZones,
                                       bool reportFullTrajectories,
                                       bool segmentOnMatcherValueChange,
-                                      bool singleThreaded) {
+                                      bool singleThreaded,
+                                      bool reportProgress) {
 
 	py::list trajectories;
 	py::list interactions;
@@ -107,17 +172,18 @@ py::tuple QueryComputeAntInteractions(const fort::myrmidon::Experiment & experim
 	args.Matcher = matcher;
 	args.ReportFullTrajectories = reportFullTrajectories;
 	args.SingleThreaded = singleThreaded;
-	args.AllocationInCurrentThread = true;
+	args.AllocationInCurrentThread = reportProgress;
 	args.CollisionsIgnoreZones = collisionsIgnoreZones;
 	args.SegmentOnMatcherValueChange = segmentOnMatcherValueChange;
+	QueryProgress progress(experiment,start,end,"Computing ant interactions",reportProgress);
 	fort::myrmidon::Query::ComputeAntInteractionsFunctor(experiment,
-	                                                     [&trajectories](const fort::myrmidon::AntTrajectory::Ptr & t) {
+	                                                     [&](const fort::myrmidon::AntTrajectory::Ptr & t) {
 		                                                     trajectories.append(t);
-		                                                     check_py_interrupt();
+		                                                     progress.Update(t->End());
 	                                                     },
-	                                                     [&interactions](const fort::myrmidon::AntInteraction::Ptr & i) {
+	                                                     [&](const fort::myrmidon::AntInteraction::Ptr & i) {
 		                                                     interactions.append(i);
-		                                                     check_py_interrupt();
+		                                                     progress.Update(i->End);
 	                                                     },
 	                                                     args);
 	return py::make_tuple(trajectories,interactions);
@@ -274,6 +340,7 @@ Returns:
 		            "end"_a = identifyArgs.End,
 		            "singleThreaded"_a = identifyArgs.SingleThreaded,
 		            "computeZones"_a = identifyArgs.ComputeZones,
+		            "reportProgress"_a = true,
 		            R"pydoc(
 Gets Ant positions in video frames.
 
@@ -295,6 +362,7 @@ Returns:
 		            "end"_a = collideArgs.End,
 		            "collisionsIgnoreZones"_a = collideArgs.CollisionsIgnoreZones,
 		            "singleThreaded"_a = collideArgs.SingleThreaded,
+		            "reportProgress"_a = true,
 		            R"pydoc(
 Gets Ant collision in video frames.
 
@@ -319,6 +387,7 @@ Returns:
 		            "computeZones"_a = trajectoryArgs.ComputeZones,
 		            "segmentOnMatcherValueChange"_a = trajectoryArgs.SegmentOnMatcherValueChange,
 		            "singleThreaded"_a = trajectoryArgs.SingleThreaded,
+		            "reportProgress"_a = true,
 		            R"pydoc(
 Conputes Ant Trajectories between two times.
 
@@ -349,6 +418,7 @@ Returns:
 		            "reportFullTrajectories"_a = interactionArgs.ReportFullTrajectories,
 		            "segmentOnMatcherValueChange"_a = interactionArgs.SegmentOnMatcherValueChange,
 		            "singleThreaded"_a = interactionArgs.SingleThreaded,
+		            "reportProgress"_a = true,
 		            R"pydoc(
 Conputes Ant Interctions between two times.
 
