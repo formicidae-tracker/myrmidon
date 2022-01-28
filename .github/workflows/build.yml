@@ -34,14 +34,13 @@ jobs:
                                protobuf-compiler \
                                lcov \
                                doxygen \
-                               ccache
-              pip install --upgrade pip
+                               ccache \
+                               python3-pandas \
+                               python3-tqdm
               pip install sphinx>=4.2.0 \
                           sphinx_rtd_theme>=1.0.0 \
                           breathe \
-                          numpy>=1.18.5 \
-                          pybind11 \
-                          pandas
+                          pybind11
         - name: Uses ccache
           uses: hendrikmuhs/ccache-action@v1
         - name: Configure
