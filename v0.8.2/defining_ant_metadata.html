@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Defining Ant Metadata &mdash; fort-myrmidon  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/../version_dropdown.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Performing Queries" href="performing_queries.html" />
+    <link rel="prev" title="Identifying Ants" href="identifying_ants.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> fort-myrmidon
+          </a>
+              <div class="version">
+                placeholder
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-myrmidon Basics</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Defining Ant Metadata</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ant-virtual-shapes">Ant virtual shapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#user-defined-timed-metadata-system">User-defined timed metadata system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ant-visualization-data">Ant visualization data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="performing_queries.html">Performing Queries</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-studio Manual</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="studio/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/defining_ant_shapes.html">Defining Ant Shapes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/measuring_ants.html">Measuring Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/metadata_edition.html">Ant Metadata Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/visualization.html">Tracking Data Visualization</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="space_zoning.html">Segmenting Spaces in Zones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matching_video.html">Matching Video and Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="time.html">Time Representation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html#c">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html#r">R</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fort-myrmidon</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Defining Ant Metadata</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/defining_ant_metadata.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="defining-ant-metadata">
+<h1>Defining Ant Metadata<a class="headerlink" href="#defining-ant-metadata" title="Permalink to this headline"></a></h1>
+<p>Once ants are created and identified, the next steps is to fill some
+metadata on the ants that will be used for interaction detection,
+visualisation or for any pre-defined usage.</p>
+<section id="ant-virtual-shapes">
+<h2>Ant virtual shapes<a class="headerlink" href="#ant-virtual-shapes" title="Permalink to this headline"></a></h2>
+<p>In <strong>fort-myrmidon</strong> each ant has a virtual shape defined as an union
+of <cite>capsules</cite> <a class="footnote-reference brackets" href="#capsule" id="id1">2</a>, as shown in figure
+<a class="reference internal" href="#ant-shape-fig"><span class="std std-numref">Fig. 1</span></a>. There are no predefined type in a new
+experiment, and they must be <em>created</em> <a class="footnote-reference brackets" href="#createantshapetype" id="id2">3</a> before
+<em>adding a capsule to an ant</em> <a class="footnote-reference brackets" href="#addcapsule" id="id3">4</a>.</p>
+<figure class="align-center" id="ant-shape-fig">
+<img alt="An ant virtual shape is defined by a collection of typed capsules" src="_images/ant_virtual_shape.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Ant virtual shape in <strong>fort-myrmidon</strong>.</span><a class="headerlink" href="#ant-shape-fig" title="Permalink to this image"></a></p>
+<div class="legend">
+<p>Ant virtual shape are defined as a collection of typed capsules. Here
+each type is assigned an unique color. A capsule is defined as
+region inside and between two circles.</p>
+</div>
+</figcaption>
+</figure>
+<p>Capsule are defined in the ant reference frame.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#python</span>
+<span class="kn">import</span> <span class="nn">py_fort_myrmidon</span> <span class="kn">as</span> <span class="nn">fm</span>
+
+<span class="n">e</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Experiment</span><span class="p">(</span><span class="s2">&quot;defining_ant_metadata.myrmidon&quot;</span><span class="p">)</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">CreateAnt</span><span class="p">()</span>
+
+<span class="n">headID</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">CreateAntShapeType</span><span class="p">(</span><span class="s2">&quot;head&quot;</span><span class="p">)</span>
+<span class="n">antennaID</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">CreateAntShapeType</span><span class="p">(</span><span class="s2">&quot;antennas&quot;</span><span class="p">)</span>
+<span class="n">bodyID</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">CreateAntShapeType</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">)</span>
+
+
+<span class="n">a</span><span class="o">.</span><span class="n">AddCapsule</span><span class="p">(</span><span class="n">headID</span><span class="p">,</span><span class="n">fm</span><span class="o">.</span><span class="n">Capsule</span><span class="p">(</span><span class="n">c1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">r1</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">r2</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="p">))</span>
+<span class="n">a</span><span class="o">.</span><span class="n">AddCapsule</span><span class="p">(</span><span class="n">antennaID</span><span class="p">,</span><span class="n">fm</span><span class="o">.</span><span class="n">Capsule</span><span class="p">(</span><span class="n">c1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">r1</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">r2</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="p">))</span>
+<span class="n">a</span><span class="o">.</span><span class="n">AddCapsule</span><span class="p">(</span><span class="n">antennaID</span><span class="p">,</span><span class="n">fm</span><span class="o">.</span><span class="n">Capsule</span><span class="p">(</span><span class="n">c1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">r1</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">r2</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="p">))</span>
+<span class="n">a</span><span class="o">.</span><span class="n">AddCapsule</span><span class="p">(</span><span class="n">bodyID</span><span class="p">,</span><span class="n">fm</span><span class="o">.</span><span class="n">Capsule</span><span class="p">(</span><span class="n">c1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">r1</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">r2</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="p">))</span>
+<span class="n">a</span><span class="o">.</span><span class="n">AddCapsule</span><span class="p">(</span><span class="n">bodyID</span><span class="p">,</span><span class="n">fm</span><span class="o">.</span><span class="n">Capsule</span><span class="p">(</span><span class="n">c1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">r1</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">r2</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="p">))</span>
+
+<span class="k">for</span> <span class="n">typeID</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="n">a</span><span class="o">.</span><span class="n">Capsules</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">typeID</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="c1">#R</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">FortMyrmidon</span><span class="p">)</span>
+
+<span class="n">e</span> <span class="o">&lt;-</span> <span class="nf">fmExperimentCreate</span><span class="p">(</span><span class="s">&quot;defining_ant_metadata.myrmidon&quot;</span><span class="p">)</span>
+
+<span class="n">a</span> <span class="o">&lt;-</span> <span class="n">e</span><span class="o">$</span><span class="nf">createAnt</span><span class="p">()</span>
+
+<span class="n">headID</span> <span class="o">=</span> <span class="n">e</span><span class="o">$</span><span class="nf">createAntShapeType</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>
+<span class="n">antennaID</span> <span class="o">=</span> <span class="n">e</span><span class="o">$</span><span class="nf">createAntShapeType</span><span class="p">(</span><span class="s">&quot;antennas&quot;</span><span class="p">)</span>
+<span class="n">bodyID</span> <span class="o">=</span> <span class="n">e</span><span class="o">$</span><span class="nf">createAntShapeType</span><span class="p">(</span><span class="s">&quot;body&quot;</span><span class="p">)</span>
+
+
+<span class="n">a</span><span class="o">$</span><span class="nf">addCapsule</span><span class="p">(</span><span class="n">headID</span><span class="p">,</span><span class="nf">fmCapsuleCreate</span><span class="p">(</span><span class="n">c1</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">),</span> <span class="n">c2</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">),</span> <span class="n">r1</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">,</span> <span class="n">r2</span> <span class="o">=</span> <span class="m">1.0</span> <span class="p">))</span>
+<span class="n">a</span><span class="o">$</span><span class="nf">addCapsule</span><span class="p">(</span><span class="n">antennaID</span><span class="p">,</span><span class="nf">fmCapsuleCreate</span><span class="p">(</span><span class="n">c1</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">),</span> <span class="n">c2</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">),</span> <span class="n">r1</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">,</span> <span class="n">r2</span> <span class="o">=</span> <span class="m">1.0</span> <span class="p">))</span>
+<span class="n">a</span><span class="o">$</span><span class="nf">addCapsule</span><span class="p">(</span><span class="n">antennaID</span><span class="p">,</span><span class="nf">fmCapsuleCreate</span><span class="p">(</span><span class="n">c1</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">),</span> <span class="n">c2</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">),</span> <span class="n">r1</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">,</span> <span class="n">r2</span> <span class="o">=</span> <span class="m">1.0</span> <span class="p">))</span>
+<span class="n">a</span><span class="o">$</span><span class="nf">addCapsule</span><span class="p">(</span><span class="n">bodyID</span><span class="p">,</span><span class="nf">fmCapsuleCreate</span><span class="p">(</span><span class="n">c1</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">),</span> <span class="n">c2</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">),</span> <span class="n">r1</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">,</span> <span class="n">r2</span> <span class="o">=</span> <span class="m">1.0</span> <span class="p">))</span>
+<span class="n">a</span><span class="o">$</span><span class="nf">addCapsule</span><span class="p">(</span><span class="n">bodyID</span><span class="p">,</span><span class="nf">fmCapsuleCreate</span><span class="p">(</span><span class="n">c1</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">),</span> <span class="n">c2</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">),</span> <span class="n">r1</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">,</span> <span class="n">r2</span> <span class="o">=</span> <span class="m">1.0</span> <span class="p">))</span>
+
+<span class="n">a</span><span class="o">$</span><span class="n">capsules</span> <span class="c1"># a list with all capsules data</span>
+
+<span class="nf">for </span><span class="p">(</span> <span class="n">typedCapsule</span> <span class="n">in</span> <span class="n">a</span><span class="o">$</span><span class="n">capsules</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="nf">print</span><span class="p">(</span><span class="nf">paste</span><span class="p">(</span><span class="n">typedCapsule</span><span class="o">$</span><span class="n">type</span><span class="p">,</span><span class="nf">capture.output</span><span class="p">(</span><span class="n">typedCapsule</span><span class="o">$</span><span class="n">capsule</span><span class="p">)))</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;fort/myrmidon/Experiment.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="p">;</span>
+
+<span class="k">auto</span> <span class="n">e</span> <span class="o">=</span> <span class="n">Experiment</span><span class="o">::</span><span class="n">Create</span><span class="p">(</span><span class="s">&quot;defining_ant_metadata.myrmidon&quot;</span><span class="p">);</span>
+<span class="k">auto</span> <span class="n">a</span> <span class="o">=</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">CreateAnt</span><span class="p">();</span>
+
+<span class="n">headID</span> <span class="o">=</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">CreateAntShapeType</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">);</span>
+<span class="n">antennaID</span> <span class="o">=</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">CreateAntShapeType</span><span class="p">(</span><span class="s">&quot;antennas&quot;</span><span class="p">);</span>
+<span class="n">bodyID</span> <span class="o">=</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">CreateAntShapeType</span><span class="p">(</span><span class="s">&quot;body&quot;</span><span class="p">);</span>
+
+
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">AddCapsule</span><span class="p">(</span><span class="n">headID</span><span class="p">,</span>
+              <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Capsule</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
+                                        <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>
+                                        <span class="mf">0.5</span><span class="p">,</span>
+                                        <span class="mf">1.0</span><span class="p">));</span>
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">AddCapsule</span><span class="p">(</span><span class="n">antennaID</span><span class="p">,</span>
+              <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Capsule</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
+                                        <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>
+                                        <span class="mf">0.5</span><span class="p">,</span>
+                                        <span class="mf">1.0</span><span class="p">));</span>
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">AddCapsule</span><span class="p">(</span><span class="n">antennaID</span><span class="p">,</span>
+              <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Capsule</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
+                                        <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>
+                                        <span class="mf">0.5</span><span class="p">,</span>
+                                        <span class="mf">1.0</span><span class="p">));</span>
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">AddCapsule</span><span class="p">(</span><span class="n">bodyID</span><span class="p">,</span>
+              <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Capsule</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
+                                        <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>
+                                        <span class="mf">0.5</span><span class="p">,</span>
+                                        <span class="mf">1.0</span><span class="p">));</span>
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">AddCapsule</span><span class="p">(</span><span class="n">bodyID</span><span class="p">,</span>
+              <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Capsule</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
+                                        <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>
+                                        <span class="mf">0.5</span><span class="p">,</span>
+                                        <span class="mf">1.0</span><span class="p">));</span>
+
+<span class="k">for</span> <span class="p">(</span> <span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span> <span class="p">[</span><span class="n">typeID</span><span class="p">,</span><span class="n">capsule</span><span class="p">]</span> <span class="o">:</span> <span class="n">a</span><span class="o">-&gt;</span><span class="n">Capsules</span><span class="p">()</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="n">typeID</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">capsule</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="user-defined-timed-metadata-system">
+<h2>User-defined timed metadata system<a class="headerlink" href="#user-defined-timed-metadata-system" title="Permalink to this headline"></a></h2>
+<p><strong>fort-studio</strong> provides the ability to define timed key/value pair
+for each ant. Like ant shape type, these keys and their default value
+must be <em>defined</em> <a class="footnote-reference brackets" href="#setmetadatakey" id="id4">5</a> in the experiment before,
+optionally, be <em>modified</em> <a class="footnote-reference brackets" href="#setvalue" id="id5">6</a> or <em>accessed</em> <a class="footnote-reference brackets" href="#getvalue" id="id6">7</a> for
+any ant. Type of key is strongly typed and set in the experiment:
+i.e. if the key <code class="docutils literal notranslate"><span class="pre">&quot;group&quot;</span></code> is defined to be a <code class="docutils literal notranslate"><span class="pre">str</span></code>, assigning an
+<code class="docutils literal notranslate"><span class="pre">int</span></code> will result an error. Possible types are restricted to
+boolean, integer, float, strings or <cite>Time</cite> <a class="footnote-reference brackets" href="#time" id="id7">1</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#python</span>
+<span class="n">e</span><span class="o">.</span><span class="n">SetMetaDataKey</span><span class="p">(</span><span class="s2">&quot;group&quot;</span><span class="p">,</span><span class="s2">&quot;worker&quot;</span><span class="p">)</span>
+<span class="n">e</span><span class="o">.</span><span class="n">SetMetaDataKey</span><span class="p">(</span><span class="s2">&quot;alive&quot;</span><span class="p">,</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">Now</span><span class="p">()</span>
+
+<span class="n">a</span><span class="o">.</span><span class="n">GetValue</span><span class="p">(</span><span class="s2">&quot;group&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">)</span> <span class="c1"># is a worker</span>
+<span class="n">a</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="s2">&quot;alive&quot;</span><span class="p">,</span><span class="bp">False</span><span class="p">,</span><span class="n">t</span><span class="p">)</span>
+<span class="n">a</span><span class="o">.</span><span class="n">GetValue</span><span class="p">(</span><span class="s2">&quot;alive&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">)</span> <span class="c1"># False</span>
+<span class="n">a</span><span class="o">.</span><span class="n">GetValue</span><span class="p">(</span><span class="s2">&quot;alive&quot;</span><span class="p">,</span><span class="n">t</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">fm</span><span class="o">.</span><span class="n">Duration</span><span class="o">.</span><span class="n">Second</span><span class="p">))</span> <span class="c1"># True, it was alive before t</span>
+</pre></div>
+</div>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="c1">#R</span>
+<span class="n">e</span><span class="o">$</span><span class="nf">setMetaDataKey</span><span class="p">(</span><span class="s">&quot;group&quot;</span><span class="p">,</span><span class="s">&quot;worker&quot;</span><span class="p">)</span>
+<span class="n">e</span><span class="o">$</span><span class="nf">setMetaDataKey</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="kc">TRUE</span><span class="p">)</span>
+
+<span class="n">t</span> <span class="o">&lt;-</span> <span class="nf">fmTimeNow</span><span class="p">()</span>
+
+<span class="n">a</span><span class="o">$</span><span class="nf">getValue</span><span class="p">(</span><span class="s">&quot;group&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">)</span> <span class="c1"># is a &quot;worker&quot;</span>
+<span class="n">a</span><span class="o">$</span><span class="nf">setValue</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="kc">FALSE</span><span class="p">,</span><span class="n">t</span><span class="p">)</span>
+<span class="n">a</span><span class="o">$</span><span class="nf">getValue</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">)</span> <span class="c1"># FALSE</span>
+<span class="nf">a.GetValue</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="n">t</span><span class="o">$</span><span class="nf">add</span><span class="p">(</span><span class="nf">fmSecond</span><span class="p">(</span><span class="m">-1</span><span class="p">)))</span> <span class="c1"># TRUE, it was alive before t</span>
+</pre></div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// C++</span>
+<span class="n">e</span><span class="o">-&gt;</span><span class="n">SetMetaDataKey</span><span class="p">(</span><span class="s">&quot;group&quot;</span><span class="p">,</span><span class="s">&quot;worker&quot;</span><span class="p">);</span>
+<span class="n">e</span><span class="o">-&gt;</span><span class="n">SetMetaDataKey</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="nb">true</span><span class="p">);</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">fort</span><span class="o">::</span><span class="n">Time</span><span class="o">::</span><span class="n">Now</span><span class="p">();</span>
+
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">GetValue</span><span class="p">(</span><span class="s">&quot;group&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">);</span> <span class="c1">// is a &quot;worker&quot;</span>
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">SetValue</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="nb">false</span><span class="p">,</span><span class="n">t</span><span class="p">);</span>
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">GetValue</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">);</span> <span class="c1">// false</span>
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">GetValue</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">fort</span><span class="o">::</span><span class="n">Duration</span><span class="o">::</span><span class="n">Second</span><span class="p">));</span> <span class="c1">// true, it was alive before t</span>
+</pre></div>
+</div>
+</section>
+<section id="ant-visualization-data">
+<h2>Ant visualization data<a class="headerlink" href="#ant-visualization-data" title="Permalink to this headline"></a></h2>
+<p>It is possible to <em>set or access</em> <a class="footnote-reference brackets" href="#visualization" id="id8">8</a> properties on how
+ants should be displayed in <strong>fort-studio</strong>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#python</span>
+<span class="n">a</span><span class="o">.</span><span class="n">DisplayColor</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">DefaultPaletteColor</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">a</span><span class="o">.</span><span class="n">DisplayStatus</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Ant</span><span class="o">.</span><span class="n">DisplayState</span><span class="o">.</span><span class="n">SOLO</span>
+</pre></div>
+</div>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="c1">#R</span>
+<span class="n">a</span><span class="o">$</span><span class="n">displayColor</span> <span class="o">=</span> <span class="nf">fmDefaultPaletteColor</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+<span class="n">a</span><span class="o">$</span><span class="n">displayStatus</span> <span class="o">=</span> <span class="n">fmAntDisplayState</span><span class="o">$</span><span class="n">SOLO</span>
+</pre></div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">//C++</span>
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">SetDisplayColor</span><span class="p">(</span><span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">DefaultPaletteColor</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">SetDisplayStatus</span><span class="p">(</span><span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">Ant</span><span class="o">::</span><span class="n">DisplayState</span><span class="o">::</span><span class="n">SOLO</span><span class="p">);</span>
+</pre></div>
+</div>
+<dl class="footnote brackets">
+<dt class="label" id="time"><span class="brackets"><a class="fn-backref" href="#id7">1</a></span></dt>
+<dd><p>Python: <a class="reference internal" href="api/python/time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Time</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmTime</span></code>, C++: <a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort4TimeE" title="fort::Time"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::Time</span></code></a></p>
+</dd>
+<dt class="label" id="capsule"><span class="brackets"><a class="fn-backref" href="#id1">2</a></span></dt>
+<dd><p>Python: <a class="reference internal" href="api/python/shapes.html#py_fort_myrmidon.Capsule" title="py_fort_myrmidon.Capsule"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Capsule</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmCapsule</span></code>, C++: <a class="reference internal" href="api/cpp/shapes.html#_CPPv4N4fort8myrmidon7CapsuleE" title="fort::myrmidon::Capsule"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::Capsule</span></code></a></p>
+</dd>
+<dt class="label" id="createantshapetype"><span class="brackets"><a class="fn-backref" href="#id2">3</a></span></dt>
+<dd><p>Python: <a class="reference internal" href="api/python/experiment.html#py_fort_myrmidon.Experiment.CreateAntShapeType" title="py_fort_myrmidon.Experiment.CreateAntShapeType"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Experiment.CreateAntShapeType()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmExperiment$createAntShapeType()</span></code>, C++: <a class="reference internal" href="api/cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment18CreateAntShapeTypeERKNSt6stringE" title="fort::myrmidon::Experiment::CreateAntShapeType"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Experiment::CreateAntShapeType()</span></code></a></p>
+</dd>
+<dt class="label" id="addcapsule"><span class="brackets"><a class="fn-backref" href="#id3">4</a></span></dt>
+<dd><p>Python: <a class="reference internal" href="api/python/ant_identification.html#py_fort_myrmidon.Ant.AddCapsule" title="py_fort_myrmidon.Ant.AddCapsule"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Ant.AddCapsule()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt$addCapsule()</span></code>, C++: <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4N4fort8myrmidon3Ant10AddCapsuleE14AntShapeTypeIDRKNSt10shared_ptrI7CapsuleEE" title="fort::myrmidon::Ant::AddCapsule"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Ant::AddCapsule()</span></code></a></p>
+</dd>
+<dt class="label" id="setmetadatakey"><span class="brackets"><a class="fn-backref" href="#id4">5</a></span></dt>
+<dd><p>Python: <a class="reference internal" href="api/python/experiment.html#py_fort_myrmidon.Experiment.SetMetaDataKey" title="py_fort_myrmidon.Experiment.SetMetaDataKey"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Experiment.SetMetaDataKey()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmExperiment$setMetaDataKey()</span></code>, C++: <a class="reference internal" href="api/cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment14SetMetaDataKeyERKNSt6stringE5Value" title="fort::myrmidon::Experiment::SetMetaDataKey"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Experiment::SetMetaDataKey()</span></code></a></p>
+</dd>
+<dt class="label" id="setvalue"><span class="brackets"><a class="fn-backref" href="#id5">6</a></span></dt>
+<dd><p>Python: <a class="reference internal" href="api/python/ant_identification.html#py_fort_myrmidon.Ant.SetValue" title="py_fort_myrmidon.Ant.SetValue"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Ant.SetValue()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt$setValue()</span></code>, C++: <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4N4fort8myrmidon3Ant8SetValueERKNSt6stringERK5ValueRK4Time" title="fort::myrmidon::Ant::SetValue"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Ant::SetValue()</span></code></a></p>
+</dd>
+<dt class="label" id="getvalue"><span class="brackets"><a class="fn-backref" href="#id6">7</a></span></dt>
+<dd><p>Python: <a class="reference internal" href="api/python/ant_identification.html#py_fort_myrmidon.Ant.GetValue" title="py_fort_myrmidon.Ant.GetValue"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Ant.GetValue()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt$getValue()</span></code>, C++: <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant8GetValueERKNSt6stringERK4Time" title="fort::myrmidon::Ant::GetValue"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Ant::GetValue()</span></code></a></p>
+</dd>
+<dt class="label" id="visualization"><span class="brackets"><a class="fn-backref" href="#id8">8</a></span></dt>
+<dd><p>Python: <a class="reference internal" href="api/python/ant_identification.html#py_fort_myrmidon.Ant.DisplayStatus" title="py_fort_myrmidon.Ant.DisplayStatus"><code class="xref py py-attr docutils literal notranslate"><span class="pre">py_fort_myrmidon.Ant.DisplayStatus</span></code></a> and <a class="reference internal" href="api/python/ant_identification.html#py_fort_myrmidon.Ant.DisplayColor" title="py_fort_myrmidon.Ant.DisplayColor"><code class="xref py py-attr docutils literal notranslate"><span class="pre">py_fort_myrmidon.Ant.DisplayColor</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt$displayStatus</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt$displayColor</span></code>, C++ <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant13DisplayStatusEv" title="fort::myrmidon::Ant::DisplayStatus"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Ant::DisplayStatus()</span></code></a> and <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant12DisplayColorEv" title="fort::myrmidon::Ant::DisplayColor"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Ant::DisplayColor()</span></code></a></p>
+</dd>
+</dl>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="identifying_ants.html" class="btn btn-neutral float-left" title="Identifying Ants" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="performing_queries.html" class="btn btn-neutral float-right" title="Performing Queries" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Université de Lausanne.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
