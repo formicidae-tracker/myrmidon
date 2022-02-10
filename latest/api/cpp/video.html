@@ -164,11 +164,11 @@
 </pre></div>
 </div>
 </p>
- <div class="admonition note">
+ </p>
+<div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><a class="reference internal" href="queries_matchers.html#classfort_1_1myrmidon_1_1Query_1ac758e8193eb6f82f811b838dea78b6e7"><span class="std std-ref">Query::FindVideoSegments()</span></a>, <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment_1a4b0b753062f448c77bbc76f14da6044d"><span class="std std-ref">Match()</span></a> and <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSequence_1a362cf918d09a624f545178e90fe45bd8"><span class="std std-ref">VideoSequence::ForEach</span></a> accepts a <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment_1a0362f558fa0c2279a5830352fa63dd8d"><span class="std std-ref">VideoSegment::List</span></a> as argument. Indeed it could happen that the desired <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSequence"><span class="std std-ref">VideoSequence</span></a> would span multiple video file.</p>
 </div>
-</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
@@ -244,7 +244,7 @@
 <dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon14VideoFrameDataE">
 <span id="_CPPv3N4fort8myrmidon14VideoFrameDataE"></span><span id="_CPPv2N4fort8myrmidon14VideoFrameDataE"></span><span id="fort::myrmidon::VideoFrameData"></span><span class="target" id="structfort_1_1myrmidon_1_1VideoFrameData"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">VideoFrameData</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14VideoFrameDataE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Represents the tracking data and query results associated to a video frame. </p>
-<p><div class="admonition note">
+<div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>After a call to <a class="reference internal" href="queries_matchers.html#classfort_1_1myrmidon_1_1Query_1ac758e8193eb6f82f811b838dea78b6e7"><span class="std std-ref">Query::FindVideoSegments()</span></a> all pointer values will be set to <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>. One must call <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment_1a4b0b753062f448c77bbc76f14da6044d"><span class="std std-ref">VideoSegment::Match()</span></a> to query results with the <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoFrameData"><span class="std std-ref">VideoFrameData</span></a> present in the <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment_1a0362f558fa0c2279a5830352fa63dd8d"><span class="std std-ref">VideoSegment::List</span></a>.</p>
 </div>
@@ -252,7 +252,6 @@
 <p class="admonition-title">Warning</p>
 <p>In the unlikely case of a <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoFrameData"><span class="std std-ref">VideoFrameData</span></a> without any tracking data ( the video frame was exported but not even a tracking timeout/frame drop was reported), the value of <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoFrameData_1ada7e8844da9ccb8417ad6903e1a36694"><span class="std std-ref">VideoFrameData::Time</span></a> will be set to <a class="reference internal" href="time.html#classfort_1_1Time_1a9593a5d95440d83965255957deb60226"><span class="std std-ref">Time::SinceEver()</span></a>, and all other field would be empty or set to <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>. </p>
 </div>
-</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">

@@ -124,11 +124,6 @@
 <span id="_CPPv3N4fort8myrmidon3AntE"></span><span id="_CPPv2N4fort8myrmidon3AntE"></span><span id="fort::myrmidon::Ant"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Ant</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon3AntE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Main object of interest of any <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p>
 <p><a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> are the main object of interest of an <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. They are identified from tags with <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a>, have a virtual shape to perform collision and interaction detection, and holds user defined metadata.</p>
-<p><div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> can only be created from an <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> with <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment_1aa29e102b024913b692fffc4cc7ceb611"><span class="std std-ref">Experiment::CreateAnt()</span></a>.</p>
-</div>
-</p>
 <section id="classfort_1_1myrmidon_1_1Ant_1autotoc_md3">
 <h3>Naming<a class="headerlink" href="#classfort_1_1myrmidon_1_1Ant_1autotoc_md3" title="Permalink to this headline"></a></h3>
 <p id="classfort_1_1myrmidon_1_1Ant_1autotoc_md3"><a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> are uniquely identified by their ID. By convention we use decimal notation with up to two <code class="docutils literal notranslate"><span class="pre">0</span></code> prefix to display an ID, as returned by AntFormatID.</p>
@@ -149,11 +144,15 @@
 <h3>User defined meta-data (named values)<a class="headerlink" href="#classfort_1_1myrmidon_1_1Ant_1autotoc_md7" title="Permalink to this headline"></a></h3>
 <p id="classfort_1_1myrmidon_1_1Ant_1autotoc_md7"><a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> can stores timed user defined metadata. These are modifiable using <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant_1ab15ae0f99b1ad4db9112b74d997a6650"><span class="std std-ref">SetValue()</span></a> and <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant_1a8abe79d02db27729e72b7d5073517342"><span class="std std-ref">DeleteValue()</span></a> and accesible through <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant_1a698379ee9cacbf858a7136182d85e00c"><span class="std std-ref">GetValue()</span></a>. </p>
 </section>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> can only be created from an <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> with <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment_1aa29e102b024913b692fffc4cc7ceb611"><span class="std std-ref">Experiment::CreateAnt()</span></a>.</p>
+</div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
-<dl class="cpp enum">
+<dl class="cpp enum-class">
 <dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon3Ant12DisplayStateE">
-<span id="_CPPv3N4fort8myrmidon3Ant12DisplayStateE"></span><span id="_CPPv2N4fort8myrmidon3Ant12DisplayStateE"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant_1a5a0a9e1dc212db96ce4c4168cc55f0af"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DisplayState</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon3Ant12DisplayStateE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N4fort8myrmidon3Ant12DisplayStateE"></span><span id="_CPPv2N4fort8myrmidon3Ant12DisplayStateE"></span><span class="target" id="classfort_1_1myrmidon_1_1Ant_1a5a0a9e1dc212db96ce4c4168cc55f0af"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DisplayState</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon3Ant12DisplayStateE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>The DisplayState of an <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> in an <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
@@ -420,11 +419,6 @@ Adds a <a class="reference internal" href="shapes.html#classfort_1_1myrmidon_1_1
 <span id="_CPPv3N4fort8myrmidon14IdentificationE"></span><span id="_CPPv2N4fort8myrmidon14IdentificationE"></span><span id="fort::myrmidon::Identification"></span><span class="target" id="classfort_1_1myrmidon_1_1Identification"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Identification</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14IdentificationE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Relates tags to <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>. </p>
 <p>An <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> relates a <a class="reference internal" href="typedef.html#namespacefort_1_1myrmidon_1a4740c5497efc77ef02c54023ca2a7d6d"><span class="std std-ref">TagID</span></a> to an <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>, with <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> validity data and geometric data.</p>
-<p><div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>An <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> can only be created from an <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> with <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment_1af4e5a8197f0011fc5e5a8641dc699fbb"><span class="std std-ref">Experiment::AddIdentification</span></a>.</p>
-</div>
-</p>
 <section id="classfort_1_1myrmidon_1_1Identification_1autotoc_md0">
 <h3>Time validy<a class="headerlink" href="#classfort_1_1myrmidon_1_1Identification_1autotoc_md0" title="Permalink to this headline"></a></h3>
 <p id="classfort_1_1myrmidon_1_1Identification_1autotoc_md0"><a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> are bounded in <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> in the range [<a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification_1aa20561607f2d2d43a77294426b2f42a2"><span class="std std-ref">Start()</span></a>,<a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification_1a983c8e6cb73f057c57bb1eed3519b91a"><span class="std std-ref">End()</span></a>[. <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification_1aa20561607f2d2d43a77294426b2f42a2"><span class="std std-ref">Start()</span></a> can be <a class="reference internal" href="time.html#classfort_1_1Time_1a9593a5d95440d83965255957deb60226"><span class="std std-ref">Time::SinceEver()</span></a> and <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification_1a983c8e6cb73f057c57bb1eed3519b91a"><span class="std std-ref">End()</span></a> can be Time::ForEver(). These value are modifiable with SetStart() and <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification_1a1c8bf02e07b17ea6c3acc1fc0a19648e"><span class="std std-ref">SetEnd()</span></a>.</p>
@@ -439,16 +433,20 @@ Adds a <a class="reference internal" href="shapes.html#classfort_1_1myrmidon_1_1
 <h3>Pose information<a class="headerlink" href="#classfort_1_1myrmidon_1_1Identification_1autotoc_md1" title="Permalink to this headline"></a></h3>
 <p id="classfort_1_1myrmidon_1_1Identification_1autotoc_md1"><a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> also contains geometric information on how the detected tag is related to the observed <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>. These are the translation and rotation of the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>, in the tag coordinate reference.</p>
 <p>Usually, this information is automatically generated from the manual measurement <a class="reference internal" href="typedef.html#namespacefort_1_1myrmidon_1a160328db24e8a6a82a110a42674001bd"><span class="std std-ref">HEAD_TAIL_MEASUREMENT_TYPE</span></a> made in <code class="docutils literal notranslate"><span class="pre">fort-studio</span></code>. Alternatively, users can override this behavior by setting themselves the relative pose using <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification_1a532b4676510381aef6e174f25a595211"><span class="std std-ref">SetUserDefinedAntPose()</span></a>. <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification_1aa4cb5c9a81bcb6a976d95befb6baf992"><span class="std std-ref">ClearUserDefinedAntPose()</span></a> can be used to revert to the internally computed pose.</p>
-<p><div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Any angle is measured in radians, with a standard mathematical convention. Since in image processing the y-axis is pointing from the top of the image to the bottom, positive angles appears clockwise.</p>
-</div>
-</p>
+<p></p>
 </section>
 <section id="classfort_1_1myrmidon_1_1Identification_1autotoc_md2">
 <h3>Tag Size<a class="headerlink" href="#classfort_1_1myrmidon_1_1Identification_1autotoc_md2" title="Permalink to this headline"></a></h3>
 <p id="classfort_1_1myrmidon_1_1Identification_1autotoc_md2">Identifications also contains the information of the physical tag size used to identify the individual. It can be accessed and set with TagSize and SetTagSize. The value DEFAULT_TAG_SIZE (i.e. 0.0) indicates that the <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment_1a7182fd0798e8a16860f163ad586c9f33"><span class="std std-ref">Experiment::DefaultTagSize</span></a> should be used. Therefore, for most <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>, this field should be kept to DEFAULT_TAG_SIZE, appart for a few individuals, for examples, Queens. </p>
 </section>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> can only be created from an <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> with <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment_1af4e5a8197f0011fc5e5a8641dc699fbb"><span class="std std-ref">Experiment::AddIdentification</span></a>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Any angle is measured in radians, with a standard mathematical convention. Since in image processing the y-axis is pointing from the top of the image to the bottom, positive angles appears clockwise.</p>
+</div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">

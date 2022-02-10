@@ -136,7 +136,7 @@
 <span id="_CPPv3N4fort8myrmidon5QueryE"></span><span id="_CPPv2N4fort8myrmidon5QueryE"></span><span id="fort::myrmidon::Query"></span><span class="target" id="classfort_1_1myrmidon_1_1Query"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Query</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5QueryE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Queries are computation on an <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> tracking data. </p>
 <p>This class is a wrapper for all data queries that can be made on an <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. They takes advantages of multithreading to have efficient computation time.</p>
-<p><div class="admonition note">
+<div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Some queries have two version, one returing up to two std::vector, and one with a storeMethod parameter. The later is to be used with bindings, or when a different data structure is needed.</p>
 </div>
@@ -144,7 +144,6 @@
 <p class="admonition-title">Note</p>
 <p>For very small <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> in number of <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>, most of the query operation are IO bounded, and the multithreading overhead will impact performance by 40-50% in computation time, as threads are waiting for data inpout to come. This is the case for <a class="reference internal" href="#classfort_1_1myrmidon_1_1Query_1ab240018cec2f60e54d6823c7e522820b"><span class="std std-ref">IdentifyFrames()</span></a>, and <a class="reference internal" href="#classfort_1_1myrmidon_1_1Query_1a201c637a14d251c8e61eecc017ee9714"><span class="std std-ref">ComputeAntTrajectories()</span></a>. When collision detection is required, multi-threading can largely help, especially with a large number of individuals. Threading is controlled with <a class="reference internal" href="#structfort_1_1myrmidon_1_1Query_1_1QueryArgs_1a0a49f49f58a6b11ba837322260ed6bd5"><span class="std std-ref">QueryArgs::SingleThreaded</span></a> </p>
 </div>
-</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
 <dl class="cpp function">
