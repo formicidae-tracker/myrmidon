@@ -2,14 +2,15 @@
 % Please edit documentation in R/RcppExports.R
 \name{fmMatcherAntDisplacement}
 \alias{fmMatcherAntDisplacement}
-\title{A fmMatcher that matches ant displacement}
+\title{A fmMatcher that matches ant displacement.}
 \usage{
 fmMatcherAntDisplacement(under, minimumGap)
 }
 \arguments{
 \item{under}{the maximal allowed displacement in pixel}
 
-\item{minimumGap}{minimal time Gap between check}
+\item{minimumGap}{minimal time Gap between check, as a
+\code{\link{fmDuration}}. Can possibly be 0.}
 }
 \value{
 a \code{\link{fmMatcher}} that rejects large displacement

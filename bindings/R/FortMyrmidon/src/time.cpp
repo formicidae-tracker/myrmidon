@@ -58,7 +58,7 @@ RCPP_MODULE(time) {
 	using namespace Rcpp;
 	class_<fort::Duration>("fmDuration")
 		.constructor()
-		.constructor<int64_t>()
+		.constructor<int32_t>()
 		.const_method("show",
 		              &fmDuration_show,
 		              "shows a fmDuration")
@@ -281,4 +281,25 @@ fort::Duration fmMicrosecond(double us) {
 // [[Rcpp::export]]
 fort::Duration fmNanosecond(int64_t ns) {
 	return ns;
+}
+
+// [[Rcpp::export]]
+void pfmConsumeDuration(fort::Duration duration) {
+}
+
+namespace Rcpp {
+template <> fort::Duration as(SEXP s) {
+	RObject object(s);
+	if ( object.isS4() ) {
+		S4 s4object(s);
+		if ( s4object.is("Rcpp_fmDuration") == true ) {
+			Environment env(s4object);
+			return *XPtr<fort::Duration>(env.get(".pointer"));
+		}
+	}
+	if ( Rcpp::is<Rcpp::IntegerVector>(object) ) {
+		return Rcpp::IntegerVector(s)[0];
+	}
+	throw std::invalid_argument("Only integer can be converted to fmDuration");
+}
 }

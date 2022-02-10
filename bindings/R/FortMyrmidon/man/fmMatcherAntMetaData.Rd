@@ -7,7 +7,7 @@
 fmMatcherAntMetaData(key, value)
 }
 \arguments{
-\item{key}{the key to match}
+\item{key}{(a character) the key to match}
 
 \item{value}{the value to match. Should either be a logical,
 integer, numerical, character or \code{\link{fmTime}}.}

@@ -11,11 +11,13 @@
 
 #include <RcppCommon.h>
 
-RCPP_EXPOSED_CLASS_NODECL(fort::Duration);
 RCPP_EXPOSED_CLASS_NODECL(fort::Time);
+RCPP_EXPOSED_CLASS_NODECL(fort::Duration);
 
 
 namespace Rcpp {
+template <> fort::Duration as(SEXP);
+
 template <> Eigen::Vector2d as(SEXP);
 template <> SEXP wrap(const Eigen::Vector2d & );
 

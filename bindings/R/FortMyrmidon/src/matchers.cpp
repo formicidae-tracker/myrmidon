@@ -81,7 +81,7 @@ fort::myrmidon::Matcher::Ptr fmMatcherAntID(fort::myrmidon::AntID antID) {
 //' A fmMatcher that matches metadata key/value
 //' @details In the case of interactions, matches interaction with one
 //'   of the Ant meeting the criterion.
-//' @param key the key to match
+//' @param key (a character) the key to match
 //' @param value the value to match. Should either be a logical,
 //'   integer, numerical, character or \code{\link{fmTime}}.
 //' @return a \code{\link{fmMatcher}} that matches when one of the
@@ -141,8 +141,8 @@ fort::myrmidon::Matcher::Ptr fmMatcherAntAngleGreaterThan(double angle) {
 
 //' A fmMatcher that matches interaction types
 //' @details In the case of trajectories, it matches anything.
-//' @param type1 the first ant shape type to match
-//' @param type2 the second ant shape type to match
+//' @param type1 (integer) the first ant shape type to match
+//' @param type2 (integer) the second ant shape type to match
 //' @return a \code{\link{fmMatcher}} that matches
 //'     (**type1**,**type2**) and (**type2**,**type1**) interactions.
 //' @family fmMatcher methods
@@ -152,9 +152,10 @@ fort::myrmidon::Matcher::Ptr fmMatcherInteractionType(fort::myrmidon::AntShapeTy
 	return fort::myrmidon::Matcher::InteractionType(type1,type2);
 }
 
-//' A fmMatcher that matches ant displacement
+//' A fmMatcher that matches ant displacement.
 //' @param under the maximal allowed displacement in pixel
-//' @param minimumGap minimal time Gap between check
+//' @param minimumGap minimal time Gap between check, as a
+//'        \code{\link{fmDuration}}. Can possibly be 0.
 //' @description Matches trajectories and interactions where the Ant
 //'     displacement between two consecutive position is smaller than
 //'     **under**. If **minimumGap** is not zero, this check will be

@@ -7,9 +7,9 @@
 fmMatcherInteractionType(type1, type2)
 }
 \arguments{
-\item{type1}{the first ant shape type to match}
+\item{type1}{(integer) the first ant shape type to match}
 
-\item{type2}{the second ant shape type to match}
+\item{type2}{(integer) the second ant shape type to match}
 }
 \value{
 a \code{\link{fmMatcher}} that matches

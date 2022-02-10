@@ -561,6 +561,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// pfmConsumeDuration
+void pfmConsumeDuration(fort::Duration duration);
+RcppExport SEXP _FortMyrmidon_pfmConsumeDuration(SEXP durationSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< fort::Duration >::type duration(durationSEXP);
+    pfmConsumeDuration(duration);
+    return R_NilValue;
+END_RCPP
+}
 
 RcppExport SEXP _rcpp_module_boot_ant();
 RcppExport SEXP _rcpp_module_boot_eigen();
@@ -622,6 +632,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FortMyrmidon_fmMillisecond", (DL_FUNC) &_FortMyrmidon_fmMillisecond, 1},
     {"_FortMyrmidon_fmMicrosecond", (DL_FUNC) &_FortMyrmidon_fmMicrosecond, 1},
     {"_FortMyrmidon_fmNanosecond", (DL_FUNC) &_FortMyrmidon_fmNanosecond, 1},
+    {"_FortMyrmidon_pfmConsumeDuration", (DL_FUNC) &_FortMyrmidon_pfmConsumeDuration, 1},
     {"_rcpp_module_boot_ant", (DL_FUNC) &_rcpp_module_boot_ant, 0},
     {"_rcpp_module_boot_eigen", (DL_FUNC) &_rcpp_module_boot_eigen, 0},
     {"_rcpp_module_boot_experiment", (DL_FUNC) &_rcpp_module_boot_experiment, 0},

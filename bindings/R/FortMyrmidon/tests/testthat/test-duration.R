@@ -79,7 +79,7 @@ test_that("it can be parsed",{
     for( i in 1:length(data)) {
         v <- names(data)[[i]]
         expected <- fmNanosecond(data[[i]])
-        expect_true(fmDurationParse(!!v) == expected)
+        expect_true(fmDurationParse(!!v) == !!expected)
     }
 
     errors <- list("",
@@ -121,4 +121,12 @@ test_that("binary operation works as expected", {
     expect_true(a >= a)
     expect_false(a >= b)
 
+})
+
+test_that("it cannot be implicitly cast from integer, numerical, character or logical", {
+    pfmConsumeDuration(fmHour(1))
+    pfmConsumeDuration(1L)
+    expect_error(pfmConsumeDuration(1.1),"Only integer can be converted to fmDuration")
+    expect_error(pfmConsumeDuration(TRUE),"Only integer can be converted to fmDuration")
+    expect_error(pfmConsumeDuration("foo"),"Only integer can be converted to fmDuration")
 })
