@@ -226,7 +226,7 @@ py::object GetTagCloseUps(const fort::myrmidon::Experiment & e,
 					                                       current = current_;
 					                                       total = total_;
 				                                       }
-				                                       cv.notify_one();
+				                                       cv.notify_all();
 			                                       },
 			                                       [&](const char * what) {
 				                                       if ( verbose == false ) {
@@ -256,7 +256,8 @@ py::object GetTagCloseUps(const fort::myrmidon::Experiment & e,
 			break;
 		}
 		if ( PyErr_CheckSignals() != 0 ) {
-		    throw py::error_already_set();
+			op.detach();
+			throw py::error_already_set();
 		}
 		if ( progress.is_none() == true ) {
 			progress = tqdm.attr("tqdm")("total"_a = total,
