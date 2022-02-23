@@ -20,7 +20,7 @@ class QueryProgress {
 private:
 	py::object d_progress;
 	fort::Time d_start;
-	uint64_t d_lastMinuteReported;
+	int64_t d_lastMinuteReported;
 public:
 	QueryProgress(const fort::myrmidon::Experiment & e,
 	           fort::Time start,
@@ -28,9 +28,11 @@ public:
 	           const std::string & description,
 	           bool verbose = true)
 		: d_progress(pybind11::none()) {
+
 		if ( verbose == false) {
 			return;
 		}
+
 		if ( start.IsInfinite() || end.IsInfinite() ) {
 			auto dataInfo = fort::myrmidon::Query::GetDataInformations(e);
 			if ( start.IsInfinite() ) {
@@ -44,7 +46,7 @@ public:
 		using namespace pybind11::literals;
 
 		d_start = start;
-		uint64_t minutes =  std::ceil(end.Sub(start).Minutes());
+		int64_t minutes =  std::ceil(end.Sub(start).Minutes());
 		d_lastMinuteReported = 0;
 
 		d_progress = py::module_::import("tqdm").attr("tqdm")("total"_a = minutes,
@@ -66,10 +68,10 @@ public:
 		}
 		using namespace pybind11::literals;
 
-		uint64_t minuteEllapsed = std::floor(t.Sub(d_start).Minutes());
+		int64_t minuteEllapsed = std::floor(t.Sub(d_start).Minutes());
 		if ( minuteEllapsed > d_lastMinuteReported) {
-			d_lastMinuteReported = minuteEllapsed;
 			d_progress.attr("update")("n"_a = minuteEllapsed - d_lastMinuteReported);
+			d_lastMinuteReported = minuteEllapsed;
 		}
 	}
 };
