@@ -263,7 +263,7 @@ TrackingSolver::Ptr Experiment::CompileTrackingSolver(bool collisionsIgnoreZones
 }
 
 void Experiment::EnsureAllDataIsLoaded(const std::function<void(int,int)> & progressCallback,
-                                       bool fixCorruptedData) {
+                                       bool fixCorruptedData) const {
 	d_p->Get().EnsureAllDataIsLoaded(progressCallback,fixCorruptedData);
 }
 

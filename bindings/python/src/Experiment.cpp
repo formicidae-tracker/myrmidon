@@ -2,7 +2,108 @@
 
 #include <fort/myrmidon/Experiment.hpp>
 
+#include <condition_variable>
+#include <thread>
+
 namespace py = pybind11;
+using namespace pybind11::literals;
+
+class TqdmProgress {
+public:
+	TqdmProgress()
+		: d_progress(pybind11::none()) {
+
+	}
+	~TqdmProgress() {
+		if ( d_progress.is_none() == true ) {
+			return;
+		}
+		d_progress.attr("close")();
+	}
+
+	void Update(int current, int total) {
+		lazyInitialize(current,total);
+		d_progress.attr("update")("n"_a = current - d_last);
+		d_last = current;
+	}
+
+private:
+	void lazyInitialize(int current,int total) {
+		if ( d_progress.is_none() == false ) {
+			return;
+		}
+		d_progress = py::module_::import("tqdm").attr("tqdm")("total"_a = total,
+		                                                      "ncols"_a = 80);
+		d_last = 0;
+	}
+
+
+	py::object d_progress;
+	int d_last;
+};
+
+
+void EnsureAllDataIsLoaded(const fort::myrmidon::Experiment & e,
+                           bool fixCorruptedData) {
+	py::object tqdm = py::module_::import("tqdm");
+	int total(0),current(0);
+	bool done(false);
+	std::mutex m;
+	std::condition_variable cv;
+
+	fort::myrmidon::FixableErrorList errors;
+
+	std::thread op([&]() {
+		try {
+			e.EnsureAllDataIsLoaded([&](int current_,int total_) {
+				                        {
+					                        std::lock_guard<std::mutex> lock(m);
+					                        current = current_;
+					                        total = total_;
+				                        }
+				                        cv.notify_all();
+			                        },
+				fixCorruptedData);
+		} catch ( fort::myrmidon::FixableErrors & e) {
+			errors = std::move(e.Errors());
+		} catch ( const std::exception & ) {}
+		{
+			std::lock_guard<std::mutex> lock(m);
+			done = true;
+		}
+		cv.notify_all();
+	});
+
+		py::object progress = pybind11::none();
+	int lastCurrent = 0;
+	do {
+		std::unique_lock<std::mutex> lock(m);
+		cv.wait(lock,[&]() { return total > 0 || done == true; });
+		if ( done == true ) {
+			if ( progress.is_none() == false ) {
+				progress.attr("close")();
+			}
+			break;
+		}
+		if ( PyErr_CheckSignals() != 0 ) {
+			op.detach();
+			throw py::error_already_set();
+		}
+		if ( progress.is_none() == true ) {
+			progress = tqdm.attr("tqdm")("total"_a = total,
+			                             "ncols"_a = 80);
+		}
+		if ( current != lastCurrent ) {
+			progress.attr("update")("n"_a = current - lastCurrent);
+			lastCurrent = current;
+		}
+	} while( true );
+	op.join();
+
+	if ( errors.empty() == false ) {
+		throw fort::myrmidon::FixableErrors(std::move(errors));
+	}
+}
 
 void BindExperiment(py::module_ & m) {
 	using namespace fort::myrmidon;
@@ -484,7 +585,26 @@ collide ant from raw data.
 Returns:
     TrackingSolver: the compiled tracking solver.
 )pydoc")
+		.def("EnsureAllDataIsLoaded",
+		     [](const Experiment & e,bool fixCorruptedData) {
+			     EnsureAllDataIsLoaded(e,fixCorruptedData);
+		     },
+		     "fixCorruptedData"_a = false,
+		     R"pydoc(
+Ensures all tracking data is loaded.
 
+Ensures that all tracking data, statistics and close-up are available.
+
+Args:
+    fixCorruptedData (bool): if True, will silently fix any data
+        corruption. This could lead to the loss of large chunck of
+        tracking data. Otherwise a RuntimeError is raised summarizing
+        all data corruption found.
+
+Raises:
+    RuntimeError: if fixCorruptedData is False and some data
+        corruption is found.
+)pydoc")
 		;
 
 	py::register_exception<FixableError>(m,"FixableError",PyExc_RuntimeError);

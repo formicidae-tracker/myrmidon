@@ -579,7 +579,7 @@ public:
 	 *         fixCorruptedData is \false
 	 */
 	void EnsureAllDataIsLoaded(const std::function<void(int,int)> & progressCallback,
-	                           bool fixCorruptedData = false);
+	                           bool fixCorruptedData = false) const;
 
 	~Experiment();
 

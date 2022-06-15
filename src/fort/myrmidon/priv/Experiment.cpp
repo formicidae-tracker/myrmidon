@@ -664,7 +664,7 @@ CollisionSolver::ConstPtr Experiment::CompileCollisionSolver(bool collisionsIgno
 }
 
 void Experiment::EnsureAllDataIsLoaded(const std::function<void(int,int)> & progressCallback,
-                                       bool fixCorruptedData) {
+                                       bool fixCorruptedData) const {
 	FixableErrorList errors;
 
 	std::vector<TrackingDataDirectory::Loader> loaders;

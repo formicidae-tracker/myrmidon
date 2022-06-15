@@ -257,7 +257,7 @@ public :
 
 
 	void EnsureAllDataIsLoaded(const std::function<void(int,int)> & progressCallback,
-	                           bool fixCorruptedData);
+	                           bool fixCorruptedData) const;
 private:
 	typedef std::map<MeasurementTypeID,
 	                 std::map<TagID,
