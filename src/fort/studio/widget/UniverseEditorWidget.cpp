@@ -112,7 +112,10 @@ fmp::TrackingDataDirectory::Ptr UniverseEditorWidget::openTDD(const QString & pa
 	dialog->deleteLater();
 
 	if (errors.empty() == false ) {
-		promptForFix(path,std::move(errors));
+		if ( promptForFix(path,std::move(errors)) == false ) {
+			qWarning() << "[UniverseEditorWidget]: Fixing errors discarded by user";
+			return fmp::TrackingDataDirectory::Ptr();
+		}
 	}
 
 	return res;
@@ -185,10 +188,10 @@ void UniverseEditorWidget::onSelectionChanged(const QItemSelection & selection) 
 }
 
 
-void UniverseEditorWidget::promptForFix(const QString & path,fm::FixableErrorList  errors) {
+bool UniverseEditorWidget::promptForFix(const QString & path,fm::FixableErrorList  errors) {
 
 	if (errors.empty()) {
-		return;
+		return true;
 	}
 
 	auto errorDialog = new FixableErrorDialog(std::move(errors),
@@ -196,8 +199,9 @@ void UniverseEditorWidget::promptForFix(const QString & path,fm::FixableErrorLis
 	                                          this);
 	if( errorDialog->exec() == QDialog::Rejected ) {
 		delete errorDialog;
-		return;
+		return false;
 	}
 	errorDialog->fixSelected();
 	delete errorDialog;
+	return true;
 }
