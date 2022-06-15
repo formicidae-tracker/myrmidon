@@ -77,7 +77,6 @@ void CorruptedHermesFileError::Fix() {
 	std::ostringstream oss;
 	oss << d_file.stem().stem().string() << "." << std::setfill('0') << std::setw(4) << (number+1) << ".hermes";;
 	auto next = d_file.parent_path()/oss.str();
-	std::cerr << next << "exists: " << std::boolalpha << fs::exists(next) << std::endl;
 
 	if ( d_until != std::numeric_limits<uint64_t>::max()
 	     || fs::exists(next) == false ) {

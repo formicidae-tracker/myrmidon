@@ -329,7 +329,7 @@ Returns:
 		.def_static("ComputeTagStatistics",
 		            &fort::myrmidon::Query::ComputeTagStatistics,
 		            "experiment"_a,
-		            "fixCorruptedData"_a,
+		            "fixCorruptedData"_a = false,
 		            R"pydoc(
 Computes tag detection statistics in an experiment.
 
