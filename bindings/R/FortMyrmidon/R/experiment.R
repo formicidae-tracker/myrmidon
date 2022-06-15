@@ -292,3 +292,14 @@ fmTagFamily <- c("Tag36h11" = 0,
                  "Standard41h12" = 8,
                  "Standard52h13" = 9,
                  "Undefined" = 10)
+
+#' @name fmExperiment$ensureAllDataIsLoaded
+#' @title Ensure that all data is loaded
+#' @description Ensure that all derived data (tracking data,close ups,
+#'              statistics) is loaded.
+#' @param fixCorruptedData if \code{TRUE} will silently fix any data '
+#'        corruption. This may lead to the loss of large chunck of
+#'        tracking data. Otherwise an error is reported on data
+#'        corruption.
+#' @family fmExperiment methods
+NULL

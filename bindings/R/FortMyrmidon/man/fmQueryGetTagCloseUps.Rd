@@ -4,10 +4,14 @@
 \alias{fmQueryGetTagCloseUps}
 \title{Gets close-ups available in the experiment}
 \usage{
-fmQueryGetTagCloseUps(experiment)
+fmQueryGetTagCloseUps(experiment, fixCorruptedData = FALSE)
 }
 \arguments{
 \item{experiment}{the \code{\link{fmExperiment}} to query}
+
+\item{fixCorruptedData}{if \code{TRUE}, will silently fix '
+corrupted data. Could lead to the loss of a few
+close-up. Otherwise an error will be raised.}
 }
 \value{
 a data.frame with the closeup

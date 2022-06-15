@@ -295,13 +295,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // fmQueryComputeTagStatistics
-fort::myrmidon::TagStatistics::ByTagID fmQueryComputeTagStatistics(const ExperimentPtr& experiment);
-RcppExport SEXP _FortMyrmidon_fmQueryComputeTagStatistics(SEXP experimentSEXP) {
+fort::myrmidon::TagStatistics::ByTagID fmQueryComputeTagStatistics(const ExperimentPtr& experiment, bool fixCorruptedData);
+RcppExport SEXP _FortMyrmidon_fmQueryComputeTagStatistics(SEXP experimentSEXP, SEXP fixCorruptedDataSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const ExperimentPtr& >::type experiment(experimentSEXP);
-    rcpp_result_gen = Rcpp::wrap(fmQueryComputeTagStatistics(experiment));
+    Rcpp::traits::input_parameter< bool >::type fixCorruptedData(fixCorruptedDataSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmQueryComputeTagStatistics(experiment, fixCorruptedData));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -401,13 +402,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // fmQueryGetTagCloseUps
-Rcpp::DataFrame fmQueryGetTagCloseUps(const ExperimentPtr& experiment);
-RcppExport SEXP _FortMyrmidon_fmQueryGetTagCloseUps(SEXP experimentSEXP) {
+Rcpp::DataFrame fmQueryGetTagCloseUps(const ExperimentPtr& experiment, bool fixCorruptedData);
+RcppExport SEXP _FortMyrmidon_fmQueryGetTagCloseUps(SEXP experimentSEXP, SEXP fixCorruptedDataSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const ExperimentPtr& >::type experiment(experimentSEXP);
-    rcpp_result_gen = Rcpp::wrap(fmQueryGetTagCloseUps(experiment));
+    Rcpp::traits::input_parameter< bool >::type fixCorruptedData(fixCorruptedDataSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmQueryGetTagCloseUps(experiment, fixCorruptedData));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -610,14 +612,14 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FortMyrmidon_fmMatcherInteractionType", (DL_FUNC) &_FortMyrmidon_fmMatcherInteractionType, 2},
     {"_FortMyrmidon_fmMatcherAntDisplacement", (DL_FUNC) &_FortMyrmidon_fmMatcherAntDisplacement, 2},
     {"_FortMyrmidon_fmQueryComputeMeasurementFor", (DL_FUNC) &_FortMyrmidon_fmQueryComputeMeasurementFor, 3},
-    {"_FortMyrmidon_fmQueryComputeTagStatistics", (DL_FUNC) &_FortMyrmidon_fmQueryComputeTagStatistics, 1},
+    {"_FortMyrmidon_fmQueryComputeTagStatistics", (DL_FUNC) &_FortMyrmidon_fmQueryComputeTagStatistics, 2},
     {"_FortMyrmidon_pfmQueryIdentifyFrames", (DL_FUNC) &_FortMyrmidon_pfmQueryIdentifyFrames, 6},
     {"_FortMyrmidon_pfmQueryCollideFrames", (DL_FUNC) &_FortMyrmidon_pfmQueryCollideFrames, 6},
     {"_FortMyrmidon_pfmQueryComputeAntTrajectories", (DL_FUNC) &_FortMyrmidon_pfmQueryComputeAntTrajectories, 9},
     {"_FortMyrmidon_pfmQueryComputeAntInteractions", (DL_FUNC) &_FortMyrmidon_pfmQueryComputeAntInteractions, 10},
     {"_FortMyrmidon_fmQueryGetDataInformations", (DL_FUNC) &_FortMyrmidon_fmQueryGetDataInformations, 1},
     {"_FortMyrmidon_fmQueryGetMetaDataKeyRanges", (DL_FUNC) &_FortMyrmidon_fmQueryGetMetaDataKeyRanges, 3},
-    {"_FortMyrmidon_fmQueryGetTagCloseUps", (DL_FUNC) &_FortMyrmidon_fmQueryGetTagCloseUps, 1},
+    {"_FortMyrmidon_fmQueryGetTagCloseUps", (DL_FUNC) &_FortMyrmidon_fmQueryGetTagCloseUps, 2},
     {"_FortMyrmidon_fmShapeListCreate", (DL_FUNC) &_FortMyrmidon_fmShapeListCreate, 1},
     {"_FortMyrmidon_pfmIWantAShapeList", (DL_FUNC) &_FortMyrmidon_pfmIWantAShapeList, 1},
     {"_FortMyrmidon_fmTimeCreate", (DL_FUNC) &_FortMyrmidon_fmTimeCreate, 1},

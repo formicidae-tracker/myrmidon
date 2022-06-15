@@ -137,6 +137,11 @@ inline SEXP fmExperiment_IdentificationsAt(ExperimentPtr * e,
 }
 
 
+inline void fmExperiment_EnsureAllDataIsLoaded(ExperimentPtr * e,
+                                               bool fixCorruptedData) {
+	(*e)->EnsureAllDataIsLoaded([](int,int){},fixCorruptedData);
+}
+
 RCPP_MODULE(experiment) {
 	using namespace Rcpp;
 	class_<ExperimentPtr> ("fmExperiment")
@@ -184,6 +189,7 @@ RCPP_MODULE(experiment) {
 		.method("renameMetaDataKey",&fmExperiment_RenameMetaDataKey)
 
 		.method("identificationsAt",&fmExperiment_IdentificationsAt)
+		.method("ensureAllDataIsLoaded",&fmExperiment_EnsureAllDataIsLoaded);
 		;
 }
 
