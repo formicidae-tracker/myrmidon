@@ -27,6 +27,7 @@ Other fmExperiment methods:
 \code{\link{fmExperiment$deleteMeasurementType}},
 \code{\link{fmExperiment$deleteMetaDataKey}},
 \code{\link{fmExperiment$deleteSpace}},
+\code{\link{fmExperiment$ensureAllDataIsLoaded}},
 \code{\link{fmExperiment$freeIdentificationRangeAt}},
 \code{\link{fmExperiment$identificationsAt}},
 \code{\link{fmExperiment$removeTrackingDataDirectory}},

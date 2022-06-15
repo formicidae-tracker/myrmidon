@@ -214,11 +214,15 @@ fmQueryComputeMeasurementFor <- function(experiment, antID, typeID = 1L) {
 
 #' Computes tag statistics for an experiment
 #' @param experiment the \code{\link{fmExperiment}} to query
+#' @param fixCorruptedData if \code{TRUE}, will silently fix any
+#'        corrupted data. Could lead to the loss of large chunck of
+#'        tracking data. Otherwise will raise an error in case of
+#'        data corruption.
 #' @return a \code{data.frame} with the detection statistics in
 #'   **experiment**
 #' @family fmQuery methods
-fmQueryComputeTagStatistics <- function(experiment) {
-    .Call(`_FortMyrmidon_fmQueryComputeTagStatistics`, experiment)
+fmQueryComputeTagStatistics <- function(experiment, fixCorruptedData = FALSE) {
+    .Call(`_FortMyrmidon_fmQueryComputeTagStatistics`, experiment, fixCorruptedData)
 }
 
 pfmQueryIdentifyFrames <- function(experiment, start, end, computeZones, showProgress, singleThreaded) {
@@ -264,10 +268,13 @@ fmQueryGetMetaDataKeyRanges <- function(experiment, key, value) {
 
 #' Gets close-ups available in the experiment
 #' @param experiment the \code{\link{fmExperiment}} to query
+#' @param fixCorruptedData if \code{TRUE}, will silently fix '
+#'        corrupted data. Could lead to the loss of a few
+#'        close-up. Otherwise an error will be raised.
 #' @return a data.frame with the closeup
 #' @family fmQuery methods
-fmQueryGetTagCloseUps <- function(experiment) {
-    .Call(`_FortMyrmidon_fmQueryGetTagCloseUps`, experiment)
+fmQueryGetTagCloseUps <- function(experiment, fixCorruptedData = FALSE) {
+    .Call(`_FortMyrmidon_fmQueryGetTagCloseUps`, experiment, fixCorruptedData)
 }
 
 #' Creates a fmShapeList

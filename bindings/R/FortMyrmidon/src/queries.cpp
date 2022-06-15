@@ -86,12 +86,17 @@ SEXP wrap(const fort::myrmidon::TagStatistics::ByTagID & tagStats ) {
 
 //' Computes tag statistics for an experiment
 //' @param experiment the \code{\link{fmExperiment}} to query
+//' @param fixCorruptedData if \code{TRUE}, will silently fix any
+//'        corrupted data. Could lead to the loss of large chunck of
+//'        tracking data. Otherwise will raise an error in case of
+//'        data corruption.
 //' @return a \code{data.frame} with the detection statistics in
 //'   **experiment**
 //' @family fmQuery methods
 //[[Rcpp::export]]
-fort::myrmidon::TagStatistics::ByTagID fmQueryComputeTagStatistics(const ExperimentPtr & experiment) {
-	return Query::ComputeTagStatistics(*experiment);
+fort::myrmidon::TagStatistics::ByTagID fmQueryComputeTagStatistics(const ExperimentPtr & experiment,
+                                                                   bool fixCorruptedData = false) {
+	return Query::ComputeTagStatistics(*experiment,fixCorruptedData);
 }
 
 static void checkInt(void * dummy) {
@@ -583,10 +588,14 @@ Rcpp::DataFrame fmQueryGetMetaDataKeyRanges(const ExperimentPtr & experiment,
 
 //' Gets close-ups available in the experiment
 //' @param experiment the \code{\link{fmExperiment}} to query
+//' @param fixCorruptedData if \code{TRUE}, will silently fix '
+//'        corrupted data. Could lead to the loss of a few
+//'        close-up. Otherwise an error will be raised.
 //' @return a data.frame with the closeup
 //' @family fmQuery methods
 //[[Rcpp::export]]
-Rcpp::DataFrame fmQueryGetTagCloseUps(const ExperimentPtr & experiment) {
+Rcpp::DataFrame fmQueryGetTagCloseUps(const ExperimentPtr & experiment,
+                                      bool fixCorruptedData = false) {
 	using namespace fort::myrmidon;
 	using namespace Rcpp;
 	std::vector<std::string> cppPaths;
@@ -598,8 +607,7 @@ Rcpp::DataFrame fmQueryGetTagCloseUps(const ExperimentPtr & experiment) {
 			Query::GetTagCloseUps(*experiment,
 			                      [](int current,int total){
 			                      },
-			                      [](const char *) {
-			                      });
+			                      fixCorruptedData);
 	} catch ( const FmProgress::StopIteration & ) {
 		return R_NilValue;
 	}

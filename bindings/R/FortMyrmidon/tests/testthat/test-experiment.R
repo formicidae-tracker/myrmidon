@@ -277,10 +277,19 @@ test_that("it can open corrupted data", {
     d <- local_data()
     s <- d$experiment$createSpace("main")
     corruptedPath <- ud$CorruptedDataDir$AbsoluteFilePath
-    expect_error({
+    err <- expect_error({
         d$experiment$addTrackingDataDirectory(s$ID,corruptedPath,FALSE)
     })
     URI <- d$experiment$addTrackingDataDirectory(s$ID,corruptedPath,TRUE)
     d$experiment$removeTrackingDataDirectory(URI)
     d$experiment$addTrackingDataDirectory(s$ID,corruptedPath,FALSE)
+
+    matches <- regmatches(as.character(err),regexec("could not read last frame from '(.*hermes)': Unexpected",as.character(err)))
+    filename <- matches[[1]][2]
+    file.rename(paste(filename,".bak",sep=""),filename)
+
+    expect_error({
+        d$experiment$ensureAllDataIsLoaded(fixCorruptedData=FALSE)
+    })
+
 })

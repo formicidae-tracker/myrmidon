@@ -4,10 +4,15 @@
 \alias{fmQueryComputeTagStatistics}
 \title{Computes tag statistics for an experiment}
 \usage{
-fmQueryComputeTagStatistics(experiment)
+fmQueryComputeTagStatistics(experiment, fixCorruptedData = FALSE)
 }
 \arguments{
 \item{experiment}{the \code{\link{fmExperiment}} to query}
+
+\item{fixCorruptedData}{if \code{TRUE}, will silently fix any
+corrupted data. Could lead to the loss of large chunck of
+tracking data. Otherwise will raise an error in case of
+data corruption.}
 }
 \value{
 a \code{data.frame} with the detection statistics in
