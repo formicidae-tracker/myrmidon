@@ -248,7 +248,8 @@ private:
 	                         const fs::path & tddPath,
 	                         const TrackingIndex::ConstPtr & trackingIndexer,
 	                         FrameReferenceCache & cache,
-	                         const ProgressCallback & progress);
+	                         const ProgressCallback & progress,
+	                         FixableErrorList & errors);
 
 	static std::tuple<Ptr,FixableErrorList>
 	OpenFromFiles(const fs::path & absoluteFilePath,

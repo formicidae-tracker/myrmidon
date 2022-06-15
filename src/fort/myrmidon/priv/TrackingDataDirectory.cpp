@@ -223,11 +223,13 @@ void TrackingDataDirectory::BuildFrameReferenceCache(const std::string & URI,
                                                      const fs::path & tddPath,
                                                      const TrackingIndex::ConstPtr & trackingIndexer,
                                                      FrameReferenceCache & cache,
-                                                     const ProgressCallback & progress) {
+                                                     const ProgressCallback & progress,
+                                                     FixableErrorList & errors) {
 	struct CacheSegment {
 		std::string AbsoluteFilePath;
 		std::set<FrameID> ToFind;
 		std::vector<Time>    Times;
+		FixableErrorList Errors;
 		void Load(Time::MonoclockID monoID) {
 			Times.clear();
 			Times.reserve(ToFind.size());
@@ -251,6 +253,12 @@ void TrackingDataDirectory::BuildFrameReferenceCache(const std::string & URI,
 						                         + " is outside of file "
 						                         + AbsoluteFilePath);
 					}
+				} catch ( const hermes::UnexpectedEndOfFileSequence & e)  {
+					auto error = std::make_unique<CorruptedHermesFileError>("Could not find frame "
+					                                                        + std::to_string(*iter),
+					                                                        this->AbsoluteFilePath,
+					                                                        *iter);
+					Errors.push_back(std::move(error));
 				} catch ( const std::exception & e ) {
 					throw std::runtime_error("[TDD.BuildCache]: Could not find frame "
 					                         + std::to_string(*iter) + ": " +  e.what());
@@ -269,7 +277,7 @@ void TrackingDataDirectory::BuildFrameReferenceCache(const std::string & URI,
 	flattened.reserve(toFind.size());
 	for ( auto & [file,segment] : toFind ) {
 		segment.AbsoluteFilePath = (tddPath / file).string();
-		flattened.push_back(segment);
+		flattened.push_back(std::move(segment));
 	}
 
 	std::atomic<int> counts;
@@ -286,12 +294,15 @@ void TrackingDataDirectory::BuildFrameReferenceCache(const std::string & URI,
 		                  }
 	                  });
 	// merge all
-	for ( const auto & segment : flattened ) {
+	for ( auto & segment : flattened ) {
 		size_t i = 0;
 		for ( const auto & frameID : segment.ToFind ) {
 			const auto & time = segment.Times[i];
 			cache[frameID] = FrameReference(URI,frameID,time);
 			++i;
+		}
+		for ( auto & e : segment.Errors ) {
+			errors.push_back(std::move(e));
 		}
 	}
 
@@ -482,7 +493,9 @@ TrackingDataDirectory::OpenFromFiles(const fs::path & absoluteFilePath,
 		errors.push_back(std::move(error));
 	}
 
-	for(const auto & [frameID,s] : ListTagCloseUpFiles(absoluteFilePath / "ants") ) {
+	auto closeUpFiles = ListTagCloseUpFiles(absoluteFilePath / "ants");
+
+	for(const auto & [frameID,s] : closeUpFiles ) {
 		auto [ filepath,filter ] = s;
 		if ( frameID > endFrame ) {
 			errors.push_back(std::make_unique<NoKnownAcquisitionTimeFor>("could not access acquisition time for '"
@@ -516,7 +529,8 @@ TrackingDataDirectory::OpenFromFiles(const fs::path & absoluteFilePath,
 	                         absoluteFilePath,
 	                         ti,
 	                         *referenceCache,
-	                         progress);
+	                         progress,
+	                         errors);
 	// caches the last frame
 	referenceCache->insert(std::make_pair(endFrame,
 	                                      FrameReference(URI,
@@ -535,13 +549,25 @@ TrackingDataDirectory::OpenFromFiles(const fs::path & absoluteFilePath,
 		mi->Insert(fi->second,m);
 	}
 
-	std::vector<FrameID> toErase;
-	toErase.reserve(referenceCache->size());
+	std::set<FrameID> toErase;
 	for ( const auto & [frameID,ref] : *referenceCache ) {
 		if (ref.FrameID() == 0 && ref.Time().Equals(emptyTime) ) {
-			toErase.push_back(frameID);
+			toErase.insert(frameID);
 		}
 	}
+
+
+	for(const auto & [frameID,s] : closeUpFiles ) {
+		if ( toErase.count(frameID) == 0 ) {
+			continue;
+		}
+		auto [ filepath,filter ] = s;
+		errors.push_back(std::make_unique<NoKnownAcquisitionTimeFor>("could not access acquisition time for '"
+		                                                             + filepath.string()
+		                                                             + "', likely due to data corruption",
+		                                                             filepath));
+	}
+
 
 	for( auto frameID : toErase ) {
 		std::cerr << "[CacheCleaning] Could not find FrameReference for FrameID " << frameID << std::endl;
