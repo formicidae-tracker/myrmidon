@@ -668,10 +668,22 @@ void Experiment::EnsureAllDataIsLoaded(const std::function<void(int,int)> & prog
 	FixableErrorList errors;
 
 	std::vector<TrackingDataDirectory::Loader> loaders;
+
+
 	for ( const auto & [URI,tdd] : TrackingDataDirectories() ) {
-		for ( auto c : {tdd->PrepareTagCloseUpsLoaders(),
-		                tdd->PrepareFullFramesLoaders(),
-		                tdd->PrepareTagStatisticsLoaders()} ) {
+		std::vector<std::vector<TrackingDataDirectory::Loader>> toLoad;
+
+		if ( ! tdd->TagCloseUpsComputed() ) {
+			toLoad.push_back(tdd->PrepareTagCloseUpsLoaders());
+		}
+		if ( ! tdd->TagStatisticsComputed() ) {
+			toLoad.push_back(tdd->PrepareTagStatisticsLoaders());
+		}
+		if ( ! tdd->FullFramesComputed() ) {
+			toLoad.push_back(tdd->PrepareFullFramesLoaders());
+		}
+
+		for ( auto c : toLoad ) {
 			loaders.insert(loaders.end(),c.begin(),c.end());
 		}
 	}
