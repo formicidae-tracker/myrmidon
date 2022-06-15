@@ -567,6 +567,8 @@ public:
 	 *
 	 * This operation can take some time.
 	 *
+	 * @param progressCallback a callback to indicate progress. Only
+	 *        called if an operation is actually performed.
 	 * @param fixCorruptedData if \true, will try to silently fix
 	 *        corrupted data, leading to potential loss of large
 	 *        chunck of tracking data or a few tag
@@ -576,7 +578,8 @@ public:
 	 * @throws std::runtime_error in case of data corruption if
 	 *         fixCorruptedData is \false
 	 */
-	void EnsureAllDataIsLoaded(bool fixCorruptedData = false);
+	void EnsureAllDataIsLoaded(const std::function<void(int,int)> & progressCallback,
+	                           bool fixCorruptedData = false);
 
 	~Experiment();
 

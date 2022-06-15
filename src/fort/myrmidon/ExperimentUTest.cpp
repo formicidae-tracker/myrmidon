@@ -5,6 +5,7 @@
 #include "Query.hpp"
 #include "UtilsUTest.hpp"
 #include "TestSetup.hpp"
+#include <regex>
 
 namespace fort {
 namespace myrmidon {
@@ -483,6 +484,7 @@ TEST_F(PublicExperimentUTest,CanOpenCorruptedDataDir) {
 	std::string URI;
 	auto corruptedPath = TestSetup::UTestData().CorruptedDataDir().AbsoluteFilePath;
 	auto s = experiment->CreateSpace("main");
+	std::string corruptedFileName;
 	try{
 		URI = experiment->AddTrackingDataDirectory(s->ID(),
 		                                           corruptedPath);
@@ -494,6 +496,13 @@ TEST_F(PublicExperimentUTest,CanOpenCorruptedDataDir) {
 		if ( noError == true ) {
 			EXPECT_THAT(errors.front()->what(),MatchesRegex("could not read last frame from '.*': .*"));
 			EXPECT_THAT(errors.front()->FixDescription(),MatchesRegex("rewrite '.*' up to frame .* and to continue if possible to next segment"));
+			std::regex filenameRx("rewrite '(.*hermes)' up");
+			std::smatch filenameMatch;
+			std::string description = errors.front()->FixDescription();
+			if ( std::regex_search(description,filenameMatch,filenameRx)
+			     && filenameMatch.size() > 1 ){
+				corruptedFileName = filenameMatch[1];
+			}
 		}
 		for ( auto it = std::next(errors.begin());
 		      it != errors.end();
@@ -508,13 +517,28 @@ TEST_F(PublicExperimentUTest,CanOpenCorruptedDataDir) {
 	} catch ( const std::exception & e ) {
 		ADD_FAILURE() << "unexpected error: " << e.what();
 	}
-
 	try{
 		URI = experiment->AddTrackingDataDirectory(s->ID(),corruptedPath,true);
 		experiment->RemoveTrackingDataDirectory(URI);
 		URI = experiment->AddTrackingDataDirectory(s->ID(),corruptedPath,false);
 	} catch ( const std::exception & e) {
 		ADD_FAILURE() << "Unexpected error: " << e.what();
+	}
+
+	ASSERT_FALSE(corruptedFileName.empty());
+	fs::rename(corruptedFileName + ".bak",
+	           corruptedFileName);
+
+	try {
+		experiment->EnsureAllDataIsLoaded([](int,int){},false);
+		ADD_FAILURE() << "Should throw an error while ensuring old data";
+	} catch ( const FixableErrors & e) {
+		const auto & errors = e.Errors();
+		EXPECT_TRUE(errors.size() > 0);
+		for ( const auto & e: errors) {
+			EXPECT_THAT(e->what(),MatchesRegex("Could not fully read '.*.hermes'"));
+			EXPECT_THAT(e->FixDescription(),MatchesRegex("rewrite '.*hermes' up to frame .* and to continue if possible to next segment"));
+		}
 	}
 
 

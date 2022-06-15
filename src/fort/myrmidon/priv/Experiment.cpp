@@ -25,6 +25,8 @@
 #include "CollisionSolver.hpp"
 #include "TagCloseUp.hpp"
 
+#include <tbb/parallel_for.h>
+
 namespace fort {
 namespace myrmidon {
 namespace priv {
@@ -661,6 +663,52 @@ CollisionSolver::ConstPtr Experiment::CompileCollisionSolver(bool collisionsIgno
 	                                         collisionsIgnoreZones);
 }
 
+void Experiment::EnsureAllDataIsLoaded(const std::function<void(int,int)> & progressCallback,
+                                       bool fixCorruptedData) {
+	FixableErrorList errors;
+
+	std::vector<TrackingDataDirectory::Loader> loaders;
+	for ( const auto & [URI,tdd] : TrackingDataDirectories() ) {
+		for ( auto c : {tdd->PrepareTagCloseUpsLoaders(),
+		                tdd->PrepareFullFramesLoaders(),
+		                tdd->PrepareTagStatisticsLoaders()} ) {
+			loaders.insert(loaders.end(),c.begin(),c.end());
+		}
+	}
+	if ( loaders.empty() == true ) {
+		return;
+	}
+
+	std::mutex mx;
+	std::atomic<int> progress;
+	progress.store(0);
+	tbb::parallel_for(tbb::blocked_range<size_t>(0,loaders.size()),
+	                  [&](const tbb::blocked_range<size_t> & range) {
+		                  for ( size_t idx = range.begin();
+		                        idx != range.end();
+		                        ++idx) {
+			                  auto e = loaders[idx]();
+			                  if ( e ) {
+				                  std::lock_guard<std::mutex> lock(mx);
+				                  errors.push_back(std::move(e));
+			                  }
+			                  progressCallback(progress.fetch_add(1)+1,
+			                                   loaders.size());
+		                  }
+	                  });
+
+	if ( errors.empty() == true ) {
+		return;
+	}
+
+	if ( fixCorruptedData == false ) {
+		throw FixableErrors(std::move(errors));
+	}
+
+	for ( const auto & e : errors ) {
+		e->Fix();
+	}
+}
 
 } //namespace priv
 } //namespace myrmidon

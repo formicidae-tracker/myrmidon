@@ -116,6 +116,7 @@ fmp::TrackingDataDirectory::Ptr UniverseEditorWidget::openTDD(const QString & pa
 			qWarning() << "[UniverseEditorWidget]: Fixing errors discarded by user";
 			return fmp::TrackingDataDirectory::Ptr();
 		}
+		res->SaveToCache();
 	}
 
 	return res;
