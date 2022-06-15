@@ -88,9 +88,14 @@ public:
 	/**
 	 * Computes TagStatistics for an experiment
 	 * @param experiment the Experiment to query for
+	 * @param fixCorruptedData a boolean indicating if data corruption
+	 *        should be ignored and silently fixed. Please note that
+	 *        it could cause the loss of large chunk of tracking
+	 *        data. If false, an exception will be thrown.
 	 * @return the TagStatistics indexed by TagID
 	 */
-	static TagStatistics::ByTagID ComputeTagStatistics(const Experiment & experiment);
+	static TagStatistics::ByTagID ComputeTagStatistics(const Experiment & experiment,
+	                                                   bool fixCorruptedData = false);
 
 	/**
 	 * Arguments for IdentifyFrames
@@ -366,13 +371,17 @@ public:
 	 * Gets the tag close-up in the experiment
 	 *
 	 * @param e the Experiment to query for
+	 * @param progrssCallback a callback for the progress of the operation
+	 * @param fixCorruptedData a boolean that will make data
+	 *         corruption error silently ignored. Could lead to the
+	 *         loss of some tag close-up
 	 *
 	 * @return a tuple of a vector of string, TagID, and an Eigen::Matrix
 	 */
 	static std::tuple<std::vector<std::string>,std::vector<TagID>,Eigen::MatrixXd>
 	GetTagCloseUps(const Experiment & e,
 	               const std::function<void(int,int)> & progressCallback,
-	               const std::function<void(const char *)> & onError);
+	               bool fixCorruptedData = false);
 };
 
 

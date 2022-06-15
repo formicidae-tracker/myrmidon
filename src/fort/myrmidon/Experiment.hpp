@@ -561,6 +561,23 @@ public:
 	TrackingSolver::Ptr CompileTrackingSolver(bool collisionsIgnoreZones) const;
 
 
+
+	/**
+	 * Ensures that all tracking data is loaded.
+	 *
+	 * This operation can take some time.
+	 *
+	 * @param fixCorruptedData if \true, will try to silently fix
+	 *        corrupted data, leading to potential loss of large
+	 *        chunck of tracking data or a few tag
+	 *        close-ups. Otherwise an exception will be thrown in case
+	 *        of corruption.
+	 *
+	 * @throws std::runtime_error in case of data corruption if
+	 *         fixCorruptedData is \false
+	 */
+	void EnsureAllDataIsLoaded(bool fixCorruptedData = false);
+
 	~Experiment();
 
 private:

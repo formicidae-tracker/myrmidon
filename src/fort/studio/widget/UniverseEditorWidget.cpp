@@ -112,7 +112,7 @@ fmp::TrackingDataDirectory::Ptr UniverseEditorWidget::openTDD(const QString & pa
 	dialog->deleteLater();
 
 	if (errors.empty() == false ) {
-		if ( promptForFix(path,std::move(errors)) == false ) {
+		if ( FixableErrorDialog::promptForFix(path,std::move(errors),this) == false ) {
 			qWarning() << "[UniverseEditorWidget]: Fixing errors discarded by user";
 			return fmp::TrackingDataDirectory::Ptr();
 		}
@@ -185,23 +185,4 @@ void UniverseEditorWidget::onSelectionChanged(const QItemSelection & selection) 
 	}
 	const auto & currentSelection  =d_ui->treeView->selectionModel()->selectedIndexes();
 	d_ui->deleteButton->setEnabled(d_universe->isDeletable(currentSelection));
-}
-
-
-bool UniverseEditorWidget::promptForFix(const QString & path,fm::FixableErrorList  errors) {
-
-	if (errors.empty()) {
-		return true;
-	}
-
-	auto errorDialog = new FixableErrorDialog(std::move(errors),
-	                                          tr("opening Tracking Data Directory '%1'").arg(path),
-	                                          this);
-	if( errorDialog->exec() == QDialog::Rejected ) {
-		delete errorDialog;
-		return false;
-	}
-	errorDialog->fixSelected();
-	delete errorDialog;
-	return true;
 }

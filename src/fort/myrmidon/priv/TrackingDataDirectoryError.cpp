@@ -1,5 +1,7 @@
 #include "TrackingDataDirectoryError.hpp"
 
+#include <iomanip>
+
 #include <fort/hermes/Header.pb.h>
 #include <fort/hermes/FrameReadout.pb.h>
 
@@ -33,7 +35,7 @@ std::string CorruptedHermesFileError::FixDescription() const noexcept {
 		+ d_file.string()
 		+ "' up to frame "
 		+ std::to_string(d_until)
-		+ " and to be the last of the sequence";
+		+ " and to continue if possible to next segment";
 }
 
 void CorruptedHermesFileError::Fix() {
@@ -42,23 +44,26 @@ void CorruptedHermesFileError::Fix() {
 	std::vector<RW::LineWriter> lineWriters;
 
 	uint64_t last = 0;
-	RW::Read(d_file,
-	         [&header] ( const hermes::Header & h ) {
-		         header.CheckTypeAndMergeFrom(h);
-	         },
-	         [&last,&lineWriters,this]( const hermes::FileLine & line) {
-		         if ( line.has_readout() == false || line.readout().frameid() > d_until) {
-			         return;
-		         }
-		         hermes::FrameReadout ro;
-		         ro.CheckTypeAndMergeFrom(line.readout());
-		         lineWriters.push_back([ro](hermes::FileLine & wline) {
-			                               wline.mutable_readout()->CheckTypeAndMergeFrom(ro);
-		                               });
-		         if ( line.readout().has_time() ) {
-			         last = line.readout().frameid();
-		         }
-	         });
+	try {
+		RW::Read(d_file,
+		         [&header] ( const hermes::Header & h ) {
+			         header.CheckTypeAndMergeFrom(h);
+		         },
+		         [&last,&lineWriters,this]( const hermes::FileLine & line) {
+			         if ( line.has_readout() == false || line.readout().frameid() > d_until) {
+				         return;
+			         }
+			         hermes::FrameReadout ro;
+			         ro.CheckTypeAndMergeFrom(line.readout());
+			         lineWriters.push_back([ro](hermes::FileLine & wline) {
+				                               wline.mutable_readout()->CheckTypeAndMergeFrom(ro);
+			                               });
+			         if ( line.readout().has_time() ) {
+				         last = line.readout().frameid();
+			         }
+		         });
+	} catch ( std::exception & e ) {
+	}
 
 	if ( d_until != std::numeric_limits<uint64_t>::max()
 	     && last < d_until ) {
@@ -67,10 +72,24 @@ void CorruptedHermesFileError::Fix() {
 		                         + "' until expected frame "
 		                         + std::to_string(d_until));
 	}
-	lineWriters.push_back([](hermes::FileLine & line) {
-		                      // create an empty footer for the last message
-		                      line.mutable_footer();
-	                      });
+
+	auto number = std::atoi(d_file.stem().extension().string().substr(1).c_str());
+	std::ostringstream oss;
+	oss << d_file.stem().stem().string() << "." << std::setfill('0') << std::setw(4) << (number+1) << ".hermes";;
+	auto next = d_file.parent_path()/oss.str();
+	std::cerr << next << "exists: " << std::boolalpha << fs::exists(next) << std::endl;
+
+	if ( d_until != std::numeric_limits<uint64_t>::max()
+	     || fs::exists(next) == false ) {
+		lineWriters.push_back([](hermes::FileLine & line) {
+			                      // create an empty footer for the last message
+			                      line.mutable_footer();
+		                      });
+	} else {
+		lineWriters.push_back([&next](hermes::FileLine & line) {
+			                      line.mutable_footer()->set_next(next.string());
+		                      });
+	}
 
 	auto backupName =  d_file.parent_path() / (d_file.filename().string() + ".bak");
 	fs::rename(d_file,backupName);

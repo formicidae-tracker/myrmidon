@@ -64,6 +64,9 @@ public:
 
 	void Fix() override;
 
+	FixableErrorList & Errors() noexcept;
+
+
 private:
 	static std::string BuildReason(const FixableErrorList & errors) noexcept;
 

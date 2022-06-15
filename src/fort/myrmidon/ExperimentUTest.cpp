@@ -493,7 +493,7 @@ TEST_F(PublicExperimentUTest,CanOpenCorruptedDataDir) {
 		EXPECT_FALSE(errors.front() == nullptr) << (noError = false);
 		if ( noError == true ) {
 			EXPECT_THAT(errors.front()->what(),MatchesRegex("could not read last frame from '.*': .*"));
-			EXPECT_THAT(errors.front()->FixDescription(),MatchesRegex("rewrite '.*' up to frame .* and to be the last of the sequence"));
+			EXPECT_THAT(errors.front()->FixDescription(),MatchesRegex("rewrite '.*' up to frame .* and to continue if possible to next segment"));
 		}
 		for ( auto it = std::next(errors.begin());
 		      it != errors.end();

@@ -38,4 +38,5 @@ private:
 		                                            d_tagStatistics,
 		                                            d_fullFrames;
 	QProgressDialog * d_dialog;
+	QWidget * d_parent;
 };

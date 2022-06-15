@@ -204,7 +204,7 @@ FindVideoSegments(const fort::myrmidon::Experiment & e,
 
 
 py::object GetTagCloseUps(const fort::myrmidon::Experiment & e,
-                          bool verbose) {
+                          bool fixCorruptedData) {
 	using namespace fort::myrmidon;
 	using namespace pybind11::literals;
 
@@ -219,30 +219,29 @@ py::object GetTagCloseUps(const fort::myrmidon::Experiment & e,
 	std::vector<TagID> IDs;
 	Eigen::MatrixXd data;
 
+	FixableErrorList errors;
+
 	std::thread op([&](){
-		               std::tie(paths,IDs,data)
-			               = Query::GetTagCloseUps(e,
-			                                       [&](int current_,int total_) {
-				                                       {
-					                                       std::lock_guard<std::mutex> lock(m);
-					                                       current = current_;
-					                                       total = total_;
-				                                       }
-				                                       cv.notify_all();
-			                                       },
-			                                       [&](const char * what) {
-				                                       if ( verbose == false ) {
-					                                       return;
-				                                       }
-				                                       std::lock_guard<std::mutex> lock(m);
-				                                       std::cerr << what << std::endl;
-			                                       });
+		               try {
+			               std::tie(paths,IDs,data)
+				               = Query::GetTagCloseUps(e,
+				                                       [&](int current_,int total_) {
+					                                       {
+						                                       std::lock_guard<std::mutex> lock(m);
+						                                       current = current_;
+						                                       total = total_;
+					                                       }
+					                                       cv.notify_all();
+				                                       },
+				                                       fixCorruptedData);
+		               } catch ( FixableErrors & e ) {
+			               errors = std::move(e.Errors());
+		               }
 		               {
 			               std::lock_guard<std::mutex> lock(m);
 			               done = true;
 		               }
 		               cv.notify_all();
-
 	               });
 
 	py::object progress = pybind11::none();
@@ -273,6 +272,9 @@ py::object GetTagCloseUps(const fort::myrmidon::Experiment & e,
 	} while( true );
 	op.join();
 
+	if ( errors.empty() == false) {
+		throw FixableErrors(std::move(errors));
+	}
 	py::object df = pd.attr("DataFrame")("data"_a = py::dict("path"_a = paths,
 	                                                         "ID"_a = IDs));
 	py::list cols;
@@ -327,14 +329,22 @@ Returns:
 		.def_static("ComputeTagStatistics",
 		            &fort::myrmidon::Query::ComputeTagStatistics,
 		            "experiment"_a,
+		            "fixCorruptedData"_a,
 		            R"pydoc(
 Computes tag detection statistics in an experiment.
 
 Args:
-    experiment (Experiment): the experiment to query
+    experiment (Experiment): the experiment to query.
+    fixCorruptedData (bool): if True will silently fix any data
+        corruption error found. This may lead to the loss of large
+        chunck of tracking data. Otherwise, a RuntimeError will be
+        raised.
 
 Returns:
     Dict[int,TagStatistics]: the list of TagStatistics indexed by TagID.
+
+Raises:
+    RuntimeError: in vase of data corruption if fixCorruptedData == False
 )pydoc")
 		.def_static("IdentifyFrames",&QueryIdentifyFrames,
 		            "experiment"_a,
@@ -491,12 +501,18 @@ Raises:
 		.def_static("GetTagCloseUps",
 		            &GetTagCloseUps,
 		            "experiment"_a,
-		            "verbose"_a = false,
+		            "fixCorruptedData"_a = false,
 		            R"pydoc(
 Gets the tag close-up in this experiment
 
 Args:
-    experiment (Experiment): the Experiment to query
+    experiment (Experiment): the Experiment to quer
+    fixCorruptedData (bool): if True, data corruption will be silently
+        fixed. In this case a few close-up may be lost. Otherwise it
+        will raise an error.
+
+Raises:
+   RuntimeError: in case of data corruption and if fixCorruptedData == False.
 
 Returns:
     pandas.DataFrame: the close-up data in the experiment

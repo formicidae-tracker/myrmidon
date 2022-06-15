@@ -25,7 +25,7 @@ namespace myrmidon {
 namespace priv {
 
 
-static void EnsureTagStatisticsAreComputed(const Space & space) {
+static void EnsureTagStatisticsAreComputed(const Space & space, bool fixCorruptedData) {
 	std::vector<TrackingDataDirectory::Loader> loaders;
 	for ( const auto & tdd : space.TrackingDataDirectories() ) {
 		if ( tdd->TagStatisticsComputed() == true ) {
@@ -34,22 +34,41 @@ static void EnsureTagStatisticsAreComputed(const Space & space) {
 		auto localLoaders = tdd->PrepareTagStatisticsLoaders();
 		loaders.insert(loaders.end(),localLoaders.begin(),localLoaders.end());
 	}
+	FixableErrorList errors;
+	std::mutex mx;
 	tbb::parallel_for(tbb::blocked_range<size_t>(0,loaders.size()),
-		                  [&loaders](const tbb::blocked_range<size_t> & range) {
+	                  [&](const tbb::blocked_range<size_t> & range) {
 			                  for ( size_t idx = range.begin();
 			                        idx != range.end();
 			                        ++idx ) {
-				                  loaders[idx]();
+				                  auto e = loaders[idx]();
+				                  if ( e ) {
+					                  std::lock_guard<std::mutex> lock(mx);
+					                  errors.push_back(std::move(e));
+				                  }
 			                  }
 		                  });
+
+	if ( errors.empty() ) {
+		return;
+	}
+	if ( fixCorruptedData == false ) {
+		throw FixableErrors(std::move(errors));
+	}
+
+	for ( auto & e : errors) {
+		e->Fix();
+	}
 }
 
-void Query::ComputeTagStatistics(const Experiment & experiment,TagStatistics::ByTagID & result) {
+void Query::ComputeTagStatistics(const Experiment & experiment,
+                                 TagStatistics::ByTagID & result,
+                                 bool fixCorruptedData ) {
 	std::vector<TagStatistics::ByTagID> allSpaceResult;
 
 	typedef std::vector<TagStatisticsHelper::Loader> StatisticLoaderList;
 	for ( const auto & [spaceID,space] : experiment.Spaces() ) {
-		EnsureTagStatisticsAreComputed(*space);
+		EnsureTagStatisticsAreComputed(*space,fixCorruptedData);
 		std::vector<TagStatisticsHelper::Timed> spaceResults;
 		for ( const auto & tdd : space->TrackingDataDirectories() ) {
 			spaceResults.push_back(tdd->TagStatistics());
@@ -224,7 +243,7 @@ void Query::FindVideoSegments(const Experiment & experiment,
 
 static void EnsureTagCloseUpsAreLoaded(const Experiment & e,
                                        const std::function<void(int,int)> & progressCallback,
-                                       const std::function<void(const char *)> & onError) {
+                                       bool fixCorruptedData) {
 	std::vector<TrackingDataDirectory::Loader> loaders;
 	for ( const auto & [uri,tdd] : e.TrackingDataDirectories() ) {
 		if ( tdd->TagCloseUpsComputed() == true ) {
@@ -235,27 +254,39 @@ static void EnsureTagCloseUpsAreLoaded(const Experiment & e,
 	}
 	progressCallback(0,loaders.size());
 	std::atomic<int> loaded(0);
-
+	FixableErrorList errors;
+	std::mutex mx;
 	tbb::parallel_for(tbb::blocked_range<size_t>(0,loaders.size()),
 	                  [&](const tbb::blocked_range<size_t> & range) {
 			                  for ( size_t idx = range.begin();
 			                        idx != range.end();
 			                        ++idx ) {
-				                  try {
-					                  loaders[idx]();
-				                  } catch ( const std::exception & e) {
-					                  onError(e.what());
+				                  auto e = loaders[idx]();
+				                  if ( e ) {
+					                  std::lock_guard<std::mutex> lock(mx);
+					                  errors.push_back(std::move(e));
 				                  }
 				                  progressCallback(loaded.fetch_add(1)+1,loaders.size());
 			                  }
 	                  });
+
+	if (errors.empty() == true ) {
+		return;
+	}
+	if ( fixCorruptedData == false ) {
+		throw FixableErrors(std::move(errors));
+	}
+	for ( auto & e : errors ) {
+		e->Fix();
+	}
 }
 
 std::tuple<std::vector<std::string>,std::vector<TagID>,Eigen::MatrixXd>
 Query::GetTagCloseUps(const Experiment & e,
                       const std::function<void(int,int)> & progressCallback,
-                      const std::function<void(const char *)> & onError) {
-	EnsureTagCloseUpsAreLoaded(e,progressCallback,onError);
+                      bool fixCorruptedData) {
+
+	EnsureTagCloseUpsAreLoaded(e,progressCallback,fixCorruptedData);
 
 	std::vector<std::string> paths;
 	std::vector<TagID> IDs;
