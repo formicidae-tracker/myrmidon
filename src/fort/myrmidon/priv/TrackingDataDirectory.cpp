@@ -446,9 +446,11 @@ TrackingDataDirectory::Open(const fs::path & filepath,
 		res = LoadFromCache(absoluteFilePath,URI.generic_string());
 	} catch (const std::exception & e ) {
 		std::tie(res,errors) = OpenFromFiles(absoluteFilePath,URI.generic_string(),progress);
-		try {
-			res->SaveToCache();
-		} catch ( const std::exception & e) {}
+		if ( errors.empty() ) {
+			try {
+				res->SaveToCache();
+			} catch ( const std::exception & e) {}
+		}
 	}
 
 	res->LoadComputedFromCache();

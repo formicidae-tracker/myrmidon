@@ -210,6 +210,8 @@ public:
 	IteratorRanges(const std::vector<Ptr> & list,
 	               const Time & start,
 	               const Time & end);
+
+	void SaveToCache() const;
 private:
 
 	typedef std::pair<FrameID,Time> TimedFrame;
@@ -269,8 +271,6 @@ private:
 
 	std::shared_ptr<std::map<FrameReference,fs::path>> EnumerateFullFrames(const fs::path & subpath) const noexcept;
 
-
-	void SaveToCache() const;
 
 	void LoadComputedFromCache();
 

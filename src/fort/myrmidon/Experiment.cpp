@@ -63,7 +63,8 @@ std::string Experiment::AddTrackingDataDirectory(SpaceID spaceID,
 	priv::TrackingDataDirectory::Ptr tdd;
 	FixableErrorList errors;
 	try {
-		std::tie(tdd,errors) = priv::TrackingDataDirectory::Open(filepath,d_p->Get().Basedir());
+		std::tie(tdd,errors) = priv::TrackingDataDirectory::Open(filepath,
+		                                                         d_p->Get().Basedir());
 	} catch ( const std::exception & e ) {
 		throw std::runtime_error(e.what());
 	}
@@ -72,6 +73,7 @@ std::string Experiment::AddTrackingDataDirectory(SpaceID spaceID,
 			throw FixableErrors(std::move(errors));
 		} else {
 			FixableErrors(std::move(errors)).Fix();
+			tdd->SaveToCache();
 		}
 	}
 	d_p->Get().AddTrackingDataDirectory(fi->second,tdd);
@@ -260,7 +262,9 @@ TrackingSolver::Ptr Experiment::CompileTrackingSolver(bool collisionsIgnoreZones
 	return std::unique_ptr<TrackingSolver>(new TrackingSolver(privateSolver));
 }
 
-void Experiment::EnsureAllDataIsLoaded(bool fixCorruptedData) {
+void Experiment::EnsureAllDataIsLoaded(const std::function<void(int,int)> & progressCallback,
+                                       bool fixCorruptedData) {
+	d_p->Get().EnsureAllDataIsLoaded(progressCallback,fixCorruptedData);
 }
 
 

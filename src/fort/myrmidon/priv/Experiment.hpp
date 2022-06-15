@@ -255,6 +255,9 @@ public :
 	// @return the right ratio
 	static double CornerWidthRatio(fort::tags::Family f);
 
+
+	void EnsureAllDataIsLoaded(const std::function<void(int,int)> & progressCallback,
+	                           bool fixCorruptedData);
 private:
 	typedef std::map<MeasurementTypeID,
 	                 std::map<TagID,
