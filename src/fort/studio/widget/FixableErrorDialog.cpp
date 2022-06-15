@@ -98,3 +98,23 @@ void FixableErrorDialog::on_checkBox_stateChanged() {
 		item->setCheckState(state);
 	}
 }
+
+bool FixableErrorDialog::promptForFix(const QString & path,
+                                      fm::FixableErrorList errors,
+                                      QWidget * parent) {
+
+	if (errors.empty()) {
+		return true;
+	}
+
+	auto errorDialog = new FixableErrorDialog(std::move(errors),
+	                                          tr("opening Tracking Data Directory '%1'").arg(path),
+	                                          parent);
+	if( errorDialog->exec() == QDialog::Rejected ) {
+		delete errorDialog;
+		return false;
+	}
+	errorDialog->fixSelected();
+	delete errorDialog;
+	return true;
+}

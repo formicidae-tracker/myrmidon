@@ -7,6 +7,7 @@
 #include "DenseMap.hpp"
 #include "TimeUtils.hpp"
 
+#include "TrackingDataDirectoryError.hpp"
 
 namespace fort {
 namespace myrmidon {
@@ -47,8 +48,10 @@ TagStatistics::CountHeader TagStatisticsHelper::ComputeGap(const Time & lastSeen
 
 
 
-TagStatisticsHelper::Timed TagStatisticsHelper::BuildStats(const std::string & hermesFile) {
+std::tuple<TagStatisticsHelper::Timed,FixableError::Ptr>
+TagStatisticsHelper::BuildStats(const std::string & hermesFile) {
 	Timed res;
+
 
 	auto & stats = res.TagStats;
 	hermes::FileContext file(hermesFile,false);
@@ -62,9 +65,11 @@ TagStatisticsHelper::Timed TagStatisticsHelper::BuildStats(const std::string & h
 
 	std::map<TagID,LastSeen> lastSeens;
 	bool hasStart = false;
+	FrameID last = 0;
 	for (;;) {
 		try {
 			file.Read(&ro);
+			last = ro.frameid();
 		} catch ( const fort::hermes::EndOfFile & ) {
 			for ( const auto & [tagID,last] : lastSeens ) {
 				if ( last.FrameTime < res.End ) {
@@ -72,7 +77,15 @@ TagStatisticsHelper::Timed TagStatisticsHelper::BuildStats(const std::string & h
 				}
 			}
 
-			return res;
+			return {res,nullptr};
+
+		} catch ( const hermes::UnexpectedEndOfFileSequence & e ) {
+			return {res,
+			        std::make_unique<CorruptedHermesFileError>("Could not fully read '"
+			                                                   + hermesFile + "'",
+			                                                   hermesFile,
+			                                                   last)};
+
 		} catch ( const std::exception & e ) {
 			throw std::runtime_error("Could not build statistic for '"
 			                         + hermesFile + "':" + e.what());

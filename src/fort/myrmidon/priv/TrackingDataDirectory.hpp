@@ -193,7 +193,7 @@ public:
 	bool TagStatisticsComputed() const;
 	bool FullFramesComputed() const;
 
-	typedef std::function<void()> Loader;
+	typedef std::function<FixableError::Ptr()> Loader;
 
 	std::vector<Loader> PrepareTagCloseUpsLoaders();
 	std::vector<Loader> PrepareTagStatisticsLoaders();

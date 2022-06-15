@@ -5,6 +5,7 @@
 #include <fort/time/Time.hpp>
 
 #include <fort/myrmidon/types/TagStatistics.hpp>
+#include <fort/myrmidon/types/FixableError.hpp>
 
 namespace fort {
 namespace myrmidon {
@@ -25,7 +26,7 @@ public:
 
 	typedef std::function<Timed ()> Loader;
 
-	static Timed BuildStats(const std::string & hermesFile);
+	static std::tuple<Timed,FixableError::Ptr> BuildStats(const std::string & hermesFile);
 
 	template <typename InputIter>
 	inline static Timed MergeTimed(const InputIter & begin, const InputIter & end) {

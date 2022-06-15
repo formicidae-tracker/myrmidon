@@ -12,7 +12,8 @@ class Query {
 public:
 
 	static void ComputeTagStatistics(const Experiment & experiment,
-	                                 TagStatistics::ByTagID & result);
+	                                 TagStatistics::ByTagID & result,
+	                                 bool fixCorruptedData);
 
 	static void IdentifyFrames(const Experiment & experiment,
 	                           std::function<void (const IdentifiedFrame::Ptr &)> storeData,
@@ -44,7 +45,7 @@ public:
 	static std::tuple<std::vector<std::string>,std::vector<TagID>,Eigen::MatrixXd>
 	GetTagCloseUps(const Experiment & e,
 	               const std::function<void(int,int)> & progressCallback,
-	               const std::function<void(const char *)> & onError);
+	               bool fixCorruptedData);
 
 private:
 

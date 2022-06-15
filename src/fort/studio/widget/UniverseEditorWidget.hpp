@@ -33,7 +33,6 @@ public slots:
 
 private:
 
-	bool promptForFix(const QString & path,fm::FixableErrorList errors );
 
 	friend class UniverseUTest_WidgetTest_Test;
 

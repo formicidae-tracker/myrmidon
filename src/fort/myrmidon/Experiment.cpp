@@ -260,6 +260,8 @@ TrackingSolver::Ptr Experiment::CompileTrackingSolver(bool collisionsIgnoreZones
 	return std::unique_ptr<TrackingSolver>(new TrackingSolver(privateSolver));
 }
 
+void Experiment::EnsureAllDataIsLoaded(bool fixCorruptedData) {
+}
 
 
 } // namespace mrymidon

@@ -49,5 +49,9 @@ void FixableErrors::Fix() {
 	}
 }
 
+FixableErrorList & FixableErrors::Errors()  noexcept {
+	return d_errors;
+}
+
 }  // myrmidon
 }  // fort

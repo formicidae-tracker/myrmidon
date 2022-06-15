@@ -1,5 +1,7 @@
 #include "TrackingDataDirectoryLoader.hpp"
 
+#include <fort/studio/widget/FixableErrorDialog.hpp>
+
 #include <QProgressDialog>
 #include <QtConcurrent>
 size_t TrackingDataDirectoryLoader::size() const {
@@ -50,7 +52,8 @@ void TrackingDataDirectoryLoader::initDialog(QWidget * parent) {
 
 TrackingDataDirectoryLoader::TrackingDataDirectoryLoader(const std::vector<fmp::TrackingDataDirectory::Ptr> & tdds,
                                                          QWidget * parent)
-	: d_dialog(nullptr) {
+	: d_dialog(nullptr)
+	, d_parent(parent) {
 
 	for ( const auto & tdd : tdds ) {
 		append(tdd);
@@ -86,10 +89,16 @@ void TrackingDataDirectoryLoader::load(const std::vector<fmp::TrackingDataDirect
 	connect(&watcher,&QFutureWatcher<void>::finished,
 	        &loop,&QEventLoop::quit);
 
+	fm::FixableErrorList errors;
+	std::mutex mx;
 	watcher.setFuture(QtConcurrent::map(loaders,
-	                                    [&counts,this](const fmp::TrackingDataDirectory::Loader & l) {
+	                                    [&counts,&mx,&errors,this](const fmp::TrackingDataDirectory::Loader & l) {
 		                                    try {
-			                                    l();
+			                                    auto e = l();
+			                                    if ( e ) {
+				                                    std::lock_guard<std::mutex> lock(mx);
+				                                    errors.push_back(std::move(e));
+			                                    }
 		                                    } catch( const std::exception & e) {
 			                                    qWarning() << e.what();
 		                                    }
@@ -97,6 +106,8 @@ void TrackingDataDirectoryLoader::load(const std::vector<fmp::TrackingDataDirect
 		                                    emit valueChanged(done);
 	                                    }));
 	loop.exec();
+
+	FixableErrorDialog::promptForFix("",std::move(errors),d_parent);
 }
 
 

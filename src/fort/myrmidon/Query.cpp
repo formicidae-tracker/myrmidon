@@ -23,9 +23,12 @@ ComputedMeasurement::List Query::ComputeMeasurementFor(const Experiment & experi
 	return res;
 }
 
-TagStatistics::ByTagID Query::ComputeTagStatistics(const Experiment & experiment) {
+TagStatistics::ByTagID Query::ComputeTagStatistics(const Experiment & experiment,
+                                                   bool fixCorruptedData) {
 	TagStatistics::ByTagID res;
-	priv::Query::ComputeTagStatistics(experiment.d_p->Get(),res);
+	priv::Query::ComputeTagStatistics(experiment.d_p->Get(),
+	                                  res,
+	                                  fixCorruptedData);
 	return res;
 }
 
@@ -212,9 +215,10 @@ Query::GetMetaDataKeyRanges(const Experiment & e,
 
 
 std::tuple<std::vector<std::string>,std::vector<TagID>,Eigen::MatrixXd>
-Query::GetTagCloseUps(const Experiment & e,const std::function<void(int,int)> & progressCallback,
-                      const std::function<void(const char *)> & onError) {
-	return priv::Query::GetTagCloseUps(e.d_p->Get(),progressCallback,onError);
+Query::GetTagCloseUps(const Experiment & e,
+                      const std::function<void(int,int)> & progressCallback,
+                      bool fixCorruptedData ) {
+	return priv::Query::GetTagCloseUps(e.d_p->Get(),progressCallback,fixCorruptedData);
 }
 
 

@@ -227,41 +227,40 @@ void TrackingDataDirectory::BuildFrameReferenceCache(const std::string & URI,
                                                      FixableErrorList & errors) {
 	struct CacheSegment {
 		std::string AbsoluteFilePath;
-		std::set<FrameID> ToFind;
-		std::vector<Time>    Times;
+		std::map<FrameID,Time> ToFind;
 		FixableErrorList Errors;
 		void Load(Time::MonoclockID monoID) {
-			Times.clear();
-			Times.reserve(ToFind.size());
 
 			fort::hermes::FileContext fc(AbsoluteFilePath,false);
 			fort::hermes::FrameReadout ro;
 			bool first = true;
-			for ( auto iter = ToFind.cbegin(); iter != ToFind.cend() ;) {
+			FrameID curFrameID = 0;
+			for ( auto iter = ToFind.begin(); iter != ToFind.end() ;) {
 				try {
 					fc.Read(&ro);
-					FrameID curFrameID = ro.frameid();
+					curFrameID = ro.frameid();
 					Time curTime = TimeFromFrameReadout(ro,monoID);
-					if ( *iter == curFrameID ) {
-						Times.push_back(curTime);
+					if ( iter->first == curFrameID ) {
+						iter->second = curTime;
 						++iter;
 					}
 				} catch ( const fort::hermes::EndOfFile & ) {
 					if ( iter != ToFind.end() ) {
 						throw std::runtime_error("Frame "
-						                         + std::to_string(*iter)
+						                         + std::to_string(iter->first)
 						                         + " is outside of file "
 						                         + AbsoluteFilePath);
 					}
 				} catch ( const hermes::UnexpectedEndOfFileSequence & e)  {
 					auto error = std::make_unique<CorruptedHermesFileError>("Could not find frame "
-					                                                        + std::to_string(*iter),
+					                                                        + std::to_string(iter->first),
 					                                                        this->AbsoluteFilePath,
-					                                                        *iter);
+					                                                        curFrameID);
 					Errors.push_back(std::move(error));
+					return;
 				} catch ( const std::exception & e ) {
 					throw std::runtime_error("[TDD.BuildCache]: Could not find frame "
-					                         + std::to_string(*iter) + ": " +  e.what());
+					                         + std::to_string(iter->first) + ": " +  e.what());
 				}
 			}
 		}
@@ -271,8 +270,8 @@ void TrackingDataDirectory::BuildFrameReferenceCache(const std::string & URI,
 	std::vector<CacheSegment> flattened;
 	for ( const auto & [frameID,neededRef] : cache ) {
 		const auto & [ref,file] = trackingIndexer->Find(frameID);
-		toFind[file].ToFind.insert(frameID);
-		toFind[file].ToFind.insert(ref.FrameID());
+		toFind[file].ToFind.insert({frameID,Time()});
+		toFind[file].ToFind.insert({ref.FrameID(),Time()});
 	}
 	flattened.reserve(toFind.size());
 	for ( auto & [file,segment] : toFind ) {
@@ -295,11 +294,8 @@ void TrackingDataDirectory::BuildFrameReferenceCache(const std::string & URI,
 	                  });
 	// merge all
 	for ( auto & segment : flattened ) {
-		size_t i = 0;
-		for ( const auto & frameID : segment.ToFind ) {
-			const auto & time = segment.Times[i];
+		for ( const auto & [frameID,time] : segment.ToFind ) {
 			cache[frameID] = FrameReference(URI,frameID,time);
-			++i;
 		}
 		for ( auto & e : segment.Errors ) {
 			errors.push_back(std::move(e));
@@ -538,23 +534,32 @@ TrackingDataDirectory::OpenFromFiles(const fs::path & absoluteFilePath,
 	                                                     endDate.Add(-1))));
 	Time emptyTime;
 
-	for(const auto & m : movies) {
-		auto fi = referenceCache->find(m->StartFrame());
-		if (fi == referenceCache->cend() ||
-		    ( fi->second.FrameID() == 0 && fi->second.Time().Equals(emptyTime) ) ) {
-			std::ostringstream oss;
-			oss << "[MovieIndexing] Could not find FrameReference for FrameID " << m->StartFrame();
-			throw std::logic_error(oss.str());
-		}
-		mi->Insert(fi->second,m);
-	}
-
 	std::set<FrameID> toErase;
 	for ( const auto & [frameID,ref] : *referenceCache ) {
-		if (ref.FrameID() == 0 && ref.Time().Equals(emptyTime) ) {
+		if (ref.FrameID() == 0 || ref.Time().Equals(emptyTime) ) {
 			toErase.insert(frameID);
 		}
 	}
+
+
+	for(const auto & m : movies) {
+		auto fi = referenceCache->find(m->StartFrame());
+		if ( fi == referenceCache->cend() ||
+		     ( fi->second.FrameID() == 0 || fi->second.Time().Equals(emptyTime) ) ) {
+
+			std::ostringstream oss;
+			oss << "could not access acquisition time for frame "
+			    << m->StartFrame()
+			    << ", starting frame of movie segment '"
+			    << m->AbsoluteFilePath()
+			    << "', likely due to data corruption.";
+			errors.push_back(std::make_unique<NoKnownAcquisitionTimeFor>(oss.str(),
+			                                                             m->AbsoluteFilePath()));
+		} else {
+			mi->Insert(fi->second,m);
+		}
+	}
+
 
 
 	for(const auto & [frameID,s] : closeUpFiles ) {
@@ -570,7 +575,6 @@ TrackingDataDirectory::OpenFromFiles(const fs::path & absoluteFilePath,
 
 
 	for( auto frameID : toErase ) {
-		std::cerr << "[CacheCleaning] Could not find FrameReference for FrameID " << frameID << std::endl;
 		referenceCache->erase(frameID);
 	}
 
@@ -854,19 +858,21 @@ public:
 		d_count.store(count);
 	}
 
-	void Compute(size_t index,
-	             FrameID frameID,
-	             const TrackingDataDirectory::TagCloseUpFileAndFilter & fileAndFilter) {
+	FixableError::Ptr Compute(size_t index,
+	                          FrameID frameID,
+	                          const TrackingDataDirectory::TagCloseUpFileAndFilter & fileAndFilter) {
 		auto detector = d_detectorPool.Get(d_tdd->DetectionSettings());
 
 		try {
-			auto tcus = detector->Detect(fileAndFilter,
-			                             d_tdd->FrameReferenceAt(frameID));
+			auto [tcus,error] = detector->Detect(fileAndFilter,
+			                                     d_tdd->FrameReferenceAt(frameID));
 			Reduce(index,tcus);
+			return std::move(error);
 		} catch ( const std::exception & ) {
 			Reduce(index,{});
 			throw;
 		}
+		return nullptr;
 	}
 
 	void Reduce(size_t index,
@@ -903,8 +909,9 @@ private:
 			d_destructor(d_family);
 		}
 
-		std::vector<TagCloseUp::ConstPtr> Detect(const TrackingDataDirectory::TagCloseUpFileAndFilter & fileAndFilter,
-		                                         const FrameReference & reference) {
+		std::tuple<std::vector<TagCloseUp::ConstPtr>,FixableError::Ptr>
+		Detect(const TrackingDataDirectory::TagCloseUpFileAndFilter & fileAndFilter,
+		       const FrameReference & reference) {
 
 			std::vector<TagCloseUp::ConstPtr> res;
 			cv::Mat imgCv;
@@ -912,7 +919,8 @@ private:
 			imgCv = cv::imread(fileAndFilter.first.string(),cv::IMREAD_GRAYSCALE);
 
 			if ( imgCv.empty() ) {
-				throw std::runtime_error(fileAndFilter.first.string() + " is an empty image");
+				return {res,std::make_unique<NoKnownAcquisitionTimeFor>(fileAndFilter.first.string() + " is an empty image",
+				                                                       fileAndFilter.first)};
 			}
 
 
@@ -934,11 +942,11 @@ private:
 				oss << "could not detect tag 0x" << std::hex << *fileAndFilter.second
 				    << " (decimal: " << std::dec << *fileAndFilter.second << ") in "
 				    << fileAndFilter.first;
-				throw std::runtime_error(oss.str());
+				return {res,std::make_unique<NoKnownAcquisitionTimeFor>(oss.str(),fileAndFilter.first)};
 
 			}
 
-			return res;
+			return {res,nullptr};
 		}
 
 	private:
@@ -975,7 +983,7 @@ TrackingDataDirectory::PrepareTagCloseUpsLoaders() {
 	res.reserve(tagCloseUpFiles.size());
 	for( const auto & [frameID,fileAndFilter] : tagCloseUpFiles ) {
 		res.push_back([frameID,fileAndFilter,reducer,i]() {
-			              reducer->Compute(i,frameID,fileAndFilter);
+			              return reducer->Compute(i,frameID,fileAndFilter);
 		              });
 		++i;
 	}
@@ -1020,8 +1028,9 @@ TrackingDataDirectory::PrepareTagStatisticsLoaders() {
 	for ( const auto & s : segments ) {
 
 		res.push_back([reducer,s,i,this]() {
-			              auto stats = TagStatisticsHelper::BuildStats((AbsoluteFilePath()/ s.second).string());
+			              auto [stats,error] = TagStatisticsHelper::BuildStats((AbsoluteFilePath()/ s.second).string());
 			              reducer->Reduce(i,stats);
+			              return std::move(error);
 		              });
 		++i;
 	}
@@ -1069,6 +1078,7 @@ TrackingDataDirectory::PrepareFullFramesLoaders() {
 			              auto imgPath = AbsoluteFilePath() / "ants/computed" / filename;
 			              cv::imwrite(imgPath.c_str(),scaled);
 			              reducer->Reduce();
+			              return nullptr;
 		              });
 	}
 

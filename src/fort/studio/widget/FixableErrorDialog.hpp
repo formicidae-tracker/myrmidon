@@ -15,7 +15,12 @@ public:
 	explicit FixableErrorDialog(fm::FixableErrorList errors,
 	                            const QString & context,
 	                            QWidget *parent = nullptr);
+
 	~FixableErrorDialog();
+
+	static bool promptForFix(const QString & path,
+	                         fm::FixableErrorList errors,
+	                         QWidget * parent);
 
 public slots:
 	void fixSelected();

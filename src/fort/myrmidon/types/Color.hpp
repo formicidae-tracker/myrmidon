@@ -2,6 +2,10 @@
 
 #include <tuple>
 #include <vector>
+#include <cstdint>
+#include <cstddef>
+
+#include <iostream>
 
 namespace fort {
 namespace myrmidon {
