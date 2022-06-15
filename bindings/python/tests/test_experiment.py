@@ -363,5 +363,15 @@ class ExperimentTestCase(unittest.TestCase, assertions.CustomAssertion):
 
         with self.assertRaises(m.FixableError):
             self.experiment.EnsureAllDataIsLoaded(fixCorruptedData=False)
+
+        self.experiment.RemoveTrackingDataDirectory(URI)
+        # no need to fix here, the cache has the fix.
+        self.experiment.AddTrackingDataDirectory(spaceID=s.ID,
+                                                 filepath=corruptedPath)
         self.experiment.EnsureAllDataIsLoaded(fixCorruptedData=True)
+
+        self.experiment.RemoveTrackingDataDirectory(URI)
+        self.experiment.AddTrackingDataDirectory(spaceID=s.ID,
+                                                 filepath=corruptedPath)
+        # here was fixed with previous load
         self.experiment.EnsureAllDataIsLoaded(fixCorruptedData=False)

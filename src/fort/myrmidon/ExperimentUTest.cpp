@@ -541,6 +541,28 @@ TEST_F(PublicExperimentUTest,CanOpenCorruptedDataDir) {
 		}
 	}
 
+	experiment->RemoveTrackingDataDirectory(URI);
+	// no need to fix here, the cache has the fix
+	URI = experiment->AddTrackingDataDirectory(s->ID(),corruptedPath,false);
+	try {
+		experiment->EnsureAllDataIsLoaded([](int,int){
+		},true);
+	} catch ( const std::exception & e ) {
+		ADD_FAILURE() << "Unexpected error : " << e.what();
+		return;
+	}
+
+	experiment->RemoveTrackingDataDirectory(URI);
+	// no need to fix here, the cache has the fix
+	URI = experiment->AddTrackingDataDirectory(s->ID(),corruptedPath,false);
+	try {
+		experiment->EnsureAllDataIsLoaded([](int,int){
+		},false);
+	} catch ( const std::exception & e ) {
+		ADD_FAILURE() << "Unexpected error : " << e.what();
+		return;
+	}
+
 
 }
 
