@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>API generic types &mdash; fort-myrmidon  documentation</title>
@@ -14,6 +14,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/../version_dropdown.js"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -115,9 +116,9 @@
            <div itemprop="articleBody">
              
   <section id="api-generic-types">
-<h1>API generic types<a class="headerlink" href="#api-generic-types" title="Permalink to this headline"></a></h1>
+<h1>API generic types<a class="headerlink" href="#api-generic-types" title="Permalink to this heading"></a></h1>
 <section id="simple-typedefs">
-<h2>Simple typedefs<a class="headerlink" href="#simple-typedefs" title="Permalink to this headline"></a></h2>
+<h2>Simple typedefs<a class="headerlink" href="#simple-typedefs" title="Permalink to this heading"></a></h2>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5TagIDE">
 <span id="_CPPv3N4fort8myrmidon5TagIDE"></span><span id="_CPPv2N4fort8myrmidon5TagIDE"></span><span id="fort::myrmidon::TagID"></span><span class="target" id="namespacefort_1_1myrmidon_1a4740c5497efc77ef02c54023ca2a7d6d"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">TagID</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5TagIDE" title="Permalink to this definition"></a><br /></dt>
@@ -255,13 +256,13 @@
 <span id="_CPPv3N4fort8myrmidon10ValueUtils8TypeNameE9ValueType"></span><span id="_CPPv2N4fort8myrmidon10ValueUtils8TypeNameE9ValueType"></span><span id="fort::myrmidon::ValueUtils::TypeName__ValueType"></span><span class="target" id="structfort_1_1myrmidon_1_1ValueUtils_1a3b0576bbc7f3ea064f88bb8c08d7e4dd"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">TypeName</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4fort8myrmidon9ValueTypeE" title="fort::myrmidon::ValueType"><span class="n"><span class="pre">ValueType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon10ValueUtils8TypeNameE9ValueType" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Gives the type name of a ValueType. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>type</strong> – the type to query for its name </p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if type is unknown </p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the conventional name for type </p>
 </dd>
 </dl>
@@ -272,10 +273,10 @@
 <span id="_CPPv3N4fort8myrmidon10ValueUtils8TypeNameERK5Value"></span><span id="_CPPv2N4fort8myrmidon10ValueUtils8TypeNameERK5Value"></span><span id="fort::myrmidon::ValueUtils::TypeName__ValueCR"></span><span class="target" id="structfort_1_1myrmidon_1_1ValueUtils_1a874349fc3679e4c6f067881032bb0add"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TypeName</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5ValueE" title="fort::myrmidon::Value"><span class="n"><span class="pre">Value</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon10ValueUtils8TypeNameERK5Value" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Gives the type name of a Value. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>value</strong> – the the value to query for its type’s name </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the conventional name for type’s value name </p>
 </dd>
 </dl>
@@ -286,10 +287,10 @@
 <span id="_CPPv3N4fort8myrmidon10ValueUtils11BuildRangesERKNSt3mapI4Time5ValueEE"></span><span id="_CPPv2N4fort8myrmidon10ValueUtils11BuildRangesERKNSt3mapI4Time5ValueEE"></span><span id="fort::myrmidon::ValueUtils::BuildRanges__std::map:Time.Value:CR"></span><span class="target" id="structfort_1_1myrmidon_1_1ValueUtils_1a9aefb1548960dd5041d9d62a1ba43899"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon10ValueUtils19ValuedTimeRangeListE" title="fort::myrmidon::ValueUtils::ValuedTimeRangeList"><span class="n"><span class="pre">ValuedTimeRangeList</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BuildRanges</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">map</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5ValueE" title="fort::myrmidon::Value"><span class="n"><span class="pre">Value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">values</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon10ValueUtils11BuildRangesERKNSt3mapI4Time5ValueEE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Gets the <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange"><span class="std std-ref">ValuedTimeRange</span></a> from a list of <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a>’d Value. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>values</strong> – a list of timed values, such as returned by <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant_1aaacc50609b0253c0dd0052ff745d43a0"><span class="std std-ref">Ant::GetValues()</span></a> </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a ValuedTimeRangeList that would correspond to values </p>
 </dd>
 </dl>
@@ -300,14 +301,14 @@
 <span id="_CPPv3N4fort8myrmidon10ValueUtils13FindConflictsERKNSt3mapI4Time5ValueEERK5ValueRK15ValuedTimeRange"></span><span id="_CPPv2N4fort8myrmidon10ValueUtils13FindConflictsERKNSt3mapI4Time5ValueEERK5ValueRK15ValuedTimeRange"></span><span id="fort::myrmidon::ValueUtils::FindConflicts__std::map:Time.Value:CR.ValueCR.ValuedTimeRangeCR"></span><span class="target" id="structfort_1_1myrmidon_1_1ValueUtils_1a087c92cee6ee9710e8eb23615d09170d"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon10ValueUtils19ValuedTimeRangeListE" title="fort::myrmidon::ValueUtils::ValuedTimeRangeList"><span class="n"><span class="pre">ValuedTimeRangeList</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FindConflicts</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">map</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5ValueE" title="fort::myrmidon::Value"><span class="n"><span class="pre">Value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">values</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5ValueE" title="fort::myrmidon::Value"><span class="n"><span class="pre">Value</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">defaultValue</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon10ValueUtils15ValuedTimeRangeE" title="fort::myrmidon::ValueUtils::ValuedTimeRange"><span class="n"><span class="pre">ValuedTimeRange</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">r</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon10ValueUtils13FindConflictsERKNSt3mapI4Time5ValueEERK5ValueRK15ValuedTimeRange" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Finds <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange"><span class="std std-ref">ValuedTimeRange</span></a> that conflicts with a set of timed Value. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>values</strong> – a set of timed values as returned by <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant_1aaacc50609b0253c0dd0052ff745d43a0"><span class="std std-ref">Ant::GetValues()</span></a> </p></li>
 <li><p><strong>defaultValue</strong> – the value that is considered a default value </p></li>
 <li><p><strong>r</strong> – the <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange"><span class="std std-ref">ValuedTimeRange</span></a> to find any conflict with </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange"><span class="std std-ref">ValuedTimeRange</span></a> that conflict with r </p>
 </dd>
 </dl>
@@ -319,14 +320,14 @@
 <dd><p>Merges a <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange"><span class="std std-ref">ValuedTimeRange</span></a> with a list of timed value. </p>
 <p>This operation will kept the <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange"><span class="std std-ref">ValuedTimeRange</span></a> defined by values which are not defaultValue intact. However r may have its boundaries modified, or be split in several <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange"><span class="std std-ref">ValuedTimeRange</span></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>values</strong> – the values to merge </p></li>
 <li><p><strong>defaultValue</strong> – the Value to be considered as an empty <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange"><span class="std std-ref">ValuedTimeRange</span></a> </p></li>
 <li><p><strong>r</strong> – the <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange"><span class="std std-ref">ValuedTimeRange</span></a> to merge </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1Operations"><span class="std std-ref">Operations</span></a> to actually perform the merge </p>
 </dd>
 </dl>
@@ -338,13 +339,13 @@
 <dd><p>Overwrites a list of timed values to contain a <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange"><span class="std std-ref">ValuedTimeRange</span></a>. </p>
 <p>This operation will modifies values to ensure that the wanted <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange_1a70be7f4f341be0de17cb6599b1dd2431"><span class="std std-ref">ValuedTimeRange::Value</span></a> is set over [<a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange_1a2a57ceda50a8040ba79434040747b72c"><span class="std std-ref">ValuedTimeRange::Start</span></a>;<a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange_1a515a927753552545257f4e26daadf63c"><span class="std std-ref">ValuedTimeRange::End</span></a>[.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>values</strong> – the values to merge with r </p></li>
 <li><p><strong>r</strong> – the range to ensure existance </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1Operations"><span class="std std-ref">Operations</span></a> to actually perform the overwrite </p>
 </dd>
 </dl>

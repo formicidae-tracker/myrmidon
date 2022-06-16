@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Installation &mdash; fort-myrmidon  documentation</title>
@@ -14,6 +14,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/../version_dropdown.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -114,12 +115,12 @@
            <div itemprop="articleBody">
              
   <section id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h1>
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
 <p>It is recommended to install <strong>fort-myrmidon</strong>, <strong>py-fort-myrmidon</strong>
 and <strong>r-fort-myrmidon</strong> via <code class="docutils literal notranslate"><span class="pre">conda</span></code> or <code class="docutils literal notranslate"><span class="pre">mamba</span></code> and to install
 <strong>fort-studio</strong> using <code class="docutils literal notranslate"><span class="pre">snap</span></code>.</p>
 <section id="fort-studio-through-snap">
-<h2><strong>fort-studio</strong> through snap<a class="headerlink" href="#fort-studio-through-snap" title="Permalink to this headline"></a></h2>
+<h2><strong>fort-studio</strong> through snap<a class="headerlink" href="#fort-studio-through-snap" title="Permalink to this heading"></a></h2>
 <p><strong>fort-studio</strong> is available on the snap store with the eponymous snap:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo snap install fort-studio
 </pre></div>
@@ -148,12 +149,12 @@ deployment and is automatically updated with any code pushed on the
 </div>
 </section>
 <section id="fort-myrmidon-and-bindings-through-conda">
-<h2><strong>fort-myrmidon</strong> and bindings through <code class="docutils literal notranslate"><span class="pre">conda</span></code><a class="headerlink" href="#fort-myrmidon-and-bindings-through-conda" title="Permalink to this headline"></a></h2>
+<h2><strong>fort-myrmidon</strong> and bindings through <code class="docutils literal notranslate"><span class="pre">conda</span></code><a class="headerlink" href="#fort-myrmidon-and-bindings-through-conda" title="Permalink to this heading"></a></h2>
 <p>A complete distribution of <strong>libfort-myrmidon</strong> (C++ library)
 <strong>py-fort-myrmidon</strong> (python bindings) and <strong>r-fort-myrmidon</strong> (R
 bindings) are available on the <a class="reference external" href="https::/anaconda.org/formicidae-tracker">formicidae-tracker</a> channel.</p>
 <section id="tips-on-an-efficient-conda-usage">
-<h3>Tips on an efficient <strong>conda</strong> usage<a class="headerlink" href="#tips-on-an-efficient-conda-usage" title="Permalink to this headline"></a></h3>
+<h3>Tips on an efficient <strong>conda</strong> usage<a class="headerlink" href="#tips-on-an-efficient-conda-usage" title="Permalink to this heading"></a></h3>
 <p><strong>conda</strong> can be a bit daunting to master at first. The ecosystem of
 tools has grown quite large, and it is difficult to get all essential
 information in one place. You can find some pointers on essentials
@@ -217,9 +218,9 @@ version installed. Therefore, <cite>always</cite> make sure:</p>
 </section>
 </section>
 <section id="including-fort-studio-to-your-project">
-<h2>Including <strong>fort-studio</strong> to your project<a class="headerlink" href="#including-fort-studio-to-your-project" title="Permalink to this headline"></a></h2>
+<h2>Including <strong>fort-studio</strong> to your project<a class="headerlink" href="#including-fort-studio-to-your-project" title="Permalink to this heading"></a></h2>
 <section id="python">
-<h3>Python<a class="headerlink" href="#python" title="Permalink to this headline"></a></h3>
+<h3>Python<a class="headerlink" href="#python" title="Permalink to this heading"></a></h3>
 <p>After installing the <strong>py-fort-myrmidon</strong> package in an environment, the
 <strong>py_fort_myrmidon</strong> module is available to python in that
 environment.</p>
@@ -232,14 +233,14 @@ environment.</p>
 </div>
 </section>
 <section id="r">
-<h3>R<a class="headerlink" href="#r" title="Permalink to this headline"></a></h3>
+<h3>R<a class="headerlink" href="#r" title="Permalink to this heading"></a></h3>
 <p>After installing the <strong>r-fort-myrmidon</strong> package in an environment,
 the <strong>FortMyrmidon</strong> package is available to the R version <cite>packaged
 with this environment</cite>. The system packaged R will not be able to see
 nor to use without crashing the <strong>FortMyrmidon</strong> package.</p>
 </section>
 <section id="c">
-<h3>C++<a class="headerlink" href="#c" title="Permalink to this headline"></a></h3>
+<h3>C++<a class="headerlink" href="#c" title="Permalink to this heading"></a></h3>
 <p>After installing the <strong>libfort-myrmidon</strong> package, libraries and
 header files for <strong>fort-myrmidon</strong> will be available to the targeted
 conda environment. The recommanded way is to use CMake to build your
@@ -257,7 +258,7 @@ project and link with <strong>fort-myrmidon</strong>.</p>
 nicely integrated with <strong>conda</strong>. Its utilisation should be avoided.</p>
 </section>
 <section id="using-rstudio-with-conda">
-<h3>Using <strong>rstudio</strong> with <strong>conda</strong><a class="headerlink" href="#using-rstudio-with-conda" title="Permalink to this headline"></a></h3>
+<h3>Using <strong>rstudio</strong> with <strong>conda</strong><a class="headerlink" href="#using-rstudio-with-conda" title="Permalink to this heading"></a></h3>
 <p>If you are an <strong>rstudio</strong> user, you will remark that it will always
 use the system’s R version instead of the one you installed with
 <strong>conda</strong>, which means that it will never be able to find

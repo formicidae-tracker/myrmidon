@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Time Representation &mdash; fort-myrmidon  documentation</title>
@@ -14,6 +14,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/../version_dropdown.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -117,7 +118,7 @@
            <div itemprop="articleBody">
              
   <section id="time-representation">
-<h1>Time Representation<a class="headerlink" href="#time-representation" title="Permalink to this headline"></a></h1>
+<h1>Time Representation<a class="headerlink" href="#time-representation" title="Permalink to this heading"></a></h1>
 <p><strong>fort-myrmidon</strong> uses its own classes to represent
 <a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort4TimeE" title="fort::Time"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::Time</span></code></a> and <a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort8DurationE" title="fort::Duration"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::Duration</span></code></a>. These have
 been developped to handle the following features, which are not
@@ -160,9 +161,9 @@ casting native time object to and from the <strong>fort-myrmidon</strong>
 object.</p>
 </div>
 <section id="c">
-<h2>C++<a class="headerlink" href="#c" title="Permalink to this headline"></a></h2>
+<h2>C++<a class="headerlink" href="#c" title="Permalink to this heading"></a></h2>
 <section id="example">
-<h3>Example<a class="headerlink" href="#example" title="Permalink to this headline"></a></h3>
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h3>
 <p><a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort4TimeE" title="fort::Time"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::Time</span></code></a> and <a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort8DurationE" title="fort::Duration"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::Duration</span></code></a> provides
 operators for manipulating duration naturally:</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
@@ -182,9 +183,9 @@ operators for manipulating duration naturally:</p>
 </section>
 </section>
 <section id="python">
-<h2>Python<a class="headerlink" href="#python" title="Permalink to this headline"></a></h2>
+<h2>Python<a class="headerlink" href="#python" title="Permalink to this heading"></a></h2>
 <section id="python-convertion-to-and-from-time-time">
-<h3>Python convertion to and from <strong>time.Time</strong><a class="headerlink" href="#python-convertion-to-and-from-time-time" title="Permalink to this headline"></a></h3>
+<h3>Python convertion to and from <strong>time.Time</strong><a class="headerlink" href="#python-convertion-to-and-from-time-time" title="Permalink to this heading"></a></h3>
 <p><a class="reference internal" href="api/python/time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Time</span></code></a> objects can be created from and converted to a float
 number of seconds from the epoch, as returned by <a class="reference external" href="https://docs.python.org/3/library/time.html#time.time" title="(in Python v3.10)"><code class="xref py py-func docutils literal notranslate"><span class="pre">time.time()</span></code></a> or
 <a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime.timestamp" title="(in Python v3.10)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">datetime.datetime.timestamp()</span></code></a>, with:</p>
@@ -208,7 +209,7 @@ number of seconds from the epoch, as returned by <a class="reference external" h
 </div>
 </section>
 <section id="python-convertion-to-and-from-datetime-datetime">
-<h3>Python convertion to and from <strong>datetime.datetime</strong><a class="headerlink" href="#python-convertion-to-and-from-datetime-datetime" title="Permalink to this headline"></a></h3>
+<h3>Python convertion to and from <strong>datetime.datetime</strong><a class="headerlink" href="#python-convertion-to-and-from-datetime-datetime" title="Permalink to this heading"></a></h3>
 <p><a class="reference internal" href="api/python/time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Time</span></code></a> objects can be created from and
 converted to <a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a>:</p>
 <ul>
@@ -249,7 +250,7 @@ that.</p></li>
 </div>
 </section>
 <section id="id1">
-<h3>Example<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
+<h3>Example<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
 <p><a class="reference internal" href="api/python/time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Time</span></code></a> and
 <a class="reference internal" href="api/python/time.html#py_fort_myrmidon.Duration" title="py_fort_myrmidon.Duration"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Duration</span></code></a> provides overloaded operator
 that gives a natural feeling on time manipulation.</p>
@@ -275,9 +276,9 @@ that gives a natural feeling on time manipulation.</p>
 </section>
 </section>
 <section id="r">
-<h2>R<a class="headerlink" href="#r" title="Permalink to this headline"></a></h2>
+<h2>R<a class="headerlink" href="#r" title="Permalink to this heading"></a></h2>
 <section id="conversion-to-and-from-posixct">
-<h3>Conversion to and from <strong>POSIXct</strong><a class="headerlink" href="#conversion-to-and-from-posixct" title="Permalink to this headline"></a></h3>
+<h3>Conversion to and from <strong>POSIXct</strong><a class="headerlink" href="#conversion-to-and-from-posixct" title="Permalink to this heading"></a></h3>
 <p>R represents times as <code class="xref py py-obj docutils literal notranslate"><span class="pre">POSIXct</span></code> objects, i.e. a numerical number
 of seconds since the system epoch, marked with the <cite>POSIXct</cite>
 class. One can use the following function to convert to and from a
@@ -301,7 +302,7 @@ simply use the <code class="xref py py-obj docutils literal notranslate"><span c
 </ul>
 </section>
 <section id="id2">
-<h3>Example<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<h3>Example<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
 <p>Here is an example of the <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmTime</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmDuration</span></code> R API:</p>
 <div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">FortMyrmidon</span><span class="p">)</span>
 

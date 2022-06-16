@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Matching Video and Tracking Data &mdash; fort-myrmidon  documentation</title>
@@ -14,6 +14,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/../version_dropdown.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -112,7 +113,7 @@
            <div itemprop="articleBody">
              
   <section id="matching-video-and-tracking-data">
-<h1>Matching Video and Tracking Data<a class="headerlink" href="#matching-video-and-tracking-data" title="Permalink to this headline"></a></h1>
+<h1>Matching Video and Tracking Data<a class="headerlink" href="#matching-video-and-tracking-data" title="Permalink to this heading"></a></h1>
 <p>After the analysis of the tracking data, one may want to display the
 analysis of the tracking over saved video sequence.</p>
 <p>There are a few technical difficulties to ensure that the saved video
@@ -136,9 +137,9 @@ opencv bindings to read,modify and write a video file, which is the
 main purpose of the API described here.</p>
 </div>
 <section id="find-video-segments-between-two-times">
-<h2>1. Find Video Segments Between Two Times<a class="headerlink" href="#find-video-segments-between-two-times" title="Permalink to this headline"></a></h2>
-<p>First we must <em>find the VideoSegments</em> <a class="footnote-reference brackets" href="#findvideosegments" id="id1">3</a> between
-two times. This will return a <em>list of VideoSegment</em> <a class="footnote-reference brackets" href="#videosegmentlist" id="id2">1</a>
+<h2>1. Find Video Segments Between Two Times<a class="headerlink" href="#find-video-segments-between-two-times" title="Permalink to this heading"></a></h2>
+<p>First we must <em>find the VideoSegments</em> <a class="footnote-reference brackets" href="#findvideosegments" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> between
+two times. This will return a <em>list of VideoSegment</em> <a class="footnote-reference brackets" href="#videosegmentlist" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>
 which will describes the list of video files and ranges of frames in
 this files that were acquired in the wanted time range. Indeed, since
 the FORT system saves video by default in two hours longs file, it is
@@ -167,13 +168,13 @@ quite inefficient to run the query below over a large time range.</p>
 </div>
 </section>
 <section id="match-query-results-with-video-segments">
-<h2>2. Match Query Results with Video Segments<a class="headerlink" href="#match-query-results-with-video-segments" title="Permalink to this headline"></a></h2>
+<h2>2. Match Query Results with Video Segments<a class="headerlink" href="#match-query-results-with-video-segments" title="Permalink to this heading"></a></h2>
 <p>The <em>list of VideoSegment</em> acquired will only contains, for each video
 frame were this information is available, the acquisition time in a
-<em>VideoFrameData</em> <a class="footnote-reference brackets" href="#videoframedata" id="id3">2</a> object. This object contains other
+<em>VideoFrameData</em> <a class="footnote-reference brackets" href="#videoframedata" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> object. This object contains other
 variable to hold any kind over query result, however those will only
 be populated once we <em>matched query result with the video segments</em>
-<a class="footnote-reference brackets" href="#videosegmentmatch" id="id4">4</a></p>
+<a class="footnote-reference brackets" href="#videosegmentmatch" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a></p>
 <p>Please note in the example below, that the match operation also takes
 a <em>list of VideoSegment</em>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Python</span>
@@ -195,13 +196,13 @@ a <em>list of VideoSegment</em>.</p>
 </pre></div>
 </div>
 <section id="matching-user-specific-data">
-<h3>Matching User Specific Data<a class="headerlink" href="#matching-user-specific-data" title="Permalink to this headline"></a></h3>
+<h3>Matching User Specific Data<a class="headerlink" href="#matching-user-specific-data" title="Permalink to this heading"></a></h3>
 <p>It may be planed for the future to match any kind of timed object, but
 it is not part yet of the public API.</p>
 </section>
 </section>
 <section id="iterate-over-all-video-frames-in-the-videosequence">
-<h2>3. Iterate Over All Video Frames in the VideoSequence<a class="headerlink" href="#iterate-over-all-video-frames-in-the-videosequence" title="Permalink to this headline"></a></h2>
+<h2>3. Iterate Over All Video Frames in the VideoSequence<a class="headerlink" href="#iterate-over-all-video-frames-in-the-videosequence" title="Permalink to this heading"></a></h2>
 <p>The last steps will be to iterate over all video frames. Each API
 provides utility function or object for this purpose.</p>
 <div class="admonition warning">
@@ -213,7 +214,7 @@ default). So while drawing, you must take care to scale
 the geometric data accordingly.</p>
 </div>
 <section id="python">
-<h3>Python<a class="headerlink" href="#python" title="Permalink to this headline"></a></h3>
+<h3>Python<a class="headerlink" href="#python" title="Permalink to this heading"></a></h3>
 <p>A <a class="reference internal" href="api/python/video.html#py_fort_myrmidon.VideoSequence" title="py_fort_myrmidon.VideoSequence"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.VideoSequence</span></code></a> context manager is
 provided to iterate over the <em>VideoSegments</em>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">DrawInteractions</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span><span class="n">data</span><span class="p">):</span>
@@ -232,7 +233,7 @@ provided to iterate over the <em>VideoSegments</em>.</p>
 </div>
 </section>
 <section id="c">
-<h3>C++<a class="headerlink" href="#c" title="Permalink to this headline"></a></h3>
+<h3>C++<a class="headerlink" href="#c" title="Permalink to this heading"></a></h3>
 <p>A <a class="reference internal" href="api/cpp/video.html#_CPPv4N4fort8myrmidon13VideoSequence7ForEachERKN12VideoSegment4ListENSt8functionIFvRN2cv3MatERK14VideoFrameDataEEE" title="fort::myrmidon::VideoSequence::ForEach"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::VideoSequence::ForEach()</span></code></a> method is
 provided.</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span> <span class="n">drawInteractions</span>
@@ -251,20 +252,22 @@ provided.</p>
                                        <span class="n">drawInteractions</span><span class="p">);</span>
 </pre></div>
 </div>
-<dl class="footnote brackets">
-<dt class="label" id="videosegmentlist"><span class="brackets"><a class="fn-backref" href="#id2">1</a></span></dt>
-<dd><p>Python: <a class="reference internal" href="api/python/video.html#py_fort_myrmidon.VideoSegmentList" title="py_fort_myrmidon.VideoSegmentList"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.VideoSegmentList</span></code></a>, R: N.A., C++: <a class="reference internal" href="api/cpp/video.html#_CPPv4N4fort8myrmidon12VideoSegment4ListE" title="fort::myrmidon::VideoSegment::List"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">fort::myrmidon::VideoSegment::List</span></code></a></p>
-</dd>
-<dt class="label" id="videoframedata"><span class="brackets"><a class="fn-backref" href="#id3">2</a></span></dt>
-<dd><p>Python: <a class="reference internal" href="api/python/video.html#py_fort_myrmidon.VideoFrameData" title="py_fort_myrmidon.VideoFrameData"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.VideoFrameData</span></code></a>, R: N.A., C++: <a class="reference internal" href="api/cpp/video.html#_CPPv4N4fort8myrmidon14VideoFrameDataE" title="fort::myrmidon::VideoFrameData"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::VideoFrameData</span></code></a></p>
-</dd>
-<dt class="label" id="findvideosegments"><span class="brackets"><a class="fn-backref" href="#id1">3</a></span></dt>
-<dd><p>Python: <a class="reference internal" href="api/python/queries_matchers.html#py_fort_myrmidon.Query.FindVideoSegments" title="py_fort_myrmidon.Query.FindVideoSegments"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Query.FindVideoSegments()</span></code></a>, R: N.A., C++: <a class="reference internal" href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query17FindVideoSegmentsERK10ExperimentRNSt6vectorI12VideoSegmentEE7SpaceIDRKN4fort4TimeERKN4fort4TimeE" title="fort::myrmidon::Query::FindVideoSegments"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Query::FindVideoSegments()</span></code></a></p>
-</dd>
-<dt class="label" id="videosegmentmatch"><span class="brackets"><a class="fn-backref" href="#id4">4</a></span></dt>
-<dd><p>Python: <a class="reference internal" href="api/python/video.html#py_fort_myrmidon.VideoSegment.Match" title="py_fort_myrmidon.VideoSegment.Match"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.VideoSegment.Match()</span></code></a>, R: N.A., C++: <a class="reference internal" href="api/cpp/video.html#_CPPv4I0EN4fort8myrmidon12VideoSegment5MatchEvR4List8IterType8IterType" title="fort::myrmidon::VideoSegment::Match"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::VideoSegment::Match()</span></code></a></p>
-</dd>
-</dl>
+<aside class="footnote brackets" id="videosegmentlist" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">1</a><span class="fn-bracket">]</span></span>
+<p>Python: <a class="reference internal" href="api/python/video.html#py_fort_myrmidon.VideoSegmentList" title="py_fort_myrmidon.VideoSegmentList"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.VideoSegmentList</span></code></a>, R: N.A., C++: <a class="reference internal" href="api/cpp/video.html#_CPPv4N4fort8myrmidon12VideoSegment4ListE" title="fort::myrmidon::VideoSegment::List"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">fort::myrmidon::VideoSegment::List</span></code></a></p>
+</aside>
+<aside class="footnote brackets" id="videoframedata" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">2</a><span class="fn-bracket">]</span></span>
+<p>Python: <a class="reference internal" href="api/python/video.html#py_fort_myrmidon.VideoFrameData" title="py_fort_myrmidon.VideoFrameData"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.VideoFrameData</span></code></a>, R: N.A., C++: <a class="reference internal" href="api/cpp/video.html#_CPPv4N4fort8myrmidon14VideoFrameDataE" title="fort::myrmidon::VideoFrameData"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::VideoFrameData</span></code></a></p>
+</aside>
+<aside class="footnote brackets" id="findvideosegments" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">3</a><span class="fn-bracket">]</span></span>
+<p>Python: <a class="reference internal" href="api/python/queries_matchers.html#py_fort_myrmidon.Query.FindVideoSegments" title="py_fort_myrmidon.Query.FindVideoSegments"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Query.FindVideoSegments()</span></code></a>, R: N.A., C++: <a class="reference internal" href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query17FindVideoSegmentsERK10ExperimentRNSt6vectorI12VideoSegmentEE7SpaceIDRKN4fort4TimeERKN4fort4TimeE" title="fort::myrmidon::Query::FindVideoSegments"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Query::FindVideoSegments()</span></code></a></p>
+</aside>
+<aside class="footnote brackets" id="videosegmentmatch" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">4</a><span class="fn-bracket">]</span></span>
+<p>Python: <a class="reference internal" href="api/python/video.html#py_fort_myrmidon.VideoSegment.Match" title="py_fort_myrmidon.VideoSegment.Match"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.VideoSegment.Match()</span></code></a>, R: N.A., C++: <a class="reference internal" href="api/cpp/video.html#_CPPv4I0EN4fort8myrmidon12VideoSegment5MatchEvR4List8IterType8IterType" title="fort::myrmidon::VideoSegment::Match"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::VideoSegment::Match()</span></code></a></p>
+</aside>
 </section>
 </section>
 </section>
