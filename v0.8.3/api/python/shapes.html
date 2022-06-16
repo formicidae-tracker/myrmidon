@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2D Geometric Shapes &mdash; fort-myrmidon  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/../version_dropdown.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Video Sequence Matching" href="video.html" />
+    <link rel="prev" title="Time Representation" href="time.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> fort-myrmidon
+          </a>
+              <div class="version">
+                placeholder
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-myrmidon Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defining_ant_metadata.html">Defining Ant Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../performing_queries.html">Performing Queries</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-studio Manual</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/defining_ant_shapes.html">Defining Ant Shapes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/measuring_ants.html">Measuring Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/metadata_edition.html">Ant Metadata Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/visualization.html">Tracking Data Visualization</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../space_zoning.html">Segmenting Spaces in Zones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matching_video.html">Matching Video and Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../time.html">Time Representation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API References</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Python</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="experiment.html">API Entry Point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ant_identification.html">Ants and Identifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="space_zone.html">Spaces and Zones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="queries_matchers.html">Queries And Matchers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="time.html">Time Representation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2D Geometric Shapes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#py-fort-myrmidon-shape">py_fort_myrmidon.Shape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#py-fort-myrmidon-circle">py_fort_myrmidon.Circle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#py-fort-myrmidon-capsule">py_fort_myrmidon.Capsule</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#py-fort-myrmidon-polygon">py_fort_myrmidon.Polygon</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="video.html">Video Sequence Matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="misc.html">Miscanellous</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html#c">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html#r">R</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fort-myrmidon</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Python</a> &raquo;</li>
+      <li>2D Geometric Shapes</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/api/python/shapes.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="d-geometric-shapes">
+<h1>2D Geometric Shapes<a class="headerlink" href="#d-geometric-shapes" title="Permalink to this heading"></a></h1>
+<section id="py-fort-myrmidon-shape">
+<h2>py_fort_myrmidon.Shape<a class="headerlink" href="#py-fort-myrmidon-shape" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Shape">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">Shape</span></span><a class="headerlink" href="#py_fort_myrmidon.Shape" title="Permalink to this definition"></a></dt>
+<dd><p>A Generic class for a Shape</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Shape.ShapeType">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ShapeType</span></span><a class="headerlink" href="#py_fort_myrmidon.Shape.ShapeType" title="Permalink to this definition"></a></dt>
+<dd><p>the type of the shape</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(<a class="reference internal" href="#py_fort_myrmidon.Shape.Type" title="py_fort_myrmidon.Shape.Type">py_fort_myrmidon.Shape.Type</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Shape.Type">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Type</span></span><a class="headerlink" href="#py_fort_myrmidon.Shape.Type" title="Permalink to this definition"></a></dt>
+<dd><p>Enum for the type of a Shape</p>
+<p>Members:</p>
+<blockquote>
+<div><p>CIRCLE : int: a circle</p>
+<p>CAPSULE : int: a capsule</p>
+<p>POLYGON : int: a polygon</p>
+</div></blockquote>
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Shape.Type.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#py_fort_myrmidon.Shape.Type.name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="py-fort-myrmidon-circle">
+<h2>py_fort_myrmidon.Circle<a class="headerlink" href="#py-fort-myrmidon-circle" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Circle">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">Circle</span></span><a class="headerlink" href="#py_fort_myrmidon.Circle" title="Permalink to this definition"></a></dt>
+<dd><p>Represents a circle</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Circle.Center">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Center</span></span><a class="headerlink" href="#py_fort_myrmidon.Circle.Center" title="Permalink to this definition"></a></dt>
+<dd><p>the center of the circle (float64, size [2,1])</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Circle.Radius">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Radius</span></span><a class="headerlink" href="#py_fort_myrmidon.Circle.Radius" title="Permalink to this definition"></a></dt>
+<dd><p>the radius of the circle</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="py-fort-myrmidon-capsule">
+<h2>py_fort_myrmidon.Capsule<a class="headerlink" href="#py-fort-myrmidon-capsule" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Capsule">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">Capsule</span></span><a class="headerlink" href="#py_fort_myrmidon.Capsule" title="Permalink to this definition"></a></dt>
+<dd><p>Represents a capsule</p>
+<p>A capsule is the region inside and between two given circles.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Capsule.C1">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">C1</span></span><a class="headerlink" href="#py_fort_myrmidon.Capsule.C1" title="Permalink to this definition"></a></dt>
+<dd><p>the center of the first circle (float64, size [2,1])</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Capsule.C2">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">C2</span></span><a class="headerlink" href="#py_fort_myrmidon.Capsule.C2" title="Permalink to this definition"></a></dt>
+<dd><p>the center of the second circle (float64, size [2,1])</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Capsule.R1">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">R1</span></span><a class="headerlink" href="#py_fort_myrmidon.Capsule.R1" title="Permalink to this definition"></a></dt>
+<dd><p>the radius of the first circle</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Capsule.R2">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">R2</span></span><a class="headerlink" href="#py_fort_myrmidon.Capsule.R2" title="Permalink to this definition"></a></dt>
+<dd><p>the radius of the second circle</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="py-fort-myrmidon-polygon">
+<h2>py_fort_myrmidon.Polygon<a class="headerlink" href="#py-fort-myrmidon-polygon" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Polygon">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">Polygon</span></span><a class="headerlink" href="#py_fort_myrmidon.Polygon" title="Permalink to this definition"></a></dt>
+<dd><p>Represents a closed polygon.</p>
+<p>Represents a closed polygon from a list of vertices. The polygon is
+always considered closed. i.e. <code class="docutils literal notranslate"><span class="pre">[[1,1],[-1,1],[-1,-1],[1,-1]]</span></code> is a
+closed square.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Order matters as <code class="docutils literal notranslate"><span class="pre">[[1,1],[-1,-1],[1,-1],[-1,1]]</span></code> represents an
+hourglass.</p>
+</div>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">square</span> <span class="o">=</span> <span class="n">py_fort_myrmidon</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">Vertices</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+<span class="n">hourglass</span> <span class="o">=</span> <span class="n">py_fort_myrmidon</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">Vertices</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
+</pre></div>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.Polygon.Vertices">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Vertices</span></span><a class="headerlink" href="#py_fort_myrmidon.Polygon.Vertices" title="Permalink to this definition"></a></dt>
+<dd><p>a list of the polygon vertices (float64 , size [2,1])</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="time.html" class="btn btn-neutral float-left" title="Time Representation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="video.html" class="btn btn-neutral float-right" title="Video Sequence Matching" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Université de Lausanne.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

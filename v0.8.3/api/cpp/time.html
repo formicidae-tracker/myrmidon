@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Time Representation &mdash; fort-myrmidon  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/../version_dropdown.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="2D Geometric Shapes" href="shapes.html" />
+    <link rel="prev" title="Queries And Matchers" href="queries_matchers.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> fort-myrmidon
+          </a>
+              <div class="version">
+                placeholder
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-myrmidon Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defining_ant_metadata.html">Defining Ant Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../performing_queries.html">Performing Queries</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-studio Manual</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/defining_ant_shapes.html">Defining Ant Shapes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/measuring_ants.html">Measuring Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/metadata_edition.html">Ant Metadata Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/visualization.html">Tracking Data Visualization</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../space_zoning.html">Segmenting Spaces in Zones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matching_video.html">Matching Video and Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../time.html">Time Representation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API References</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Python</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html#c">C++</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="experiment.html">API Entry Point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ant_identification.html">Ants and Identifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="space_zone.html">Spaces and Zones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="queries_matchers.html">Queries And Matchers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Time Representation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fort-duration">fort::Duration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fort-time">fort::Time</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shapes.html">2D Geometric Shapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video.html">Video Sequence Matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef.html">API generic types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html#r">R</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fort-myrmidon</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Python</a> &raquo;</li>
+      <li>Time Representation</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/api/cpp/time.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="time-representation">
+<h1>Time Representation<a class="headerlink" href="#time-representation" title="Permalink to this heading"></a></h1>
+<section id="fort-duration">
+<h2>fort::Duration<a class="headerlink" href="#fort-duration" title="Permalink to this heading"></a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8DurationE">
+<span id="_CPPv3N4fort8DurationE"></span><span id="_CPPv2N4fort8DurationE"></span><span id="fort::Duration"></span><span class="target" id="classfort_1_1Duration"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Duration</span></span></span><a class="headerlink" href="#_CPPv4N4fort8DurationE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>The amount of time ellapsed between two <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>. </p>
+<p>A <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> represents the amount of time between two <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>.</p>
+<p>This class aims to replicate a <a class="reference external" href="https://golang.org">go</a> syntax. For example to represent one hour, 10 minute, one may write: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="p">{</span><span class="n">c</span><span class="o">++</span><span class="p">}</span>
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">fort</span><span class="p">;</span>
+<span class="n">Duration</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">Duration</span><span class="p">::</span><span class="n">Hour</span> <span class="o">+</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">Duration</span><span class="p">::</span><span class="n">Minute</span><span class="p">;</span>
+</pre></div>
+</div>
+ </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8Duration8DurationE7int64_t">
+<span id="_CPPv3N4fort8Duration8DurationE7int64_t"></span><span id="_CPPv2N4fort8Duration8DurationE7int64_t"></span><span id="fort::Duration::Duration__int64_t"></span><span class="target" id="classfort_1_1Duration_1a762667d60aa57ef1502af159b4105aea"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Duration</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">int64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ns</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8Duration8DurationE7int64_t" title="Permalink to this definition"></a><br /></dt>
+<dd><p>constructor by an ammount of nanosecond </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ns</strong> – the number of nanosecond </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8Duration8DurationEv">
+<span id="_CPPv3N4fort8Duration8DurationEv"></span><span id="_CPPv2N4fort8Duration8DurationEv"></span><span id="fort::Duration::Duration"></span><span class="target" id="classfort_1_1Duration_1a6f35f563e1e15e0ef5244b487b289d70"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Duration</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8Duration8DurationEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Default constructor with a zero duration. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN4fort8Duration8DurationERKNSt6chrono8durationI1T1UEE">
+<span id="_CPPv3I00EN4fort8Duration8DurationERKNSt6chrono8durationI1T1UEE"></span><span id="_CPPv2I00EN4fort8Duration8DurationERKNSt6chrono8durationI1T1UEE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">U</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classfort_1_1Duration_1a84d575d09af313a5e5cf170bb70f058a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Duration</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">chrono</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">duration</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN4fort8Duration8DurationERKNSt6chrono8durationI1T1UEE" title="fort::Duration::Duration::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN4fort8Duration8DurationERKNSt6chrono8durationI1T1UEE" title="fort::Duration::Duration::U"><span class="n"><span class="pre">U</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">duration</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN4fort8Duration8DurationERKNSt6chrono8durationI1T1UEE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>constructor from std::chrono::duration </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>T</strong> – first &lt;std::chrono::duration&gt; template </p></li>
+<li><p><strong>U</strong> – second &lt;std::chrono::duration&gt; template </p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>duration</strong> – the &lt;std::chrono::duration&gt; to convert </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8Duration5HoursEv">
+<span id="_CPPv3NK4fort8Duration5HoursEv"></span><span id="_CPPv2NK4fort8Duration5HoursEv"></span><span id="fort::Duration::HoursC"></span><span class="target" id="classfort_1_1Duration_1a55ec8bafe98b9a24cdea752ce72f981c"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Hours</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8Duration5HoursEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the duration in hours. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the duration in hours </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8Duration7MinutesEv">
+<span id="_CPPv3NK4fort8Duration7MinutesEv"></span><span id="_CPPv2NK4fort8Duration7MinutesEv"></span><span id="fort::Duration::MinutesC"></span><span class="target" id="classfort_1_1Duration_1a4cdef00d82832fcb8244c5e7224fe320"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Minutes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8Duration7MinutesEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the duration in minutes. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the duration in minutes </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8Duration7SecondsEv">
+<span id="_CPPv3NK4fort8Duration7SecondsEv"></span><span id="_CPPv2NK4fort8Duration7SecondsEv"></span><span id="fort::Duration::SecondsC"></span><span class="target" id="classfort_1_1Duration_1a8fc0b411d30e581c1e48456a24f6d53e"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Seconds</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8Duration7SecondsEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the duration in seconds. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the duration in seconds </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8Duration12MillisecondsEv">
+<span id="_CPPv3NK4fort8Duration12MillisecondsEv"></span><span id="_CPPv2NK4fort8Duration12MillisecondsEv"></span><span id="fort::Duration::MillisecondsC"></span><span class="target" id="classfort_1_1Duration_1a96e69834d1ba81a09d0c611713cb1900"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Milliseconds</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8Duration12MillisecondsEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the duration in milliseconds. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the duration in milliseconds </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8Duration12MicrosecondsEv">
+<span id="_CPPv3NK4fort8Duration12MicrosecondsEv"></span><span id="_CPPv2NK4fort8Duration12MicrosecondsEv"></span><span id="fort::Duration::MicrosecondsC"></span><span class="target" id="classfort_1_1Duration_1abfb137237894217eeab99cc4e23d6888"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Microseconds</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8Duration12MicrosecondsEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the duration in microseconds. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the duration in microseconds </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8Duration11NanosecondsEv">
+<span id="_CPPv3NK4fort8Duration11NanosecondsEv"></span><span id="_CPPv2NK4fort8Duration11NanosecondsEv"></span><span id="fort::Duration::NanosecondsC"></span><span class="target" id="classfort_1_1Duration_1a21268cf229e9ca2f1b168c87418a9a76"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">int64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Nanoseconds</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8Duration11NanosecondsEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the duration in nanoseconds. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the duration in nanoseconds </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8DurationplERK8Duration">
+<span id="_CPPv3NK4fort8DurationplERK8Duration"></span><span id="_CPPv2NK4fort8DurationplERK8Duration"></span><span id="fort::Duration::add-operator__DurationCRC"></span><span class="target" id="classfort_1_1Duration_1a9eb83fc2a59eb67f9ff703161a55aeac"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">+</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8DurationplERK8Duration" title="Permalink to this definition"></a><br /></dt>
+<dd><p>The addition operator. </p>
+<p>
+Adds two <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a>. Silently overflow following int64_t arithmetic.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> – the other <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> to add</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a new duration <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">+</span> <span class="pre">other</span></code> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8DurationmlERKN4fort8DurationE">
+<span id="_CPPv3NK4fort8DurationmlERKN4fort8DurationE"></span><span id="_CPPv2NK4fort8DurationmlERKN4fort8DurationE"></span><span id="fort::Duration::mul-operator__fort::DurationCRC"></span><span class="target" id="classfort_1_1Duration_1ac8da6bcf5892dd9a9216812e6de272c1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">*</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8DurationmlERKN4fort8DurationE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Multiplication operator. </p>
+<p>
+Multiplies two <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> – the other <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> to multiply.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a new duration <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">*</span> <span class="pre">other</span></code> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8DurationmiERKN4fort8DurationE">
+<span id="_CPPv3NK4fort8DurationmiERKN4fort8DurationE"></span><span id="_CPPv2NK4fort8DurationmiERKN4fort8DurationE"></span><span id="fort::Duration::sub-operator__fort::DurationCRC"></span><span class="target" id="classfort_1_1Duration_1a761e109798ebc22951a427a136b2ed50"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8DurationmiERKN4fort8DurationE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Substraction operator. </p>
+<p>
+Substracts two <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> – the other <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> to substract</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a new duration <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">-</span> <span class="pre">other</span></code> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8DurationmiEv">
+<span id="_CPPv3NK4fort8DurationmiEv"></span><span id="_CPPv2NK4fort8DurationmiEv"></span><span id="fort::Duration::sub-operatorC"></span><span class="target" id="classfort_1_1Duration_1a9fab8ba1a4ed7cf30deaffbaac0df4fd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8DurationmiEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Negation operator. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the opposite duration <code class="docutils literal notranslate"><span class="pre">-</span> <span class="pre">this</span></code> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8DurationltERK8Duration">
+<span id="_CPPv3NK4fort8DurationltERK8Duration"></span><span id="_CPPv2NK4fort8DurationltERK8Duration"></span><span id="fort::Duration::lt-operator__DurationCRC"></span><span class="target" id="classfort_1_1Duration_1a13fdb3afd4632d9ecfd29bd325170a5b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8DurationltERK8Duration" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Less than operator. </p>
+<p>
+Compares two <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> – the <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> to compare</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&lt;</span> <span class="pre">other</span></code> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8DurationleERK8Duration">
+<span id="_CPPv3NK4fort8DurationleERK8Duration"></span><span id="_CPPv2NK4fort8DurationleERK8Duration"></span><span id="fort::Duration::lte-operator__DurationCRC"></span><span class="target" id="classfort_1_1Duration_1a12c1b3a677dcce180a5e98f3b98e6c8d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8DurationleERK8Duration" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Less or equal operator. </p>
+<p>
+Compares two <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> – the <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> to compare</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&lt;=</span> <span class="pre">other</span></code> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8DurationgtERK8Duration">
+<span id="_CPPv3NK4fort8DurationgtERK8Duration"></span><span id="_CPPv2NK4fort8DurationgtERK8Duration"></span><span id="fort::Duration::gt-operator__DurationCRC"></span><span class="target" id="classfort_1_1Duration_1a937f2c9daea09c451b48a1b3618625f4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&gt;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8DurationgtERK8Duration" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Greater than operator. </p>
+<p>
+Compares two <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> – the <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> to compare</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&gt;</span> <span class="pre">other</span></code> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8DurationgeERK8Duration">
+<span id="_CPPv3NK4fort8DurationgeERK8Duration"></span><span id="_CPPv2NK4fort8DurationgeERK8Duration"></span><span id="fort::Duration::gte-operator__DurationCRC"></span><span class="target" id="classfort_1_1Duration_1ad31be1112901b822865ae267eb849256"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&gt;=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8DurationgeERK8Duration" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Greater or equal operator. </p>
+<p>
+Compares two <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> – the <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> to compare</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&gt;=</span> <span class="pre">other</span></code> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8DurationeqERK8Duration">
+<span id="_CPPv3NK4fort8DurationeqERK8Duration"></span><span id="_CPPv2NK4fort8DurationeqERK8Duration"></span><span id="fort::Duration::eq-operator__DurationCRC"></span><span class="target" id="classfort_1_1Duration_1a5e0982d1e451bea1b921e9cf786bf1d8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8DurationeqERK8Duration" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Equality operator. </p>
+<p>
+Compares two <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> – the <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> to compare</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">==</span> <span class="pre">other</span></code> </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8Duration5ParseERKNSt6stringE">
+<span id="_CPPv3N4fort8Duration5ParseERKNSt6stringE"></span><span id="_CPPv2N4fort8Duration5ParseERKNSt6stringE"></span><span id="fort::Duration::Parse__ssCR"></span><span class="target" id="classfort_1_1Duration_1ad68d8f84a8b3bbb4a2b458deae094a65"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Parse</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">d</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8Duration5ParseERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Parses a string to a <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a>. </p>
+<p>
+Parses a std::string to a <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a>. string must be of the form <code class="docutils literal notranslate"><span class="pre">[amount][unit]</span></code> where <code class="docutils literal notranslate"><span class="pre">[amount]</span></code> is a value that may contain a decimal point, and <code class="docutils literal notranslate"><span class="pre">[unit]</span></code> could be any of <code class="docutils literal notranslate"><span class="pre">h</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">s</span></code>, <code class="docutils literal notranslate"><span class="pre">ms</span></code>, <code class="docutils literal notranslate"><span class="pre">us</span></code>, <code class="docutils literal notranslate"><span class="pre">µs</span></code> and <code class="docutils literal notranslate"><span class="pre">ns</span></code>. This pattern may be repeated. For example <code class="docutils literal notranslate"><span class="pre">4m32s</span></code> is a valid input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>d</strong> – the string to Parse in the form <code class="docutils literal notranslate"><span class="pre">&quot;2h&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;1m&quot;</span></code></p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if d is an invalid string</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> represented by the string. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8Duration4HourE">
+<span id="_CPPv3N4fort8Duration4HourE"></span><span id="_CPPv2N4fort8Duration4HourE"></span><span id="fort::Duration::Hour__DurationC"></span><span class="target" id="classfort_1_1Duration_1a01771c74e005458902e0e8e1b39fa120"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Hour</span></span></span><a class="headerlink" href="#_CPPv4N4fort8Duration4HourE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>The Value for an hour. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8Duration6MinuteE">
+<span id="_CPPv3N4fort8Duration6MinuteE"></span><span id="_CPPv2N4fort8Duration6MinuteE"></span><span id="fort::Duration::Minute__DurationC"></span><span class="target" id="classfort_1_1Duration_1a3d02bac15d0467031841024b64562bbf"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Minute</span></span></span><a class="headerlink" href="#_CPPv4N4fort8Duration6MinuteE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>The Value for a minute. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8Duration6SecondE">
+<span id="_CPPv3N4fort8Duration6SecondE"></span><span id="_CPPv2N4fort8Duration6SecondE"></span><span id="fort::Duration::Second__DurationC"></span><span class="target" id="classfort_1_1Duration_1ae59f6821fea6f9cfe1e4ab199b383dc9"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Second</span></span></span><a class="headerlink" href="#_CPPv4N4fort8Duration6SecondE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>The Value for a second. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8Duration11MillisecondE">
+<span id="_CPPv3N4fort8Duration11MillisecondE"></span><span id="_CPPv2N4fort8Duration11MillisecondE"></span><span id="fort::Duration::Millisecond__DurationC"></span><span class="target" id="classfort_1_1Duration_1a783f83de49f494b83629575a12698d4f"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Millisecond</span></span></span><a class="headerlink" href="#_CPPv4N4fort8Duration11MillisecondE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>The Value for a millisecond. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8Duration11MicrosecondE">
+<span id="_CPPv3N4fort8Duration11MicrosecondE"></span><span id="_CPPv2N4fort8Duration11MicrosecondE"></span><span id="fort::Duration::Microsecond__DurationC"></span><span class="target" id="classfort_1_1Duration_1ad8c01e48c27b95309405bfeb5cde9017"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Microsecond</span></span></span><a class="headerlink" href="#_CPPv4N4fort8Duration11MicrosecondE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>The Value for a microsecond. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8Duration10NanosecondE">
+<span id="_CPPv3N4fort8Duration10NanosecondE"></span><span id="_CPPv2N4fort8Duration10NanosecondE"></span><span id="fort::Duration::Nanosecond__DurationC"></span><span class="target" id="classfort_1_1Duration_1a1ab9b56c7e85dea9da3d7c7c6d8762a2"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Nanosecond</span></span></span><a class="headerlink" href="#_CPPv4N4fort8Duration10NanosecondE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>The Value for a nanosecond. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="fort-time">
+<h2>fort::Time<a class="headerlink" href="#fort-time" title="Permalink to this heading"></a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort4TimeE">
+<span id="_CPPv3N4fort4TimeE"></span><span id="_CPPv2N4fort4TimeE"></span><span id="fort::Time"></span><span class="target" id="classfort_1_1Time"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Time</span></span></span><a class="headerlink" href="#_CPPv4N4fort4TimeE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>A point in time. </p>
+<p><a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> represents a point in time in UTC timezone</p>
+<section id="classfort_1_1Time_1autotoc_md18">
+<h3>why not std::chrono::time_point ?<a class="headerlink" href="#classfort_1_1Time_1autotoc_md18" title="Permalink to this heading"></a></h3>
+<p id="classfort_1_1Time_1autotoc_md18">Why re-implementing one of this object and not using a <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">timeval</span></code> or a <code class="docutils literal notranslate"><span class="pre">std::chrono</span></code> ? We are dealing with long living experiment on heterogenous systems. Under this circunstances, we would like also to measure precise time difference. For this purpose we could use the framegrabber monolotic clock, which is timestamping every frame we acquired.</p>
+<p>Well the issue is that we cannot solely rely on this clock, as we may have several computers each with their own monolithic clock. Or even with a single computer, every time we starts the tracking we must assume a new monotonic clock.</p>
+<p>We could use the wall clock but this clock may be resetted any time, and we would end up with issue where a time difference between two consecutive frames could be negative. This happen during leap seconds.</p>
+<p>Inspired from golang <a class="reference external" href="https: *golang.org/pkg/time#Time">time.Time</a> we propose an Object that store both a Wall time, and a Monotonic timestamp. But here we could have different monotonic timestamp issued by different monotonic clocks. We try, whenever its possible use monotonic value for time differences and comparisons. It could only be the case if both object have a <a class="reference internal" href="#classfort_1_1Time_1a8939ca3259c7e198fc927b21586610fc"><span class="std std-ref">MonotonicValue()</span></a> issued from the same clock. Otherwise the Wall clock value will be used with the issue regarding the jitter or Wall clock reset.</p>
+<p>Differentiaing Monotonic clock is done through <a class="reference internal" href="#classfort_1_1Time_1af7d65f2eecdaa89e5c574315f99385d4"><span class="std std-ref">MonoclockID()</span></a> values. The 0 value is reserved for the <a class="reference internal" href="#classfort_1_1Time_1ab0efa5e0ed0292700adb4407509bf956"><span class="std std-ref">SYSTEM_MONOTONIC_CLOCK</span></a> and which is used by <a class="reference internal" href="#classfort_1_1Time_1a4be8e3ee0799334019b114dcd12701f2"><span class="std std-ref">Now()</span></a>. When reading saved monotonic Timestamp from the filesystem (as it is the case when reading data from different <code class="docutils literal notranslate"><span class="pre">TrackingDataDirectory</span></code> ), care must be taken to assign different <a class="reference internal" href="#classfort_1_1Time_1af7d65f2eecdaa89e5c574315f99385d4"><span class="std std-ref">MonoclockID()</span></a> for each of those reading. This class does not enforce any mechanism. The only entry point to define the <a class="reference internal" href="#classfort_1_1Time_1af7d65f2eecdaa89e5c574315f99385d4"><span class="std std-ref">MonoclockID()</span></a> is through the utility function <a class="reference internal" href="#classfort_1_1Time_1accbf36e60643e7533a2482d016b0e3a2"><span class="std std-ref">FromTimestampAndMonotonic()</span></a>.</p>
+<p>Every time are considered UTC. </p>
+</section>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort4Time11MonoclockIDE">
+<span id="_CPPv3N4fort4Time11MonoclockIDE"></span><span id="_CPPv2N4fort4Time11MonoclockIDE"></span><span id="fort::Time::MonoclockID"></span><span class="target" id="classfort_1_1Time_1af7d65f2eecdaa89e5c574315f99385d4"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MonoclockID</span></span></span><a class="headerlink" href="#_CPPv4N4fort4Time11MonoclockIDE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>ID for a Monotonic Clock. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4Time7ToTimeTEv">
+<span id="_CPPv3NK4fort4Time7ToTimeTEv"></span><span id="_CPPv2NK4fort4Time7ToTimeTEv"></span><span id="fort::Time::ToTimeTC"></span><span class="target" id="classfort_1_1Time_1af9624cd4828b32eb7bc0a12f26d11e1d"></span><span class="n"><span class="pre">time_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ToTimeT</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4Time7ToTimeTEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Converts to a <code class="docutils literal notranslate"><span class="pre">time_t</span></code> </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">time_t</span></code>representing the <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4Time9ToTimevalEv">
+<span id="_CPPv3NK4fort4Time9ToTimevalEv"></span><span id="_CPPv2NK4fort4Time9ToTimevalEv"></span><span id="fort::Time::ToTimevalC"></span><span class="target" id="classfort_1_1Time_1a8648d757a50537507ac5a30589c374d2"></span><span class="n"><span class="pre">timeval</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ToTimeval</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4Time9ToTimevalEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Converts to a <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">timeval</span></code> </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">timeval</span></code>representing the <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4Time11ToTimestampEv">
+<span id="_CPPv3NK4fort4Time11ToTimestampEv"></span><span id="_CPPv2NK4fort4Time11ToTimestampEv"></span><span id="fort::Time::ToTimestampC"></span><span class="target" id="classfort_1_1Time_1ae2c09746f55b0d3c35c616dc5caec33b"></span><span class="n"><span class="pre">google</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">protobuf</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Timestamp</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ToTimestamp</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4Time11ToTimestampEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Converts to a protobuf Timestamp message. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the protobuf Timestamp representing the <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4Time11ToTimestampEPN6google8protobuf9TimestampE">
+<span id="_CPPv3NK4fort4Time11ToTimestampEPN6google8protobuf9TimestampE"></span><span id="_CPPv2NK4fort4Time11ToTimestampEPN6google8protobuf9TimestampE"></span><span id="fort::Time::ToTimestamp__google::protobuf::TimestampPC"></span><span class="target" id="classfort_1_1Time_1ad8b14e5705d85c826f3c48c8f3d4a4f3"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ToTimestamp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">google</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">protobuf</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Timestamp</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">timestamp</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4Time11ToTimestampEPN6google8protobuf9TimestampE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>In-place conversion to a protobuf Timestamp. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>timestamp</strong> – the timestamp to modify to represent the <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort4Time4TimeEv">
+<span id="_CPPv3N4fort4Time4TimeEv"></span><span id="_CPPv2N4fort4Time4TimeEv"></span><span id="fort::Time::Time"></span><span class="target" id="classfort_1_1Time_1ac68b091e66eb227683a26d03fe70bb1b"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Time</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort4Time4TimeEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Default constructor to the system’s epoch. </p>
+<p>The resulting <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> will represent the epoch. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4Time3AddERK8Duration">
+<span id="_CPPv3NK4fort4Time3AddERK8Duration"></span><span id="_CPPv2NK4fort4Time3AddERK8Duration"></span><span id="fort::Time::Add__DurationCRC"></span><span class="target" id="classfort_1_1Time_1aa70c12f7699a589b12ab011afbb1eed8"></span><a class="reference internal" href="#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Add</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">d</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4Time3AddERK8Duration" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Adds a <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> to a <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>d</strong> – the <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> to add</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="#_CPPv4N4fort4Time8OverflowE" title="fort::Time::Overflow"><span class="n">Overflow</span></a></span></span> – if the computation will go over the minimal or maximal representable <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>. </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a new <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> distant by d from this <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4Time5RoundERK8Duration">
+<span id="_CPPv3NK4fort4Time5RoundERK8Duration"></span><span id="_CPPv2NK4fort4Time5RoundERK8Duration"></span><span id="fort::Time::Round__DurationCRC"></span><span class="target" id="classfort_1_1Time_1accf242dba8f6cb03038b653e9d5abfe3"></span><a class="reference internal" href="#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Round</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">d</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4Time5RoundERK8Duration" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Rounds a <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> to a <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a>. </p>
+<p>
+Rounds the <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> to the half-rounded up <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> d. Currently only multiple of <a class="reference internal" href="#classfort_1_1Duration_1ae59f6821fea6f9cfe1e4ab199b383dc9"><span class="std std-ref">Duration::Second</span></a> and power of 10 of <a class="reference internal" href="#classfort_1_1Duration_1a1ab9b56c7e85dea9da3d7c7c6d8762a2"><span class="std std-ref">Duration::Nanosecond</span></a> which are smaller than a second are supported.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>d</strong> – the <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> to round to.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a new <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> rounded to the wanted duration </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4Time8ReminderERK8Duration">
+<span id="_CPPv3NK4fort4Time8ReminderERK8Duration"></span><span id="_CPPv2NK4fort4Time8ReminderERK8Duration"></span><span id="fort::Time::Reminder__DurationCRC"></span><span class="target" id="classfort_1_1Time_1a721a264456e65bbdfbbcba8597509a04"></span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Reminder</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">d</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4Time8ReminderERK8Duration" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the Reminder of the division by a <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a>. </p>
+<p>
+Finds the <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> which remains if this <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> would be divided by d. Only multiple of <a class="reference internal" href="#classfort_1_1Duration_1ae59f6821fea6f9cfe1e4ab199b383dc9"><span class="std std-ref">Duration::Second</span></a> or power of 10 of <a class="reference internal" href="#classfort_1_1Duration_1a1ab9b56c7e85dea9da3d7c7c6d8762a2"><span class="std std-ref">Duration::Nanosecond</span></a> smaller than a second are supported.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>d</strong> – the <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> to divide by</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> that would remain if this <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> would be divided by d </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4Time5AfterERK4Time">
+<span id="_CPPv3NK4fort4Time5AfterERK4Time"></span><span id="_CPPv2NK4fort4Time5AfterERK4Time"></span><span id="fort::Time::After__TimeCRC"></span><span class="target" id="classfort_1_1Time_1ad91287270d97e097d893e49667fffe4f"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">After</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">t</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4Time5AfterERK4Time" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Reports if this time is after t. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>t</strong> – the <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> to test against</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if this <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> is strictly after t </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4Time6BeforeERK4Time">
+<span id="_CPPv3NK4fort4Time6BeforeERK4Time"></span><span id="_CPPv2NK4fort4Time6BeforeERK4Time"></span><span id="fort::Time::Before__TimeCRC"></span><span class="target" id="classfort_1_1Time_1ad667c17a68ec02fd2f7b50ad861488b8"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Before</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">t</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4Time6BeforeERK4Time" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Reports if this time is before t. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>t</strong> – the <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> to test against</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if this <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> is strictly before t </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4Time6EqualsERK4Time">
+<span id="_CPPv3NK4fort4Time6EqualsERK4Time"></span><span id="_CPPv2NK4fort4Time6EqualsERK4Time"></span><span id="fort::Time::Equals__TimeCRC"></span><span class="target" id="classfort_1_1Time_1ac717938cc6933e612fc1216fcdd7db20"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Equals</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">t</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4Time6EqualsERK4Time" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Reports if this time is the same than t * * Python: </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>t</strong> – the <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> to test against</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if this <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>&gt; is the same than t </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4Time9IsForeverEv">
+<span id="_CPPv3NK4fort4Time9IsForeverEv"></span><span id="_CPPv2NK4fort4Time9IsForeverEv"></span><span id="fort::Time::IsForeverC"></span><span class="target" id="classfort_1_1Time_1a9dfbe6d3dfcc8196245cc31866497804"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsForever</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4Time9IsForeverEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Reports if this <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> is +∞ </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>true if this <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> is <a class="reference internal" href="#classfort_1_1Time_1a0f13c9a8cc26f34ca49c006c115dc845"><span class="std std-ref">Forever()</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4Time11IsSinceEverEv">
+<span id="_CPPv3NK4fort4Time11IsSinceEverEv"></span><span id="_CPPv2NK4fort4Time11IsSinceEverEv"></span><span id="fort::Time::IsSinceEverC"></span><span class="target" id="classfort_1_1Time_1af09eda35107d65f7b75b730ec37f4be0"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsSinceEver</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4Time11IsSinceEverEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Reports if this <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> is -∞ </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>true if this <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> is <a class="reference internal" href="#classfort_1_1Time_1a9593a5d95440d83965255957deb60226"><span class="std std-ref">SinceEver()</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4Time10IsInfiniteEv">
+<span id="_CPPv3NK4fort4Time10IsInfiniteEv"></span><span id="_CPPv2NK4fort4Time10IsInfiniteEv"></span><span id="fort::Time::IsInfiniteC"></span><span class="target" id="classfort_1_1Time_1ae051c4dd5c2210fef379b38e0eb283bf"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsInfinite</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4Time10IsInfiniteEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Reports if this <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> is either Forever or SinceEver. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>true if this <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> is <a class="reference internal" href="#classfort_1_1Time_1a0f13c9a8cc26f34ca49c006c115dc845"><span class="std std-ref">Forever()</span></a> or <a class="reference internal" href="#classfort_1_1Time_1a9593a5d95440d83965255957deb60226"><span class="std std-ref">SinceEver()</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4Time3SubERK4Time">
+<span id="_CPPv3NK4fort4Time3SubERK4Time"></span><span id="_CPPv2NK4fort4Time3SubERK4Time"></span><span id="fort::Time::Sub__TimeCRC"></span><span class="target" id="classfort_1_1Time_1aab136c2aca1f7fd4c9d6264c3ad76b55"></span><a class="reference internal" href="#_CPPv4N4fort8DurationE" title="fort::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Sub</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">t</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4Time3SubERK4Time" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Computes time difference with another time. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>t</strong> – the <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> to substract to this one.</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="#_CPPv4N4fort4Time8OverflowE" title="fort::Time::Overflow"><span class="n">Overflow</span></a></span></span> – if the time Differance is larger than a signed 64-bit amount of nanoseconds. </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> representing the time ellapsed between <code class="docutils literal notranslate"><span class="pre">this</span></code> and t. It could be negative.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4Time7HasMonoEv">
+<span id="_CPPv3NK4fort4Time7HasMonoEv"></span><span id="_CPPv2NK4fort4Time7HasMonoEv"></span><span id="fort::Time::HasMonoC"></span><span class="target" id="classfort_1_1Time_1a221929b93f8b444a31cc00f7a066ea1d"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">HasMono</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4Time7HasMonoEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Reports the presence of a monotonic time value. </p>
+<p>Reports the presence of a monotonic time value. Only <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> issued by <a class="reference internal" href="#classfort_1_1Time_1a4be8e3ee0799334019b114dcd12701f2"><span class="std std-ref">Now()</span></a> or <a class="reference internal" href="#classfort_1_1Time_1accbf36e60643e7533a2482d016b0e3a2"><span class="std std-ref">FromTimestampAndMonotonic()</span></a> contains a monotonic time value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">this</span></code> contains a monotonic clock value. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4Time6MonoIDEv">
+<span id="_CPPv3NK4fort4Time6MonoIDEv"></span><span id="_CPPv2NK4fort4Time6MonoIDEv"></span><span id="fort::Time::MonoIDC"></span><span class="target" id="classfort_1_1Time_1a53859edb94eb4af3a37e23dbd40998ca"></span><a class="reference internal" href="#_CPPv4N4fort4Time11MonoclockIDE" title="fort::Time::MonoclockID"><span class="n"><span class="pre">MonoclockID</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MonoID</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4Time6MonoIDEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the referred MonoclockID. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">exception</span></span></span> – if this <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> has no monotonic clock value. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the MonoclockID designating the monotonic clock the monotonic time value refers to.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4Time14MonotonicValueEv">
+<span id="_CPPv3NK4fort4Time14MonotonicValueEv"></span><span id="_CPPv2NK4fort4Time14MonotonicValueEv"></span><span id="fort::Time::MonotonicValueC"></span><span class="target" id="classfort_1_1Time_1a8939ca3259c7e198fc927b21586610fc"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MonotonicValue</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4Time14MonotonicValueEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the monotonic value. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">exception</span></span></span> – if this <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> has no monotonic clock value. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the monotonic clock value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4Time6FormatEv">
+<span id="_CPPv3NK4fort4Time6FormatEv"></span><span id="_CPPv2NK4fort4Time6FormatEv"></span><span id="fort::Time::FormatC"></span><span class="target" id="classfort_1_1Time_1aa9f5313947215567c08bd1c66231cd76"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Format</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4Time6FormatEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Formats the <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> as a RFC 3339 string. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a string representing this <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>. Either using RFC 3339 or +/-∞ if this <a class="reference internal" href="#classfort_1_1Time_1ae051c4dd5c2210fef379b38e0eb283bf"><span class="std std-ref">Time::IsInfinite()</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4Time11DebugStringEv">
+<span id="_CPPv3NK4fort4Time11DebugStringEv"></span><span id="_CPPv2NK4fort4Time11DebugStringEv"></span><span id="fort::Time::DebugStringC"></span><span class="target" id="classfort_1_1Time_1a6a0e60d4a809bdbbb476a4ff8d184fa4"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DebugString</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4Time11DebugStringEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Builds a debug string. </p>
+<p>This method is useful for internal debugging. Prefer the standard c++ formatting operator on std::ostream or <a class="reference internal" href="#classfort_1_1Time_1aa9f5313947215567c08bd1c66231cd76"><span class="std std-ref">Format()</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a debug string with the complete time internal state. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4TimeeqERK4Time">
+<span id="_CPPv3NK4fort4TimeeqERK4Time"></span><span id="_CPPv2NK4fort4TimeeqERK4Time"></span><span id="fort::Time::eq-operator__TimeCRC"></span><span class="target" id="classfort_1_1Time_1a5e952e1e3815bfb6a1143feba1df7b95"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4TimeeqERK4Time" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Equal comparison operator. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> – the other <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> to compare to</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">==</span> <span class="pre">other</span></code> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4TimeltERK4Time">
+<span id="_CPPv3NK4fort4TimeltERK4Time"></span><span id="_CPPv2NK4fort4TimeltERK4Time"></span><span id="fort::Time::lt-operator__TimeCRC"></span><span class="target" id="classfort_1_1Time_1ab67b911bfff7e2af1818285cc2a6b665"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4TimeltERK4Time" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Less than operator. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> – the other <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> to compare to</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&lt;</span> <span class="pre">other</span></code> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4TimeleERK4Time">
+<span id="_CPPv3NK4fort4TimeleERK4Time"></span><span id="_CPPv2NK4fort4TimeleERK4Time"></span><span id="fort::Time::lte-operator__TimeCRC"></span><span class="target" id="classfort_1_1Time_1af3c1b3101abfc4bc8573a028c1654c00"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4TimeleERK4Time" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Less or equal operator. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> – the other <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> to compare to</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&lt;=</span> <span class="pre">other</span></code> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4TimegtERK4Time">
+<span id="_CPPv3NK4fort4TimegtERK4Time"></span><span id="_CPPv2NK4fort4TimegtERK4Time"></span><span id="fort::Time::gt-operator__TimeCRC"></span><span class="target" id="classfort_1_1Time_1a0b0f1187d3b3046a84d19454f07ecb10"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&gt;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4TimegtERK4Time" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Greater than operator. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> – the other <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> to compare to</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&gt;</span> <span class="pre">other</span></code> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort4TimegeERK4Time">
+<span id="_CPPv3NK4fort4TimegeERK4Time"></span><span id="_CPPv2NK4fort4TimegeERK4Time"></span><span id="fort::Time::gte-operator__TimeCRC"></span><span class="target" id="classfort_1_1Time_1ac4c360d331a09da5463299a6532efb22"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&gt;=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4TimegeERK4Time" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Greate or equal operator. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> – the other <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> to compare to</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&gt;=</span> <span class="pre">other</span></code> </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort4Time7ForeverEv">
+<span id="_CPPv3N4fort4Time7ForeverEv"></span><span id="_CPPv2N4fort4Time7ForeverEv"></span><span id="fort::Time::Forever"></span><span class="target" id="classfort_1_1Time_1a0f13c9a8cc26f34ca49c006c115dc845"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Forever</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort4Time7ForeverEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Returns the positive infinite <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>. </p>
+<p>Returns the positive infinite <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>. For any other <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> value, <a class="reference internal" href="#classfort_1_1Time_1ad667c17a68ec02fd2f7b50ad861488b8"><span class="std std-ref">Before()</span></a> will return <code class="docutils literal notranslate"><span class="pre">true</span></code>. Any computation with this value will <a class="reference internal" href="#classfort_1_1Time_1_1Overflow"><span class="std std-ref">Overflow</span></a>. Calling this method is the only to construct such <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>, as operation on other regular <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> will <a class="reference internal" href="#classfort_1_1Time_1_1Overflow"><span class="std std-ref">Overflow</span></a> before.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a positive infinite <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort4Time9SinceEverEv">
+<span id="_CPPv3N4fort4Time9SinceEverEv"></span><span id="_CPPv2N4fort4Time9SinceEverEv"></span><span id="fort::Time::SinceEver"></span><span class="target" id="classfort_1_1Time_1a9593a5d95440d83965255957deb60226"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SinceEver</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort4Time9SinceEverEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Returns the negative infinite <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>. </p>
+<p>Returns the negative infinite <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>. For any other <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> value, <a class="reference internal" href="#classfort_1_1Time_1ad91287270d97e097d893e49667fffe4f"><span class="std std-ref">After()</span></a> will return <code class="docutils literal notranslate"><span class="pre">true</span></code>. Any computation with this value will <a class="reference internal" href="#classfort_1_1Time_1_1Overflow"><span class="std std-ref">Overflow</span></a>. Calling this method is the only to construct such <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>, as operation on other regular <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> will <a class="reference internal" href="#classfort_1_1Time_1_1Overflow"><span class="std std-ref">Overflow</span></a> before.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a negative infinite <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort4Time3NowEv">
+<span id="_CPPv3N4fort4Time3NowEv"></span><span id="_CPPv2N4fort4Time3NowEv"></span><span id="fort::Time::Now"></span><span class="target" id="classfort_1_1Time_1a4be8e3ee0799334019b114dcd12701f2"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Now</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort4Time3NowEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the current <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>. </p>
+<p>Gets the current <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>. This time will both have a wall and a monotonic clock reading associated with the <a class="reference internal" href="#classfort_1_1Time_1ab0efa5e0ed0292700adb4407509bf956"><span class="std std-ref">SYSTEM_MONOTONIC_CLOCK</span></a>. Therefore such idioms:</p>
+<p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="p">{</span><span class="n">c</span><span class="o">++</span><span class="p">}</span>
+<span class="n">auto</span> <span class="n">start</span> <span class="o">=</span> <span class="n">fort</span><span class="p">::</span><span class="n">Time</span><span class="p">::</span><span class="n">Now</span><span class="p">();</span>
+<span class="n">SomeFunction</span><span class="p">();</span>
+<span class="n">auto</span> <span class="n">ellapsed</span> <span class="o">=</span> <span class="n">fort</span><span class="p">::</span><span class="n">Time</span><span class="p">::</span><span class="n">Now</span><span class="p">()</span><span class="o">.</span><span class="n">Sub</span><span class="p">(</span><span class="n">start</span><span class="p">);</span>
+</pre></div>
+</div>
+</p>
+<p>Will always return a positive <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a>, even if the wall clock has been reset between the two calls to <a class="reference internal" href="#classfort_1_1Time_1a4be8e3ee0799334019b114dcd12701f2"><span class="std std-ref">Now()</span></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the current &lt;myrmidon::Time&gt; </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort4Time9FromTimeTE6time_t">
+<span id="_CPPv3N4fort4Time9FromTimeTE6time_t"></span><span id="_CPPv2N4fort4Time9FromTimeTE6time_t"></span><span id="fort::Time::FromTimeT__time_t"></span><span class="target" id="classfort_1_1Time_1ac83f5b94af144afbd0abf25af545d197"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FromTimeT</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">time_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort4Time9FromTimeTE6time_t" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Creates a <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> from <code class="docutils literal notranslate"><span class="pre">time_t</span></code> </p>
+<p>
+The <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> will not have any monotonic clock value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>t</strong> – the time_t value</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the converted <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort4Time11FromTimevalERK7timeval">
+<span id="_CPPv3N4fort4Time11FromTimevalERK7timeval"></span><span id="_CPPv2N4fort4Time11FromTimevalERK7timeval"></span><span id="fort::Time::FromTimeval__timevalCR"></span><span class="target" id="classfort_1_1Time_1ac1e25b597c5806121dfd974ef90fab7d"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FromTimeval</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">timeval</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">t</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort4Time11FromTimevalERK7timeval" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Creates a <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> from <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">timeval</span></code> </p>
+<p>
+The <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> will not have any monotonic clock value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>t</strong> – the <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">timeval</span></code></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the converted <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort4Time13FromTimestampERKN6google8protobuf9TimestampE">
+<span id="_CPPv3N4fort4Time13FromTimestampERKN6google8protobuf9TimestampE"></span><span id="_CPPv2N4fort4Time13FromTimestampERKN6google8protobuf9TimestampE"></span><span id="fort::Time::FromTimestamp__google::protobuf::TimestampCR"></span><span class="target" id="classfort_1_1Time_1a8d9c6b7370134c3d930db54820c0ca48"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FromTimestamp</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">google</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">protobuf</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Timestamp</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">timestamp</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort4Time13FromTimestampERKN6google8protobuf9TimestampE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Creates a <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> from a protobuf Timestamp. </p>
+<p>
+The <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> will not have any monotonic clock value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>timestamp</strong> – the <code class="docutils literal notranslate"><span class="pre">google.protobuf.Timestamp</span></code> message</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the converted <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort4Time8FromUnixE7int64_t7int32_t">
+<span id="_CPPv3N4fort4Time8FromUnixE7int64_t7int32_t"></span><span id="_CPPv2N4fort4Time8FromUnixE7int64_t7int32_t"></span><span id="fort::Time::FromUnix__int64_t.int32_t"></span><span class="target" id="classfort_1_1Time_1ae80bd6a1cea4b8629106809fc4023c13"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FromUnix</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">int64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seconds</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nanoseconds</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort4Time8FromUnixE7int64_t7int32_t" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Creates a <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> from Unix EPOCH. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>seconds</strong> – number of seconds since 1970-01-01T00:00:00.000Z </p></li>
+<li><p><strong>nanoseconds</strong> – reminder of seconds since 1970-01-01T00:00:00.000Z</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the corresponding <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort4Time25FromTimestampAndMonotonicERKN6google8protobuf9TimestampE8uint64_t11MonoclockID">
+<span id="_CPPv3N4fort4Time25FromTimestampAndMonotonicERKN6google8protobuf9TimestampE8uint64_t11MonoclockID"></span><span id="_CPPv2N4fort4Time25FromTimestampAndMonotonicERKN6google8protobuf9TimestampE8uint64_t11MonoclockID"></span><span id="fort::Time::FromTimestampAndMonotonic__google::protobuf::TimestampCR.uint64_t.MonoclockID"></span><span class="target" id="classfort_1_1Time_1accbf36e60643e7533a2482d016b0e3a2"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FromTimestampAndMonotonic</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">google</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">protobuf</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Timestamp</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">timestamp</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nsecs</span></span>, <a class="reference internal" href="#_CPPv4N4fort4Time11MonoclockIDE" title="fort::Time::MonoclockID"><span class="n"><span class="pre">MonoclockID</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">monoID</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort4Time25FromTimestampAndMonotonicERKN6google8protobuf9TimestampE8uint64_t11MonoclockID" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Creates a <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> from a protobuf Timestamp and an external Monotonic clock. </p>
+<p>
+Creates a <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> from a protobuf Timestamp and an external monotonic clock. The two values should correspond to the same physical time. It is an helper function to create accurate <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> from data saved in <code class="docutils literal notranslate"><span class="pre">fort.hermes.FrameReadout</span></code> protobuf messages that saves both a Wall time value and a framegrabber timestamp for each frame. It is the caller responsability to manage monoID values for not mixing timestamp issued from different clocks. Nothing prevent you to use <a class="reference internal" href="#classfort_1_1Time_1ab0efa5e0ed0292700adb4407509bf956"><span class="std std-ref">SYSTEM_MONOTONIC_CLOCK</span></a> for the monoID value but the behavior manipulating resulting times is undefined.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>timestamp</strong> – the <code class="docutils literal notranslate"><span class="pre">google.protobuf.Timestamp</span></code> message </p></li>
+<li><p><strong>nsecs</strong> – the external monotonic value in nanoseconds </p></li>
+<li><p><strong>monoID</strong> – the external monoID</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the converted <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> with associated monotonic data </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort4Time5ParseERKNSt6stringE">
+<span id="_CPPv3N4fort4Time5ParseERKNSt6stringE"></span><span id="_CPPv2N4fort4Time5ParseERKNSt6stringE"></span><span id="fort::Time::Parse__ssCR"></span><span class="target" id="classfort_1_1Time_1a1da467f7353ff91f16d525a25a9cd41a"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Parse</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort4Time5ParseERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Parses from RFC 3339 date string format. </p>
+<p>
+Parses from <a class="reference external" href="https: *www.ietf.org/rfc/rfc3339.txt">RFC 3339</a> date string format, i.e. string of the form <code class="docutils literal notranslate"><span class="pre">1972-01-01T10:00:20.021-05:00</span></code>. It is merely a wrapper from google::protobuf::time_util functions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input</strong> – the string to parse</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">exception</span></span></span> – if input is not a RFC 3339 valid string</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the converted &lt;myrmidon::Time&gt; </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort4Time15MonoFromSecNSecE8uint64_t8uint64_t">
+<span id="_CPPv3N4fort4Time15MonoFromSecNSecE8uint64_t8uint64_t"></span><span id="_CPPv2N4fort4Time15MonoFromSecNSecE8uint64_t8uint64_t"></span><span id="fort::Time::MonoFromSecNSec__uint64_t.uint64_t"></span><span class="target" id="classfort_1_1Time_1ad21e18eb6a309ecae237f7e6d9924365"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MonoFromSecNSec</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">sec</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nsec</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort4Time15MonoFromSecNSecE8uint64_t8uint64_t" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Helpers to convert (sec,nsec) to nsec. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sec</strong> – the amount of second </p></li>
+<li><p><strong>nsec</strong> – the amount of nanos</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="#_CPPv4N4fort4Time8OverflowE" title="fort::Time::Overflow"><span class="n">Overflow</span></a></span></span> – </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>sec * 1e9 + nsec if no overflow </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort4Time22SYSTEM_MONOTONIC_CLOCKE">
+<span id="_CPPv3N4fort4Time22SYSTEM_MONOTONIC_CLOCKE"></span><span id="_CPPv2N4fort4Time22SYSTEM_MONOTONIC_CLOCKE"></span><span id="fort::Time::SYSTEM_MONOTONIC_CLOCK__MonoclockIDC"></span><span class="target" id="classfort_1_1Time_1ab0efa5e0ed0292700adb4407509bf956"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort4Time11MonoclockIDE" title="fort::Time::MonoclockID"><span class="n"><span class="pre">MonoclockID</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SYSTEM_MONOTONIC_CLOCK</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N4fort4Time22SYSTEM_MONOTONIC_CLOCKE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>The current system monotonic clock. </p>
+<p>The MonoclockID reserved for the current system ( aka <code class="docutils literal notranslate"><span class="pre">CLOCK_MONOTONIC</span></code>). </p>
+</dd></dl>
+
+</div>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort4Time8OverflowE">
+<span id="_CPPv3N4fort4Time8OverflowE"></span><span id="_CPPv2N4fort4Time8OverflowE"></span><span id="fort::Time::Overflow"></span><span class="target" id="classfort_1_1Time_1_1Overflow"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Overflow</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">runtime_error</span></span><a class="headerlink" href="#_CPPv4N4fort4Time8OverflowE" title="Permalink to this definition"></a><br /></dt>
+<dd><p><a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> values can overflow when performing operation on them. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort4Time8Overflow8OverflowERKNSt6stringE">
+<span id="_CPPv3N4fort4Time8Overflow8OverflowERKNSt6stringE"></span><span id="_CPPv2N4fort4Time8Overflow8OverflowERKNSt6stringE"></span><span id="fort::Time::Overflow::Overflow__ssCR"></span><span class="target" id="classfort_1_1Time_1_1Overflow_1adec3e7ac69402185d37077309ae410ec"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Overflow</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">clocktype</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort4Time8Overflow8OverflowERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Construct an overflow from a clocktype name. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>clocktype</strong> – the clock type to use </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort4Time8OverflowD0Ev">
+<span id="_CPPv3N4fort4Time8OverflowD0Ev"></span><span id="_CPPv2N4fort4Time8OverflowD0Ev"></span><span id="fort::Time::Overflow::~Overflow"></span><span class="target" id="classfort_1_1Time_1_1Overflow_1a2358e4dcedbf6c6ba0b8b0c3eb6181ea"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~Overflow</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort4Time8OverflowD0Ev" title="Permalink to this definition"></a><br /></dt>
+<dd><p>default destructor </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="queries_matchers.html" class="btn btn-neutral float-left" title="Queries And Matchers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="shapes.html" class="btn btn-neutral float-right" title="2D Geometric Shapes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Université de Lausanne.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
