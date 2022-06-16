@@ -4,6 +4,7 @@
 #include <thread>
 
 #include <tbb/parallel_for.h>
+#include <tbb/concurrent_queue.h>
 #include <tbb/pipeline.h>
 
 #include <fort/myrmidon/Matchers.hpp>
@@ -25,50 +26,98 @@ namespace myrmidon {
 namespace priv {
 
 
-static void EnsureTagStatisticsAreComputed(const Space & space, bool fixCorruptedData) {
+void Query::ProcessLoaders(const std::vector<TrackingDataDirectory::Loader> & loaders,
+                           const std::function<void(int,int)> & progressCallback,
+                           bool fixCorruptedData) {
+	if ( loaders.empty() == true ) {
+		return;
+	}
+	tbb::concurrent_bounded_queue<std::shared_ptr<FixableError::Ptr>> queue;
+
+	std::atomic<bool> stop;
+	stop.store(false);
+
+	class StopIteration {};
+
+	std::thread go([&]() {
+		try {
+			tbb::parallel_for(tbb::blocked_range<size_t>(0,loaders.size()),
+			                  [&](const tbb::blocked_range<size_t> & range) {
+				                  for ( size_t idx = range.begin();
+				                        idx != range.end();
+				                        ++idx ) {
+					                  FixableError::Ptr e;
+					                  if ( stop.load() == true ) {
+						                  throw StopIteration();
+					                  }
+					                  e = loaders[idx]();
+					                  queue.push(std::make_shared<FixableError::Ptr>(std::move(e)));
+				                  }
+			                  });
+		} catch ( const StopIteration & ) {
+			return;
+		}
+		queue.push(nullptr);
+	});
+
+	FixableErrorList errors;
+	int i = 0;
+	for (;;) {
+		std::shared_ptr<FixableError::Ptr> error;
+		queue.pop(error);
+		if ( error == nullptr ) {
+			break;
+		}
+		if ( *error ) {
+			errors.push_back(std::move(*error));
+		}
+		try {
+			progressCallback(++i,loaders.size());
+		} catch ( const std::exception & e ) {
+			stop.store(true);
+			go.join();
+			throw;
+		}
+	}
+	go.join();
+
+	if ( errors.empty() == true ) {
+		return;
+	}
+	if ( fixCorruptedData == false ) {
+		throw FixableErrors(std::move(errors));
+	}
+	for ( auto & e : errors ) {
+		e->Fix();
+	}
+}
+
+
+static void EnsureTagStatisticsAreComputed(const Experiment & experiment,
+                                           const std::function<void(int,int)> & progressCallback,
+                                           bool fixCorruptedData) {
 	std::vector<TrackingDataDirectory::Loader> loaders;
-	for ( const auto & tdd : space.TrackingDataDirectories() ) {
+	for ( const auto & [URI,tdd] : experiment.TrackingDataDirectories() ) {
 		if ( tdd->TagStatisticsComputed() == true ) {
 			continue;
 		}
 		auto localLoaders = tdd->PrepareTagStatisticsLoaders();
 		loaders.insert(loaders.end(),localLoaders.begin(),localLoaders.end());
 	}
-	FixableErrorList errors;
-	std::mutex mx;
-	tbb::parallel_for(tbb::blocked_range<size_t>(0,loaders.size()),
-	                  [&](const tbb::blocked_range<size_t> & range) {
-			                  for ( size_t idx = range.begin();
-			                        idx != range.end();
-			                        ++idx ) {
-				                  auto e = loaders[idx]();
-				                  if ( e ) {
-					                  std::lock_guard<std::mutex> lock(mx);
-					                  errors.push_back(std::move(e));
-				                  }
-			                  }
-		                  });
 
-	if ( errors.empty() ) {
-		return;
-	}
-	if ( fixCorruptedData == false ) {
-		throw FixableErrors(std::move(errors));
-	}
-
-	for ( auto & e : errors) {
-		e->Fix();
-	}
+	Query::ProcessLoaders(loaders,progressCallback,fixCorruptedData);
 }
 
 void Query::ComputeTagStatistics(const Experiment & experiment,
                                  TagStatistics::ByTagID & result,
+                                 const std::function<void(int,int)> & progressCallback,
                                  bool fixCorruptedData ) {
+	EnsureTagStatisticsAreComputed(experiment,progressCallback,fixCorruptedData);
+
 	std::vector<TagStatistics::ByTagID> allSpaceResult;
 
 	typedef std::vector<TagStatisticsHelper::Loader> StatisticLoaderList;
 	for ( const auto & [spaceID,space] : experiment.Spaces() ) {
-		EnsureTagStatisticsAreComputed(*space,fixCorruptedData);
 		std::vector<TagStatisticsHelper::Timed> spaceResults;
 		for ( const auto & tdd : space->TrackingDataDirectories() ) {
 			spaceResults.push_back(tdd->TagStatistics());
@@ -252,33 +301,8 @@ static void EnsureTagCloseUpsAreLoaded(const Experiment & e,
 		auto localLoaders = tdd->PrepareTagCloseUpsLoaders();
 		loaders.insert(loaders.end(),localLoaders.begin(),localLoaders.end());
 	}
-	progressCallback(0,loaders.size());
-	std::atomic<int> loaded(0);
-	FixableErrorList errors;
-	std::mutex mx;
-	tbb::parallel_for(tbb::blocked_range<size_t>(0,loaders.size()),
-	                  [&](const tbb::blocked_range<size_t> & range) {
-			                  for ( size_t idx = range.begin();
-			                        idx != range.end();
-			                        ++idx ) {
-				                  auto e = loaders[idx]();
-				                  if ( e ) {
-					                  std::lock_guard<std::mutex> lock(mx);
-					                  errors.push_back(std::move(e));
-				                  }
-				                  progressCallback(loaded.fetch_add(1)+1,loaders.size());
-			                  }
-	                  });
 
-	if (errors.empty() == true ) {
-		return;
-	}
-	if ( fixCorruptedData == false ) {
-		throw FixableErrors(std::move(errors));
-	}
-	for ( auto & e : errors ) {
-		e->Fix();
-	}
+	Query::ProcessLoaders(loaders,progressCallback,fixCorruptedData);
 }
 
 std::tuple<std::vector<std::string>,std::vector<TagID>,Eigen::MatrixXd>

@@ -96,7 +96,7 @@ SEXP wrap(const fort::myrmidon::TagStatistics::ByTagID & tagStats ) {
 //[[Rcpp::export]]
 fort::myrmidon::TagStatistics::ByTagID fmQueryComputeTagStatistics(const ExperimentPtr & experiment,
                                                                    bool fixCorruptedData = false) {
-	return Query::ComputeTagStatistics(*experiment,fixCorruptedData);
+	return Query::ComputeTagStatistics(*experiment,[](int,int){},fixCorruptedData);
 }
 
 static void checkInt(void * dummy) {

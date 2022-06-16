@@ -1,6 +1,7 @@
 #pragma once
 
 #include <fort/myrmidon/Query.hpp>
+#include "TrackingDataDirectory.hpp"
 
 namespace fort {
 namespace myrmidon {
@@ -13,6 +14,7 @@ public:
 
 	static void ComputeTagStatistics(const Experiment & experiment,
 	                                 TagStatistics::ByTagID & result,
+	                                 const std::function<void(int,int)> & progressCallback,
 	                                 bool fixCorruptedData);
 
 	static void IdentifyFrames(const Experiment & experiment,
@@ -46,6 +48,11 @@ public:
 	GetTagCloseUps(const Experiment & e,
 	               const std::function<void(int,int)> & progressCallback,
 	               bool fixCorruptedData);
+
+
+	static void ProcessLoaders(const std::vector<TrackingDataDirectory::Loader> & loaders,
+	                           const std::function<void(int,int)> & progressCallback,
+	                           bool fixCorruptedData);
 
 private:
 

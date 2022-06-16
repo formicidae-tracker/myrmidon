@@ -1,5 +1,7 @@
 #include "BindTypes.hpp"
 
+#include "Progress.hpp"
+
 #include <condition_variable>
 #include <thread>
 
@@ -8,73 +10,10 @@
 #include <fort/myrmidon/Experiment.hpp>
 #include <fort/myrmidon/Video.hpp>
 
+
+
 namespace py = pybind11;
 
-#define check_py_interrupt() do { \
-		if ( PyErr_CheckSignals() != 0 ) { \
-			throw py::error_already_set(); \
-		} \
-	} while(0)
-
-class QueryProgress {
-private:
-	py::object d_progress;
-	fort::Time d_start;
-	int64_t d_lastMinuteReported;
-public:
-	QueryProgress(const fort::myrmidon::Experiment & e,
-	           fort::Time start,
-	           fort::Time end,
-	           const std::string & description,
-	           bool verbose = true)
-		: d_progress(pybind11::none()) {
-
-		if ( verbose == false) {
-			return;
-		}
-
-		if ( start.IsInfinite() || end.IsInfinite() ) {
-			auto dataInfo = fort::myrmidon::Query::GetDataInformations(e);
-			if ( start.IsInfinite() ) {
-				start = dataInfo.Start;
-			}
-			if ( end.IsInfinite() ) {
-				end = dataInfo.End;
-			}
-		}
-
-		using namespace pybind11::literals;
-
-		d_start = start;
-		int64_t minutes =  std::ceil(end.Sub(start).Minutes());
-		d_lastMinuteReported = 0;
-
-		d_progress = py::module_::import("tqdm").attr("tqdm")("total"_a = minutes,
-		                                                      "desc"_a = description,
-		                                                      "ncols"_a = 80,
-		                                                      "unit"_a = "tracked min");
-	}
-
-	~QueryProgress() {
-		if ( d_progress.is_none() == false ) {
-			d_progress.attr("close")();
-		}
-	}
-
-	void Update(const fort::Time & t) {
-		check_py_interrupt();
-		if ( d_progress.is_none() == true ) {
-			return;
-		}
-		using namespace pybind11::literals;
-
-		int64_t minuteEllapsed = std::floor(t.Sub(d_start).Minutes());
-		if ( minuteEllapsed > d_lastMinuteReported) {
-			d_progress.attr("update")("n"_a = minuteEllapsed - d_lastMinuteReported);
-			d_lastMinuteReported = minuteEllapsed;
-		}
-	}
-};
 
 py::list QueryIdentifyFrames(const fort::myrmidon::Experiment & experiment,
                              fort::Time start,
@@ -89,7 +28,7 @@ py::list QueryIdentifyFrames(const fort::myrmidon::Experiment & experiment,
 	args.SingleThreaded = singleThreaded;
 	args.ComputeZones = computeZones;
 	args.AllocationInCurrentThread = reportProgress;
-	QueryProgress progress(experiment,start,end,"Identifiying frames",reportProgress);
+	TimeProgress progress(experiment,start,end,"Identifiying frames",reportProgress);
 	fort::myrmidon::Query::IdentifyFramesFunctor(experiment,
 	                                             [&res,&progress](const fort::myrmidon::IdentifiedFrame::Ptr & f) {
 		                                             res.append(f);
@@ -112,7 +51,7 @@ py::list QueryCollideFrames(const fort::myrmidon::Experiment & experiment,
 	args.SingleThreaded = singleThreaded;
 	args.AllocationInCurrentThread = reportProgress;
 	args.CollisionsIgnoreZones = collisionsIgnoreZones;
-	QueryProgress progress(experiment,start,end,"Colliding frames",reportProgress);
+	TimeProgress progress(experiment,start,end,"Colliding frames",reportProgress);
 	fort::myrmidon::Query::CollideFramesFunctor(experiment,
 	                                            [&](const fort::myrmidon::CollisionData & d) {
 		                                             res.append(d);
@@ -143,7 +82,7 @@ py::list QueryComputeAntTrajectories(const fort::myrmidon::Experiment & experime
 	args.SingleThreaded = singleThreaded;
 	args.AllocationInCurrentThread = reportProgress;
 	args.SegmentOnMatcherValueChange = segmentOnMatcherValueChange;
-	QueryProgress progress(experiment,start,end,"Computing ant trajectories",reportProgress);
+	TimeProgress progress(experiment,start,end,"Computing ant trajectories",reportProgress);
 	fort::myrmidon::Query::ComputeAntTrajectoriesFunctor(experiment,
 	                                                     [&](const fort::myrmidon::AntTrajectory::Ptr & t) {
 		                                                     res.append(t);
@@ -177,7 +116,7 @@ py::tuple QueryComputeAntInteractions(const fort::myrmidon::Experiment & experim
 	args.AllocationInCurrentThread = reportProgress;
 	args.CollisionsIgnoreZones = collisionsIgnoreZones;
 	args.SegmentOnMatcherValueChange = segmentOnMatcherValueChange;
-	QueryProgress progress(experiment,start,end,"Computing ant interactions",reportProgress);
+	TimeProgress progress(experiment,start,end,"Computing ant interactions",reportProgress);
 	fort::myrmidon::Query::ComputeAntInteractionsFunctor(experiment,
 	                                                     [&](const fort::myrmidon::AntTrajectory::Ptr & t) {
 		                                                     trajectories.append(t);
@@ -210,71 +149,18 @@ py::object GetTagCloseUps(const fort::myrmidon::Experiment & e,
 
 	py::object pd = py::module_::import("pandas");
 	py::object tqdm = py::module_::import("tqdm");
-	int total(0),current(0);
-	bool done(false);
-	std::mutex m;
-	std::condition_variable cv;
-
 	std::vector<std::string> paths;
 	std::vector<TagID> IDs;
 	Eigen::MatrixXd data;
 
-	FixableErrorList errors;
+	ItemProgress p("Tag Close-Ups",true);
+	std::tie(paths,IDs,data)
+		= Query::GetTagCloseUps(e,
+		                        [&](int current,int total) {
+			                        p.Update(current,total);
+		                        },
+		                        fixCorruptedData);
 
-	std::thread op([&](){
-		               try {
-			               std::tie(paths,IDs,data)
-				               = Query::GetTagCloseUps(e,
-				                                       [&](int current_,int total_) {
-					                                       {
-						                                       std::lock_guard<std::mutex> lock(m);
-						                                       current = current_;
-						                                       total = total_;
-					                                       }
-					                                       cv.notify_all();
-				                                       },
-				                                       fixCorruptedData);
-		               } catch ( FixableErrors & e ) {
-			               errors = std::move(e.Errors());
-		               }
-		               {
-			               std::lock_guard<std::mutex> lock(m);
-			               done = true;
-		               }
-		               cv.notify_all();
-	               });
-
-	py::object progress = pybind11::none();
-	int lastCurrent = 0;
-	do {
-
-		std::unique_lock<std::mutex> lock(m);
-		cv.wait(lock,[&]() { return total > 0 || done == true; });
-		if ( done == true ) {
-			if ( progress.is_none() == false ) {
-				progress.attr("close")();
-			}
-			break;
-		}
-		if ( PyErr_CheckSignals() != 0 ) {
-			op.detach();
-			throw py::error_already_set();
-		}
-		if ( progress.is_none() == true ) {
-			progress = tqdm.attr("tqdm")("total"_a = total,
-			                             "desc"_a = "Computing Close-Ups",
-			                             "ncols"_a = 80);
-		}
-		if ( current != lastCurrent ) {
-			progress.attr("update")("n"_a = current - lastCurrent);
-			lastCurrent = current;
-		}
-	} while( true );
-	op.join();
-
-	if ( errors.empty() == false) {
-		throw FixableErrors(std::move(errors));
-	}
 	py::object df = pd.attr("DataFrame")("data"_a = py::dict("path"_a = paths,
 	                                                         "ID"_a = IDs));
 	py::list cols;
@@ -327,7 +213,15 @@ Returns:
 		            &fort::myrmidon::Query::GetDataInformations,
 		            "experiment"_a)
 		.def_static("ComputeTagStatistics",
-		            &fort::myrmidon::Query::ComputeTagStatistics,
+		            [](const fort::myrmidon::Experiment & e,
+		               bool fixCorruptedData) {
+			            ItemProgress p("Tag Statistics",true);
+			            return fort::myrmidon::Query::ComputeTagStatistics(e,
+			                                                               [&](int current, int total) {
+				                                                               p.Update(current,total);
+			                                                               },
+			                                                               fixCorruptedData);
+		            },
 		            "experiment"_a,
 		            "fixCorruptedData"_a = false,
 		            R"pydoc(

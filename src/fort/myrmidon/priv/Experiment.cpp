@@ -24,6 +24,7 @@
 #include "Space.hpp"
 #include "CollisionSolver.hpp"
 #include "TagCloseUp.hpp"
+#include "Query.hpp"
 
 #include <tbb/parallel_for.h>
 
@@ -665,10 +666,7 @@ CollisionSolver::ConstPtr Experiment::CompileCollisionSolver(bool collisionsIgno
 
 void Experiment::EnsureAllDataIsLoaded(const std::function<void(int,int)> & progressCallback,
                                        bool fixCorruptedData) const {
-	FixableErrorList errors;
-
 	std::vector<TrackingDataDirectory::Loader> loaders;
-
 
 	for ( const auto & [URI,tdd] : TrackingDataDirectories() ) {
 		std::vector<std::vector<TrackingDataDirectory::Loader>> toLoad;
@@ -687,39 +685,7 @@ void Experiment::EnsureAllDataIsLoaded(const std::function<void(int,int)> & prog
 			loaders.insert(loaders.end(),c.begin(),c.end());
 		}
 	}
-	if ( loaders.empty() == true ) {
-		return;
-	}
-
-	std::mutex mx;
-	std::atomic<int> progress;
-	progress.store(0);
-	tbb::parallel_for(tbb::blocked_range<size_t>(0,loaders.size()),
-	                  [&](const tbb::blocked_range<size_t> & range) {
-		                  for ( size_t idx = range.begin();
-		                        idx != range.end();
-		                        ++idx) {
-			                  auto e = loaders[idx]();
-			                  if ( e ) {
-				                  std::lock_guard<std::mutex> lock(mx);
-				                  errors.push_back(std::move(e));
-			                  }
-			                  progressCallback(progress.fetch_add(1)+1,
-			                                   loaders.size());
-		                  }
-	                  });
-
-	if ( errors.empty() == true ) {
-		return;
-	}
-
-	if ( fixCorruptedData == false ) {
-		throw FixableErrors(std::move(errors));
-	}
-
-	for ( const auto & e : errors ) {
-		e->Fix();
-	}
+	Query::ProcessLoaders(loaders,progressCallback,fixCorruptedData);
 }
 
 } //namespace priv

@@ -24,10 +24,12 @@ ComputedMeasurement::List Query::ComputeMeasurementFor(const Experiment & experi
 }
 
 TagStatistics::ByTagID Query::ComputeTagStatistics(const Experiment & experiment,
+                                                   const std::function<void(int,int)> & progressCallback,
                                                    bool fixCorruptedData) {
 	TagStatistics::ByTagID res;
 	priv::Query::ComputeTagStatistics(experiment.d_p->Get(),
 	                                  res,
+	                                  progressCallback,
 	                                  fixCorruptedData);
 	return res;
 }
