@@ -95,6 +95,7 @@ public:
 	 * @return the TagStatistics indexed by TagID
 	 */
 	static TagStatistics::ByTagID ComputeTagStatistics(const Experiment & experiment,
+	                                                   const std::function<void(int,int)> & progressCallback = [](int,int){},
 	                                                   bool fixCorruptedData = false);
 
 	/**
