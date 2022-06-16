@@ -1,6 +1,8 @@
+#include <utility>
+#include <iostream>
+
 #include <fort/time/Time.hpp>
 #include <fort/myrmidon/types/Collision.hpp>
-#include <utility>
 
 #include "UtilsUTest.hpp"
 
@@ -20,9 +22,9 @@
 #define failure_helper(aExpr,bExpr,a,b,field) \
 	::testing::AssertionFailure() \
 	<< "Value of: " << aExpr << "." << #field << std::endl \
-	<< "  Actual: " << a.field << std::endl \
+	<< "  Actual: " << ::testing::PrintToString(a.field) << std::endl \
 	<< "Expected: " << bExpr << "." << #field << std::endl \
-	<< "Which is: " << b.field
+	<< "Which is: " << ::testing::PrintToString(b.field)
 
 ::testing::AssertionResult AssertTimeEqual(const char * aExpr,
                                            const char * bExpr,
@@ -494,7 +496,7 @@ AssertCollisionFrameEqual(const char * aExpr,
 		if ( j == a.Collisions.size() ) {
 			return ::testing::AssertionFailure()
 				<< "Could not found collision "
-				<< b.Collisions[i].IDs
+				<< ::testing::PrintToString(b.Collisions[i].IDs)
 				<< " in " << aExpr << ".Collisions";
 		}
 		tmp = AssertCollisionEqual((std::string(aExpr)+".Collision[" + std::to_string(j) + "]").c_str(),

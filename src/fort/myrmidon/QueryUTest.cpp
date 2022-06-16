@@ -211,10 +211,14 @@ TEST_F(QueryUTest,ComputeAntInteractions) {
 			EXPECT_ANT_INTERACTION_EQ(*interactions[i],
 			                          *expected.Interactions[i])
 				<< "  With i: " << i << std::endl
-				<< "Expected Interaction End: " << expected.Interactions[i]->End << std::endl
-				<< "  Acutal Interaction End: " << interactions[i]->End << std::endl
-				<< "    Expected Segment End: " << std::get<0>(expected.Interactions[i]->Trajectories).first.EndTime() << std::endl
-				<< "      Actual Segment End: " << std::get<0>(interactions[i]->Trajectories).first.EndTime() << std::endl;
+				<< "Expected Interaction End: "
+				<< ::testing::PrintToString(expected.Interactions[i]->End) << std::endl
+				<< "  Actual Interaction End: "
+				<< ::testing::PrintToString(interactions[i]->End) << std::endl
+				<< "    Expected Segment End: "
+				<< ::testing::PrintToString(std::get<0>(expected.Interactions[i]->Trajectories).first.EndTime()) << std::endl
+				<< "      Actual Segment End: "
+				<< ::testing::PrintToString(std::get<0>(interactions[i]->Trajectories).first.EndTime()) << std::endl;
 
 		}
 	}

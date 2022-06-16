@@ -1,6 +1,5 @@
 #pragma once
 
-#include <gtest/gtest.h>
 
 #include <Eigen/Core>
 
@@ -8,6 +7,9 @@
 
 #include <fort/myrmidon/types/Value.hpp>
 #include <fort/myrmidon/types/TagStatistics.hpp>
+
+
+#include <gtest/gtest.h>
 
 namespace fort {
 class Time;
