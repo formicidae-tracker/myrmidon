@@ -49,7 +49,7 @@ TEST_F(TagStatisticsUTest,ComputeAndUpdatesGap) {
 	for ( const auto & d : testdata ) {
 		auto stat = TagStatisticsHelper::Create(0,t);
 		auto gap  = TagStatisticsHelper::ComputeGap(t,t.Add(d.D));
-		EXPECT_EQ(gap,d.H) << " testing for " << d.D;
+		EXPECT_EQ(gap,d.H) << " testing for " << ::testing::PrintToString(d.D);
 		TagStatisticsHelper::UpdateGaps(stat,t,t.Add(d.D));
 		if ( d.H == 0 ) {
 			EXPECT_EQ(stat.Counts.sum(),1);

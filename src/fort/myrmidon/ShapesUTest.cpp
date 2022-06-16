@@ -203,7 +203,10 @@ TEST_F(ShapesUTest,TestCaspuleCollision) {
 
 		bool res = Capsule::Intersect(a.C1(),a.C2(),a.R1(),a.R2(),
 		                              b.C1(),b.C2(),b.R1(),b.R2());
-		EXPECT_EQ(res,d.Expected) << " Intersecting " << a << " and " << b;
+		EXPECT_EQ(res,d.Expected) << " Intersecting "
+		                          << ::testing::PrintToString(a)
+		                          << " and "
+		                          << ::testing::PrintToString(b);
 	}
 }
 
