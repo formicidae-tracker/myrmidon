@@ -29,9 +29,9 @@ requirements:
     - {{ cdt('libxdamage') }}        [linux]
     - {{ cdt('libxfixes') }}         [linux]
     - {{ cdt('libxxf86vm') }}        [linux]
-    - libstdcxx-ng {{ c_compiler_version }} [linux]
+#    - libstdcxx-ng {{ c_compiler_version }} [linux]
   host:
-    - libstdcxx-ng {{ c_compiler_version }} [linux]
+#    - libstdcxx-ng {{ c_compiler_version }} [linux]
     - eigen =3.4.0
     - tbb-devel =2020.2
     - libprotobuf {{ protobuf }}
@@ -57,7 +57,7 @@ outputs:
         - libopencv {{ opencv }}
         - yaml-cpp =0.6.3
         - tbb =2020.2
-        - libstdcxx-ng {{ c_compiler_version }} [linux]
+#        - libstdcxx-ng {{ c_compiler_version }} [linux]
     test:
       script: test-libfort-myrmidon.sh
       requires:
@@ -88,7 +88,7 @@ outputs:
         - libopencv {{ opencv }}
         - yaml-cpp =0.6.3
         - eigen =3.4.0
-        - libstdcxx-ng {{ c_compiler_version }} [linux]
+ #       - libstdcxx-ng {{ c_compiler_version }} [linux]
       run:
         - r-base {{ r_base }}
         - r-rcpp
@@ -97,7 +97,7 @@ outputs:
         - libprotobuf {{ protobuf }}
         - libopencv {{ opencv }}
         - yaml-cpp =0.6.3
-        - libstdcxx-ng {{ c_compiler_version }} [linux]
+#        - libstdcxx-ng {{ c_compiler_version }} [linux]
     test:
       files:
         - test-r-fort-myrmidon.r
@@ -110,14 +110,14 @@ outputs:
       build:
         - python {{python}}
         - opencv {{ opencv }}
-        - libprotobuf {{ protobuf }}
+        - libprotobuf ={{ protobuf }}
       host:
         - python {{python}}
         - {{ pin_subpackage('libfort-myrmidon',exact=True) }}
         - pybind11 =2.7.1
         - libprotobuf {{ protobuf }}
-        - numpy =1.21.2
-        - libstdcxx-ng {{ c_compiler_version }} [linux]
+        - numpy
+#        - libstdcxx-ng {{ c_compiler_version }} [linux]
         - opencv {{ opencv }}
         - pandas
         - tqdm
@@ -127,8 +127,8 @@ outputs:
         - libprotobuf {{ protobuf }}
         - opencv {{ opencv }}
         - yaml-cpp =0.6.3
-        - numpy =1.21.2
-        - libstdcxx-ng {{ c_compiler_version }} [linux]
+        - numpy
+#        - libstdcxx-ng {{ c_compiler_version }} [linux]
         - pandas
         - tqdm
     test:
