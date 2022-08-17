@@ -2,6 +2,18 @@
 
 #include <fort/myrmidon/TrackingSolver.hpp>
 
+std::shared_ptr<fort::myrmidon::IdentifiedFrame>
+TrackingSolverIdentifyFrame(const fort::myrmidon::TrackingSolver & self,
+                            py::object & frame_readout,
+                            fort::myrmidon::SpaceID spaceID) {
+	std::string serialized = frame_readout.attr("SerializeToString")().cast<std::string>();
+	fort::hermes::FrameReadout ro;
+	ro.ParseFromString(serialized);
+	auto res = std::make_shared<fort::myrmidon::IdentifiedFrame>();
+	self.IdentifyFrame(*res,ro,spaceID);
+	return res;
+}
+
 void BindTrackingSolver(py::module_ & m) {
 	using namespace fort::myrmidon;
 	py::class_<TrackingSolver>(m,"TrackingSolver",
@@ -24,14 +36,8 @@ void BindTrackingSolver(py::module_ & m) {
             no ant is identified by tagID at time.
 )pydoc")
 		.def("IdentifyFrame",
-		     [](const TrackingSolver & self,
-		        const fort::hermes::FrameReadout & frame,
-		        SpaceID spaceID) {
-			     auto res = std::make_shared<IdentifiedFrame>();
-			     self.IdentifyFrame(*res,frame,spaceID);
-			     return res;
-		     },
-		     py::arg("frame"),
+		     &TrackingSolverIdentifyFrame,
+		     py::arg("frameReadout"),
 		     py::arg("spaceID"),
 		     R"pydoc(
     Identifies Ant in a raw frame readout
