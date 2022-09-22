@@ -358,8 +358,8 @@ private:
 	Vector2dList d_vertices;
 };
 
-} // namespace myrmidon
-} // namespace fort
-
 std::ostream  & operator<<(std::ostream & out,
                            const fort::myrmidon::Capsule & c);
+
+} // namespace myrmidon
+} // namespace fort

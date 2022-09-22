@@ -217,12 +217,11 @@ void Zone::SetName(const std::string & name) {
 	d_name = name;
 }
 
-} // namespace priv
-} // namespace myrmidon
-} // namespace fort
-
-
 std::ostream & operator<<(std::ostream & out,
                           const fort::myrmidon::priv::ZoneDefinition & definition) {
 	return out << "ZoneDefinition";
 }
+
+} // namespace priv
+} // namespace myrmidon
+} // namespace fort

@@ -82,14 +82,13 @@ private:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
-
-} // namespace priv
-} // namespace myrmidon
-} // namespace fort
-
 // Formats a TagInFrameReference
 // @out the std::ostream to format to
 // @p the <fort::myrmidon::priv::TagInFrameReference> to format
 // @return a reference to <out>
 std::ostream& operator<<(std::ostream & out,
                          const fort::myrmidon::priv::TagCloseUp & tcu);
+
+} // namespace priv
+} // namespace myrmidon
+} // namespace fort

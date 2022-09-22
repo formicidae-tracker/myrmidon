@@ -58,8 +58,8 @@ public:
 	virtual ~Matcher();
 };
 
+std::ostream & operator<<(std::ostream & out, const fort::myrmidon::priv::Matcher & m);
+
 } // namespace priv
 } // namespace myrmidon
 } // namespace fort
-
-std::ostream & operator<<(std::ostream & out, const fort::myrmidon::priv::Matcher & m);

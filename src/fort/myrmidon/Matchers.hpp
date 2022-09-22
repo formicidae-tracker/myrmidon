@@ -13,8 +13,6 @@
 namespace fort {
 namespace myrmidon {
 class Matcher;
-}
-}
 
 /**
  * Formats a fort::myrmidon::Matcher.
@@ -25,6 +23,10 @@ class Matcher;
  */
 std::ostream & operator<<(std::ostream & out,
                           const fort::myrmidon::Matcher & m);
+
+}
+}
+
 
 namespace fort {
 namespace myrmidon {
@@ -213,8 +215,8 @@ private:
 	friend class fort::myrmidon::priv::Query;
 	friend class PublicMatchersUTest_RightMatcher_Test;
 
-	friend std::ostream & ::operator<<(std::ostream & out,
-	                                   const fort::myrmidon::Matcher & m);
+	friend std::ostream & operator<<(std::ostream & out,
+	                                 const fort::myrmidon::Matcher & m);
 
 	// opaque pointer to implementation
 	typedef std::shared_ptr<priv::Matcher> PPtr;

@@ -1,6 +1,7 @@
 #include "ValueUtils.hpp"
 
 #include <type_traits>
+#include <iomanip>
 
 namespace fort {
 namespace myrmidon {

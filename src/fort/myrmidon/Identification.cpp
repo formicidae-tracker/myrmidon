@@ -90,12 +90,10 @@ std::string OverlappingIdentification::Reason(const priv::Identification & a,
 	return os.str();
 }
 
-
-} // namespace fort
-} // namespace myrmidon
-
-
 std::ostream & operator<<(std::ostream & out,
                           const fort::myrmidon::Identification & identification) {
 	return out << identification.d_p->Get();
 }
+
+} // namespace fort
+} // namespace myrmidon

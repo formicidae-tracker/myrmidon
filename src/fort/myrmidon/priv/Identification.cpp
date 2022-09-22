@@ -155,11 +155,6 @@ void Identification::ClearUserDefinedAntPose() {
 }
 
 
-} // namespace priv
-} // namespace myrmidon
-} // namespace fort
-
-
 std::ostream & operator<<(std::ostream & out,
                           const fort::myrmidon::priv::Identification & a) {
 	out << "Identification{ID:"
@@ -173,3 +168,7 @@ std::ostream & operator<<(std::ostream & out,
 	    << "}";
 	return out;
 }
+
+} // namespace priv
+} // namespace myrmidon
+} // namespace fort

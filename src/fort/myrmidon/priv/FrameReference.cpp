@@ -45,11 +45,11 @@ bool FrameReference::operator<(const FrameReference & other) const {
 	return d_parentURI < other.d_parentURI;
 }
 
-} //namespace priv
-} //namespace myrmidon
-} //namespace fort
-
 std::ostream& operator<<(std::ostream & out,
                          const fort::myrmidon::priv::FrameReference & p) {
 	return out << p.URI();
 }
+
+} //namespace priv
+} //namespace myrmidon
+} //namespace fort

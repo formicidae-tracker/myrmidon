@@ -53,15 +53,16 @@ private:
 	fort::Time     d_time;
 };
 
-} //namespace priv
-
-} //namespace myrmidon
-
-} //namespace fort
-
 // Formats a FrameReference
 // @out the std::ostream to format to
 // @p the <fort::myrmidon::priv::FrameReference> to format
 // @return a reference to <out>
 std::ostream& operator<<(std::ostream & out,
                          const fort::myrmidon::priv::FrameReference & p);
+
+
+} //namespace priv
+
+} //namespace myrmidon
+
+} //namespace fort

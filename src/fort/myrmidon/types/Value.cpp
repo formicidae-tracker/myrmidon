@@ -1,5 +1,11 @@
 #include "Value.hpp"
 
+#include <iostream>
+#include <iomanip>
+
+namespace fort {
+namespace myrmidon {
+
 std::ostream & operator<<(std::ostream & out, const fort::myrmidon::Value & v) {
 	auto flags = out.flags();
 	std::visit([&out](auto && args) { out << std::boolalpha << args; },v);
@@ -27,3 +33,6 @@ bool operator==(const fort::myrmidon::Value & a,
 		                  return Equals(a,arg);
 	                  },b);
 }
+
+} // namespace myrmidon
+} // namespace fort

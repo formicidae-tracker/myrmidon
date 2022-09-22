@@ -60,11 +60,10 @@ Matcher::PPtr Matcher::ToPrivate() const {
 	return d_p;
 }
 
-} // namespace myrmidon
-} // namespace fort
-
-
 std::ostream & operator<<(std::ostream & out,
                           const fort::myrmidon::Matcher & m) {
 	return out << *m.d_p;
 }
+
+} // namespace myrmidon
+} // namespace fort

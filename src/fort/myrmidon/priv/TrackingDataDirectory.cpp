@@ -1189,11 +1189,6 @@ TrackingDataDirectory::IteratorRanges(const std::vector<Ptr> & list,
 	return res;
 }
 
-}
-}
-}
-
-
 std::ostream & operator<<(std::ostream & out,
                           const fort::myrmidon::priv::TrackingDataDirectory & a) {
 	return out << "TDD{URI:'" << a.URI()
@@ -1201,3 +1196,8 @@ std::ostream & operator<<(std::ostream & out,
 	           << ", end:" << a.End()
 	           << "}";
 }
+
+
+} // namespace priv
+} // namespace myrmidon
+} // namespace fort

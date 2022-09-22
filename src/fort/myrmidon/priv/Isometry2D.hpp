@@ -3,20 +3,13 @@
 
 #include <Eigen/Core>
 #include <Eigen/Geometry>
+
 namespace fort {
-
 namespace myrmidon {
-
 namespace priv {
 
 template <typename T>
 class Isometry2D;
-
-} // namespace priv
-
-} // namespace myrmidon
-
-} // namespace fort
 
 // Applies the <fort::myrmidon::priv::Isometry2D> to a point.
 // @ T the scalar type such as float or double
@@ -43,6 +36,12 @@ fort::myrmidon::priv::Isometry2D<T> operator*(const fort::myrmidon::priv::Isomet
 template<typename T>
 Eigen::Matrix<T,2,1> operator*(const fort::myrmidon::priv::Isometry2D<T> & i,
                                const Eigen::Matrix<T,2,1> & p);
+
+
+} // namespace priv
+} // namespace myrmidon
+} // namespace fort
+
 
 
 namespace fort {
@@ -125,35 +124,26 @@ private:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW_IF(NeedsToAlign);
 
 
-	friend fort::myrmidon::priv::Isometry2D<T> operator*<>(const fort::myrmidon::priv::Isometry2D<T> & a,
-	                                                       const fort::myrmidon::priv::Isometry2D<T> & b);
-
-	friend Eigen::Matrix<T,2,1> operator*<>(const fort::myrmidon::priv::Isometry2D<T> & i,
-	                                        const Eigen::Matrix<T,2,1> & p);
-
 };
 
 // An alias for <Isometry2D<double>>
 typedef Isometry2D<double> Isometry2Dd;
 
+template<typename T>
+inline Eigen::Matrix<T,2,1> operator*(const fort::myrmidon::priv::Isometry2D<T> & i,
+                                      const Eigen::Matrix<T,2,1> & p) {
+	return Eigen::Rotation2D<T>(i.angle()) * p + i.translation();
+}
 
+template<typename T>
+inline fort::myrmidon::priv::Isometry2D<T> operator*(const fort::myrmidon::priv::Isometry2D<T> & a,
+                                                     const fort::myrmidon::priv::Isometry2D<T> & b) {
+	return fort::myrmidon::priv::Isometry2D<T>(a.angle() + b.angle(),
+	                                           Eigen::Rotation2D<T>(a.angle()) * b.translation() + a.translation());
+}
 
 } // namespace priv
 
 } // namespace myrmidon
 
 } // namespace fort
-
-
-template<typename T>
-inline Eigen::Matrix<T,2,1> operator*(const fort::myrmidon::priv::Isometry2D<T> & i,
-                                      const Eigen::Matrix<T,2,1> & p) {
-	return Eigen::Rotation2D<T>(i.d_angle) * p + i.d_translation;
-}
-
-template<typename T>
-inline fort::myrmidon::priv::Isometry2D<T> operator*(const fort::myrmidon::priv::Isometry2D<T> & a,
-                                                     const fort::myrmidon::priv::Isometry2D<T> & b) {
-	return fort::myrmidon::priv::Isometry2D<T>(a.d_angle + b.d_angle,
-	                                           Eigen::Rotation2D<T>(a.d_angle) * b.d_translation + a.d_translation);
-}
