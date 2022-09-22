@@ -1,5 +1,5 @@
 r_base:
-  - 4.0.*
+  - 4.2.*
 python:
   - 3.8.*
 c_compiler_version:   # [linux]
