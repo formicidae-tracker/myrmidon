@@ -1,6 +1,10 @@
 #pragma once
 
+#include <sstream>
+#include <iomanip>
+
 #include <fort/time/Time.hpp>
+#include <fort/myrmidon/types/Value.hpp>
 
 #include <QString>
 
@@ -8,6 +12,7 @@
 template <typename T>
 inline std::string ToString(const T & t) {
 	std::ostringstream os;
+	using fort::myrmidon::operator<<;
 	os << t;
 	return os.str();
 }
