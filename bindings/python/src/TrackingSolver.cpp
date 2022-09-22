@@ -2,10 +2,11 @@
 
 #include <fort/myrmidon/TrackingSolver.hpp>
 
-void TrackingSolverIdentifyFrame(const fort::myrmidon::TrackingSolver & self,
+fort::myrmidon::IdentifiedFrame::Ptr
+TrackingSolverIdentifyFrame(const fort::myrmidon::TrackingSolver & self,
                                  const py::object & frame_readout,
                                  fort::myrmidon::SpaceID spaceID) {
-	std::string serialized = frame_readout.attr("SerializeToString")();
+	std::string serialized = frame_readout.attr("SerializeToString")().cast<std::string>();
 	fort::hermes::FrameReadout ro;
 	ro.ParseFromString(serialized);
 	auto res = std::make_shared<fort::myrmidon::IdentifiedFrame>();
