@@ -1,5 +1,6 @@
 #pragma once
 
+#include <sstream>
 
 #include <fort/time/Time.hpp>
 #include <fort/myrmidon/types/MaybeDeref.hpp>

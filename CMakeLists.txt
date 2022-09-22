@@ -45,13 +45,13 @@ include(FetchFortTime)
 include(FetchSemver)
 include(FetchGoogleTest)
 
-fetch_google_test(VERSION release-1.12.0)
+fetch_google_test(VERSION release-1.12.1)
 fetch_fort_tags(VERSION v1.4.1)
 set(OBUILD_PYTHON ${BUILD_PYTHON})
 set(BUILD_PYTHON Off)
 fetch_fort_hermes(VERSION 1692f9915b80665b299b06927f4310d99dabe447)
 set(BUILD_PYTHON ${OBUILD_PYTHON})
-fetch_fort_time(VERSION v1.0.7)
+fetch_fort_time(VERSION v1.0.8)
 fetch_semver(VERSION v0.2.2)
 
 

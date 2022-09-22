@@ -296,25 +296,3 @@ private:
 } //namespace priv
 } //namespace myrmidon
 } //namespace fort
-
-inline std::ostream & operator<<( std::ostream & out,
-                                  fort::tags::Family t) {
-	static std::vector<std::string> names = {
-		 "Tag36h11",
-		 "Tag36h10",
-		 "Tag36ARTag",
-		 "Tag16h5",
-		 "Tag25h9",
-		 "Circle21h7",
-		 "Circle49h12",
-		 "Custom48h12",
-		 "Standard41h12",
-		 "Standard52h13",
-		 "<unknown>",
-	};
-	size_t idx = (size_t)(t);
-	if ( idx >= names.size() ) {
-		idx = names.size()-1;
-	}
-	return out << names[idx];
-}

@@ -302,10 +302,9 @@ private:
 
 };
 
+std::ostream & operator<<(std::ostream & out,
+                          const fort::myrmidon::priv::TrackingDataDirectory & a);
+
 } //namespace priv
 } //namespace myrmidon
 } //namespace fort
-
-
-std::ostream & operator<<(std::ostream & out,
-                          const fort::myrmidon::priv::TrackingDataDirectory & a);

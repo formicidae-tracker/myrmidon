@@ -14,9 +14,6 @@ namespace myrmidon {
 class Identification;
 class Experiment;
 
-}
-}
-
 // Formats an Identification to an std::ostream
 // @out the stream to format to
 // @identification the <fort::myrmidon::Identification> to format
@@ -24,6 +21,10 @@ class Experiment;
 // @return a reference to <out>
 std::ostream & operator<<(std::ostream & out,
                           const fort::myrmidon::Identification & identification);
+
+}
+}
+
 
 
 namespace fort {
@@ -254,7 +255,7 @@ public:
 private:
 	friend class AntHandle;
 	friend class ExperimentHandle;
-	friend std::ostream & ::operator<<(std::ostream &, const Identification&);
+	friend std::ostream & operator<<(std::ostream &, const Identification&);
 
 
 

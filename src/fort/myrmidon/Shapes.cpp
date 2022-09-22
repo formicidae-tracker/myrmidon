@@ -289,11 +289,11 @@ std::unique_ptr<Shape> Polygon::Clone() const {
 	return std::make_unique<Polygon>(*this);
 }
 
-} // namespace myrmidon
-} // namespace fort
-
 std::ostream & operator<<(std::ostream & out,
                           const fort::myrmidon::Capsule & c) {
 	return out << "Capsule{C1:{" << c.C1().transpose() << "},R1:" << c.R1()
 	           << ",C2:{" << c.C2().transpose() << "},R2:" << c.R2() << "}";
 }
+
+} // namespace myrmidon
+} // namespace fort

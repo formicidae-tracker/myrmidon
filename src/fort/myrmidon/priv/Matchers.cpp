@@ -1,3 +1,6 @@
+#include <fort/myrmidon/types/Value.hpp>
+#include <sstream>
+
 #include "Matchers.hpp"
 #include "Ant.hpp"
 
@@ -201,6 +204,7 @@ Matcher::Ptr Matcher::AntColumnMatcher(const std::string & name, const Value & v
 		}
 
 		void Format(std::ostream & out ) const override {
+			using fort::myrmidon::operator<<;
 			out << "Ant.'" << d_name << "' == " << d_value;
 		}
 
@@ -470,11 +474,11 @@ Matcher::Ptr Matcher::AntDisplacement(double under,
 	return std::make_shared<AntDisplacementMatcher>(under,minimumGap);
 }
 
-} // namespace priv
-} // namespace myrmidon
-} // namespace fort
-
 std::ostream & operator<<(std::ostream & out, const fort::myrmidon::priv::Matcher & m) {
 	m.Format(out);
 	return out;
 }
+
+} // namespace priv
+} // namespace myrmidon
+} // namespace fort

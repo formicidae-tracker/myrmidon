@@ -3,6 +3,7 @@
 #include <variant>
 #include <cstdint>
 #include <string>
+#include <iostream>
 
 #include <fort/time/Time.hpp>
 
@@ -45,11 +46,6 @@ enum class ValueType {
                       TIME,
 };
 
-
-} // namespace myrmidon
-} // namespace fort
-
-
 /**
  * C++ Formatting operator for Value
  * @param out the std::ostream to format the value to
@@ -62,3 +58,7 @@ std::ostream & operator<<(std::ostream & out, const fort::myrmidon::Value & v);
 
 bool operator==(const fort::myrmidon::Value & a,
                 const fort::myrmidon::Value & b);
+
+
+} // namespace myrmidon
+} // namespace fort

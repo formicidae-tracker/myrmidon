@@ -13,9 +13,6 @@ namespace fort {
 namespace myrmidon {
 namespace priv {
 class Identification;
-} // namespae priv
-} // namespae myrmidon
-} // namespae fort
 
 // Formats an Identification to an std::ostream
 // @out the stream to format to
@@ -24,6 +21,11 @@ class Identification;
 // @return a reference to <out>
 std::ostream & operator<<(std::ostream & out,
                           const fort::myrmidon::priv::Identification & a);
+
+} // namespae priv
+} // namespae myrmidon
+} // namespae fort
+
 
 
 #include "TimeValid.hpp"

@@ -8,12 +8,14 @@ namespace fort {
 namespace myrmidon {
 namespace priv {
 class ZoneDefinition;
+
+std::ostream & operator<<(std::ostream & out,
+                          const fort::myrmidon::priv::ZoneDefinition & definition);
+
 } // namespae priv
 } // namespae myrmidon
 } // namespae fort
 
-std::ostream & operator<<(std::ostream & out,
-                          const fort::myrmidon::priv::ZoneDefinition & definition);
 
 
 #include "TimeValid.hpp"

@@ -416,7 +416,7 @@ AssertIdentifiedFrameEqual(const char * aExpr,
 }
 
 std::ostream & operator<<(std::ostream & out,
-                        const fort::myrmidon::InteractionID & v) {
+                          const fort::myrmidon::InteractionID & v) {
 	return out << fort::myrmidon::FormatAntID(v.first)
 	           << " - "
 	           << fort::myrmidon::FormatAntID(v.second);

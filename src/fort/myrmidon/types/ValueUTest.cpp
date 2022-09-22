@@ -41,6 +41,24 @@ TEST_F(ValueUTest,HasEqualityOperator) {
 	EXPECT_FALSE(Value(false) == Value(0));
 }
 
+TEST_F(ValueUTest,CanFormat) {
+	std::vector<std::pair<Value,std::string>> testdata
+		= {
+		{ true,"true"},
+		{ false, "false"},
+		{ 0,"0"},
+		{ 0.2,"0.2"},
+		{ std::string("a"),"a"},
+		{Time(),"1970-01-01T00:00:00Z"},
+	};
+
+	for ( const auto & [ value,expected ] : testdata) {
+		std::ostringstream oss;
+		oss << value;
+		EXPECT_EQ(oss.str(),expected);
+	}
+}
+
 
 
 } // namespace myrmidon

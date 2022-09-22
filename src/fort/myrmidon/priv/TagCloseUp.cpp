@@ -143,12 +143,12 @@ double TagCloseUp::Squareness() const {
 	return 1.0 - maxAngleDistanceToPI_2 / M_PI * 2.0;
 }
 
-} // namespace priv
-} // namespace myrmidon
-} // namespace fort
-
 std::ostream& operator<<(std::ostream & out,
                          const fort::myrmidon::priv::TagCloseUp & p) {
 	return out << p.Frame() << "/closeups/"
 	           << fort::myrmidon::FormatTagID(p.TagValue());
 }
+
+} // namespace priv
+} // namespace myrmidon
+} // namespace fort
