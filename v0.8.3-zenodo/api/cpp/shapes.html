@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2D Geometric Shapes &mdash; fort-myrmidon  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/../version_dropdown.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Video Sequence Matching" href="video.html" />
+    <link rel="prev" title="Time Representation" href="time.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> fort-myrmidon
+          </a>
+              <div class="version">
+                placeholder
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-myrmidon Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defining_ant_metadata.html">Defining Ant Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../performing_queries.html">Performing Queries</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-studio Manual</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/defining_ant_shapes.html">Defining Ant Shapes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/measuring_ants.html">Measuring Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/metadata_edition.html">Ant Metadata Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/visualization.html">Tracking Data Visualization</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../space_zoning.html">Segmenting Spaces in Zones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matching_video.html">Matching Video and Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../time.html">Time Representation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API References</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Python</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html#c">C++</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="experiment.html">API Entry Point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ant_identification.html">Ants and Identifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="space_zone.html">Spaces and Zones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="queries_matchers.html">Queries And Matchers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="time.html">Time Representation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2D Geometric Shapes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fort-myrmidon-shape">fort::myrmidon::Shape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fort-myrmidon-capsule">fort::myrmidon::Capsule</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fort-myrmidon-circle">fort::myrmidon::Circle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fort-myrmidon-polygon">fort::myrmidon::Polygon</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="video.html">Video Sequence Matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef.html">API generic types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html#r">R</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fort-myrmidon</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Python</a> &raquo;</li>
+      <li>2D Geometric Shapes</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/api/cpp/shapes.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="d-geometric-shapes">
+<h1>2D Geometric Shapes<a class="headerlink" href="#d-geometric-shapes" title="Permalink to this heading"></a></h1>
+<section id="fort-myrmidon-shape">
+<h2>fort::myrmidon::Shape<a class="headerlink" href="#fort-myrmidon-shape" title="Permalink to this heading"></a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5ShapeE">
+<span id="_CPPv3N4fort8myrmidon5ShapeE"></span><span id="_CPPv2N4fort8myrmidon5ShapeE"></span><span id="fort::myrmidon::Shape"></span><span class="target" id="classfort_1_1myrmidon_1_1Shape"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Shape</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5ShapeE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Base class for geometric <a class="reference internal" href="#classfort_1_1myrmidon_1_1Shape"><span class="std std-ref">Shape</span></a>. </p>
+<p>Base class for geometruc <a class="reference internal" href="#classfort_1_1myrmidon_1_1Shape"><span class="std std-ref">Shape</span></a> such as <a class="reference internal" href="#classfort_1_1myrmidon_1_1Circle"><span class="std std-ref">Circle</span></a>, <a class="reference internal" href="#classfort_1_1myrmidon_1_1Capsule"><span class="std std-ref">Capsule</span></a> and <a class="reference internal" href="#classfort_1_1myrmidon_1_1Polygon"><span class="std std-ref">Polygon</span></a>. This class allows to construct heterogenous <a class="reference internal" href="#classfort_1_1myrmidon_1_1Shape_1ad6c720912cf1ff2980601dd2a487fa0e"><span class="std std-ref">Shape::List</span></a> for <a class="reference internal" href="space_zone.html#classfort_1_1myrmidon_1_1ZoneDefinition"><span class="std std-ref">ZoneDefinition</span></a> </p>
+<p>Subclassed by <a class="reference internal" href="#classfort_1_1myrmidon_1_1Capsule"><span class="std std-ref">fort::myrmidon::Capsule</span></a>, <a class="reference internal" href="#classfort_1_1myrmidon_1_1Circle"><span class="std std-ref">fort::myrmidon::Circle</span></a>, <a class="reference internal" href="#classfort_1_1myrmidon_1_1Polygon"><span class="std std-ref">fort::myrmidon::Polygon</span></a></p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp enum-class">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5Shape4TypeE">
+<span id="_CPPv3N4fort8myrmidon5Shape4TypeE"></span><span id="_CPPv2N4fort8myrmidon5Shape4TypeE"></span><span class="target" id="classfort_1_1myrmidon_1_1Shape_1a503cba3120332bda9d27fbb04c902633"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Type</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5Shape4TypeE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>The type of a <a class="reference internal" href="#classfort_1_1myrmidon_1_1Shape"><span class="std std-ref">Shape</span></a>. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5Shape4Type7CAPSULEE">
+<span id="_CPPv3N4fort8myrmidon5Shape4Type7CAPSULEE"></span><span id="_CPPv2N4fort8myrmidon5Shape4Type7CAPSULEE"></span><span class="target" id="classfort_1_1myrmidon_1_1Shape_1a503cba3120332bda9d27fbb04c902633a67586f12c9792da11a4bdf60360d40e9"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CAPSULE</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5Shape4Type7CAPSULEE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>A <a class="reference internal" href="#classfort_1_1myrmidon_1_1Capsule"><span class="std std-ref">Capsule</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5Shape4Type6CIRCLEE">
+<span id="_CPPv3N4fort8myrmidon5Shape4Type6CIRCLEE"></span><span id="_CPPv2N4fort8myrmidon5Shape4Type6CIRCLEE"></span><span class="target" id="classfort_1_1myrmidon_1_1Shape_1a503cba3120332bda9d27fbb04c902633a0af50777920c1401ab975cab64c4d491"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CIRCLE</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5Shape4Type6CIRCLEE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>A <a class="reference internal" href="#classfort_1_1myrmidon_1_1Circle"><span class="std std-ref">Circle</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5Shape4Type7POLYGONE">
+<span id="_CPPv3N4fort8myrmidon5Shape4Type7POLYGONE"></span><span id="_CPPv2N4fort8myrmidon5Shape4Type7POLYGONE"></span><span class="target" id="classfort_1_1myrmidon_1_1Shape_1a503cba3120332bda9d27fbb04c902633aecdc92bf56d960b73b02ee40125758bc"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">POLYGON</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5Shape4Type7POLYGONE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>A <a class="reference internal" href="#classfort_1_1myrmidon_1_1Polygon"><span class="std std-ref">Polygon</span></a>. </p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5Shape3PtrE">
+<span id="_CPPv3N4fort8myrmidon5Shape3PtrE"></span><span id="_CPPv2N4fort8myrmidon5Shape3PtrE"></span><span id="fort::myrmidon::Shape::Ptr"></span><span class="target" id="classfort_1_1myrmidon_1_1Shape_1aaa43df1b60e9a1ff7282d04bdbbf433d"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5ShapeE" title="fort::myrmidon::Shape"><span class="n"><span class="pre">Shape</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Ptr</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5Shape3PtrE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>A pointer to a <a class="reference internal" href="#classfort_1_1myrmidon_1_1Shape"><span class="std std-ref">Shape</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5Shape4ListE">
+<span id="_CPPv3N4fort8myrmidon5Shape4ListE"></span><span id="_CPPv2N4fort8myrmidon5Shape4ListE"></span><span id="fort::myrmidon::Shape::List"></span><span class="target" id="classfort_1_1myrmidon_1_1Shape_1ad6c720912cf1ff2980601dd2a487fa0e"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5Shape3PtrE" title="fort::myrmidon::Shape::Ptr"><span class="n"><span class="pre">Ptr</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">List</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5Shape4ListE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>A list of <a class="reference internal" href="#classfort_1_1myrmidon_1_1Shape"><span class="std std-ref">Shape</span></a>. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5ShapeD0Ev">
+<span id="_CPPv3N4fort8myrmidon5ShapeD0Ev"></span><span id="_CPPv2N4fort8myrmidon5ShapeD0Ev"></span><span id="fort::myrmidon::Shape::~Shape"></span><span class="target" id="classfort_1_1myrmidon_1_1Shape_1a14fb7f4f027114512ca86348c0b97d4d"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~Shape</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5ShapeD0Ev" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Default destructor. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon5Shape9ShapeTypeEv">
+<span id="_CPPv3NK4fort8myrmidon5Shape9ShapeTypeEv"></span><span id="_CPPv2NK4fort8myrmidon5Shape9ShapeTypeEv"></span><span id="fort::myrmidon::Shape::ShapeTypeC"></span><span class="target" id="classfort_1_1myrmidon_1_1Shape_1ac8887f7eec4b915cf4acadf25a25882f"></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5Shape4TypeE" title="fort::myrmidon::Shape::Type"><span class="n"><span class="pre">Type</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ShapeType</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon5Shape9ShapeTypeEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Shape"><span class="std std-ref">Shape</span></a> Type. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the Type of the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Shape"><span class="std std-ref">Shape</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="fort-myrmidon-capsule">
+<h2>fort::myrmidon::Capsule<a class="headerlink" href="#fort-myrmidon-capsule" title="Permalink to this heading"></a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon7CapsuleE">
+<span id="_CPPv3N4fort8myrmidon7CapsuleE"></span><span id="_CPPv2N4fort8myrmidon7CapsuleE"></span><span id="fort::myrmidon::Capsule"></span><span class="target" id="classfort_1_1myrmidon_1_1Capsule"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Capsule</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5ShapeE" title="fort::myrmidon::Shape"><span class="n"><span class="pre">Shape</span></span></a><a class="headerlink" href="#_CPPv4N4fort8myrmidon7CapsuleE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>A capsule. </p>
+<p>A <a class="reference internal" href="#classfort_1_1myrmidon_1_1Capsule"><span class="std std-ref">Capsule</span></a> is defined as two circle and the region in between those two circles.</p>
+<p>Their main purpose is to define <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> virtual body parts. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon7Capsule3PtrE">
+<span id="_CPPv3N4fort8myrmidon7Capsule3PtrE"></span><span id="_CPPv2N4fort8myrmidon7Capsule3PtrE"></span><span id="fort::myrmidon::Capsule::Ptr"></span><span class="target" id="classfort_1_1myrmidon_1_1Capsule_1a86d3f83f873a55f10f4377b882c84972"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon7CapsuleE" title="fort::myrmidon::Capsule"><span class="n"><span class="pre">Capsule</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Ptr</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon7Capsule3PtrE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>A pointer to a <a class="reference internal" href="#classfort_1_1myrmidon_1_1Capsule"><span class="std std-ref">Capsule</span></a>. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon7Capsule7CapsuleEv">
+<span id="_CPPv3N4fort8myrmidon7Capsule7CapsuleEv"></span><span id="_CPPv2N4fort8myrmidon7Capsule7CapsuleEv"></span><span id="fort::myrmidon::Capsule::Capsule"></span><span class="target" id="classfort_1_1myrmidon_1_1Capsule_1afa6a21b94601d81767eb4f63af8f493b"></span><span class="sig-name descname"><span class="n"><span class="pre">Capsule</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon7Capsule7CapsuleEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>An empty <a class="reference internal" href="#classfort_1_1myrmidon_1_1Capsule"><span class="std std-ref">Capsule</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon7Capsule7CapsuleERKN5Eigen8Vector2dERKN5Eigen8Vector2dEdd">
+<span id="_CPPv3N4fort8myrmidon7Capsule7CapsuleERKN5Eigen8Vector2dERKN5Eigen8Vector2dEdd"></span><span id="_CPPv2N4fort8myrmidon7Capsule7CapsuleERKN5Eigen8Vector2dERKN5Eigen8Vector2dEdd"></span><span id="fort::myrmidon::Capsule::Capsule__Eigen::Vector2dCR.Eigen::Vector2dCR.double.double"></span><span class="target" id="classfort_1_1myrmidon_1_1Capsule_1ac2f738d17358aea7837dbf0fbe75c305"></span><span class="sig-name descname"><span class="n"><span class="pre">Capsule</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Eigen</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Vector2d</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">c1</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Eigen</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Vector2d</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">c2</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">r1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">r2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon7Capsule7CapsuleERKN5Eigen8Vector2dERKN5Eigen8Vector2dEdd" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Public constructor. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>c1</strong> – the first center </p></li>
+<li><p><strong>c2</strong> – the second center </p></li>
+<li><p><strong>r1</strong> – the radius at c1 </p></li>
+<li><p><strong>r2</strong> – the radius at c2 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon7Capsule5SetC1ERKN5Eigen8Vector2dE">
+<span id="_CPPv3N4fort8myrmidon7Capsule5SetC1ERKN5Eigen8Vector2dE"></span><span id="_CPPv2N4fort8myrmidon7Capsule5SetC1ERKN5Eigen8Vector2dE"></span><span id="fort::myrmidon::Capsule::SetC1__Eigen::Vector2dCR"></span><span class="target" id="classfort_1_1myrmidon_1_1Capsule_1a2f381ddfc6aeb6ec8331368d6a947e9e"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetC1</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Eigen</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Vector2d</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">c1</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon7Capsule5SetC1ERKN5Eigen8Vector2dE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Sets the first circle’s center. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>c1</strong> – the center of the first circle </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon7Capsule5SetC2ERKN5Eigen8Vector2dE">
+<span id="_CPPv3N4fort8myrmidon7Capsule5SetC2ERKN5Eigen8Vector2dE"></span><span id="_CPPv2N4fort8myrmidon7Capsule5SetC2ERKN5Eigen8Vector2dE"></span><span id="fort::myrmidon::Capsule::SetC2__Eigen::Vector2dCR"></span><span class="target" id="classfort_1_1myrmidon_1_1Capsule_1a71b7b0f657588bee652627e9b83ed5a5"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetC2</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Eigen</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Vector2d</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">c2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon7Capsule5SetC2ERKN5Eigen8Vector2dE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Sets the second circle’s center. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>c2</strong> – the center of the second circle </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon7Capsule2C1Ev">
+<span id="_CPPv3NK4fort8myrmidon7Capsule2C1Ev"></span><span id="_CPPv2NK4fort8myrmidon7Capsule2C1Ev"></span><span id="fort::myrmidon::Capsule::C1C"></span><span class="target" id="classfort_1_1myrmidon_1_1Capsule_1a3a50e959b4ad999d6aa9f4292d4af243"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Eigen</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Vector2d</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">C1</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon7Capsule2C1Ev" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the first circle’s center. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the center of the first circle </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon7Capsule2C2Ev">
+<span id="_CPPv3NK4fort8myrmidon7Capsule2C2Ev"></span><span id="_CPPv2NK4fort8myrmidon7Capsule2C2Ev"></span><span id="fort::myrmidon::Capsule::C2C"></span><span class="target" id="classfort_1_1myrmidon_1_1Capsule_1a6fe25c798f20d506357ac4852f9cd92c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Eigen</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Vector2d</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">C2</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon7Capsule2C2Ev" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the second circle’s center. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the center of the second circle </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon7Capsule5SetR1Ed">
+<span id="_CPPv3N4fort8myrmidon7Capsule5SetR1Ed"></span><span id="_CPPv2N4fort8myrmidon7Capsule5SetR1Ed"></span><span id="fort::myrmidon::Capsule::SetR1__double"></span><span class="target" id="classfort_1_1myrmidon_1_1Capsule_1a91f6bf32058fc6dabd5d4579d2c68a0c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetR1</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">r1</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon7Capsule5SetR1Ed" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Sets the first circle’s radius. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>r1</strong> – the radius of the first circle </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon7Capsule5SetR2Ed">
+<span id="_CPPv3N4fort8myrmidon7Capsule5SetR2Ed"></span><span id="_CPPv2N4fort8myrmidon7Capsule5SetR2Ed"></span><span id="fort::myrmidon::Capsule::SetR2__double"></span><span class="target" id="classfort_1_1myrmidon_1_1Capsule_1af1bfcbaffe1d24c03bb72e007fca0bfd"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetR2</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">r2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon7Capsule5SetR2Ed" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Sets the second circle’s radius. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>r2</strong> – the radius of the first circle </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon7Capsule2R1Ev">
+<span id="_CPPv3NK4fort8myrmidon7Capsule2R1Ev"></span><span id="_CPPv2NK4fort8myrmidon7Capsule2R1Ev"></span><span id="fort::myrmidon::Capsule::R1C"></span><span class="target" id="classfort_1_1myrmidon_1_1Capsule_1adb5d13e564c493a06040744e674cb1aa"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">R1</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon7Capsule2R1Ev" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the first circle’s radius. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the radius of the first circle </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon7Capsule2R2Ev">
+<span id="_CPPv3NK4fort8myrmidon7Capsule2R2Ev"></span><span id="_CPPv2NK4fort8myrmidon7Capsule2R2Ev"></span><span id="fort::myrmidon::Capsule::R2C"></span><span class="target" id="classfort_1_1myrmidon_1_1Capsule_1a759e2780941b730ed20688ed831309fe"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">R2</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon7Capsule2R2Ev" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the second circle’s radius. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the radius of the second circle </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="fort-myrmidon-circle">
+<h2>fort::myrmidon::Circle<a class="headerlink" href="#fort-myrmidon-circle" title="Permalink to this heading"></a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon6CircleE">
+<span id="_CPPv3N4fort8myrmidon6CircleE"></span><span id="_CPPv2N4fort8myrmidon6CircleE"></span><span id="fort::myrmidon::Circle"></span><span class="target" id="classfort_1_1myrmidon_1_1Circle"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Circle</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5ShapeE" title="fort::myrmidon::Shape"><span class="n"><span class="pre">Shape</span></span></a><a class="headerlink" href="#_CPPv4N4fort8myrmidon6CircleE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Represent a 2D circle. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon6Circle3PtrE">
+<span id="_CPPv3N4fort8myrmidon6Circle3PtrE"></span><span id="_CPPv2N4fort8myrmidon6Circle3PtrE"></span><span id="fort::myrmidon::Circle::Ptr"></span><span class="target" id="classfort_1_1myrmidon_1_1Circle_1aa7da9266663ad249a9386c7d4b34afa1"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon6CircleE" title="fort::myrmidon::Circle"><span class="n"><span class="pre">Circle</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Ptr</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon6Circle3PtrE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>A pointer to a <a class="reference internal" href="#classfort_1_1myrmidon_1_1Circle"><span class="std std-ref">Circle</span></a>. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon6Circle6CircleERKN5Eigen8Vector2dEd">
+<span id="_CPPv3N4fort8myrmidon6Circle6CircleERKN5Eigen8Vector2dEd"></span><span id="_CPPv2N4fort8myrmidon6Circle6CircleERKN5Eigen8Vector2dEd"></span><span id="fort::myrmidon::Circle::Circle__Eigen::Vector2dCR.double"></span><span class="target" id="classfort_1_1myrmidon_1_1Circle_1ac08540d45c65a806900f7a5b59976865"></span><span class="sig-name descname"><span class="n"><span class="pre">Circle</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Eigen</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Vector2d</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">center</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">radius</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon6Circle6CircleERKN5Eigen8Vector2dEd" title="Permalink to this definition"></a><br /></dt>
+<dd><p>public constructor </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> – the center of the circle </p></li>
+<li><p><strong>radius</strong> – the radius of the circle </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon6Circle9SetCenterERKN5Eigen8Vector2dE">
+<span id="_CPPv3N4fort8myrmidon6Circle9SetCenterERKN5Eigen8Vector2dE"></span><span id="_CPPv2N4fort8myrmidon6Circle9SetCenterERKN5Eigen8Vector2dE"></span><span id="fort::myrmidon::Circle::SetCenter__Eigen::Vector2dCR"></span><span class="target" id="classfort_1_1myrmidon_1_1Circle_1a9535f5cefbeb54acbc1aaa3b786da539"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetCenter</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Eigen</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Vector2d</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">center</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon6Circle9SetCenterERKN5Eigen8Vector2dE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Sets the center of the circle. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>center</strong> – the center of the circle </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon6Circle6CenterEv">
+<span id="_CPPv3NK4fort8myrmidon6Circle6CenterEv"></span><span id="_CPPv2NK4fort8myrmidon6Circle6CenterEv"></span><span id="fort::myrmidon::Circle::CenterC"></span><span class="target" id="classfort_1_1myrmidon_1_1Circle_1abaede82acc08bca4396037b9cc95b777"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Eigen</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Vector2d</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">Center</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon6Circle6CenterEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the center of the circle. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the circle center </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon6Circle9SetRadiusEd">
+<span id="_CPPv3N4fort8myrmidon6Circle9SetRadiusEd"></span><span id="_CPPv2N4fort8myrmidon6Circle9SetRadiusEd"></span><span id="fort::myrmidon::Circle::SetRadius__double"></span><span class="target" id="classfort_1_1myrmidon_1_1Circle_1adf502ad4814e97d462db0114d07c929b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetRadius</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">radius</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon6Circle9SetRadiusEd" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Sets the radius of the circle. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>radius</strong> – the radius of the circle </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon6Circle6RadiusEv">
+<span id="_CPPv3NK4fort8myrmidon6Circle6RadiusEv"></span><span id="_CPPv2NK4fort8myrmidon6Circle6RadiusEv"></span><span id="fort::myrmidon::Circle::RadiusC"></span><span class="target" id="classfort_1_1myrmidon_1_1Circle_1aa89537ce306d4837fc36a2c5c77ce666"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Radius</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon6Circle6RadiusEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the radius of the circle. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>radius</strong> – the radius of the circle </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="fort-myrmidon-polygon">
+<h2>fort::myrmidon::Polygon<a class="headerlink" href="#fort-myrmidon-polygon" title="Permalink to this heading"></a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon7PolygonE">
+<span id="_CPPv3N4fort8myrmidon7PolygonE"></span><span id="_CPPv2N4fort8myrmidon7PolygonE"></span><span id="fort::myrmidon::Polygon"></span><span class="target" id="classfort_1_1myrmidon_1_1Polygon"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Polygon</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5ShapeE" title="fort::myrmidon::Shape"><span class="n"><span class="pre">Shape</span></span></a><a class="headerlink" href="#_CPPv4N4fort8myrmidon7PolygonE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>A closed polygon. </p>
+<p>A polygon is defined by a collection of <a class="reference internal" href="#classfort_1_1myrmidon_1_1Polygon_1aded67af3e2db1f341e01ec257b562278"><span class="std std-ref">Vertex()</span></a>. <a class="reference internal" href="#classfort_1_1myrmidon_1_1Polygon"><span class="std std-ref">Polygon</span></a> in <code class="docutils literal notranslate"><span class="pre">fort-myrmidon</span></code> are always closed, meaning that there is no need to manually close it by setting <code class="docutils literal notranslate"><span class="pre">Vertex(</span><a class="reference internal" href="#classfort_1_1myrmidon_1_1Polygon_1ad4f44a3a51625911db2d5fd722c083bf"><span class="std std-ref"><span class="pre">Size()</span></span></a><span class="pre">-1)</span> <span class="pre">==</span> <span class="pre">Vertex(0)</span></code>.</p>
+<p>Note that order matters as {(-1,-1),(1,-1),(1,1),(-1,1)} is a square, and {(-1,-1),(1,-1),(-1,1),(1,1)} is an hourglass. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon7Polygon3PtrE">
+<span id="_CPPv3N4fort8myrmidon7Polygon3PtrE"></span><span id="_CPPv2N4fort8myrmidon7Polygon3PtrE"></span><span id="fort::myrmidon::Polygon::Ptr"></span><span class="target" id="classfort_1_1myrmidon_1_1Polygon_1a6fb70a6b4a4630bcd0369b66a02cda41"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon7PolygonE" title="fort::myrmidon::Polygon"><span class="n"><span class="pre">Polygon</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Ptr</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon7Polygon3PtrE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>A pointer to a <a class="reference internal" href="#classfort_1_1myrmidon_1_1Polygon"><span class="std std-ref">Polygon</span></a>. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon7Polygon7PolygonERK12Vector2dList">
+<span id="_CPPv3N4fort8myrmidon7Polygon7PolygonERK12Vector2dList"></span><span id="_CPPv2N4fort8myrmidon7Polygon7PolygonERK12Vector2dList"></span><span id="fort::myrmidon::Polygon::Polygon__Vector2dListCR"></span><span class="target" id="classfort_1_1myrmidon_1_1Polygon_1a545f4b15c8102a2c8d412a13ac46f136"></span><span class="sig-name descname"><span class="n"><span class="pre">Polygon</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="typedef.html#_CPPv4N4fort8myrmidon12Vector2dListE" title="fort::myrmidon::Vector2dList"><span class="n"><span class="pre">Vector2dList</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">vertices</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon7Polygon7PolygonERK12Vector2dList" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Public constructor. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vertices</strong> – the vertices of the polygon </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon7Polygon8VerticesEv">
+<span id="_CPPv3NK4fort8myrmidon7Polygon8VerticesEv"></span><span id="_CPPv2NK4fort8myrmidon7Polygon8VerticesEv"></span><span id="fort::myrmidon::Polygon::VerticesC"></span><span class="target" id="classfort_1_1myrmidon_1_1Polygon_1a27c8111c8ce0c0311e2a79e457be8321"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="typedef.html#_CPPv4N4fort8myrmidon12Vector2dListE" title="fort::myrmidon::Vector2dList"><span class="n"><span class="pre">Vector2dList</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">Vertices</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon7Polygon8VerticesEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Polygon"><span class="std std-ref">Polygon</span></a>’s vertices. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a Vector2dList of the polygon vertices </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon7Polygon11SetVerticesERK12Vector2dList">
+<span id="_CPPv3N4fort8myrmidon7Polygon11SetVerticesERK12Vector2dList"></span><span id="_CPPv2N4fort8myrmidon7Polygon11SetVerticesERK12Vector2dList"></span><span id="fort::myrmidon::Polygon::SetVertices__Vector2dListCR"></span><span class="target" id="classfort_1_1myrmidon_1_1Polygon_1a03c53575e5e7dbd6098192e11c09916e"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetVertices</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="typedef.html#_CPPv4N4fort8myrmidon12Vector2dListE" title="fort::myrmidon::Vector2dList"><span class="n"><span class="pre">Vector2dList</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">vertices</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon7Polygon11SetVerticesERK12Vector2dList" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Sets the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Polygon"><span class="std std-ref">Polygon</span></a>’s vertices. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vertices</strong> – a Vector2dList of the polygon vertices </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon7Polygon4SizeEv">
+<span id="_CPPv3NK4fort8myrmidon7Polygon4SizeEv"></span><span id="_CPPv2NK4fort8myrmidon7Polygon4SizeEv"></span><span id="fort::myrmidon::Polygon::SizeC"></span><span class="target" id="classfort_1_1myrmidon_1_1Polygon_1ad4f44a3a51625911db2d5fd722c083bf"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon7Polygon4SizeEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets the number of vertices in the polygon. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the number of vertices in the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Polygon"><span class="std std-ref">Polygon</span></a> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon7Polygon6VertexE6size_t">
+<span id="_CPPv3NK4fort8myrmidon7Polygon6VertexE6size_t"></span><span id="_CPPv2NK4fort8myrmidon7Polygon6VertexE6size_t"></span><span id="fort::myrmidon::Polygon::Vertex__sC"></span><span class="target" id="classfort_1_1myrmidon_1_1Polygon_1aded67af3e2db1f341e01ec257b562278"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Eigen</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Vector2d</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">Vertex</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon7Polygon6VertexE6size_t" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Gets a polygon vertex. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>i</strong> – the index of the wanted vertex in [0;<a class="reference internal" href="#classfort_1_1myrmidon_1_1Polygon_1ad4f44a3a51625911db2d5fd722c083bf"><span class="std std-ref">Size()</span></a>-1]</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if i is &gt;= <a class="reference internal" href="#classfort_1_1myrmidon_1_1Polygon_1ad4f44a3a51625911db2d5fd722c083bf"><span class="std std-ref">Size()</span></a>. </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a const reference to the wanted vertex </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon7Polygon9SetVertexE6size_tRKN5Eigen8Vector2dE">
+<span id="_CPPv3N4fort8myrmidon7Polygon9SetVertexE6size_tRKN5Eigen8Vector2dE"></span><span id="_CPPv2N4fort8myrmidon7Polygon9SetVertexE6size_tRKN5Eigen8Vector2dE"></span><span id="fort::myrmidon::Polygon::SetVertex__s.Eigen::Vector2dCR"></span><span class="target" id="classfort_1_1myrmidon_1_1Polygon_1a515c32dbc725aea6bd5bdca5c3bc28b7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SetVertex</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Eigen</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Vector2d</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">v</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon7Polygon9SetVertexE6size_tRKN5Eigen8Vector2dE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Sets a <a class="reference internal" href="#classfort_1_1myrmidon_1_1Polygon"><span class="std std-ref">Polygon</span></a> vertex. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>i</strong> – the index of the wanted vertex in [0;<a class="reference internal" href="#classfort_1_1myrmidon_1_1Polygon_1ad4f44a3a51625911db2d5fd722c083bf"><span class="std std-ref">Size()</span></a>-1] </p></li>
+<li><p><strong>v</strong> – the new value for the vertex </p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if i is &gt;= <a class="reference internal" href="#classfort_1_1myrmidon_1_1Polygon_1ad4f44a3a51625911db2d5fd722c083bf"><span class="std std-ref">Size()</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon7Polygon12DeleteVertexE6size_t">
+<span id="_CPPv3N4fort8myrmidon7Polygon12DeleteVertexE6size_t"></span><span id="_CPPv2N4fort8myrmidon7Polygon12DeleteVertexE6size_t"></span><span id="fort::myrmidon::Polygon::DeleteVertex__s"></span><span class="target" id="classfort_1_1myrmidon_1_1Polygon_1aca967245f4f8f2830ec7052ac17d1b7f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DeleteVertex</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon7Polygon12DeleteVertexE6size_t" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Deletes a <a class="reference internal" href="#classfort_1_1myrmidon_1_1Polygon"><span class="std std-ref">Polygon</span></a> vertex. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>i</strong> – the index of the wanted vertex in [0;<a class="reference internal" href="#classfort_1_1myrmidon_1_1Polygon_1ad4f44a3a51625911db2d5fd722c083bf"><span class="std std-ref">Size()</span></a>-1] </p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if i is &gt;= <a class="reference internal" href="#classfort_1_1myrmidon_1_1Polygon_1ad4f44a3a51625911db2d5fd722c083bf"><span class="std std-ref">Size()</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="time.html" class="btn btn-neutral float-left" title="Time Representation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="video.html" class="btn btn-neutral float-right" title="Video Sequence Matching" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Université de Lausanne.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

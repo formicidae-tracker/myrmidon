@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Video Sequence Matching &mdash; fort-myrmidon  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/../version_dropdown.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Errors" href="errors.html" />
+    <link rel="prev" title="2D Geometric Shapes" href="shapes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> fort-myrmidon
+          </a>
+              <div class="version">
+                placeholder
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-myrmidon Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defining_ant_metadata.html">Defining Ant Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../performing_queries.html">Performing Queries</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-studio Manual</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/defining_ant_shapes.html">Defining Ant Shapes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/measuring_ants.html">Measuring Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/metadata_edition.html">Ant Metadata Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/visualization.html">Tracking Data Visualization</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../space_zoning.html">Segmenting Spaces in Zones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matching_video.html">Matching Video and Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../time.html">Time Representation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API References</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Python</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="experiment.html">API Entry Point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ant_identification.html">Ants and Identifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="space_zone.html">Spaces and Zones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="queries_matchers.html">Queries And Matchers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="time.html">Time Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shapes.html">2D Geometric Shapes</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Video Sequence Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#py-fort-myrmidon-videosegment">py_fort_myrmidon.VideoSegment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#py-fort-myrmidon-videosegmentlist">py_fort_myrmidon.VideoSegmentList</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#py-fort-myrmidon-videoframedata">py_fort_myrmidon.VideoFrameData</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#py-fort-myrmidon-videosequence">py_fort_myrmidon.VideoSequence</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="misc.html">Miscanellous</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html#c">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html#r">R</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fort-myrmidon</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Python</a> &raquo;</li>
+      <li>Video Sequence Matching</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/api/python/video.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="video-sequence-matching">
+<h1>Video Sequence Matching<a class="headerlink" href="#video-sequence-matching" title="Permalink to this heading"></a></h1>
+<section id="py-fort-myrmidon-videosegment">
+<h2>py_fort_myrmidon.VideoSegment<a class="headerlink" href="#py-fort-myrmidon-videosegment" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="py_fort_myrmidon.VideoSegment">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">VideoSegment</span></span><a class="headerlink" href="#py_fort_myrmidon.VideoSegment" title="Permalink to this definition"></a></dt>
+<dd><p>A VideoSegment represents a part of a Video file with its associated
+tracking data.</p>
+<p>VideoSegment are most often queried with
+<a class="reference internal" href="queries_matchers.html#py_fort_myrmidon.Query.FindVideoSegments" title="py_fort_myrmidon.Query.FindVideoSegments"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Query.FindVideoSegments()</span></code></a>. Once queried, they are blank, i.e. no
+query results will appears in <a class="reference internal" href="#py_fort_myrmidon.VideoSegment.Data" title="py_fort_myrmidon.VideoSegment.Data"><code class="xref py py-attr docutils literal notranslate"><span class="pre">VideoSegment.Data</span></code></a>. One would
+call <a class="reference internal" href="#py_fort_myrmidon.VideoSegment.Match" title="py_fort_myrmidon.VideoSegment.Match"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Match()</span></code></a> to associate queries results with these
+segments. Finally a <a class="reference internal" href="#py_fort_myrmidon.VideoSequence" title="py_fort_myrmidon.VideoSequence"><code class="xref py py-class docutils literal notranslate"><span class="pre">VideoSequence</span></code></a> context manager can be used
+to iterate over each video frame of the <a class="reference internal" href="#py_fort_myrmidon.VideoSegmentList" title="py_fort_myrmidon.VideoSegmentList"><code class="xref py py-class docutils literal notranslate"><span class="pre">VideoSegmentList</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="xref py py-meth docutils literal notranslate"><span class="pre">Query.FindVideoSegment()</span></code>, <a class="reference internal" href="#py_fort_myrmidon.VideoSegment.Match" title="py_fort_myrmidon.VideoSegment.Match"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Match()</span></code></a> and
+<a class="reference internal" href="#py_fort_myrmidon.VideoSequence" title="py_fort_myrmidon.VideoSequence"><code class="xref py py-class docutils literal notranslate"><span class="pre">VideoSequence</span></code></a> use a <a class="reference internal" href="#py_fort_myrmidon.VideoSegmentList" title="py_fort_myrmidon.VideoSegmentList"><code class="xref py py-class docutils literal notranslate"><span class="pre">VideoSegmentList</span></code></a> as return
+value or arguments. Indeed it could happen that the desired
+sequence of images span over multiple video file.</p>
+</div>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">py_fort_myrmidon</span> <span class="kn">as</span> <span class="nn">fm</span>
+
+<span class="n">e</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Experiment</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="s2">&quot;file.myrmidon&quot;</span><span class="p">)</span>
+
+<span class="c1"># note it would be extremly computationally intensive to</span>
+<span class="c1"># iterate over the whole experiment, we select a time region.</span>
+<span class="n">start</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">Parse</span><span class="p">(</span><span class="s1">&#39;2019-11-02T20:00:00.000Z&#39;</span><span class="p">)</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">start</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="mi">30</span> <span class="o">*</span> <span class="n">fm</span><span class="o">.</span><span class="n">Duration</span><span class="o">.</span><span class="n">Second</span><span class="p">)</span>
+
+<span class="c1">## step 0: make some query on the experiment</span>
+<span class="n">trajectories</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Query</span><span class="o">.</span><span class="n">ComputeAntTrajectories</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">)</span>
+
+<span class="c1">## step 1: look up segments bet</span>
+<span class="n">segments</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Query</span><span class="o">.</span><span class="n">FindVideoSegments</span><span class="p">(</span><span class="n">e</span><span class="p">,</span>
+                                      <span class="n">space</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                                      <span class="n">start</span> <span class="o">=</span> <span class="n">start</span><span class="p">,</span>
+                                      <span class="n">end</span> <span class="o">=</span> <span class="n">end</span><span class="p">)</span>
+
+<span class="c1">## step 2: match queried data with video frames</span>
+<span class="n">fm</span><span class="o">.</span><span class="n">VideoSegment</span><span class="o">.</span><span class="n">Match</span><span class="p">(</span><span class="n">segments</span><span class="p">,</span><span class="n">trajectories</span><span class="p">)</span>
+
+<span class="c1">## step 3: iterate over all video frame and matched data</span>
+<span class="k">with</span> <span class="n">fm</span><span class="o">.</span><span class="n">VideoSequence</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span> <span class="k">as</span> <span class="n">sequence</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">frame</span><span class="p">,</span><span class="n">data</span> <span class="ow">in</span> <span class="n">sequence</span><span class="p">:</span>
+        <span class="c1">## step 3.1 on each cv2.Mat `frame` do something based</span>
+        <span class="c1">## on `data`</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.VideoSegment.AbsoluteFilePath">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AbsoluteFilePath</span></span><a class="headerlink" href="#py_fort_myrmidon.VideoSegment.AbsoluteFilePath" title="Permalink to this definition"></a></dt>
+<dd><p>the absolute filepath to the video file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.VideoSegment.Begin">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Begin</span></span><a class="headerlink" href="#py_fort_myrmidon.VideoSegment.Begin" title="Permalink to this definition"></a></dt>
+<dd><p>the first video frame position in the video file corresponding to the segment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.VideoSegment.Data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Data</span></span><a class="headerlink" href="#py_fort_myrmidon.VideoSegment.Data" title="Permalink to this definition"></a></dt>
+<dd><p>matched query result with the video frame in the list. If no tracking data is associated with a given frame, there will be no corresponding object in this field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="#py_fort_myrmidon.VideoFrameData" title="py_fort_myrmidon.VideoFrameData">VideoFrameData</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.VideoSegment.End">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">End</span></span><a class="headerlink" href="#py_fort_myrmidon.VideoSegment.End" title="Permalink to this definition"></a></dt>
+<dd><p>the last+1 video frame postion in the video file corresponding to the segment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.VideoSegment.Match">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#py_fort_myrmidon.VideoSegment.Match" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>Match(segments: py_fort_myrmidon.VideoSegmentList, identifiedFrames: List[py_fort_myrmidon.IdentifiedFrame]) -&gt; None</p></li>
+</ol>
+<p>Matches <a class="reference internal" href="queries_matchers.html#py_fort_myrmidon.IdentifiedFrame" title="py_fort_myrmidon.IdentifiedFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">IdentifiedFrame</span></code></a> with a <a class="reference internal" href="#py_fort_myrmidon.VideoSegmentList" title="py_fort_myrmidon.VideoSegmentList"><code class="xref py py-class docutils literal notranslate"><span class="pre">VideoSegmentList</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>segments</strong> (<a class="reference internal" href="#py_fort_myrmidon.VideoSegmentList" title="py_fort_myrmidon.VideoSegmentList"><em>VideoSegmentList</em></a>) – the segments to associate data with</p></li>
+<li><p><strong>identifiedFrames</strong> (<em>List</em><em>[</em><a class="reference internal" href="queries_matchers.html#py_fort_myrmidon.IdentifiedFrame" title="py_fort_myrmidon.IdentifiedFrame"><em>IdentifiedFrame</em></a><em>]</em>) – the IdentifiedFrames to match with <cite>segments</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if the all segments are not from the same <a class="reference internal" href="space_zone.html#py_fort_myrmidon.Space" title="py_fort_myrmidon.Space"><code class="xref py py-class docutils literal notranslate"><span class="pre">Space</span></code></a></p>
+</dd>
+</dl>
+<ol class="arabic simple" start="2">
+<li><p>Match(segments: py_fort_myrmidon.VideoSegmentList, collisionData: List[Tuple[py_fort_myrmidon.IdentifiedFrame, py_fort_myrmidon.CollisionFrame]]) -&gt; None</p></li>
+</ol>
+<p>Matches <code class="xref py py-class docutils literal notranslate"><span class="pre">CollisionData</span></code> with a <a class="reference internal" href="#py_fort_myrmidon.VideoSegmentList" title="py_fort_myrmidon.VideoSegmentList"><code class="xref py py-class docutils literal notranslate"><span class="pre">VideoSegmentList</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>segments</strong> (<a class="reference internal" href="#py_fort_myrmidon.VideoSegmentList" title="py_fort_myrmidon.VideoSegmentList"><em>VideoSegmentList</em></a>) – the segments to associate data with</p></li>
+<li><p><strong>collisionData</strong> (<em>List</em><em>[</em><em>CollisionData</em><em>]</em>) – the CollisionData to match with <cite>segments</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if the all segments are not from the same <a class="reference internal" href="space_zone.html#py_fort_myrmidon.Space" title="py_fort_myrmidon.Space"><code class="xref py py-class docutils literal notranslate"><span class="pre">Space</span></code></a></p>
+</dd>
+</dl>
+<ol class="arabic simple" start="3">
+<li><p>Match(segments: py_fort_myrmidon.VideoSegmentList, trajectories: List[py_fort_myrmidon.AntTrajectory]) -&gt; None</p></li>
+</ol>
+<p>Matches <a class="reference internal" href="queries_matchers.html#py_fort_myrmidon.AntTrajectory" title="py_fort_myrmidon.AntTrajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntTrajectory</span></code></a> with a <a class="reference internal" href="#py_fort_myrmidon.VideoSegmentList" title="py_fort_myrmidon.VideoSegmentList"><code class="xref py py-class docutils literal notranslate"><span class="pre">VideoSegmentList</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>segments</strong> (<a class="reference internal" href="#py_fort_myrmidon.VideoSegmentList" title="py_fort_myrmidon.VideoSegmentList"><em>VideoSegmentList</em></a>) – the segments to associate data with</p></li>
+<li><p><strong>trajectories</strong> (<em>List</em><em>[</em><a class="reference internal" href="queries_matchers.html#py_fort_myrmidon.AntTrajectory" title="py_fort_myrmidon.AntTrajectory"><em>AntTrajectory</em></a><em>]</em>) – the AntTrajectories to match with <cite>segments</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if the all segments are not from the same <a class="reference internal" href="space_zone.html#py_fort_myrmidon.Space" title="py_fort_myrmidon.Space"><code class="xref py py-class docutils literal notranslate"><span class="pre">Space</span></code></a></p>
+</dd>
+</dl>
+<ol class="arabic simple" start="4">
+<li><p>Match(segments: py_fort_myrmidon.VideoSegmentList, interactions: List[py_fort_myrmidon.AntInteraction]) -&gt; None</p></li>
+</ol>
+<p>Matches <a class="reference internal" href="queries_matchers.html#py_fort_myrmidon.AntInteraction" title="py_fort_myrmidon.AntInteraction"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntInteraction</span></code></a> with a <a class="reference internal" href="#py_fort_myrmidon.VideoSegmentList" title="py_fort_myrmidon.VideoSegmentList"><code class="xref py py-class docutils literal notranslate"><span class="pre">VideoSegmentList</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>segments</strong> (<a class="reference internal" href="#py_fort_myrmidon.VideoSegmentList" title="py_fort_myrmidon.VideoSegmentList"><em>VideoSegmentList</em></a>) – the segments to associate data with</p></li>
+<li><p><strong>interactions</strong> (<em>List</em><em>[</em><a class="reference internal" href="queries_matchers.html#py_fort_myrmidon.AntInteraction" title="py_fort_myrmidon.AntInteraction"><em>AntInteraction</em></a><em>]</em>) – the AntInteractions to match with <cite>segments</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if the all segments are not from the same <a class="reference internal" href="space_zone.html#py_fort_myrmidon.Space" title="py_fort_myrmidon.Space"><code class="xref py py-class docutils literal notranslate"><span class="pre">Space</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.VideoSegment.Space">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Space</span></span><a class="headerlink" href="#py_fort_myrmidon.VideoSegment.Space" title="Permalink to this definition"></a></dt>
+<dd><p>the <a class="reference internal" href="space_zone.html#py_fort_myrmidon.Space" title="py_fort_myrmidon.Space"><code class="xref py py-class docutils literal notranslate"><span class="pre">Space</span></code></a> the segment belongs to</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="py-fort-myrmidon-videosegmentlist">
+<h2>py_fort_myrmidon.VideoSegmentList<a class="headerlink" href="#py-fort-myrmidon-videosegmentlist" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="py_fort_myrmidon.VideoSegmentList">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">VideoSegmentList</span></span><a class="headerlink" href="#py_fort_myrmidon.VideoSegmentList" title="Permalink to this definition"></a></dt>
+<dd><p>An opaque list of <a class="reference internal" href="#py_fort_myrmidon.VideoSegment" title="py_fort_myrmidon.VideoSegment"><code class="xref py py-class docutils literal notranslate"><span class="pre">VideoSegment</span></code></a>.</p>
+<p>It works just as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference internal" href="#py_fort_myrmidon.VideoSegment" title="py_fort_myrmidon.VideoSegment"><code class="xref py py-class docutils literal notranslate"><span class="pre">VideoSegment</span></code></a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.VideoSegmentList.append">
+<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.VideoSegmentList" title="py_fort_myrmidon.VideoSegmentList"><span class="pre">py_fort_myrmidon.VideoSegmentList</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.VideoSegment" title="py_fort_myrmidon.VideoSegment"><span class="pre">py_fort_myrmidon.VideoSegment</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.VideoSegmentList.append" title="Permalink to this definition"></a></dt>
+<dd><p>Add an item to the end of the list</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.VideoSegmentList.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.VideoSegmentList" title="py_fort_myrmidon.VideoSegmentList"><span class="pre">py_fort_myrmidon.VideoSegmentList</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.VideoSegmentList.clear" title="Permalink to this definition"></a></dt>
+<dd><p>Clear the contents</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.VideoSegmentList.deepcopy">
+<span class="sig-name descname"><span class="pre">deepcopy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.VideoSegmentList" title="py_fort_myrmidon.VideoSegmentList"><span class="pre">py_fort_myrmidon.VideoSegmentList</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#py_fort_myrmidon.VideoSegmentList" title="py_fort_myrmidon.VideoSegmentList"><span class="pre">py_fort_myrmidon.VideoSegmentList</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.VideoSegmentList.deepcopy" title="Permalink to this definition"></a></dt>
+<dd><p>Performs a deepcopy of the list.</p>
+<p>The main purpose is for the unittest implementation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.VideoSegmentList.extend">
+<span class="sig-name descname"><span class="pre">extend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#py_fort_myrmidon.VideoSegmentList.extend" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>extend(self: py_fort_myrmidon.VideoSegmentList, L: py_fort_myrmidon.VideoSegmentList) -&gt; None</p></li>
+</ol>
+<p>Extend the list by appending all the items in the given list</p>
+<ol class="arabic simple" start="2">
+<li><p>extend(self: py_fort_myrmidon.VideoSegmentList, L: Iterable) -&gt; None</p></li>
+</ol>
+<p>Extend the list by appending all the items in the given list</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.VideoSegmentList.insert">
+<span class="sig-name descname"><span class="pre">insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.VideoSegmentList" title="py_fort_myrmidon.VideoSegmentList"><span class="pre">py_fort_myrmidon.VideoSegmentList</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.VideoSegment" title="py_fort_myrmidon.VideoSegment"><span class="pre">py_fort_myrmidon.VideoSegment</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.VideoSegmentList.insert" title="Permalink to this definition"></a></dt>
+<dd><p>Insert an item at a given position.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.VideoSegmentList.pop">
+<span class="sig-name descname"><span class="pre">pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#py_fort_myrmidon.VideoSegmentList.pop" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>pop(self: py_fort_myrmidon.VideoSegmentList) -&gt; py_fort_myrmidon.VideoSegment</p></li>
+</ol>
+<p>Remove and return the last item</p>
+<ol class="arabic simple" start="2">
+<li><p>pop(self: py_fort_myrmidon.VideoSegmentList, i: int) -&gt; py_fort_myrmidon.VideoSegment</p></li>
+</ol>
+<p>Remove and return the item at index <code class="docutils literal notranslate"><span class="pre">i</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="py-fort-myrmidon-videoframedata">
+<h2>py_fort_myrmidon.VideoFrameData<a class="headerlink" href="#py-fort-myrmidon-videoframedata" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="py_fort_myrmidon.VideoFrameData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">VideoFrameData</span></span><a class="headerlink" href="#py_fort_myrmidon.VideoFrameData" title="Permalink to this definition"></a></dt>
+<dd><p>The tracking data and query results associated with a Video frame.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>After a call to <code class="xref py py-meth docutils literal notranslate"><span class="pre">Query.FindMovieSegments()</span></code> this structure will
+contain no matched data. One must call <code class="xref py py-meth docutils literal notranslate"><span class="pre">VideoSequence.Match()</span></code>
+to associate query results with the <a class="reference internal" href="#py_fort_myrmidon.VideoFrameData" title="py_fort_myrmidon.VideoFrameData"><code class="xref py py-class docutils literal notranslate"><span class="pre">VideoFrameData</span></code></a>
+present in the <a class="reference internal" href="#py_fort_myrmidon.VideoSegmentList" title="py_fort_myrmidon.VideoSegmentList"><code class="xref py py-class docutils literal notranslate"><span class="pre">VideoSegmentList</span></code></a>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In the unlikely case of a <a class="reference internal" href="#py_fort_myrmidon.VideoFrameData" title="py_fort_myrmidon.VideoFrameData"><code class="xref py py-class docutils literal notranslate"><span class="pre">VideoFrameData</span></code></a> without any
+tracking data ( the movie frame was exported but no tracking was
+reported ), the value of <a class="reference internal" href="#py_fort_myrmidon.VideoFrameData.Time" title="py_fort_myrmidon.VideoFrameData.Time"><code class="xref py py-attr docutils literal notranslate"><span class="pre">VideoFrameData.Time</span></code></a> will be set
+to <a class="reference internal" href="time.html#py_fort_myrmidon.Time.SinceEver" title="py_fort_myrmidon.Time.SinceEver"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Time.SinceEver()</span></code></a> and all other query result field will be
+set to <cite>None</cite>.</p>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.VideoFrameData.Collided">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Collided</span></span><a class="headerlink" href="#py_fort_myrmidon.VideoFrameData.Collided" title="Permalink to this definition"></a></dt>
+<dd><p>the ants collision (if previously matched)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="queries_matchers.html#py_fort_myrmidon.CollisionFrame" title="py_fort_myrmidon.CollisionFrame">CollisionFrame</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="py_fort_myrmidon.VideoFrameData.Empty">
+<span class="sig-name descname"><span class="pre">Empty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#py_fort_myrmidon.VideoFrameData" title="py_fort_myrmidon.VideoFrameData"><span class="pre">py_fort_myrmidon.VideoFrameData</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.VideoFrameData.Empty" title="Permalink to this definition"></a></dt>
+<dd><p>Indicates the (unlikely) case where no tracking data is associated
+with this video frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>True</cite> if there is no tracking data (even a timeout / frame drop report) associated with this video frame.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.VideoFrameData.Identified">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Identified</span></span><a class="headerlink" href="#py_fort_myrmidon.VideoFrameData.Identified" title="Permalink to this definition"></a></dt>
+<dd><p>the ants position (if previously matched)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="queries_matchers.html#py_fort_myrmidon.IdentifiedFrame" title="py_fort_myrmidon.IdentifiedFrame">IdentifiedFrame</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.VideoFrameData.Interactions">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Interactions</span></span><a class="headerlink" href="#py_fort_myrmidon.VideoFrameData.Interactions" title="Permalink to this definition"></a></dt>
+<dd><p>the interactions in this frame (if previously matched)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="queries_matchers.html#py_fort_myrmidon.AntInteraction" title="py_fort_myrmidon.AntInteraction">AntInteraction</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.VideoFrameData.Position">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Position</span></span><a class="headerlink" href="#py_fort_myrmidon.VideoFrameData.Position" title="Permalink to this definition"></a></dt>
+<dd><p>the frame position in the video file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.VideoFrameData.Time">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Time</span></span><a class="headerlink" href="#py_fort_myrmidon.VideoFrameData.Time" title="Permalink to this definition"></a></dt>
+<dd><p>the video frame acquisition time (if available)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time">Time</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="py_fort_myrmidon.VideoFrameData.Trajectories">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Trajectories</span></span><a class="headerlink" href="#py_fort_myrmidon.VideoFrameData.Trajectories" title="Permalink to this definition"></a></dt>
+<dd><p>the trajectories in this frame (if previously matched)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="queries_matchers.html#py_fort_myrmidon.AntTrajectory" title="py_fort_myrmidon.AntTrajectory">AntTrajectory</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="py-fort-myrmidon-videosequence">
+<h2>py_fort_myrmidon.VideoSequence<a class="headerlink" href="#py-fort-myrmidon-videosequence" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="py_fort_myrmidon.VideoSequence">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">VideoSequence</span></span><a class="headerlink" href="#py_fort_myrmidon.VideoSequence" title="Permalink to this definition"></a></dt>
+<dd><p>A contextmanager for iterating over Video Frame and matched data.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">py_fort_myrmidon</span> <span class="kn">as</span> <span class="nn">fm</span>
+
+<span class="c1">## will iterate over all video frame of space 1</span>
+<span class="n">segments</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Query</span><span class="o">.</span><span class="n">FindVideoSegments</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">space</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">fm</span><span class="o">.</span><span class="n">VideoSequence</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span> <span class="k">as</span> <span class="n">sequence</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">frame</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">sequence</span><span class="p">:</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="shapes.html" class="btn btn-neutral float-left" title="2D Geometric Shapes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="errors.html" class="btn btn-neutral float-right" title="Errors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Université de Lausanne.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

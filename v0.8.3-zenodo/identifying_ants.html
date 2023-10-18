@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Identifying Ants &mdash; fort-myrmidon  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/../version_dropdown.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Defining Ant Metadata" href="defining_ant_metadata.html" />
+    <link rel="prev" title="Linking Tracking Data" href="linking_tdata.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> fort-myrmidon
+          </a>
+              <div class="version">
+                placeholder
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-myrmidon Basics</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Identifying Ants</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#creating-ants">Creating Ants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#associating-ants-with-tags">Associating Ants with Tags</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#creation-of-an-identification">Creation of an Identification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#geometric-relation-between-tags-and-ants">Geometric relation between tags and ants</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="defining_ant_metadata.html">Defining Ant Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="performing_queries.html">Performing Queries</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-studio Manual</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="studio/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/defining_ant_shapes.html">Defining Ant Shapes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/measuring_ants.html">Measuring Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/metadata_edition.html">Ant Metadata Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="studio/visualization.html">Tracking Data Visualization</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="space_zoning.html">Segmenting Spaces in Zones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matching_video.html">Matching Video and Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="time.html">Time Representation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html#c">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html#r">R</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fort-myrmidon</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Identifying Ants</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/identifying_ants.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="identifying-ants">
+<h1>Identifying Ants<a class="headerlink" href="#identifying-ants" title="Permalink to this heading"></a></h1>
+<p>The main purpose of a tracking <em>Experiment</em> <a class="footnote-reference brackets" href="#experiment" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> is to study
+<em>Ant</em> <a class="footnote-reference brackets" href="#ant" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> movements and Interactions.</p>
+<section id="creating-ants">
+<h2>Creating Ants<a class="headerlink" href="#creating-ants" title="Permalink to this heading"></a></h2>
+<p>The first step would be to <em>create an Ant</em> <a class="footnote-reference brackets" href="#createant" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></a> for each
+individual in our experiment. Like spaces, ants have a unique
+ID in the experiment which cannot be chosen, but will be generated
+starting from 1.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#python</span>
+<span class="kn">import</span> <span class="nn">py_fort_myrmidon</span> <span class="kn">as</span> <span class="nn">fm</span>
+
+<span class="n">e</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Experiment</span><span class="p">(</span><span class="s2">&quot;identifying-ants.myrmidon&quot;</span><span class="p">)</span>
+
+<span class="n">ants</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">CreateAnt</span><span class="p">(),</span><span class="n">e</span><span class="o">.</span><span class="n">CreateAnt</span><span class="p">(),</span><span class="n">e</span><span class="o">.</span><span class="n">CreateAnt</span><span class="p">()]</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ants</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Ant at index </span><span class="si">%d</span><span class="s2"> has ID: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">fm</span><span class="o">.</span><span class="n">FormatAntID</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">ID</span><span class="p">)))</span>
+<span class="c1"># outputs:</span>
+<span class="c1">#    Ant at index 0 has ID: 001</span>
+<span class="c1">#    Ant at index 1 has ID: 002</span>
+<span class="c1">#    Ant at index 2 has ID: 003</span>
+</pre></div>
+</div>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="c1">#R</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">FortMyrmidon</span><span class="p">)</span>
+
+<span class="n">e</span> <span class="o">&lt;-</span> <span class="nf">fmExperimentCreate</span><span class="p">(</span><span class="s">&quot;identifying-ants.myrmidon&quot;</span><span class="p">)</span>
+
+<span class="n">ants</span> <span class="o">&lt;-</span> <span class="nf">list</span><span class="p">(</span><span class="n">e</span><span class="o">$</span><span class="nf">createAnt</span><span class="p">(),</span><span class="n">e</span><span class="o">$</span><span class="nf">createAnt</span><span class="p">(),</span><span class="n">e</span><span class="o">$</span><span class="nf">createAnt</span><span class="p">())</span>
+<span class="nf">for </span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">3</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nf">printf</span><span class="p">(</span><span class="s">&quot;Ant at index %d has ID: %s\n&quot;</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="nf">fmFormatAntID</span><span class="p">(</span><span class="n">ants[[i]]</span><span class="o">$</span><span class="n">ID</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="c1"># outputs:</span>
+<span class="c1">#    Ant at index 1 has ID: 001</span>
+<span class="c1">#    Ant at index 2 has ID: 002</span>
+<span class="c1">#    Ant at index 3 has ID: 003</span>
+</pre></div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">//C++</span>
+<span class="cp">#include</span> <span class="cpf">&lt;fort/myrmidon/Experiment.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">auto</span> <span class="n">e</span> <span class="o">=</span> <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">Experiment</span><span class="o">::</span><span class="n">Create</span><span class="p">(</span><span class="s">&quot;identifying-ant.myrmidon&quot;</span><span class="p">);</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">Ant</span><span class="o">&gt;</span> <span class="n">ants</span> <span class="o">=</span> <span class="p">{</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">reateAnt</span><span class="p">(),</span><span class="n">e</span><span class="o">-&gt;</span><span class="n">CreateAnt</span><span class="p">(),</span><span class="n">e</span><span class="o">-&gt;</span><span class="n">CreateAnt</span><span class="p">()};</span>
+<span class="k">for</span> <span class="p">(</span> <span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ants</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Ants at index &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; has ID: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">FormatAntID</span><span class="p">(</span><span class="n">ants</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">ID</span><span class="p">())</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">//outputs:</span>
+<span class="c1">//    Ant at index 0 has ID: 001</span>
+<span class="c1">//    Ant at index 1 has ID: 002</span>
+<span class="c1">//    Ant at index 2 has ID: 003</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you delete an ant and there would be a gap in the set of all
+ant IDs, the next time an ant would be created, it will have an ID
+that will fill that gap.</p>
+</div>
+</section>
+<section id="associating-ants-with-tags">
+<h2>Associating Ants with Tags<a class="headerlink" href="#associating-ants-with-tags" title="Permalink to this heading"></a></h2>
+<section id="creation-of-an-identification">
+<h3>Creation of an Identification<a class="headerlink" href="#creation-of-an-identification" title="Permalink to this heading"></a></h3>
+<p>Next we use <em>Identifications</em> <a class="footnote-reference brackets" href="#identification" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> to associate an ant
+with a tag ID. This relation is not a direct 1:1 relation, has
+identifications are bounded in time, i.e. an ant is associated
+with a tag from a given time up to another. As <strong>fort-myrmidon</strong>
+uses its own <em>Time</em> <a class="footnote-reference brackets" href="#time" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> objects, these value can effectively be
+set to -∞ <a class="footnote-reference brackets" href="#timesinceever" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a> or +∞ <a class="footnote-reference brackets" href="#timeforever" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a> for a given
+identification. Modeled as such, one ant could then be identified
+by several different tags over time.</p>
+<p>Internally, <strong>fort-myrmidon</strong> ensure that these two conditions are met:</p>
+<ul class="simple">
+<li><p>For any given time, any ant is identified by a unique tag ID (or
+none).</p></li>
+<li><p>For any given time, any tag ID identifies only a unique ant (or
+none).</p></li>
+</ul>
+<p>To ensure this, one cannot create directly identification, but must
+<em>create an Identification through an Experiment</em> <a class="footnote-reference brackets" href="#addidentification" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#python</span>
+<span class="k">for</span> <span class="n">tagID</span><span class="p">,</span><span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ants</span><span class="p">):</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">AddIdentification</span><span class="p">(</span><span class="n">antID</span> <span class="o">=</span> <span class="n">ants</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
+                            <span class="n">tagID</span> <span class="o">=</span> <span class="n">tagID</span><span class="p">)</span> <span class="c1">#start and end have default values to -∞/+∞</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="c1"># outputs:</span>
+<span class="c1">#     Identification{ID: 0x000 ↦ 001, From: -∞, To: +∞}</span>
+<span class="c1">#     Identification{ID: 0x001 ↦ 002, From: -∞, To: +∞}</span>
+<span class="c1">#     Identification{ID: 0x002 ↦ 003, From: -∞, To: +∞}</span>
+</pre></div>
+</div>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="c1">#R</span>
+<span class="nf">for </span><span class="p">(</span> <span class="n">i</span> <span class="n">in</span> <span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">ants</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="n">identification</span> <span class="o">&lt;-</span> <span class="n">e</span><span class="o">$</span><span class="nf">addIdentification</span><span class="p">(</span><span class="n">ants[[i]]</span><span class="o">$</span><span class="n">ID</span><span class="p">,</span><span class="n">i</span><span class="m">-1</span><span class="p">,</span><span class="nf">fmTimeSinceEver</span><span class="p">(),</span><span class="nf">fmTimeForever</span><span class="p">())</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">identification</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1"># outputs:</span>
+<span class="c1">#     fmIdentification( $tagValue = 0x000, $targetAntID = 001, $start = -∞, $end = +∞ )</span>
+<span class="c1">#     fmIdentification( $tagValue = 0x001, $targetAntID = 002, $start = -∞, $end = +∞ )</span>
+<span class="c1">#     fmIdentification( $tagValue = 0x002, $targetAntID = 003, $start = -∞, $end = +∞ )</span>
+</pre></div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">//C++</span>
+<span class="k">for</span> <span class="p">(</span> <span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ants</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">auto</span> <span class="n">identification</span> <span class="o">=</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">AddIdentification</span><span class="p">(</span><span class="n">ants</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">ID</span><span class="p">(),</span><span class="n">i</span><span class="p">,</span><span class="n">fort</span><span class="o">::</span><span class="n">Time</span><span class="o">::</span><span class="n">SinceEver</span><span class="p">(),</span><span class="n">fort</span><span class="o">::</span><span class="n">Time</span><span class="o">::</span><span class="n">Forever</span><span class="p">());</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">identification</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">// outputs:</span>
+<span class="c1">//     Identification{ID: 0x000 ↦ 001, From: -∞, To: +∞}</span>
+<span class="c1">//     Identification{ID: 0x001 ↦ 002, From: -∞, To: +∞}</span>
+<span class="c1">//     Identification{ID: 0x002 ↦ 003, From: -∞, To: +∞}</span>
+</pre></div>
+</div>
+<p>After being added to the experiment each identification will be
+found in the targeted <em>ant listing of identifications</em> <a class="footnote-reference brackets" href="#antidentifications" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>9<span class="fn-bracket">]</span></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#python</span>
+<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">ants</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Ant </span><span class="si">%s</span><span class="s2"> is identified by:&quot;</span> <span class="o">%</span> <span class="n">fm</span><span class="o">.</span><span class="n">FormatAntID</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">ID</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">a</span><span class="o">.</span><span class="n">Identifications</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot; * </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+<span class="c1"># outputs:</span>
+<span class="c1">#     Ant 001 is identified by:</span>
+<span class="c1">#      * Identification{ID: 0x000 ↦ 001, From: -∞, To: +∞}</span>
+<span class="c1">#     Ant 002 is identified by:</span>
+<span class="c1">#      * Identification{ID: 0x001 ↦ 002, From: -∞, To: +∞}</span>
+<span class="c1">#     Ant 003 is identified by:</span>
+<span class="c1">#      * Identification{ID: 0x002 ↦ 003, From: -∞, To: +∞}</span>
+</pre></div>
+</div>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="c1">#R</span>
+<span class="nf">for </span><span class="p">(</span><span class="n">a</span> <span class="n">in</span> <span class="n">ants</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">printf</span><span class="p">(</span><span class="s">&quot;Ant %s is identified by:\n&quot;</span><span class="p">,</span> <span class="nf">fmFormatAntID</span><span class="p">(</span><span class="n">a</span><span class="o">$</span><span class="n">ID</span><span class="p">))</span>
+        <span class="nf">for </span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="n">a</span><span class="o">$</span><span class="n">identifications</span><span class="p">){</span>
+            <span class="nf">printf</span><span class="p">(</span><span class="s">&quot; * %s\n&quot;</span><span class="p">,</span> <span class="nf">capture.output</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1"># outputs:</span>
+<span class="c1">#     Ant 001 is identified by:</span>
+<span class="c1">#      * fmIdentification( $tagValue = 0x000 , $targetAntID = 001 , $start = -∞, $end = +∞ )</span>
+<span class="c1">#     Ant 002 is identified by:</span>
+<span class="c1">#      * fmIdentification( $tagValue = 0x001 , $targetAntID = 002 , $start = -∞, $end = +∞ )</span>
+<span class="c1">#     Ant 003 is identified by:</span>
+<span class="c1">#      * fmIdentification( $tagValue = 0x002 , $targetAntID = 003 , $start = -∞, $end = +∞ )</span>
+</pre></div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">//c++</span>
+<span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span> <span class="nl">a</span> <span class="p">:</span> <span class="n">ants</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Ant &quot;</span>
+                  <span class="o">&lt;&lt;</span> <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">FormatAntID</span><span class="p">(</span><span class="n">a</span><span class="o">-&gt;</span><span class="n">ID</span><span class="p">())</span>
+                              <span class="o">&lt;&lt;</span> <span class="s">&quot; is identified by:&quot;</span>
+                              <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span> <span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span> <span class="nl">i</span> <span class="p">:</span>  <span class="n">a</span><span class="o">-&gt;</span><span class="n">Identifications</span><span class="p">()</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; * &quot;</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">// outputs:</span>
+<span class="c1">//     Ant 001 is identified by:</span>
+<span class="c1">//      * Identification{ID: 0x000 ↦ 001, From: -∞, To: +∞}</span>
+<span class="c1">//     Ant 002 is identified by:</span>
+<span class="c1">//      * Identification{ID: 0x001 ↦ 002, From: -∞, To: +∞}</span>
+<span class="c1">//     Ant 003 is identified by:</span>
+<span class="c1">//      * Identification{ID: 0x002 ↦ 003, From: -∞, To: +∞}</span>
+</pre></div>
+</div>
+</section>
+<section id="geometric-relation-between-tags-and-ants">
+<h3>Geometric relation between tags and ants<a class="headerlink" href="#geometric-relation-between-tags-and-ants" title="Permalink to this heading"></a></h3>
+<p>Identfications also holds the relation between the tag center and
+orientation to the estimated ant’s center and orientation. Usually
+this relation is automatically computed from manual measurements made
+in <strong>fort-studio</strong> pointing to the tip of the head and tip of the
+abdomen.</p>
+<p>For some large experiment, it is preferable to infer this relation
+from a chosen heuristic, and force <strong>fort-myrmidon</strong> to <em>set a user
+defined ant pose</em> <a class="footnote-reference brackets" href="#userdefinedantpose" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>10<span class="fn-bracket">]</span></a>. Please remark that this
+information should be set for every identification of an Ant.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This relation’s translation is the offset of the ant center to the
+tag center, <em>expressed in the tag coordinate system</em>. The angle
+correspond to the difference in radians of the ant orientation from
+the tag orientation , with <em>trigonometric orientation</em>. As in computer
+vision, the y-axis is conventionally going from top to bottom,
+<strong>positive angles appears clockwise</strong>.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#python</span>
+<span class="n">ants</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">SetUserDefinedAntPose</span><span class="p">(</span><span class="n">antPosition</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">antAngle</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Ant </span><span class="si">%d</span><span class="s2"> has pose </span><span class="si">%s</span><span class="s2"> and angle </span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fm</span><span class="o">.</span><span class="n">FormatAntID</span><span class="p">(</span><span class="n">ants</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ID</span><span class="p">),</span><span class="n">ants</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">AntPosition</span><span class="p">,</span><span class="n">ants</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">AntAngle</span><span class="p">))</span>
+<span class="c1"># outputs: Ant 001 has pose [0.0 0.0] and angle 0.0</span>
+</pre></div>
+</div>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="c1">#R</span>
+<span class="n">ants[[1]]</span><span class="o">$</span><span class="n">identifications[[1]]</span><span class="o">$</span><span class="nf">setUserDefinedAntPose</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">),</span> <span class="m">0.0</span><span class="p">)</span>
+<span class="nf">printf</span><span class="p">(</span><span class="s">&quot;Ant %s has pose %s and angle %f&quot;</span><span class="p">,</span> <span class="nf">fmFormatAntID</span><span class="p">(</span><span class="n">ants[[1]]</span><span class="o">$</span><span class="n">ID</span><span class="p">),</span><span class="nf">paste</span><span class="p">(</span><span class="n">ants[[1]]</span><span class="o">$</span><span class="n">identifications[[1]]</span><span class="o">$</span><span class="n">antPosition</span><span class="p">,</span><span class="n">collapse</span><span class="o">=</span><span class="s">&quot;,&quot;</span><span class="p">),</span><span class="n">ants[[1]]</span><span class="o">$</span><span class="n">identifications[[1]]</span><span class="o">$</span><span class="n">antAngle</span><span class="p">)</span>
+<span class="c1"># outputs: Ant 001 has pose 0,0 and angle 0.000000</span>
+</pre></div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">//C++</span>
+<span class="n">ants</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">SetUserDefinedAntPose</span><span class="p">(</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Ant &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">FormatAnt</span><span class="p">(</span><span class="n">ant</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">ID</span><span class="p">())</span>
+          <span class="o">&lt;&lt;</span> <span class="s">&quot; has pose &quot;</span><span class="o">&lt;&lt;</span> <span class="n">ant</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">AntPosition</span><span class="p">().</span><span class="n">transpose</span><span class="p">()</span>
+          <span class="o">&lt;&lt;</span> <span class="s">&quot; and angle &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">ant</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">AntAngle</span><span class="p">()</span>
+          <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="c1">// outputs: Ant 001 has pose (0.0 0.0) and angle 0.0</span>
+</pre></div>
+</div>
+<p>This user defined can be <em>cleared</em> <a class="footnote-reference brackets" href="#clearuserdefinedantpose" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>11<span class="fn-bracket">]</span></a> to
+revert to the position/angle derived from manual measurement.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="experiment" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Python: <a class="reference internal" href="api/python/experiment.html#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Experiment</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmExperiment</span></code>, C++: <a class="reference internal" href="api/cpp/experiment.html#_CPPv4N4fort8myrmidon10ExperimentE" title="fort::myrmidon::Experiment"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::Experiment</span></code></a></p>
+</aside>
+<aside class="footnote brackets" id="ant" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>Python: <a class="reference internal" href="api/python/ant_identification.html#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Ant</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt</span></code>, C++: <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4N4fort8myrmidon3AntE" title="fort::myrmidon::Ant"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::Ant</span></code></a></p>
+</aside>
+<aside class="footnote brackets" id="identification" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">3</a><span class="fn-bracket">]</span></span>
+<p>Python: <a class="reference internal" href="api/python/ant_identification.html#py_fort_myrmidon.Identification" title="py_fort_myrmidon.Identification"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Identification</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmIdentification</span></code>, C++: <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4N4fort8myrmidon14IdentificationE" title="fort::myrmidon::Identification"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::Identification</span></code></a></p>
+</aside>
+<aside class="footnote brackets" id="time" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">4</a><span class="fn-bracket">]</span></span>
+<p>Python: <a class="reference internal" href="api/python/time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Time</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmTime</span></code>, C++: <a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort4TimeE" title="fort::Time"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::Time</span></code></a></p>
+</aside>
+<aside class="footnote brackets" id="timesinceever" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id6">5</a><span class="fn-bracket">]</span></span>
+<p>Python: <a class="reference internal" href="api/python/time.html#py_fort_myrmidon.Time.SinceEver" title="py_fort_myrmidon.Time.SinceEver"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Time.SinceEver()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmTimeSinceEver()</span></code>, C++: <a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort4Time9SinceEverEv" title="fort::Time::SinceEver"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::Time::SinceEver()</span></code></a></p>
+</aside>
+<aside class="footnote brackets" id="timeforever" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id7">6</a><span class="fn-bracket">]</span></span>
+<p>Python: <a class="reference internal" href="api/python/time.html#py_fort_myrmidon.Time.Forever" title="py_fort_myrmidon.Time.Forever"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Time.Forever()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmTimeForever()</span></code>, C++: <a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort4Time7ForeverEv" title="fort::Time::Forever"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::Time::Forever()</span></code></a></p>
+</aside>
+<aside class="footnote brackets" id="createant" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">7</a><span class="fn-bracket">]</span></span>
+<p>Python: <a class="reference internal" href="api/python/experiment.html#py_fort_myrmidon.Experiment.CreateAnt" title="py_fort_myrmidon.Experiment.CreateAnt"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Experiment.CreateAnt()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmExperiment$createAnt()</span></code>, C++: <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::Experiment::CreateAnt()</span></code></p>
+</aside>
+<aside class="footnote brackets" id="addidentification" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id8">8</a><span class="fn-bracket">]</span></span>
+<p>Python: <a class="reference internal" href="api/python/experiment.html#py_fort_myrmidon.Experiment.AddIdentification" title="py_fort_myrmidon.Experiment.AddIdentification"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Experiment.AddIdentification()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmExperiment$addIdentification()</span></code>, C++: <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::Experiment::AddIdentification()</span></code></p>
+</aside>
+<aside class="footnote brackets" id="antidentifications" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id9">9</a><span class="fn-bracket">]</span></span>
+<p>Python: <a class="reference internal" href="api/python/ant_identification.html#py_fort_myrmidon.Ant.Identifications" title="py_fort_myrmidon.Ant.Identifications"><code class="xref py py-attr docutils literal notranslate"><span class="pre">py_fort_myrmidon.Ant.Identifications</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt$identifications</span></code>, C++ <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant15IdentificationsEv" title="fort::myrmidon::Ant::Identifications"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Ant::Identifications()</span></code></a></p>
+</aside>
+<aside class="footnote brackets" id="userdefinedantpose" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id10">10</a><span class="fn-bracket">]</span></span>
+<p>Python: <a class="reference internal" href="api/python/ant_identification.html#py_fort_myrmidon.Identification.SetUserDefinedAntPose" title="py_fort_myrmidon.Identification.SetUserDefinedAntPose"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Identification.SetUserDefinedAntPose()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmIdentification$setUserDefinedAntPose</span></code>, C++ <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4N4fort8myrmidon14Identification21SetUserDefinedAntPoseERKN5Eigen8Vector2dEd" title="fort::myrmidon::Identification::SetUserDefinedAntPose"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Identification::SetUserDefinedAntPose()</span></code></a></p>
+</aside>
+<aside class="footnote brackets" id="clearuserdefinedantpose" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id11">11</a><span class="fn-bracket">]</span></span>
+<p>Python: <a class="reference internal" href="api/python/ant_identification.html#py_fort_myrmidon.Identification.ClearUserDefinedAntPose" title="py_fort_myrmidon.Identification.ClearUserDefinedAntPose"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Identification.ClearUserDefinedAntPose()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmIdentification$clearUserDefinedAntPose</span></code>, C++ <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4N4fort8myrmidon14Identification23ClearUserDefinedAntPoseEv" title="fort::myrmidon::Identification::ClearUserDefinedAntPose"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Identification::ClearUserDefinedAntPose()</span></code></a></p>
+</aside>
+</aside>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="linking_tdata.html" class="btn btn-neutral float-left" title="Linking Tracking Data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="defining_ant_metadata.html" class="btn btn-neutral float-right" title="Defining Ant Metadata" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Université de Lausanne.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
