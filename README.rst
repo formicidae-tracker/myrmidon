@@ -5,7 +5,8 @@
 ``fort-myrmidon`` and ``fort-studio`` — Post-processing API and User Interface
 ******************************************************************************
 
-|Build Status| |Coverage Status| |Stable Documentation Status| |License|
+|Build Status| |Coverage Status| |Stable Documentation Status| |License| |DOI|
+
 
 
 `FORT Project Wiki <https://github.com/formicidae-tracker/documentation/wiki>`_
@@ -73,3 +74,5 @@ file for details
    :target: https://formicidae-tracker.github.io/myrmidon/latest
 .. |License| image:: https://img.shields.io/github/license/formicidae-tracker/myrmidon.svg
    :target: https://github.com/formicidae-tracker/myrmidon/blob/master/LICENSE
+.. |DOI| image:: https://zenodo.org/badge/209609026.svg 
+    :target: https://zenodo.org/doi/10.5281/zenodo.10019150
