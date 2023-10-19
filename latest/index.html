@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>fort-myrmidon and fort-studio — Post-processing API and User Interface &mdash; fort-myrmidon  documentation</title>
@@ -11,12 +11,12 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/../version_dropdown.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/../version_dropdown.js?v=4f7105bd"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -28,14 +28,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="#" class="icon icon-home"> fort-myrmidon
+
+          
+          
+          <a href="#" class="icon icon-home">
+            fort-myrmidon
           </a>
               <div class="version">
                 placeholder
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -88,8 +92,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
-      <li><code class="docutils literal notranslate"><span class="pre">fort-myrmidon</span></code> and <code class="docutils literal notranslate"><span class="pre">fort-studio</span></code> — Post-processing API and User Interface</li>
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><code class="docutils literal notranslate"><span class="pre">fort-myrmidon</span></code> and <code class="docutils literal notranslate"><span class="pre">fort-studio</span></code> — Post-processing API and User Interface</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/index.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -101,7 +105,7 @@
              
   <p align="center"><img src="https://github.com/formicidae-tracker/myrmidon/raw/master/resources/icons/fort-studio.svg" width="200px" alt="fort-studio logo"></p><section id="fort-myrmidon-and-fort-studio-post-processing-api-and-user-interface">
 <h1><code class="docutils literal notranslate"><span class="pre">fort-myrmidon</span></code> and <code class="docutils literal notranslate"><span class="pre">fort-studio</span></code> — Post-processing API and User Interface<a class="headerlink" href="#fort-myrmidon-and-fort-studio-post-processing-api-and-user-interface" title="Permalink to this heading"></a></h1>
-<p><a class="reference external" href="https://github.com/formicidae-tracker/myrmidon/actions/workflows/build.yml"><img alt="Build Status" src="https://github.com/formicidae-tracker/myrmidon/actions/workflows/build.yml/badge.svg" /></a> <a class="reference external" href="https://codecov.io/gh/formicidae-tracker/myrmidon"><img alt="Coverage Status" src="https://codecov.io/gh/formicidae-tracker/myrmidon/branch/master/graph/badge.svg" /></a> <a class="reference external" href="https://formicidae-tracker.github.io/myrmidon/latest"><img alt="Stable Documentation Status" src="https://github.com/formicidae-tracker/myrmidon/actions/workflows/docs.yml/badge.svg" /></a> <a class="reference external" href="https://github.com/formicidae-tracker/myrmidon/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/github/license/formicidae-tracker/myrmidon.svg" /></a></p>
+<p><a class="reference external" href="https://github.com/formicidae-tracker/myrmidon/actions/workflows/build.yml"><img alt="Build Status" src="https://github.com/formicidae-tracker/myrmidon/actions/workflows/build.yml/badge.svg" /></a> <a class="reference external" href="https://codecov.io/gh/formicidae-tracker/myrmidon"><img alt="Coverage Status" src="https://codecov.io/gh/formicidae-tracker/myrmidon/branch/master/graph/badge.svg" /></a> <a class="reference external" href="https://formicidae-tracker.github.io/myrmidon/latest"><img alt="Stable Documentation Status" src="https://github.com/formicidae-tracker/myrmidon/actions/workflows/docs.yml/badge.svg" /></a> <a class="reference external" href="https://github.com/formicidae-tracker/myrmidon/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/github/license/formicidae-tracker/myrmidon.svg" /></a> <a class="reference external" href="https://zenodo.org/doi/10.5281/zenodo.10019150"><img alt="DOI" src="https://zenodo.org/badge/209609026.svg" /></a></p>
 <p><a class="reference external" href="https://github.com/formicidae-tracker/documentation/wiki">FORT Project Wiki</a>
 • <a class="reference external" href="https://github.com/formicidae-tracker/myrmidon/issues/new?template=bug_report.md">Report a Bug</a>
 • <a class="reference external" href="https://github.com/formicidae-tracker/myrmidon/issues/new?template=feature_request.md">Request a Feature</a></p>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ants and Identifications &mdash; fort-myrmidon  documentation</title>
@@ -11,12 +11,12 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/../version_dropdown.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="../../_static/../version_dropdown.js?v=4f7105bd"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -29,14 +29,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> fort-myrmidon
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            fort-myrmidon
           </a>
               <div class="version">
                 placeholder
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -104,9 +108,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Python</a> &raquo;</li>
-      <li>Ants and Identifications</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Python</a></li>
+      <li class="breadcrumb-item active">Ants and Identifications</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/api/cpp/ant_identification.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -223,7 +227,7 @@ Gets the <a class="reference internal" href="typedef.html#namespacefort_1_1myrmi
 <p>Ants gets an unique ID in an <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>, with a minimal value of <code class="docutils literal notranslate"><span class="pre">1</span></code>. <code class="docutils literal notranslate"><span class="pre">0</span></code> is an invalid/undefined <a class="reference internal" href="typedef.html#namespacefort_1_1myrmidon_1a93ee51c34fda526044d99551b5ceba71"><span class="std std-ref">AntID</span></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>the <a class="reference internal" href="typedef.html#namespacefort_1_1myrmidon_1a93ee51c34fda526044d99551b5ceba71"><span class="std std-ref">AntID</span></a> of the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> </p>
+<dd class="field-odd"><p>the <a class="reference internal" href="typedef.html#namespacefort_1_1myrmidon_1a93ee51c34fda526044d99551b5ceba71"><span class="std std-ref">AntID</span></a> of the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -289,7 +293,7 @@ Gets the value for a key at time. Values are set with <a class="reference intern
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>key</strong> – the key of the user defined key in <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> </p></li>
+<li><p><strong>key</strong> – the key of the user defined key in <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a></p></li>
 <li><p><strong>time</strong> – the <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> we want the value for (infinite <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> are valid)</p></li>
 </ul>
 </dd>
@@ -318,8 +322,8 @@ Sets key to value starting from time. If time is <a class="reference internal" h
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if name is not a defined key in <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if time is <a class="reference internal" href="time.html#classfort_1_1Time_1a0f13c9a8cc26f34ca49c006c115dc845"><span class="std std-ref">Time::Forever()</span></a> </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if name is not a defined key in <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a></p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if time is <a class="reference internal" href="time.html#classfort_1_1Time_1a0f13c9a8cc26f34ca49c006c115dc845"><span class="std std-ref">Time::Forever()</span></a></p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if value is not of the right type for key </p></li>
 </ul>
 </dd>
@@ -368,12 +372,12 @@ Adds a <a class="reference internal" href="shapes.html#classfort_1_1myrmidon_1_1
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>shapeTypeID</strong> – the AntShapeTypeID for the <a class="reference internal" href="shapes.html#classfort_1_1myrmidon_1_1Capsule"><span class="std std-ref">Capsule</span></a> </p></li>
+<li><p><strong>shapeTypeID</strong> – the AntShapeTypeID for the <a class="reference internal" href="shapes.html#classfort_1_1myrmidon_1_1Capsule"><span class="std std-ref">Capsule</span></a></p></li>
 <li><p><strong>capsule</strong> – the <a class="reference internal" href="shapes.html#classfort_1_1myrmidon_1_1Capsule"><span class="std std-ref">Capsule</span></a></p></li>
 </ul>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if shapeTypeID is not defined in <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if shapeTypeID is not defined in <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -384,7 +388,7 @@ Adds a <a class="reference internal" href="shapes.html#classfort_1_1myrmidon_1_1
 <dd><p>Gets all capsules for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>a TypedCapsuleList representing the virtual shape of the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> </p>
+<dd class="field-odd"><p>a TypedCapsuleList representing the virtual shape of the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -466,7 +470,7 @@ Adds a <a class="reference internal" href="shapes.html#classfort_1_1myrmidon_1_1
 <p>The associated TagID of an <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> is immuable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>the TagID used by this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> </p>
+<dd class="field-odd"><p>the TagID used by this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -494,7 +498,7 @@ Sets the ending validity <a class="reference internal" href="time.html#classfort
 <p>First <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> where this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> becomes valid. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>the <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> where where this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> becomes valid. It can return <a class="reference internal" href="time.html#classfort_1_1Time_1a9593a5d95440d83965255957deb60226"><span class="std std-ref">Time::SinceEver()</span></a> </p>
+<dd class="field-odd"><p>the <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> where where this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> becomes valid. It can return <a class="reference internal" href="time.html#classfort_1_1Time_1a9593a5d95440d83965255957deb60226"><span class="std std-ref">Time::SinceEver()</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -506,7 +510,7 @@ Sets the ending validity <a class="reference internal" href="time.html#classfort
 <p>First <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> where this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> becomes unvalid. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>the first <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> where this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> becomes unvalid. It can return <a class="reference internal" href="time.html#classfort_1_1Time_1a0f13c9a8cc26f34ca49c006c115dc845"><span class="std std-ref">Time::Forever()</span></a> </p>
+<dd class="field-odd"><p>the first <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> where this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> becomes unvalid. It can return <a class="reference internal" href="time.html#classfort_1_1Time_1a0f13c9a8cc26f34ca49c006c115dc845"><span class="std std-ref">Time::Forever()</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -545,7 +549,7 @@ Sets the ending validity <a class="reference internal" href="time.html#classfort
 <dd><p>Indicates if <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> has a user defined pose. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> has a user defined pose set with <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification_1a532b4676510381aef6e174f25a595211"><span class="std std-ref">SetUserDefinedAntPose()</span></a> </p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> has a user defined pose set with <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification_1a532b4676510381aef6e174f25a595211"><span class="std std-ref">SetUserDefinedAntPose()</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -599,7 +603,7 @@ Sets the ending validity <a class="reference internal" href="time.html#classfort
 <dd><p>Checks if <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment_1a7182fd0798e8a16860f163ad586c9f33"><span class="std std-ref">Experiment::DefaultTagSize()</span></a> is used. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> uses <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment_1a7182fd0798e8a16860f163ad586c9f33"><span class="std std-ref">Experiment::DefaultTagSize()</span></a> </p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> uses <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment_1a7182fd0798e8a16860f163ad586c9f33"><span class="std std-ref">Experiment::DefaultTagSize()</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -610,7 +614,7 @@ Sets the ending validity <a class="reference internal" href="time.html#classfort
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon14Identification16DEFAULT_TAG_SIZEE">
 <span id="_CPPv3N4fort8myrmidon14Identification16DEFAULT_TAG_SIZEE"></span><span id="_CPPv2N4fort8myrmidon14Identification16DEFAULT_TAG_SIZEE"></span><span id="fort::myrmidon::Identification::DEFAULT_TAG_SIZE__doubleC"></span><span class="target" id="classfort_1_1myrmidon_1_1Identification_1adfe64e84b6377708662244961128b5a1"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DEFAULT_TAG_SIZE</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14Identification16DEFAULT_TAG_SIZEE" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Value use to mark the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> to use the <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment_1a7182fd0798e8a16860f163ad586c9f33"><span class="std std-ref">Experiment::DefaultTagSize()</span></a> </p>
+<dd><p>Value use to mark the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> to use the <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment_1a7182fd0798e8a16860f163ad586c9f33"><span class="std std-ref">Experiment::DefaultTagSize()</span></a></p>
 </dd></dl>
 
 </div>

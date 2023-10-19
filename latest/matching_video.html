@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Matching Video and Tracking Data &mdash; fort-myrmidon  documentation</title>
@@ -11,12 +11,12 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/../version_dropdown.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/../version_dropdown.js?v=4f7105bd"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -29,14 +29,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> fort-myrmidon
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            fort-myrmidon
           </a>
               <div class="version">
                 placeholder
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -101,8 +105,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Matching Video and Tracking Data</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Matching Video and Tracking Data</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/matching_video.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -157,12 +161,12 @@ quite inefficient to run the query below over a large time range.</p>
 </pre></div>
 </div>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// C++</span>
-<span class="cp">#include</span> <span class="cpf">&lt;fort/myrmidon/Query.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;fort/myrmidon/Video.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fort/myrmidon/Query.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fort/myrmidon/Video.hpp&gt;</span>
 
-<span class="k">auto</span> <span class="n">start</span> <span class="o">=</span> <span class="n">fort</span><span class="o">::</span><span class="n">Time</span><span class="o">::</span><span class="n">Parse</span><span class="p">(</span><span class="s">&quot;2019-11-02T20:00:00.000Z&quot;</span><span class="p">);</span>
-<span class="k">auto</span> <span class="n">end</span> <span class="o">=</span> <span class="n">start</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="mi">30</span> <span class="o">*</span> <span class="n">fort</span><span class="o">::</span><span class="n">Duration</span><span class="o">::</span><span class="n">Second</span><span class="p">);</span>
-<span class="n">VideoSegment</span><span class="o">::</span><span class="n">List</span> <span class="n">segments</span><span class="p">;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fort</span><span class="o">::</span><span class="n">Time</span><span class="o">::</span><span class="n">Parse</span><span class="p">(</span><span class="s">&quot;2019-11-02T20:00:00.000Z&quot;</span><span class="p">);</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">start</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="mi">30</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">fort</span><span class="o">::</span><span class="n">Duration</span><span class="o">::</span><span class="n">Second</span><span class="p">);</span>
+<span class="n">VideoSegment</span><span class="o">::</span><span class="n">List</span><span class="w"> </span><span class="n">segments</span><span class="p">;</span>
 <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">Query</span><span class="o">::</span><span class="n">FindVideoSegments</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">segments</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">start</span><span class="p">,</span><span class="n">end</span><span class="p">);</span>
 </pre></div>
 </div>
@@ -178,7 +182,7 @@ be populated once we <em>matched query result with the video segments</em>
 <p>Please note in the example below, that the match operation also takes
 a <em>list of VideoSegment</em>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Python</span>
-<span class="n">trajectories</span><span class="p">,</span><span class="n">interactions</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Query</span><span class="o">.</span><span class="n">ComputeAntInteractions</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">reportFullTrajectories</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+<span class="n">trajectories</span><span class="p">,</span><span class="n">interactions</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Query</span><span class="o">.</span><span class="n">ComputeAntInteractions</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">reportFullTrajectories</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># must be call once for each containers</span>
 <span class="n">fm</span><span class="o">.</span><span class="n">VideoSegment</span><span class="o">.</span><span class="n">Match</span><span class="p">(</span><span class="n">segments</span><span class="p">,</span><span class="n">trajectories</span><span class="p">)</span>
@@ -186,8 +190,8 @@ a <em>list of VideoSegment</em>.</p>
 </pre></div>
 </div>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// C++</span>
-<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">AntTrajectory</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&gt;</span> <span class="n">trajectories</span><span class="p">;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">AntInteraction</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&gt;</span> <span class="n">interactions</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">AntTrajectory</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&gt;</span><span class="w"> </span><span class="n">trajectories</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">AntInteraction</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&gt;</span><span class="w"> </span><span class="n">interactions</span><span class="p">;</span>
 <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">Query</span><span class="o">::</span><span class="n">ComputeAntInteractions</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">trajectories</span><span class="p">,</span><span class="n">interactions</span><span class="p">);</span>
 
 <span class="c1">// must be called once over each containers</span>
@@ -236,36 +240,36 @@ provided to iterate over the <em>VideoSegments</em>.</p>
 <h3>C++<a class="headerlink" href="#c" title="Permalink to this heading"></a></h3>
 <p>A <a class="reference internal" href="api/cpp/video.html#_CPPv4N4fort8myrmidon13VideoSequence7ForEachERKN12VideoSegment4ListENSt8functionIFvRN2cv3MatERK14VideoFrameDataEEE" title="fort::myrmidon::VideoSequence::ForEach"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::VideoSequence::ForEach()</span></code></a> method is
 provided.</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span> <span class="n">drawInteractions</span>
-    <span class="o">=</span> <span class="p">[](</span><span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="o">&amp;</span> <span class="n">frame</span><span class="p">,</span>
-         <span class="k">const</span> <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">VideoFrameData</span> <span class="o">&amp;</span> <span class="n">data</span><span class="p">)</span> <span class="p">{</span>
-             <span class="k">if</span> <span class="p">(</span> <span class="n">data</span><span class="p">.</span><span class="n">Empty</span><span class="p">()</span> <span class="p">)</span> <span class="p">{</span>
-                 <span class="k">return</span><span class="p">;</span>
-             <span class="p">}</span>
-             <span class="k">for</span> <span class="p">(</span> <span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span> <span class="nl">i</span> <span class="p">:</span> <span class="n">data</span><span class="p">.</span><span class="n">Interactions</span> <span class="p">)</span> <span class="p">{</span>
-                 <span class="c1">//Use here opencv method to draw on frame</span>
-             <span class="p">}</span>
-             <span class="c1">// You may want to display or write the frame to another file.</span>
-          <span class="p">};</span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">drawInteractions</span>
+<span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="p">[](</span><span class="n">cv</span><span class="o">::</span><span class="n">Mat</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">frame</span><span class="p">,</span>
+<span class="w">         </span><span class="k">const</span><span class="w"> </span><span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">VideoFrameData</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">             </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">Empty</span><span class="p">()</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                 </span><span class="k">return</span><span class="p">;</span>
+<span class="w">             </span><span class="p">}</span>
+<span class="w">             </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">Interactions</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                 </span><span class="c1">//Use here opencv method to draw on frame</span>
+<span class="w">             </span><span class="p">}</span>
+<span class="w">             </span><span class="c1">// You may want to display or write the frame to another file.</span>
+<span class="w">          </span><span class="p">};</span>
 
 <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="o">::</span><span class="n">VideoSequence</span><span class="o">::</span><span class="n">ForEach</span><span class="p">(</span><span class="n">segments</span><span class="p">,</span>
-                                       <span class="n">drawInteractions</span><span class="p">);</span>
+<span class="w">                                       </span><span class="n">drawInteractions</span><span class="p">);</span>
 </pre></div>
 </div>
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="videosegmentlist" role="note">
+<aside class="footnote brackets" id="videosegmentlist" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">1</a><span class="fn-bracket">]</span></span>
 <p>Python: <a class="reference internal" href="api/python/video.html#py_fort_myrmidon.VideoSegmentList" title="py_fort_myrmidon.VideoSegmentList"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.VideoSegmentList</span></code></a>, R: N.A., C++: <a class="reference internal" href="api/cpp/video.html#_CPPv4N4fort8myrmidon12VideoSegment4ListE" title="fort::myrmidon::VideoSegment::List"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">fort::myrmidon::VideoSegment::List</span></code></a></p>
 </aside>
-<aside class="footnote brackets" id="videoframedata" role="note">
+<aside class="footnote brackets" id="videoframedata" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">2</a><span class="fn-bracket">]</span></span>
 <p>Python: <a class="reference internal" href="api/python/video.html#py_fort_myrmidon.VideoFrameData" title="py_fort_myrmidon.VideoFrameData"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.VideoFrameData</span></code></a>, R: N.A., C++: <a class="reference internal" href="api/cpp/video.html#_CPPv4N4fort8myrmidon14VideoFrameDataE" title="fort::myrmidon::VideoFrameData"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::VideoFrameData</span></code></a></p>
 </aside>
-<aside class="footnote brackets" id="findvideosegments" role="note">
+<aside class="footnote brackets" id="findvideosegments" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">3</a><span class="fn-bracket">]</span></span>
 <p>Python: <a class="reference internal" href="api/python/queries_matchers.html#py_fort_myrmidon.Query.FindVideoSegments" title="py_fort_myrmidon.Query.FindVideoSegments"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Query.FindVideoSegments()</span></code></a>, R: N.A., C++: <a class="reference internal" href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query17FindVideoSegmentsERK10ExperimentRNSt6vectorI12VideoSegmentEE7SpaceIDRKN4fort4TimeERKN4fort4TimeE" title="fort::myrmidon::Query::FindVideoSegments"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Query::FindVideoSegments()</span></code></a></p>
 </aside>
-<aside class="footnote brackets" id="videosegmentmatch" role="note">
+<aside class="footnote brackets" id="videosegmentmatch" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">4</a><span class="fn-bracket">]</span></span>
 <p>Python: <a class="reference internal" href="api/python/video.html#py_fort_myrmidon.VideoSegment.Match" title="py_fort_myrmidon.VideoSegment.Match"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.VideoSegment.Match()</span></code></a>, R: N.A., C++: <a class="reference internal" href="api/cpp/video.html#_CPPv4I0EN4fort8myrmidon12VideoSegment5MatchEvR4List8IterType8IterType" title="fort::myrmidon::VideoSegment::Match"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::VideoSegment::Match()</span></code></a></p>
 </aside>

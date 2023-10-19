@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Installation &mdash; fort-myrmidon  documentation</title>
@@ -11,12 +11,12 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/../version_dropdown.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/../version_dropdown.js?v=4f7105bd"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -29,14 +29,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> fort-myrmidon
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            fort-myrmidon
           </a>
               <div class="version">
                 placeholder
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -103,8 +107,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Installation</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Installation</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/installation.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -122,7 +126,7 @@ and <strong>r-fort-myrmidon</strong> via <code class="docutils literal notransla
 <section id="fort-studio-through-snap">
 <h2><strong>fort-studio</strong> through snap<a class="headerlink" href="#fort-studio-through-snap" title="Permalink to this heading"></a></h2>
 <p><strong>fort-studio</strong> is available on the snap store with the eponymous snap:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo snap install fort-studio
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>snap<span class="w"> </span>install<span class="w"> </span>fort-studio
 </pre></div>
 </div>
 <div class="admonition warning">
@@ -134,7 +138,7 @@ be quite large and stored on external hard drives. To enable
 <strong>fort-studio</strong> to access these files, you must grant the snap right
 to access external hard drives by allowing the <code class="docutils literal notranslate"><span class="pre">removable-media</span></code>
 connection:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo snap connect fort-studio:removable-media :removable-media
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>snap<span class="w"> </span>connect<span class="w"> </span>fort-studio:removable-media<span class="w"> </span>:removable-media
 </pre></div>
 </div>
 </div>
@@ -174,8 +178,8 @@ quite irritating.</p></li>
 <strong>anaconda</strong> and <strong>conda-forge</strong> a careful installation as per
 <a class="reference external" href="https://conda-forge.org/docs/user/introduction.html#how-can-i-install-packages-from-conda-forge">conda-forge documentation</a>
 is strongly recommended. In summary, one must perform once:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda config --add channels conda-forge
-conda config --set channel_priority strict
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>config<span class="w"> </span>--add<span class="w"> </span>channels<span class="w"> </span>conda-forge
+conda<span class="w"> </span>config<span class="w"> </span>--set<span class="w"> </span>channel_priority<span class="w"> </span>strict
 </pre></div>
 </div>
 </li>
@@ -201,11 +205,11 @@ version installed. Therefore, <cite>always</cite> make sure:</p>
 <ol class="loweralpha">
 <li><p>To activate the environment you want to modify:</p>
 <blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda activate my-env-name
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>activate<span class="w"> </span>my-env-name
 </pre></div>
 </div>
 <p>You can create an environment with:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda create -n my-env-name
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>my-env-name
 </pre></div>
 </div>
 </div></blockquote>
@@ -227,7 +231,7 @@ environment.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The examples in this documentation assumes this module to be included as :</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">py_fort_myrmidon</span> <span class="kn">as</span> <span class="nn">fm</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">py_fort_myrmidon</span> <span class="k">as</span> <span class="nn">fm</span>
 </pre></div>
 </div>
 </div>
@@ -245,13 +249,13 @@ nor to use without crashing the <strong>FortMyrmidon</strong> package.</p>
 header files for <strong>fort-myrmidon</strong> will be available to the targeted
 conda environment. The recommanded way is to use CMake to build your
 project and link with <strong>fort-myrmidon</strong>.</p>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">find_package</span><span class="p">(</span><span class="s">FortMyrmidon</span> <span class="s">REQUIRED</span><span class="p">)</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">find_package</span><span class="p">(</span><span class="s">FortMyrmidon</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
 <span class="nb">include_directories</span><span class="p">(</span><span class="s">FORT_MYRMIDON_INCLUDE_DIRS</span><span class="p">)</span>
 <span class="c"># fort-myrmidon requires at least the c++17 standard</span>
-<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span> <span class="s">17</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span><span class="w"> </span><span class="s">17</span><span class="p">)</span>
 
 <span class="c"># once my-target is created</span>
-<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">my-target</span> <span class="o">${</span><span class="nv">FORT_MYRMIDON_LIBRARIES</span><span class="o">}</span><span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">my-target</span><span class="w"> </span><span class="o">${</span><span class="nv">FORT_MYRMIDON_LIBRARIES</span><span class="o">}</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>A <code class="docutils literal notranslate"><span class="pre">pkg-config</span></code> configuration file is also available, but it is not

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>API Entry Point &mdash; fort-myrmidon  documentation</title>
@@ -11,12 +11,12 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/../version_dropdown.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="../../_static/../version_dropdown.js?v=4f7105bd"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -29,14 +29,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> fort-myrmidon
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            fort-myrmidon
           </a>
               <div class="version">
                 placeholder
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -104,9 +108,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Python</a> &raquo;</li>
-      <li>API Entry Point</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Python</a></li>
+      <li class="breadcrumb-item active">API Entry Point</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/api/cpp/experiment.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -240,7 +244,7 @@
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>spaceID</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>spaceID</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a></p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if <strong>filepath</strong> is not a valid tracking data directory </p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="errors.html#_CPPv4N4fort8myrmidon13FixableErrorsE" title="fort::myrmidon::FixableErrors"><span class="n">FixableErrors</span></a></span></span> – if the directory contains corrupted data, and fixCorruptedData is false. </p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">domain_error</span></span></span> – if <strong>filepath</strong> contains data that would overlap in <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> with another tracking data directory associated with the same space. </p></li>
@@ -273,7 +277,7 @@
 <dd><p>Creates a new <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> in the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>the newly created <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> </p>
+<dd class="field-odd"><p>the newly created <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -299,7 +303,7 @@
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>antID</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>antID</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a></p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if the <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> stills have an identification </p></li>
 </ul>
 </dd>
@@ -315,14 +319,14 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>antID</strong> – the targetted <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> designated by its AntID </p></li>
-<li><p><strong>tagID</strong> – the tag to associate with the <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> </p></li>
-<li><p><strong>start</strong> – the first valid <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a>. It can be <a class="reference internal" href="time.html#classfort_1_1Time_1a9593a5d95440d83965255957deb60226"><span class="std std-ref">Time::SinceEver()</span></a> </p></li>
+<li><p><strong>tagID</strong> – the tag to associate with the <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a></p></li>
+<li><p><strong>start</strong> – the first valid <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a>. It can be <a class="reference internal" href="time.html#classfort_1_1Time_1a9593a5d95440d83965255957deb60226"><span class="std std-ref">Time::SinceEver()</span></a></p></li>
 <li><p><strong>end</strong> – the first invalid <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a>. It can be <a class="reference internal" href="time.html#classfort_1_1Time_1a0f13c9a8cc26f34ca49c006c115dc845"><span class="std std-ref">Time::Forever()</span></a></p></li>
 </ul>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>antID</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>antID</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a></p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">OverlapingIdentification</span></span></span> – if it will conflict in time with another <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> with the same <strong>antID</strong> or <strong>tagID</strong>. </p></li>
 </ul>
 </dd>
@@ -441,7 +445,7 @@ Queries for a valid time range for a given TagID and <a class="reference interna
 <p>Gets the family of the tags used in this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. It is automatically determined from the information in TrackingDataDirectory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>the family of tag used in the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> </p>
+<dd class="field-odd"><p>the family of tag used in the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -583,7 +587,7 @@ Queries for a valid time range for a given TagID and <a class="reference interna
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>shapeTypeID</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if at least one <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> still have a <a class="reference internal" href="shapes.html#classfort_1_1myrmidon_1_1Capsule"><span class="std std-ref">Capsule</span></a> for <strong>shapeTypeID</strong> </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if at least one <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> still have a <a class="reference internal" href="shapes.html#classfort_1_1myrmidon_1_1Capsule"><span class="std std-ref">Capsule</span></a> for <strong>shapeTypeID</strong></p></li>
 </ul>
 </dd>
 </dl>
@@ -606,7 +610,7 @@ Adds a non-tracking metadata <strong>key</strong> with type and default defined 
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if the following conditions are met:<ul class="simple">
 <li><p><strong>key</strong> is already registered</p></li>
 <li><p><strong>defaultValue</strong> would change the type of key</p></li>
-<li><p>at least one <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> has a value registered for <strong>key</strong> </p></li>
+<li><p>at least one <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> has a value registered for <strong>key</strong></p></li>
 </ul>
 </p>
 </dd>
@@ -756,7 +760,7 @@ Adds a non-tracking metadata <strong>key</strong> with type and default defined 
 <dd class="field-odd"><p><strong>filepath</strong> – the filesystem location for the <code class="docutils literal notranslate"><span class="pre">.myrmidon</span></code> file.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>the new empty <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> </p>
+<dd class="field-even"><p>the new empty <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -780,7 +784,7 @@ Adds a non-tracking metadata <strong>key</strong> with type and default defined 
 <dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon14TrackingSolverE">
 <span id="_CPPv3N4fort8myrmidon14TrackingSolverE"></span><span id="_CPPv2N4fort8myrmidon14TrackingSolverE"></span><span id="fort::myrmidon::TrackingSolver"></span><span class="target" id="classfort_1_1myrmidon_1_1TrackingSolver"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TrackingSolver</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14TrackingSolverE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Identifies and Collides <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> from raw tracking data. </p>
-<p>This class lets the user to manually identify and track ants from raw tracking data, as for example, obtained from a network stream with <code class="docutils literal notranslate"><span class="pre">fort-hermes</span></code> </p>
+<p>This class lets the user to manually identify and track ants from raw tracking data, as for example, obtained from a network stream with <code class="docutils literal notranslate"><span class="pre">fort-hermes</span></code></p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
@@ -803,7 +807,7 @@ Adds a non-tracking metadata <strong>key</strong> with type and default defined 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon14TrackingSolver13IdentifyFrameER15IdentifiedFrameRKN4fort6hermes12FrameReadoutE7SpaceID">
 <span id="_CPPv3NK4fort8myrmidon14TrackingSolver13IdentifyFrameER15IdentifiedFrameRKN4fort6hermes12FrameReadoutE7SpaceID"></span><span id="_CPPv2NK4fort8myrmidon14TrackingSolver13IdentifyFrameER15IdentifiedFrameRKN4fort6hermes12FrameReadoutE7SpaceID"></span><span id="fort::myrmidon::TrackingSolver::IdentifyFrame__IdentifiedFrameR.fort::hermes::FrameReadoutCR.SpaceIDC"></span><span class="target" id="classfort_1_1myrmidon_1_1TrackingSolver_1aad60875372afa252924a2d9dfcd3335e"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IdentifyFrame</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="queries_matchers.html#_CPPv4N4fort8myrmidon15IdentifiedFrameE" title="fort::myrmidon::IdentifiedFrame"><span class="n"><span class="pre">IdentifiedFrame</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">identified</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">hermes</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">FrameReadout</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">frame</span></span>, <a class="reference internal" href="typedef.html#_CPPv4N4fort8myrmidon7SpaceIDE" title="fort::myrmidon::SpaceID"><span class="n"><span class="pre">SpaceID</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">spaceID</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon14TrackingSolver13IdentifyFrameER15IdentifiedFrameRKN4fort6hermes12FrameReadoutE7SpaceID" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Identifies Ants from a <code class="docutils literal notranslate"><span class="pre">fort::hermes::FrameReadout</span></code> </p>
+<dd><p>Identifies Ants from a <code class="docutils literal notranslate"><span class="pre">fort::hermes::FrameReadout</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Time Representation &mdash; fort-myrmidon  documentation</title>
@@ -11,12 +11,12 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/../version_dropdown.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="../../_static/../version_dropdown.js?v=4f7105bd"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -29,14 +29,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> fort-myrmidon
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            fort-myrmidon
           </a>
               <div class="version">
                 placeholder
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -104,9 +108,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Python</a> &raquo;</li>
-      <li>Time Representation</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Python</a></li>
+      <li class="breadcrumb-item active">Time Representation</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/api/cpp/time.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -130,7 +134,7 @@
 <span class="n">Duration</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">Duration</span><span class="p">::</span><span class="n">Hour</span> <span class="o">+</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">Duration</span><span class="p">::</span><span class="n">Minute</span><span class="p">;</span>
 </pre></div>
 </div>
- </p>
+</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
@@ -244,7 +248,7 @@ Adds two <a class="reference internal" href="#classfort_1_1Duration"><span class
 <dd class="field-odd"><p><strong>other</strong> – the other <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> to add</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>a new duration <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">+</span> <span class="pre">other</span></code> </p>
+<dd class="field-even"><p>a new duration <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">+</span> <span class="pre">other</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -260,7 +264,7 @@ Multiplies two <a class="reference internal" href="#classfort_1_1Duration"><span
 <dd class="field-odd"><p><strong>other</strong> – the other <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> to multiply.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>a new duration <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">*</span> <span class="pre">other</span></code> </p>
+<dd class="field-even"><p>a new duration <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">*</span> <span class="pre">other</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -276,7 +280,7 @@ Substracts two <a class="reference internal" href="#classfort_1_1Duration"><span
 <dd class="field-odd"><p><strong>other</strong> – the other <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> to substract</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>a new duration <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">-</span> <span class="pre">other</span></code> </p>
+<dd class="field-even"><p>a new duration <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">-</span> <span class="pre">other</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -287,7 +291,7 @@ Substracts two <a class="reference internal" href="#classfort_1_1Duration"><span
 <dd><p>Negation operator. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>the opposite duration <code class="docutils literal notranslate"><span class="pre">-</span> <span class="pre">this</span></code> </p>
+<dd class="field-odd"><p>the opposite duration <code class="docutils literal notranslate"><span class="pre">-</span> <span class="pre">this</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -303,7 +307,7 @@ Compares two <a class="reference internal" href="#classfort_1_1Duration"><span c
 <dd class="field-odd"><p><strong>other</strong> – the <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> to compare</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&lt;</span> <span class="pre">other</span></code> </p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&lt;</span> <span class="pre">other</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -319,7 +323,7 @@ Compares two <a class="reference internal" href="#classfort_1_1Duration"><span c
 <dd class="field-odd"><p><strong>other</strong> – the <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> to compare</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&lt;=</span> <span class="pre">other</span></code> </p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&lt;=</span> <span class="pre">other</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -335,7 +339,7 @@ Compares two <a class="reference internal" href="#classfort_1_1Duration"><span c
 <dd class="field-odd"><p><strong>other</strong> – the <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> to compare</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&gt;</span> <span class="pre">other</span></code> </p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&gt;</span> <span class="pre">other</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -351,7 +355,7 @@ Compares two <a class="reference internal" href="#classfort_1_1Duration"><span c
 <dd class="field-odd"><p><strong>other</strong> – the <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> to compare</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&gt;=</span> <span class="pre">other</span></code> </p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&gt;=</span> <span class="pre">other</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -367,7 +371,7 @@ Compares two <a class="reference internal" href="#classfort_1_1Duration"><span c
 <dd class="field-odd"><p><strong>other</strong> – the <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a> to compare</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">==</span> <span class="pre">other</span></code> </p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">==</span> <span class="pre">other</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -467,7 +471,7 @@ Parses a std::string to a <a class="reference internal" href="#classfort_1_1Dura
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK4fort4Time7ToTimeTEv">
 <span id="_CPPv3NK4fort4Time7ToTimeTEv"></span><span id="_CPPv2NK4fort4Time7ToTimeTEv"></span><span id="fort::Time::ToTimeTC"></span><span class="target" id="classfort_1_1Time_1af9624cd4828b32eb7bc0a12f26d11e1d"></span><span class="n"><span class="pre">time_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ToTimeT</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4Time7ToTimeTEv" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Converts to a <code class="docutils literal notranslate"><span class="pre">time_t</span></code> </p>
+<dd><p>Converts to a <code class="docutils literal notranslate"><span class="pre">time_t</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">time_t</span></code>representing the <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>. </p>
@@ -478,7 +482,7 @@ Parses a std::string to a <a class="reference internal" href="#classfort_1_1Dura
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK4fort4Time9ToTimevalEv">
 <span id="_CPPv3NK4fort4Time9ToTimevalEv"></span><span id="_CPPv2NK4fort4Time9ToTimevalEv"></span><span id="fort::Time::ToTimevalC"></span><span class="target" id="classfort_1_1Time_1a8648d757a50537507ac5a30589c374d2"></span><span class="n"><span class="pre">timeval</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ToTimeval</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort4Time9ToTimevalEv" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Converts to a <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">timeval</span></code> </p>
+<dd><p>Converts to a <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">timeval</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">timeval</span></code>representing the <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>. </p>
@@ -503,7 +507,7 @@ Parses a std::string to a <a class="reference internal" href="#classfort_1_1Dura
 <dd><p>In-place conversion to a protobuf Timestamp. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>timestamp</strong> – the timestamp to modify to represent the <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> </p>
+<dd class="field-odd"><p><strong>timestamp</strong> – the timestamp to modify to represent the <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -612,7 +616,7 @@ Finds the <a class="reference internal" href="#classfort_1_1Duration"><span clas
 <dd><p>Reports if this <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> is +∞ </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>true if this <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> is <a class="reference internal" href="#classfort_1_1Time_1a0f13c9a8cc26f34ca49c006c115dc845"><span class="std std-ref">Forever()</span></a> </p>
+<dd class="field-odd"><p>true if this <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> is <a class="reference internal" href="#classfort_1_1Time_1a0f13c9a8cc26f34ca49c006c115dc845"><span class="std std-ref">Forever()</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -623,7 +627,7 @@ Finds the <a class="reference internal" href="#classfort_1_1Duration"><span clas
 <dd><p>Reports if this <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> is -∞ </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>true if this <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> is <a class="reference internal" href="#classfort_1_1Time_1a9593a5d95440d83965255957deb60226"><span class="std std-ref">SinceEver()</span></a> </p>
+<dd class="field-odd"><p>true if this <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> is <a class="reference internal" href="#classfort_1_1Time_1a9593a5d95440d83965255957deb60226"><span class="std std-ref">SinceEver()</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -702,7 +706,7 @@ Finds the <a class="reference internal" href="#classfort_1_1Duration"><span clas
 <dd><p>Formats the <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> as a RFC 3339 string. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>a string representing this <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>. Either using RFC 3339 or +/-∞ if this <a class="reference internal" href="#classfort_1_1Time_1ae051c4dd5c2210fef379b38e0eb283bf"><span class="std std-ref">Time::IsInfinite()</span></a> </p>
+<dd class="field-odd"><p>a string representing this <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>. Either using RFC 3339 or +/-∞ if this <a class="reference internal" href="#classfort_1_1Time_1ae051c4dd5c2210fef379b38e0eb283bf"><span class="std std-ref">Time::IsInfinite()</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -728,7 +732,7 @@ Finds the <a class="reference internal" href="#classfort_1_1Duration"><span clas
 <dd class="field-odd"><p><strong>other</strong> – the other <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> to compare to</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">==</span> <span class="pre">other</span></code> </p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">==</span> <span class="pre">other</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -742,7 +746,7 @@ Finds the <a class="reference internal" href="#classfort_1_1Duration"><span clas
 <dd class="field-odd"><p><strong>other</strong> – the other <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> to compare to</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&lt;</span> <span class="pre">other</span></code> </p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&lt;</span> <span class="pre">other</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -756,7 +760,7 @@ Finds the <a class="reference internal" href="#classfort_1_1Duration"><span clas
 <dd class="field-odd"><p><strong>other</strong> – the other <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> to compare to</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&lt;=</span> <span class="pre">other</span></code> </p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&lt;=</span> <span class="pre">other</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -770,7 +774,7 @@ Finds the <a class="reference internal" href="#classfort_1_1Duration"><span clas
 <dd class="field-odd"><p><strong>other</strong> – the other <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> to compare to</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&gt;</span> <span class="pre">other</span></code> </p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&gt;</span> <span class="pre">other</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -784,7 +788,7 @@ Finds the <a class="reference internal" href="#classfort_1_1Duration"><span clas
 <dd class="field-odd"><p><strong>other</strong> – the other <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> to compare to</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&gt;=</span> <span class="pre">other</span></code> </p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">&gt;=</span> <span class="pre">other</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -799,7 +803,7 @@ Finds the <a class="reference internal" href="#classfort_1_1Duration"><span clas
 <p>Returns the positive infinite <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>. For any other <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> value, <a class="reference internal" href="#classfort_1_1Time_1ad667c17a68ec02fd2f7b50ad861488b8"><span class="std std-ref">Before()</span></a> will return <code class="docutils literal notranslate"><span class="pre">true</span></code>. Any computation with this value will <a class="reference internal" href="#classfort_1_1Time_1_1Overflow"><span class="std std-ref">Overflow</span></a>. Calling this method is the only to construct such <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>, as operation on other regular <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> will <a class="reference internal" href="#classfort_1_1Time_1_1Overflow"><span class="std std-ref">Overflow</span></a> before.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>a positive infinite <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> </p>
+<dd class="field-odd"><p>a positive infinite <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -811,7 +815,7 @@ Finds the <a class="reference internal" href="#classfort_1_1Duration"><span clas
 <p>Returns the negative infinite <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>. For any other <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> value, <a class="reference internal" href="#classfort_1_1Time_1ad91287270d97e097d893e49667fffe4f"><span class="std std-ref">After()</span></a> will return <code class="docutils literal notranslate"><span class="pre">true</span></code>. Any computation with this value will <a class="reference internal" href="#classfort_1_1Time_1_1Overflow"><span class="std std-ref">Overflow</span></a>. Calling this method is the only to construct such <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>, as operation on other regular <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> will <a class="reference internal" href="#classfort_1_1Time_1_1Overflow"><span class="std std-ref">Overflow</span></a> before.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>a negative infinite <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> </p>
+<dd class="field-odd"><p>a negative infinite <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -821,13 +825,12 @@ Finds the <a class="reference internal" href="#classfort_1_1Duration"><span clas
 <span id="_CPPv3N4fort4Time3NowEv"></span><span id="_CPPv2N4fort4Time3NowEv"></span><span id="fort::Time::Now"></span><span class="target" id="classfort_1_1Time_1a4be8e3ee0799334019b114dcd12701f2"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Now</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort4Time3NowEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Gets the current <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>. </p>
 <p>Gets the current <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a>. This time will both have a wall and a monotonic clock reading associated with the <a class="reference internal" href="#classfort_1_1Time_1ab0efa5e0ed0292700adb4407509bf956"><span class="std std-ref">SYSTEM_MONOTONIC_CLOCK</span></a>. Therefore such idioms:</p>
-<p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="p">{</span><span class="n">c</span><span class="o">++</span><span class="p">}</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="p">{</span><span class="n">c</span><span class="o">++</span><span class="p">}</span>
 <span class="n">auto</span> <span class="n">start</span> <span class="o">=</span> <span class="n">fort</span><span class="p">::</span><span class="n">Time</span><span class="p">::</span><span class="n">Now</span><span class="p">();</span>
 <span class="n">SomeFunction</span><span class="p">();</span>
 <span class="n">auto</span> <span class="n">ellapsed</span> <span class="o">=</span> <span class="n">fort</span><span class="p">::</span><span class="n">Time</span><span class="p">::</span><span class="n">Now</span><span class="p">()</span><span class="o">.</span><span class="n">Sub</span><span class="p">(</span><span class="n">start</span><span class="p">);</span>
 </pre></div>
 </div>
-</p>
 <p>Will always return a positive <a class="reference internal" href="#classfort_1_1Duration"><span class="std std-ref">Duration</span></a>, even if the wall clock has been reset between the two calls to <a class="reference internal" href="#classfort_1_1Time_1a4be8e3ee0799334019b114dcd12701f2"><span class="std std-ref">Now()</span></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -839,7 +842,7 @@ Finds the <a class="reference internal" href="#classfort_1_1Duration"><span clas
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4fort4Time9FromTimeTE6time_t">
 <span id="_CPPv3N4fort4Time9FromTimeTE6time_t"></span><span id="_CPPv2N4fort4Time9FromTimeTE6time_t"></span><span id="fort::Time::FromTimeT__time_t"></span><span class="target" id="classfort_1_1Time_1ac83f5b94af144afbd0abf25af545d197"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FromTimeT</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">time_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort4Time9FromTimeTE6time_t" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Creates a <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> from <code class="docutils literal notranslate"><span class="pre">time_t</span></code> </p>
+<dd><p>Creates a <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> from <code class="docutils literal notranslate"><span class="pre">time_t</span></code></p>
 <p>
 The <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> will not have any monotonic clock value.</p>
 <dl class="field-list simple">
@@ -847,7 +850,7 @@ The <a class="reference internal" href="#classfort_1_1Time"><span class="std std
 <dd class="field-odd"><p><strong>t</strong> – the time_t value</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>the converted <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> </p>
+<dd class="field-even"><p>the converted <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -855,7 +858,7 @@ The <a class="reference internal" href="#classfort_1_1Time"><span class="std std
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4fort4Time11FromTimevalERK7timeval">
 <span id="_CPPv3N4fort4Time11FromTimevalERK7timeval"></span><span id="_CPPv2N4fort4Time11FromTimevalERK7timeval"></span><span id="fort::Time::FromTimeval__timevalCR"></span><span class="target" id="classfort_1_1Time_1ac1e25b597c5806121dfd974ef90fab7d"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FromTimeval</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">timeval</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">t</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort4Time11FromTimevalERK7timeval" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Creates a <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> from <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">timeval</span></code> </p>
+<dd><p>Creates a <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> from <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">timeval</span></code></p>
 <p>
 The <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> will not have any monotonic clock value.</p>
 <dl class="field-list simple">
@@ -863,7 +866,7 @@ The <a class="reference internal" href="#classfort_1_1Time"><span class="std std
 <dd class="field-odd"><p><strong>t</strong> – the <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">timeval</span></code></p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>the converted <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> </p>
+<dd class="field-even"><p>the converted <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -879,7 +882,7 @@ The <a class="reference internal" href="#classfort_1_1Time"><span class="std std
 <dd class="field-odd"><p><strong>timestamp</strong> – the <code class="docutils literal notranslate"><span class="pre">google.protobuf.Timestamp</span></code> message</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>the converted <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> </p>
+<dd class="field-even"><p>the converted <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -896,7 +899,7 @@ The <a class="reference internal" href="#classfort_1_1Time"><span class="std std
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>the corresponding <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a> </p>
+<dd class="field-even"><p>the corresponding <a class="reference internal" href="#classfort_1_1Time"><span class="std std-ref">Time</span></a></p>
 </dd>
 </dl>
 </dd></dl>

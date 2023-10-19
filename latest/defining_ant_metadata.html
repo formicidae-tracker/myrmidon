@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Defining Ant Metadata &mdash; fort-myrmidon  documentation</title>
@@ -11,12 +11,12 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/../version_dropdown.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/../version_dropdown.js?v=4f7105bd"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -29,14 +29,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> fort-myrmidon
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            fort-myrmidon
           </a>
               <div class="version">
                 placeholder
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -94,8 +98,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Defining Ant Metadata</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Defining Ant Metadata</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/defining_ant_metadata.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -130,7 +134,7 @@ region inside and between two circles.</p>
 </figure>
 <p>Capsule are defined in the ant reference frame.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#python</span>
-<span class="kn">import</span> <span class="nn">py_fort_myrmidon</span> <span class="kn">as</span> <span class="nn">fm</span>
+<span class="kn">import</span> <span class="nn">py_fort_myrmidon</span> <span class="k">as</span> <span class="nn">fm</span>
 
 <span class="n">e</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Experiment</span><span class="p">(</span><span class="s2">&quot;defining_ant_metadata.myrmidon&quot;</span><span class="p">)</span>
 
@@ -148,74 +152,74 @@ region inside and between two circles.</p>
 <span class="n">a</span><span class="o">.</span><span class="n">AddCapsule</span><span class="p">(</span><span class="n">bodyID</span><span class="p">,</span><span class="n">fm</span><span class="o">.</span><span class="n">Capsule</span><span class="p">(</span><span class="n">c1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">r1</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">r2</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="p">))</span>
 
 <span class="k">for</span> <span class="n">typeID</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="n">a</span><span class="o">.</span><span class="n">Capsules</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">typeID</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">typeID</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="c1">#R</span>
 <span class="nf">library</span><span class="p">(</span><span class="n">FortMyrmidon</span><span class="p">)</span>
 
-<span class="n">e</span> <span class="o">&lt;-</span> <span class="nf">fmExperimentCreate</span><span class="p">(</span><span class="s">&quot;defining_ant_metadata.myrmidon&quot;</span><span class="p">)</span>
+<span class="n">e</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">fmExperimentCreate</span><span class="p">(</span><span class="s">&quot;defining_ant_metadata.myrmidon&quot;</span><span class="p">)</span>
 
-<span class="n">a</span> <span class="o">&lt;-</span> <span class="n">e</span><span class="o">$</span><span class="nf">createAnt</span><span class="p">()</span>
+<span class="n">a</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">e</span><span class="o">$</span><span class="nf">createAnt</span><span class="p">()</span>
 
-<span class="n">headID</span> <span class="o">=</span> <span class="n">e</span><span class="o">$</span><span class="nf">createAntShapeType</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>
-<span class="n">antennaID</span> <span class="o">=</span> <span class="n">e</span><span class="o">$</span><span class="nf">createAntShapeType</span><span class="p">(</span><span class="s">&quot;antennas&quot;</span><span class="p">)</span>
-<span class="n">bodyID</span> <span class="o">=</span> <span class="n">e</span><span class="o">$</span><span class="nf">createAntShapeType</span><span class="p">(</span><span class="s">&quot;body&quot;</span><span class="p">)</span>
+<span class="n">headID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="o">$</span><span class="nf">createAntShapeType</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">)</span>
+<span class="n">antennaID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="o">$</span><span class="nf">createAntShapeType</span><span class="p">(</span><span class="s">&quot;antennas&quot;</span><span class="p">)</span>
+<span class="n">bodyID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="o">$</span><span class="nf">createAntShapeType</span><span class="p">(</span><span class="s">&quot;body&quot;</span><span class="p">)</span>
 
 
-<span class="n">a</span><span class="o">$</span><span class="nf">addCapsule</span><span class="p">(</span><span class="n">headID</span><span class="p">,</span><span class="nf">fmCapsuleCreate</span><span class="p">(</span><span class="n">c1</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">),</span> <span class="n">c2</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">),</span> <span class="n">r1</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">,</span> <span class="n">r2</span> <span class="o">=</span> <span class="m">1.0</span> <span class="p">))</span>
-<span class="n">a</span><span class="o">$</span><span class="nf">addCapsule</span><span class="p">(</span><span class="n">antennaID</span><span class="p">,</span><span class="nf">fmCapsuleCreate</span><span class="p">(</span><span class="n">c1</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">),</span> <span class="n">c2</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">),</span> <span class="n">r1</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">,</span> <span class="n">r2</span> <span class="o">=</span> <span class="m">1.0</span> <span class="p">))</span>
-<span class="n">a</span><span class="o">$</span><span class="nf">addCapsule</span><span class="p">(</span><span class="n">antennaID</span><span class="p">,</span><span class="nf">fmCapsuleCreate</span><span class="p">(</span><span class="n">c1</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">),</span> <span class="n">c2</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">),</span> <span class="n">r1</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">,</span> <span class="n">r2</span> <span class="o">=</span> <span class="m">1.0</span> <span class="p">))</span>
-<span class="n">a</span><span class="o">$</span><span class="nf">addCapsule</span><span class="p">(</span><span class="n">bodyID</span><span class="p">,</span><span class="nf">fmCapsuleCreate</span><span class="p">(</span><span class="n">c1</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">),</span> <span class="n">c2</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">),</span> <span class="n">r1</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">,</span> <span class="n">r2</span> <span class="o">=</span> <span class="m">1.0</span> <span class="p">))</span>
-<span class="n">a</span><span class="o">$</span><span class="nf">addCapsule</span><span class="p">(</span><span class="n">bodyID</span><span class="p">,</span><span class="nf">fmCapsuleCreate</span><span class="p">(</span><span class="n">c1</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">),</span> <span class="n">c2</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">),</span> <span class="n">r1</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">,</span> <span class="n">r2</span> <span class="o">=</span> <span class="m">1.0</span> <span class="p">))</span>
+<span class="n">a</span><span class="o">$</span><span class="nf">addCapsule</span><span class="p">(</span><span class="n">headID</span><span class="p">,</span><span class="nf">fmCapsuleCreate</span><span class="p">(</span><span class="n">c1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">),</span><span class="w"> </span><span class="n">c2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">),</span><span class="w"> </span><span class="n">r1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.5</span><span class="p">,</span><span class="w"> </span><span class="n">r2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1.0</span><span class="w"> </span><span class="p">))</span>
+<span class="n">a</span><span class="o">$</span><span class="nf">addCapsule</span><span class="p">(</span><span class="n">antennaID</span><span class="p">,</span><span class="nf">fmCapsuleCreate</span><span class="p">(</span><span class="n">c1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">),</span><span class="w"> </span><span class="n">c2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">),</span><span class="w"> </span><span class="n">r1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.5</span><span class="p">,</span><span class="w"> </span><span class="n">r2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1.0</span><span class="w"> </span><span class="p">))</span>
+<span class="n">a</span><span class="o">$</span><span class="nf">addCapsule</span><span class="p">(</span><span class="n">antennaID</span><span class="p">,</span><span class="nf">fmCapsuleCreate</span><span class="p">(</span><span class="n">c1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">),</span><span class="w"> </span><span class="n">c2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">),</span><span class="w"> </span><span class="n">r1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.5</span><span class="p">,</span><span class="w"> </span><span class="n">r2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1.0</span><span class="w"> </span><span class="p">))</span>
+<span class="n">a</span><span class="o">$</span><span class="nf">addCapsule</span><span class="p">(</span><span class="n">bodyID</span><span class="p">,</span><span class="nf">fmCapsuleCreate</span><span class="p">(</span><span class="n">c1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">),</span><span class="w"> </span><span class="n">c2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">),</span><span class="w"> </span><span class="n">r1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.5</span><span class="p">,</span><span class="w"> </span><span class="n">r2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1.0</span><span class="w"> </span><span class="p">))</span>
+<span class="n">a</span><span class="o">$</span><span class="nf">addCapsule</span><span class="p">(</span><span class="n">bodyID</span><span class="p">,</span><span class="nf">fmCapsuleCreate</span><span class="p">(</span><span class="n">c1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">),</span><span class="w"> </span><span class="n">c2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">),</span><span class="w"> </span><span class="n">r1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.5</span><span class="p">,</span><span class="w"> </span><span class="n">r2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1.0</span><span class="w"> </span><span class="p">))</span>
 
-<span class="n">a</span><span class="o">$</span><span class="n">capsules</span> <span class="c1"># a list with all capsules data</span>
+<span class="n">a</span><span class="o">$</span><span class="n">capsules</span><span class="w"> </span><span class="c1"># a list with all capsules data</span>
 
-<span class="nf">for </span><span class="p">(</span> <span class="n">typedCapsule</span> <span class="n">in</span> <span class="n">a</span><span class="o">$</span><span class="n">capsules</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="nf">print</span><span class="p">(</span><span class="nf">paste</span><span class="p">(</span><span class="n">typedCapsule</span><span class="o">$</span><span class="n">type</span><span class="p">,</span><span class="nf">capture.output</span><span class="p">(</span><span class="n">typedCapsule</span><span class="o">$</span><span class="n">capsule</span><span class="p">)))</span>
+<span class="nf">for </span><span class="p">(</span><span class="w"> </span><span class="n">typedCapsule</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="n">a</span><span class="o">$</span><span class="n">capsules</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nf">print</span><span class="p">(</span><span class="nf">paste</span><span class="p">(</span><span class="n">typedCapsule</span><span class="o">$</span><span class="n">type</span><span class="p">,</span><span class="nf">capture.output</span><span class="p">(</span><span class="n">typedCapsule</span><span class="o">$</span><span class="n">capsule</span><span class="p">)))</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;fort/myrmidon/Experiment.hpp&gt;</span><span class="cp"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fort/myrmidon/Experiment.hpp&gt;</span>
 
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">fort</span><span class="o">::</span><span class="nn">myrmidon</span><span class="p">;</span>
 
-<span class="k">auto</span> <span class="n">e</span> <span class="o">=</span> <span class="n">Experiment</span><span class="o">::</span><span class="n">Create</span><span class="p">(</span><span class="s">&quot;defining_ant_metadata.myrmidon&quot;</span><span class="p">);</span>
-<span class="k">auto</span> <span class="n">a</span> <span class="o">=</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">CreateAnt</span><span class="p">();</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Experiment</span><span class="o">::</span><span class="n">Create</span><span class="p">(</span><span class="s">&quot;defining_ant_metadata.myrmidon&quot;</span><span class="p">);</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="o">-&gt;</span><span class="n">CreateAnt</span><span class="p">();</span>
 
-<span class="n">headID</span> <span class="o">=</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">CreateAntShapeType</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">);</span>
-<span class="n">antennaID</span> <span class="o">=</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">CreateAntShapeType</span><span class="p">(</span><span class="s">&quot;antennas&quot;</span><span class="p">);</span>
-<span class="n">bodyID</span> <span class="o">=</span> <span class="n">e</span><span class="o">-&gt;</span><span class="n">CreateAntShapeType</span><span class="p">(</span><span class="s">&quot;body&quot;</span><span class="p">);</span>
+<span class="n">headID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="o">-&gt;</span><span class="n">CreateAntShapeType</span><span class="p">(</span><span class="s">&quot;head&quot;</span><span class="p">);</span>
+<span class="n">antennaID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="o">-&gt;</span><span class="n">CreateAntShapeType</span><span class="p">(</span><span class="s">&quot;antennas&quot;</span><span class="p">);</span>
+<span class="n">bodyID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="o">-&gt;</span><span class="n">CreateAntShapeType</span><span class="p">(</span><span class="s">&quot;body&quot;</span><span class="p">);</span>
 
 
 <span class="n">a</span><span class="o">-&gt;</span><span class="n">AddCapsule</span><span class="p">(</span><span class="n">headID</span><span class="p">,</span>
-              <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Capsule</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
-                                        <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>
-                                        <span class="mf">0.5</span><span class="p">,</span>
-                                        <span class="mf">1.0</span><span class="p">));</span>
+<span class="w">              </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Capsule</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
+<span class="w">                                        </span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>
+<span class="w">                                        </span><span class="mf">0.5</span><span class="p">,</span>
+<span class="w">                                        </span><span class="mf">1.0</span><span class="p">));</span>
 <span class="n">a</span><span class="o">-&gt;</span><span class="n">AddCapsule</span><span class="p">(</span><span class="n">antennaID</span><span class="p">,</span>
-              <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Capsule</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
-                                        <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>
-                                        <span class="mf">0.5</span><span class="p">,</span>
-                                        <span class="mf">1.0</span><span class="p">));</span>
+<span class="w">              </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Capsule</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
+<span class="w">                                        </span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>
+<span class="w">                                        </span><span class="mf">0.5</span><span class="p">,</span>
+<span class="w">                                        </span><span class="mf">1.0</span><span class="p">));</span>
 <span class="n">a</span><span class="o">-&gt;</span><span class="n">AddCapsule</span><span class="p">(</span><span class="n">antennaID</span><span class="p">,</span>
-              <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Capsule</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
-                                        <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>
-                                        <span class="mf">0.5</span><span class="p">,</span>
-                                        <span class="mf">1.0</span><span class="p">));</span>
+<span class="w">              </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Capsule</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
+<span class="w">                                        </span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>
+<span class="w">                                        </span><span class="mf">0.5</span><span class="p">,</span>
+<span class="w">                                        </span><span class="mf">1.0</span><span class="p">));</span>
 <span class="n">a</span><span class="o">-&gt;</span><span class="n">AddCapsule</span><span class="p">(</span><span class="n">bodyID</span><span class="p">,</span>
-              <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Capsule</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
-                                        <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>
-                                        <span class="mf">0.5</span><span class="p">,</span>
-                                        <span class="mf">1.0</span><span class="p">));</span>
+<span class="w">              </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Capsule</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
+<span class="w">                                        </span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>
+<span class="w">                                        </span><span class="mf">0.5</span><span class="p">,</span>
+<span class="w">                                        </span><span class="mf">1.0</span><span class="p">));</span>
 <span class="n">a</span><span class="o">-&gt;</span><span class="n">AddCapsule</span><span class="p">(</span><span class="n">bodyID</span><span class="p">,</span>
-              <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Capsule</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
-                                        <span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>
-                                        <span class="mf">0.5</span><span class="p">,</span>
-                                        <span class="mf">1.0</span><span class="p">));</span>
+<span class="w">              </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Capsule</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
+<span class="w">                                        </span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>
+<span class="w">                                        </span><span class="mf">0.5</span><span class="p">,</span>
+<span class="w">                                        </span><span class="mf">1.0</span><span class="p">));</span>
 
-<span class="k">for</span> <span class="p">(</span> <span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span> <span class="p">[</span><span class="n">typeID</span><span class="p">,</span><span class="n">capsule</span><span class="p">]</span> <span class="o">:</span> <span class="n">a</span><span class="o">-&gt;</span><span class="n">Capsules</span><span class="p">()</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="n">typeID</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">capsule</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">[</span><span class="n">typeID</span><span class="p">,</span><span class="n">capsule</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">a</span><span class="o">-&gt;</span><span class="n">Capsules</span><span class="p">()</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">typeID</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="o">*</span><span class="n">capsule</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -232,12 +236,12 @@ i.e. if the key <code class="docutils literal notranslate"><span class="pre">&qu
 boolean, integer, float, strings or <cite>Time</cite> <a class="footnote-reference brackets" href="#time" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#python</span>
 <span class="n">e</span><span class="o">.</span><span class="n">SetMetaDataKey</span><span class="p">(</span><span class="s2">&quot;group&quot;</span><span class="p">,</span><span class="s2">&quot;worker&quot;</span><span class="p">)</span>
-<span class="n">e</span><span class="o">.</span><span class="n">SetMetaDataKey</span><span class="p">(</span><span class="s2">&quot;alive&quot;</span><span class="p">,</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">e</span><span class="o">.</span><span class="n">SetMetaDataKey</span><span class="p">(</span><span class="s2">&quot;alive&quot;</span><span class="p">,</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">t</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">Now</span><span class="p">()</span>
 
 <span class="n">a</span><span class="o">.</span><span class="n">GetValue</span><span class="p">(</span><span class="s2">&quot;group&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">)</span> <span class="c1"># is a worker</span>
-<span class="n">a</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="s2">&quot;alive&quot;</span><span class="p">,</span><span class="bp">False</span><span class="p">,</span><span class="n">t</span><span class="p">)</span>
+<span class="n">a</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="s2">&quot;alive&quot;</span><span class="p">,</span><span class="kc">False</span><span class="p">,</span><span class="n">t</span><span class="p">)</span>
 <span class="n">a</span><span class="o">.</span><span class="n">GetValue</span><span class="p">(</span><span class="s2">&quot;alive&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">)</span> <span class="c1"># False</span>
 <span class="n">a</span><span class="o">.</span><span class="n">GetValue</span><span class="p">(</span><span class="s2">&quot;alive&quot;</span><span class="p">,</span><span class="n">t</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">fm</span><span class="o">.</span><span class="n">Duration</span><span class="o">.</span><span class="n">Second</span><span class="p">))</span> <span class="c1"># True, it was alive before t</span>
 </pre></div>
@@ -246,24 +250,24 @@ boolean, integer, float, strings or <cite>Time</cite> <a class="footnote-referen
 <span class="n">e</span><span class="o">$</span><span class="nf">setMetaDataKey</span><span class="p">(</span><span class="s">&quot;group&quot;</span><span class="p">,</span><span class="s">&quot;worker&quot;</span><span class="p">)</span>
 <span class="n">e</span><span class="o">$</span><span class="nf">setMetaDataKey</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="kc">TRUE</span><span class="p">)</span>
 
-<span class="n">t</span> <span class="o">&lt;-</span> <span class="nf">fmTimeNow</span><span class="p">()</span>
+<span class="n">t</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">fmTimeNow</span><span class="p">()</span>
 
-<span class="n">a</span><span class="o">$</span><span class="nf">getValue</span><span class="p">(</span><span class="s">&quot;group&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">)</span> <span class="c1"># is a &quot;worker&quot;</span>
+<span class="n">a</span><span class="o">$</span><span class="nf">getValue</span><span class="p">(</span><span class="s">&quot;group&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="c1"># is a &quot;worker&quot;</span>
 <span class="n">a</span><span class="o">$</span><span class="nf">setValue</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="kc">FALSE</span><span class="p">,</span><span class="n">t</span><span class="p">)</span>
-<span class="n">a</span><span class="o">$</span><span class="nf">getValue</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">)</span> <span class="c1"># FALSE</span>
-<span class="nf">a.GetValue</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="n">t</span><span class="o">$</span><span class="nf">add</span><span class="p">(</span><span class="nf">fmSecond</span><span class="p">(</span><span class="m">-1</span><span class="p">)))</span> <span class="c1"># TRUE, it was alive before t</span>
+<span class="n">a</span><span class="o">$</span><span class="nf">getValue</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="c1"># FALSE</span>
+<span class="nf">a.GetValue</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="n">t</span><span class="o">$</span><span class="nf">add</span><span class="p">(</span><span class="nf">fmSecond</span><span class="p">(</span><span class="m">-1</span><span class="p">)))</span><span class="w"> </span><span class="c1"># TRUE, it was alive before t</span>
 </pre></div>
 </div>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// C++</span>
 <span class="n">e</span><span class="o">-&gt;</span><span class="n">SetMetaDataKey</span><span class="p">(</span><span class="s">&quot;group&quot;</span><span class="p">,</span><span class="s">&quot;worker&quot;</span><span class="p">);</span>
 <span class="n">e</span><span class="o">-&gt;</span><span class="n">SetMetaDataKey</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="nb">true</span><span class="p">);</span>
 
-<span class="n">t</span> <span class="o">=</span> <span class="n">fort</span><span class="o">::</span><span class="n">Time</span><span class="o">::</span><span class="n">Now</span><span class="p">();</span>
+<span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fort</span><span class="o">::</span><span class="n">Time</span><span class="o">::</span><span class="n">Now</span><span class="p">();</span>
 
-<span class="n">a</span><span class="o">-&gt;</span><span class="n">GetValue</span><span class="p">(</span><span class="s">&quot;group&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">);</span> <span class="c1">// is a &quot;worker&quot;</span>
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">GetValue</span><span class="p">(</span><span class="s">&quot;group&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">);</span><span class="w"> </span><span class="c1">// is a &quot;worker&quot;</span>
 <span class="n">a</span><span class="o">-&gt;</span><span class="n">SetValue</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="nb">false</span><span class="p">,</span><span class="n">t</span><span class="p">);</span>
-<span class="n">a</span><span class="o">-&gt;</span><span class="n">GetValue</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">);</span> <span class="c1">// false</span>
-<span class="n">a</span><span class="o">-&gt;</span><span class="n">GetValue</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">fort</span><span class="o">::</span><span class="n">Duration</span><span class="o">::</span><span class="n">Second</span><span class="p">));</span> <span class="c1">// true, it was alive before t</span>
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">GetValue</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">);</span><span class="w"> </span><span class="c1">// false</span>
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">GetValue</span><span class="p">(</span><span class="s">&quot;alive&quot;</span><span class="p">,</span><span class="n">t</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="mi">-1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">fort</span><span class="o">::</span><span class="n">Duration</span><span class="o">::</span><span class="n">Second</span><span class="p">));</span><span class="w"> </span><span class="c1">// true, it was alive before t</span>
 </pre></div>
 </div>
 </section>
@@ -277,8 +281,8 @@ ants should be displayed in <strong>fort-studio</strong>.</p>
 </pre></div>
 </div>
 <div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="c1">#R</span>
-<span class="n">a</span><span class="o">$</span><span class="n">displayColor</span> <span class="o">=</span> <span class="nf">fmDefaultPaletteColor</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
-<span class="n">a</span><span class="o">$</span><span class="n">displayStatus</span> <span class="o">=</span> <span class="n">fmAntDisplayState</span><span class="o">$</span><span class="n">SOLO</span>
+<span class="n">a</span><span class="o">$</span><span class="n">displayColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">fmDefaultPaletteColor</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+<span class="n">a</span><span class="o">$</span><span class="n">displayStatus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fmAntDisplayState</span><span class="o">$</span><span class="n">SOLO</span>
 </pre></div>
 </div>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">//C++</span>
@@ -287,35 +291,35 @@ ants should be displayed in <strong>fort-studio</strong>.</p>
 </pre></div>
 </div>
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="time" role="note">
+<aside class="footnote brackets" id="time" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id7">1</a><span class="fn-bracket">]</span></span>
 <p>Python: <a class="reference internal" href="api/python/time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Time</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmTime</span></code>, C++: <a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort4TimeE" title="fort::Time"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::Time</span></code></a></p>
 </aside>
-<aside class="footnote brackets" id="capsule" role="note">
+<aside class="footnote brackets" id="capsule" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">2</a><span class="fn-bracket">]</span></span>
 <p>Python: <a class="reference internal" href="api/python/shapes.html#py_fort_myrmidon.Capsule" title="py_fort_myrmidon.Capsule"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Capsule</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmCapsule</span></code>, C++: <a class="reference internal" href="api/cpp/shapes.html#_CPPv4N4fort8myrmidon7CapsuleE" title="fort::myrmidon::Capsule"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::Capsule</span></code></a></p>
 </aside>
-<aside class="footnote brackets" id="createantshapetype" role="note">
+<aside class="footnote brackets" id="createantshapetype" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">3</a><span class="fn-bracket">]</span></span>
 <p>Python: <a class="reference internal" href="api/python/experiment.html#py_fort_myrmidon.Experiment.CreateAntShapeType" title="py_fort_myrmidon.Experiment.CreateAntShapeType"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Experiment.CreateAntShapeType()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmExperiment$createAntShapeType()</span></code>, C++: <a class="reference internal" href="api/cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment18CreateAntShapeTypeERKNSt6stringE" title="fort::myrmidon::Experiment::CreateAntShapeType"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Experiment::CreateAntShapeType()</span></code></a></p>
 </aside>
-<aside class="footnote brackets" id="addcapsule" role="note">
+<aside class="footnote brackets" id="addcapsule" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">4</a><span class="fn-bracket">]</span></span>
 <p>Python: <a class="reference internal" href="api/python/ant_identification.html#py_fort_myrmidon.Ant.AddCapsule" title="py_fort_myrmidon.Ant.AddCapsule"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Ant.AddCapsule()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt$addCapsule()</span></code>, C++: <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4N4fort8myrmidon3Ant10AddCapsuleE14AntShapeTypeIDRKNSt10shared_ptrI7CapsuleEE" title="fort::myrmidon::Ant::AddCapsule"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Ant::AddCapsule()</span></code></a></p>
 </aside>
-<aside class="footnote brackets" id="setmetadatakey" role="note">
+<aside class="footnote brackets" id="setmetadatakey" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">5</a><span class="fn-bracket">]</span></span>
 <p>Python: <a class="reference internal" href="api/python/experiment.html#py_fort_myrmidon.Experiment.SetMetaDataKey" title="py_fort_myrmidon.Experiment.SetMetaDataKey"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Experiment.SetMetaDataKey()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmExperiment$setMetaDataKey()</span></code>, C++: <a class="reference internal" href="api/cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment14SetMetaDataKeyERKNSt6stringE5Value" title="fort::myrmidon::Experiment::SetMetaDataKey"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Experiment::SetMetaDataKey()</span></code></a></p>
 </aside>
-<aside class="footnote brackets" id="setvalue" role="note">
+<aside class="footnote brackets" id="setvalue" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">6</a><span class="fn-bracket">]</span></span>
 <p>Python: <a class="reference internal" href="api/python/ant_identification.html#py_fort_myrmidon.Ant.SetValue" title="py_fort_myrmidon.Ant.SetValue"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Ant.SetValue()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt$setValue()</span></code>, C++: <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4N4fort8myrmidon3Ant8SetValueERKNSt6stringERK5ValueRK4Time" title="fort::myrmidon::Ant::SetValue"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Ant::SetValue()</span></code></a></p>
 </aside>
-<aside class="footnote brackets" id="getvalue" role="note">
+<aside class="footnote brackets" id="getvalue" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id6">7</a><span class="fn-bracket">]</span></span>
 <p>Python: <a class="reference internal" href="api/python/ant_identification.html#py_fort_myrmidon.Ant.GetValue" title="py_fort_myrmidon.Ant.GetValue"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Ant.GetValue()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt$getValue()</span></code>, C++: <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant8GetValueERKNSt6stringERK4Time" title="fort::myrmidon::Ant::GetValue"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Ant::GetValue()</span></code></a></p>
 </aside>
-<aside class="footnote brackets" id="visualization" role="note">
+<aside class="footnote brackets" id="visualization" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id8">8</a><span class="fn-bracket">]</span></span>
 <p>Python: <a class="reference internal" href="api/python/ant_identification.html#py_fort_myrmidon.Ant.DisplayStatus" title="py_fort_myrmidon.Ant.DisplayStatus"><code class="xref py py-attr docutils literal notranslate"><span class="pre">py_fort_myrmidon.Ant.DisplayStatus</span></code></a> and <a class="reference internal" href="api/python/ant_identification.html#py_fort_myrmidon.Ant.DisplayColor" title="py_fort_myrmidon.Ant.DisplayColor"><code class="xref py py-attr docutils literal notranslate"><span class="pre">py_fort_myrmidon.Ant.DisplayColor</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt$displayStatus</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt$displayColor</span></code>, C++ <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant13DisplayStatusEv" title="fort::myrmidon::Ant::DisplayStatus"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Ant::DisplayStatus()</span></code></a> and <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant12DisplayColorEv" title="fort::myrmidon::Ant::DisplayColor"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Ant::DisplayColor()</span></code></a></p>
 </aside>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Video Sequence Matching &mdash; fort-myrmidon  documentation</title>
@@ -11,12 +11,12 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/../version_dropdown.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="../../_static/../version_dropdown.js?v=4f7105bd"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -29,14 +29,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> fort-myrmidon
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            fort-myrmidon
           </a>
               <div class="version">
                 placeholder
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -105,9 +109,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Python</a> &raquo;</li>
-      <li>Video Sequence Matching</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Python</a></li>
+      <li class="breadcrumb-item active">Video Sequence Matching</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/api/cpp/video.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -126,42 +130,42 @@
 <span id="_CPPv3N4fort8myrmidon12VideoSegmentE"></span><span id="_CPPv2N4fort8myrmidon12VideoSegmentE"></span><span id="fort::myrmidon::VideoSegment"></span><span class="target" id="structfort_1_1myrmidon_1_1VideoSegment"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">VideoSegment</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon12VideoSegmentE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Represents parts of a video file with its associated tracking data. </p>
 <p><a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment"><span class="std std-ref">VideoSegment</span></a> are queried with <a class="reference internal" href="queries_matchers.html#classfort_1_1myrmidon_1_1Query_1ac758e8193eb6f82f811b838dea78b6e7"><span class="std std-ref">Query::FindVideoSegments()</span></a>. Once queried they are blank, i.e. no query results will appears in their Data field. One would call <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment_1a4b0b753062f448c77bbc76f14da6044d"><span class="std std-ref">Match()</span></a> to associate queries results with a <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment_1a0362f558fa0c2279a5830352fa63dd8d"><span class="std std-ref">VideoSegment::List</span></a>. Finally one would call <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSequence_1a362cf918d09a624f545178e90fe45bd8"><span class="std std-ref">VideoSequence::ForEach</span></a> to iterate over each video frame in the <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment_1a0362f558fa0c2279a5830352fa63dd8d"><span class="std std-ref">VideoSegment::List</span></a>.</p>
-<p><p><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;fort/myrmidon/Experiment.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;fort/myrmidon/Query.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;fort/myrmidon/Video.hpp&gt;</span><span class="cp"></span>
+<p><p><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fort/myrmidon/Experiment.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fort/myrmidon/Query.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fort/myrmidon/Video.hpp&gt;</span>
 
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">fort</span><span class="o">::</span><span class="nn">myrmidon</span><span class="p">;</span>
 
-<span class="k">auto</span> <span class="n">e</span> <span class="o">=</span> <span class="n">Experiment</span><span class="o">::</span><span class="n">Open</span><span class="p">(</span><span class="s">&quot;file.myrmidon&quot;</span><span class="p">);</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Experiment</span><span class="o">::</span><span class="n">Open</span><span class="p">(</span><span class="s">&quot;file.myrmidon&quot;</span><span class="p">);</span>
 
 <span class="c1">// Note: it would be extremly computationally intensive to iterate</span>
 <span class="c1">// over the whole experiment, we therefore select a time region.</span>
-<span class="k">auto</span> <span class="n">start</span> <span class="o">=</span> <span class="n">fort</span><span class="o">::</span><span class="n">Time</span><span class="o">::</span><span class="n">Parse</span><span class="p">(</span><span class="s">&quot;2019-11-02T20:00:00.000Z&quot;</span><span class="p">);</span>
-<span class="k">auto</span> <span class="n">end</span> <span class="o">=</span> <span class="n">start</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="mi">30</span> <span class="o">*</span> <span class="n">fort</span><span class="o">::</span><span class="n">Duration</span><span class="o">::</span><span class="n">Second</span><span class="p">);</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fort</span><span class="o">::</span><span class="n">Time</span><span class="o">::</span><span class="n">Parse</span><span class="p">(</span><span class="s">&quot;2019-11-02T20:00:00.000Z&quot;</span><span class="p">);</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">start</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="mi">30</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">fort</span><span class="o">::</span><span class="n">Duration</span><span class="o">::</span><span class="n">Second</span><span class="p">);</span>
 
 <span class="c1">// step 0: perform some queries on the experiment.</span>
-<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">AntTrajectory</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&gt;</span> <span class="n">trajectories</span><span class="p">;</span>
-<span class="n">Query</span><span class="o">::</span><span class="n">ComputeAntTrajectoriesArgs</span> <span class="n">args</span><span class="p">;</span>
-<span class="n">args</span><span class="p">.</span><span class="n">Start</span> <span class="o">=</span> <span class="n">start</span><span class="p">;</span>
-<span class="n">args</span><span class="p">.</span><span class="n">End</span> <span class="o">=</span> <span class="n">end</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">AntTrajectory</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&gt;</span><span class="w"> </span><span class="n">trajectories</span><span class="p">;</span>
+<span class="n">Query</span><span class="o">::</span><span class="n">ComputeAntTrajectoriesArgs</span><span class="w"> </span><span class="n">args</span><span class="p">;</span>
+<span class="n">args</span><span class="p">.</span><span class="n">Start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">start</span><span class="p">;</span>
+<span class="n">args</span><span class="p">.</span><span class="n">End</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">end</span><span class="p">;</span>
 <span class="n">Query</span><span class="o">::</span><span class="n">ComputeAntTrajectories</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">trajectories</span><span class="p">,</span><span class="n">args</span><span class="p">);</span>
 
 <span class="c1">// step 1: look up a VideoSegment::List</span>
-<span class="n">VideoSegment</span><span class="o">::</span><span class="n">List</span> <span class="n">segments</span><span class="p">;</span>
+<span class="n">VideoSegment</span><span class="o">::</span><span class="n">List</span><span class="w"> </span><span class="n">segments</span><span class="p">;</span>
 <span class="n">Query</span><span class="o">::</span><span class="n">FindVideoSegments</span><span class="p">(</span><span class="n">e</span><span class="p">,</span>
-                         <span class="n">segments</span><span class="p">,</span>
-                         <span class="mi">1</span><span class="p">,</span> <span class="c1">// space we are looking for</span>
-                         <span class="n">start</span><span class="p">,</span>
-                         <span class="n">end</span><span class="p">);</span>
+<span class="w">                         </span><span class="n">segments</span><span class="p">,</span>
+<span class="w">                         </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="c1">// space we are looking for</span>
+<span class="w">                         </span><span class="n">start</span><span class="p">,</span>
+<span class="w">                         </span><span class="n">end</span><span class="p">);</span>
 
 <span class="c1">// step 2: match the query results with the VideoSegment::List</span>
 <span class="n">VideoSegment</span><span class="o">::</span><span class="n">Match</span><span class="p">(</span><span class="n">segments</span><span class="p">,</span><span class="n">trajectories</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="n">trajectories</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
 
 <span class="c1">// step 3: iterate over all video frames</span>
 <span class="n">VideoSequence</span><span class="o">::</span><span class="n">ForEach</span><span class="p">(</span><span class="n">segments</span><span class="p">,</span>
-                       <span class="p">[](</span><span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="o">&amp;</span> <span class="n">frame</span><span class="p">,</span> <span class="k">const</span> <span class="n">VideoFrameData</span> <span class="o">&amp;</span> <span class="n">data</span><span class="p">)</span> <span class="p">{</span>
-                           <span class="c1">// step 3.1: on each `frame`, perform an operation based on `data`</span>
-                       <span class="p">});</span>
+<span class="w">                       </span><span class="p">[](</span><span class="n">cv</span><span class="o">::</span><span class="n">Mat</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">frame</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">VideoFrameData</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                           </span><span class="c1">// step 3.1: on each `frame`, perform an operation based on `data`</span>
+<span class="w">                       </span><span class="p">});</span>
 </pre></div>
 </div>
 </p>
@@ -220,7 +224,7 @@
 <dd><p>Matches a query result with a <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment_1a0362f558fa0c2279a5830352fa63dd8d"><span class="std std-ref">VideoSegment::List</span></a>. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>iterator</strong> – type of the sequence of object to match. These objects should define fort::myrmidon::data_traits. This is the case for any result of <a class="reference internal" href="queries_matchers.html#classfort_1_1myrmidon_1_1Query_1ab240018cec2f60e54d6823c7e522820b"><span class="std std-ref">Query::IdentifyFrames</span></a>, <a class="reference internal" href="queries_matchers.html#classfort_1_1myrmidon_1_1Query_1a92854b207343aaf6d08d6f523e5a80a4"><span class="std std-ref">Query::CollideFrames</span></a>, <a class="reference internal" href="queries_matchers.html#classfort_1_1myrmidon_1_1Query_1a201c637a14d251c8e61eecc017ee9714"><span class="std std-ref">Query::ComputeAntTrajectories</span></a> and <a class="reference internal" href="queries_matchers.html#classfort_1_1myrmidon_1_1Query_1af28adafca47cb0bb9fd662c7a12689ce"><span class="std std-ref">Query::ComputeAntInteractions</span></a> </p>
+<dd class="field-odd"><p><strong>iterator</strong> – type of the sequence of object to match. These objects should define fort::myrmidon::data_traits. This is the case for any result of <a class="reference internal" href="queries_matchers.html#classfort_1_1myrmidon_1_1Query_1ab240018cec2f60e54d6823c7e522820b"><span class="std std-ref">Query::IdentifyFrames</span></a>, <a class="reference internal" href="queries_matchers.html#classfort_1_1myrmidon_1_1Query_1a92854b207343aaf6d08d6f523e5a80a4"><span class="std std-ref">Query::CollideFrames</span></a>, <a class="reference internal" href="queries_matchers.html#classfort_1_1myrmidon_1_1Query_1a201c637a14d251c8e61eecc017ee9714"><span class="std std-ref">Query::ComputeAntTrajectories</span></a> and <a class="reference internal" href="queries_matchers.html#classfort_1_1myrmidon_1_1Query_1af28adafca47cb0bb9fd662c7a12689ce"><span class="std std-ref">Query::ComputeAntInteractions</span></a></p>
 </dd>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
@@ -321,23 +325,23 @@
 <dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon13VideoSequence7ForEachERKN12VideoSegment4ListENSt8functionIFvRN2cv3MatERK14VideoFrameDataEEE">
 <span id="_CPPv3N4fort8myrmidon13VideoSequence7ForEachERKN12VideoSegment4ListENSt8functionIFvRN2cv3MatERK14VideoFrameDataEEE"></span><span id="_CPPv2N4fort8myrmidon13VideoSequence7ForEachERKN12VideoSegment4ListENSt8functionIFvRN2cv3MatERK14VideoFrameDataEEE"></span><span class="target" id="structfort_1_1myrmidon_1_1VideoSequence_1a362cf918d09a624f545178e90fe45bd8"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ForEach</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon12VideoSegmentE" title="fort::myrmidon::VideoSegment"><span class="n"><span class="pre">VideoSegment</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon12VideoSegment4ListE" title="fort::myrmidon::VideoSegment::List"><span class="n"><span class="pre">List</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">list</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">cv</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Mat</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n"><span class="pre">frame</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon14VideoFrameDataE" title="fort::myrmidon::VideoFrameData"><span class="n"><span class="pre">VideoFrameData</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">operation</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon13VideoSequence7ForEachERKN12VideoSegment4ListENSt8functionIFvRN2cv3MatERK14VideoFrameDataEEE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Iterates over all frames of a sequence. </p>
-<p><p><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;fort/myrmidon/Query.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;fort/myrmidon/Video.hpp&gt;</span><span class="cp"></span>
+<p><p><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fort/myrmidon/Query.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fort/myrmidon/Video.hpp&gt;</span>
 
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">fort</span><span class="o">::</span><span class="n">myrmidon</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">fort</span><span class="o">::</span><span class="nn">myrmidon</span><span class="p">;</span>
 
-<span class="n">VideoSegment</span><span class="o">::</span><span class="n">List</span> <span class="n">segments</span><span class="p">;</span>
+<span class="n">VideoSegment</span><span class="o">::</span><span class="n">List</span><span class="w"> </span><span class="n">segments</span><span class="p">;</span>
 <span class="n">Query</span><span class="o">::</span><span class="n">FindVideoSegments</span><span class="p">(</span><span class="n">e</span><span class="p">,</span>
-                         <span class="n">segments</span><span class="p">,</span>
-                         <span class="mi">1</span><span class="p">,</span>
-                         <span class="n">fort</span><span class="o">::</span><span class="n">Time</span><span class="o">::</span><span class="n">SinceEver</span><span class="p">(),</span>
-                         <span class="n">fort</span><span class="o">::</span><span class="n">Time</span><span class="o">::</span><span class="n">Forever</span><span class="p">());</span>
+<span class="w">                         </span><span class="n">segments</span><span class="p">,</span>
+<span class="w">                         </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">                         </span><span class="n">fort</span><span class="o">::</span><span class="n">Time</span><span class="o">::</span><span class="n">SinceEver</span><span class="p">(),</span>
+<span class="w">                         </span><span class="n">fort</span><span class="o">::</span><span class="n">Time</span><span class="o">::</span><span class="n">Forever</span><span class="p">());</span>
 
 <span class="n">VideoSequence</span><span class="o">::</span><span class="n">ForEach</span><span class="p">(</span><span class="n">segments</span><span class="p">,</span>
-                       <span class="p">[](</span><span class="n">cv</span><span class="o">::</span><span class="n">Mat</span> <span class="o">&amp;</span> <span class="n">frame</span><span class="p">,</span>
-                          <span class="k">const</span> <span class="n">VideoFrameData</span> <span class="o">&amp;</span> <span class="n">data</span><span class="p">)</span> <span class="p">{</span>
-                           <span class="c1">// do something on frame based on data</span>
-                       <span class="p">});</span>
+<span class="w">                       </span><span class="p">[](</span><span class="n">cv</span><span class="o">::</span><span class="n">Mat</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">frame</span><span class="p">,</span>
+<span class="w">                          </span><span class="k">const</span><span class="w"> </span><span class="n">VideoFrameData</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                           </span><span class="c1">// do something on frame based on data</span>
+<span class="w">                       </span><span class="p">});</span>
 </pre></div>
 </div>
 </p>

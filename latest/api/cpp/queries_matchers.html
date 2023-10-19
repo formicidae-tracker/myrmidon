@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Queries And Matchers &mdash; fort-myrmidon  documentation</title>
@@ -11,12 +11,12 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/../version_dropdown.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="../../_static/../version_dropdown.js?v=4f7105bd"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -29,14 +29,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> fort-myrmidon
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            fort-myrmidon
           </a>
               <div class="version">
                 placeholder
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -116,9 +120,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Python</a> &raquo;</li>
-      <li>Queries And Matchers</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Python</a></li>
+      <li class="breadcrumb-item active">Queries And Matchers</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/api/cpp/queries_matchers.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -143,7 +147,7 @@
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For very small <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> in number of <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>, most of the query operation are IO bounded, and the multithreading overhead will impact performance by 40-50% in computation time, as threads are waiting for data inpout to come. This is the case for <a class="reference internal" href="#classfort_1_1myrmidon_1_1Query_1ab240018cec2f60e54d6823c7e522820b"><span class="std std-ref">IdentifyFrames()</span></a>, and <a class="reference internal" href="#classfort_1_1myrmidon_1_1Query_1a201c637a14d251c8e61eecc017ee9714"><span class="std std-ref">ComputeAntTrajectories()</span></a>. When collision detection is required, multi-threading can largely help, especially with a large number of individuals. Threading is controlled with <a class="reference internal" href="#structfort_1_1myrmidon_1_1Query_1_1QueryArgs_1a0a49f49f58a6b11ba837322260ed6bd5"><span class="std std-ref">QueryArgs::SingleThreaded</span></a> </p>
+<p>For very small <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> in number of <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>, most of the query operation are IO bounded, and the multithreading overhead will impact performance by 40-50% in computation time, as threads are waiting for data inpout to come. This is the case for <a class="reference internal" href="#classfort_1_1myrmidon_1_1Query_1ab240018cec2f60e54d6823c7e522820b"><span class="std std-ref">IdentifyFrames()</span></a>, and <a class="reference internal" href="#classfort_1_1myrmidon_1_1Query_1a201c637a14d251c8e61eecc017ee9714"><span class="std std-ref">ComputeAntTrajectories()</span></a>. When collision detection is required, multi-threading can largely help, especially with a large number of individuals. Threading is controlled with <a class="reference internal" href="#structfort_1_1myrmidon_1_1Query_1_1QueryArgs_1a0a49f49f58a6b11ba837322260ed6bd5"><span class="std std-ref">QueryArgs::SingleThreaded</span></a></p>
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
@@ -155,12 +159,12 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>experiment</strong> – the <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> to query for </p></li>
-<li><p><strong>antID</strong> – the desired <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> </p></li>
+<li><p><strong>antID</strong> – the desired <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a></p></li>
 <li><p><strong>typeID</strong> – the desired measurement type </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>a <a class="reference internal" href="#structfort_1_1myrmidon_1_1ComputedMeasurement_1adfaa207eed985cd37e8b58edcea8a526"><span class="std std-ref">ComputedMeasurement::List</span></a> of the Measurement for the <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> </p>
+<dd class="field-even"><p>a <a class="reference internal" href="#structfort_1_1myrmidon_1_1ComputedMeasurement_1adfaa207eed985cd37e8b58edcea8a526"><span class="std std-ref">ComputedMeasurement::List</span></a> of the Measurement for the <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -232,7 +236,7 @@ Identifies Ants in frames, data will be reported ordered by time.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>experiment</strong> – the <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> to query for </p></li>
-<li><p><strong>result</strong> – the resulting <a class="reference internal" href="#structfort_1_1myrmidon_1_1IdentifiedFrame"><span class="std std-ref">IdentifiedFrame</span></a> </p></li>
+<li><p><strong>result</strong> – the resulting <a class="reference internal" href="#structfort_1_1myrmidon_1_1IdentifiedFrame"><span class="std std-ref">IdentifiedFrame</span></a></p></li>
 <li><p><strong>args</strong> – the IdentifyFrameArgs to use for this query</p></li>
 </ul>
 </dd>
@@ -270,7 +274,7 @@ Finds <a class="reference internal" href="#structfort_1_1myrmidon_1_1Collision">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>experiment</strong> – the <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> to query for </p></li>
-<li><p><strong>result</strong> – the resulting <a class="reference internal" href="#structfort_1_1myrmidon_1_1IdentifiedFrame"><span class="std std-ref">IdentifiedFrame</span></a> and <a class="reference internal" href="#structfort_1_1myrmidon_1_1CollisionFrame"><span class="std std-ref">CollisionFrame</span></a> </p></li>
+<li><p><strong>result</strong> – the resulting <a class="reference internal" href="#structfort_1_1myrmidon_1_1IdentifiedFrame"><span class="std std-ref">IdentifiedFrame</span></a> and <a class="reference internal" href="#structfort_1_1myrmidon_1_1CollisionFrame"><span class="std std-ref">CollisionFrame</span></a></p></li>
 <li><p><strong>args</strong> – the <a class="reference internal" href="#structfort_1_1myrmidon_1_1Query_1_1QueryArgs"><span class="std std-ref">QueryArgs</span></a> to use for this query</p></li>
 </ul>
 </dd>
@@ -392,7 +396,7 @@ Computes ant interactions, i.e. time intervals where two Ants collides. These wi
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if key is not defined in <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if key is not defined in <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a></p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if value is not of the right type for key </p></li>
 </ul>
 </dd>
@@ -607,12 +611,11 @@ Computes ant interactions, i.e. time intervals where two Ants collides. These wi
 <section id="classfort_1_1myrmidon_1_1Matcher_1autotoc_md17">
 <h3>Combination<a class="headerlink" href="#classfort_1_1myrmidon_1_1Matcher_1autotoc_md17" title="Permalink to this heading"></a></h3>
 <p id="classfort_1_1myrmidon_1_1Matcher_1autotoc_md17">Using <a class="reference internal" href="#classfort_1_1myrmidon_1_1Matcher_1a6046e285c743ccf9069d84b97d282b7c"><span class="std std-ref">And()</span></a> or <a class="reference internal" href="#classfort_1_1myrmidon_1_1Matcher_1a0c865ae27ba6c17a88931747ab21eeeb"><span class="std std-ref">Or()</span></a>, one can combine several <a class="reference internal" href="#classfort_1_1myrmidon_1_1Matcher"><span class="std std-ref">Matcher</span></a> together to build more complex criterion. For example to build a <a class="reference internal" href="#classfort_1_1myrmidon_1_1Matcher"><span class="std std-ref">Matcher</span></a> that matches ID <code class="docutils literal notranslate"><span class="pre">001</span></code> or <code class="docutils literal notranslate"><span class="pre">002</span></code>:</p>
-<p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="p">{</span><span class="n">c</span><span class="o">++</span><span class="p">}</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="p">{</span><span class="n">c</span><span class="o">++</span><span class="p">}</span>
 <span class="n">using</span> <span class="n">namespace</span> <span class="n">fort</span><span class="p">::</span><span class="n">myrmidon</span><span class="p">;</span>
 <span class="n">auto</span> <span class="n">m</span> <span class="o">=</span> <span class="n">Matcher</span><span class="p">::</span><span class="n">Or</span><span class="p">(</span><span class="n">Matcher</span><span class="p">::</span><span class="n">AntID</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">Matcher</span><span class="p">::</span><span class="n">AntID</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span>
 </pre></div>
 </div>
- </p>
 </section>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
