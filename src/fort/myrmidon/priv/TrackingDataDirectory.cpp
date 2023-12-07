@@ -161,44 +161,45 @@ void TrackingDataDirectory::CheckPaths(const fs::path & path,
 	}
 }
 
-
-std::tuple<std::vector<fs::path>,
-           std::map<uint32_t,std::pair<fs::path,fs::path>>>
- TrackingDataDirectory::LookUpFiles(const fs::path & absoluteFilePath) {
-	std::vector<fs::path>  hermesFiles;
-	std::map<uint32_t,std::pair<fs::path,fs::path> >  moviesPaths;
-	auto extractID =
-		[](const fs::path & p) -> uint32_t {
-			std::istringstream iss(p.stem().extension().string());
-			uint32_t res;
-			iss.ignore(std::numeric_limits<std::streamsize>::max(),'.');
-			iss >> res;
-			if (!iss) {
-				throw std::runtime_error("Could not extract id in " +p.string());
-			}
-			return res;
-		};
-	for( auto const & f : fs::directory_iterator(absoluteFilePath) ) {
-		if ( ! MYRMIDON_FILE_IS_REGULAR(f.status()) ) {
+std::tuple<
+    std::vector<fs::path>,
+    std::map<uint32_t, std::pair<fs::path, fs::path>>>
+TrackingDataDirectory::LookUpFiles(const fs::path &absoluteFilePath) {
+	std::vector<fs::path>                             hermesFiles;
+	std::map<uint32_t, std::pair<fs::path, fs::path>> moviesPaths;
+	auto extractID = [](const fs::path &p) -> uint32_t {
+		std::istringstream iss(p.stem().extension().string());
+		uint32_t           res;
+		iss.ignore(std::numeric_limits<std::streamsize>::max(), '.');
+		iss >> res;
+		if (!iss) {
+			throw std::runtime_error("Could not extract id in " + p.string());
+		}
+		return res;
+	};
+	for (auto const &f : fs::directory_iterator(absoluteFilePath)) {
+		if (!MYRMIDON_FILE_IS_REGULAR(f.status())) {
 			continue;
 		}
 		auto p = f.path();
-		if ( p.extension() == ".hermes") {
+		if (p.extension() == ".hermes" &&
+		    p.filename().string().substr(0, 9) == "tracking.") {
 			hermesFiles.push_back(p);
 			continue;
 		}
 
-		if ( p.extension() == ".mp4" && p.stem().stem() == "stream" ) {
+		if (p.extension() == ".mp4" && p.stem().stem() == "stream") {
 			moviesPaths[extractID(p)].first = p;
 		}
 
-		if ( p.extension() == ".txt" && p.stem().stem() == "stream.frame-matching" ) {
+		if (p.extension() == ".txt" &&
+		    p.stem().stem() == "stream.frame-matching") {
 			moviesPaths[extractID(p)].second = p;
 		}
 	}
 
-	std::sort(hermesFiles.begin(),hermesFiles.end());
-	return {hermesFiles,moviesPaths};
+	std::sort(hermesFiles.begin(), hermesFiles.end());
+	return {hermesFiles, moviesPaths};
 }
 
 MovieSegment::List
