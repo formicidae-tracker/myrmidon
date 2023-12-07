@@ -1,15 +1,14 @@
 #pragma once
 
-#include <utility>
 #include <functional>
+#include <utility>
 
 #include <fort/time/Time.hpp>
 
-#include <fort/myrmidon/types/Typedefs.hpp>
 #include <fort/myrmidon/types/Collision.hpp>
+#include <fort/myrmidon/types/Typedefs.hpp>
 
 #include "ForwardDeclaration.hpp"
-
 
 namespace fort {
 namespace myrmidon {
@@ -19,8 +18,11 @@ class Experiment;
 
 class QueryRunner {
 public:
-
-	typedef std::pair<SpaceID,RawFrameConstPtr> RawData;
+	struct RawData {
+		SpaceID          Space;
+		RawFrameConstPtr Frame;
+		uint64_t         ID;
+	};
 
 	struct Args {
 		Time Start;
@@ -30,37 +32,29 @@ public:
 		bool CollisionsIgnoreZones;
 	};
 
-	typedef std::function<void (const CollisionData & data)> Finalizer;
+	using OrderedCollisionData =
+	    std::tuple<uint64_t, IdentifiedFrame::Ptr, CollisionFrame::Ptr>;
 
-	typedef std::function<void (const Experiment &,const Args &,Finalizer)> Runner;
+	using Computer = std::function<OrderedCollisionData(const RawData &)>;
 
-	static void RunMultithread(const Experiment & experiment,
-							   const Args & args,
-							   Finalizer finalizer);
+	using Finalizer = std::function<void(const OrderedCollisionData &data)>;
 
-	static void RunMultithreadFinalizeInCurrent(const Experiment & experiment,
-												const Args & args,
-												Finalizer finalizer);
+	using Runner =
+	    std::function<void(const Experiment &, const Args &, Finalizer)>;
 
+	static void RunMultithread(
+	    const Experiment &experiment, const Args &args, Finalizer finalizer
+	);
 
-	static void RunSingleThread(const Experiment & experiment,
-								const Args & args,
-								Finalizer finalizer);
+	static void RunSingleThread(
+	    const Experiment &experiment, const Args &args, Finalizer finalizer
+	);
 
-
-
-	static Runner RunnerFor(bool multithread,bool finalizerInCurrentThread);
-
-
-
-
+	static Runner RunnerFor(bool multithread);
 
 private:
-
-
-	static std::function<CollisionData(const RawData &)> computeData(const Experiment & experiment,
-																			const Args & args);
-
+	static std::function<OrderedCollisionData(const RawData &)>
+	computeData(const Experiment &experiment, const Args &args);
 };
 
 } // namespace priv

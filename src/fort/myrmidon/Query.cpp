@@ -75,17 +75,6 @@ ExperimentDataInfo Query::GetDataInformations(const Experiment & experiment) {
 	return res;
 }
 
-Query::QueryArgs::QueryArgs()
-	: Start(Time::SinceEver())
-	, End(Time::Forever())
-	, SingleThreaded(false)
-	, AllocationInCurrentThread(false) {
-}
-
-Query::IdentifyFramesArgs::IdentifyFramesArgs()
-	: ComputeZones(false) {
-}
-
 void Query::IdentifyFramesFunctor(const Experiment & experiment,
                                   std::function<void (const IdentifiedFrame::Ptr &)> storeData,
                                   const IdentifyFramesArgs & args) {
@@ -101,10 +90,6 @@ void Query::IdentifyFrames(const Experiment & experiment,
 		                            result.push_back(i);
 	                            },
 	                            args);
-}
-
-Query::CollideFramesArgs::CollideFramesArgs()
-	: CollisionsIgnoreZones(false) {
 }
 
 void Query::CollideFramesFunctor(const Experiment & experiment,
@@ -124,13 +109,6 @@ void Query::CollideFrames(const Experiment & experiment,
 	                           args);
 }
 
-Query::ComputeAntTrajectoriesArgs::ComputeAntTrajectoriesArgs()
-	: MaximumGap(1 * Duration::Second)
-	, ComputeZones(false)
-	, SegmentOnMatcherValueChange(false){
-}
-
-
 void Query::ComputeAntTrajectoriesFunctor(const Experiment & experiment,
                                           std::function<void (const AntTrajectory::Ptr &)> storeTrajectory,
                                           const ComputeAntTrajectoriesArgs & args) {
@@ -148,13 +126,6 @@ void Query::ComputeAntTrajectories(const Experiment & experiment,
 		                                 trajectories.push_back(trajectory);
 	                                 },
 	                                 args);
-}
-
-Query::ComputeAntInteractionsArgs::ComputeAntInteractionsArgs()
-	: MaximumGap(1 * Duration::Second)
-	, ReportFullTrajectories(true)
-	, CollisionsIgnoreZones(false)
-	, SegmentOnMatcherValueChange(false) {
 }
 
 void Query::ComputeAntInteractionsFunctor(const Experiment & experiment,

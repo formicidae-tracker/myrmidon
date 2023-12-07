@@ -1,29 +1,70 @@
+# fort-myrmidon - TRacking Analysis tools for the FORmicidae Tracker.
+#
+# Copyright (C) 2019-2023  Alexandre Tuleu
+#
+# This file is part of fort-myrmidon.
+#
+# fort-myrmidonis free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# fort-myrmidonis distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# fort-myrmidon.  If not, see <http://www.gnu.org/licenses/>.
+
 cmake_policy(SET CMP0048 NEW)
 
 project(fort-studio LANGUAGES C CXX)
 
 cmake_minimum_required(VERSION 3.11)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED 1)
+set(CMAKE_C_STANDARD 11)
+
 if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
-	set(IS_MAIN TRUE)
-else(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
-	set(IS_MAIN FALSE)
+	set(FORT_MYRMIDON_MAIN TRUE)
 endif(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
 
+if(FORT_MYRMIDON_MAIN)
+	option(ENABLE_COVERAGE "Enables coverage generation" Off)
+	option(
+		UNIT_TEST_CHECK_TIMING
+		"Test timing improvements during unit tests. May fails due to kernel scheduling, disable for automation"
+		Off
+	)
+	option(BUILD_DOCS "Builds the documentation" Off)
+endif(FORT_MYRMIDON_MAIN)
 
-option(ENABLE_COVERAGE "Enables coverage generation" Off)
-option(UNIT_TEST_CHECK_TIMING "Test timing improvements during unit tests. May fails due to kernel scheduling, disable for automation" Off)
-option(BUILD_DOCS "Builds the documentation" Off)
 option(BUILD_PYTHON "Build python bindings" Off)
 option(BUILD_R "Build R packages" Off)
 
-if(IS_MAIN)
-	include(GoogleTest)
-	enable_testing()
-	set(MAKE_CHECK_TEST_COMMAND ${CMAKE_CTEST_COMMAND} -V)
-	add_custom_target(check COMMAND ${MAKE_CHECK_TEST_COMMAND})
-endif(IS_MAIN)
+include(FetchContent)
 
+if(FORT_MYRMIDON_MAIN)
+	set(INSTALL_GTEST Off)
+	FetchContent_Declare(
+		googletest
+		GIT_REPOSITORY https://github.com/google/googletest.git
+		GIT_TAG 76bb2afb8b522d24496ad1c757a49784fbfa2e42
+	)
+	# For Windows: Prevent overriding the parent project's compiler/linker
+	# settings
+	set(gtest_force_shared_crt
+		ON
+		CACHE BOOL "" FORCE
+	)
+	FetchContent_MakeAvailable(googletest)
+
+	enable_testing()
+	add_custom_target(check ${CMAKE_CTEST_COMMAND} ARGS -V)
+	include(GoogleTest)
+endif(FORT_MYRMIDON_MAIN)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
@@ -33,48 +74,62 @@ version_from_git()
 find_package(Eigen3 3.3.4 REQUIRED NO_MODULE)
 find_package(Protobuf 3.3.0 REQUIRED)
 find_package(TBB REQUIRED)
-find_package(OpenCV REQUIRED core imgcodecs imgproc highgui videoio)
-find_package(yaml-cpp REQUIRED)
+find_package(
+	OpenCV
+	REQUIRED
+	core
+	imgcodecs
+	imgproc
+	highgui
+	videoio
+)
 if(BUILD_STUDIO)
-	find_package(Qt5 COMPONENTS Widgets Concurrent Test Charts REQUIRED)
+	find_package(
+		Qt5
+		COMPONENTS Widgets Concurrent Test Charts
+		REQUIRED
+	)
 endif(BUILD_STUDIO)
 
-include(FetchFortTags)
-include(FetchFortHermes)
-include(FetchFortTime)
-include(FetchSemver)
-include(FetchGoogleTest)
+set(YAML_BUILD_SHARED_LIBS On)
+FetchContent_Declare(
+	yaml-cpp
+	GIT_REPOSITORY https://github.com/jbeder/yaml-cpp
+	GIT_TAG yaml-cpp-0.7.0
+)
 
-fetch_google_test(VERSION release-1.12.1)
-fetch_fort_tags(VERSION v1.4.1)
-set(OBUILD_PYTHON ${BUILD_PYTHON})
-set(BUILD_PYTHON Off)
-fetch_fort_hermes(VERSION 1692f9915b80665b299b06927f4310d99dabe447)
-set(BUILD_PYTHON ${OBUILD_PYTHON})
-fetch_fort_time(VERSION v1.0.8)
-fetch_semver(VERSION v0.2.2)
+FetchContent_Declare(
+	fort-tags
+	GIT_REPOSITORY https://github.com/formicidae-tracker/fort-tags.git
+	GIT_TAG v1.4.2
+)
 
+FetchContent_Declare(
+	fort-time
+	GIT_REPOSITORY https://github.com/formicidae-tracker/time.git
+	GIT_TAG v1.0.10
+)
 
+FetchContent_Declare(
+	fort-hermes
+	GIT_REPOSITORY https://github.com/formicidae-tracker/hermes.git
+	GIT_TAG v0.5.5
+)
 
-include_directories(${EIGEN3_INCLUDE_DIRS}
-                    ${PROTOBUF_INCLUDE_DIRS}
-                    ${FORT_HERMES_INCLUDE_DIRS}
-                    ${APRILTAG_INCLUDE_DIRS}
-                    ${FORT_TAGS_INCLUDE_DIRS}
-                    ${FORT_TIME_INCLUDE_DIRS}
-                    ${HERMES_INCLUDE_DIRS}
-                    ${SEMVER_INCLUDE_DIRS}
-                    )
+FetchContent_Declare(
+	semver
+	GIT_REPOSITORY https://github.com/Neargye/semver.git
+	GIT_TAG v0.3.0
+)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_C_STANDARD 11)
-
+FetchContent_MakeAvailable(yaml-cpp semver fort-tags fort-time fort-hermes)
 
 include(CheckCXXSourceCompiles)
 
 set(CMAKE_REQUIRED_FLAGS "-lstdc++fs")
 
-check_cxx_source_compiles("#include <filesystem>
+check_cxx_source_compiles(
+	"#include <filesystem>
 
 int main(){
 	std::filesystem::path p;
@@ -94,8 +149,8 @@ else(USE_CXX17_FS_LIBRARY)
 	set(MYRMIDON_USE_BOOST_FILESYSTEM 1)
 endif(USE_CXX17_FS_LIBRARY)
 
-
-check_cxx_source_compiles("#include <variant>
+check_cxx_source_compiles(
+	"#include <variant>
 
 int main() {
 	std::variant<int, double> v, w;
@@ -104,19 +159,19 @@ int main() {
 	return std::get<int>(v);
 }
 "
-	HAS_STD_VARIANT)
-if ( NOT HAS_STD_VARIANT )
-	message(FATAL_ERROR "fort-myrmidon needs std::variant support: ${HAS_STD_VARIANT}")
-endif ( NOT HAS_STD_VARIANT )
+	HAS_STD_VARIANT
+)
+if(NOT HAS_STD_VARIANT)
+	message(
+		FATAL_ERROR
+			"fort-myrmidon needs std::variant support: ${HAS_STD_VARIANT}"
+	)
+endif(NOT HAS_STD_VARIANT)
 
-
-
-if(IS_MAIN AND ENABLE_COVERAGE)
+if(FORT_MYRMIDON_MAIN AND ENABLE_COVERAGE)
 	include(CodeCoverage)
 	enable_coverage()
-endif(IS_MAIN AND ENABLE_COVERAGE)
-
-
+endif(FORT_MYRMIDON_MAIN AND ENABLE_COVERAGE)
 
 if(UNIT_TEST_CHECK_TIMING)
 	add_definitions("-DMYRMIDON_TEST_TIMING")
@@ -124,35 +179,46 @@ endif(UNIT_TEST_CHECK_TIMING)
 
 set(INCLUDE_PATH include)
 set(INCLUDE_INSTALL_DIR ${INCLUDE_PATH}/fort/myrmidon)
-set(LIB_INSTALL_DIR lib )
+set(LIB_INSTALL_DIR lib)
 
 include(CMakePackageConfigHelpers)
-configure_package_config_file(FortMyrmidonConfig.cmake.in
+configure_package_config_file(
+	FortMyrmidonConfig.cmake.in
 	${CMAKE_CURRENT_BINARY_DIR}/FortMyrmidonConfig.cmake
 	INSTALL_DESTINATION ${LIB_INSTALL_DIR}/FortMyrmidon/cmake
-	PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR INCLUDE_PATH)
-write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/FortMyrmidonConfigVersion.cmake
+	PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR INCLUDE_PATH
+)
+write_basic_package_version_file(
+	${CMAKE_CURRENT_BINARY_DIR}/FortMyrmidonConfigVersion.cmake
 	VERSION ${PROJECT_VERSION}
-	COMPATIBILITY SameMajorVersion )
+	COMPATIBILITY SameMajorVersion
+)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/FortMyrmidonConfig.cmake
-              ${CMAKE_CURRENT_BINARY_DIR}/FortMyrmidonConfigVersion.cmake
-        DESTINATION ${LIB_INSTALL_DIR}/FortMyrmidon/cmake )
+			  ${CMAKE_CURRENT_BINARY_DIR}/FortMyrmidonConfigVersion.cmake
+		DESTINATION ${LIB_INSTALL_DIR}/FortMyrmidon/cmake
+)
 
 add_subdirectory(pkgconfig)
 
 add_subdirectory(src)
 
-if(IS_MAIN AND ENABLE_COVERAGE)
-	setup_target_for_coverage(NAME coverage
-	                          DEPENDENCIES check
-	                          LCOV_OPTIONS --exclude "'*UTest.*'"
-	                                       --exclude "main-check.cpp"
-	                                       --include "'${PROJECT_SOURCE_DIR}/src/fort/myrmidon/*'"
-#	                                       --include "'${PROJECT_SOURCE_DIR}/src/fort/studio/*'"
-	                          )
-endif(IS_MAIN AND ENABLE_COVERAGE)
-
+if(FORT_MYRMIDON_MAIN AND ENABLE_COVERAGE)
+	setup_target_for_coverage(
+		NAME
+		coverage
+		DEPENDENCIES
+		check
+		LCOV_OPTIONS
+		--exclude
+		"'*UTest.*'"
+		--exclude
+		"main-check.cpp"
+		--include
+		"'${PROJECT_SOURCE_DIR}/src/fort/myrmidon/*'"
+		# --include "'${PROJECT_SOURCE_DIR}/src/fort/studio/*'"
+	)
+endif(FORT_MYRMIDON_MAIN AND ENABLE_COVERAGE)
 
 add_subdirectory(misc)
 
@@ -163,26 +229,26 @@ if(BUILD_PYTHON OR BUILD_DOCS)
 	set(FORT_MYRMIDON_UTESTDATA_LIBRARIES fort-myrmidon-utestdata)
 
 	add_subdirectory(bindings/python/src)
-	if(IS_MAIN)
-		add_custom_target(py_fort_myrmidon-tests
-		                  COMMAND ${CMAKE_COMMAND} -E env
-		                          PYTHONPATH=${PROJECT_BINARY_DIR}/bindings/python/src
-		                          ${PYTHON_EXECUTABLE} -m unittest discover -s tests -v
-		                  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/bindings/python
-		                  DEPENDS py_fort_myrmidon
-		                  )
+	if(FORT_MYRMIDON_MAIN)
+		add_custom_target(
+			py_fort_myrmidon-tests
+			COMMAND
+				${CMAKE_COMMAND} -E env
+				PYTHONPATH=${PROJECT_BINARY_DIR}/bindings/python/src
+				${PYTHON_EXECUTABLE} -m unittest discover -s tests -v
+			WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/bindings/python
+			DEPENDS py_fort_myrmidon
+		)
 
 		add_dependencies(check py_fort_myrmidon-tests)
 		add_dependencies(py_fort_myrmidon fort-myrmidon)
 		add_dependencies(py_fort_myrmidon_utestdata fort-myrmidon-utestdata)
-	endif(IS_MAIN)
+	endif(FORT_MYRMIDON_MAIN)
 endif(BUILD_PYTHON OR BUILD_DOCS)
 
 if(BUILD_R)
 	add_subdirectory(bindings/R)
 endif(BUILD_R)
-
-
 
 if(BUILD_DOCS)
 	add_subdirectory(docs)

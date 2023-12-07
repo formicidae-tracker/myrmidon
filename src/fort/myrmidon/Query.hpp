@@ -2,19 +2,16 @@
 
 #include <vector>
 
-
 #include <fort/time/Time.hpp>
 
-
+#include <fort/myrmidon/types/AntInteraction.hpp>
+#include <fort/myrmidon/types/AntTrajectory.hpp>
+#include <fort/myrmidon/types/Collision.hpp>
 #include <fort/myrmidon/types/ComputedMeasurement.hpp>
 #include <fort/myrmidon/types/ExperimentDataInfo.hpp>
-#include <fort/myrmidon/types/TagStatistics.hpp>
 #include <fort/myrmidon/types/IdentifiedFrame.hpp>
-#include <fort/myrmidon/types/Collision.hpp>
-#include <fort/myrmidon/types/AntTrajectory.hpp>
-#include <fort/myrmidon/types/AntInteraction.hpp>
+#include <fort/myrmidon/types/TagStatistics.hpp>
 #include <fort/myrmidon/types/Value.hpp>
-
 
 namespace fort {
 namespace myrmidon {
@@ -47,7 +44,6 @@ class VideoSegment;
  */
 class Query {
 public:
-
 	/**
 	 * Computes all measurement for an Ant
 	 * @param experiment the Experiment to query for
@@ -55,35 +51,28 @@ public:
 	 * @param typeID the desired measurement type
 	 * @return a ComputedMeasurement::List of the Measurement for the Ant
 	 */
-	static ComputedMeasurement::List ComputeMeasurementFor(const Experiment & experiment,
-	                                                       AntID antID,
-	                                                       MeasurementTypeID typeID);
+	static ComputedMeasurement::List ComputeMeasurementFor(
+	    const Experiment &experiment, AntID antID, MeasurementTypeID typeID
+	);
 
 	/**
 	 * Gets tracking data statistics about the Experiment
 	 *
 	 * @return an ExperimentDataInfo structure of informations
 	 */
-	static ExperimentDataInfo GetDataInformations(const Experiment & experiment);
-
+	static ExperimentDataInfo GetDataInformations(const Experiment &experiment);
 
 	/**
 	 * Arguments for any Query
 	 */
 	struct QueryArgs {
 		//! First Time to consider (default: Time::SinceEver())
-		Time Start;
+		Time Start          = Time::SinceEver();
 		//! Last  Time to consider (default: Time::Forever())
-		Time End;
+		Time End            = Time::Forever();
 		//! Uses a single thread for computation (default: false)
-		bool SingleThreaded;
-		//! Forces result allocation from the calling thread (default: false)
-		bool AllocationInCurrentThread;
-
-		//! Builds default arguments
-		QueryArgs();
+		bool SingleThreaded = false;
 	};
-
 
 	/**
 	 * Computes TagStatistics for an experiment
@@ -94,9 +83,11 @@ public:
 	 *        data. If false, an exception will be thrown.
 	 * @return the TagStatistics indexed by TagID
 	 */
-	static TagStatistics::ByTagID ComputeTagStatistics(const Experiment & experiment,
-	                                                   const std::function<void(int,int)> & progressCallback = [](int,int){},
-	                                                   bool fixCorruptedData = false);
+	static TagStatistics::ByTagID ComputeTagStatistics(
+	    const Experiment                    &experiment,
+	    const std::function<void(int, int)> &progressCallback = [](int, int) {},
+	    bool                                 fixCorruptedData = false
+	);
 
 	/**
 	 * Arguments for IdentifyFrames
@@ -105,10 +96,7 @@ public:
 	 */
 	struct IdentifyFramesArgs : public QueryArgs {
 		//! enables zone computation without collision detection
-		bool ComputeZones;
-
-		// Builds default arguments
-		IdentifyFramesArgs();
+		bool ComputeZones = true;
 	};
 
 	/**
@@ -126,10 +114,11 @@ public:
 	 * @note This version aimed to be used by language bindings to
 	 * avoid large data copy.
 	 */
-	static void IdentifyFramesFunctor(const Experiment & experiment,
-	                                  std::function<void (const IdentifiedFrame::Ptr &)> storeData,
-	                                  const IdentifyFramesArgs & args = IdentifyFramesArgs());
-
+	static void IdentifyFramesFunctor(
+	    const Experiment	                             &experiment,
+	    std::function<void(const IdentifiedFrame::Ptr &)> storeData,
+	    const IdentifyFramesArgs                         &args
+	);
 
 	/**
 	 * Identifies ants in frames
@@ -142,9 +131,11 @@ public:
 	 * @note Zones for Ant will not be computed unless specified with
 	 * IdentifyFrameArgs::ComputeZones.
 	 */
-	static void IdentifyFrames(const Experiment & experiment,
-	                           std::vector<IdentifiedFrame::Ptr> & result,
-	                           const IdentifyFramesArgs & args = IdentifyFramesArgs() );
+	static void IdentifyFrames(
+	    const Experiment                  &experiment,
+	    std::vector<IdentifiedFrame::Ptr> &result,
+	    const IdentifyFramesArgs          &args
+	);
 
 	/**
 	 * Arguments for CollideFrames
@@ -153,12 +144,8 @@ public:
 	 */
 	struct CollideFramesArgs : public QueryArgs {
 		//! Collision detection happens over different zones (default: false).
-		bool CollisionsIgnoreZones;
-
-		// Builds default arguments
-		CollideFramesArgs();
+		bool CollisionsIgnoreZones = false;
 	};
-
 
 	/**
 	 * Finds Collision in tracking frames - functor version
@@ -172,10 +159,11 @@ public:
 	 * @note This version aimed to be used by language bindings to
 	 * avoid large data copy.
 	 */
-	static void CollideFramesFunctor(const Experiment & experiment,
-	                                 std::function<void (const CollisionData & data)> storeData,
-	                                 const CollideFramesArgs & args = CollideFramesArgs());
-
+	static void CollideFramesFunctor(
+	    const Experiment	                          &experiment,
+	    std::function<void(const CollisionData &data)> storeData,
+	    const CollideFramesArgs                       &args
+	);
 
 	/**
 	 * Finds Collision in tracking frames
@@ -186,10 +174,11 @@ public:
 	 * Finds Collision between ants in frames, data will be reported
 	 * ordered by time. Zones for each Ant will also be computed.
 	 */
-	static void CollideFrames(const Experiment & experiment,
-	                          std::vector<CollisionData> & result,
-	                          const CollideFramesArgs & args = CollideFramesArgs());
-
+	static void CollideFrames(
+	    const Experiment           &experiment,
+	    std::vector<CollisionData> &result,
+	    const CollideFramesArgs    &args
+	);
 
 	/**
 	 * Arguments for ComputeAntTrajectories
@@ -200,20 +189,18 @@ public:
 	struct ComputeAntTrajectoriesArgs : public QueryArgs {
 		//! Maximum Duration before considering the trajectory be two
 		//! different parts (default: 1s)
-		Duration MaximumGap;
+		Duration MaximumGap = Duration::Second;
+
 		//! Matcher to reduce the query to an Ant subset (default: to
 		//! nullptr, i.e. anything).
-		std::shared_ptr<myrmidon::Matcher> Matcher;
+		std::shared_ptr<myrmidon::Matcher> Matcher = nullptr;
+
 		//! Computes the zone of each Ant (default: false)
-		bool ComputeZones;
+		bool ComputeZones = false;
 
 		//! If a combined matcher value changes, create a new object
-		bool SegmentOnMatcherValueChange;
-
-		// Builds default arguments
-		ComputeAntTrajectoriesArgs();
+		bool SegmentOnMatcherValueChange = false;
 	};
-
 
 	/**
 	 * Computes trajectories for ants - functor version
@@ -229,11 +216,11 @@ public:
 	 * @note This version aimed to be used by language bindings to
 	 * avoid large data copy.
 	 */
-	static void ComputeAntTrajectoriesFunctor(const Experiment & experiment,
-	                                          std::function<void (const AntTrajectory::Ptr &)> storeTrajectory,
-	                                          const ComputeAntTrajectoriesArgs & args = ComputeAntTrajectoriesArgs());
-
-
+	static void ComputeAntTrajectoriesFunctor(
+	    const Experiment	                           &experiment,
+	    std::function<void(const AntTrajectory::Ptr &)> storeTrajectory,
+	    const ComputeAntTrajectoriesArgs               &args
+	);
 
 	/**
 	 * Computes trajectories for ants.
@@ -246,9 +233,11 @@ public:
 	 * gap under ComputeAntTrajectoriesArgs::MaximumGap. These will be
 	 * reported ordered by ending time.
 	 */
-	static void ComputeAntTrajectories(const Experiment & experiment,
-	                                   std::vector<AntTrajectory::Ptr> & trajectories,
-	                                   const ComputeAntTrajectoriesArgs & args = ComputeAntTrajectoriesArgs());
+	static void ComputeAntTrajectories(
+	    const Experiment                 &experiment,
+	    std::vector<AntTrajectory::Ptr>  &trajectories,
+	    const ComputeAntTrajectoriesArgs &args
+	);
 
 	/**
 	 * Arguments for ComputeAntInteractions
@@ -256,31 +245,28 @@ public:
 	 * Arguments for ComputeAntInteractions() and
 	 * ComputeAntInteractionsFunctor().
 	 */
-	struct ComputeAntInteractionsArgs : public QueryArgs{
+	struct ComputeAntInteractionsArgs : public QueryArgs {
 		//! Maximum Duration before considering the trajectory be two
 		//! different parts (default: 1s)
-		Duration MaximumGap;
+		Duration MaximumGap = Duration::Second;
+
 		//! Matcher to reduce the query to an Ant subset (default: to
 		//! nullptr, i.e. anything).
-		std::shared_ptr<myrmidon::Matcher> Matcher;
+		std::shared_ptr<myrmidon::Matcher> Matcher = nullptr;
 
 		//! Reports full trajectories. If false only mean trajectory
 		//! during interactions will be reported, otherwise trajectory
 		//! will be computed like ComputeAntTrajectories() and
 		//! AntInteraction wil points to sub-segment (default: true).
-		bool ReportFullTrajectories;
+		bool ReportFullTrajectories = true;
 
 		//! Collisions, and therefore interactions, happens over
 		//! different zones.
-		bool CollisionsIgnoreZones;
+		bool CollisionsIgnoreZones = false;
 
 		//! If a combined matcher value changes, create a new object
-		bool SegmentOnMatcherValueChange;
-
-		//! Builds default arguments
-		ComputeAntInteractionsArgs();
+		bool SegmentOnMatcherValueChange = false;
 	};
-
 
 	/**
 	 * Computes interactions for ants - functor version
@@ -302,12 +288,12 @@ public:
 	 * @note This version aimed to be used by language bindings to
 	 * avoid large data copy.
 	 */
-	static void ComputeAntInteractionsFunctor(const Experiment & experiment,
-	                                          std::function<void ( const AntTrajectory::Ptr&)> storeTrajectory,
-	                                          std::function<void ( const AntInteraction::Ptr&)> storeInteraction,
-	                                          const ComputeAntInteractionsArgs & args = ComputeAntInteractionsArgs());
-
-
+	static void ComputeAntInteractionsFunctor(
+	    const Experiment	                            &experiment,
+	    std::function<void(const AntTrajectory::Ptr &)>  storeTrajectory,
+	    std::function<void(const AntInteraction::Ptr &)> storeInteraction,
+	    const ComputeAntInteractionsArgs                &args
+	);
 
 	/**
 	 * Computes interactions for ants
@@ -326,10 +312,12 @@ public:
 	 * impact on the amount of RAM required to perform the query
 	 * efficiently or at all.
 	 */
-	static void ComputeAntInteractions(const Experiment & experiment,
-	                                   std::vector<AntTrajectory::Ptr> & trajectories,
-	                                   std::vector<AntInteraction::Ptr> & interactions,
-	                                   const ComputeAntInteractionsArgs & args = ComputeAntInteractionsArgs());
+	static void ComputeAntInteractions(
+	    const Experiment                 &experiment,
+	    std::vector<AntTrajectory::Ptr>  &trajectories,
+	    std::vector<AntInteraction::Ptr> &interactions,
+	    const ComputeAntInteractionsArgs &args
+	);
 
 	/**
 	 * Finds the VideoSegment in a Space of the Experiment
@@ -343,11 +331,13 @@ public:
 	 * @param start the first Time to query a video frame for
 	 * @param end the last Time to query a video frame for
 	 */
-	static void  FindVideoSegments(const Experiment & experiment,
-	                               std::vector<VideoSegment> & segments,
-	                               SpaceID space,
-	                               const fort::Time & start,
-	                               const fort::Time & end);
+	static void FindVideoSegments(
+	    const Experiment          &experiment,
+	    std::vector<VideoSegment> &segments,
+	    SpaceID                    space,
+	    const fort::Time          &start,
+	    const fort::Time          &end
+	);
 
 	/**
 	 * Gets the time ranges where metadata key has a given value.
@@ -363,10 +353,9 @@ public:
 	 * @throws std::invalid_argument if value is not of the right type for key
 	 */
 
-	static std::vector<std::tuple<AntID,Time,Time>>
-	GetMetaDataKeyRanges(const Experiment & e,
-	                     const std::string & key,
-	                     const Value & value);
+	static std::vector<std::tuple<AntID, Time, Time>> GetMetaDataKeyRanges(
+	    const Experiment &e, const std::string &key, const Value &value
+	);
 
 	/**
 	 * Gets the tag close-up in the experiment
@@ -379,12 +368,14 @@ public:
 	 *
 	 * @return a tuple of a vector of string, TagID, and an Eigen::Matrix
 	 */
-	static std::tuple<std::vector<std::string>,std::vector<TagID>,Eigen::MatrixXd>
-	GetTagCloseUps(const Experiment & e,
-	               const std::function<void(int,int)> & progressCallback,
-	               bool fixCorruptedData = false);
+	static std::
+	    tuple<std::vector<std::string>, std::vector<TagID>, Eigen::MatrixXd>
+	    GetTagCloseUps(
+	        const Experiment                    &e,
+	        const std::function<void(int, int)> &progressCallback,
+	        bool                                 fixCorruptedData = false
+	    );
 };
-
 
 } // namespace myrmidon
 } // namespace fort
