@@ -10,126 +10,147 @@
 #include <fort/myrmidon/Experiment.hpp>
 #include <fort/myrmidon/Video.hpp>
 
-
-
 namespace py = pybind11;
 
-
-py::list QueryIdentifyFrames(const fort::myrmidon::Experiment & experiment,
-                             fort::Time start,
-                             fort::Time end,
-                             bool singleThreaded,
-                             bool computeZones,
-                             bool reportProgress) {
-	py::list res;
+py::list QueryIdentifyFrames(
+    const fort::myrmidon::Experiment &experiment,
+    fort::Time                        start,
+    fort::Time                        end,
+    bool                              singleThreaded,
+    bool                              computeZones,
+    bool                              reportProgress
+) {
+	py::list                                  res;
 	fort::myrmidon::Query::IdentifyFramesArgs args;
-	args.Start = start;
-	args.End = end;
+	args.Start          = start;
+	args.End            = end;
 	args.SingleThreaded = singleThreaded;
-	args.ComputeZones = computeZones;
-	args.AllocationInCurrentThread = reportProgress;
-	TimeProgress progress(experiment,start,end,"Identifiying frames",reportProgress);
-	fort::myrmidon::Query::IdentifyFramesFunctor(experiment,
-	                                             [&res,&progress](const fort::myrmidon::IdentifiedFrame::Ptr & f) {
-		                                             res.append(f);
-		                                             progress.Update(f->FrameTime);
-	                                             },
-	                                             args);
+	args.ComputeZones   = computeZones;
+	TimeProgress
+	    progress(experiment, start, end, "Identifiying frames", reportProgress);
+	fort::myrmidon::Query::IdentifyFramesFunctor(
+	    experiment,
+	    [&res, &progress](const fort::myrmidon::IdentifiedFrame::Ptr &f) {
+		    res.append(f);
+		    progress.Update(f->FrameTime);
+	    },
+	    args
+	);
 	return res;
 }
 
-py::list QueryCollideFrames(const fort::myrmidon::Experiment & experiment,
-                            fort::Time start,
-                            fort::Time end,
-                            bool collisionsIgnoreZones,
-                            bool singleThreaded,
-                            bool reportProgress) {
-	py::list res;
+py::list QueryCollideFrames(
+    const fort::myrmidon::Experiment &experiment,
+    fort::Time                        start,
+    fort::Time                        end,
+    bool                              collisionsIgnoreZones,
+    bool                              singleThreaded,
+    bool                              reportProgress
+) {
+	py::list                                 res;
 	fort::myrmidon::Query::CollideFramesArgs args;
-	args.Start = start;
-	args.End = end;
-	args.SingleThreaded = singleThreaded;
-	args.AllocationInCurrentThread = reportProgress;
+	args.Start                 = start;
+	args.End                   = end;
+	args.SingleThreaded        = singleThreaded;
 	args.CollisionsIgnoreZones = collisionsIgnoreZones;
-	TimeProgress progress(experiment,start,end,"Colliding frames",reportProgress);
-	fort::myrmidon::Query::CollideFramesFunctor(experiment,
-	                                            [&](const fort::myrmidon::CollisionData & d) {
-		                                             res.append(d);
-		                                             progress.Update(std::get<0>(d)->FrameTime);
-	                                             },
-	                                             args);
+	TimeProgress
+	    progress(experiment, start, end, "Colliding frames", reportProgress);
+	fort::myrmidon::Query::CollideFramesFunctor(
+	    experiment,
+	    [&](const fort::myrmidon::CollisionData &d) {
+		    res.append(d);
+		    progress.Update(std::get<0>(d)->FrameTime);
+	    },
+	    args
+	);
 	return res;
 }
 
+py::list QueryComputeAntTrajectories(
+    const fort::myrmidon::Experiment   &experiment,
+    fort::Time                          start,
+    fort::Time                          end,
+    fort::Duration                      maximumGap,
+    const fort::myrmidon::Matcher::Ptr &matcher,
+    bool                                computeZones,
+    bool                                segmentOnMatcherValueChange,
+    bool                                singleThreaded,
+    bool                                reportProgress
+) {
 
-py::list QueryComputeAntTrajectories(const fort::myrmidon::Experiment & experiment,
-                                     fort::Time start,
-                                     fort::Time end,
-                                     fort::Duration maximumGap,
-                                     const fort::myrmidon::Matcher::Ptr & matcher,
-                                     bool computeZones,
-                                     bool segmentOnMatcherValueChange,
-                                     bool singleThreaded,
-                                     bool reportProgress) {
-
-	py::list res;
+	py::list                                          res;
 	fort::myrmidon::Query::ComputeAntTrajectoriesArgs args;
-	args.Start = start;
-	args.End = end;
-	args.MaximumGap = maximumGap;
-	args.Matcher = matcher;
-	args.ComputeZones = computeZones;
-	args.SingleThreaded = singleThreaded;
-	args.AllocationInCurrentThread = reportProgress;
+	args.Start                       = start;
+	args.End                         = end;
+	args.MaximumGap                  = maximumGap;
+	args.Matcher                     = matcher;
+	args.ComputeZones                = computeZones;
+	args.SingleThreaded              = singleThreaded;
 	args.SegmentOnMatcherValueChange = segmentOnMatcherValueChange;
-	TimeProgress progress(experiment,start,end,"Computing ant trajectories",reportProgress);
-	fort::myrmidon::Query::ComputeAntTrajectoriesFunctor(experiment,
-	                                                     [&](const fort::myrmidon::AntTrajectory::Ptr & t) {
-		                                                     res.append(t);
-		                                                     progress.Update(t->End());
-	                                                     },
-	                                                     args);
+	TimeProgress progress(
+	    experiment,
+	    start,
+	    end,
+	    "Computing ant trajectories",
+	    reportProgress
+	);
+	fort::myrmidon::Query::ComputeAntTrajectoriesFunctor(
+	    experiment,
+	    [&](const fort::myrmidon::AntTrajectory::Ptr &t) {
+		    res.append(t);
+		    progress.Update(t->End());
+	    },
+	    args
+	);
 	return res;
 }
 
-py::tuple QueryComputeAntInteractions(const fort::myrmidon::Experiment & experiment,
-                                      fort::Time start,
-                                      fort::Time end,
-                                      fort::Duration maximumGap,
-                                      const fort::myrmidon::Matcher::Ptr & matcher,
-                                      bool collisionsIgnoreZones,
-                                      bool reportFullTrajectories,
-                                      bool segmentOnMatcherValueChange,
-                                      bool singleThreaded,
-                                      bool reportProgress) {
+py::tuple QueryComputeAntInteractions(
+    const fort::myrmidon::Experiment   &experiment,
+    fort::Time                          start,
+    fort::Time                          end,
+    fort::Duration                      maximumGap,
+    const fort::myrmidon::Matcher::Ptr &matcher,
+    bool                                collisionsIgnoreZones,
+    bool                                reportFullTrajectories,
+    bool                                segmentOnMatcherValueChange,
+    bool                                singleThreaded,
+    bool                                reportProgress
+) {
 
 	py::list trajectories;
 	py::list interactions;
 
 	fort::myrmidon::Query::ComputeAntInteractionsArgs args;
-	args.Start = start;
-	args.End = end;
-	args.MaximumGap = maximumGap;
-	args.Matcher = matcher;
-	args.ReportFullTrajectories = reportFullTrajectories;
-	args.SingleThreaded = singleThreaded;
-	args.AllocationInCurrentThread = reportProgress;
-	args.CollisionsIgnoreZones = collisionsIgnoreZones;
+	args.Start                       = start;
+	args.End                         = end;
+	args.MaximumGap                  = maximumGap;
+	args.Matcher                     = matcher;
+	args.ReportFullTrajectories      = reportFullTrajectories;
+	args.SingleThreaded              = singleThreaded;
+	args.CollisionsIgnoreZones       = collisionsIgnoreZones;
 	args.SegmentOnMatcherValueChange = segmentOnMatcherValueChange;
-	TimeProgress progress(experiment,start,end,"Computing ant interactions",reportProgress);
-	fort::myrmidon::Query::ComputeAntInteractionsFunctor(experiment,
-	                                                     [&](const fort::myrmidon::AntTrajectory::Ptr & t) {
-		                                                     trajectories.append(t);
-		                                                     progress.Update(t->End());
-	                                                     },
-	                                                     [&](const fort::myrmidon::AntInteraction::Ptr & i) {
-		                                                     interactions.append(i);
-		                                                     progress.Update(i->End);
-	                                                     },
-	                                                     args);
-	return py::make_tuple(trajectories,interactions);
+	TimeProgress progress(
+	    experiment,
+	    start,
+	    end,
+	    "Computing ant interactions",
+	    reportProgress
+	);
+	fort::myrmidon::Query::ComputeAntInteractionsFunctor(
+	    experiment,
+	    [&](const fort::myrmidon::AntTrajectory::Ptr &t) {
+		    trajectories.append(t);
+		    progress.Update(t->End());
+	    },
+	    [&](const fort::myrmidon::AntInteraction::Ptr &i) {
+		    interactions.append(i);
+		    progress.Update(i->End);
+	    },
+	    args
+	);
+	return py::make_tuple(trajectories, interactions);
 }
-
 
 std::shared_ptr<fort::myrmidon::VideoSegment::List>
 FindVideoSegments(const fort::myrmidon::Experiment & e,

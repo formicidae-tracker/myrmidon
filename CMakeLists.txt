@@ -237,7 +237,7 @@ if(BUILD_PYTHON OR BUILD_DOCS)
 				PYTHONPATH=${PROJECT_BINARY_DIR}/bindings/python/src
 				${PYTHON_EXECUTABLE} -m unittest discover -s tests -v
 			WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/bindings/python
-			DEPENDS py_fort_myrmidon
+			DEPENDS py_fort_myrmidon py_fort_myrmidon_utestdata
 		)
 
 		add_dependencies(check py_fort_myrmidon-tests)

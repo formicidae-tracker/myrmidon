@@ -1,50 +1,56 @@
-import py_fort_myrmidon as m
-import unittest
-import py_fort_myrmidon_utestdata as ud
-import assertions
 import os
-import sys
 import re
+import sys
+import unittest
+
+import py_fort_myrmidon as m
+import py_fort_myrmidon_utestdata as ud
+
+import assertions
 
 
 class ExperimentTestCase(unittest.TestCase, assertions.CustomAssertion):
-
     def setUp(self):
         self.experiment = m.Experiment(
-            str(ud.UData().Basedir / 'public-experiment.myrmidon'))
+            str(ud.UData().Basedir / "public-experiment.myrmidon")
+        )
 
     def tearDown(self):
         self.experiment = None
 
     def test_opening_dataless(self):
         self.experiment = m.Experiment.Open(
-            str(ud.UData().CurrentVersionFile.AbsoluteFilePath))
+            str(ud.UData().CurrentVersionFile.AbsoluteFilePath)
+        )
         self.assertTrue(self.experiment != None)
         dataInformation = m.Query.GetDataInformations(self.experiment)
         self.assertEqual(len(dataInformation.Spaces), 2)
         self.assertEqual(
             len(dataInformation.Spaces[1].TrackingDataDirectories),
-            len(ud.UData().NestDataDirs))
+            len(ud.UData().NestDataDirs),
+        )
         for idx, info in enumerate(ud.UData().NestDataDirs):
             self.assertEqual(
                 dataInformation.Spaces[1].TrackingDataDirectories[idx].URI,
-                info.AbsoluteFilePath.name)
+                info.AbsoluteFilePath.name,
+            )
         self.assertEqual(
             len(dataInformation.Spaces[2].TrackingDataDirectories),
-            len(ud.UData().ForagingDataDirs))
+            len(ud.UData().ForagingDataDirs),
+        )
         for idx, info in enumerate(ud.UData().ForagingDataDirs):
             self.assertEqual(
                 dataInformation.Spaces[2].TrackingDataDirectories[idx].URI,
-                info.AbsoluteFilePath.name)
+                info.AbsoluteFilePath.name,
+            )
 
         dataless = m.Experiment.OpenDataLess(
-            str(ud.UData().CurrentVersionFile.AbsoluteFilePath))
+            str(ud.UData().CurrentVersionFile.AbsoluteFilePath)
+        )
         dataInformation = m.Query.GetDataInformations(dataless)
         self.assertEqual(len(dataInformation.Spaces), 2)
-        self.assertEqual(
-            len(dataInformation.Spaces[1].TrackingDataDirectories), 0)
-        self.assertEqual(
-            len(dataInformation.Spaces[2].TrackingDataDirectories), 0)
+        self.assertEqual(len(dataInformation.Spaces[1].TrackingDataDirectories), 0)
+        self.assertEqual(len(dataInformation.Spaces[2].TrackingDataDirectories), 0)
 
         self.assertEqual(len(self.experiment.Ants), 3)
         self.assertEqual(len(dataless.Ants), 3)
@@ -58,33 +64,34 @@ class ExperimentTestCase(unittest.TestCase, assertions.CustomAssertion):
                 shapeType, capsule = ant.Capsules[i]
                 self.assertEqual(shapeType, eShapeType)
                 self.assertCapsuleEqual(capsule, eCapsule)
-            self.assertEqual(len(ant.Identifications),
-                             len(expected.Identifications))
+            self.assertEqual(len(ant.Identifications), len(expected.Identifications))
             for i, eIdentification in enumerate(expected.Identifications):
                 identification = ant.Identifications[i]
-                self.assertEqual(identification.TagValue,
-                                 eIdentification.TagValue)
-                self.assertTimeEqual(identification.Start,
-                                     eIdentification.Start)
+                self.assertEqual(identification.TagValue, eIdentification.TagValue)
+                self.assertTimeEqual(identification.Start, eIdentification.Start)
                 self.assertTimeEqual(identification.End, eIdentification.End)
 
-        self.assertEqual(self.experiment.AbsoluteFilePath,
-                         str(ud.UData().CurrentVersionFile.AbsoluteFilePath))
-        self.assertEqual(dataless.AbsoluteFilePath,
-                         str(ud.UData().CurrentVersionFile.AbsoluteFilePath))
+        self.assertEqual(
+            self.experiment.AbsoluteFilePath,
+            str(ud.UData().CurrentVersionFile.AbsoluteFilePath),
+        )
+        self.assertEqual(
+            dataless.AbsoluteFilePath,
+            str(ud.UData().CurrentVersionFile.AbsoluteFilePath),
+        )
 
         with self.assertRaises(RuntimeError):
-            e = m.Experiment.Open(
-                str(ud.UData().Basedir / "does-not-exists.myrmidon"))
+            e = m.Experiment.Open(str(ud.UData().Basedir / "does-not-exists.myrmidon"))
 
         with self.assertRaises(RuntimeError):
             e = m.Experiment.OpenDataLess(
-                str(ud.UData().Basedir / "does-not-exists.myrmidon"))
+                str(ud.UData().Basedir / "does-not-exists.myrmidon")
+            )
 
     def test_file_manipulation(self):
         dirs = [
             ud.UData().Basedir / "test-manipulation",
-            ud.UData().Basedir / "test-manipulation-new"
+            ud.UData().Basedir / "test-manipulation-new",
         ]
         for d in dirs:
             try:
@@ -117,8 +124,9 @@ class ExperimentTestCase(unittest.TestCase, assertions.CustomAssertion):
         self.assertTrue(spaces[1].ID in self.experiment.Spaces)
 
         tddInfo = ud.UData().ForagingDataDirs[0]
-        self.experiment.AddTrackingDataDirectory(spaces[1].ID,
-                                                 str(tddInfo.AbsoluteFilePath))
+        self.experiment.AddTrackingDataDirectory(
+            spaces[1].ID, str(tddInfo.AbsoluteFilePath)
+        )
         with self.assertRaises(RuntimeError):
             self.experiment.DeleteSpace(spaces[1].ID)
 
@@ -132,20 +140,15 @@ class ExperimentTestCase(unittest.TestCase, assertions.CustomAssertion):
         with self.assertRaises(IndexError):
             self.experiment.AddTrackingDataDirectory(42, str(foragingTDDPath))
         with self.assertRaises(RuntimeError):
-            self.experiment.AddTrackingDataDirectory(foragingID,
-                                                     str(badTDDPath))
-        URI = self.experiment.AddTrackingDataDirectory(foragingID,
-                                                       str(foragingTDDPath))
+            self.experiment.AddTrackingDataDirectory(foragingID, str(badTDDPath))
+        URI = self.experiment.AddTrackingDataDirectory(foragingID, str(foragingTDDPath))
         self.assertEqual(URI, foragingTDDPath.name)
         with self.assertRaises(ValueError):
-            self.experiment.AddTrackingDataDirectory(foragingID,
-                                                     str(nestTDDPath))
+            self.experiment.AddTrackingDataDirectory(foragingID, str(nestTDDPath))
 
         with self.assertRaises(ValueError):
-            self.experiment.AddTrackingDataDirectory(nestID,
-                                                     str(foragingTDDPath))
-        URI = self.experiment.AddTrackingDataDirectory(nestID,
-                                                       str(nestTDDPath))
+            self.experiment.AddTrackingDataDirectory(nestID, str(foragingTDDPath))
+        URI = self.experiment.AddTrackingDataDirectory(nestID, str(nestTDDPath))
         self.assertEqual(URI, nestTDDPath.name)
 
         with self.assertRaises(ValueError):
@@ -161,8 +164,7 @@ class ExperimentTestCase(unittest.TestCase, assertions.CustomAssertion):
         with self.assertRaises(IndexError):
             self.experiment.DeleteAnt(42)
 
-        self.experiment.AddIdentification(a.ID, 0, m.Time.SinceEver(),
-                                          m.Time.Forever())
+        self.experiment.AddIdentification(a.ID, 0, m.Time.SinceEver(), m.Time.Forever())
 
         with self.assertRaises(RuntimeError):
             self.experiment.DeleteAnt(a.ID)
@@ -173,28 +175,30 @@ class ExperimentTestCase(unittest.TestCase, assertions.CustomAssertion):
     def test_identification_manipulation(self):
         ants = [self.experiment.CreateAnt(), self.experiment.CreateAnt()]
         with self.assertRaises(IndexError):
-            self.experiment.AddIdentification(42, 0, m.Time.SinceEver(),
-                                              m.Time.Forever())
-        self.experiment.AddIdentification(ants[0].ID, 0, m.Time.SinceEver(),
-                                          m.Time.Forever())
+            self.experiment.AddIdentification(
+                42, 0, m.Time.SinceEver(), m.Time.Forever()
+            )
+        self.experiment.AddIdentification(
+            ants[0].ID, 0, m.Time.SinceEver(), m.Time.Forever()
+        )
 
         with self.assertRaises(m.OverlappingIdentification):
-            self.experiment.AddIdentification(ants[0].ID, 1,
-                                              m.Time.SinceEver(),
-                                              m.Time.Forever())
+            self.experiment.AddIdentification(
+                ants[0].ID, 1, m.Time.SinceEver(), m.Time.Forever()
+            )
 
         with self.assertRaises(m.OverlappingIdentification):
-            self.experiment.AddIdentification(ants[1].ID, 0,
-                                              m.Time.SinceEver(),
-                                              m.Time.Forever())
+            self.experiment.AddIdentification(
+                ants[1].ID, 0, m.Time.SinceEver(), m.Time.Forever()
+            )
 
-        self.experiment.AddIdentification(ants[1].ID, 1, m.Time.SinceEver(),
-                                          m.Time.Forever())
+        self.experiment.AddIdentification(
+            ants[1].ID, 1, m.Time.SinceEver(), m.Time.Forever()
+        )
 
         e2 = m.Experiment("foo.myrmidon")
         a2 = e2.CreateAnt()
-        i2 = e2.AddIdentification(a2.ID, 0, m.Time.SinceEver(),
-                                  m.Time.Forever())
+        i2 = e2.AddIdentification(a2.ID, 0, m.Time.SinceEver(), m.Time.Forever())
 
         with self.assertRaises(ValueError):
             self.experiment.DeleteIdentification(i2)
@@ -202,11 +206,12 @@ class ExperimentTestCase(unittest.TestCase, assertions.CustomAssertion):
         ants[0].Identifications[0].End = m.Time()
         with self.assertRaises(RuntimeError):
             self.experiment.FreeIdentificationRangeAt(
-                ants[0].Identifications[0].TagValue,
-                m.Time().Add(-1))
+                ants[0].Identifications[0].TagValue, m.Time().Add(-1)
+            )
 
         low, high = self.experiment.FreeIdentificationRangeAt(
-            ants[0].Identifications[0].TagValue, m.Time())
+            ants[0].Identifications[0].TagValue, m.Time()
+        )
         self.assertTimeEqual(low, m.Time())
         self.assertTimeEqual(high, m.Time.Forever())
 
@@ -215,19 +220,22 @@ class ExperimentTestCase(unittest.TestCase, assertions.CustomAssertion):
         self.assertTimeEqual(high, m.Time.Forever())
 
         identifications = self.experiment.IdentificationsAt(
-            time=m.Time().Add(-1), removeUnidentifiedAnt=True)
+            time=m.Time().Add(-1), removeUnidentifiedAnt=True
+        )
         self.assertEqual(len(identifications), 2)
         self.assertEqual(identifications[ants[0].ID], 0)
         self.assertEqual(identifications[ants[1].ID], 1)
         identifications = self.experiment.IdentificationsAt(
-            time=m.Time(), removeUnidentifiedAnt=True)
+            time=m.Time(), removeUnidentifiedAnt=True
+        )
         self.assertEqual(len(identifications), 1)
         self.assertEqual(identifications[ants[1].ID], 1)
         self.assertFalse(ants[0].ID in identifications)
         identifications = self.experiment.IdentificationsAt(
-            time=m.Time(), removeUnidentifiedAnt=False)
+            time=m.Time(), removeUnidentifiedAnt=False
+        )
         self.assertEqual(len(identifications), 2)
-        self.assertEqual(identifications[ants[0].ID], 2**32 - 1)
+        self.assertEqual(identifications[ants[0].ID], 2 ** 32 - 1)
         self.assertEqual(identifications[ants[1].ID], 1)
 
     def test_fields_manipulation(self):
@@ -246,8 +254,7 @@ class ExperimentTestCase(unittest.TestCase, assertions.CustomAssertion):
         self.assertEqual(self.experiment.Family, m.TagFamily.Undefined)
         spaceID = self.experiment.CreateSpace("foraging").ID
         tddInfo = ud.UData().ForagingDataDirs[0]
-        self.experiment.AddTrackingDataDirectory(spaceID,
-                                                 str(tddInfo.AbsoluteFilePath))
+        self.experiment.AddTrackingDataDirectory(spaceID, str(tddInfo.AbsoluteFilePath))
         self.assertEqual(self.experiment.Family, tddInfo.Family)
 
         self.assertEqual(self.experiment.DefaultTagSize, 1.0)
@@ -257,8 +264,7 @@ class ExperimentTestCase(unittest.TestCase, assertions.CustomAssertion):
     def test_measurement_type_manipulation(self):
         mtID = self.experiment.CreateMeasurementType("antennas")
         self.assertEqual(len(self.experiment.MeasurementTypeNames), 2)
-        self.assertEqual(self.experiment.MeasurementTypeNames[mtID],
-                         "antennas")
+        self.assertEqual(self.experiment.MeasurementTypeNames[mtID], "antennas")
         self.assertEqual(self.experiment.MeasurementTypeNames[1], "head-tail")
         with self.assertRaises(IndexError):
             self.experiment.SetMeasurementTypeName(42, "foo")
@@ -345,33 +351,31 @@ class ExperimentTestCase(unittest.TestCase, assertions.CustomAssertion):
         s = self.experiment.CreateSpace("main")
         corruptedPath = str(ud.UData().CorruptedDataDir.AbsoluteFilePath)
         with self.assertRaises(m.FixableError) as e:
-            self.experiment.AddTrackingDataDirectory(spaceID=s.ID,
-                                                     filepath=corruptedPath)
+            self.experiment.AddTrackingDataDirectory(
+                spaceID=s.ID, filepath=corruptedPath
+            )
 
-        URI = self.experiment.AddTrackingDataDirectory(spaceID=s.ID,
-                                                       filepath=corruptedPath,
-                                                       fixCorruptedData=True)
+        URI = self.experiment.AddTrackingDataDirectory(
+            spaceID=s.ID, filepath=corruptedPath, fixCorruptedData=True
+        )
         self.experiment.RemoveTrackingDataDirectory(URI)
-        self.experiment.AddTrackingDataDirectory(spaceID=s.ID,
-                                                 filepath=corruptedPath)
+        self.experiment.AddTrackingDataDirectory(spaceID=s.ID, filepath=corruptedPath)
         self.maxDiff = None
         match = re.search(
-            "could not read last frame from '(.*hermes)': Unexpected",
-            str(e.exception))
+            "could not read last frame from '(.*hermes)': unexpected", str(e.exception)
+        )
         filename = match.group(1)
-        os.replace(filename + '.bak', filename)
+        os.replace(filename + ".bak", filename)
 
         with self.assertRaises(m.FixableError):
             self.experiment.EnsureAllDataIsLoaded(fixCorruptedData=False)
 
         self.experiment.RemoveTrackingDataDirectory(URI)
         # no need to fix here, the cache has the fix.
-        self.experiment.AddTrackingDataDirectory(spaceID=s.ID,
-                                                 filepath=corruptedPath)
+        self.experiment.AddTrackingDataDirectory(spaceID=s.ID, filepath=corruptedPath)
         self.experiment.EnsureAllDataIsLoaded(fixCorruptedData=True)
 
         self.experiment.RemoveTrackingDataDirectory(URI)
-        self.experiment.AddTrackingDataDirectory(spaceID=s.ID,
-                                                 filepath=corruptedPath)
+        self.experiment.AddTrackingDataDirectory(spaceID=s.ID, filepath=corruptedPath)
         # here was fixed with previous load
         self.experiment.EnsureAllDataIsLoaded(fixCorruptedData=False)
