@@ -6,14 +6,13 @@
 #include <fort/time/Time.hpp>
 
 class Defer {
-public :
+public:
 #ifndef NDEBUG
 	static std::mutex PerfLock;
-#endif //NDEBUG
+#endif // NDEBUG
 
-	Defer(const std::function<void()> & toDefer)
-		: d_toDefer(toDefer) {
-	}
+	Defer(const std::function<void()> &toDefer)
+	    : d_toDefer(toDefer) {}
 
 	~Defer() {
 		d_toDefer();
@@ -21,7 +20,6 @@ public :
 private:
 	std::function<void ()> d_toDefer;
 };
-
 
 #ifndef NDEBUG
 #define PERF_FUNCTION() \

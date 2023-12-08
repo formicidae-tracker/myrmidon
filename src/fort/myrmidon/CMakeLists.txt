@@ -71,6 +71,7 @@ set(HDR_PRIVATE_FILES
 	priv/proto/IOUtils.hpp
 	priv/proto/TagStatisticsCache.hpp
 	priv/proto/TagCloseUpCache.hpp
+	priv/PNGUtils.hpp
 	utils/Checker.hpp
 	utils/Defer.hpp
 	priv/AntPoseEstimate.hpp
@@ -150,6 +151,7 @@ set(SRC_PRIVATE_FILES
 	priv/FrameReference.cpp
 	priv/TagCloseUp.cpp
 	priv/AntMetadata.cpp
+	priv/PNGUtils.cpp
 	priv/proto/FileReadWriter.cpp
 	priv/proto/ExperimentReadWriter.cpp
 	priv/proto/TDDCache.cpp
@@ -281,8 +283,6 @@ set(UTESTDATA_HDR_FILES
 	utest-data/FrameDrawer.cpp
 )
 
-include_directories(${OpenCV_INCLUDE_DIRS})
-
 add_library(
 	fort-myrmidon SHARED ${SRC_FILES} ${SRC_PRIVATE_FILES} ${HDR_PRIVATE_FILES}
 						 ${HDR_PUBLIC_FILES} ${PROTO_HDR} ${PROTO_SRC}
@@ -295,12 +295,13 @@ target_link_libraries(
 	fort-tags::libfort-tags
 	fort-time::libfort-time
 	fort-hermes::libfort-hermes
+	fort-charis::libfort-utils
 	TBB::tbb
 	Threads::Threads
 	yaml-cpp::yaml-cpp
 	Eigen3::Eigen
 	semver::semver
-	${OpenCV_LIBS}
+	spng
 )
 
 set_target_properties(
@@ -323,12 +324,13 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/myrmidon-config.h
 )
 
 if(FORT_MYRMIDON_MAIN)
+	include_directories(${OpenCV_INCLUDE_DIRS})
 	add_library(
 		fort-myrmidon-utestdata SHARED ${UTESTDATA_SRC_FILES}
 									   ${UTESTDATA_HDR_FILES}
 	)
 
-	target_link_libraries(fort-myrmidon-utestdata fort-myrmidon)
+	target_link_libraries(fort-myrmidon-utestdata fort-myrmidon ${OpenCV_LIBS})
 
 	install(TARGETS fort-myrmidon-utestdata DESTINATION lib)
 	install(FILES utest-data/UTestData.hpp utest-data/Config.hpp
@@ -371,4 +373,4 @@ set(MYRMIDON_PRIVATE_DOC_FILES
 )
 
 add_executable(benchmarks benchmark/main.cpp)
-target_link_libraries(benchmarks fort-myrmidon)
+target_link_libraries(benchmarks fort-myrmidon ${OpenCV_LIBS})

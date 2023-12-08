@@ -18,6 +18,7 @@
 # fort-myrmidon.  If not, see <http://www.gnu.org/licenses/>.
 
 cmake_policy(SET CMP0048 NEW)
+cmake_policy(SET CMP0077 NEW)
 
 project(fort-studio LANGUAGES C CXX)
 
@@ -64,6 +65,8 @@ if(FORT_MYRMIDON_MAIN)
 	enable_testing()
 	add_custom_target(check ${CMAKE_CTEST_COMMAND} ARGS -V)
 	include(GoogleTest)
+
+	find_package(OpenCV REQUIRED highgui imgproc imgcodecs videoio)
 endif(FORT_MYRMIDON_MAIN)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
@@ -74,15 +77,6 @@ version_from_git()
 find_package(Eigen3 3.3.4 REQUIRED NO_MODULE)
 find_package(Protobuf 3.3.0 REQUIRED)
 find_package(TBB REQUIRED)
-find_package(
-	OpenCV
-	REQUIRED
-	core
-	imgcodecs
-	imgproc
-	highgui
-	videoio
-)
 if(BUILD_STUDIO)
 	find_package(
 		Qt5
@@ -91,7 +85,10 @@ if(BUILD_STUDIO)
 	)
 endif(BUILD_STUDIO)
 
-set(YAML_BUILD_SHARED_LIBS On)
+set(YAML_BUILD_SHARED_LIBS
+	On
+	CACHE BOOL "Compile shared libraries"
+)
 FetchContent_Declare(
 	yaml-cpp
 	GIT_REPOSITORY https://github.com/jbeder/yaml-cpp
@@ -122,7 +119,28 @@ FetchContent_Declare(
 	GIT_TAG v0.3.0
 )
 
-FetchContent_MakeAvailable(yaml-cpp semver fort-tags fort-time fort-hermes)
+FetchContent_Declare(
+	spng
+	GIT_REPOSITORY https://github.com/randy408/libspng.git
+	GIT_TAG v0.7.4
+)
+
+set(FORT_CHARIS_BUILD_GL Off)
+FetchContent_Declare(
+	fort-charis
+	GIT_REPOSITORY https://github.com/formicidae-tracker/charis.git
+	GIT_TAG e74827dbd6cdd59e6693eec0b1e4377452425fce
+)
+
+FetchContent_MakeAvailable(
+	yaml-cpp
+	semver
+	fort-tags
+	fort-time
+	fort-hermes
+	spng
+	fort-charis
+)
 
 include(CheckCXXSourceCompiles)
 
