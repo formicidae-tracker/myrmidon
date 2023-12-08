@@ -1,27 +1,23 @@
 #pragma once
 
-#include <vector>
 #include <functional>
+#include <vector>
 
 #include <fort/time/Time.hpp>
 
-#include <fort/myrmidon/types/Typedefs.hpp>
-#include <fort/myrmidon/types/Traits.hpp>
-#include <fort/myrmidon/types/IdentifiedFrame.hpp>
-#include <fort/myrmidon/types/Collision.hpp>
-#include <fort/myrmidon/types/AntTrajectory.hpp>
 #include <fort/myrmidon/types/AntInteraction.hpp>
+#include <fort/myrmidon/types/AntTrajectory.hpp>
+#include <fort/myrmidon/types/Collision.hpp>
+#include <fort/myrmidon/types/IdentifiedFrame.hpp>
 #include <fort/myrmidon/types/MaybeDeref.hpp>
-
-namespace cv {
-class Mat;
-}
+#include <fort/myrmidon/types/Traits.hpp>
+#include <fort/myrmidon/types/Typedefs.hpp>
 
 namespace fort {
 namespace myrmidon {
 
 /**
- * Represents the tracking data and query results associated to a
+ * Represents the tracking data and query results associated with a
  * video frame.
  *
  * @note After a call to Query::FindVideoSegments() all pointer values
@@ -62,6 +58,26 @@ struct VideoFrameData {
 	std::vector<AntInteraction::Ptr> Interactions;
 
 	/**
+	 * The pointer to the frame pixel data.
+	 */
+	uint8_t *Pixels;
+
+	/**
+	 * The pixels Width
+	 */
+	int Width;
+
+	/**
+	 * The pixels Stride
+	 */
+	int Stride;
+
+	/**
+	 * The pixels Height
+	 */
+	int Height;
+
+	/**
 	 * Indicates the (unlikely) case where no tracking data is
 	 * associated with this video frame.
 	 *
@@ -72,8 +88,7 @@ struct VideoFrameData {
 		return Time.IsInfinite();
 	}
 
-	template <typename T>
-	void Append(const T & value);
+	template <typename T> void Append(const T &value);
 };
 
 /**
@@ -128,7 +143,8 @@ struct VideoFrameData {
  *     // step 3: iterate over all video frames
  *     VideoSequence::ForEach(segments,
  *                            [](cv::Mat & frame, const VideoFrameData & data) {
- *                                // step 3.1: on each `frame`, perform an operation based on `data`
+ *                                // step 3.1: on each `frame`, perform an
+ * operation based on `data`
  *                            });
  *
  * \endverbatim
@@ -148,7 +164,8 @@ struct VideoSegment {
 	 */
 	std::string                 AbsoluteFilePath;
 	/**
-	 * Matched queries result and acquisition time for the frames in the segment.
+	 * Matched queries result and acquisition time for the frames in the
+	 * segment.
 	 */
 	std::vector<VideoFrameData> Data;
 	/**
@@ -174,28 +191,17 @@ struct VideoSegment {
 	 * not from the same Space.
 	 */
 	template <typename IterType>
-	static void Match(List & list,
-	                  IterType begin,
-	                  IterType end);
+	static void Match(List &list, IterType begin, IterType end);
 
 private:
 	template <typename IterType>
-	static void MatchSortedFiltered(List & list,
-	                                IterType begin,
-	                                IterType end);
+	static void MatchSortedFiltered(List &list, IterType begin, IterType end);
 
 	template <typename IterType>
-	IterType Match(IterType begin,
-	               IterType end,
-	               timed_data);
+	IterType Match(IterType begin, IterType end, timed_data);
 
 	template <typename IterType>
-	IterType Match(IterType begin,
-	               IterType end,
-	               time_ranged_data);
-
-
-
+	IterType Match(IterType begin, IterType end, time_ranged_data);
 };
 
 /**
@@ -225,56 +231,51 @@ struct VideoSequence {
 	 *                              fort::Time::Forever());
 	 *
 	 *     VideoSequence::ForEach(segments,
-	 *                            [](cv::Mat & frame,
-	 *                               const VideoFrameData & data) {
+	 *                            [](const VideoFrameData & data) {
 	 *                                // do something on frame based on data
 	 *                            });
 	 * \endverbatim
 	 */
-	static void ForEach(const VideoSegment::List & list,
-	                    std::function<void (cv::Mat & frame,
-	                                        const VideoFrameData & data)> operation);
+	static void ForEach(
+	    const VideoSegment::List                       &list,
+	    std::function<void(const VideoFrameData &data)> operation
+	);
 };
 
-template <>
-inline void
-VideoFrameData::Append(const IdentifiedFrame::Ptr & f) {
+template <> inline void VideoFrameData::Append(const IdentifiedFrame::Ptr &f) {
 	Identified = f;
 }
-template <>
-inline void
-VideoFrameData::Append(const CollisionData & data) {
+
+template <> inline void VideoFrameData::Append(const CollisionData &data) {
 	Identified = std::get<0>(data);
-	Collided = std::get<1>(data);
+	Collided   = std::get<1>(data);
 }
 
-template <>
-inline void
-VideoFrameData::Append(const AntTrajectory::Ptr & t) {
+template <> inline void VideoFrameData::Append(const AntTrajectory::Ptr &t) {
 	Trajectories.push_back(t);
 }
 
-template <>
-inline void
-VideoFrameData::Append(const AntInteraction::Ptr & i) {
+template <> inline void VideoFrameData::Append(const AntInteraction::Ptr &i) {
 	Interactions.push_back(i);
 }
 
 template <typename IterType>
-inline void
-VideoSegment::Match(List & list,
-                    IterType begin,
-                    IterType end) {
+inline void VideoSegment::Match(List &list, IterType begin, IterType end) {
 
-	if ( list.empty() ) {
+	if (list.empty()) {
 		return;
 	}
-	if ( std::find_if(list.begin()+1,
-	                  list.end(),
-	                  [&list](const VideoSegment & s) {
-		                  return s.Space != list.front().Space;
-	                  }) != list.end() ) {
-		throw std::invalid_argument("This implementation only supports matching of segment from the same space");
+	if (std::find_if(
+	        list.begin() + 1,
+	        list.end(),
+	        [&list](const VideoSegment &s) {
+		        return s.Space != list.front().Space;
+	        }
+	    ) != list.end()) {
+		throw std::invalid_argument(
+		    "This implementation only supports matching of segment from the "
+		    "same space"
+		);
 	}
 
 	SpaceID space = list.front().Space;
@@ -282,47 +283,44 @@ VideoSegment::Match(List & list,
 	typedef typename std::iterator_traits<IterType>::value_type   Type;
 	typedef data_traits<typename pointed_type_if_any<Type>::type> TypeTraits;
 
-	auto compare =
-		[](const Type & a, const Type & b) -> bool {
-			return TypeTraits::compare(MaybeDeref(a),MaybeDeref(b));
-		};
+	auto compare = [](const Type &a, const Type &b) -> bool {
+		return TypeTraits::compare(MaybeDeref(a), MaybeDeref(b));
+	};
 
 	typedef typename TypeTraits::data_category data_category;
-	if constexpr ( TypeTraits::spaced_data == false ) {
-			std::sort(begin,end,
-			          compare);
-			MatchSortedFiltered(list,begin,end);
-			return;
+	if constexpr (TypeTraits::spaced_data == false) {
+		std::sort(begin, end, compare);
+		MatchSortedFiltered(list, begin, end);
+		return;
 	} else {
 		std::vector<Type> filtered;
-		filtered.reserve(std::distance(begin,end));
+		filtered.reserve(std::distance(begin, end));
 
-		std::copy_if(begin,end,
-		             std::back_inserter(filtered),
-		             [space](const Type & v) -> bool {
-			             return TypeTraits::space(MaybeDeref(v)) == space;
-		             });
+		std::copy_if(
+		    begin,
+		    end,
+		    std::back_inserter(filtered),
+		    [space](const Type &v) -> bool {
+			    return TypeTraits::space(MaybeDeref(v)) == space;
+		    }
+		);
 
-		std::sort(filtered.begin(),
-		          filtered.end(),
-		          compare);
+		std::sort(filtered.begin(), filtered.end(), compare);
 
-		MatchSortedFiltered(list,filtered.begin(),filtered.end());
+		MatchSortedFiltered(list, filtered.begin(), filtered.end());
 	}
 }
 
 template <typename IterType>
 inline void
-VideoSegment::MatchSortedFiltered(List & list,
-                                  IterType begin,
-                                  IterType end) {
+VideoSegment::MatchSortedFiltered(List &list, IterType begin, IterType end) {
 	typedef typename std::iterator_traits<IterType>::value_type   Type;
 	typedef data_traits<typename pointed_type_if_any<Type>::type> TypeTraits;
-	typedef typename TypeTraits::data_category data_category;
+	typedef typename TypeTraits::data_category                    data_category;
 
-	for ( auto & s : list ) {
-		begin = s.Match(begin,end,data_category());
-		if ( begin == end ) {
+	for (auto &s : list) {
+		begin = s.Match(begin, end, data_category());
+		if (begin == end) {
 			return;
 		}
 	}
@@ -330,24 +328,22 @@ VideoSegment::MatchSortedFiltered(List & list,
 
 template <typename IterType>
 inline IterType
-VideoSegment::Match(IterType begin,
-                    IterType end,
-                    timed_data /*placeholder*/) {
+VideoSegment::Match(IterType begin, IterType end, timed_data /*placeholder*/) {
 
-	typedef typename std::iterator_traits<IterType>::value_type Type;
-	typedef data_traits<typename pointed_type_if_any<Type>::type>    TypeTraits;
+	typedef typename std::iterator_traits<IterType>::value_type   Type;
+	typedef data_traits<typename pointed_type_if_any<Type>::type> TypeTraits;
 
-	for ( auto & d : Data ) {
-		while( TypeTraits::time(MaybeDeref(*begin)) < d.Time ) {
+	for (auto &d : Data) {
+		while (TypeTraits::time(MaybeDeref(*begin)) < d.Time) {
 			++begin;
-			if ( begin == end ) {
+			if (begin == end) {
 				return end;
 			}
 		}
-		while ( TypeTraits::time(MaybeDeref(*begin)) == d.Time ) {
+		while (TypeTraits::time(MaybeDeref(*begin)) == d.Time) {
 			d.Append(*begin);
 			++begin;
-			if ( begin == end ) {
+			if (begin == end) {
 				return end;
 			}
 		}
@@ -355,34 +351,31 @@ VideoSegment::Match(IterType begin,
 	return begin;
 }
 
-
 template <typename IterType>
-inline IterType
-VideoSegment::Match(IterType begin,
-                    IterType end,
-                    time_ranged_data /*placeholder*/) {
-	typedef typename std::iterator_traits<IterType>::value_type Type;
-	typedef data_traits<typename pointed_type_if_any<Type>::type>    TypeTraits;
+inline IterType VideoSegment::
+    Match(IterType begin, IterType end, time_ranged_data /*placeholder*/) {
+	typedef typename std::iterator_traits<IterType>::value_type   Type;
+	typedef data_traits<typename pointed_type_if_any<Type>::type> TypeTraits;
 
-	//TODO use segment tree to reduce to O(n log(n) ) complexity from O(n2) here
-	for ( auto & d : Data ) {
-		while( TypeTraits::end(MaybeDeref(*begin)) < d.Time ) {
+	// TODO use segment tree to reduce to O(n log(n) ) complexity from O(n2)
+	// here
+	for (auto &d : Data) {
+		while (TypeTraits::end(MaybeDeref(*begin)) < d.Time) {
 			++begin;
-			if ( begin == end ) {
+			if (begin == end) {
 				return end;
 			}
 		}
-		for ( IterType iter = begin; iter != end; ++iter ) {
-			const auto & start = TypeTraits::start(MaybeDeref(*iter));
-			const auto & end = TypeTraits::end(MaybeDeref(*iter));
-			if ( start <= d.Time && d.Time <= end ) {
+		for (IterType iter = begin; iter != end; ++iter) {
+			const auto &start = TypeTraits::start(MaybeDeref(*iter));
+			const auto &end   = TypeTraits::end(MaybeDeref(*iter));
+			if (start <= d.Time && d.Time <= end) {
 				d.Append(*iter);
 			}
 		}
 	}
 	return begin;
 }
-
 
 } // namespace myrmidon
 } // namespace fort
