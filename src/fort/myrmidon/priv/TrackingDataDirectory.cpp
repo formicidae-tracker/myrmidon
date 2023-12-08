@@ -10,11 +10,13 @@
 #include <fort/hermes/Error.hpp>
 #include <fort/hermes/FileContext.hpp>
 
+#include <fort/utils/Defer.hpp>
+
+#include <fort/myrmidon/priv/PNGUtils.hpp>
 #include <fort/myrmidon/priv/proto/TDDCache.hpp>
 #include <fort/myrmidon/priv/proto/TagCloseUpCache.hpp>
 #include <fort/myrmidon/priv/proto/TagStatisticsCache.hpp>
 #include <fort/myrmidon/utils/Checker.hpp>
-#include <fort/myrmidon/utils/Defer.hpp>
 #include <fort/myrmidon/utils/NotYetImplemented.hpp>
 #include <fort/myrmidon/utils/ObjectPool.hpp>
 
@@ -968,29 +970,27 @@ private:
 
 			std::vector<TagCloseUp::ConstPtr> res;
 
-			// imgCv =
-			//     cv::imread(fileAndFilter.first.string(),
-			//     cv::IMREAD_GRAYSCALE);
+			zarray_t *detections = nullptr;
+			try {
+				auto img   = priv::ReadPNG(fileAndFilter.first);
+				detections = apriltag_detector_detect(d_detector, img.get());
+			} catch (const std::exception &e) {
+				std::ostringstream oss;
+				oss << "could not read image " << fileAndFilter.first << ": "
+				    << e.what();
 
-			// if (imgCv.empty()) {
-			// 	return {
-			// 	    res,
-			// 	    std::make_unique<NoKnownAcquisitionTimeFor>(
-			// 	        fileAndFilter.first.string() + " is an empty image",
-			// 	        fileAndFilter.first
-			// 	    )};
-			// }
+				return {
+				    res,
+				    std::make_unique<NoKnownAcquisitionTimeFor>(
+				        oss.str(),
+				        fileAndFilter.first
+				    ),
+				};
+			}
 
-			// image_u8_t img = {
-			//     .width  = imgCv.cols,
-			//     .height = imgCv.rows,
-			//     .stride = imgCv.cols,
-			//     .buf    = imgCv.data};
-			zarray_t *detections =
-			    apriltag_detector_detect(d_detector, nullptr);
-			Defer               destroyDetections([detections]() {
-                apriltag_detections_destroy(detections);
-            });
+			defer {
+				apriltag_detections_destroy(detections);
+			};
 			apriltag_detection *d;
 			for (size_t i = 0; i < zarray_size(detections); ++i) {
 				zarray_get(detections, i, &d);
@@ -1152,7 +1152,7 @@ TrackingDataDirectory::PrepareFullFramesLoaders() {
 			                std::to_string(ms.second->ToTrackingFrameID(0)) +
 			                ".png";
 			auto imgPath = AbsoluteFilePath() / "ants/computed" / filename;
-			// cv::imwrite(imgPath.c_str(), scaled);
+			// TODO: WritePNG()
 			reducer->Reduce();
 			return nullptr;
 		});
