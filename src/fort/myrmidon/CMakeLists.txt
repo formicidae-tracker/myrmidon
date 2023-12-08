@@ -72,6 +72,7 @@ set(HDR_PRIVATE_FILES
 	priv/proto/TagStatisticsCache.hpp
 	priv/proto/TagCloseUpCache.hpp
 	priv/PNGUtils.hpp
+	priv/VideoReader.hpp
 	utils/Checker.hpp
 	utils/Defer.hpp
 	priv/AntPoseEstimate.hpp
@@ -152,6 +153,7 @@ set(SRC_PRIVATE_FILES
 	priv/TagCloseUp.cpp
 	priv/AntMetadata.cpp
 	priv/PNGUtils.cpp
+	priv/VideoReader.cpp
 	priv/proto/FileReadWriter.cpp
 	priv/proto/ExperimentReadWriter.cpp
 	priv/proto/TDDCache.cpp
