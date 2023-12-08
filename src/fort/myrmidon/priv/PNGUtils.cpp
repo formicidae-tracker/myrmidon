@@ -50,7 +50,7 @@ ImageU8Ptr ReadPNG(const std::filesystem::path &path) {
 	if (file == nullptr) {
 		std::ostringstream oss;
 		oss << "open(" << path << ", \"rb\")";
-		throw std::system_error{oss.str(), errno, std::generic_category()};
+		throw std::system_error{errno, std::generic_category(), oss.str()};
 	}
 	auto ctx = spng_ctx_new(0); // create a decoder context
 	defer {
@@ -116,7 +116,7 @@ void WritePNG(const std::filesystem::path &path, const image_u8_t &image) {
 	if (file == nullptr) {
 		std::ostringstream oss;
 		oss << "fopen(" << path << ", \"wb\") error";
-		throw std::system_error{oss.str(), errno, std::generic_category()};
+		throw std::system_error{errno, std::generic_category(), oss.str()};
 	}
 	auto ctx = spng_ctx_new(SPNG_CTX_ENCODER);
 	defer {
@@ -125,6 +125,39 @@ void WritePNG(const std::filesystem::path &path, const image_u8_t &image) {
 	};
 
 	SPNGCall(spng_set_png_file, ctx, file);
+
+	struct spng_ihdr ihdr {
+		.width = uint32_t(image.width), .height = uint32_t(image.height),
+		.bit_depth = 8, .color_type = SPNG_COLOR_TYPE_GRAYSCALE,
+		.filter_method    = SPNG_FILTER_NONE,
+		.interlace_method = SPNG_INTERLACE_NONE,
+	};
+
+	SPNGCall(spng_set_ihdr, ctx, &ihdr);
+
+	SPNGCall(
+	    spng_encode_image,
+	    ctx,
+	    nullptr,
+	    0,
+	    SPNG_FMT_PNG,
+	    SPNG_ENCODE_FINALIZE | SPNG_ENCODE_PROGRESSIVE
+	);
+
+	try {
+		struct spng_row_info rowInfo;
+		while (true) {
+			SPNGCall(spng_get_row_info, ctx, &rowInfo);
+
+			void *addr = image.buf + image.stride * rowInfo.row_num;
+
+			SPNGCall(spng_encode_row, ctx, addr, image.width);
+		}
+	} catch (const SPNGError &e) {
+		if (e.Code() != SPNG_EIO) {
+			throw;
+		}
+	}
 }
 
 } // namespace priv
