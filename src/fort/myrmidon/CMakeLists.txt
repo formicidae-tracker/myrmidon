@@ -246,6 +246,7 @@ set(SRC_UTEST_FILES
 	priv/MatchersUTest.cpp
 	priv/LocatableTypesUTest.cpp
 	priv/UtilsUTest.cpp
+	priv/PNGUtilsUTest.cpp
 	AntUTest.cpp
 	ExperimentUTest.cpp
 	IdentificationUTest.cpp
