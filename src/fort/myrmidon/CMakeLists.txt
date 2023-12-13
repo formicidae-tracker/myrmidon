@@ -306,6 +306,7 @@ target_link_libraries(
 	Eigen3::Eigen
 	semver::semver
 	spng
+	PkgConfig::ffmpeg
 )
 
 set_target_properties(
