@@ -247,6 +247,7 @@ set(SRC_UTEST_FILES
 	priv/LocatableTypesUTest.cpp
 	priv/UtilsUTest.cpp
 	priv/PNGUtilsUTest.cpp
+	priv/VideoReaderUTest.cpp
 	AntUTest.cpp
 	ExperimentUTest.cpp
 	IdentificationUTest.cpp

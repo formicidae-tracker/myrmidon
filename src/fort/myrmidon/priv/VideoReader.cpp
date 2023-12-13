@@ -10,6 +10,8 @@ struct VideoReader::Implementation {};
 VideoReader::VideoReader(const std::filesystem::path &path)
     : d_implementation{std::make_unique<Implementation>()} {}
 
+VideoReader::~VideoReader() {}
+
 std::tuple<int, int> VideoReader::Size() const noexcept {
 	return {0, 0};
 }

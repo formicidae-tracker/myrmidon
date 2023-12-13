@@ -17,6 +17,8 @@ class VideoReader {
 public:
 	VideoReader(const std::filesystem::path &path);
 
+	~VideoReader();
+
 	std::tuple<int, int> Size() const noexcept;
 
 	fort::Duration Duration() const noexcept;
