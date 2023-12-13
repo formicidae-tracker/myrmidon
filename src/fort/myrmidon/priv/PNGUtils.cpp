@@ -78,7 +78,7 @@ ImageU8Ptr ReadPNG(const std::filesystem::path &path) {
 		throw cpptrace::runtime_error(oss.str());
 	}
 
-	ImageU8Ptr res{image_u8_create(ihdr.width, ihdr.height), deleteImageU8};
+	ImageU8Ptr res{image_u8_create(ihdr.width, ihdr.height), &image_u8_destroy};
 
 	SPNGCall(
 	    spng_decode_image,
@@ -98,12 +98,12 @@ ImageU8Ptr ReadPNG(const std::filesystem::path &path) {
 
 			// note that image_u8 is not necessarly packed, use stride instead
 			// of width.
-			void *rowAddr = res->buf + res->stride * rowInfo.row_num;
+			uint8_t *rowAddr = res->buf + res->stride * rowInfo.row_num;
 
 			SPNGCall(spng_decode_row, ctx, rowAddr, res->stride);
 		}
 	} catch (const SPNGError &e) {
-		if (e.Code() != SPNG_EIO) {
+		if (e.Code() != SPNG_EOI) {
 			throw;
 		}
 	}
@@ -149,12 +149,12 @@ void WritePNG(const std::filesystem::path &path, const image_u8_t &image) {
 		while (true) {
 			SPNGCall(spng_get_row_info, ctx, &rowInfo);
 
-			void *addr = image.buf + image.stride * rowInfo.row_num;
+			uint8_t *addr = image.buf + image.stride * rowInfo.row_num;
 
 			SPNGCall(spng_encode_row, ctx, addr, image.width);
 		}
 	} catch (const SPNGError &e) {
-		if (e.Code() != SPNG_EIO) {
+		if (e.Code() != SPNG_EOI) {
 			throw;
 		}
 	}

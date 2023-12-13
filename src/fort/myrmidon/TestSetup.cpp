@@ -1,12 +1,9 @@
 #include "TestSetup.hpp"
 
-
-
 #include <fort/myrmidon/utest-data/UTestData.hpp>
 
-
-
-void TestSetup::OnTestProgramStart(const ::testing::UnitTest& /* unit_test */)  {
+void TestSetup::OnTestProgramStart(const ::testing::UnitTest
+                                       & /* unit_test */) {
 	std::ostringstream oss;
 	oss << "myrmidon-test-" << getpid();
 	auto tmppath = fort::myrmidon::UTestData::TempDirName();
