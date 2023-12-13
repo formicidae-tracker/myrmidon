@@ -60,12 +60,13 @@ public:
 		bool               HasMovie;
 		bool               HasConfig;
 		bool               IsCorrupted;
-		Time               Start,End;
-		uint64_t           StartFrame,EndFrame;
+		Time               Start, End;
+		uint64_t           StartFrame, EndFrame;
 
-		std::multimap<uint64_t,std::pair<fs::path,std::shared_ptr<TagID>>> TagCloseUpFiles;
-		std::vector<std::shared_ptr<const priv::TagCloseUp>>               TagCloseUps;
-		std::vector<SegmentInfo>                                           Segments;
+		std::multimap<uint64_t, std::pair<fs::path, std::shared_ptr<TagID>>>
+		                                                     TagCloseUpFiles;
+		std::vector<std::shared_ptr<const priv::TagCloseUp>> TagCloseUps;
+		std::vector<SegmentInfo>                             Segments;
 	};
 
 	struct ExperimentInfo {
@@ -117,7 +118,10 @@ public:
 
 	const std::vector<std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr>> & ExpectedFrames() const;
 
-	const std::vector<ExpectedResult> & ExpectedResults() const;
+	const std::vector<ExpectedResult> &ExpectedResults() const;
+
+	const fort::myrmidon::Config &Config() const;
+
 private:
 	typedef std::vector<std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr>> FrameList;
 
@@ -164,7 +168,7 @@ private:
 
 
 	fs::path d_basedir;
-	Config   d_config;
+	fort::myrmidon::Config d_config;
 
 	std::vector<TDDInfo> d_nestTDDs,d_foragingTDDs;
 	TDDInfo              d_noConfigDir,d_ARTagDir,d_noFamilyDir,d_corruptedDir;
