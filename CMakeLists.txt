@@ -77,6 +77,9 @@ version_from_git()
 find_package(Eigen3 3.3.4 REQUIRED NO_MODULE)
 find_package(Protobuf 3.3.0 REQUIRED)
 find_package(TBB REQUIRED)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(ffmpeg REQUIRED libavformat libavcodec IMPORTED_TARGET)
+
 if(BUILD_STUDIO)
 	find_package(
 		Qt5
