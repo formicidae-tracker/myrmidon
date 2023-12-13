@@ -58,16 +58,15 @@ struct AntData {
 	                        const Eigen::Vector3d & antPosition) const;
 };
 
-
 struct Config {
-	Time      Start,End;
-	Duration  Framerate,Segment;
-	float     Jitter;
-	size_t    Width,Height;
+	Time     Start, End;
+	Duration Framerate, Segment;
+	float    Jitter;
+	size_t   Width, Height;
 
-	std::vector<TDDData> NestTDDs,ForagingTDDs;
+	std::vector<TDDData> NestTDDs, ForagingTDDs;
 
-	std::map<AntID,AntData> Ants;
+	std::map<AntID, AntData> Ants;
 	Config();
 };
 

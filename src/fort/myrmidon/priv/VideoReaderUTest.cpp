@@ -9,14 +9,21 @@ namespace priv {
 
 class VideoReaderUTest : public ::testing::Test {};
 
-TEST_F(VideoReaderUTest, HelloWorld) {
-	const auto &config = TestSetup::UTestData().NestDataDirs().front();
+TEST_F(VideoReaderUTest, GetBaseStreamInfo) {
+	const auto &tddConfig = TestSetup::UTestData().NestDataDirs().front();
+	const auto &config    = TestSetup::UTestData().Config();
+	ASSERT_TRUE(tddConfig.HasMovie);
 
-	ASSERT_TRUE(config.HasMovie);
+	ASSERT_EQ(tddConfig.Segments.size(), 1);
+	VideoReader vr(tddConfig.AbsoluteFilePath / "stream.0000.mp4");
 
-	VideoReader vr(config.AbsoluteFilePath / "stream.0000.mp4");
+	EXPECT_EQ(
+	    vr.Duration(),
+	    (tddConfig.EndFrame - tddConfig.StartFrame + 1) * config.Framerate
+	);
 
-	EXPECT_EQ(vr.Length(), config.EndFrame - config.StartFrame + 1);
+	EXPECT_EQ(vr.Length(), tddConfig.EndFrame - tddConfig.StartFrame + 1);
+	EXPECT_EQ(vr.Size(), std::make_tuple(config.Width, config.Height));
 }
 
 } // namespace priv

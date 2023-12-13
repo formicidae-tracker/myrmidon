@@ -78,7 +78,15 @@ find_package(Eigen3 3.3.4 REQUIRED NO_MODULE)
 find_package(Protobuf 3.3.0 REQUIRED)
 find_package(TBB REQUIRED)
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(ffmpeg REQUIRED libavformat libavcodec IMPORTED_TARGET)
+pkg_check_modules(
+	ffmpeg
+	REQUIRED
+	libavformat
+	libavcodec
+	libavutil
+	IMPORTED_TARGET
+	GLOBAL
+)
 
 if(BUILD_STUDIO)
 	find_package(
@@ -132,7 +140,7 @@ set(FORT_CHARIS_BUILD_GL Off)
 FetchContent_Declare(
 	fort-charis
 	GIT_REPOSITORY https://github.com/formicidae-tracker/charis.git
-	GIT_TAG e74827dbd6cdd59e6693eec0b1e4377452425fce
+	GIT_TAG 7ee8366641eb02b08c57bd87ca1de3bcc7076c8f
 )
 
 FetchContent_MakeAvailable(

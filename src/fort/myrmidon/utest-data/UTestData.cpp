@@ -266,82 +266,76 @@ void UTestData::GenerateMatchedResults() {
 	                                        queenOnly.InteractionTrajectories.end());
 }
 
-
 void UTestData::GenerateTDDStructure() {
-	for ( const auto & tdd : d_config.NestTDDs ) {
+	for (const auto &tdd : d_config.NestTDDs) {
 		d_nestTDDs.push_back({
-		                      .AbsoluteFilePath = d_basedir / tdd.RelativeFilePath,
-		                      .Family = fort::tags::Family::Tag36h11,
-		                      .HasFullFrame = tdd.HasFullFrame,
-		                      .HasMovie = tdd.HasMovie,
-		                      .HasConfig = tdd.HasConfig,
-		                      .IsCorrupted = false,
-		                      .Start = tdd.Start,
-		                      .End = tdd.End,
-			});
+		    .AbsoluteFilePath = d_basedir / tdd.RelativeFilePath,
+		    .Family           = fort::tags::Family::Tag36h11,
+		    .HasFullFrame     = tdd.HasFullFrame,
+		    .HasMovie         = tdd.HasMovie,
+		    .HasConfig        = tdd.HasConfig,
+		    .IsCorrupted      = false,
+		    .Start            = tdd.Start,
+		    .End              = tdd.End,
+		});
 	}
 
-	for ( const auto & tdd : d_config.ForagingTDDs ) {
+	for (const auto &tdd : d_config.ForagingTDDs) {
 		d_foragingTDDs.push_back({
-		                          .AbsoluteFilePath = d_basedir / tdd.RelativeFilePath,
-		                          .Family = fort::tags::Family::Tag36h11,
-		                          .HasFullFrame = tdd.HasFullFrame,
-		                          .HasMovie = tdd.HasMovie,
-		                          .HasConfig = tdd.HasConfig,
-		                          .IsCorrupted = false,
-		                          .Start = tdd.Start,
-		                          .End = tdd.End,
-			});
+		    .AbsoluteFilePath = d_basedir / tdd.RelativeFilePath,
+		    .Family           = fort::tags::Family::Tag36h11,
+		    .HasFullFrame     = tdd.HasFullFrame,
+		    .HasMovie         = tdd.HasMovie,
+		    .HasConfig        = tdd.HasConfig,
+		    .IsCorrupted      = false,
+		    .Start            = tdd.Start,
+		    .End              = tdd.End,
+		});
 	}
 
+	d_noConfigDir = {
+	    .AbsoluteFilePath = d_basedir / "no-config.0000",
+	    .Family           = fort::tags::Family::Tag36h11,
+	    .HasFullFrame     = false,
+	    .HasMovie         = false,
+	    .HasConfig        = false,
+	    .IsCorrupted      = false,
+	    .Start            = d_config.Start,
+	    .End              = d_config.Start.Add(10 * Duration::Second),
+	};
+	d_noFamilyDir = {
+	    .AbsoluteFilePath = d_basedir / "no-family.0000",
+	    .Family           = fort::tags::Family::Undefined,
+	    .HasFullFrame     = false,
+	    .HasMovie         = false,
+	    .HasConfig        = true,
+	    .IsCorrupted      = false,
+	    .Start            = d_config.Start,
+	    .End              = d_config.Start.Add(10 * Duration::Second),
 
-	d_noConfigDir =
-		{
-		 .AbsoluteFilePath =  d_basedir / "no-config.0000",
-		 .Family = fort::tags::Family::Tag36h11,
-		 .HasFullFrame = false,
-		 .HasMovie = false,
-		 .HasConfig = false,
-		 .IsCorrupted = false,
-		 .Start = d_config.Start,
-		 .End = d_config.Start.Add(10*Duration::Second),
-		};
-	d_noFamilyDir =
-		{
-		 .AbsoluteFilePath =  d_basedir / "no-family.0000",
-		 .Family = fort::tags::Family::Undefined,
-		 .HasFullFrame = false,
-		 .HasMovie = false,
-		 .HasConfig = true,
-		 .IsCorrupted = false,
-		 .Start = d_config.Start,
-		 .End = d_config.Start.Add(10*Duration::Second),
-		};
+	};
 
-	d_corruptedDir =
-		{
-		 .AbsoluteFilePath =  d_basedir / "corrupted.0000",
-		 .Family = fort::tags::Family::Tag36h11,
-		 .HasFullFrame = true,
-		 .HasMovie = true,
-		 .HasConfig = true,
-  		 .IsCorrupted = true,
-		 .Start = d_config.Start,
-		 .End = d_config.Start.Add(9*Duration::Second),
-		};
+	d_corruptedDir = {
+	    .AbsoluteFilePath = d_basedir / "corrupted.0000",
+	    .Family           = fort::tags::Family::Tag36h11,
+	    .HasFullFrame     = true,
+	    .HasMovie         = true,
+	    .HasConfig        = true,
+	    .IsCorrupted      = true,
+	    .Start            = d_config.Start,
+	    .End              = d_config.Start.Add(9 * Duration::Second),
+	};
 
-
-	d_ARTagDir =
-		{
-		 .AbsoluteFilePath =  d_basedir / "ARTag.0000",
-		 .Family = fort::tags::Family::Tag36ARTag,
-		 .HasFullFrame = false,
-		 .HasMovie = false,
-		 .HasConfig = true,
-		 .IsCorrupted = false,
-		 .Start = d_config.Start,
-		 .End = d_config.Start.Add(10*Duration::Second),
-		};
+	d_ARTagDir = {
+	    .AbsoluteFilePath = d_basedir / "ARTag.0000",
+	    .Family           = fort::tags::Family::Tag36ARTag,
+	    .HasFullFrame     = false,
+	    .HasMovie         = false,
+	    .HasConfig        = true,
+	    .IsCorrupted      = false,
+	    .Start            = d_config.Start,
+	    .End              = d_config.Start.Add(10 * Duration::Second),
+	};
 }
 
 void UTestData::GenerateExperimentStructure() {
@@ -856,6 +850,10 @@ void UTestData::GenerateMovieSegmentData(ExpectedResult & result,
 		          << "}" << std::endl;
 	}
 #endif //NDEBUG
+}
+
+const Config &UTestData::Config() const {
+	return d_config;
 }
 
 } // namespace myrmidon
