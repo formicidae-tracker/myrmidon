@@ -479,93 +479,109 @@ TEST_F(PublicExperimentUTest,MetaDataKeyManipulation) {
 
 }
 
-TEST_F(PublicExperimentUTest,CanOpenCorruptedDataDir) {
+TEST_F(PublicExperimentUTest, CanOpenCorruptedDataDir) {
 	using testing::MatchesRegex;
 	std::string URI;
-	auto corruptedPath = TestSetup::UTestData().CorruptedDataDir().AbsoluteFilePath;
-	auto s = experiment->CreateSpace("main");
+	auto        corruptedPath =
+	    TestSetup::UTestData().CorruptedDataDir().AbsoluteFilePath;
+	auto        s = experiment->CreateSpace("main");
 	std::string corruptedFileName;
-	try{
-		URI = experiment->AddTrackingDataDirectory(s->ID(),
-		                                           corruptedPath);
-	} catch ( const FixableErrors & e ) {
-		const auto & errors = e.Errors();
+	try {
+		URI = experiment->AddTrackingDataDirectory(s->ID(), corruptedPath);
+	} catch (const FixableErrors &e) {
+		const auto &errors = e.Errors();
 		EXPECT_TRUE(errors.size() > 1);
 		bool noError = true;
 		EXPECT_FALSE(errors.front() == nullptr) << (noError = false);
-		if ( noError == true ) {
-			EXPECT_THAT(errors.front()->what(),MatchesRegex("could not read last frame from '.*': .*"));
-			EXPECT_THAT(errors.front()->FixDescription(),MatchesRegex("rewrite '.*' up to frame .* and to continue if possible to next segment"));
-			std::regex filenameRx("rewrite '(.*hermes)' up");
+		if (noError == true) {
+			EXPECT_THAT(
+			    errors.front()->what(),
+			    MatchesRegex("could not read last frame from '.*': .*")
+			);
+			EXPECT_THAT(
+			    errors.front()->FixDescription(),
+			    MatchesRegex("rewrite '.*' up to frame .* and to continue if "
+			                 "possible to next segment")
+			);
+			std::regex  filenameRx("rewrite '(.*hermes)' up");
 			std::smatch filenameMatch;
 			std::string description = errors.front()->FixDescription();
-			if ( std::regex_search(description,filenameMatch,filenameRx)
-			     && filenameMatch.size() > 1 ){
+			if (std::regex_search(description, filenameMatch, filenameRx) &&
+			    filenameMatch.size() > 1) {
 				corruptedFileName = filenameMatch[1];
 			}
 		}
-		for ( auto it = std::next(errors.begin());
-		      it != errors.end();
-		      ++it) {
+		for (auto it = std::next(errors.begin()); it != errors.end(); ++it) {
 			noError = true;
 			EXPECT_FALSE(*it == nullptr) << (noError = false);
-			if ( noError == true ) {
-				EXPECT_THAT((*it)->what(),MatchesRegex("could not access acquisition time for '.*': .*"));
-				EXPECT_THAT((*it)->FixDescription(),MatchesRegex("rename '.*' to '.*'"));
+			if (noError == true) {
+				EXPECT_THAT(
+				    (*it)->what(),
+				    MatchesRegex(
+				        "could not access acquisition time for '.*': .*"
+				    )
+				);
+				EXPECT_THAT(
+				    (*it)->FixDescription(),
+				    MatchesRegex("rename '.*' to '.*'")
+				);
 			}
 		}
-	} catch ( const std::exception & e ) {
+	} catch (const std::exception &e) {
 		ADD_FAILURE() << "unexpected error: " << e.what();
 	}
-	try{
-		URI = experiment->AddTrackingDataDirectory(s->ID(),corruptedPath,true);
+	try {
+		URI =
+		    experiment->AddTrackingDataDirectory(s->ID(), corruptedPath, true);
 		experiment->RemoveTrackingDataDirectory(URI);
-		URI = experiment->AddTrackingDataDirectory(s->ID(),corruptedPath,false);
-	} catch ( const std::exception & e) {
+		URI =
+		    experiment->AddTrackingDataDirectory(s->ID(), corruptedPath, false);
+	} catch (const std::exception &e) {
 		ADD_FAILURE() << "Unexpected error: " << e.what();
 	}
 
 	ASSERT_FALSE(corruptedFileName.empty());
-	fs::rename(corruptedFileName + ".bak",
-	           corruptedFileName);
+	fs::rename(corruptedFileName + ".bak", corruptedFileName);
 
 	try {
-		experiment->EnsureAllDataIsLoaded([](int,int){},false);
+		experiment->EnsureAllDataIsLoaded([](int, int) {}, false);
 		ADD_FAILURE() << "Should throw an error while ensuring old data";
-	} catch ( const FixableErrors & e) {
-		const auto & errors = e.Errors();
+	} catch (const FixableErrors &e) {
+		const auto &errors = e.Errors();
 		EXPECT_TRUE(errors.size() > 0);
-		for ( const auto & e: errors) {
-			EXPECT_THAT(e->what(),MatchesRegex("Could not fully read '.*.hermes'"));
-			EXPECT_THAT(e->FixDescription(),MatchesRegex("rewrite '.*hermes' up to frame .* and to continue if possible to next segment"));
+		for (const auto &e : errors) {
+			EXPECT_THAT(
+			    e->what(),
+			    MatchesRegex("Could not fully read '.*.hermes'")
+			);
+			EXPECT_THAT(
+			    e->FixDescription(),
+			    MatchesRegex("rewrite '.*hermes' up to frame .* and to "
+			                 "continue if possible to next segment")
+			);
 		}
 	}
 
 	experiment->RemoveTrackingDataDirectory(URI);
 	// no need to fix here, the cache has the fix
-	URI = experiment->AddTrackingDataDirectory(s->ID(),corruptedPath,false);
+	URI = experiment->AddTrackingDataDirectory(s->ID(), corruptedPath, false);
 	try {
-		experiment->EnsureAllDataIsLoaded([](int,int){
-		},true);
-	} catch ( const std::exception & e ) {
+		experiment->EnsureAllDataIsLoaded([](int, int) {}, true);
+	} catch (const std::exception &e) {
 		ADD_FAILURE() << "Unexpected error : " << e.what();
 		return;
 	}
 
 	experiment->RemoveTrackingDataDirectory(URI);
 	// no need to fix here, the cache has the fix
-	URI = experiment->AddTrackingDataDirectory(s->ID(),corruptedPath,false);
+	URI = experiment->AddTrackingDataDirectory(s->ID(), corruptedPath, false);
 	try {
-		experiment->EnsureAllDataIsLoaded([](int,int){
-		},false);
-	} catch ( const std::exception & e ) {
+		experiment->EnsureAllDataIsLoaded([](int, int) {}, false);
+	} catch (const std::exception &e) {
 		ADD_FAILURE() << "Unexpected error : " << e.what();
 		return;
 	}
-
-
 }
-
 
 } // namespace myrmidon
 } // namespace fort
