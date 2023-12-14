@@ -84,6 +84,7 @@ pkg_check_modules(
 	libavformat
 	libavcodec
 	libavutil
+	libswscale
 	IMPORTED_TARGET
 	GLOBAL
 )
@@ -140,7 +141,7 @@ set(FORT_CHARIS_BUILD_GL Off)
 FetchContent_Declare(
 	fort-charis
 	GIT_REPOSITORY https://github.com/formicidae-tracker/charis.git
-	GIT_TAG 7ee8366641eb02b08c57bd87ca1de3bcc7076c8f
+	GIT_TAG c57bb56ab503455fdfa613768df18bc102072f2b
 )
 
 FetchContent_MakeAvailable(

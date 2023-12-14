@@ -2,7 +2,8 @@
 
 #include <cpptrace/cpptrace.hpp>
 #include <fort/time/Time.hpp>
-#include <fort/utils/Once.hpp>
+#include <fort/utils/Defer.hpp>
+#include <fort/utils/ObjectPool.hpp>
 #include <memory>
 #include <utility>
 
@@ -12,6 +13,8 @@ extern "C" {
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 #include <libavutil/avutil.h>
+#include <libavutil/imgutils.h>
+#include <libswscale/swscale.h>
 }
 
 #include <iostream>
@@ -20,12 +23,6 @@ namespace fort {
 
 namespace myrmidon {
 namespace priv {
-
-using AVFormatContextPtr =
-    std::unique_ptr<AVFormatContext, void (*)(AVFormatContext *)>;
-
-using AVCodecContextPtr =
-    std::unique_ptr<AVCodecContext, void (*)(AVCodecContext *)>;
 
 class AVError : public cpptrace::runtime_error {
 public:
@@ -65,8 +62,15 @@ int AVCall(Function &&fn, Args &&...args) {
 	return res;
 }
 
+struct VideoFrame::ImageData {
+	uint8_t *Planes[4];
+	int      Strides[4];
+};
+
 struct VideoReader::Implementation {
-	Implementation(const std::filesystem::path &path)
+	Implementation(
+	    const std::filesystem::path &path, std::tuple<int, int> targetSize
+	)
 	    : Context{open(path), [](AVFormatContext *c) {
 		              if (c) {
 			              avformat_close_input(&c);
@@ -107,17 +111,87 @@ struct VideoReader::Implementation {
 
 		AVCall(avcodec_parameters_to_context, decCtx, Stream()->codecpar);
 		AVCall(avcodec_open2, decCtx, dec, nullptr);
+
+		auto [outputWidth, outputHeight] = targetSize;
+		if (outputWidth <= 0 || outputHeight <= 0) {
+			outputWidth  = Codec->width;
+			outputHeight = Codec->height;
+		}
+
+		ImagePool = ImageDataPool::Create(
+		    [w = outputWidth, h = outputHeight]() {
+			    auto res = new VideoFrame::ImageData{};
+			    AVCall(
+			        av_image_alloc,
+			        res->Planes,
+			        res->Strides,
+			        w,
+			        h,
+			        AV_PIX_FMT_GRAY8,
+			        16
+			    );
+			    return res;
+		    },
+		    [](VideoFrame::ImageData *data) {
+			    av_freep(data->Planes);
+			    delete data;
+		    }
+		);
+
+		if (Codec->width != outputWidth || Codec->height != outputHeight ||
+		    Codec->pix_fmt != AV_PIX_FMT_GRAY8) {
+			ScaleContext = {
+			    sws_getContext(
+			        Codec->width,
+			        Codec->height,
+			        Codec->pix_fmt,
+			        outputWidth,
+			        outputHeight,
+			        AV_PIX_FMT_GRAY8,
+			        SWS_BILINEAR,
+			        nullptr,
+			        nullptr,
+			        nullptr
+			    ),
+			    sws_freeContext,
+			};
+		}
+	}
+
+	VideoFrame::Ptr receiveFrame() {
+		AVCall(avcodec_receive_frame, Codec.get(), Frame.get());
+		auto res = ImagePool->Get();
+		if (!ScaleContext) {
+			av_image_copy(
+			    res->Planes,
+			    res->Strides,
+			    const_cast<const uint8_t **>(Frame->data),
+			    Frame->linesize,
+			    Codec->pix_fmt,
+			    Codec->width,
+			    Codec->height
+			);
+		} else {
+			AVCall(
+			    sws_scale,
+			    ScaleContext.get(),
+			    Frame->data,
+			    Frame->linesize,
+			    0,
+			    Codec->height,
+			    res->Planes,
+			    res->Strides
+			);
+		}
+		auto frame         = new VideoFrame{};
+		frame->d_imageData = std::move(res);
+		return VideoFrame::Ptr{frame};
 	}
 
 	AVStream *Stream() const noexcept {
 		return Context->streams[Index];
 	}
 
-	AVFormatContextPtr Context = {nullptr, nullptr};
-	int                Index   = -1;
-	AVCodecContextPtr  Codec   = {nullptr, nullptr};
-
-private:
 	AVFormatContext *open(const std::filesystem::path &path) {
 		AVFormatContext *ctx = nullptr;
 		AVCall(
@@ -129,10 +203,43 @@ private:
 		);
 		return ctx;
 	}
+
+	using ImageDataPool = utils::ObjectPool<
+	    VideoFrame::ImageData,
+	    std::function<VideoFrame::ImageData *()>,
+	    std::function<void(VideoFrame::ImageData *)>>;
+
+	using AVFormatContextPtr =
+	    std::unique_ptr<AVFormatContext, void (*)(AVFormatContext *)>;
+
+	using AVCodecContextPtr =
+	    std::unique_ptr<AVCodecContext, void (*)(AVCodecContext *)>;
+
+	using AVPacketPtr = std::unique_ptr<AVPacket, void (*)(AVPacket *)>;
+
+	using AVFramePtr = std::unique_ptr<AVFrame, void (*)(AVFrame *)>;
+
+	using SwsContextPtr = std::unique_ptr<SwsContext, void (*)(SwsContext *)>;
+
+	AVFormatContextPtr Context = {nullptr, nullptr};
+	int                Index   = -1;
+	AVCodecContextPtr  Codec   = {nullptr, nullptr};
+	AVPacketPtr        Packet  = {
+	            av_packet_alloc(),
+	            [](AVPacket *pkt) { av_packet_free(&pkt); },
+    };
+	SwsContextPtr ScaleContext = {nullptr, nullptr};
+	AVFramePtr    Frame        = {
+	              av_frame_alloc(),
+	              [](AVFrame *frame) { av_frame_free(&frame); },
+    };
+	ImageDataPool::Ptr ImagePool;
 };
 
-VideoReader::VideoReader(const std::filesystem::path &path)
-    : d_implementation{std::make_unique<Implementation>(path)} {}
+VideoReader::VideoReader(
+    const std::filesystem::path &path, std::tuple<int, int> targetSize
+)
+    : d_implementation{std::make_unique<Implementation>(path, targetSize)} {}
 
 VideoReader::~VideoReader() {}
 
@@ -154,7 +261,35 @@ size_t VideoReader::Position() const noexcept {
 	return 0;
 }
 
-void VideoReader::Grab(const image_u8_t &image) {}
+VideoFrame::Ptr VideoReader::Grab() {
+
+	if (d_implementation->Packet->buf == nullptr) {
+		AVCall(
+		    av_read_frame,
+		    d_implementation->Context.get(),
+		    d_implementation->Packet.get()
+		);
+	}
+
+	try {
+		AVCall(
+		    avcodec_send_packet,
+		    d_implementation->Codec.get(),
+		    d_implementation->Packet.get()
+		);
+
+	} catch (const AVError &e) {
+		if (e.Code() == AVERROR(EAGAIN)) {
+			return d_implementation->receiveFrame();
+		}
+		av_packet_unref(d_implementation->Packet.get());
+		throw;
+	}
+
+	auto res = d_implementation->receiveFrame();
+	av_packet_unref(d_implementation->Packet.get());
+	return res;
+}
 
 void VideoReader::Seek(size_t position) {}
 
