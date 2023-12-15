@@ -279,21 +279,30 @@ VideoFrame::Ptr VideoReader::Grab() {
 		);
 
 	} catch (const AVError &e) {
-		if (e.Code() == AVERROR(EAGAIN)) {
-			return d_implementation->receiveFrame();
+		if (e.Code() != AVERROR(EAGAIN)) {
+			av_packet_unref(d_implementation->Packet.get());
+			throw;
 		}
+	}
+	defer {
 		av_packet_unref(d_implementation->Packet.get());
+	};
+	try {
+		auto res = d_implementation->receiveFrame();
+		return res;
+
+	} catch (const AVError &e) {
+		if (e.Code() == AVERROR(EAGAIN)) {
+			av_packet_unref(d_implementation->Packet.get());
+			return Grab();
+		}
 		throw;
 	}
-
-	auto res = d_implementation->receiveFrame();
-	av_packet_unref(d_implementation->Packet.get());
-	return res;
 }
 
-void VideoReader::Seek(size_t position) {}
+    void VideoReader::Seek(size_t position) {}
 
-void VideoReader::Seek(fort::Duration duration) {}
+	void VideoReader::Seek(fort::Duration duration) {}
 
 } // namespace priv
 } // namespace myrmidon
