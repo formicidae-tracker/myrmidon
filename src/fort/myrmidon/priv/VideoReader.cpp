@@ -1,4 +1,5 @@
 #include "VideoReader.hpp"
+#include "concurrentqueue.h"
 
 #include <cpptrace/cpptrace.hpp>
 #include <fort/time/Time.hpp>
@@ -68,6 +69,41 @@ struct VideoFrame::ImageData {
 };
 
 struct VideoReader::Implementation {
+	using ImageDataPool = utils::ObjectPool<
+	    VideoFrame::ImageData,
+	    std::function<VideoFrame::ImageData *()>,
+	    std::function<void(VideoFrame::ImageData *)>>;
+
+	using AVFormatContextPtr =
+	    std::unique_ptr<AVFormatContext, void (*)(AVFormatContext *)>;
+
+	using AVCodecContextPtr =
+	    std::unique_ptr<AVCodecContext, void (*)(AVCodecContext *)>;
+
+	using AVPacketPtr = std::unique_ptr<AVPacket, void (*)(AVPacket *)>;
+
+	using AVFramePtr = std::unique_ptr<AVFrame, void (*)(AVFrame *)>;
+
+	using SwsContextPtr = std::unique_ptr<SwsContext, void (*)(SwsContext *)>;
+
+	using ImageDataQueue =
+	    moodycamel::ConcurrentQueue<ImageDataPool::ObjectPtr>;
+
+	AVFormatContextPtr Context = {nullptr, nullptr};
+	int                Index   = -1;
+	AVCodecContextPtr  Codec   = {nullptr, nullptr};
+	AVPacketPtr        Packet  = {
+	            av_packet_alloc(),
+	            [](AVPacket *pkt) { av_packet_free(&pkt); },
+    };
+	SwsContextPtr ScaleContext = {nullptr, nullptr};
+	AVFramePtr    Frame        = {
+	              av_frame_alloc(),
+	              [](AVFrame *frame) { av_frame_free(&frame); },
+    };
+	ImageDataPool::Ptr ImagePool;
+	ImageDataQueue     Queue;
+
 	Implementation(
 	    const std::filesystem::path &path, std::tuple<int, int> targetSize
 	)
@@ -158,34 +194,80 @@ struct VideoReader::Implementation {
 		}
 	}
 
-	VideoFrame::Ptr receiveFrame() {
-		AVCall(avcodec_receive_frame, Codec.get(), Frame.get());
-		auto res = ImagePool->Get();
-		if (!ScaleContext) {
-			av_image_copy(
-			    res->Planes,
-			    res->Strides,
-			    const_cast<const uint8_t **>(Frame->data),
-			    Frame->linesize,
-			    Codec->pix_fmt,
-			    Codec->width,
-			    Codec->height
-			);
-		} else {
-			AVCall(
-			    sws_scale,
-			    ScaleContext.get(),
-			    Frame->data,
-			    Frame->linesize,
-			    0,
-			    Codec->height,
-			    res->Planes,
-			    res->Strides
-			);
+	VideoFrame::Ptr Grab() {
+		auto res         = std::make_unique<VideoFrame>();
+		res->d_imageData = grab();
+		if (!res->d_imageData) {
+			return nullptr;
 		}
-		auto frame         = new VideoFrame{};
-		frame->d_imageData = std::move(res);
-		return VideoFrame::Ptr{frame};
+		return res;
+	}
+
+	ImageDataPool::ObjectPtr grab() {
+		ImageDataPool::ObjectPtr res = nullptr;
+		if (Queue.try_dequeue(res)) {
+			return res;
+		}
+		if (!Packet) {
+			return nullptr;
+		}
+		try {
+			AVCall(av_read_frame, Context.get(), Packet.get());
+		} catch (const AVError &e) {
+			if (e.Code() != AVERROR_EOF) {
+				throw;
+			} else {
+				Packet.reset();
+			}
+		}
+		defer {
+			if (Packet) {
+				av_packet_unref(Packet.get());
+			}
+		};
+
+		AVCall(avcodec_send_packet, Codec.get(), Packet.get());
+		while (true) {
+			try {
+				AVCall(avcodec_receive_frame, Codec.get(), Frame.get());
+			} catch (const AVError &e) {
+				if (e.Code() == AVERROR(EAGAIN) || e.Code() == AVERROR_EOF) {
+					break;
+				}
+				throw;
+			}
+			defer {
+				av_frame_unref(Frame.get());
+			};
+			auto newImage = ImagePool->Get();
+			if (ScaleContext) {
+				AVCall(
+				    sws_scale,
+				    ScaleContext.get(),
+				    Frame->data,
+				    Frame->linesize,
+				    0,
+				    Codec->height,
+				    newImage->Planes,
+				    newImage->Strides
+				);
+			} else {
+				av_image_copy(
+				    newImage->Planes,
+				    newImage->Strides,
+				    const_cast<const uint8_t **>(Frame->data),
+				    Frame->linesize,
+				    AV_PIX_FMT_GRAY8,
+				    Codec->width,
+				    Codec->height
+				);
+			}
+			Queue.enqueue(std::move(newImage));
+		}
+		if (Queue.try_dequeue(res)) {
+			return res;
+		}
+		return grab();
 	}
 
 	AVStream *Stream() const noexcept {
@@ -203,37 +285,6 @@ struct VideoReader::Implementation {
 		);
 		return ctx;
 	}
-
-	using ImageDataPool = utils::ObjectPool<
-	    VideoFrame::ImageData,
-	    std::function<VideoFrame::ImageData *()>,
-	    std::function<void(VideoFrame::ImageData *)>>;
-
-	using AVFormatContextPtr =
-	    std::unique_ptr<AVFormatContext, void (*)(AVFormatContext *)>;
-
-	using AVCodecContextPtr =
-	    std::unique_ptr<AVCodecContext, void (*)(AVCodecContext *)>;
-
-	using AVPacketPtr = std::unique_ptr<AVPacket, void (*)(AVPacket *)>;
-
-	using AVFramePtr = std::unique_ptr<AVFrame, void (*)(AVFrame *)>;
-
-	using SwsContextPtr = std::unique_ptr<SwsContext, void (*)(SwsContext *)>;
-
-	AVFormatContextPtr Context = {nullptr, nullptr};
-	int                Index   = -1;
-	AVCodecContextPtr  Codec   = {nullptr, nullptr};
-	AVPacketPtr        Packet  = {
-	            av_packet_alloc(),
-	            [](AVPacket *pkt) { av_packet_free(&pkt); },
-    };
-	SwsContextPtr ScaleContext = {nullptr, nullptr};
-	AVFramePtr    Frame        = {
-	              av_frame_alloc(),
-	              [](AVFrame *frame) { av_frame_free(&frame); },
-    };
-	ImageDataPool::Ptr ImagePool;
 };
 
 VideoReader::VideoReader(
@@ -262,47 +313,12 @@ size_t VideoReader::Position() const noexcept {
 }
 
 VideoFrame::Ptr VideoReader::Grab() {
-
-	if (d_implementation->Packet->buf == nullptr) {
-		AVCall(
-		    av_read_frame,
-		    d_implementation->Context.get(),
-		    d_implementation->Packet.get()
-		);
-	}
-
-	try {
-		AVCall(
-		    avcodec_send_packet,
-		    d_implementation->Codec.get(),
-		    d_implementation->Packet.get()
-		);
-
-	} catch (const AVError &e) {
-		if (e.Code() != AVERROR(EAGAIN)) {
-			av_packet_unref(d_implementation->Packet.get());
-			throw;
-		}
-	}
-	defer {
-		av_packet_unref(d_implementation->Packet.get());
-	};
-	try {
-		auto res = d_implementation->receiveFrame();
-		return res;
-
-	} catch (const AVError &e) {
-		if (e.Code() == AVERROR(EAGAIN)) {
-			av_packet_unref(d_implementation->Packet.get());
-			return Grab();
-		}
-		throw;
-	}
+	return d_implementation->Grab();
 }
 
-    void VideoReader::Seek(size_t position) {}
+void VideoReader::Seek(size_t position) {}
 
-	void VideoReader::Seek(fort::Duration duration) {}
+void VideoReader::Seek(fort::Duration duration) {}
 
 } // namespace priv
 } // namespace myrmidon
