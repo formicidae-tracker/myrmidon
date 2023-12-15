@@ -63,16 +63,26 @@ int AVCall(Function &&fn, Args &&...args) {
 	return res;
 }
 
-struct VideoFrame::ImageData {
+struct VideoFrame::Implementation {
 	uint8_t *Planes[4];
 	int      Strides[4];
+	size_t   Index;
+	Duration Timestamp;
 };
+
+size_t VideoFrame::Index() const noexcept {
+	return d_implementation->Index;
+}
+
+Duration VideoFrame::Timestamp() const noexcept {
+	return d_implementation->Timestamp;
+}
 
 struct VideoReader::Implementation {
 	using ImageDataPool = utils::ObjectPool<
-	    VideoFrame::ImageData,
-	    std::function<VideoFrame::ImageData *()>,
-	    std::function<void(VideoFrame::ImageData *)>>;
+	    VideoFrame::Implementation,
+	    std::function<VideoFrame::Implementation *()>,
+	    std::function<void(VideoFrame::Implementation *)>>;
 
 	using AVFormatContextPtr =
 	    std::unique_ptr<AVFormatContext, void (*)(AVFormatContext *)>;
@@ -156,7 +166,7 @@ struct VideoReader::Implementation {
 
 		ImagePool = ImageDataPool::Create(
 		    [w = outputWidth, h = outputHeight]() {
-			    auto res = new VideoFrame::ImageData{};
+			    auto res = new VideoFrame::Implementation{};
 			    AVCall(
 			        av_image_alloc,
 			        res->Planes,
@@ -168,7 +178,7 @@ struct VideoReader::Implementation {
 			    );
 			    return res;
 		    },
-		    [](VideoFrame::ImageData *data) {
+		    [](VideoFrame::Implementation *data) {
 			    av_freep(data->Planes);
 			    delete data;
 		    }
@@ -195,9 +205,10 @@ struct VideoReader::Implementation {
 	}
 
 	VideoFrame::Ptr Grab() {
-		auto res         = std::make_unique<VideoFrame>();
-		res->d_imageData = grab();
-		if (!res->d_imageData) {
+		auto res = std::make_unique<VideoFrame>();
+
+		res->d_implementation = grab();
+		if (!res->d_implementation) {
 			return nullptr;
 		}
 		return res;
@@ -236,10 +247,13 @@ struct VideoReader::Implementation {
 				}
 				throw;
 			}
+
 			defer {
 				av_frame_unref(Frame.get());
 			};
-			auto newImage = ImagePool->Get();
+
+			auto newFrame = ImagePool->Get();
+
 			if (ScaleContext) {
 				AVCall(
 				    sws_scale,
@@ -248,13 +262,13 @@ struct VideoReader::Implementation {
 				    Frame->linesize,
 				    0,
 				    Codec->height,
-				    newImage->Planes,
-				    newImage->Strides
+				    newFrame->Planes,
+				    newFrame->Strides
 				);
 			} else {
 				av_image_copy(
-				    newImage->Planes,
-				    newImage->Strides,
+				    newFrame->Planes,
+				    newFrame->Strides,
 				    const_cast<const uint8_t **>(Frame->data),
 				    Frame->linesize,
 				    AV_PIX_FMT_GRAY8,
@@ -262,11 +276,18 @@ struct VideoReader::Implementation {
 				    Codec->height
 				);
 			}
-			Queue.enqueue(std::move(newImage));
+
+			newFrame->Index = Frame->pts;
+
+			newFrame->Timestamp = Frame->best_effort_timestamp;
+
+			Queue.enqueue(std::move(newFrame));
 		}
+
 		if (Queue.try_dequeue(res)) {
 			return res;
 		}
+
 		return grab();
 	}
 

@@ -39,7 +39,11 @@ TEST_F(VideoReaderUTest, CanGrabAllImages) {
 		    "frame: " + std::to_string(i + 1) + "/" +
 		    std::to_string(vr.Length())
 		);
-		EXPECT_NO_THROW({ vr.Grab(); });
+		EXPECT_NO_THROW({
+			auto frame = vr.Grab();
+
+			EXPECT_EQ(frame->Index(), i);
+		});
 	}
 	EXPECT_FALSE(vr.Grab());
 }

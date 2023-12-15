@@ -19,15 +19,21 @@ namespace priv {
 
 class VideoFrame {
 public:
-	struct ImageData;
 	using Ptr = std::unique_ptr<VideoFrame>;
 
 	image_u8_t AsImageU8() const noexcept;
 
+	size_t Index() const noexcept;
+
+	Duration Timestamp() const noexcept;
+
 private:
+	struct Implementation;
+
 	friend class VideoReader;
 
-	std::unique_ptr<ImageData, std::function<void(ImageData *)>> d_imageData;
+	std::unique_ptr<Implementation, std::function<void(Implementation *)>>
+	    d_implementation;
 };
 
 class VideoReader {
