@@ -26,18 +26,22 @@ TEST_F(VideoReaderUTest, GetBaseStreamInfo) {
 	EXPECT_EQ(vr.Size(), std::make_tuple(config.Width, config.Height));
 }
 
-TEST_F(VideoReaderUTest, CanGrabImages) {
+TEST_F(VideoReaderUTest, CanGrabAllImages) {
 	const auto &tddConfig = TestSetup::UTestData().NestDataDirs().front();
 	ASSERT_TRUE(tddConfig.HasMovie);
 
 	ASSERT_EQ(tddConfig.Segments.size(), 1);
 	VideoReader vr(tddConfig.AbsoluteFilePath / "stream.0000.mp4");
-	EXPECT_GT(vr.Length(), 0);
-	size_t i = 0;
-	while (true) {
-		SCOPED_TRACE(std::to_string(i++));
-		ASSERT_NO_THROW({ vr.Grab(); });
+
+	ASSERT_EQ(vr.Length(), tddConfig.EndFrame - tddConfig.StartFrame + 1);
+	for (size_t i = 0; i < vr.Length(); i++) {
+		SCOPED_TRACE(
+		    "frame: " + std::to_string(i + 1) + "/" +
+		    std::to_string(vr.Length())
+		);
+		EXPECT_NO_THROW({ vr.Grab(); });
 	}
+	EXPECT_FALSE(vr.Grab());
 }
 
 } // namespace priv
