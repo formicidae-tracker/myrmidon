@@ -24,6 +24,7 @@
 #include "TagCloseUp.hpp"
 #include "TimeUtils.hpp"
 #include "TrackingDataDirectoryError.hpp"
+#include "fort/myrmidon/priv/VideoReader.hpp"
 
 #ifdef MYRMIDON_USE_BOOST_FILESYSTEM
 #define MYRMIDON_FILE_IS_REGULAR(f) ((f).type() == fs::regular_file)
@@ -1147,12 +1148,15 @@ TrackingDataDirectory::PrepareFullFramesLoaders() {
 	std::vector<Loader> res;
 	for (const auto &ms : d_movies->Segments()) {
 		res.push_back([reducer, ms, width, height, this]() {
-			throw std::runtime_error("not yet reimplemented");
+			VideoReader vr{ms.second->AbsoluteFilePath(), {width, height}};
+			auto        frame = vr.Grab();
+
 			auto filename = "frame_" +
 			                std::to_string(ms.second->ToTrackingFrameID(0)) +
 			                ".png";
 			auto imgPath = AbsoluteFilePath() / "ants/computed" / filename;
-			// TODO: WritePNG()
+			WritePNG(imgPath, frame->AsImageU8());
+
 			reducer->Reduce();
 			return nullptr;
 		});

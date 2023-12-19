@@ -78,10 +78,7 @@ TEST_F(VideoReaderUTest, CanSeekBackward) {
 	size_t positionBackward = positionForward / 2;
 
 	for (size_t i = 0; i < positionForward; i++) {
-		EXPECT_NO_THROW({
-			auto frame = vr.Grab();
-			std::cerr << frame->Index() << std::endl;
-		});
+		EXPECT_NO_THROW({ auto frame = vr.Grab(); });
 	}
 	vr.SeekFrame(positionBackward);
 
