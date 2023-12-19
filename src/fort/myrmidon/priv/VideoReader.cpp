@@ -2,10 +2,13 @@
 #include "concurrentqueue.h"
 
 #include <cpptrace/cpptrace.hpp>
+#include <cstdint>
 #include <fort/time/Time.hpp>
 #include <fort/utils/Defer.hpp>
 #include <fort/utils/ObjectPool.hpp>
+#include <limits>
 #include <memory>
+#include <queue>
 #include <utility>
 
 #include <cxxabi.h>
@@ -71,12 +74,18 @@ struct VideoFrame::Implementation {
 };
 
 size_t VideoFrame::Index() const noexcept {
-	return d_implementation->Index;
+	return self->Index;
 }
 
 Duration VideoFrame::Timestamp() const noexcept {
-	return d_implementation->Timestamp;
+	return self->Timestamp;
 }
+
+template <typename Frame> struct FrameOrderer {
+	constexpr bool operator()(const Frame &a, const Frame &b) const {
+		return a->Index > b->Index;
+	};
+};
 
 struct VideoReader::Implementation {
 	using ImageDataPool = utils::ObjectPool<
@@ -96,38 +105,41 @@ struct VideoReader::Implementation {
 
 	using SwsContextPtr = std::unique_ptr<SwsContext, void (*)(SwsContext *)>;
 
-	using ImageDataQueue =
-	    moodycamel::ConcurrentQueue<ImageDataPool::ObjectPtr>;
+	using ImageDataQueue = std::priority_queue<
+	    ImageDataPool::ObjectPtr,
+	    std::vector<ImageDataPool::ObjectPtr>,
+	    FrameOrderer<ImageDataPool::ObjectPtr>>;
 
-	AVFormatContextPtr Context = {nullptr, nullptr};
-	int                Index   = -1;
-	AVCodecContextPtr  Codec   = {nullptr, nullptr};
-	AVPacketPtr        Packet  = {
+	AVFormatContextPtr d_context = {nullptr, nullptr};
+	int                d_index   = -1;
+	AVCodecContextPtr  d_codec   = {nullptr, nullptr};
+	AVPacketPtr        d_packet  = {
 	            av_packet_alloc(),
 	            [](AVPacket *pkt) { av_packet_free(&pkt); },
     };
-	SwsContextPtr ScaleContext = {nullptr, nullptr};
-	AVFramePtr    Frame        = {
+	SwsContextPtr d_scaleContext = {nullptr, nullptr};
+	AVFramePtr    d_frame        = {
 	              av_frame_alloc(),
 	              [](AVFrame *frame) { av_frame_free(&frame); },
     };
-	ImageDataPool::Ptr ImagePool;
-	ImageDataQueue     Queue;
+	ImageDataPool::Ptr d_imagePool;
+	ImageDataQueue     d_queue;
+	size_t             d_next = 0;
 
 	Implementation(
 	    const std::filesystem::path &path, std::tuple<int, int> targetSize
 	)
-	    : Context{open(path), [](AVFormatContext *c) {
-		              if (c) {
-			              avformat_close_input(&c);
-		              }
-	              }} {
+	    : d_context{open(path), [](AVFormatContext *c) {
+		                if (c) {
+			                avformat_close_input(&c);
+		                }
+	                }} {
 		// Needed for mpeg2 formats
-		AVCall(avformat_find_stream_info, Context.get(), nullptr);
+		AVCall(avformat_find_stream_info, d_context.get(), nullptr);
 
-		Index = AVCall(
+		d_index = AVCall(
 		    av_find_best_stream,
-		    Context.get(),
+		    d_context.get(),
 		    AVMEDIA_TYPE_VIDEO,
 		    -1,
 		    -1,
@@ -149,22 +161,22 @@ struct VideoReader::Implementation {
 			    "could not allocate  context for codec " +
 			    std::string(dec->long_name)};
 		}
-		Codec = {decCtx, [](AVCodecContext *ctx) {
-			         if (ctx) {
-				         avcodec_free_context(&ctx);
-			         }
-		         }};
+		d_codec = {decCtx, [](AVCodecContext *ctx) {
+			           if (ctx) {
+				           avcodec_free_context(&ctx);
+			           }
+		           }};
 
 		AVCall(avcodec_parameters_to_context, decCtx, Stream()->codecpar);
 		AVCall(avcodec_open2, decCtx, dec, nullptr);
 
 		auto [outputWidth, outputHeight] = targetSize;
 		if (outputWidth <= 0 || outputHeight <= 0) {
-			outputWidth  = Codec->width;
-			outputHeight = Codec->height;
+			outputWidth  = d_codec->width;
+			outputHeight = d_codec->height;
 		}
 
-		ImagePool = ImageDataPool::Create(
+		d_imagePool = ImageDataPool::Create(
 		    [w = outputWidth, h = outputHeight]() {
 			    auto res = new VideoFrame::Implementation{};
 			    AVCall(
@@ -184,13 +196,13 @@ struct VideoReader::Implementation {
 		    }
 		);
 
-		if (Codec->width != outputWidth || Codec->height != outputHeight ||
-		    Codec->pix_fmt != AV_PIX_FMT_GRAY8) {
-			ScaleContext = {
+		if (d_codec->width != outputWidth || d_codec->height != outputHeight ||
+		    d_codec->pix_fmt != AV_PIX_FMT_GRAY8) {
+			d_scaleContext = {
 			    sws_getContext(
-			        Codec->width,
-			        Codec->height,
-			        Codec->pix_fmt,
+			        d_codec->width,
+			        d_codec->height,
+			        d_codec->pix_fmt,
 			        outputWidth,
 			        outputHeight,
 			        AV_PIX_FMT_GRAY8,
@@ -207,40 +219,43 @@ struct VideoReader::Implementation {
 	VideoFrame::Ptr Grab() {
 		auto res = std::make_unique<VideoFrame>();
 
-		res->d_implementation = grab();
-		if (!res->d_implementation) {
+		res->self = grab();
+		if (!res->self) {
 			return nullptr;
 		}
 		return res;
 	}
 
-	ImageDataPool::ObjectPtr grab() {
+	ImageDataPool::ObjectPtr grab(bool checkIFrame = false) {
 		ImageDataPool::ObjectPtr res = nullptr;
-		if (Queue.try_dequeue(res)) {
+		if (!d_queue.empty()) {
+			res = std::move(const_cast<ImageDataPool::ObjectPtr &>(d_queue.top()
+			));
+			d_queue.pop();
 			return res;
 		}
-		if (!Packet) {
+		if (!d_packet) {
 			return nullptr;
 		}
 		try {
-			AVCall(av_read_frame, Context.get(), Packet.get());
+			AVCall(av_read_frame, d_context.get(), d_packet.get());
 		} catch (const AVError &e) {
 			if (e.Code() != AVERROR_EOF) {
 				throw;
 			} else {
-				Packet.reset();
+				d_packet.reset();
 			}
 		}
 		defer {
-			if (Packet) {
-				av_packet_unref(Packet.get());
+			if (d_packet) {
+				av_packet_unref(d_packet.get());
 			}
 		};
 
-		AVCall(avcodec_send_packet, Codec.get(), Packet.get());
+		AVCall(avcodec_send_packet, d_codec.get(), d_packet.get());
 		while (true) {
 			try {
-				AVCall(avcodec_receive_frame, Codec.get(), Frame.get());
+				AVCall(avcodec_receive_frame, d_codec.get(), d_frame.get());
 			} catch (const AVError &e) {
 				if (e.Code() == AVERROR(EAGAIN) || e.Code() == AVERROR_EOF) {
 					break;
@@ -249,19 +264,26 @@ struct VideoReader::Implementation {
 			}
 
 			defer {
-				av_frame_unref(Frame.get());
+				av_frame_unref(d_frame.get());
 			};
 
-			auto newFrame = ImagePool->Get();
+			if (checkIFrame && d_frame->pict_type != AV_PICTURE_TYPE_I) {
+				throw cpptrace::runtime_error(
+				    std::string("Only I-Frame requested, but received a ") +
+				    av_get_picture_type_char(d_frame->pict_type)
+				);
+			}
 
-			if (ScaleContext) {
+			auto newFrame = d_imagePool->Get();
+
+			if (d_scaleContext) {
 				AVCall(
 				    sws_scale,
-				    ScaleContext.get(),
-				    Frame->data,
-				    Frame->linesize,
+				    d_scaleContext.get(),
+				    d_frame->data,
+				    d_frame->linesize,
 				    0,
-				    Codec->height,
+				    d_codec->height,
 				    newFrame->Planes,
 				    newFrame->Strides
 				);
@@ -269,22 +291,29 @@ struct VideoReader::Implementation {
 				av_image_copy(
 				    newFrame->Planes,
 				    newFrame->Strides,
-				    const_cast<const uint8_t **>(Frame->data),
-				    Frame->linesize,
+				    const_cast<const uint8_t **>(d_frame->data),
+				    d_frame->linesize,
 				    AV_PIX_FMT_GRAY8,
-				    Codec->width,
-				    Codec->height
+				    d_codec->width,
+				    d_codec->height
 				);
 			}
 
-			newFrame->Index = Frame->pts;
+			newFrame->Index = d_frame->pict_type == AV_PICTURE_TYPE_I
+			                      ? d_frame->coded_picture_number
+			                      : d_next;
 
-			newFrame->Timestamp = Frame->best_effort_timestamp;
+			d_next = newFrame->Index + 1;
 
-			Queue.enqueue(std::move(newFrame));
+			newFrame->Timestamp = d_frame->best_effort_timestamp;
+
+			d_queue.push(std::move(newFrame));
 		}
 
-		if (Queue.try_dequeue(res)) {
+		if (!d_queue.empty()) {
+			res = std::move(const_cast<ImageDataPool::ObjectPtr &>(d_queue.top()
+			));
+			d_queue.pop();
 			return res;
 		}
 
@@ -292,7 +321,7 @@ struct VideoReader::Implementation {
 	}
 
 	AVStream *Stream() const noexcept {
-		return Context->streams[Index];
+		return d_context->streams[d_index];
 	}
 
 	AVFormatContext *open(const std::filesystem::path &path) {
@@ -306,27 +335,55 @@ struct VideoReader::Implementation {
 		);
 		return ctx;
 	}
+
+	void seekFrame(size_t position) {
+		AVCall(
+		    avformat_seek_file,
+		    d_context.get(),
+		    d_index,
+		    0, // std::numeric_limits<int64_t>::min(),
+		    position,
+		    position,
+		    AVSEEK_FLAG_FRAME | AVSEEK_FLAG_BACKWARD
+		);
+
+		avcodec_flush_buffers(d_codec.get());
+		ImageDataPool::ObjectPtr frame;
+
+		bool checkIFrame = true;
+		do {
+			frame = grab(checkIFrame);
+			std::cerr << "got frame " << frame->Index << std::endl;
+			checkIFrame = false;
+		} while (frame && frame->Index < position);
+		while (!d_queue.empty()) {
+			d_queue.pop();
+		}
+		if (frame) {
+			d_queue.push(std::move(frame));
+		}
+	}
 };
 
 VideoReader::VideoReader(
     const std::filesystem::path &path, std::tuple<int, int> targetSize
 )
-    : d_implementation{std::make_unique<Implementation>(path, targetSize)} {}
+    : self{std::make_unique<Implementation>(path, targetSize)} {}
 
 VideoReader::~VideoReader() {}
 
 std::tuple<int, int> VideoReader::Size() const noexcept {
-	const auto codecpar = d_implementation->Stream()->codecpar;
+	const auto codecpar = self->Stream()->codecpar;
 	return {codecpar->width, codecpar->height};
 }
 
 fort::Duration VideoReader::Duration() const noexcept {
-	return (d_implementation->Context->duration) *
+	return (self->d_context->duration) *
 	       fort::Duration{1000000000 / AV_TIME_BASE};
 }
 
 size_t VideoReader::Length() const noexcept {
-	return d_implementation->Stream()->nb_frames;
+	return self->Stream()->nb_frames;
 }
 
 size_t VideoReader::Position() const noexcept {
@@ -334,12 +391,14 @@ size_t VideoReader::Position() const noexcept {
 }
 
 VideoFrame::Ptr VideoReader::Grab() {
-	return d_implementation->Grab();
+	return self->Grab();
 }
 
-void VideoReader::Seek(size_t position) {}
+void VideoReader::SeekFrame(size_t position) {
+	self->seekFrame(position);
+}
 
-void VideoReader::Seek(fort::Duration duration) {}
+void VideoReader::SeekTime(fort::Duration duration) {}
 
 } // namespace priv
 } // namespace myrmidon

@@ -48,6 +48,48 @@ TEST_F(VideoReaderUTest, CanGrabAllImages) {
 	EXPECT_FALSE(vr.Grab());
 }
 
+TEST_F(VideoReaderUTest, CanSeekForward) {
+	const auto &tddConfig = TestSetup::UTestData().NestDataDirs().front();
+	ASSERT_TRUE(tddConfig.HasMovie);
+
+	ASSERT_EQ(tddConfig.Segments.size(), 1);
+	VideoReader vr(tddConfig.AbsoluteFilePath / "stream.0000.mp4");
+
+	size_t position =
+	    (tddConfig.StartFrame + tddConfig.EndFrame) / 2 - tddConfig.StartFrame;
+
+	vr.SeekFrame(position);
+
+	auto frame = vr.Grab();
+	ASSERT_TRUE(frame);
+	EXPECT_EQ(frame->Index(), position);
+}
+
+TEST_F(VideoReaderUTest, CanSeekBackward) {
+	const auto &tddConfig = TestSetup::UTestData().NestDataDirs().front();
+	ASSERT_TRUE(tddConfig.HasMovie);
+
+	ASSERT_EQ(tddConfig.Segments.size(), 1);
+	VideoReader vr(tddConfig.AbsoluteFilePath / "stream.0000.mp4");
+
+	size_t positionForward =
+	    (tddConfig.StartFrame + tddConfig.EndFrame) / 2 - tddConfig.StartFrame;
+
+	size_t positionBackward = positionForward / 2;
+
+	for (size_t i = 0; i < positionForward; i++) {
+		EXPECT_NO_THROW({
+			auto frame = vr.Grab();
+			std::cerr << frame->Index() << std::endl;
+		});
+	}
+	vr.SeekFrame(positionBackward);
+
+	auto frame = vr.Grab();
+	ASSERT_TRUE(frame);
+	EXPECT_EQ(frame->Index(), positionBackward);
+}
+
 } // namespace priv
 } // namespace myrmidon
 } // namespace fort
