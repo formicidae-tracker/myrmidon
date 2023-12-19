@@ -29,11 +29,12 @@ public:
 
 private:
 	struct Implementation;
+	using ImplementationPtr =
+	    std::unique_ptr<Implementation, std::function<void(Implementation *)>>;
 
 	friend class VideoReader;
 
-	std::unique_ptr<Implementation, std::function<void(Implementation *)>>
-	    d_implementation;
+	ImplementationPtr self;
 };
 
 class VideoReader {
@@ -53,16 +54,16 @@ public:
 
 	size_t Position() const noexcept;
 
-	void Seek(size_t position);
+	void SeekFrame(size_t position);
 
-	void Seek(fort::Duration duration);
+	void SeekTime(fort::Duration duration);
 
 	VideoFrame::Ptr Grab();
 
 private:
 	struct Implementation;
 
-	std::unique_ptr<Implementation> d_implementation;
+	std::unique_ptr<Implementation> self;
 };
 
 } // namespace priv
