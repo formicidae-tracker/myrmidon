@@ -69,6 +69,7 @@ int AVCall(Function &&fn, Args &&...args) {
 struct VideoFrame::Implementation {
 	uint8_t *Planes[4];
 	int      Strides[4];
+	int      Width, Height;
 	size_t   Index;
 	Duration Timestamp;
 };
@@ -79,6 +80,15 @@ size_t VideoFrame::Index() const noexcept {
 
 Duration VideoFrame::Timestamp() const noexcept {
 	return self->Timestamp;
+}
+
+image_u8_t VideoFrame::AsImageU8() const noexcept {
+	return image_u8_t{
+	    .width  = self->Width,
+	    .height = self->Height,
+	    .stride = self->Strides[0],
+	    .buf    = self->Planes[0],
+	};
 }
 
 template <typename Frame> struct FrameOrderer {
@@ -125,6 +135,8 @@ struct VideoReader::Implementation {
 	ImageDataPool::Ptr d_imagePool;
 	ImageDataQueue     d_queue;
 	size_t             d_next = 0;
+	fort::Duration     d_timebase;
+	int64_t            d_framerate;
 
 	Implementation(
 	    const std::filesystem::path &path, std::tuple<int, int> targetSize
@@ -170,6 +182,10 @@ struct VideoReader::Implementation {
 		AVCall(avcodec_parameters_to_context, decCtx, Stream()->codecpar);
 		AVCall(avcodec_open2, decCtx, dec, nullptr);
 
+		d_timebase =
+		    (Duration::Second * Stream()->time_base.num).Nanoseconds() /
+		    (Stream()->time_base.den);
+
 		auto [outputWidth, outputHeight] = targetSize;
 		if (outputWidth <= 0 || outputHeight <= 0) {
 			outputWidth  = d_codec->width;
@@ -188,6 +204,8 @@ struct VideoReader::Implementation {
 			        AV_PIX_FMT_GRAY8,
 			        16
 			    );
+			    res->Width  = w;
+			    res->Height = h;
 			    return res;
 		    },
 		    [](VideoFrame::Implementation *data) {
@@ -299,13 +317,16 @@ struct VideoReader::Implementation {
 				);
 			}
 
-			newFrame->Index = d_frame->pict_type == AV_PICTURE_TYPE_I
-			                      ? d_frame->coded_picture_number
-			                      : d_next;
-
-			d_next = newFrame->Index + 1;
-
-			newFrame->Timestamp = d_frame->best_effort_timestamp;
+			newFrame->Timestamp = av_rescale_q(
+			    d_frame->pts,
+			    Stream()->time_base,
+			    {1, int64_t(1e9)}
+			);
+			newFrame->Index = av_rescale_q(
+			    d_frame->pts,
+			    Stream()->time_base,
+			    {Stream()->avg_frame_rate.den, Stream()->avg_frame_rate.num}
+			);
 
 			d_queue.push(std::move(newFrame));
 		}
@@ -353,7 +374,7 @@ struct VideoReader::Implementation {
 		bool checkIFrame = true;
 		do {
 			frame = grab(checkIFrame);
-			std::cerr << "got frame " << frame->Index << std::endl;
+
 			checkIFrame = false;
 		} while (frame && frame->Index < position);
 		while (!d_queue.empty()) {
