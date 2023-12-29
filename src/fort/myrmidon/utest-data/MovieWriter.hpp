@@ -4,13 +4,15 @@
 
 #include "FrameDrawer.hpp"
 #include "SegmentedDataWriter.hpp"
-#include <opencv2/core.hpp>
 
-namespace cv {
-class VideoWriter;
-}
+#include <fort/video/Frame.hpp>
+#include <tuple>
 
 namespace fort {
+namespace video {
+class Writer;
+}
+
 namespace myrmidon {
 
 class Config;
@@ -33,14 +35,14 @@ private:
 
 	fs::path d_basepath;
 
-	FrameDrawer::Ptr d_drawer;
-	cv::Mat          d_frameBuffer;
-	double           d_fps;
-	cv::Size         d_size;
-	int              d_movieFrame;
+	FrameDrawer::Ptr     d_drawer;
+	video::Frame         d_frameBuffer;
+	double               d_fps;
+	std::tuple<int, int> d_size;
+	int                  d_movieFrame;
 
-	std::unique_ptr<cv::VideoWriter> d_videoWriter;
-	std::unique_ptr<std::ofstream>   d_frameMatching;
+	std::unique_ptr<video::Writer> d_videoWriter;
+	std::unique_ptr<std::ofstream> d_frameMatching;
 };
 
 } // namespace myrmidon
