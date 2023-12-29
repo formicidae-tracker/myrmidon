@@ -3,9 +3,14 @@
 #include "Config.hpp"
 
 #include <fort/myrmidon/priv/Isometry2D.hpp>
+#include <memory>
+#include <stdexcept>
 
-#include <opencv2/highgui.hpp>
-#include <opencv2/imgproc.hpp>
+#include <fort/video/Frame.hpp>
+
+extern "C" {
+#include <libavutil/imgutils.h>
+}
 
 namespace fort {
 namespace myrmidon {
@@ -20,14 +25,16 @@ FrameDrawer::FrameDrawer(fort::tags::Family family, const Config &config)
 	}
 }
 
-void FrameDrawer::Draw(cv::Mat &dest, const IdentifiedFrame &frame) const {
-	// sets the right type
-	if (dest.type() != CV_8UC1 ||
-	    dest.size() != cv::Size(frame.Width, frame.Height)) {
-		dest = cv::Mat(frame.Height, frame.Width, CV_8UC1);
-	}
+std::unique_ptr<video::Frame> FrameDrawer::Draw(const IdentifiedFrame &frame
+) const {
+	auto res = std::make_unique<video::Frame>(
+	    frame.Width,
+	    frame.Height,
+	    AV_PIX_FMT_GRAY8
+	);
+
 	// fills background
-	dest.setTo(127);
+	memset(res->Planes[0], 127, res->Linesize[0] * frame.Height);
 
 	// draw shapes at the right position
 	for (size_t i = 0; i < frame.Positions.rows(); ++i) {
@@ -40,8 +47,10 @@ void FrameDrawer::Draw(cv::Mat &dest, const IdentifiedFrame &frame) const {
 		    frame.Positions.block<1, 2>(i, 1).transpose()
 		);
 
-		DrawShapeOnImage(dest, d_ants.at(antID), transform);
+		DrawShapeOnImage(*res, d_ants.at(antID), transform);
 	}
+
+	return res;
 }
 
 void FrameDrawer::WriteAnt(ColoredShape &shape, uint8_t gray, size_t antSize)

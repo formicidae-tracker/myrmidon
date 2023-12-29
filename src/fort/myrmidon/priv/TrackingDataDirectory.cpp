@@ -1,5 +1,6 @@
 #include "TrackingDataDirectory.hpp"
 
+#include <libavutil/pixfmt.h>
 #include <mutex>
 #include <regex>
 
@@ -11,6 +12,8 @@
 #include <fort/hermes/FileContext.hpp>
 
 #include <fort/utils/Defer.hpp>
+
+#include <fort/video/Reader.hpp>
 
 #include <fort/myrmidon/priv/PNGUtils.hpp>
 #include <fort/myrmidon/priv/proto/TDDCache.hpp>
@@ -24,7 +27,6 @@
 #include "TagCloseUp.hpp"
 #include "TimeUtils.hpp"
 #include "TrackingDataDirectoryError.hpp"
-#include "fort/myrmidon/priv/VideoReader.hpp"
 
 #ifdef MYRMIDON_USE_BOOST_FILESYSTEM
 #define MYRMIDON_FILE_IS_REGULAR(f) ((f).type() == fs::regular_file)
@@ -1135,6 +1137,15 @@ private:
 	TrackingDataDirectory::Ptr d_tdd;
 };
 
+image_u8_t wrapVideoFrame(const video::Frame &frame) noexcept {
+	return image_u8_t{
+	    .width  = std::get<0>(frame.Size),
+	    .height = std::get<1>(frame.Size),
+	    .stride = frame.Linesize[0],
+	    .buf    = frame.Planes[0],
+	};
+}
+
 std::vector<TrackingDataDirectory::Loader>
 TrackingDataDirectory::PrepareFullFramesLoaders() {
 	auto firstFrame = *begin();
@@ -1148,14 +1159,18 @@ TrackingDataDirectory::PrepareFullFramesLoaders() {
 	std::vector<Loader> res;
 	for (const auto &ms : d_movies->Segments()) {
 		res.push_back([reducer, ms, width, height, this]() {
-			VideoReader vr{ms.second->AbsoluteFilePath(), {width, height}};
-			auto        frame = vr.Grab();
+			video::Reader v{
+			    ms.second->AbsoluteFilePath(),
+			    AV_PIX_FMT_GRAY8,
+			    {width, height}};
+
+			auto frame = v.Grab();
 
 			auto filename = "frame_" +
 			                std::to_string(ms.second->ToTrackingFrameID(0)) +
 			                ".png";
 			auto imgPath = AbsoluteFilePath() / "ants/computed" / filename;
-			WritePNG(imgPath, frame->AsImageU8());
+			WritePNG(imgPath, wrapVideoFrame(*frame));
 
 			reducer->Reduce();
 			return nullptr;

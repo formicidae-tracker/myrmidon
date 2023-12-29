@@ -72,7 +72,6 @@ set(HDR_PRIVATE_FILES
 	priv/proto/TagStatisticsCache.hpp
 	priv/proto/TagCloseUpCache.hpp
 	priv/PNGUtils.hpp
-	priv/VideoReader.hpp
 	utils/Checker.hpp
 	utils/Defer.hpp
 	priv/AntPoseEstimate.hpp
@@ -153,7 +152,6 @@ set(SRC_PRIVATE_FILES
 	priv/TagCloseUp.cpp
 	priv/AntMetadata.cpp
 	priv/PNGUtils.cpp
-	priv/VideoReader.cpp
 	priv/proto/FileReadWriter.cpp
 	priv/proto/ExperimentReadWriter.cpp
 	priv/proto/TDDCache.cpp
@@ -247,7 +245,6 @@ set(SRC_UTEST_FILES
 	priv/LocatableTypesUTest.cpp
 	priv/UtilsUTest.cpp
 	priv/PNGUtilsUTest.cpp
-	priv/VideoReaderUTest.cpp
 	AntUTest.cpp
 	ExperimentUTest.cpp
 	IdentificationUTest.cpp
@@ -300,13 +297,13 @@ target_link_libraries(
 	fort-time::libfort-time
 	fort-hermes::libfort-hermes
 	fort-charis::libfort-utils
+	fort-charis::libfort-video
 	TBB::tbb
 	Threads::Threads
 	yaml-cpp::yaml-cpp
 	Eigen3::Eigen
 	semver::semver
 	spng
-	PkgConfig::ffmpeg
 )
 
 set_target_properties(
@@ -329,13 +326,12 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/myrmidon-config.h
 )
 
 if(FORT_MYRMIDON_MAIN)
-	include_directories(${OpenCV_INCLUDE_DIRS})
 	add_library(
 		fort-myrmidon-utestdata SHARED ${UTESTDATA_SRC_FILES}
 									   ${UTESTDATA_HDR_FILES}
 	)
 
-	target_link_libraries(fort-myrmidon-utestdata fort-myrmidon ${OpenCV_LIBS})
+	target_link_libraries(fort-myrmidon-utestdata fort-myrmidon)
 
 	install(TARGETS fort-myrmidon-utestdata DESTINATION lib)
 	install(FILES utest-data/UTestData.hpp utest-data/Config.hpp
