@@ -5,15 +5,11 @@
 #include <gtest/gtest.h>
 
 void TestSetup::OnTestProgramStart(const ::testing::UnitTest &unit_test) {
-	try {
-		std::ostringstream oss;
-		oss << "myrmidon-test-" << getpid();
-		auto tmppath = fort::myrmidon::UTestData::TempDirName();
-		fs::remove_all(tmppath);
-		s_utestdata = std::make_unique<fort::myrmidon::UTestData>(tmppath);
-	} catch (const std::exception &e) {
-		std::cerr << e.what() << std::endl;
-	}
+	std::ostringstream oss;
+	oss << "myrmidon-test-" << getpid();
+	auto tmppath = fort::myrmidon::UTestData::TempDirName();
+	fs::remove_all(tmppath);
+	s_utestdata = std::make_unique<fort::myrmidon::UTestData>(tmppath);
 }
 
 // Called after all test activities have ended.
