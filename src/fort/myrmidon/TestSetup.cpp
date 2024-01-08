@@ -3,8 +3,12 @@
 #include <cpptrace/cpptrace.hpp>
 #include <fort/myrmidon/utest-data/UTestData.hpp>
 #include <gtest/gtest.h>
+extern "C" {
+#include <libavutil/log.h>
+}
 
 void TestSetup::OnTestProgramStart(const ::testing::UnitTest &unit_test) {
+	av_log_set_level(AV_LOG_QUIET);
 	std::ostringstream oss;
 	oss << "myrmidon-test-" << getpid();
 	auto tmppath = fort::myrmidon::UTestData::TempDirName();
