@@ -294,7 +294,7 @@ target_link_libraries(
 	protobuf::libprotobuf
 	${CXXFS_LIBRARY}
 	fort-tags::libfort-tags
-	fort-time::libfort-time
+	fort-charis::libfort-time
 	fort-hermes::libfort-hermes
 	fort-charis::libfort-utils
 	fort-charis::libfort-video

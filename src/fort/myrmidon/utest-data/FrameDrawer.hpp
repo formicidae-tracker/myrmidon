@@ -32,7 +32,7 @@ public:
 
 	FrameDrawer(fort::tags::Family family, const Config &config);
 
-	std::unique_ptr<video::Frame> Draw(const IdentifiedFrame &frame) const;
+	void Draw(video::Frame &buffer, const IdentifiedFrame &frame) const;
 
 	void ComputeTagPosition(
 	    Eigen::Vector2d       &position,

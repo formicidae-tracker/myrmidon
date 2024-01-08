@@ -3,6 +3,7 @@
 #include "Config.hpp"
 
 #include <fort/myrmidon/priv/Isometry2D.hpp>
+#include <libavutil/pixfmt.h>
 #include <memory>
 #include <stdexcept>
 
@@ -25,16 +26,17 @@ FrameDrawer::FrameDrawer(fort::tags::Family family, const Config &config)
 	}
 }
 
-std::unique_ptr<video::Frame> FrameDrawer::Draw(const IdentifiedFrame &frame
-) const {
-	auto res = std::make_unique<video::Frame>(
-	    frame.Width,
-	    frame.Height,
-	    AV_PIX_FMT_GRAY8
-	);
+void FrameDrawer::Draw(video::Frame &buffer, const IdentifiedFrame &frame)
+    const {
+	if (buffer.Size != std::make_tuple(frame.Width, frame.Height) ||
+	    buffer.Format != AV_PIX_FMT_GRAY8) {
+		throw std::invalid_argument{
+		    "Output buffer must be a " + std::to_string(frame.Width) + "x" +
+		    std::to_string(frame.Height) + " buffer GRAY8 image"};
+	}
 
 	// fills background
-	memset(res->Planes[0], 127, res->Linesize[0] * frame.Height);
+	memset(buffer.Planes[0], 127, buffer.Linesize[0] * frame.Height);
 
 	// draw shapes at the right position
 	for (size_t i = 0; i < frame.Positions.rows(); ++i) {
@@ -47,10 +49,8 @@ std::unique_ptr<video::Frame> FrameDrawer::Draw(const IdentifiedFrame &frame
 		    frame.Positions.block<1, 2>(i, 1).transpose()
 		);
 
-		DrawShapeOnImage(*res, d_ants.at(antID), transform);
+		DrawShapeOnImage(buffer, d_ants.at(antID), transform);
 	}
-
-	return res;
 }
 
 void FrameDrawer::WriteAnt(ColoredShape &shape, uint8_t gray, size_t antSize)
@@ -154,7 +154,7 @@ FrameDrawer::BuildAntShape(AntID antID, const AntData &ant) const {
 }
 
 std::tuple<Eigen::Vector2i, Eigen::Vector2i>
-computeAABB(const std::vector<Eigen::Vector2f> &vertices) {
+computeAABB(const std::vector<Eigen::Vector2d> &vertices) {
 	Eigen::Vector2i pMin{
 	    std::numeric_limits<int>::max(),
 	    std::numeric_limits<int>::max(),
@@ -172,13 +172,14 @@ computeAABB(const std::vector<Eigen::Vector2f> &vertices) {
 	return {pMin, pMax};
 }
 
-bool isInside(const std::vector<Eigen::Vector2f> &vertices, int x, int y) {
+bool isInside(const std::vector<Eigen::Vector2d> &vertices, int x, int y) {
+
 	return false;
 }
 
 void fillConvexPoly(
     video::Frame                       &img,
-    const std::vector<Eigen::Vector2f> &vertices,
+    const std::vector<Eigen::Vector2d> &vertices,
     uint8_t                             color
 ) {
 	auto [min, max] = computeAABB(vertices);
@@ -197,7 +198,7 @@ void FrameDrawer::DrawShapeOnImage(
     const ColoredShape             &shape,
     const priv::Isometry2D<double> &transformation
 ) {
-	std::vector<Eigen::Vector2f> vertices;
+	std::vector<Eigen::Vector2d> vertices;
 	for (const auto &[color, poly] : shape) {
 		vertices.clear();
 		vertices.reserve(poly.size());

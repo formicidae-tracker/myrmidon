@@ -1,6 +1,11 @@
 #include "CloseUpWriter.hpp"
+#include "fort/myrmidon/priv/PNGUtils.hpp"
 
 #include <fort/myrmidon/priv/TagCloseUp.hpp>
+
+#include <fort/video/Frame.hpp>
+#include <libavutil/pixfmt.h>
+#include <stdexcept>
 
 namespace fort {
 namespace myrmidon {
@@ -21,7 +26,7 @@ void CloseUpWriter::Prepare(size_t index) {
 }
 
 void CloseUpWriter::WriteFrom(const IdentifiedFrame &data, uint64_t frameID) {
-	std::map<AntID, cv::Point2f> neededCloseUp;
+	std::map<AntID, Eigen::Vector2f> neededCloseUp;
 
 	for (size_t i = 0; i < data.Positions.rows(); ++i) {
 		AntID antID = data.Positions(i, 0);
@@ -43,17 +48,22 @@ void CloseUpWriter::WriteFrom(const IdentifiedFrame &data, uint64_t frameID) {
 		return;
 	}
 
-	d_drawer->Draw(d_frameBuffer, data);
+	video::Frame frameBuffer{
+	    int(data.Width),
+	    int(data.Height),
+	    AV_PIX_FMT_GRAY8};
+
+	d_drawer->Draw(frameBuffer, data);
 
 	if (d_fullFrameNeeded == true) {
 		d_fullFrameNeeded = false;
-		SaveFullFrame(d_frameBuffer, frameID);
+		SaveFullFrame(frameBuffer, frameID);
 		SaveExpectedFullFrame(data, frameID);
 	}
 
 	for (const auto &[antID, position] : neededCloseUp) {
 		d_seen.insert(antID);
-		SaveCloseUp(d_frameBuffer, frameID, antID, position);
+		SaveCloseUp(frameBuffer, frameID, antID, position);
 		SaveExpectedCloseUpFrame(data, frameID, antID);
 	}
 }
@@ -83,23 +93,55 @@ std::string CloseUpWriter::CloseUpPath(uint64_t frameID, AntID antID) const {
 	        std::to_string(frameID) + ".png");
 }
 
-void CloseUpWriter::SaveFullFrame(const cv::Mat &frame, uint64_t frameID) {
-	cv::imwrite(FullFramePath(frameID), frame);
+image_u8_t AsImageU8(const video::Frame &frame) {
+	if (frame.Format != AV_PIX_FMT_GRAY8) {
+		throw std::invalid_argument{"Invalid video::Frame format"};
+	}
+	return image_u8_t{
+	    .width  = std::get<0>(frame.Size),
+	    .height = std::get<1>(frame.Size),
+	    .stride = frame.Linesize[0],
+	    .buf    = frame.Planes[0],
+	};
+}
+
+void CloseUpWriter::SaveFullFrame(const video::Frame &frame, uint64_t frameID) {
+	priv::WritePNG(FullFramePath(frameID), AsImageU8(frame));
+}
+
+struct ROI {
+	int X, Y, W, H;
+	ROI(const Eigen::Vector2i &position, const Eigen::Vector2i &size)
+	    : X{position.x()}
+	    , Y{position.y()}
+	    , W{size.x()}
+	    , H{size.y()} {};
+};
+
+image_u8_t GetROI(image_u8_t image, const ROI &roi) {
+	return image_u8_t{
+	    .width  = roi.W,
+	    .height = roi.H,
+	    .stride = image.stride - roi.X,
+	    .buf    = image.buf + roi.Y * image.stride + roi.X,
+	};
 }
 
 void CloseUpWriter::SaveCloseUp(
-    const cv::Mat     &frame,
-    uint64_t           frameID,
-    AntID              antID,
-    const cv::Point2f &position
+    const video::Frame    &frame,
+    uint64_t               frameID,
+    AntID                  antID,
+    const Eigen::Vector2f &position
 ) {
 
-	auto roi =
-	    cv::Rect_<float>(position - cv::Point2f(150, 150), cv::Size(300, 300));
-	roi.x = std::clamp(std::round(roi.x), 0.0f, float(frame.cols - 300));
-	roi.y = std::clamp(std::round(roi.y), 0.0f, float(frame.rows - 300));
+	auto roi = ROI{
+	    (position - Eigen::Vector2f(150, 150)).cast<int>(),
+	    Eigen::Vector2i(300, 300),
+	};
+	roi.X = std::clamp(roi.X, 0, std::get<0>(frame.Size) - 300);
+	roi.Y = std::clamp(roi.Y, 0, std::get<1>(frame.Size) - 300);
 
-	cv::imwrite(CloseUpPath(frameID, antID), frame(roi));
+	priv::WritePNG(CloseUpPath(frameID, antID), GetROI(AsImageU8(frame), roi));
 }
 
 void CloseUpWriter::SaveExpectedFullFrame(

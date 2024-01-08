@@ -5,96 +5,114 @@
 
 #include "Video.hpp"
 
-#include "UtilsUTest.hpp"
 #include "TestSetup.hpp"
+#include "UtilsUTest.hpp"
+#include <fort/myrmidon/utest-data/UTestData.hpp>
 
-#include <opencv2/core.hpp>
+#define failure_helper(aExpr, bExpr, a, b, field)                              \
+	::testing::AssertionFailure()                                              \
+	    << "Value of: " << aExpr << "." << #field << std::endl                 \
+	    << "  Actual: " << a.field << std::endl                                \
+	    << "Expected: " << bExpr << "." << #field << std::endl                 \
+	    << "Which is: " << b.field
 
-#define failure_helper(aExpr,bExpr,a,b,field) \
-	::testing::AssertionFailure() \
-	<< "Value of: " << aExpr << "." << #field << std::endl \
-	<< "  Actual: " << a.field << std::endl \
-	<< "Expected: " << bExpr << "." << #field << std::endl \
-	<< "Which is: " << b.field
+#define check(aExpr, bExpr, a, b, field)                                       \
+	do {                                                                       \
+		if (a.field != b.field) {                                              \
+			return failure_helper(aExpr, bExpr, a, b, field);                  \
+		}                                                                      \
+	} while (0)
 
+#define check_presence(aExpr, bExpr, a, b, field)                              \
+	do {                                                                       \
+		if ((!b.field) != (!a.field)) {                                        \
+			return ::testing::AssertionFailure()                               \
+			       << "Value of: " << aExpr << "." << #field << " != nullptr " \
+			       << std::endl                                                \
+			       << "  Actual: " << std::boolalpha << bool(a.field)          \
+			       << std::endl                                                \
+			       << "Expected: " << bool(b.field);                           \
+		}                                                                      \
+	} while (0)
 
-#define check(aExpr,bExpr,a,b,field) do {	  \
-		if ( a.field != b.field ) { \
-			return failure_helper(aExpr,bExpr,a,b,field); \
-		} \
-	} while(0)
-
-#define check_presence(aExpr,bExpr,a,b,field) do { \
-		if ( (!b.field) != (!a.field) ) { \
-			return ::testing::AssertionFailure() \
-				<< "Value of: " << aExpr << "." << #field << " != nullptr " << std::endl \
-				<< "  Actual: " << std::boolalpha << bool(a.field) << std::endl \
-				<< "Expected: " << bool(b.field); \
-		} \
-	}while(0)
-
-
-
-::testing::AssertionResult AssertVideoFrameDataEqual(const char * aExpr,
-                                                     const char * bExpr,
-                                                     const fort::myrmidon::VideoFrameData & a,
-                                                     const fort::myrmidon::VideoFrameData & b) {
-	check(aExpr,bExpr,a,b,Position);
-	auto tmp = AssertTimeEqual((std::string(aExpr) + ".Time").c_str(),
-	                           (std::string(bExpr) + ".Time").c_str(),
-	                           a.Time,
-	                           b.Time);
-	if ( !tmp ) {
+::testing::AssertionResult AssertVideoFrameDataEqual(
+    const char                           *aExpr,
+    const char                           *bExpr,
+    const fort::myrmidon::VideoFrameData &a,
+    const fort::myrmidon::VideoFrameData &b
+) {
+	check(aExpr, bExpr, a, b, Position);
+	auto tmp = AssertTimeEqual(
+	    (std::string(aExpr) + ".Time").c_str(),
+	    (std::string(bExpr) + ".Time").c_str(),
+	    a.Time,
+	    b.Time
+	);
+	if (!tmp) {
 		return tmp;
 	}
-	check_presence(aExpr,bExpr,a,b,Identified);
-	if ( b.Identified ) {
-		tmp = AssertIdentifiedFrameEqual(("*" + std::string(aExpr) + ".Identified").c_str(),
-		                                  ("*" + std::string(bExpr) + ".Identified").c_str(),
-		                                 *a.Identified,
-		                                 *b.Identified);
+	check_presence(aExpr, bExpr, a, b, Identified);
+	if (b.Identified) {
+		tmp = AssertIdentifiedFrameEqual(
+		    ("*" + std::string(aExpr) + ".Identified").c_str(),
+		    ("*" + std::string(bExpr) + ".Identified").c_str(),
+		    *a.Identified,
+		    *b.Identified
+		);
 		if (!tmp) {
 			return tmp;
 		}
 	}
-	check_presence(aExpr,bExpr,a,b,Collided);
-	if ( b.Collided ) {
-		tmp = AssertCollisionFrameEqual(("*" + std::string(aExpr) + ".Collided").c_str(),
-		                                ("*" + std::string(bExpr) + ".Collided").c_str(),
-		                                *a.Collided,
-		                                *b.Collided);
-		if (!tmp) {
-			return tmp;
-		}
-	}
-
-	check(aExpr,bExpr,a,b,Trajectories.size());
-	for ( size_t i = 0; i < b.Trajectories.size(); ++i) {
-		tmp = AssertAntTrajectoryEqual(("*" + std::string(aExpr) + ".Trajectories[" + std::to_string(i) + "]").c_str(),
-		                               ("*" + std::string(bExpr) + ".Trajectories[" + std::to_string(i) + "]").c_str(),
-		                               *a.Trajectories[i],
-		                               *b.Trajectories[i]);
+	check_presence(aExpr, bExpr, a, b, Collided);
+	if (b.Collided) {
+		tmp = AssertCollisionFrameEqual(
+		    ("*" + std::string(aExpr) + ".Collided").c_str(),
+		    ("*" + std::string(bExpr) + ".Collided").c_str(),
+		    *a.Collided,
+		    *b.Collided
+		);
 		if (!tmp) {
 			return tmp;
 		}
 	}
 
-	check(aExpr,bExpr,a,b,Interactions.size());
+	check(aExpr, bExpr, a, b, Trajectories.size());
+	for (size_t i = 0; i < b.Trajectories.size(); ++i) {
+		tmp = AssertAntTrajectoryEqual(
+		    ("*" + std::string(aExpr) + ".Trajectories[" + std::to_string(i) +
+		     "]")
+		        .c_str(),
+		    ("*" + std::string(bExpr) + ".Trajectories[" + std::to_string(i) +
+		     "]")
+		        .c_str(),
+		    *a.Trajectories[i],
+		    *b.Trajectories[i]
+		);
+		if (!tmp) {
+			return tmp;
+		}
+	}
 
-	for ( size_t i = 0; i < b.Interactions.size(); ++i) {
-		tmp = AssertAntInteractionEqual(("*" + std::string(aExpr) + ".Interactions[" + std::to_string(i) + "]").c_str(),
-		                                ("*" + std::string(bExpr) + ".Interactions[" + std::to_string(i) + "]").c_str(),
-		                                *a.Interactions[i],
-		                                *b.Interactions[i]);
+	check(aExpr, bExpr, a, b, Interactions.size());
+
+	for (size_t i = 0; i < b.Interactions.size(); ++i) {
+		tmp = AssertAntInteractionEqual(
+		    ("*" + std::string(aExpr) + ".Interactions[" + std::to_string(i) +
+		     "]")
+		        .c_str(),
+		    ("*" + std::string(bExpr) + ".Interactions[" + std::to_string(i) +
+		     "]")
+		        .c_str(),
+		    *a.Interactions[i],
+		    *b.Interactions[i]
+		);
 		if (!tmp) {
 			return tmp;
 		}
 	}
 
 	return ::testing::AssertionSuccess();
-
 }
-
 
 ::testing::AssertionResult AssertVideoSegmentEqual(const char * aExpr,
                                                    const char * bExpr,
