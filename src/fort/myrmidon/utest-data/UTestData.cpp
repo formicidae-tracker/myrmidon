@@ -486,6 +486,7 @@ void UTestData::WriteTDD(TDDInfo &tddInfo, SpaceID spaceID) {
 	if (tddInfo.HasConfig) {
 		WriteTDDConfig(tddInfo);
 	}
+
 	SegmentedDataWriter::List writers = {
 	    std::make_shared<HermesFileWriter>(tddInfo.AbsoluteFilePath, d_config),
 	};
@@ -495,7 +496,6 @@ void UTestData::WriteTDD(TDDInfo &tddInfo, SpaceID spaceID) {
 		writers.push_back(std::make_shared<CloseUpWriter>(tddInfo, drawer));
 
 		if (tddInfo.HasMovie) {
-			std::cout << "coucou" << std::endl;
 			writers.push_back(std::make_shared<MovieWriter>(
 			    tddInfo.AbsoluteFilePath,
 			    d_config,

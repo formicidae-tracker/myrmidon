@@ -124,7 +124,7 @@ set(FORT_CHARIS_BUILD_GL Off)
 FetchContent_Declare(
 	fort-charis
 	GIT_REPOSITORY https://github.com/formicidae-tracker/charis.git
-	GIT_TAG 3d59377e1e971c24acab5cee06b7c42393318d28
+	GIT_TAG 4529b4f45a19d9e710e94fc9c764f55dca88d0f0
 )
 
 FetchContent_MakeAvailable(

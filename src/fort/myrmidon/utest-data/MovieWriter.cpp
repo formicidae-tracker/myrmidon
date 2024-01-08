@@ -17,8 +17,7 @@ MovieWriter::MovieWriter(
     , d_framerate{config.Framerate}
     , d_size{config.Width, config.Height}
     , d_drawer{drawer}
-    , d_frameBuffer{
-          int(config.Width), int(config.Height), AV_PIX_FMT_GRAY8, 0} {}
+    , d_frameBuffer{int(config.Width), int(config.Height), AV_PIX_FMT_GRAY8} {}
 
 MovieWriter::~MovieWriter() {}
 
@@ -41,6 +40,7 @@ void MovieWriter::Prepare(size_t index) {
 	    video::Encoder::Params{
 	        .Size      = d_frameBuffer.Size,
 	        .Framerate = d_framerate,
+	        .Format    = AV_PIX_FMT_GRAY8,
 	    }
 	);
 	d_frameMatching = std::make_unique<std::ofstream>(matchPath.c_str());
