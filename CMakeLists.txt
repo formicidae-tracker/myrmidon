@@ -103,12 +103,6 @@ FetchContent_Declare(
 )
 
 FetchContent_Declare(
-	fort-time
-	GIT_REPOSITORY https://github.com/formicidae-tracker/time.git
-	GIT_TAG v1.0.10
-)
-
-FetchContent_Declare(
 	fort-hermes
 	GIT_REPOSITORY https://github.com/formicidae-tracker/hermes.git
 	GIT_TAG v0.5.5
@@ -130,17 +124,11 @@ set(FORT_CHARIS_BUILD_GL Off)
 FetchContent_Declare(
 	fort-charis
 	GIT_REPOSITORY https://github.com/formicidae-tracker/charis.git
-	GIT_TAG ac4e162a2ec0fb03981f9d284a98064b07d8dc51
+	GIT_TAG 3d59377e1e971c24acab5cee06b7c42393318d28
 )
 
 FetchContent_MakeAvailable(
-	yaml-cpp
-	semver
-	fort-tags
-	fort-time
-	fort-hermes
-	spng
-	fort-charis
+	yaml-cpp semver fort-tags fort-hermes spng fort-charis
 )
 
 include(CheckCXXSourceCompiles)

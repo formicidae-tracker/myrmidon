@@ -495,6 +495,7 @@ void UTestData::WriteTDD(TDDInfo &tddInfo, SpaceID spaceID) {
 		writers.push_back(std::make_shared<CloseUpWriter>(tddInfo, drawer));
 
 		if (tddInfo.HasMovie) {
+			std::cout << "coucou" << std::endl;
 			writers.push_back(std::make_shared<MovieWriter>(
 			    tddInfo.AbsoluteFilePath,
 			    d_config,
@@ -605,7 +606,7 @@ void UTestData::WriteTDDConfig(const TDDInfo &info) {
 	       << "  strobe-duration: 1.5ms" << std::endl
 	       << "  fps: "
 	       << int(std::round(
-	              Duration::Second.Seconds() / d_config.Framerate.Seconds()
+	              double(d_config.Framerate.Num) / d_config.Framerate.Den
 	          ))
 	       << std::endl
 	       << "  stub-path: \"\"" << std::endl

@@ -37,7 +37,7 @@ private:
 
 	FrameDrawer::Ptr     d_drawer;
 	video::Frame         d_frameBuffer;
-	double               d_fps;
+	video::Ratio<int>    d_framerate;
 	std::tuple<int, int> d_size;
 	int                  d_movieFrame;
 
