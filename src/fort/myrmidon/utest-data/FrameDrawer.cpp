@@ -153,20 +153,58 @@ FrameDrawer::BuildAntShape(AntID antID, const AntData &ant) const {
 	return res;
 }
 
+std::tuple<Eigen::Vector2i, Eigen::Vector2i>
+computeAABB(const std::vector<Eigen::Vector2f> &vertices) {
+	Eigen::Vector2i pMin{
+	    std::numeric_limits<int>::max(),
+	    std::numeric_limits<int>::max(),
+	},
+	    pMax{
+	        std::numeric_limits<int>::min(),
+	        std::numeric_limits<int>::min(),
+	    };
+	for (const auto v : vertices) {
+		pMin.x() = std::min(pMin.x(), int(std::floor(v.x())));
+		pMin.y() = std::min(pMin.y(), int(std::ceil(v.y())));
+		pMax.x() = std::max(pMax.x(), int(std::floor(v.x())));
+		pMax.y() = std::max(pMax.y(), int(std::ceil(v.y())));
+	}
+	return {pMin, pMax};
+}
+
+bool isInside(const std::vector<Eigen::Vector2f> &vertices, int x, int y) {
+	return false;
+}
+
+void fillConvexPoly(
+    video::Frame                       &img,
+    const std::vector<Eigen::Vector2f> &vertices,
+    uint8_t                             color
+) {
+	auto [min, max] = computeAABB(vertices);
+	for (int y = min.y(); y < max.y(); y++) {
+		for (int x = min.x(); x < max.x(); x++) {
+			if (isInside(vertices, x, y) == false) {
+				continue;
+			}
+			img.Planes[0][y * img.Linesize[0] + x] = color;
+		}
+	}
+}
+
 void FrameDrawer::DrawShapeOnImage(
-    cv::Mat                        &dest,
+    video::Frame                   &dest,
     const ColoredShape             &shape,
     const priv::Isometry2D<double> &transformation
 ) {
-	std::vector<cv::Point> vertices;
+	std::vector<Eigen::Vector2f> vertices;
 	for (const auto &[color, poly] : shape) {
 		vertices.clear();
 		vertices.reserve(poly.size());
 		for (const auto &p : poly) {
-			auto v = transformation * p;
-			vertices.push_back(cv::Point(v.x(), v.y()));
+			vertices.push_back(transformation * p);
 		}
-		cv::fillConvexPoly(dest, vertices, color);
+		fillConvexPoly(dest, vertices, color);
 	}
 }
 
