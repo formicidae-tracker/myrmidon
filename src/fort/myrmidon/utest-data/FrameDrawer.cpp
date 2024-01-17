@@ -172,9 +172,31 @@ computeAABB(const std::vector<Eigen::Vector2d> &vertices) {
 	return {pMin, pMax};
 }
 
-bool isInside(const std::vector<Eigen::Vector2d> &vertices, int x, int y) {
+int sideOfEdge(
+    const Eigen::Vector2d &a, const Eigen::Vector2d &b, const Eigen::Vector2d &p
+) {
+	return (b.x() - a.x()) * (p.y() - a.y()) -
+	       (p.x() - a.x()) * (b.y() - a.y());
+}
 
-	return false;
+bool isInside(
+    const std::vector<Eigen::Vector2d> &vertices, const Eigen::Vector2d &p
+) {
+	int windingNumber{0};
+
+	for (size_t i = 0; i < vertices.size(); ++i) {
+		size_t j = (i + 1) % vertices.size();
+
+		if (vertices[i].y() <= p.y()) {
+			if ((vertices[j].y() > p.y()) &&
+			    sideOfEdge(vertices[i], vertices[j], p) > 0) {
+				++windingNumber;
+			}
+		} else if (vertices[j].y() <= p.y() && sideOfEdge(vertices[i], vertices[j], p) < 0) {
+			--windingNumber;
+		}
+	}
+	return windingNumber == 0;
 }
 
 void fillConvexPoly(
@@ -185,7 +207,8 @@ void fillConvexPoly(
 	auto [min, max] = computeAABB(vertices);
 	for (int y = min.y(); y < max.y(); y++) {
 		for (int x = min.x(); x < max.x(); x++) {
-			if (isInside(vertices, x, y) == false) {
+			Eigen::Vector2d p{x, y};
+			if (isInside(vertices, p) == false) {
 				continue;
 			}
 			img.Planes[0][y * img.Linesize[0] + x] = color;
