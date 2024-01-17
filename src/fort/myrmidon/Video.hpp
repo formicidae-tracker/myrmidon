@@ -14,6 +14,11 @@
 #include <fort/myrmidon/types/Typedefs.hpp>
 
 namespace fort {
+
+namespace video {
+struct Frame;
+}
+
 namespace myrmidon {
 
 /**
@@ -56,26 +61,6 @@ struct VideoFrameData {
 	 * The ants interactions (if previously VideoSegment::Match() 'ed)
 	 */
 	std::vector<AntInteraction::Ptr> Interactions;
-
-	/**
-	 * The pointer to the frame pixel data.
-	 */
-	uint8_t *Pixels;
-
-	/**
-	 * The pixels Width
-	 */
-	int Width;
-
-	/**
-	 * The pixels Stride
-	 */
-	int Stride;
-
-	/**
-	 * The pixels Height
-	 */
-	int Height;
 
 	/**
 	 * Indicates the (unlikely) case where no tracking data is
@@ -237,8 +222,10 @@ struct VideoSequence {
 	 * \endverbatim
 	 */
 	static void ForEach(
-	    const VideoSegment::List                       &list,
-	    std::function<void(const VideoFrameData &data)> operation
+	    const VideoSegment::List &list,
+	    std::function<
+	        void(const video::Frame &frame, const VideoFrameData &data)>
+	        operation
 	);
 };
 
