@@ -122,7 +122,7 @@ image_u8_t GetROI(image_u8_t image, const ROI &roi) {
 	return image_u8_t{
 	    .width  = roi.W,
 	    .height = roi.H,
-	    .stride = image.stride - roi.X,
+	    .stride = image.stride,
 	    .buf    = image.buf + roi.Y * image.stride + roi.X,
 	};
 }
