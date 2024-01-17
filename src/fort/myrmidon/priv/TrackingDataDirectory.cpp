@@ -1223,22 +1223,21 @@ void TrackingDataDirectory::LoadDetectionSettings() {
 	}
 #define SET_IF_EXISTS(cppType, cppName, yamlName)                              \
 	do {                                                                       \
-		if (quadSettings[#yamlName]) {                                         \
+		if (quadSettings[yamlName]) {                                          \
 			d_detectionSettings.cppName =                                      \
 			    quadSettings[#yamlName].as<cppType>();                         \
 		}                                                                      \
 	} while (0)
 
-	SET_IF_EXISTS(float, QuadDecimate, decimate);
-	SET_IF_EXISTS(float, QuadSigma, sigma);
-	SET_IF_EXISTS(bool, RefineEdges, refine - edges);
-	SET_IF_EXISTS(int, QuadMinClusterPixel, min - cluster - pixel);
+	SET_IF_EXISTS(float, QuadDecimate, "decimate");
+	SET_IF_EXISTS(float, QuadSigma, "sigma");
+	SET_IF_EXISTS(bool, RefineEdges, "refine-edges");
+	SET_IF_EXISTS(int, QuadMinClusterPixel, "min-cluster-pixel");
 	SET_IF_EXISTS(int, QuadMaxNMaxima, max - n - maxima);
 	SET_IF_EXISTS(float, QuadCriticalRadian, critical - angle - radian);
 	SET_IF_EXISTS(float, QuadMaxLineMSE, max - line - mean - square - error);
 	SET_IF_EXISTS(int, QuadMinBWDiff, min - black - white - diff);
 	SET_IF_EXISTS(bool, QuadDeglitch, deglitch);
-
 #undef SET_IF_EXISTS
 }
 

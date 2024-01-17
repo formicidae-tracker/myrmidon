@@ -7,7 +7,10 @@
 
 #include "TestSetup.hpp"
 #include "UtilsUTest.hpp"
+
 #include <fort/myrmidon/utest-data/UTestData.hpp>
+
+#include <fort/video/Frame.hpp>
 
 #define failure_helper(aExpr, bExpr, a, b, field)                              \
 	::testing::AssertionFailure()                                              \
@@ -178,24 +181,29 @@ TEST_F(VideoUTest, ForEachFramesEdgeCases) {
 	);
 	segment.End += 2;
 
-	VideoSequence::ForEach(segments, [&](const VideoFrameData &d) {
-		auto fi = std::find_if(
-		    segment.Data.begin(),
-		    segment.Data.end(),
-		    [&](const VideoFrameData &it) { return it.Position == d.Position; }
-		);
-		if (fi == segment.Data.end()) {
-			EXPECT_PRED_FORMAT2(
-			    AssertVideoFrameDataEqual,
-			    d,
-			    (VideoFrameData{
-			        .Position = d.Position,
-			        .Time     = Time::SinceEver()})
-			);
-		} else {
-			EXPECT_PRED_FORMAT2(AssertVideoFrameDataEqual, d, *fi);
-		}
-	});
+	VideoSequence::ForEach(
+	    segments,
+	    [&](const video::Frame &frame, const VideoFrameData &d) {
+		    auto fi = std::find_if(
+		        segment.Data.begin(),
+		        segment.Data.end(),
+		        [&](const VideoFrameData &it) {
+			        return it.Position == d.Position;
+		        }
+		    );
+		    if (fi == segment.Data.end()) {
+			    EXPECT_PRED_FORMAT2(
+			        AssertVideoFrameDataEqual,
+			        d,
+			        (VideoFrameData{
+			            .Position = d.Position,
+			            .Time     = Time::SinceEver()})
+			    );
+		    } else {
+			    EXPECT_PRED_FORMAT2(AssertVideoFrameDataEqual, d, *fi);
+		    }
+	    }
+	);
 };
 
 TEST_F(VideoUTest, EndToEnd) {
@@ -240,12 +248,15 @@ TEST_F(VideoUTest, EndToEnd) {
 
 	auto iter = segments.front().Data.begin();
 
-	VideoSequence::ForEach(segments, [&](const VideoFrameData &d) {
-		ASSERT_TRUE(iter != segments.front().Data.end());
-		EXPECT_FALSE(d.Pixels == nullptr);
-		EXPECT_PRED_FORMAT2(AssertVideoFrameDataEqual, d, *iter);
-		++iter;
-	});
+	VideoSequence::ForEach(
+	    segments,
+	    [&](const video::Frame &frame, const VideoFrameData &d) {
+		    ASSERT_TRUE(iter != segments.front().Data.end());
+		    EXPECT_TRUE(frame.Planes[0] != nullptr);
+		    EXPECT_PRED_FORMAT2(AssertVideoFrameDataEqual, d, *iter);
+		    ++iter;
+	    }
+	);
 
 	Query::FindVideoSegments(
 	    *experiment,
