@@ -43,9 +43,7 @@ UTestData::UTestData(const fs::path &basedir) {
 	}
 }
 
-UTestData::~UTestData() {
-	CleanUpFilesystem();
-}
+UTestData::~UTestData() {}
 
 const fs::path &UTestData::Basedir() const {
 	return d_basedir;

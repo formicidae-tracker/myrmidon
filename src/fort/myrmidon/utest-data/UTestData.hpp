@@ -122,11 +122,12 @@ public:
 
 	const fort::myrmidon::Config &Config() const;
 
+	void CleanUpFilesystem();
+
 private:
 	typedef std::vector<std::pair<IdentifiedFrame::Ptr,CollisionFrame::Ptr>> FrameList;
 
 	void BuildFakeData(const fs::path & basedir);
-	void CleanUpFilesystem();
 
 	void GenerateFakedata();
 	void GenerateExperimentStructure();

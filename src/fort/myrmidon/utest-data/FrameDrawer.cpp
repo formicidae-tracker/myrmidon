@@ -196,7 +196,7 @@ bool isInside(
 			--windingNumber;
 		}
 	}
-	return windingNumber == 0;
+	return windingNumber % 2 != 0;
 }
 
 void fillConvexPoly(

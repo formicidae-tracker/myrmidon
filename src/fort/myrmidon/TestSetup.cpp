@@ -18,6 +18,9 @@ void TestSetup::OnTestProgramStart(const ::testing::UnitTest &unit_test) {
 
 // Called after all test activities have ended.
 void TestSetup::OnTestProgramEnd(const ::testing::UnitTest &unit_test) {
+	if (unit_test.Passed()) {
+		s_utestdata->CleanUpFilesystem();
+	}
 	s_utestdata.reset();
 }
 
