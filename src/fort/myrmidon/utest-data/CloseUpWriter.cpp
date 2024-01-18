@@ -119,11 +119,15 @@ GetROI(const video::Frame &image, const ROI &roi) {
 	}
 	auto res =
 	    std::make_unique<video::Frame>(roi.W, roi.H, AV_PIX_FMT_GRAY8, 32);
-	memcpy(
-	    res->Planes[0],
-	    image.Planes[0] + roi.Y * res->Linesize[0] + roi.X,
-	    res->Linesize[0] * roi.H
-	);
+
+	for (size_t i = 0; i < roi.H; i++) {
+		memcpy(
+		    res->Planes[0] + i * res->Linesize[0],
+		    image.Planes[0] + (i + roi.Y) * image.Linesize[0] + roi.X,
+		    roi.W
+		);
+	}
+
 	return res;
 }
 
