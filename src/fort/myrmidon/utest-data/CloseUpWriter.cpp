@@ -1,10 +1,14 @@
+extern "C" {
+#include <libavutil/pixdesc.h>
+#include <libavutil/pixfmt.h>
+}
+
 #include "CloseUpWriter.hpp"
-#include "fort/myrmidon/priv/PNGUtils.hpp"
+#include <fort/video/PNG.hpp>
 
 #include <fort/myrmidon/priv/TagCloseUp.hpp>
 
 #include <fort/video/Frame.hpp>
-#include <libavutil/pixfmt.h>
 #include <stdexcept>
 
 namespace fort {
@@ -93,20 +97,8 @@ std::string CloseUpWriter::CloseUpPath(uint64_t frameID, AntID antID) const {
 	        std::to_string(frameID) + ".png");
 }
 
-image_u8_t AsImageU8(const video::Frame &frame) {
-	if (frame.Format != AV_PIX_FMT_GRAY8) {
-		throw std::invalid_argument{"Invalid video::Frame format"};
-	}
-	return image_u8_t{
-	    .width  = std::get<0>(frame.Size),
-	    .height = std::get<1>(frame.Size),
-	    .stride = frame.Linesize[0],
-	    .buf    = frame.Planes[0],
-	};
-}
-
 void CloseUpWriter::SaveFullFrame(const video::Frame &frame, uint64_t frameID) {
-	priv::WritePNG(FullFramePath(frameID), AsImageU8(frame));
+	WritePNG(FullFramePath(frameID), frame);
 }
 
 struct ROI {
@@ -118,13 +110,21 @@ struct ROI {
 	    , H{size.y()} {};
 };
 
-image_u8_t GetROI(image_u8_t image, const ROI &roi) {
-	return image_u8_t{
-	    .width  = roi.W,
-	    .height = roi.H,
-	    .stride = image.stride,
-	    .buf    = image.buf + roi.Y * image.stride + roi.X,
-	};
+std::unique_ptr<video::Frame>
+GetROI(const video::Frame &image, const ROI &roi) {
+	if (image.Format != AV_PIX_FMT_GRAY8) {
+		throw std::invalid_argument{
+		    std::string("Only ") + av_get_pix_fmt_name(AV_PIX_FMT_GRAY8) +
+		    " is supported"};
+	}
+	auto res =
+	    std::make_unique<video::Frame>(roi.W, roi.H, AV_PIX_FMT_GRAY8, 32);
+	memcpy(
+	    res->Planes[0],
+	    image.Planes[0] + roi.Y * res->Linesize[0] + roi.X,
+	    res->Linesize[0] * roi.H
+	);
+	return res;
 }
 
 void CloseUpWriter::SaveCloseUp(
@@ -141,7 +141,7 @@ void CloseUpWriter::SaveCloseUp(
 	roi.X = std::clamp(roi.X, 0, std::get<0>(frame.Size) - 300);
 	roi.Y = std::clamp(roi.Y, 0, std::get<1>(frame.Size) - 300);
 
-	priv::WritePNG(CloseUpPath(frameID, antID), GetROI(AsImageU8(frame), roi));
+	WritePNG(CloseUpPath(frameID, antID), *GetROI(frame, roi));
 }
 
 void CloseUpWriter::SaveExpectedFullFrame(

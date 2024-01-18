@@ -66,7 +66,7 @@ if(FORT_MYRMIDON_MAIN)
 	add_custom_target(check ${CMAKE_CTEST_COMMAND} ARGS -V)
 	include(GoogleTest)
 
-	find_package(OpenCV REQUIRED highgui imgproc imgcodecs videoio)
+	# find_package(OpenCV REQUIRED highgui imgproc imgcodecs videoio)
 endif(FORT_MYRMIDON_MAIN)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
@@ -114,22 +114,14 @@ FetchContent_Declare(
 	GIT_TAG v0.3.0
 )
 
-FetchContent_Declare(
-	spng
-	GIT_REPOSITORY https://github.com/randy408/libspng.git
-	GIT_TAG v0.7.4
-)
-
 set(FORT_CHARIS_BUILD_GL Off)
 FetchContent_Declare(
 	fort-charis
 	GIT_REPOSITORY https://github.com/formicidae-tracker/charis.git
-	GIT_TAG ebbf84299894f2a54fb53571a5c5b4def1dda860
+	GIT_TAG b1f2540a9a79ea69ca5cdf5a2a0bd62d15ff2f69
 )
 
-FetchContent_MakeAvailable(
-	yaml-cpp semver fort-tags fort-hermes spng fort-charis
-)
+FetchContent_MakeAvailable(yaml-cpp semver fort-tags fort-hermes fort-charis)
 
 include(CheckCXXSourceCompiles)
 
