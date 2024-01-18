@@ -71,7 +71,6 @@ set(HDR_PRIVATE_FILES
 	priv/proto/IOUtils.hpp
 	priv/proto/TagStatisticsCache.hpp
 	priv/proto/TagCloseUpCache.hpp
-	priv/PNGUtils.hpp
 	utils/Checker.hpp
 	utils/Defer.hpp
 	priv/AntPoseEstimate.hpp
@@ -151,7 +150,6 @@ set(SRC_PRIVATE_FILES
 	priv/FrameReference.cpp
 	priv/TagCloseUp.cpp
 	priv/AntMetadata.cpp
-	priv/PNGUtils.cpp
 	priv/proto/FileReadWriter.cpp
 	priv/proto/ExperimentReadWriter.cpp
 	priv/proto/TDDCache.cpp
@@ -244,7 +242,6 @@ set(SRC_UTEST_FILES
 	priv/MatchersUTest.cpp
 	priv/LocatableTypesUTest.cpp
 	priv/UtilsUTest.cpp
-	priv/PNGUtilsUTest.cpp
 	AntUTest.cpp
 	ExperimentUTest.cpp
 	IdentificationUTest.cpp
@@ -303,7 +300,6 @@ target_link_libraries(
 	yaml-cpp::yaml-cpp
 	Eigen3::Eigen
 	semver::semver
-	spng
 )
 
 set_target_properties(

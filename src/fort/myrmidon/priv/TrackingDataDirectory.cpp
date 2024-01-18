@@ -1,6 +1,11 @@
+extern "C" {
+#include <libavutil/pixdesc.h>
+#include <libavutil/pixfmt.h>
+}
+
 #include "TrackingDataDirectory.hpp"
 
-#include <libavutil/pixfmt.h>
+#include <cpptrace/cpptrace.hpp>
 #include <mutex>
 #include <regex>
 
@@ -13,9 +18,9 @@
 
 #include <fort/utils/Defer.hpp>
 
+#include <fort/video/PNG.hpp>
 #include <fort/video/Reader.hpp>
 
-#include <fort/myrmidon/priv/PNGUtils.hpp>
 #include <fort/myrmidon/priv/proto/TDDCache.hpp>
 #include <fort/myrmidon/priv/proto/TagCloseUpCache.hpp>
 #include <fort/myrmidon/priv/proto/TagStatisticsCache.hpp>
@@ -966,6 +971,21 @@ private:
 			d_destructor(d_family);
 		}
 
+		static image_u8_t AsImageU8(const video::Frame &frame) {
+
+			if (frame.Format != AV_PIX_FMT_GRAY8) {
+				throw cpptrace::invalid_argument{
+				    std::string{"invalid image format "} +
+				    av_get_pix_fmt_name(frame.Format)};
+			}
+			return image_u8_t{
+			    .width  = std::get<0>(frame.Size),
+			    .height = std::get<1>(frame.Size),
+			    .stride = frame.Linesize[0],
+			    .buf    = frame.Planes[0],
+			};
+		}
+
 		std::tuple<std::vector<TagCloseUp::ConstPtr>, FixableError::Ptr> Detect(
 		    const TrackingDataDirectory::TagCloseUpFileAndFilter &fileAndFilter,
 		    const FrameReference		                         &reference
@@ -975,8 +995,9 @@ private:
 
 			zarray_t *detections = nullptr;
 			try {
-				auto img   = priv::ReadPNG(fileAndFilter.first);
-				detections = apriltag_detector_detect(d_detector, img.get());
+				auto img   = video::ReadPNG(fileAndFilter.first);
+				auto img8  = AsImageU8(*img);
+				detections = apriltag_detector_detect(d_detector, &img8);
 			} catch (const std::exception &e) {
 				std::ostringstream oss;
 				oss << "could not read image " << fileAndFilter.first << ": "
@@ -1137,15 +1158,6 @@ private:
 	TrackingDataDirectory::Ptr d_tdd;
 };
 
-image_u8_t wrapVideoFrame(const video::Frame &frame) noexcept {
-	return image_u8_t{
-	    .width  = std::get<0>(frame.Size),
-	    .height = std::get<1>(frame.Size),
-	    .stride = frame.Linesize[0],
-	    .buf    = frame.Planes[0],
-	};
-}
-
 std::vector<TrackingDataDirectory::Loader>
 TrackingDataDirectory::PrepareFullFramesLoaders() {
 	auto firstFrame = *begin();
@@ -1170,7 +1182,7 @@ TrackingDataDirectory::PrepareFullFramesLoaders() {
 			                std::to_string(ms.second->ToTrackingFrameID(0)) +
 			                ".png";
 			auto imgPath = AbsoluteFilePath() / "ants/computed" / filename;
-			WritePNG(imgPath, wrapVideoFrame(*frame));
+			WritePNG(imgPath, *frame);
 
 			reducer->Reduce();
 			return nullptr;
@@ -1225,7 +1237,7 @@ void TrackingDataDirectory::LoadDetectionSettings() {
 	do {                                                                       \
 		if (quadSettings[yamlName]) {                                          \
 			d_detectionSettings.cppName =                                      \
-			    quadSettings[#yamlName].as<cppType>();                         \
+			    quadSettings[yamlName].as<cppType>();                          \
 		}                                                                      \
 	} while (0)
 
@@ -1233,11 +1245,11 @@ void TrackingDataDirectory::LoadDetectionSettings() {
 	SET_IF_EXISTS(float, QuadSigma, "sigma");
 	SET_IF_EXISTS(bool, RefineEdges, "refine-edges");
 	SET_IF_EXISTS(int, QuadMinClusterPixel, "min-cluster-pixel");
-	SET_IF_EXISTS(int, QuadMaxNMaxima, max - n - maxima);
-	SET_IF_EXISTS(float, QuadCriticalRadian, critical - angle - radian);
-	SET_IF_EXISTS(float, QuadMaxLineMSE, max - line - mean - square - error);
-	SET_IF_EXISTS(int, QuadMinBWDiff, min - black - white - diff);
-	SET_IF_EXISTS(bool, QuadDeglitch, deglitch);
+	SET_IF_EXISTS(int, QuadMaxNMaxima, "max-n-maxima");
+	SET_IF_EXISTS(float, QuadCriticalRadian, "critical-angle-radian");
+	SET_IF_EXISTS(float, QuadMaxLineMSE, "max-line-mean-square-error");
+	SET_IF_EXISTS(int, QuadMinBWDiff, "min-black-white-diff");
+	SET_IF_EXISTS(bool, QuadDeglitch, "deglitch");
 #undef SET_IF_EXISTS
 }
 
