@@ -76,59 +76,77 @@ void TrackingVideoWidgetUTest::Paint(QPainter * painter) {
 	widget->paint(painter);
 }
 
-TEST_F(TrackingVideoWidgetUTest,BannerIsShown) {
-	QImage res(1920,1080,QImage::Format_RGB888);
+TEST_F(TrackingVideoWidgetUTest, BannerIsShown) {
+	QImage   res(1920, 1080, QImage::Format_RGB32);
 	QPainter painter(&res);
 	Paint(&painter);
-	EXPECT_EQ(res.pixelColor(0,0),QColor(0,0,0));
+	EXPECT_EQ(res.pixelColor(0, 0), QColor(0, 0, 0));
 	widget->hideLoadingBanner(false);
 	widget->display(frame);
 	Paint(&painter);
-	EXPECT_EQ(res.pixelColor(0,0),QColor(255,255,255));
+	EXPECT_EQ(res.pixelColor(0, 0), QColor(255, 255, 255));
 	widget->hideLoadingBanner(true);
 	Paint(&painter);
-	EXPECT_EQ(res.pixelColor(0,0),QColor(0,0,0));
+	EXPECT_EQ(res.pixelColor(0, 0), QColor(0, 0, 0));
 }
 
-
-
-TEST_F(TrackingVideoWidgetUTest,AntAreDisplayedCorrectly) {
-	QImage res(1920,1080,QImage::Format_RGB888);
+TEST_F(TrackingVideoWidgetUTest, AntAreDisplayedCorrectly) {
+	QImage   res(1920, 1080, QImage::Format_RGB32);
 	QPainter painter(&res);
 	widget->display(frame);
 	widget->hideLoadingBanner(true);
 	Paint(&painter);
 
-	EXPECT_EQ(res.pixelColor(100,200),
-	          Conversion::colorFromFM(ants[0]->DisplayColor()));
-	EXPECT_EQ(res.pixelColor(300,400),
-	          Conversion::colorFromFM(ants[1]->DisplayColor()));
-
+	EXPECT_EQ(
+	    res.pixelColor(100, 200),
+	    Conversion::colorFromFM(ants[0]->DisplayColor())
+	);
+	EXPECT_EQ(
+	    res.pixelColor(300, 400),
+	    Conversion::colorFromFM(ants[1]->DisplayColor())
+	);
 }
 
-
-TEST_F(TrackingVideoWidgetUTest,AntVisibilityIsRespected) {
-	QImage res(1920,1080,QImage::Format_RGB888);
+TEST_F(TrackingVideoWidgetUTest, AntVisibilityIsRespected) {
+	QImage   res(1920, 1080, QImage::Format_RGB32);
 	QPainter painter(&res);
 	widget->display(frame);
 	widget->hideLoadingBanner(true);
 
-	experiment->antDisplay()->setAntDisplayStatus(2,fm::Ant::DisplayState::HIDDEN);
+	experiment->antDisplay()->setAntDisplayStatus(
+	    2,
+	    fm::Ant::DisplayState::HIDDEN
+	);
+	EXPECT_EQ(experiment->antDisplay()->numberSoloAnt(), 0);
+	EXPECT_EQ(ants[0]->DisplayStatus(), fm::Ant::DisplayState::VISIBLE);
+	EXPECT_EQ(ants[1]->DisplayStatus(), fm::Ant::DisplayState::HIDDEN);
+	EXPECT_EQ(ants[2]->DisplayStatus(), fm::Ant::DisplayState::VISIBLE);
+
 	Paint(&painter);
 
-	EXPECT_EQ(res.pixelColor(100,200),
-	          Conversion::colorFromFM(ants[0]->DisplayColor()));
-	EXPECT_EQ(res.pixelColor(300,400),
-	          QColor(0,0,0));
+	EXPECT_EQ(
+	    res.pixelColor(100, 200),
+	    Conversion::colorFromFM(ants[0]->DisplayColor())
+	);
+	EXPECT_EQ(res.pixelColor(300, 400), QColor(0, 0, 0));
 
-	experiment->antDisplay()->setAntDisplayStatus(2,fm::Ant::DisplayState::SOLO);
+	experiment->antDisplay()->setAntDisplayStatus(
+	    2,
+	    fm::Ant::DisplayState::SOLO
+	);
+	EXPECT_EQ(experiment->antDisplay()->numberSoloAnt(), 1);
+	EXPECT_EQ(ants[0]->DisplayStatus(), fm::Ant::DisplayState::VISIBLE);
+	EXPECT_EQ(ants[1]->DisplayStatus(), fm::Ant::DisplayState::SOLO);
+	EXPECT_EQ(ants[2]->DisplayStatus(), fm::Ant::DisplayState::VISIBLE);
+
+	frame.AsQImage().fill(QColor(0, 0, 0));
 	Paint(&painter);
-	EXPECT_EQ(res.pixelColor(100,200),
-	          QColor(0,0,0));
-	EXPECT_EQ(res.pixelColor(300,400),
-	          Conversion::colorFromFM(ants[1]->DisplayColor()));
+	EXPECT_EQ(res.pixelColor(100, 200), QColor(0, 0, 0));
+	EXPECT_EQ(
+	    res.pixelColor(300, 400),
+	    Conversion::colorFromFM(ants[1]->DisplayColor())
+	);
 }
-
 
 TEST_F(TrackingVideoWidgetUTest,AntCollisionAreShown) {
 	QImage res(1920,1080,QImage::Format_RGB888);
