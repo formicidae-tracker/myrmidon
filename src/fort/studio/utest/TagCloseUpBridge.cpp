@@ -1,16 +1,18 @@
 #include "TagCloseUpBridge.hpp"
 
 #include <fort/myrmidon/TestSetup.hpp>
+#include <fort/myrmidon/utest-data/UTestData.hpp>
 
 #include <fort/studio/bridge/ExperimentBridge.hpp>
-#include <fort/studio/bridge/UniverseBridge.hpp>
 #include <fort/studio/bridge/TagCloseUpBridge.hpp>
+#include <fort/studio/bridge/UniverseBridge.hpp>
 
 #include <fort/studio/MyrmidonTypes/TrackingDataDirectory.hpp>
 
-
 void TagCloseUpUTest::SetUp() {
-	experiment = fmp::Experiment::Create(TestSetup::UTestData().Basedir() / "tag-close-up.myrmidon");
+	experiment = fmp::Experiment::Create(
+	    TestSetup::UTestData().Basedir() / "tag-close-up.myrmidon"
+	);
 	bridge = new ExperimentBridge();
 	bridge->setExperiment(experiment);
 	bridge->universe()->addSpace("foo");

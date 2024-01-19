@@ -4,36 +4,40 @@
 #include <QSettings>
 
 #include <fort/myrmidon/TestSetup.hpp>
-
+#include <fort/myrmidon/utest-data/UTestData.hpp>
 
 #include <fort/studio/MainWindow.hpp>
 #include <fort/studio/bridge/ExperimentBridge.hpp>
 
 #include "ui_MainWindow.h"
+
 class MainWindowUTest : public ::testing::Test {
 protected:
 	void SetUp() {
 		QCoreApplication::setOrganizationName("FORmicidae Tracker");
-		QCoreApplication::setOrganizationDomain("fortmicidae-tracker.github.io");
+		QCoreApplication::setOrganizationDomain("fortmicidae-tracker.github.io"
+		);
 		QCoreApplication::setApplicationName("FORT Studio");
 		auto settingsPath = TestSetup::UTestData().Basedir() / "qt-settings";
 		fs::remove_all(settingsPath);
-		QSettings::setPath(QSettings::NativeFormat,QSettings::UserScope,settingsPath.c_str());
+		QSettings::setPath(
+		    QSettings::NativeFormat,
+		    QSettings::UserScope,
+		    settingsPath.c_str()
+		);
 
 		mainWindow = new MainWindow();
-		auto filepath = TestSetup::UTestData().Basedir() / "test-main-window.myrmidon";
+		auto filepath =
+		    TestSetup::UTestData().Basedir() / "test-main-window.myrmidon";
 		Experiment()->create(filepath.c_str());
 
-
-		recentFilesActions
-			= {
-			   mainWindow->d_ui->recentFile1,
-			   mainWindow->d_ui->recentFile2,
-			   mainWindow->d_ui->recentFile3,
-			   mainWindow->d_ui->recentFile4,
-			   mainWindow->d_ui->recentFile5,
+		recentFilesActions = {
+		    mainWindow->d_ui->recentFile1,
+		    mainWindow->d_ui->recentFile2,
+		    mainWindow->d_ui->recentFile3,
+		    mainWindow->d_ui->recentFile4,
+		    mainWindow->d_ui->recentFile5,
 		};
-
 	}
 
 	void TearDown() {
@@ -41,13 +45,12 @@ protected:
 		delete mainWindow;
 	}
 
-	ExperimentBridge * Experiment() const {
+	ExperimentBridge *Experiment() const {
 		return mainWindow->d_experiment;
 	}
 
-	MainWindow *          mainWindow;
-	std::vector<QAction*> recentFilesActions;
-
+	MainWindow            *mainWindow;
+	std::vector<QAction *> recentFilesActions;
 };
 
 std::string ToString(const QString & s ) {

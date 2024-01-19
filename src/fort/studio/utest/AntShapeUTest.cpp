@@ -1,7 +1,7 @@
 #include "AntShapeUTest.hpp"
 
-
 #include <fort/myrmidon/TestSetup.hpp>
+#include <fort/myrmidon/utest-data/UTestData.hpp>
 
 #include <fort/studio/bridge/AntShapeBridge.hpp>
 #include <fort/studio/bridge/AntShapeTypeBridge.hpp>
@@ -13,7 +13,9 @@
 #include <QSignalSpy>
 
 void AntShapeUTest::SetUp() {
-	auto experiment = fmp::Experiment::Create(TestSetup::UTestData().Basedir() / "ant-measurement-bridge.myrmidon");
+	auto experiment = fmp::Experiment::Create(
+	    TestSetup::UTestData().Basedir() / "ant-measurement-bridge.myrmidon"
+	);
 
 	d_experiment.setExperiment(experiment);
 }

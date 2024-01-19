@@ -1,22 +1,24 @@
 #include "ZoneUTest.hpp"
 
 #include <fort/myrmidon/TestSetup.hpp>
+#include <fort/myrmidon/utest-data/UTestData.hpp>
 
-#include <QSignalSpy>
 #include <QAbstractItemModel>
+#include <QSignalSpy>
 
 #include <fort/studio/Format.hpp>
 
 void ZoneUTest::SetUp() {
 	EXPECT_NO_THROW({
-			experiment = fmp::Experiment::Create(TestSetup::UTestData().Basedir() / "zone.myrmidon");
-			experiment->Save(TestSetup::UTestData().Basedir() / "zone.myrmidon");
-			auto foo = experiment->CreateSpace("foo");
-			auto bar = experiment->CreateSpace("bar");
-		});
+		experiment = fmp::Experiment::Create(
+		    TestSetup::UTestData().Basedir() / "zone.myrmidon"
+		);
+		experiment->Save(TestSetup::UTestData().Basedir() / "zone.myrmidon");
+		auto foo = experiment->CreateSpace("foo");
+		auto bar = experiment->CreateSpace("bar");
+	});
 
 	zones = new ZoneBridge(NULL);
-
 }
 
 void ZoneUTest::TearDown() {

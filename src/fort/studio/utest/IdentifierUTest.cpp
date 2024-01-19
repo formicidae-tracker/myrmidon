@@ -4,23 +4,28 @@
 #include <fort/studio/widget/AntListWidget.hpp>
 
 #include <fort/myrmidon/TestSetup.hpp>
-#include <fort/myrmidon/priv/Identifier.hpp>
-#include <fort/myrmidon/priv/AntShapeType.hpp>
-#include <fort/myrmidon/priv/AntMetadata.hpp>
+#include <fort/myrmidon/utest-data/UTestData.hpp>
 
-#include <QTest>
+#include <fort/myrmidon/priv/AntMetadata.hpp>
+#include <fort/myrmidon/priv/AntShapeType.hpp>
+#include <fort/myrmidon/priv/Identifier.hpp>
+
 #include <QSignalSpy>
 #include <QSortFilterProxyModel>
+#include <QTest>
 
 #include <fort/studio/Format.hpp>
 
-
 void IdentifierUTest::SetUp() {
 	ASSERT_NO_THROW({
-			experiment = fmp::Experiment::Create(TestSetup::UTestData().Basedir() / "identifierUTest.myrmidon");
-			experiment->Save(TestSetup::UTestData().Basedir() / "identifierUTest.myrmidon");
-			identifier = new IdentifierBridge(NULL);
-		});
+		experiment = fmp::Experiment::Create(
+		    TestSetup::UTestData().Basedir() / "identifierUTest.myrmidon"
+		);
+		experiment->Save(
+		    TestSetup::UTestData().Basedir() / "identifierUTest.myrmidon"
+		);
+		identifier = new IdentifierBridge(NULL);
+	});
 }
 
 void IdentifierUTest::TearDown() {
