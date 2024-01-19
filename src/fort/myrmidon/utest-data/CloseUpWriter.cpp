@@ -142,8 +142,8 @@ void CloseUpWriter::SaveCloseUp(
 	    (position - Eigen::Vector2f(150, 150)).cast<int>(),
 	    Eigen::Vector2i(300, 300),
 	};
-	roi.X = std::clamp(roi.X, 0, std::get<0>(frame.Size) - 300);
-	roi.Y = std::clamp(roi.Y, 0, std::get<1>(frame.Size) - 300);
+	roi.X = std::clamp(roi.X, 0, frame.Size.Width - 300);
+	roi.Y = std::clamp(roi.Y, 0, frame.Size.Height - 300);
 
 	WritePNG(CloseUpPath(frameID, antID), *GetROI(frame, roi));
 }

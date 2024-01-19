@@ -3,15 +3,13 @@
 #include "Config.hpp"
 
 #include <fort/myrmidon/priv/Isometry2D.hpp>
-#include <libavutil/pixfmt.h>
+
 #include <memory>
 #include <stdexcept>
 
 #include <fort/video/Frame.hpp>
-
-extern "C" {
-#include <libavutil/imgutils.h>
-}
+#include <fort/video/TypesIO.hpp>
+#include <string>
 
 namespace fort {
 namespace myrmidon {
@@ -28,11 +26,16 @@ FrameDrawer::FrameDrawer(fort::tags::Family family, const Config &config)
 
 void FrameDrawer::Draw(video::Frame &buffer, const IdentifiedFrame &frame)
     const {
-	if (buffer.Size != std::make_tuple(frame.Width, frame.Height) ||
-	    buffer.Format != AV_PIX_FMT_GRAY8) {
+	video::Resolution wantedResolution{
+	    static_cast<int>(frame.Width),
+	    static_cast<int>(frame.Height),
+	};
+
+	if (buffer.Size != wantedResolution || buffer.Format != AV_PIX_FMT_GRAY8) {
 		throw std::invalid_argument{
-		    "Output buffer must be a " + std::to_string(frame.Width) + "x" +
-		    std::to_string(frame.Height) + " buffer GRAY8 image"};
+		    "Output buffer must be a " + std::to_string(wantedResolution) +
+		    " buffer GRAY8 image, got a " + std::to_string(buffer.Size) + " " +
+		    std::to_string(buffer.Format) + " buffer"};
 	}
 
 	// fills background

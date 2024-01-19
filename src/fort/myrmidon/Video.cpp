@@ -14,10 +14,10 @@ void VideoSequence::ForEach(
 
 		video::Reader reader{s.AbsoluteFilePath};
 		reader.SeekFrame(s.Begin);
-		auto iter = s.Data.cbegin();
+		auto iter  = s.Data.cbegin();
+		auto frame = reader.CreateFrame(32);
 		for (auto moviePos = s.Begin; moviePos < s.End; ++moviePos) {
-			auto frame = reader.Grab();
-			if (!frame) {
+			if (!reader.Read(*frame)) {
 				break;
 			}
 			while (iter != s.Data.end() && iter->Position < moviePos) {
