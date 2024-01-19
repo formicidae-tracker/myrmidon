@@ -207,9 +207,8 @@ void TrackingVideoWidget::paintAnts(
 		auto      angle    = tFrame->Positions(i, 3);
 		const auto &[displayStatus, displayColor] =
 		    d_antDisplay->displayStatusAndColor(antID);
-		if (displayStatus == fmp::Ant::DisplayState::HIDDEN ||
-		    (hasSolo == true && displayStatus != fmp::Ant::DisplayState::SOLO
-		    )) {
+		if (displayStatus == fm::Ant::DisplayState::HIDDEN ||
+		    (hasSolo == true && displayStatus != fm::Ant::DisplayState::SOLO)) {
 			continue;
 		}
 		auto correctedPos = Conversion::fromEigen(ratio * position);

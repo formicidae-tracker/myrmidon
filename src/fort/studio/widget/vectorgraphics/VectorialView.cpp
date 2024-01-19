@@ -66,15 +66,15 @@ void VectorialView::zoom(double factor) {
 	emit zoomed(transform().m11());
 }
 
-bool VectorialView::eventFilter(QObject * object, QEvent * event) {
-	if ( event->type() == QEvent::Wheel ) {
-		QWheelEvent* wheelEvent = static_cast<QWheelEvent*>(event);
-		if (QApplication::keyboardModifiers() == Qt::ShiftModifier ) {
-			if ( wheelEvent->orientation() == Qt::Vertical ) {
-				d_targetViewportPos = wheelEvent->pos();
-				d_targetScenePos = mapToScene(wheelEvent->pos());
-				double angle = wheelEvent->angleDelta().y();
-				double factor = std::pow(d_zoomFactorBase, angle);
+bool VectorialView::eventFilter(QObject *object, QEvent *event) {
+	if (event->type() == QEvent::Wheel) {
+		QWheelEvent *wheelEvent = static_cast<QWheelEvent *>(event);
+		if (QApplication::keyboardModifiers() == Qt::ShiftModifier) {
+			if (wheelEvent->angleDelta().y() != 0.0) {
+				d_targetViewportPos = wheelEvent->position();
+				d_targetScenePos = mapToScene(wheelEvent->position().toPoint());
+				double angle     = wheelEvent->angleDelta().y();
+				double factor    = std::pow(d_zoomFactorBase, angle);
 				zoom(factor);
 			}
 			// also disables horizontal scrolling, useful for laptop gestures

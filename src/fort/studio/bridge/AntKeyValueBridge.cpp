@@ -205,8 +205,8 @@ public:
 	}
 
 	Qt::ItemFlags flags(const QModelIndex &index) const override {
-		if ( hasIndex(index.row(),index.column(),index.parent() ) == false ) {
-			return 0;
+		if (hasIndex(index.row(), index.column(), index.parent()) == false) {
+			return Qt::ItemFlags{};
 		}
 		return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable;
 	}
@@ -539,15 +539,15 @@ public:
 	}
 
 	Qt::ItemFlags flags(const QModelIndex &index) const override {
-		if ( index.isValid() == false ) {
-			return 0;
+		if (index.isValid() == false) {
+			return Qt::ItemFlags{};
 		}
 		Qt::ItemFlags base = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
-		auto p = static_cast<Pointer*>(index.internalPointer());
-		if ( p->Value >= 0 && index.column() >= 2) {
+		auto          p    = static_cast<Pointer *>(index.internalPointer());
+		if (p->Value >= 0 && index.column() >= 2) {
 			return base | Qt::ItemIsEditable;
 		}
-		if ( p->Key >= 0 && index.column() >= 3 ) {
+		if (p->Key >= 0 && index.column() >= 3) {
 			return base | Qt::ItemIsEditable;
 		}
 		return base;
