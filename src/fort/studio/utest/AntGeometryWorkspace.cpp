@@ -1,41 +1,51 @@
 #include "AntGeometryWorkspace.hpp"
 
-#include <QMainWindow>
 #include <QAction>
 #include <QComboBox>
+#include <QMainWindow>
 
 #include <fort/myrmidon/TestSetup.hpp>
+#include <fort/myrmidon/utest-data/UTestData.hpp>
 
+#include <fort/studio/bridge/AntShapeBridge.hpp>
+#include <fort/studio/bridge/AntShapeTypeBridge.hpp>
 #include <fort/studio/bridge/ExperimentBridge.hpp>
 #include <fort/studio/bridge/IdentifierBridge.hpp>
-#include <fort/studio/bridge/AntShapeTypeBridge.hpp>
-#include <fort/studio/bridge/AntShapeBridge.hpp>
-
-
-
 
 void AntShapeWorkspaceUTest::SetUp() {
 	shapeWs = new AntShapeWorkspace();
-	WorkspaceUTest::SetUp(fmp::Experiment::Create(TestSetup::UTestData().Basedir() / "ant-shape-workspace.myrmidon"),shapeWs);
+	WorkspaceUTest::SetUp(
+	    fmp::Experiment::Create(
+	        TestSetup::UTestData().Basedir() / "ant-shape-workspace.myrmidon"
+	    ),
+	    shapeWs
+	);
 
 	bridge->createAnt();
-	bridge->identifier()->addIdentification(1,1,fort::Time::SinceEver(),fort::Time::Forever());
+	bridge->identifier()->addIdentification(
+	    1,
+	    1,
+	    fort::Time::SinceEver(),
+	    fort::Time::Forever()
+	);
 
 	bridge->antShapeTypes()->addType("foo");
 
-	shapeWs->setTagCloseUp(std::make_shared<fmp::TagCloseUp>(TestSetup::UTestData().Basedir() / "",
-	                                                         fmp::FrameReference("foo.0000",1,fort::Time()),
-	                                                         1,
-	                                                         Eigen::Vector2d::Zero(),
-	                                                         0.0,
-	                                                         fmp::Vector2dList({
-		      Eigen::Vector2d(1,1),
-		      Eigen::Vector2d(1,-1),
-		      Eigen::Vector2d(-1,-1),
-		      Eigen::Vector2d(-1,1)})));
+	shapeWs->setTagCloseUp(std::make_shared<fmp::TagCloseUp>(
+	    TestSetup::UTestData().Basedir() / "",
+	    fmp::FrameReference("foo.0000", 1, fort::Time()),
+	    1,
+	    Eigen::Vector2d::Zero(),
+	    0.0,
+	    fmp::Vector2dList(
+	        {Eigen::Vector2d(1, 1),
+	         Eigen::Vector2d(1, -1),
+	         Eigen::Vector2d(-1, -1),
+	         Eigen::Vector2d(-1, 1)}
+	    )
+	));
 
 	bridge->selectAnt(1);
-
 }
 
 void AntShapeWorkspaceUTest::TearDown() {

@@ -1,19 +1,23 @@
 #include "AntShapeTypeUTest.hpp"
 
+#include "ui_AntShapeTypeEditorWidget.h"
 #include <fort/studio/bridge/AntShapeTypeBridge.hpp>
 #include <fort/studio/widget/AntShapeTypeEditorWidget.hpp>
-#include "ui_AntShapeTypeEditorWidget.h"
 
 #include <fort/studio/Format.hpp>
 
 #include <fort/myrmidon/TestSetup.hpp>
+#include <fort/myrmidon/utest-data/UTestData.hpp>
 
+#include <QAbstractItemModel>
 #include <QSignalSpy>
 #include <QTest>
-#include <QAbstractItemModel>
+#include <qnamespace.h>
 
 void AntShapeTypeUTest::SetUp() {
-	experiment = fmp::Experiment::Create(TestSetup::UTestData().Basedir() / "ant-shape-types.myrmidon");
+	experiment = fmp::Experiment::Create(
+	    TestSetup::UTestData().Basedir() / "ant-shape-types.myrmidon"
+	);
 	shapeTypes = new AntShapeTypeBridge(nullptr);
 }
 
@@ -94,17 +98,15 @@ TEST_F(AntShapeTypeUTest,ModificationTest) {
 	ASSERT_EQ(typeDeleted.count(),1);
 	EXPECT_TRUE(modified.last().at(0).toBool());
 	EXPECT_EQ(typeDeleted.last().at(0).toInt(),1);
-
 }
 
-
-TEST_F(AntShapeTypeUTest,AntShapeTypeEditorWidgetTest) {
+TEST_F(AntShapeTypeUTest, AntShapeTypeEditorWidgetTest) {
 	AntShapeTypeEditorWidget widget(NULL);
 	widget.setup(shapeTypes);
 	auto ui = widget.d_ui;
 
-	QSignalSpy typeModified(shapeTypes,SIGNAL(typeModified(quint32,QString)));
-	QSignalSpy typeDeleted(shapeTypes,SIGNAL(typeDeleted(quint32)));
+	QSignalSpy typeModified(shapeTypes, SIGNAL(typeModified(quint32, QString)));
+	QSignalSpy typeDeleted(shapeTypes, SIGNAL(typeDeleted(quint32)));
 
 	EXPECT_FALSE(ui->addButton->isEnabled());
 	EXPECT_FALSE(ui->removeButton->isEnabled());
@@ -113,31 +115,37 @@ TEST_F(AntShapeTypeUTest,AntShapeTypeEditorWidgetTest) {
 	EXPECT_TRUE(ui->addButton->isEnabled());
 	EXPECT_FALSE(ui->removeButton->isEnabled());
 
-	QTest::mouseClick(ui->addButton,Qt::LeftButton);
-	ASSERT_EQ(typeModified.count(),1);
-	EXPECT_EQ(typeModified.last().at(0).toInt(),1);
-	EXPECT_EQ(ToStdString(typeModified.last().at(1).toString()),
-	          "body part 1");
+	QTest::mouseClick(ui->addButton, Qt::LeftButton);
+	ASSERT_EQ(typeModified.count(), 1);
+	EXPECT_EQ(typeModified.last().at(0).toInt(), 1);
+	EXPECT_EQ(ToStdString(typeModified.last().at(1).toString()), "body part 1");
 
-	QTest::mouseClick(ui->addButton,Qt::LeftButton);
-	ASSERT_EQ(typeModified.count(),2);
-	EXPECT_EQ(typeModified.last().at(0).toInt(),2);
-	EXPECT_EQ(ToStdString(typeModified.last().at(1).toString()),
-	          "body part 2");
+	QTest::mouseClick(ui->addButton, Qt::LeftButton);
+	ASSERT_EQ(typeModified.count(), 2);
+	EXPECT_EQ(typeModified.last().at(0).toInt(), 2);
+	EXPECT_EQ(ToStdString(typeModified.last().at(1).toString()), "body part 2");
 
-	int xPos = ui->tableView->columnViewportPosition( 1 );
-	int yPos = ui->tableView->rowViewportPosition( 0 );
+	int xPos = ui->tableView->columnViewportPosition(1);
+	int yPos = ui->tableView->rowViewportPosition(0);
 
-	QTest::mouseDClick(ui->tableView->viewport(), Qt::LeftButton, NULL, QPoint( xPos, yPos ));
+	QTest::mouseDClick(
+	    ui->tableView->viewport(),
+	    Qt::LeftButton,
+	    Qt::KeyboardModifiers{},
+	    QPoint(xPos, yPos)
+	);
 	EXPECT_TRUE(ui->removeButton->isEnabled());
 	QTest::mouseClick(ui->removeButton, Qt::LeftButton);
-	ASSERT_EQ(typeDeleted.count(),1);
-	EXPECT_EQ(typeDeleted.last().at(0).toInt(),1);
+	ASSERT_EQ(typeDeleted.count(), 1);
+	EXPECT_EQ(typeDeleted.last().at(0).toInt(), 1);
 
 	auto m = shapeTypes->shapeModel();
-	EXPECT_EQ(ToStdString(m->data(m->index(0,0),Qt::DisplayRole).toString()),
-	          "body part 2");
-	EXPECT_EQ(ToStdString(m->data(m->index(0,1),Qt::DisplayRole).toString()),
-	          "2");
-
+	EXPECT_EQ(
+	    ToStdString(m->data(m->index(0, 0), Qt::DisplayRole).toString()),
+	    "body part 2"
+	);
+	EXPECT_EQ(
+	    ToStdString(m->data(m->index(0, 1), Qt::DisplayRole).toString()),
+	    "2"
+	);
 }

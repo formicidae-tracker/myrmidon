@@ -1,26 +1,30 @@
 #include "MeasurementUTest.hpp"
 
-#include <fort/studio/widget/MeasurementTypeWidget.hpp>
 #include "ui_MeasurementTypeWidget.h"
+#include <fort/studio/widget/MeasurementTypeWidget.hpp>
 
 #include <fort/myrmidon/TestSetup.hpp>
+#include <fort/myrmidon/utest-data/UTestData.hpp>
 
-#include <QTest>
 #include <QSignalSpy>
-
+#include <QTest>
 
 void MeasurementUTest::SetUp() {
 	ASSERT_NO_THROW({
-			experiment = fmp::Experiment::Create(TestSetup::UTestData().Basedir() / "measurementUTest.myrmidon");
-			experiment->Save(TestSetup::UTestData().Basedir() / "measurementUTest.myrmidon");
-		});
+		experiment = fmp::Experiment::Create(
+		    TestSetup::UTestData().Basedir() / "measurementUTest.myrmidon"
+		);
+		experiment->Save(
+		    TestSetup::UTestData().Basedir() / "measurementUTest.myrmidon"
+		);
+	});
 	measurements = new MeasurementBridge(NULL);
 }
+
 void MeasurementUTest::TearDown() {
 	delete measurements;
 	experiment.reset();
 }
-
 
 TEST_F(MeasurementUTest,BridgeActivation) {
 	QSignalSpy activated(measurements,SIGNAL(activated(bool)));

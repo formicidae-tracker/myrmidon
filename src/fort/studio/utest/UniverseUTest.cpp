@@ -1,29 +1,32 @@
 #include "UniverseUTest.hpp"
 
+#include "ui_UniverseEditorWidget.h"
 #include <fort/studio/bridge/UniverseBridge.hpp>
 #include <fort/studio/widget/UniverseEditorWidget.hpp>
-#include "ui_UniverseEditorWidget.h"
 
 #include <fort/myrmidon/TestSetup.hpp>
+#include <fort/myrmidon/utest-data/UTestData.hpp>
 
 #include <fort/studio/Format.hpp>
 
 #include <QSignalSpy>
 #include <QTest>
 
-std::vector<fort::myrmidon::priv::TrackingDataDirectory::Ptr> UniverseUTest::s_nest;
-
+std::vector<fort::myrmidon::priv::TrackingDataDirectory::Ptr>
+    UniverseUTest::s_nest;
 
 void UniverseUTest::SetUpTestSuite() {
-	for ( const auto & tddInfo : TestSetup::UTestData().NestDataDirs() ) {
+	for (const auto &tddInfo : TestSetup::UTestData().NestDataDirs()) {
 		ASSERT_NO_THROW({
-				fmp::TrackingDataDirectory::Ptr tdd;
-				fm::FixableErrorList errors;
-				std::tie(tdd,errors) = fmp::priv::TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,
-				                                                              TestSetup::UTestData().Basedir());
-				EXPECT_TRUE(errors.empty());
-				s_nest.push_back(tdd);
-			});
+			fmp::TrackingDataDirectory::Ptr tdd;
+			fm::FixableErrorList            errors;
+			std::tie(tdd, errors) = fmp::priv::TrackingDataDirectory::Open(
+			    tddInfo.AbsoluteFilePath,
+			    TestSetup::UTestData().Basedir()
+			);
+			EXPECT_TRUE(errors.empty());
+			s_nest.push_back(tdd);
+		});
 	}
 	ASSERT_TRUE(s_nest.size() >= 3);
 }

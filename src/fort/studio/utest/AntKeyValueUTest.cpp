@@ -1,27 +1,27 @@
 #include <gtest/gtest.h>
 
 #include <fort/myrmidon/TestSetup.hpp>
+#include <fort/myrmidon/utest-data/UTestData.hpp>
 
 #include <fort/studio/Format.hpp>
 #include <fort/studio/bridge/AntKeyValueBridge.hpp>
 
 #include <QAbstractItemModel>
 
-#include <QTest>
-#include <QSignalSpy>
-#include <QValidator>
-#include <QRegularExpressionValidator>
 #include <QCompleter>
+#include <QRegularExpressionValidator>
+#include <QSignalSpy>
+#include <QTest>
+#include <QValidator>
 
 class AntKeyValueUTest : public ::testing::Test {
-protected :
+protected:
 	void SetUp();
 	void TearDown();
 
 	fmp::Experiment::Ptr experiment;
-	AntKeyValueBridge  * bridge;
+	AntKeyValueBridge   *bridge;
 };
-
 
 void AntKeyValueUTest::SetUp() {
 	experiment = fmp::Experiment::Create(TestSetup::UTestData().Basedir() / "antmetadata-utest.myrmidon");

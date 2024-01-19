@@ -1,6 +1,7 @@
 #include "GlobalPropertyUTest.hpp"
 
 #include <fort/myrmidon/TestSetup.hpp>
+#include <fort/myrmidon/utest-data/UTestData.hpp>
 
 #include <fort/studio/MyrmidonTypes/TrackingDataDirectory.hpp>
 
@@ -9,117 +10,127 @@
 
 #include <fort/studio/widget/GlobalPropertyWidget.hpp>
 
-
 #include "ui_GlobalPropertyWidget.h"
-
 
 #include <QSignalSpy>
 #include <QTest>
 
-
-TEST_F(GlobalPropertyUTest,SignalStateTest) {
+TEST_F(GlobalPropertyUTest, SignalStateTest) {
 	fmp::Experiment::Ptr experiment;
 	GlobalPropertyBridge globalProperties(NULL);
 	ASSERT_NO_THROW({
-			experiment = fmp::priv::Experiment::Create(TestSetup::UTestData().Basedir() / "globalProperty.myrmidon");
-			experiment->Save(TestSetup::UTestData().Basedir() / "globalProperty.myrmidon");
-		});
+		experiment = fmp::priv::Experiment::Create(
+		    TestSetup::UTestData().Basedir() / "globalProperty.myrmidon"
+		);
+		experiment->Save(
+		    TestSetup::UTestData().Basedir() / "globalProperty.myrmidon"
+		);
+	});
 
-	QSignalSpy activatedSignal(&globalProperties,SIGNAL(activated(bool)));
-	QSignalSpy modifiedSignal(&globalProperties,SIGNAL(modified(bool)));
-	QSignalSpy nameSignal(&globalProperties,SIGNAL(nameChanged(QString)));
-	QSignalSpy authorSignal(&globalProperties,SIGNAL(authorChanged(QString)));
-	QSignalSpy commentSignal(&globalProperties,SIGNAL(commentChanged(QString)));
-	QSignalSpy tagFamilySignal(&globalProperties,SIGNAL(tagFamilyChanged(fort::tags::Family)));
-	QSignalSpy tagSizeSignal(&globalProperties,SIGNAL(tagSizeChanged(double)));
+	QSignalSpy activatedSignal(&globalProperties, SIGNAL(activated(bool)));
+	QSignalSpy modifiedSignal(&globalProperties, SIGNAL(modified(bool)));
+	QSignalSpy nameSignal(&globalProperties, SIGNAL(nameChanged(QString)));
+	QSignalSpy authorSignal(&globalProperties, SIGNAL(authorChanged(QString)));
+	QSignalSpy commentSignal(
+	    &globalProperties,
+	    SIGNAL(commentChanged(QString))
+	);
+	QSignalSpy tagFamilySignal(
+	    &globalProperties,
+	    SIGNAL(tagFamilyChanged(fort::tags::Family))
+	);
+	QSignalSpy tagSizeSignal(&globalProperties, SIGNAL(tagSizeChanged(double)));
 
 	EXPECT_FALSE(globalProperties.isModified());
 	EXPECT_FALSE(globalProperties.isActive());
 
-	EXPECT_EQ(globalProperties.name(),"");
-	EXPECT_EQ(globalProperties.author(),"");
-	EXPECT_EQ(globalProperties.comment(),"");
-	EXPECT_EQ(globalProperties.tagFamily(),fort::tags::Family::Undefined);
-	EXPECT_EQ(globalProperties.tagSize(),0.0);
+	EXPECT_EQ(globalProperties.name(), "");
+	EXPECT_EQ(globalProperties.author(), "");
+	EXPECT_EQ(globalProperties.comment(), "");
+	EXPECT_EQ(globalProperties.tagFamily(), fort::tags::Family::Undefined);
+	EXPECT_EQ(globalProperties.tagSize(), 0.0);
 
 	globalProperties.setExperiment(experiment);
 
-	ASSERT_EQ(nameSignal.count(),1);
-	EXPECT_EQ(nameSignal.at(0).at(0).toString(),"");
-	ASSERT_EQ(authorSignal.count(),1);
-	EXPECT_EQ(authorSignal.at(0).at(0).toString(),"");
-	ASSERT_EQ(commentSignal.count(),1);
-	EXPECT_EQ(commentSignal.at(0).at(0).toString(),"");
-	ASSERT_EQ(tagFamilySignal.count(),1);
-	EXPECT_EQ(tagFamilySignal.at(0).at(0).value<fort::tags::Family>(),
-	          fort::tags::Family::Undefined);
-	ASSERT_EQ(tagSizeSignal.count(),1);
-	EXPECT_EQ(tagSizeSignal.at(0).at(0).toDouble(),1.0);
-
+	ASSERT_EQ(nameSignal.count(), 1);
+	EXPECT_EQ(nameSignal.at(0).at(0).toString(), "");
+	ASSERT_EQ(authorSignal.count(), 1);
+	EXPECT_EQ(authorSignal.at(0).at(0).toString(), "");
+	ASSERT_EQ(commentSignal.count(), 1);
+	EXPECT_EQ(commentSignal.at(0).at(0).toString(), "");
+	ASSERT_EQ(tagFamilySignal.count(), 1);
+	EXPECT_EQ(
+	    tagFamilySignal.at(0).at(0).value<fort::tags::Family>(),
+	    fort::tags::Family::Undefined
+	);
+	ASSERT_EQ(tagSizeSignal.count(), 1);
+	EXPECT_EQ(tagSizeSignal.at(0).at(0).toDouble(), 1.0);
 
 	EXPECT_FALSE(globalProperties.isModified());
-	EXPECT_EQ(modifiedSignal.count(),0);
-	ASSERT_EQ(activatedSignal.count(),1);
+	EXPECT_EQ(modifiedSignal.count(), 0);
+	ASSERT_EQ(activatedSignal.count(), 1);
 	EXPECT_TRUE(activatedSignal.at(0).at(0).toBool());
 	EXPECT_TRUE(globalProperties.isActive());
 
 	globalProperties.setName("foo");
 	EXPECT_TRUE(globalProperties.isModified());
-	ASSERT_EQ(modifiedSignal.count(),1);
+	ASSERT_EQ(modifiedSignal.count(), 1);
 	EXPECT_TRUE(modifiedSignal.at(0).at(0).toBool());
-	ASSERT_EQ(nameSignal.count(),2);
-	EXPECT_EQ(nameSignal.at(1).at(0).toString(),"foo");
+	ASSERT_EQ(nameSignal.count(), 2);
+	EXPECT_EQ(nameSignal.at(1).at(0).toString(), "foo");
 
 	globalProperties.setExperiment(experiment);
 	EXPECT_FALSE(globalProperties.isModified());
 
 	globalProperties.setAuthor("bar");
 	EXPECT_TRUE(globalProperties.isModified());
-	ASSERT_EQ(modifiedSignal.count(),3);
+	ASSERT_EQ(modifiedSignal.count(), 3);
 	EXPECT_TRUE(modifiedSignal.at(2).at(0).toBool());
-	ASSERT_EQ(authorSignal.count(),3);
-	EXPECT_EQ(authorSignal.last().at(0).toString(),"bar");
+	ASSERT_EQ(authorSignal.count(), 3);
+	EXPECT_EQ(authorSignal.last().at(0).toString(), "bar");
 
 	globalProperties.setExperiment(experiment);
 	EXPECT_FALSE(globalProperties.isModified());
 
 	globalProperties.setComment("baz");
 	EXPECT_TRUE(globalProperties.isModified());
-	ASSERT_EQ(modifiedSignal.count(),5);
+	ASSERT_EQ(modifiedSignal.count(), 5);
 	EXPECT_TRUE(modifiedSignal.at(4).at(0).toBool());
-	ASSERT_EQ(commentSignal.count(),4);
-	EXPECT_EQ(commentSignal.last().at(0).toString(),"baz");
+	ASSERT_EQ(commentSignal.count(), 4);
+	EXPECT_EQ(commentSignal.last().at(0).toString(), "baz");
 
 	globalProperties.setExperiment(experiment);
 	EXPECT_FALSE(globalProperties.isModified());
 
 	globalProperties.setTagSize(0.7);
 	EXPECT_TRUE(globalProperties.isModified());
-	ASSERT_EQ(modifiedSignal.count(),7);
+	ASSERT_EQ(modifiedSignal.count(), 7);
 	EXPECT_TRUE(modifiedSignal.at(6).at(0).toBool());
-	ASSERT_EQ(tagSizeSignal.count(),5);
-	EXPECT_EQ(tagSizeSignal.last().at(0).toDouble(),0.7);
+	ASSERT_EQ(tagSizeSignal.count(), 5);
+	EXPECT_EQ(tagSizeSignal.last().at(0).toDouble(), 0.7);
 
 	globalProperties.setExperiment(experiment);
 	EXPECT_FALSE(globalProperties.isModified());
 
-	ASSERT_EQ(tagFamilySignal.count(),5);
+	ASSERT_EQ(tagFamilySignal.count(), 5);
 	ASSERT_NO_THROW({
-			auto s = experiment->CreateSpace("foo");
-			fmp::TrackingDataDirectory::Ptr tdd;
-			fm::FixableErrorList errors;
-			std::tie(tdd,errors) = fmp::TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
-			                                                        TestSetup::UTestData().Basedir());
-			EXPECT_TRUE(errors.empty());
-			experiment->AddTrackingDataDirectory(s,tdd);
-		});
+		auto                            s = experiment->CreateSpace("foo");
+		fmp::TrackingDataDirectory::Ptr tdd;
+		fm::FixableErrorList            errors;
+		std::tie(tdd, errors) = fmp::TrackingDataDirectory::Open(
+		    TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
+		    TestSetup::UTestData().Basedir()
+		);
+		EXPECT_TRUE(errors.empty());
+		experiment->AddTrackingDataDirectory(s, tdd);
+	});
 	globalProperties.onTDDModified();
-	EXPECT_EQ(tagFamilySignal.count(),6);
-	EXPECT_EQ(tagFamilySignal.last().at(0).value<fort::tags::Family>(),
-	          fort::tags::Family::Tag36h11);
-
+	EXPECT_EQ(tagFamilySignal.count(), 6);
+	EXPECT_EQ(
+	    tagFamilySignal.last().at(0).value<fort::tags::Family>(),
+	    fort::tags::Family::Tag36h11
+	);
 }
-
 
 TEST_F(GlobalPropertyUTest,WidgetTest) {
 	fmp::Experiment::Ptr experiment;
