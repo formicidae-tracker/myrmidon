@@ -979,8 +979,8 @@ private:
 				    av_get_pix_fmt_name(frame.Format)};
 			}
 			return image_u8_t{
-			    .width  = std::get<0>(frame.Size),
-			    .height = std::get<1>(frame.Size),
+			    .width  = frame.Size.Width,
+			    .height = frame.Size.Height,
 			    .stride = frame.Linesize[0],
 			    .buf    = frame.Planes[0],
 			};
@@ -1176,7 +1176,10 @@ TrackingDataDirectory::PrepareFullFramesLoaders() {
 			    AV_PIX_FMT_GRAY8,
 			    {width, height}};
 
-			auto frame = v.Grab();
+			auto frame = v.CreateFrame();
+			if (v.Read(*frame) == false) {
+				return nullptr;
+			}
 
 			auto filename = "frame_" +
 			                std::to_string(ms.second->ToTrackingFrameID(0)) +
