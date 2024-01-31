@@ -6,83 +6,70 @@ namespace py = pybind11;
 
 using namespace pybind11::literals;
 
-
-
-ItemProgress::ItemProgress(const std::string & description,
-                           bool verbose)
-	: d_progress(py::none())
-	, d_description(description)
-	, d_verbose(verbose)
-	, d_last(0) {
-
-}
+ItemProgress::ItemProgress(const std::string &description, bool verbose)
+    : d_progress(py::none())
+    , d_description(description) {}
 
 ItemProgress::~ItemProgress() {
-	if ( d_progress.is_none() == true ) {
+	if (d_progress.is_none() == true) {
 		return;
 	}
 	d_progress.attr("close")();
 }
 
-void ItemProgress::Update(int current, int total) {
+void ItemProgress::SetTotal(size_t total) {
 	check_py_interrupt();
-	if ( d_verbose == false ) {
+	ensureTqdm(total);
+}
+
+void ItemProgress::Update(size_t current) {
+	check_py_interrupt();
+	if (d_progress.is_none() == true) {
 		return;
 	}
-	ensureTqdm(total);
 	d_progress.attr("update")("n"_a = current - d_last);
 	d_last = current;
 }
 
-
 void ItemProgress::ensureTqdm(int total) {
-	if ( d_verbose == false || d_progress.is_none() == false ) {
+	if (d_progress.is_none() == false) {
 		return;
 	}
-	if ( d_description.empty() == true ) {
-		d_progress = py::module_::import("tqdm").attr("tqdm")("total"_a = total,
-		                                                      "ncols"_a = 80);
+	if (d_description.empty() == true) {
+		d_progress = py::module_::import("tqdm").attr("tqdm"
+		)("total"_a = total, "ncols"_a = 80);
 
 	} else {
-		d_progress = py::module_::import("tqdm").attr("tqdm")("total"_a = total,
-		                                                      "ncols"_a = 80,
-		                                                      "desc"_a = d_description);
+		d_progress = py::module_::import("tqdm").attr("tqdm"
+		)("total"_a = total, "ncols"_a = 80, "desc"_a = d_description);
 	}
 	d_last = 0;
 }
 
+TimeProgress::TimeProgress(const std::string &description)
+    : d_progress(py::none()) {
 
-TimeProgress::TimeProgress(const fort::myrmidon::Experiment & e,
-                           fort::Time start,
-                           fort::Time end,
-                           const std::string & description,
-                           bool verbose)
-	: d_progress(py::none()) {
-
-	if ( verbose == false) {
-		return;
-	}
-
-	if ( start.IsInfinite() || end.IsInfinite() ) {
+	if (start.IsInfinite() || end.IsInfinite()) {
 		auto dataInfo = fort::myrmidon::Query::GetDataInformations(e);
-		if ( start.IsInfinite() ) {
+		if (start.IsInfinite()) {
 			start = dataInfo.Start;
 		}
-		if ( end.IsInfinite() ) {
+		if (end.IsInfinite()) {
 			end = dataInfo.End;
 		}
 	}
 
 	using namespace pybind11::literals;
 
-	d_start = start;
-	int64_t minutes =  std::ceil(end.Sub(start).Minutes());
+	d_start              = start;
+	int64_t minutes      = std::ceil(end.Sub(start).Minutes());
 	d_lastMinuteReported = 0;
 
-	d_progress = py::module_::import("tqdm").attr("tqdm")("total"_a = minutes,
-	                                                      "desc"_a = description,
-	                                                      "ncols"_a = 80,
-	                                                      "unit"_a = "tracked min");
+	d_progress = py::module_::import("tqdm").attr("tqdm"
+	)("total"_a = minutes,
+	  "desc"_a  = description,
+	  "ncols"_a = 80,
+	  "unit"_a  = "tracked min");
 }
 
 TimeProgress::~TimeProgress() {
