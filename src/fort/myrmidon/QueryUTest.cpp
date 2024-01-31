@@ -1,3 +1,4 @@
+#include "gmock/gmock.h"
 #include <gtest/gtest.h>
 
 #include "Ant.hpp"
@@ -6,10 +7,26 @@
 
 #include "TestSetup.hpp"
 #include "UtilsUTest.hpp"
+
 #include <fort/myrmidon/utest-data/UTestData.hpp>
+
+#include <gmock/gmock.h>
+#include <memory>
 
 namespace fort {
 namespace myrmidon {
+
+class MockTimeProgressReporter : public TimeProgressReporter {
+public:
+	MOCK_METHOD(void, ReportError, (const std::string &error), (override));
+	MOCK_METHOD(void, Update, (const fort::Time &time), (override));
+	MOCK_METHOD(
+	    void,
+	    SetBound,
+	    (const fort::Time &start, const fort::Time &end),
+	    (override)
+	);
+};
 
 class QueryUTest : public ::testing::Test {
 protected:
@@ -40,11 +57,35 @@ TEST_F(QueryUTest, TagStatistics) {
 }
 
 TEST_F(QueryUTest, IdentifyFrames) {
+	auto progress =
+	    std::make_unique<testing::NiceMock<MockTimeProgressReporter>>();
 
 	std::vector<IdentifiedFrame::Ptr> identifieds;
 	const auto &expected = TestSetup::UTestData().ExpectedFrames();
+
+	{
+		::testing::InSequence seq;
+		EXPECT_CALL(
+		    *progress,
+		    SetBound(
+		        expected.front().first->FrameTime,
+		        expected.back().first->FrameTime.Add(1)
+		    )
+		)
+		    .Times(1);
+
+		auto time = fort::Time::SinceEver();
+		for (const auto &e : expected) {
+			if (time.Before(e.first->FrameTime)) {
+				time = e.first->FrameTime;
+				EXPECT_CALL(*progress, Update(time)).Times(1);
+			}
+		}
+	}
+
 	ASSERT_NO_THROW({
 		myrmidon::Query::IdentifyFramesArgs args;
+		args.Progress = std::move(progress);
 		Query::IdentifyFramesFunctor(
 		    *experiment,
 		    [&identifieds](const IdentifiedFrame::Ptr &i) {

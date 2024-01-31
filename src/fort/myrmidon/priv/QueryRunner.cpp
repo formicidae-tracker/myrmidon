@@ -17,6 +17,7 @@
 #include "TrackingDataDirectory.hpp"
 #include "fort/myrmidon/priv/ForwardDeclaration.hpp"
 #include "fort/myrmidon/types/Collision.hpp"
+#include "fort/myrmidon/types/Reporter.hpp"
 
 namespace fort {
 namespace myrmidon {
@@ -27,6 +28,44 @@ public:
 	DataLoader(const Experiment &experiment, const QueryRunner::Args &args) {
 		BuildRanges(experiment, args.Start, args.End);
 		d_continue.store(true);
+
+		setProgressBounds(experiment, args);
+	}
+
+	void setProgressBounds(
+	    const Experiment &experiment, const QueryRunner::Args &args
+	) {
+		if (args.Progress == nullptr) {
+			return;
+		}
+
+		if (args.Start.IsInfinite() == false &&
+		    args.End.IsInfinite() == false) {
+			args.Progress->SetBound(args.Start, args.End);
+			return;
+		}
+
+		auto start =
+		    args.Start.IsInfinite() ? fort::Time::Forever() : args.Start;
+		auto end   = args.End.IsInfinite() ? fort::Time::SinceEver() : args.End;
+		bool empty = true;
+		for (const auto &[spaceID, space] : experiment.Spaces()) {
+			const auto &tdds = space->TrackingDataDirectories();
+			if (tdds.empty()) {
+				continue;
+			}
+			empty = false;
+			if (args.Start.IsInfinite()) {
+				start = std::min(start, tdds.front()->Start());
+			}
+			if (args.End.IsInfinite()) {
+				end = std::max(end, tdds.back()->End());
+			}
+		}
+
+		if (empty == false) {
+			args.Progress->SetBound(start, end);
+		}
 	}
 
 	void Stop() {
@@ -132,12 +171,14 @@ private:
 	void BuildRanges(
 	    const Experiment &experiment, const Time &start, const Time &end
 	) {
+
 		for (const auto &[spaceID, space] : experiment.Spaces()) {
 			auto ranges = TrackingDataDirectory::IteratorRanges(
 			    space->TrackingDataDirectories(),
 			    start,
 			    end
 			);
+
 			d_spaceIterators.insert(
 			    std::make_pair(spaceID, SpaceIterator(ranges))
 			);

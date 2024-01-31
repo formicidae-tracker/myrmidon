@@ -66,6 +66,10 @@ void Query::ProcessLoaders(
 	FixableErrorList errors;
 	int              i = 0;
 
+	if (progress) {
+		progress->SetTotal(loaders.size());
+	}
+
 	for (;;) {
 		std::shared_ptr<FixableError::Ptr> error;
 		queue.pop(error);
@@ -77,7 +81,7 @@ void Query::ProcessLoaders(
 		}
 		try {
 			if (progress) {
-				progress->Update(++i, loaders.size());
+				progress->Update(++i);
 			}
 		} catch (const std::exception &e) {
 			stop.store(true);
@@ -164,6 +168,7 @@ void Query::IdentifyFrames(
 	        .Localize              = args.ComputeZones,
 	        .Collide               = false,
 	        .CollisionsIgnoreZones = false,
+	        .Progress              = args.Progress.get(),
 	    },
 	    [=](const priv::QueryRunner::OrderedCollisionData &data) {
 		    storeDataFunctor(std::get<1>(data));
@@ -186,6 +191,7 @@ void Query::CollideFrames(
 	        .Localize              = false,
 	        .Collide               = true,
 	        .CollisionsIgnoreZones = args.CollisionsIgnoreZones,
+	        .Progress              = args.Progress.get(),
 	    },
 	    [=](const priv::QueryRunner::OrderedCollisionData &data) {
 		    storeDataFunctor(
@@ -222,6 +228,7 @@ void Query::ComputeTrajectories(
 	        .Localize              = args.ComputeZones,
 	        .Collide               = false,
 	        .CollisionsIgnoreZones = false,
+	        .Progress              = args.Progress.get(),
 	    },
 	    [&segmenter](const priv::QueryRunner::OrderedCollisionData &data) {
 		    segmenter(std::make_pair(std::get<1>(data), std::get<2>(data)));
@@ -263,6 +270,7 @@ void Query::ComputeAntInteractions(
 	        .Localize              = false,
 	        .Collide               = true,
 	        .CollisionsIgnoreZones = args.CollisionsIgnoreZones,
+	        .Progress              = args.Progress.get(),
 	    },
 	    [&segmenter](const auto &data) {
 		    segmenter({std::get<1>(data), std::get<2>(data)});

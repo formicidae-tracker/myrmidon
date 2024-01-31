@@ -26,12 +26,12 @@ public:
 	};
 
 	struct Args {
-		Time                      Start;
-		Time                      End;
-		bool                      Localize;
-		bool                      Collide;
-		bool                      CollisionsIgnoreZones;
-		TimeProgressReporter::Ptr Progress;
+		Time                  Start;
+		Time                  End;
+		bool                  Localize;
+		bool                  Collide;
+		bool                  CollisionsIgnoreZones;
+		TimeProgressReporter *Progress;
 	};
 
 	using OrderedCollisionData =
