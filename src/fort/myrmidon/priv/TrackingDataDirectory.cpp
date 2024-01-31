@@ -1,3 +1,6 @@
+#include <algorithm>
+#include <memory>
+#include <optional>
 extern "C" {
 #include <libavutil/pixdesc.h>
 #include <libavutil/pixfmt.h>
@@ -70,7 +73,6 @@ TrackingDataDirectory::Ptr TrackingDataDirectory::Create(
 	    movies,
 	    referenceCache
 	));
-	res->d_itself = res;
 	return res;
 }
 
@@ -656,6 +658,21 @@ TrackingDataDirectory::const_iterator::const_iterator(
     : d_parent(parent)
     , d_current(current) {}
 
+TrackingDataDirectory::const_iterator &
+TrackingDataDirectory::const_iterator::operator=(const const_iterator &other) {
+	d_parent  = other.d_parent;
+	d_current = other.d_current;
+	d_file.reset();
+	d_frame.reset();
+	return *this;
+}
+
+TrackingDataDirectory::const_iterator::const_iterator(
+    const const_iterator &other
+)
+    : d_parent{other.d_parent}
+    , d_current{other.d_current} {}
+
 TrackingDataDirectory::const_iterator::const_iterator(const_iterator &&other)
     : d_parent(other.d_parent)
     , d_current(other.d_current)
@@ -697,6 +714,10 @@ bool TrackingDataDirectory::const_iterator::operator!=(
 	return !(*this == other);
 }
 
+FrameID TrackingDataDirectory::const_iterator::Index() const {
+	return d_current;
+}
+
 const RawFrameConstPtr TrackingDataDirectory::const_iterator::NULLPTR;
 
 const RawFrameConstPtr &TrackingDataDirectory::const_iterator::operator*() {
@@ -704,6 +725,7 @@ const RawFrameConstPtr &TrackingDataDirectory::const_iterator::operator*() {
 	if (d_current > parent->d_endFrame) {
 		return NULLPTR;
 	}
+
 	while (!d_frame || d_frame->Frame().FrameID() < d_current) {
 		if (!d_file) {
 			auto p = parent->d_absoluteFilePath /
@@ -717,16 +739,44 @@ const RawFrameConstPtr &TrackingDataDirectory::const_iterator::operator*() {
 		try {
 			d_file->Read(&d_message);
 			d_frame = RawFrame::Create(parent->d_URI, d_message, parent->d_uid);
-		} catch (const fort::hermes::UnexpectedEndOfFileSequence &) {
+		} catch (const fort::hermes::UnexpectedEndOfFileSequence &e) {
+			auto lastValidID = d_current;
+			auto lastValidTime =
+			    d_frame ? d_frame->Frame().Time() : parent->Start();
+
 			d_current = parent->d_endFrame + 1;
 			d_frame.reset();
-			return NULLPTR;
+
+			std::optional<FrameID> next;
+
+			if (e.FileLineContext().Next.has_value()) {
+				const auto &segments = parent->TrackingSegments().Segments();
+
+				auto iter = std::find_if(
+				    segments.begin(),
+				    segments.end(),
+				    [next = e.FileLineContext().Next.value().filename().string(
+				     )](const auto &s) { return s.second == next; }
+				);
+				if (iter != segments.end()) {
+					next = iter->first.FrameID();
+				}
+			}
+
+			throw CorruptedHermesFileIterator{
+			    e.FileLineContext().Filename,
+			    lastValidID,
+			    lastValidTime,
+			    next,
+			    parent,
+			};
 		} catch (const fort::hermes::EndOfFile &) {
 			d_current = parent->d_endFrame + 1;
 			d_frame.reset();
 			return NULLPTR;
 		}
 	}
+
 	if (d_frame->Frame().FrameID() > d_current) {
 		d_current = d_frame->Frame().FrameID();
 	}
@@ -742,11 +792,17 @@ TrackingDataDirectory::const_iterator::LockParent() const {
 }
 
 TrackingDataDirectory::const_iterator TrackingDataDirectory::begin() const {
-	return const_iterator(Itself(), d_startFrame);
+	return const_iterator(
+	    std::const_pointer_cast<TrackingDataDirectory>(shared_from_this()),
+	    d_startFrame
+	);
 }
 
 TrackingDataDirectory::const_iterator TrackingDataDirectory::end() const {
-	return const_iterator(Itself(), d_endFrame + 1);
+	return const_iterator(
+	    std::const_pointer_cast<TrackingDataDirectory>(shared_from_this()),
+	    d_endFrame + 1
+	);
 }
 
 TrackingDataDirectory::const_iterator
@@ -754,7 +810,10 @@ TrackingDataDirectory::FrameAt(uint64_t frameID) const {
 	if (frameID < d_startFrame || frameID > d_endFrame) {
 		return end();
 	}
-	return const_iterator(Itself(), frameID);
+	return const_iterator(
+	    std::const_pointer_cast<TrackingDataDirectory>(shared_from_this()),
+	    frameID
+	);
 }
 
 TrackingDataDirectory::const_iterator
@@ -815,13 +874,6 @@ TrackingDataDirectory::MovieSegments() const {
 	return *d_movies;
 }
 
-TrackingDataDirectory::Ptr TrackingDataDirectory::Itself() const {
-	if (auto locked = d_itself.lock()) {
-		return locked;
-	}
-	throw DeletedReference<TrackingDataDirectory>();
-}
-
 const TrackingDataDirectory::FrameReferenceCache &
 TrackingDataDirectory::ReferenceCache() const {
 	return *d_referencesByFID;
@@ -834,7 +886,9 @@ TrackingDataDirectory::Ptr TrackingDataDirectory::LoadFromCache(
 }
 
 void TrackingDataDirectory::SaveToCache() const {
-	proto::TDDCache::Save(Itself());
+	proto::TDDCache::Save(
+	    std::const_pointer_cast<TrackingDataDirectory>(shared_from_this())
+	);
 }
 
 std::shared_ptr<std::map<FrameReference, fs::path>>
@@ -1073,8 +1127,10 @@ TrackingDataDirectory::PrepareTagCloseUpsLoaders() {
 		return {};
 	}
 
-	auto reducer =
-	    std::make_shared<TagCloseUpsReducer>(tagCloseUpFiles.size(), Itself());
+	auto reducer = std::make_shared<TagCloseUpsReducer>(
+	    tagCloseUpFiles.size(),
+	    shared_from_this()
+	);
 	size_t              i = 0;
 	std::vector<Loader> res;
 	res.reserve(tagCloseUpFiles.size());
@@ -1119,8 +1175,10 @@ private:
 std::vector<TrackingDataDirectory::Loader>
 TrackingDataDirectory::PrepareTagStatisticsLoaders() {
 	const auto &segments = d_segments->Segments();
-	auto        reducer =
-	    std::make_shared<TagStatisticsReducer>(segments.size(), Itself());
+	auto        reducer  = std::make_shared<TagStatisticsReducer>(
+        segments.size(),
+        shared_from_this()
+    );
 
 	std::vector<Loader> res;
 	res.reserve(segments.size());
@@ -1166,7 +1224,7 @@ TrackingDataDirectory::PrepareFullFramesLoaders() {
 	fs::create_directory(AbsoluteFilePath() / "ants/computed");
 	auto reducer = std::make_shared<FullFramesReducer>(
 	    d_movies->Segments().size(),
-	    Itself()
+	    shared_from_this()
 	);
 	std::vector<Loader> res;
 	for (const auto &ms : d_movies->Segments()) {
