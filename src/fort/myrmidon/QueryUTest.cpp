@@ -7,6 +7,7 @@
 
 #include "TestSetup.hpp"
 #include "UtilsUTest.hpp"
+#include "fort/myrmidon/types/Reporter.hpp"
 
 #include <fort/myrmidon/utest-data/UTestData.hpp>
 
@@ -58,7 +59,7 @@ TEST_F(QueryUTest, TagStatistics) {
 
 TEST_F(QueryUTest, IdentifyFrames) {
 	auto progress =
-	    std::make_unique<testing::NiceMock<MockTimeProgressReporter>>();
+	    std::make_unique<testing::StrictMock<MockTimeProgressReporter>>();
 
 	std::vector<IdentifiedFrame::Ptr> identifieds;
 	const auto &expected = TestSetup::UTestData().ExpectedFrames();
@@ -136,12 +137,36 @@ TEST_F(QueryUTest, IdentifyFrames) {
 }
 
 TEST_F(QueryUTest, CollideFrames) {
+	auto progress =
+	    std::make_unique<testing::StrictMock<MockTimeProgressReporter>>();
+
 	const auto &expected = TestSetup::UTestData().ExpectedFrames();
+
+	{
+		::testing::InSequence seq;
+		EXPECT_CALL(
+		    *progress,
+		    SetBound(
+		        expected.front().first->FrameTime,
+		        expected.back().first->FrameTime.Add(1)
+		    )
+		)
+		    .Times(1);
+
+		auto time = fort::Time::SinceEver();
+		for (const auto &e : expected) {
+			if (time.Before(e.first->FrameTime)) {
+				time = e.first->FrameTime;
+				EXPECT_CALL(*progress, Update(time)).Times(1);
+			}
+		}
+	}
 
 	std::vector<CollisionData> collisionData;
 
 	ASSERT_NO_THROW({
 		myrmidon::Query::CollideFramesArgs args;
+		args.Progress = std::move(progress);
 		Query::CollideFramesFunctor(
 		    *experiment,
 		    [&collisionData](const CollisionData &data) {
@@ -162,8 +187,16 @@ TEST_F(QueryUTest, CollideFrames) {
 }
 
 TEST_F(QueryUTest, ComputeAntTrajectories) {
+	using ::testing::_;
 	size_t i = 0;
 	for (const auto &expected : TestSetup::UTestData().ExpectedResults()) {
+
+		auto progress =
+		    std::make_unique<testing::NiceMock<MockTimeProgressReporter>>();
+
+		EXPECT_CALL(*progress, SetBound(_, _)).Times(1);
+
+		EXPECT_CALL(*progress, Update(_)).Times(testing::AtLeast(2));
 
 		std::vector<AntTrajectory::Ptr> trajectories;
 
@@ -173,6 +206,7 @@ TEST_F(QueryUTest, ComputeAntTrajectories) {
 			args.End        = expected.End;
 			args.MaximumGap = expected.MaximumGap;
 			args.Matcher    = expected.Matches;
+			args.Progress   = std::move(progress);
 			if (++i % 2 == 0) {
 				Query::ComputeAntTrajectoriesFunctor(
 				    *experiment,
@@ -213,7 +247,15 @@ TEST_F(QueryUTest, ComputeAntTrajectories) {
 
 TEST_F(QueryUTest, ComputeAntInteractions) {
 	size_t i = 0;
+	using ::testing::_;
 	for (const auto &expected : TestSetup::UTestData().ExpectedResults()) {
+
+		auto progress =
+		    std::make_unique<testing::NiceMock<MockTimeProgressReporter>>();
+
+		EXPECT_CALL(*progress, SetBound(_, _)).Times(1);
+
+		EXPECT_CALL(*progress, Update(_)).Times(testing::AtLeast(2));
 
 		std::vector<AntTrajectory::Ptr>  trajectories;
 		std::vector<AntInteraction::Ptr> interactions;
@@ -223,6 +265,7 @@ TEST_F(QueryUTest, ComputeAntInteractions) {
 			args.End        = expected.End;
 			args.MaximumGap = expected.MaximumGap;
 			args.Matcher    = expected.Matches;
+			args.Progress   = std::move(progress);
 			if (++i % 2 == 0) {
 				Query::ComputeAntInteractionsFunctor(
 				    *experiment,
