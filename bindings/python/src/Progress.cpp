@@ -59,6 +59,7 @@ TimeProgress::~TimeProgress() {
 
 void TimeProgress::SetBound(const fort::Time &start, const fort::Time &end) {
 	check_py_interrupt();
+	return;
 	if (d_progress.is_none() == false) {
 		return;
 	}

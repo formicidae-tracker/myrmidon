@@ -277,7 +277,8 @@ void TrackingDataDirectory::BuildFrameReferenceCache(
 					}
 				} catch (const hermes::UnexpectedEndOfFileSequence &e) {
 					auto error = std::make_unique<CorruptedHermesFileError>(
-					    "Could not find frame " + std::to_string(iter->first),
+					    "Could not find frame " + std::to_string(iter->first) +
+					        " in " + AbsoluteFilePath,
 					    this->AbsoluteFilePath,
 					    curFrameID
 					);
@@ -1227,6 +1228,7 @@ TrackingDataDirectory::PrepareFullFramesLoaders() {
 	    shared_from_this()
 	);
 	std::vector<Loader> res;
+
 	for (const auto &ms : d_movies->Segments()) {
 		res.push_back([reducer, ms, width, height, this]() {
 			video::Reader v{
