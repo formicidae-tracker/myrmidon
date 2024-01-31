@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <vector>
 
 #include <fort/time/Time.hpp>
@@ -10,6 +11,7 @@
 #include <fort/myrmidon/types/ComputedMeasurement.hpp>
 #include <fort/myrmidon/types/ExperimentDataInfo.hpp>
 #include <fort/myrmidon/types/IdentifiedFrame.hpp>
+#include <fort/myrmidon/types/Reporter.hpp>
 #include <fort/myrmidon/types/TagStatistics.hpp>
 #include <fort/myrmidon/types/Value.hpp>
 
@@ -67,11 +69,13 @@ public:
 	 */
 	struct QueryArgs {
 		//! First Time to consider (default: Time::SinceEver())
-		Time Start          = Time::SinceEver();
+		Time                      Start          = Time::SinceEver();
 		//! Last  Time to consider (default: Time::Forever())
-		Time End            = Time::Forever();
+		Time                      End            = Time::Forever();
 		//! Uses a single thread for computation (default: false)
-		bool SingleThreaded = false;
+		bool                      SingleThreaded = false;
+		//!  A TimeProgressReporter to report progress and errors
+		TimeProgressReporter::Ptr Progress;
 	};
 
 	/**
@@ -81,12 +85,14 @@ public:
 	 *        should be ignored and silently fixed. Please note that
 	 *        it could cause the loss of large chunk of tracking
 	 *        data. If false, an exception will be thrown.
+	 * @param progress a ProgressReporter to report the progress
 	 * @return the TagStatistics indexed by TagID
 	 */
 	static TagStatistics::ByTagID ComputeTagStatistics(
-	    const Experiment                    &experiment,
-	    const std::function<void(int, int)> &progressCallback = [](int, int) {},
-	    bool                                 fixCorruptedData = false
+	    const Experiment       &experiment,
+	    ProgressReporter::Ptr &&progress         = nullptr,
+	    bool                    fixCorruptedData = false
+
 	);
 
 	/**
@@ -371,9 +377,9 @@ public:
 	static std::
 	    tuple<std::vector<std::string>, std::vector<TagID>, Eigen::MatrixXd>
 	    GetTagCloseUps(
-	        const Experiment                    &e,
-	        const std::function<void(int, int)> &progressCallback,
-	        bool                                 fixCorruptedData = false
+	        const Experiment       &e,
+	        ProgressReporter::Ptr &&progress,
+	        bool                    fixCorruptedData = false
 	    );
 };
 

@@ -110,6 +110,7 @@ set(HDR_PUBLIC_FILES
 	types/Traits.hpp
 	types/TraitsCategory.hpp
 	types/Typedefs.hpp
+	types/Reporter.hpp
 	utils/FileSystem.hpp
 	Shapes.hpp
 	Identification.hpp

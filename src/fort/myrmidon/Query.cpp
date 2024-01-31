@@ -23,14 +23,18 @@ ComputedMeasurement::List Query::ComputeMeasurementFor(const Experiment & experi
 	return res;
 }
 
-TagStatistics::ByTagID Query::ComputeTagStatistics(const Experiment & experiment,
-                                                   const std::function<void(int,int)> & progressCallback,
-                                                   bool fixCorruptedData) {
+TagStatistics::ByTagID Query::ComputeTagStatistics(
+    const Experiment       &experiment,
+    ProgressReporter::Ptr &&progress,
+    bool                    fixCorruptedData
+) {
 	TagStatistics::ByTagID res;
-	priv::Query::ComputeTagStatistics(experiment.d_p->Get(),
-	                                  res,
-	                                  progressCallback,
-	                                  fixCorruptedData);
+	priv::Query::ComputeTagStatistics(
+	    experiment.d_p->Get(),
+	    res,
+	    std::move(progress),
+	    fixCorruptedData
+	);
 	return res;
 }
 
@@ -186,16 +190,16 @@ Query::GetMetaDataKeyRanges(const Experiment & e,
 	return res;
 }
 
-
-std::tuple<std::vector<std::string>,std::vector<TagID>,Eigen::MatrixXd>
-Query::GetTagCloseUps(const Experiment & e,
-                      const std::function<void(int,int)> & progressCallback,
-                      bool fixCorruptedData ) {
-	return priv::Query::GetTagCloseUps(e.d_p->Get(),progressCallback,fixCorruptedData);
+std::tuple<std::vector<std::string>, std::vector<TagID>, Eigen::MatrixXd>
+Query::GetTagCloseUps(
+    const Experiment &e, ProgressReporter::Ptr &&progress, bool fixCorruptedData
+) {
+	return priv::Query::GetTagCloseUps(
+	    e.d_p->Get(),
+	    std::move(progress),
+	    fixCorruptedData
+	);
 }
-
-
-
 
 } // namespace myrmidon
 } // namespace fort

@@ -575,7 +575,7 @@ TEST_F(PublicExperimentUTest, CanOpenCorruptedDataDir) {
 	fs::rename(corruptedFileName + ".bak", corruptedFileName);
 
 	try {
-		experiment->EnsureAllDataIsLoaded([](int, int) {}, false);
+		experiment->EnsureAllDataIsLoaded(nullptr, false);
 		ADD_FAILURE() << "Should throw an error while ensuring old data";
 	} catch (const FixableErrors &e) {
 		const auto &errors = e.Errors();
@@ -597,7 +597,7 @@ TEST_F(PublicExperimentUTest, CanOpenCorruptedDataDir) {
 	// no need to fix here, the cache has the fix
 	URI = experiment->AddTrackingDataDirectory(s->ID(), corruptedPath, false);
 	try {
-		experiment->EnsureAllDataIsLoaded([](int, int) {}, true);
+		experiment->EnsureAllDataIsLoaded(nullptr, true);
 	} catch (const std::exception &e) {
 		ADD_FAILURE() << "Unexpected error : " << e.what();
 		return;
@@ -607,7 +607,7 @@ TEST_F(PublicExperimentUTest, CanOpenCorruptedDataDir) {
 	// no need to fix here, the cache has the fix
 	URI = experiment->AddTrackingDataDirectory(s->ID(), corruptedPath, false);
 	try {
-		experiment->EnsureAllDataIsLoaded([](int, int) {}, false);
+		experiment->EnsureAllDataIsLoaded(nullptr, false);
 	} catch (const std::exception &e) {
 		ADD_FAILURE() << "Unexpected error : " << e.what();
 		return;

@@ -5,13 +5,14 @@
 
 #include <fort/tags/fort-tags.hpp>
 
-#include <fort/myrmidon/types/Typedefs.hpp>
 #include <fort/myrmidon/types/FixableError.hpp>
+#include <fort/myrmidon/types/Reporter.hpp>
+#include <fort/myrmidon/types/Typedefs.hpp>
 
 #include "Ant.hpp"
+#include "Identification.hpp"
 #include "Space.hpp"
 #include "TrackingSolver.hpp"
-#include "Identification.hpp"
 
 namespace fort {
 namespace myrmidon {
@@ -19,7 +20,6 @@ namespace myrmidon {
 class ExperimentHandle;
 
 class Query;
-
 
 /**
  * Entry point of the **fort-myrmidon** API
@@ -91,7 +91,6 @@ public:
 	/** A pointer to an Experiment. */
 	typedef std::unique_ptr<Experiment> Ptr;
 
-
 	/**
 	 * the default MeasurementTypeID for Head-Tail measuremrent
 	 */
@@ -107,14 +106,14 @@ public:
 	 * @throws std::runtime_error if **filepath** is not a valid
 	 *         `.myrmidon` file.
 	 */
-	static Experiment::Ptr Open(const std::string & filepath) {
+	static Experiment::Ptr Open(const std::string &filepath) {
 		return Ptr(new Experiment(OpenUnsafe(filepath)));
 	}
 
-	static Experiment OpenUnsafe(const std::string & filepath);
+	static Experiment OpenUnsafe(const std::string &filepath);
 
 	/**
-     * Opens an Experiment without associated tracking data
+	 * Opens an Experiment without associated tracking data
 	 *
 	 * Opens an Experiment to a `.myrmidon` file without opening its
 	 * associated tracking data. This is useful, by example, identify
@@ -131,11 +130,11 @@ public:
 	 * @throws std::runtime_error if **filepath** is not a valid
 	 *         `.myrmidon` file.
 	 */
-	static Experiment::Ptr OpenDataLess(const std::string & filepath) {
+	static Experiment::Ptr OpenDataLess(const std::string &filepath) {
 		return Ptr(new Experiment(OpenDataLessUnsafe(filepath)));
 	}
 
-	static Experiment OpenDataLessUnsafe(const std::string & filepath);
+	static Experiment OpenDataLessUnsafe(const std::string &filepath);
 
 	/**
 	 * Creates a new Experiment associated with the given filepath.
@@ -149,11 +148,11 @@ public:
 	 *
 	 * @return the new empty Experiment
 	 */
-	static Experiment::Ptr Create(const std::string & filepath) {
+	static Experiment::Ptr Create(const std::string &filepath) {
 		return Ptr(new Experiment(CreateUnsafe(filepath)));
 	}
 
-	static Experiment CreateUnsafe(const std::string & filepath);
+	static Experiment CreateUnsafe(const std::string &filepath);
 
 	/**
 	 * Saves the Experiment at the desired filepath
@@ -166,7 +165,7 @@ public:
 	 * @throws std::invalid_argument if **filepath** will change the
 	 *         parent directory of the Experiment.
 	 */
-	void Save(const std::string & filepath);
+	void Save(const std::string &filepath);
 
 	/**
 	 * Path to the underlying `.myrmidon` file
@@ -182,7 +181,7 @@ public:
 	 *
 	 * @return the newly created Space.
 	 */
-	Space::Ptr CreateSpace(const std::string & name);
+	Space::Ptr CreateSpace(const std::string &name);
 
 	/**
 	 * Deletes a Space
@@ -201,7 +200,7 @@ public:
 	 *
 	 * @return a map of the Experiment Space indexed by their SpaceID
 	 */
-	const SpaceByID & Spaces() const;
+	const SpaceByID &Spaces() const;
 
 	/**
 	 * Adds a tracking data directory to one of Experiment's Space
@@ -229,9 +228,11 @@ public:
 	 * @throws std::invalid_argument if the tracking data directory
 	 *         is already in use in this experiment.
 	 */
-	std::string AddTrackingDataDirectory(SpaceID spaceID,
-	                                     const std::string & filepath,
-	                                     bool fixCorruptedData = false);
+	std::string AddTrackingDataDirectory(
+	    SpaceID            spaceID,
+	    const std::string &filepath,
+	    bool               fixCorruptedData = false
+	);
 	/**
 	 * Removes a Tracking Data Directory from the Experiment.
 	 *
@@ -240,7 +241,7 @@ public:
 	 * @throws std::invalid_argument if **URI** does not designate a
 	 *         tracking data directory in the experiment.
 	 */
-	void RemoveTrackingDataDirectory(const std::string & URI);
+	void RemoveTrackingDataDirectory(const std::string &URI);
 
 	/**
 	 * Creates a new Ant in the Experiment.
@@ -254,7 +255,7 @@ public:
 	 *
 	 * @return the Ant indexed by their AntID in the Experiment.
 	 */
-	const AntByID & Ants() const;
+	const AntByID &Ants() const;
 
 	/**
 	 * Deletes an Ant
@@ -265,7 +266,6 @@ public:
 	 * @throws std::runtime_error if the Ant stills have an identification
 	 */
 	void DeleteAnt(AntID antID);
-
 
 	/**
 	 * Adds an Identification to the Experiment
@@ -287,10 +287,9 @@ public:
 	 *         with another Identification with the same **antID** or
 	 *         **tagID**.
 	 */
-	Identification::Ptr AddIdentification(AntID antID,
-	                                      TagID tagID,
-	                                      const Time & start,
-	                                      const Time & end);
+	Identification::Ptr AddIdentification(
+	    AntID antID, TagID tagID, const Time &start, const Time &end
+	);
 	/**
 	 * Deletes an Identification
 	 *
@@ -299,7 +298,7 @@ public:
 	 * @throws std::invalid_argument if **identification** is not an
 	 *         Identification for an Ant of this Experiment.
 	 */
-	void DeleteIdentification(const Identification::Ptr & identification);
+	void DeleteIdentification(const Identification::Ptr &identification);
 
 	/**
 	 * Computes a valid time range for a tagID.
@@ -318,50 +317,50 @@ public:
 	 * @throws std::runtime_error if **tagID** already identifies an
 	 *         Ant at **time**.
 	 */
-	std::tuple<fort::Time,fort::Time> FreeIdentificationRangeAt(TagID tagID,
-	                                                            const Time & time) const;
+	std::tuple<fort::Time, fort::Time>
+	FreeIdentificationRangeAt(TagID tagID, const Time &time) const;
 
 	/**
 	 * The name of the Experiment.
 	 *
 	 * @return a reference to the Experiment's name
 	 */
-	const std::string & Name() const;
+	const std::string &Name() const;
 
 	/**
 	 * Sets the Experiment's name.
 	 *
 	 * @param name the new Experiment name
 	 */
-	void SetName(const std::string & name);
+	void SetName(const std::string &name);
 
 	/**
 	 * The author of the Experiment
 	 *
 	 * @return a reference to the Experiment's author name
 	 */
-	const std::string & Author() const;
+	const std::string &Author() const;
 
 	/**
 	 * Sets the Experiment's author
 	 *
 	 * @param author the new value for the Experiment's author
 	 */
-	void SetAuthor(const std::string & author);
+	void SetAuthor(const std::string &author);
 
 	/**
 	 * Comments about the experiment
 	 *
 	 * @return a reference to the Experiment's comment
 	 */
-	const std::string & Comment() const;
+	const std::string &Comment() const;
 
 	/**
 	 * Sets the comment of the Experiment
 	 *
 	 * @param comment the wanted Experiment's comment
 	 */
-	void SetComment(const std::string & comment);
+	void SetComment(const std::string &comment);
 
 	/**
 	 * The kind of tag used in the Experiment
@@ -407,7 +406,7 @@ public:
 	 * @return the MeasurementTypeID identifying the new measurement
 	 *         type
 	 */
-	MeasurementTypeID CreateMeasurementType(const std::string & name);
+	MeasurementTypeID CreateMeasurementType(const std::string &name);
 
 	/**
 	 * Deletes a measurement type
@@ -432,8 +431,9 @@ public:
 	 * @throws std::out_of_range if **measurementTypeID** is not valid
 	 *         for this Experiment.
 	 */
-	void SetMeasurementTypeName(MeasurementTypeID measurementTypeID,
-	                            const std::string & name);
+	void SetMeasurementTypeName(
+	    MeasurementTypeID measurementTypeID, const std::string &name
+	);
 
 	/**
 	 * Gets the Experiment defined measurement types
@@ -441,7 +441,7 @@ public:
 	 * @return a map of measurement type name by their
 	 *         MeasurementTypeID
 	 */
-	std::map<MeasurementTypeID,std::string> MeasurementTypeNames() const;
+	std::map<MeasurementTypeID, std::string> MeasurementTypeNames() const;
 
 	/**
 	 * Creates a new Ant shape type
@@ -450,14 +450,14 @@ public:
 	 *
 	 * @return the AntShapeTypeID identifying the new Ant shape type.
 	 */
-	AntShapeTypeID CreateAntShapeType(const std::string & name);
+	AntShapeTypeID CreateAntShapeType(const std::string &name);
 
 	/**
 	 * Gets the defined Ant shape type
 	 *
 	 * @return the Ant shape type name by their AntShapeTypeID
 	 */
-	std::map<AntShapeTypeID,std::string> AntShapeTypeNames() const;
+	std::map<AntShapeTypeID, std::string> AntShapeTypeNames() const;
 
 	/**
 	 * Changes the name of an Ant Shape type
@@ -468,8 +468,8 @@ public:
 	 * @throws std::out_of_range if **shapeTypeID** is not valid for
 	 *         this Experiment.
 	 */
-	void SetAntShapeTypeName(AntShapeTypeID shapeTypeID,
-	                         const std::string & name);
+	void
+	SetAntShapeTypeName(AntShapeTypeID shapeTypeID, const std::string &name);
 
 	/**
 	 * Removes a virtual Ant shape type
@@ -498,8 +498,7 @@ public:
 	 *         * **defaultValue** would change the type of key
 	 *         * at least one Ant has a value registered for **key**
 	 */
-	void SetMetaDataKey(const std::string & key,
-	                    Value defaultValue);
+	void SetMetaDataKey(const std::string &key, Value defaultValue);
 
 	/**
 	 * Removes a meta data key.
@@ -511,14 +510,14 @@ public:
 	 * @throws std::runtime_error if at least one Ant has a defined
 	 *         value for **key**.
 	 */
-	void DeleteMetaDataKey(const std::string & key);
+	void DeleteMetaDataKey(const std::string &key);
 
 	/**
 	 * Gets the meta data keys for this Experiment
 	 *
 	 * @return default Value indexed by key
 	 */
-	std::map<std::string,Value> MetaDataKeys() const;
+	std::map<std::string, Value> MetaDataKeys() const;
 
 	/**
 	 * Renames a meta data key
@@ -532,9 +531,8 @@ public:
 	 * @throws std::invalid_argument if **newKey** is already used in this
 	 *         Experiment.
 	 */
-	void RenameMetaDataKey(const std::string & oldKey,
-	                       const std::string & newKey);
-
+	void
+	RenameMetaDataKey(const std::string &oldKey, const std::string &newKey);
 
 	/**
 	 * Gets AntID <-> TagID correspondances at a given time
@@ -547,8 +545,8 @@ public:
 	 *
 	 * @return a map with the correspondance between AntID and TagID.
 	 */
-	std::map<AntID,TagID> IdentificationsAt(const Time & time,
-	                                        bool removeUnidentifiedAnt) const;
+	std::map<AntID, TagID>
+	IdentificationsAt(const Time &time, bool removeUnidentifiedAnt) const;
 
 	/**
 	 * Compiles a TrackingSolver
@@ -559,8 +557,6 @@ public:
 	 * @return a TrackingSolver for the Experiment.
 	 */
 	TrackingSolver::Ptr CompileTrackingSolver(bool collisionsIgnoreZones) const;
-
-
 
 	/**
 	 * Ensures that all tracking data is loaded.
@@ -578,14 +574,14 @@ public:
 	 * @throws std::runtime_error in case of data corruption if
 	 *         fixCorruptedData is \false
 	 */
-	void EnsureAllDataIsLoaded(const std::function<void(int,int)> & progressCallback,
-	                           bool fixCorruptedData = false) const;
+	void EnsureAllDataIsLoaded(
+	    ProgressReporter::Ptr &&progressCallback, bool fixCorruptedData = false
+	) const;
 
 	~Experiment();
 
 private:
 	friend class Query;
-
 
 	// Private implementation constructor
 	// @pExperiment opaque pointer to implementation
@@ -594,13 +590,11 @@ private:
 	// <Open>, <OpenReadOnly>, <Create> and <NewFile>.
 	Experiment(std::unique_ptr<ExperimentHandle> handle);
 
-
-	Experiment & operator=(const Experiment &) = delete;
-	Experiment(const Experiment &) = delete;
+	Experiment &operator=(const Experiment &) = delete;
+	Experiment(const Experiment &)            = delete;
 
 	std::unique_ptr<ExperimentHandle> d_p;
 };
 
-
-} // namespace mrymidon
+} // namespace myrmidon
 } // namespace fort

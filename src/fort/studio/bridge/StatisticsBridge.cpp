@@ -125,18 +125,17 @@ void StatisticsBridge::rebuildModel() {
 	}
 }
 
-
-
-
 void StatisticsBridge::compute() {
 	clear();
-	if ( d_experiment != nullptr ) {
+	if (d_experiment != nullptr) {
 		try {
-			fmp::Query::ComputeTagStatistics(*d_experiment,
-			                                 d_stats,
-			                                 [](int,int){},
-			                                 false);
-		} catch ( const std::exception & e ) {
+			fmp::Query::ComputeTagStatistics(
+			    *d_experiment,
+			    d_stats,
+			    nullptr,
+			    false
+			);
+		} catch (const std::exception &e) {
 			qCritical() << "Could not compute tag statistics: " << e.what();
 		}
 	}
