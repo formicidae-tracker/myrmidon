@@ -1,7 +1,13 @@
 #include "QueryRunner.hpp"
 
+#include <fort/hermes/Error.hpp>
+#include <fort/hermes/FileContext.hpp>
+#include <iomanip>
+#include <ios>
 #include <memory>
+#include <mutex>
 #include <oneapi/tbb/flow_graph.h>
+#include <sstream>
 #include <thread>
 
 #include <tbb/concurrent_queue.h>
@@ -16,6 +22,7 @@
 #include "Space.hpp"
 #include "TrackingDataDirectory.hpp"
 #include "fort/myrmidon/priv/ForwardDeclaration.hpp"
+#include "fort/myrmidon/priv/TrackingDataDirectoryError.hpp"
 #include "fort/myrmidon/types/Collision.hpp"
 #include "fort/myrmidon/types/Reporter.hpp"
 
@@ -25,11 +32,25 @@ namespace priv {
 
 class DataLoader {
 public:
-	DataLoader(const Experiment &experiment, const QueryRunner::Args &args) {
+	DataLoader(const Experiment &experiment, const QueryRunner::Args &args)
+	    : d_reporter{args.Progress} {
 		BuildRanges(experiment, args.Start, args.End);
 		d_continue.store(true);
 
 		setProgressBounds(experiment, args);
+		computeDuration(experiment, args);
+	}
+
+	~DataLoader() {
+		if (d_lost == 0 || d_reporter == nullptr) {
+			return;
+		}
+		std::ostringstream oss;
+		double percent = d_lost.Seconds() / d_duration.Seconds() * 100.0;
+		oss << "data corruption during query representing "
+		    << std::setprecision(2) << std::fixed << percent
+		    << "% of total query time";
+		d_reporter->ReportError(oss.str());
 	}
 
 	void setProgressBounds(
@@ -82,7 +103,15 @@ public:
 			if (spaceIter.Done()) {
 				continue;
 			}
-			auto dataTime = (*spaceIter)->Frame().Time();
+
+			fort::Time dataTime;
+			try {
+				dataTime = (*spaceIter)->Frame().Time();
+			} catch (const CorruptedHermesFileIterator &e) {
+				recover(spaceID, e);
+				return (*this)();
+			}
+
 			if (next == 0 || dataTime.Before(nextTime)) {
 				nextTime = dataTime;
 				next     = spaceID;
@@ -99,6 +128,48 @@ public:
 		return {.Space = next, .Frame = res, .ID = d_nextID++};
 	}
 
+	void recover(SpaceID ID, const CorruptedHermesFileIterator &e) {
+		if (e.NextAvailableID().has_value() &&
+		    e.NextAvailableID().value() <
+		        d_spaceIterators.at(ID).d_current->d_end.Index()) {
+			d_spaceIterators.at(ID).d_current->d_iter = e.Next();
+		} else {
+			d_spaceIterators.at(ID).d_current->d_iter =
+			    d_spaceIterators.at(ID).d_current->d_end;
+			++(d_spaceIterators.at(ID));
+		}
+
+		d_lost = d_lost + e.Lost();
+
+		if (!d_reporter) {
+			return;
+		}
+
+		double lost = e.Lost().Seconds() / d_duration.Seconds() * 100.0;
+
+		std::ostringstream oss;
+
+		oss << e.what() << "; lost " << e.Lost().Truncate(Duration::Second)
+		    << ", " << std::setprecision(2) << std::fixed << lost
+		    << "% of total query time of "
+		    << d_duration.Truncate(Duration::Second);
+
+		d_reporter->ReportError(oss.str());
+	}
+
+	void computeDuration(const Experiment &e, const QueryRunner::Args &args) {
+		d_duration = 0;
+		for (const auto &[spaceID, space] : e.Spaces()) {
+			for (const auto &tdd : space->TrackingDataDirectories()) {
+				auto start = std::max(args.Start, tdd->Start());
+				auto end   = std::min(args.End, tdd->End().Add(-1));
+				if (start.Before(end)) {
+					d_duration = d_duration + end.Sub(start);
+				}
+			}
+		}
+	}
+
 private:
 	class TDDIterator {
 	public:
@@ -110,7 +181,7 @@ private:
 		    , d_end(std::move(end)) {}
 
 		bool Done() const {
-			return d_iter == d_end;
+			return d_iter.Index() >= d_end.Index();
 		}
 
 		const RawFrameConstPtr &operator*() {
@@ -126,6 +197,7 @@ private:
 		}
 
 	private:
+		friend class DataLoader;
 		TrackingDataDirectory::const_iterator d_iter, d_end;
 	};
 
@@ -135,8 +207,10 @@ private:
 		                  TrackingDataDirectory::const_iterator,
 		                  TrackingDataDirectory::const_iterator>> &ranges) {
 			for (auto &range : ranges) {
-				d_tddIterators.push_back(TDDIterator(range.first, range.second)
-				);
+				d_tddIterators.push_back(TDDIterator{
+				    range.first,
+				    range.second,
+				});
 			}
 			d_current = d_tddIterators.begin();
 			while (!Done() && d_current->Done()) {
@@ -163,7 +237,14 @@ private:
 			return *this;
 		}
 
+		void SkipCurrentTDD() {
+			if (d_current != d_tddIterators.end()) {
+				++d_current;
+			}
+		}
+
 	private:
+		friend class DataLoader;
 		std::vector<TDDIterator>           d_tddIterators;
 		std::vector<TDDIterator>::iterator d_current;
 	};
@@ -188,6 +269,9 @@ private:
 	std::map<SpaceID, SpaceIterator> d_spaceIterators;
 	std::atomic<bool>                d_continue;
 
+	ErrorReporter *d_reporter;
+
+	Duration d_duration, d_lost;
 	uint64_t d_nextID = 0;
 };
 

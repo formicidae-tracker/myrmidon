@@ -118,7 +118,7 @@ set(FORT_CHARIS_BUILD_GL Off)
 FetchContent_Declare(
 	fort-charis
 	GIT_REPOSITORY https://github.com/formicidae-tracker/charis.git
-	GIT_TAG 2fbc48a9aa46de88877650485a03cd493452593d
+	GIT_TAG c356b6df1978b62e4b7997ccfee9df585143aaf3
 )
 
 FetchContent_MakeAvailable(yaml-cpp semver fort-tags fort-hermes fort-charis)

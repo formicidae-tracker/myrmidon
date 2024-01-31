@@ -1,4 +1,5 @@
 #include "gmock/gmock.h"
+#include "gtest/gtest.h"
 #include <filesystem>
 #include <gtest/gtest.h>
 
@@ -486,12 +487,26 @@ TEST_F(QueryUTest, CorruptedData) {
 
 	std::vector<IdentifiedFrame::Ptr> res;
 	using ::testing::_;
+	using ::testing::MatchesRegex;
 
 	auto progress =
 	    std::make_unique<testing::StrictMock<MockTimeProgressReporter>>();
 
 	EXPECT_CALL(*progress, SetBound(_, _)).Times(1);
 	EXPECT_CALL(*progress, Update(_)).Times(::testing::AtLeast(2));
+	EXPECT_CALL(
+	    *progress,
+	    ReportError(MatchesRegex("could not read \".*\" after frame .*; lost "
+	                             ".*s, .*% of total query time of .*s"))
+	)
+	    .Times(1);
+	EXPECT_CALL(
+	    *progress,
+	    ReportError(MatchesRegex(
+	        "data corruption during query representing .*% of total query time"
+	    ))
+	)
+	    .Times(1);
 
 	Query::IdentifyFrames(
 	    *e,
