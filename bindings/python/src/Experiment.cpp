@@ -10,15 +10,13 @@
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-
-
-void EnsureAllDataIsLoaded(const fort::myrmidon::Experiment & e,
-                           bool fixCorruptedData) {
-	ItemProgress p("",true);
-	e.EnsureAllDataIsLoaded([&](int current,int total) {
-		p.Update(current,total);
-	},
-		fixCorruptedData);
+void EnsureAllDataIsLoaded(
+    const fort::myrmidon::Experiment &e, bool fixCorruptedData
+) {
+	e.EnsureAllDataIsLoaded(
+	    std::make_unique<ItemProgress>("loading data"),
+	    fixCorruptedData
+	);
 }
 
 void BindExperiment(py::module_ & m) {

@@ -12,10 +12,11 @@ public:
 	ItemProgress(const std::string &description);
 	virtual ~ItemProgress();
 
+	ItemProgress(const ItemProgress &other)            = delete;
+	ItemProgress &operator=(const ItemProgress &other) = delete;
+
 	void ReportError(const std::string &error) override;
-
 	void SetTotal(size_t total) override;
-
 	void Update(size_t current) override;
 
 private:
@@ -32,14 +33,18 @@ public:
 	TimeProgress(const std::string &description);
 	virtual ~TimeProgress();
 
+	TimeProgress(const TimeProgress &other)            = delete;
+	TimeProgress &operator=(const TimeProgress &other) = delete;
+
 	void ReportError(const std::string &error) override;
 	void SetBound(const fort::Time &start, const fort::Time &end) override;
 	void Update(const fort::Time &t) override;
 
 private:
 	pybind11::object d_progress;
+	std::string      d_description;
 	fort::Time       d_start;
-	int64_t          d_lastMinuteReported;
+	int64_t          d_lastMinuteReported = 0;
 };
 
 #define check_py_interrupt() do { \

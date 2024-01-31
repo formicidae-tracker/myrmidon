@@ -26,13 +26,13 @@ py::list QueryIdentifyFrames(
 	args.End            = end;
 	args.SingleThreaded = singleThreaded;
 	args.ComputeZones   = computeZones;
-	TimeProgress
-	    progress(experiment, start, end, "Identifiying frames", reportProgress);
+	if (reportProgress) {
+		args.Progress = std::make_unique<TimeProgress>("Identifiying frames");
+	}
 	fort::myrmidon::Query::IdentifyFramesFunctor(
 	    experiment,
-	    [&res, &progress](const fort::myrmidon::IdentifiedFrame::Ptr &f) {
+	    [&res](const fort::myrmidon::IdentifiedFrame::Ptr &f) {
 		    res.append(f);
-		    progress.Update(f->FrameTime);
 	    },
 	    args
 	);
@@ -53,14 +53,12 @@ py::list QueryCollideFrames(
 	args.End                   = end;
 	args.SingleThreaded        = singleThreaded;
 	args.CollisionsIgnoreZones = collisionsIgnoreZones;
-	TimeProgress
-	    progress(experiment, start, end, "Colliding frames", reportProgress);
+	if (reportProgress) {
+		args.Progress = std::make_unique<TimeProgress>("Colliding frames");
+	}
 	fort::myrmidon::Query::CollideFramesFunctor(
 	    experiment,
-	    [&](const fort::myrmidon::CollisionData &d) {
-		    res.append(d);
-		    progress.Update(std::get<0>(d)->FrameTime);
-	    },
+	    [&](const fort::myrmidon::CollisionData &d) { res.append(d); },
 	    args
 	);
 	return res;
@@ -87,19 +85,13 @@ py::list QueryComputeAntTrajectories(
 	args.ComputeZones                = computeZones;
 	args.SingleThreaded              = singleThreaded;
 	args.SegmentOnMatcherValueChange = segmentOnMatcherValueChange;
-	TimeProgress progress(
-	    experiment,
-	    start,
-	    end,
-	    "Computing ant trajectories",
-	    reportProgress
-	);
+	if (reportProgress) {
+		args.Progress =
+		    std::make_unique<TimeProgress>("Computing ant trajectories");
+	}
 	fort::myrmidon::Query::ComputeAntTrajectoriesFunctor(
 	    experiment,
-	    [&](const fort::myrmidon::AntTrajectory::Ptr &t) {
-		    res.append(t);
-		    progress.Update(t->End());
-	    },
+	    [&](const fort::myrmidon::AntTrajectory::Ptr &t) { res.append(t); },
 	    args
 	);
 	return res;
@@ -130,22 +122,17 @@ py::tuple QueryComputeAntInteractions(
 	args.SingleThreaded              = singleThreaded;
 	args.CollisionsIgnoreZones       = collisionsIgnoreZones;
 	args.SegmentOnMatcherValueChange = segmentOnMatcherValueChange;
-	TimeProgress progress(
-	    experiment,
-	    start,
-	    end,
-	    "Computing ant interactions",
-	    reportProgress
-	);
+	if (reportProgress) {
+		args.Progress =
+		    std::make_unique<TimeProgress>("Computing ant interactions");
+	}
 	fort::myrmidon::Query::ComputeAntInteractionsFunctor(
 	    experiment,
 	    [&](const fort::myrmidon::AntTrajectory::Ptr &t) {
 		    trajectories.append(t);
-		    progress.Update(t->End());
 	    },
 	    [&](const fort::myrmidon::AntInteraction::Ptr &i) {
 		    interactions.append(i);
-		    progress.Update(i->End);
 	    },
 	    args
 	);
@@ -162,29 +149,24 @@ FindVideoSegments(const fort::myrmidon::Experiment & e,
 	return segments;
 }
 
-
-py::object GetTagCloseUps(const fort::myrmidon::Experiment & e,
-                          bool fixCorruptedData) {
+py::object
+GetTagCloseUps(const fort::myrmidon::Experiment &e, bool fixCorruptedData) {
 	using namespace fort::myrmidon;
 	using namespace pybind11::literals;
 
-	py::object pd = py::module_::import("pandas");
-	py::object tqdm = py::module_::import("tqdm");
+	py::object               pd   = py::module_::import("pandas");
+	py::object               tqdm = py::module_::import("tqdm");
 	std::vector<std::string> paths;
-	std::vector<TagID> IDs;
-	Eigen::MatrixXd data;
+	std::vector<TagID>       IDs;
+	Eigen::MatrixXd          data;
 
-	ItemProgress p("Tag Close-Ups",true);
-	std::tie(paths,IDs,data)
-		= Query::GetTagCloseUps(e,
-		                        [&](int current,int total) {
-			                        p.Update(current,total);
-		                        },
-		                        fixCorruptedData);
+	auto p = std::make_unique<ItemProgress>("Tag Close-Ups");
+	std::tie(paths, IDs, data) =
+	    Query::GetTagCloseUps(e, std::move(p), fixCorruptedData);
 
-	py::object df = pd.attr("DataFrame")("data"_a = py::dict("path"_a = paths,
-	                                                         "ID"_a = IDs));
-	py::list cols;
+	py::object df = pd.attr("DataFrame"
+	)("data"_a = py::dict("path"_a = paths, "ID"_a = IDs));
+	py::list   cols;
 	cols.append("X");
 	cols.append("Y");
 	cols.append("Theta");
@@ -196,27 +178,27 @@ py::object GetTagCloseUps(const fort::myrmidon::Experiment & e,
 	cols.append("c2_Y");
 	cols.append("c3_X");
 	cols.append("c3_Y");
-	return df.attr("join")(pd.attr("DataFrame")("data"_a = data,
-	                                            "columns"_a = cols));
+	return df.attr("join"
+	)(pd.attr("DataFrame")("data"_a = data, "columns"_a = cols));
 }
 
-
-void BindQuery(py::module_ & m) {
+void BindQuery(py::module_ &m) {
 	using namespace pybind11::literals;
 
-	fort::myrmidon::Query::IdentifyFramesArgs identifyArgs;
-	fort::myrmidon::Query::CollideFramesArgs collideArgs;
+	fort::myrmidon::Query::IdentifyFramesArgs         identifyArgs;
+	fort::myrmidon::Query::CollideFramesArgs          collideArgs;
 	fort::myrmidon::Query::ComputeAntTrajectoriesArgs trajectoryArgs;
 	fort::myrmidon::Query::ComputeAntInteractionsArgs interactionArgs;
 
-	py::class_<fort::myrmidon::Query>(m,"Query")
-		.def_static("ComputeMeasurementFor",
-		            &fort::myrmidon::Query::ComputeMeasurementFor,
-		            "experiment"_a,
-		            py::kw_only(),
-		            "antID"_a,
-		            "measurementTypeID"_a,
-		            R"pydoc(
+	py::class_<fort::myrmidon::Query>(m, "Query")
+	    .def_static(
+	        "ComputeMeasurementFor",
+	        &fort::myrmidon::Query::ComputeMeasurementFor,
+	        "experiment"_a,
+	        py::kw_only(),
+	        "antID"_a,
+	        "measurementTypeID"_a,
+	        R"pydoc(
 Computes Ant manual measurement in millimeters.
 
 Computes the list of manual measurements made in `fort-studio` for a
@@ -229,23 +211,25 @@ Args:
 
 Returns:
         List[Measurement]: the list of measurement for **antID** and **measurementTypeID**
-)pydoc")
-		.def_static("GetDataInformations",
-		            &fort::myrmidon::Query::GetDataInformations,
-		            "experiment"_a)
-		.def_static("ComputeTagStatistics",
-		            [](const fort::myrmidon::Experiment & e,
-		               bool fixCorruptedData) {
-			            ItemProgress p("Tag Statistics",true);
-			            return fort::myrmidon::Query::ComputeTagStatistics(e,
-			                                                               [&](int current, int total) {
-				                                                               p.Update(current,total);
-			                                                               },
-			                                                               fixCorruptedData);
-		            },
-		            "experiment"_a,
-		            "fixCorruptedData"_a = false,
-		            R"pydoc(
+)pydoc"
+	    )
+	    .def_static(
+	        "GetDataInformations",
+	        &fort::myrmidon::Query::GetDataInformations,
+	        "experiment"_a
+	    )
+	    .def_static(
+	        "ComputeTagStatistics",
+	        [](const fort::myrmidon::Experiment &e, bool fixCorruptedData) {
+		        return fort::myrmidon::Query::ComputeTagStatistics(
+		            e,
+		            std::make_unique<ItemProgress>("Tag Statistics"),
+		            fixCorruptedData
+		        );
+	        },
+	        "experiment"_a,
+	        "fixCorruptedData"_a = false,
+	        R"pydoc(
 Computes tag detection statistics in an experiment.
 
 Args:
@@ -260,16 +244,19 @@ Returns:
 
 Raises:
     RuntimeError: in vase of data corruption if fixCorruptedData == False
-)pydoc")
-		.def_static("IdentifyFrames",&QueryIdentifyFrames,
-		            "experiment"_a,
-		            py::kw_only(),
-		            "start"_a = identifyArgs.Start,
-		            "end"_a = identifyArgs.End,
-		            "singleThreaded"_a = identifyArgs.SingleThreaded,
-		            "computeZones"_a = identifyArgs.ComputeZones,
-		            "reportProgress"_a = true,
-		            R"pydoc(
+)pydoc"
+	    )
+	    .def_static(
+	        "IdentifyFrames",
+	        &QueryIdentifyFrames,
+	        "experiment"_a,
+	        py::kw_only(),
+	        "start"_a          = identifyArgs.Start,
+	        "end"_a            = identifyArgs.End,
+	        "singleThreaded"_a = identifyArgs.SingleThreaded,
+	        "computeZones"_a   = identifyArgs.ComputeZones,
+	        "reportProgress"_a = true,
+	        R"pydoc(
 Gets Ant positions in video frames.
 
 Args:
@@ -281,17 +268,19 @@ Args:
 
 Returns:
     List[IdentifiedFrame]: the detected position of the Ant in video frames in [**start**;**end**[
-)pydoc")
-		.def_static("CollideFrames",
-		            &QueryCollideFrames,
-		            "experiment"_a,
-		            py::kw_only(),
-		            "start"_a = collideArgs.Start,
-		            "end"_a = collideArgs.End,
-		            "collisionsIgnoreZones"_a = collideArgs.CollisionsIgnoreZones,
-		            "singleThreaded"_a = collideArgs.SingleThreaded,
-		            "reportProgress"_a = true,
-		            R"pydoc(
+)pydoc"
+	    )
+	    .def_static(
+	        "CollideFrames",
+	        &QueryCollideFrames,
+	        "experiment"_a,
+	        py::kw_only(),
+	        "start"_a                 = collideArgs.Start,
+	        "end"_a                   = collideArgs.End,
+	        "collisionsIgnoreZones"_a = collideArgs.CollisionsIgnoreZones,
+	        "singleThreaded"_a        = collideArgs.SingleThreaded,
+	        "reportProgress"_a        = true,
+	        R"pydoc(
 Gets Ant collision in video frames.
 
 Args:
@@ -303,20 +292,23 @@ Args:
 
 Returns:
     List[Tuple[IdentifiedFrame,CollisionFrame]]: the detected position and collision of the Ants in video frames in [**start**;**end**[
- )pydoc")
-		.def_static("ComputeAntTrajectories",
-		            &QueryComputeAntTrajectories,
-		            "experiment"_a,
-		            py::kw_only(),
-		            "start"_a = trajectoryArgs.Start,
-		            "end"_a = trajectoryArgs.End,
-		            "maximumGap"_a = trajectoryArgs.MaximumGap,
-		            "matcher"_a = trajectoryArgs.Matcher,
-		            "computeZones"_a = trajectoryArgs.ComputeZones,
-		            "segmentOnMatcherValueChange"_a = trajectoryArgs.SegmentOnMatcherValueChange,
-		            "singleThreaded"_a = trajectoryArgs.SingleThreaded,
-		            "reportProgress"_a = true,
-		            R"pydoc(
+ )pydoc"
+	    )
+	    .def_static(
+	        "ComputeAntTrajectories",
+	        &QueryComputeAntTrajectories,
+	        "experiment"_a,
+	        py::kw_only(),
+	        "start"_a        = trajectoryArgs.Start,
+	        "end"_a          = trajectoryArgs.End,
+	        "maximumGap"_a   = trajectoryArgs.MaximumGap,
+	        "matcher"_a      = trajectoryArgs.Matcher,
+	        "computeZones"_a = trajectoryArgs.ComputeZones,
+	        "segmentOnMatcherValueChange"_a =
+	            trajectoryArgs.SegmentOnMatcherValueChange,
+	        "singleThreaded"_a = trajectoryArgs.SingleThreaded,
+	        "reportProgress"_a = true,
+	        R"pydoc(
 Conputes Ant Trajectories between two times.
 
 Args:
@@ -333,21 +325,24 @@ Args:
 Returns:
     List[AntTrajectory]: a list of all :class:`AntTrajectory` taking place in [**start**;**end**[ given the **matcher** and **maximumGap** criterions.
 
-)pydoc")
-		.def_static("ComputeAntInteractions",
-		            &QueryComputeAntInteractions,
-		            "experiment"_a,
-		            py::kw_only(),
-		            "start"_a = interactionArgs.Start,
-		            "end"_a = interactionArgs.End,
-		            "maximumGap"_a = interactionArgs.MaximumGap,
-		            "matcher"_a = interactionArgs.Matcher,
-		            "collisionsIgnoreZones"_a = interactionArgs.CollisionsIgnoreZones,
-		            "reportFullTrajectories"_a = interactionArgs.ReportFullTrajectories,
-		            "segmentOnMatcherValueChange"_a = interactionArgs.SegmentOnMatcherValueChange,
-		            "singleThreaded"_a = interactionArgs.SingleThreaded,
-		            "reportProgress"_a = true,
-		            R"pydoc(
+)pydoc"
+	    )
+	    .def_static(
+	        "ComputeAntInteractions",
+	        &QueryComputeAntInteractions,
+	        "experiment"_a,
+	        py::kw_only(),
+	        "start"_a                  = interactionArgs.Start,
+	        "end"_a                    = interactionArgs.End,
+	        "maximumGap"_a             = interactionArgs.MaximumGap,
+	        "matcher"_a                = interactionArgs.Matcher,
+	        "collisionsIgnoreZones"_a  = interactionArgs.CollisionsIgnoreZones,
+	        "reportFullTrajectories"_a = interactionArgs.ReportFullTrajectories,
+	        "segmentOnMatcherValueChange"_a =
+	            interactionArgs.SegmentOnMatcherValueChange,
+	        "singleThreaded"_a = interactionArgs.SingleThreaded,
+	        "reportProgress"_a = true,
+	        R"pydoc(
 Conputes Ant Interctions between two times.
 
 Args:
@@ -372,15 +367,17 @@ Returns:
           empty list.
         * a list of all AntInteraction taking place
           in [start;end[ given the matcher criterion and maximumGap
-)pydoc")
-		.def_static("FindVideoSegments",
-		            &FindVideoSegments,
-		            "experiment"_a,
-		            py::kw_only(),
-		            "space"_a = 1,
-		            "start"_a = fort::Time::SinceEver(),
-		            "end"_a = fort::Time::Forever(),
-		            R"pydoc(
+)pydoc"
+	    )
+	    .def_static(
+	        "FindVideoSegments",
+	        &FindVideoSegments,
+	        "experiment"_a,
+	        py::kw_only(),
+	        "space"_a = 1,
+	        "start"_a = fort::Time::SinceEver(),
+	        "end"_a   = fort::Time::Forever(),
+	        R"pydoc(
 Finds :class:`VideoSegment` in a time range
 
 Args:
@@ -391,14 +388,16 @@ Args:
 
 Returns:
     VideoSegmentList: list of :class:`VideoSegment` in **space** that covers [**start**;**end**].
-)pydoc")
-		.def_static("GetMetaDataKeyRanges",
-		            &fort::myrmidon::Query::GetMetaDataKeyRanges,
-		            "experiment"_a,
-		            py::kw_only(),
-		            "key"_a,
-		            "value"_a,
-		            R"pydoc(
+)pydoc"
+	    )
+	    .def_static(
+	        "GetMetaDataKeyRanges",
+	        &fort::myrmidon::Query::GetMetaDataKeyRanges,
+	        "experiment"_a,
+	        py::kw_only(),
+	        "key"_a,
+	        "value"_a,
+	        R"pydoc(
 Gets the time ranges where metadata key has a given value
 
 Args:
@@ -412,12 +411,14 @@ Returns:
 Raises:
     IndexError: if **key** is not defined in Experiment
     ValueError: if **value** is not the right type for **key**
-)pydoc")
-		.def_static("GetTagCloseUps",
-		            &GetTagCloseUps,
-		            "experiment"_a,
-		            "fixCorruptedData"_a = false,
-		            R"pydoc(
+)pydoc"
+	    )
+	    .def_static(
+	        "GetTagCloseUps",
+	        &GetTagCloseUps,
+	        "experiment"_a,
+	        "fixCorruptedData"_a = false,
+	        R"pydoc(
 Gets the tag close-up in this experiment
 
 Args:
@@ -431,9 +432,8 @@ Raises:
 
 Returns:
     pandas.DataFrame: the close-up data in the experiment
-)pydoc")
+)pydoc"
+	    )
 
-		;
-
-
+	    ;
 }
