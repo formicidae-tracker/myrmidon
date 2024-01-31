@@ -26,6 +26,7 @@ bool TrackingVideoFrame::Contains(quint32 antID) const {
 QImage TrackingVideoFrame::AsQImage() const noexcept {
 	static std::map<fort::video::PixelFormat, QImage::Format> supported = {
 	    {AV_PIX_FMT_BGRA, QImage::Format_RGB32},
+	    {AV_PIX_FMT_ARGB, QImage::Format_RGB32},
 	    {AV_PIX_FMT_RGB24, QImage::Format_RGB888},
 	};
 
