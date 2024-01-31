@@ -26,7 +26,7 @@ namespace priv {
 
 void Query::ProcessLoaders(
     const std::vector<TrackingDataDirectory::Loader> &loaders,
-    const std::function<void(int, int)>              &progressCallback,
+    ProgressReporter::Ptr                           &&progress,
     bool                                              fixCorruptedData
 ) {
 	if (loaders.empty() == true) {
@@ -65,6 +65,7 @@ void Query::ProcessLoaders(
 
 	FixableErrorList errors;
 	int              i = 0;
+
 	for (;;) {
 		std::shared_ptr<FixableError::Ptr> error;
 		queue.pop(error);
@@ -75,7 +76,9 @@ void Query::ProcessLoaders(
 			errors.push_back(std::move(*error));
 		}
 		try {
-			progressCallback(++i, loaders.size());
+			if (progress) {
+				progress->Update(++i, loaders.size());
+			}
 		} catch (const std::exception &e) {
 			stop.store(true);
 			go.join();
@@ -96,9 +99,9 @@ void Query::ProcessLoaders(
 }
 
 static void EnsureTagStatisticsAreComputed(
-    const Experiment                    &experiment,
-    const std::function<void(int, int)> &progressCallback,
-    bool                                 fixCorruptedData
+    const Experiment       &experiment,
+    ProgressReporter::Ptr &&progress,
+    bool                    fixCorruptedData
 ) {
 	std::vector<TrackingDataDirectory::Loader> loaders;
 	for (const auto &[URI, tdd] : experiment.TrackingDataDirectories()) {
@@ -109,18 +112,18 @@ static void EnsureTagStatisticsAreComputed(
 		loaders.insert(loaders.end(), localLoaders.begin(), localLoaders.end());
 	}
 
-	Query::ProcessLoaders(loaders, progressCallback, fixCorruptedData);
+	Query::ProcessLoaders(loaders, std::move(progress), fixCorruptedData);
 }
 
 void Query::ComputeTagStatistics(
-    const Experiment                    &experiment,
-    TagStatistics::ByTagID              &result,
-    const std::function<void(int, int)> &progressCallback,
-    bool                                 fixCorruptedData
+    const Experiment       &experiment,
+    TagStatistics::ByTagID &result,
+    ProgressReporter::Ptr &&progress,
+    bool                    fixCorruptedData
 ) {
 	EnsureTagStatisticsAreComputed(
 	    experiment,
-	    progressCallback,
+	    std::move(progress),
 	    fixCorruptedData
 	);
 
@@ -334,9 +337,7 @@ void Query::FindVideoSegments(
 }
 
 static void EnsureTagCloseUpsAreLoaded(
-    const Experiment                    &e,
-    const std::function<void(int, int)> &progressCallback,
-    bool                                 fixCorruptedData
+    const Experiment &e, ProgressReporter::Ptr &&progress, bool fixCorruptedData
 ) {
 	std::vector<TrackingDataDirectory::Loader> loaders;
 	for (const auto &[uri, tdd] : e.TrackingDataDirectories()) {
@@ -347,17 +348,15 @@ static void EnsureTagCloseUpsAreLoaded(
 		loaders.insert(loaders.end(), localLoaders.begin(), localLoaders.end());
 	}
 
-	Query::ProcessLoaders(loaders, progressCallback, fixCorruptedData);
+	Query::ProcessLoaders(loaders, std::move(progress), fixCorruptedData);
 }
 
 std::tuple<std::vector<std::string>, std::vector<TagID>, Eigen::MatrixXd>
 Query::GetTagCloseUps(
-    const Experiment                    &e,
-    const std::function<void(int, int)> &progressCallback,
-    bool                                 fixCorruptedData
+    const Experiment &e, ProgressReporter::Ptr &&progress, bool fixCorruptedData
 ) {
 
-	EnsureTagCloseUpsAreLoaded(e, progressCallback, fixCorruptedData);
+	EnsureTagCloseUpsAreLoaded(e, std::move(progress), fixCorruptedData);
 
 	std::vector<std::string> paths;
 	std::vector<TagID>       IDs;
