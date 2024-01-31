@@ -26,6 +26,10 @@
 
 #include <tbb/parallel_for.h>
 
+extern "C" {
+#include <libavutil/log.h>
+}
+
 namespace fort {
 namespace myrmidon {
 namespace priv {
@@ -37,7 +41,7 @@ Experiment::Experiment(const fs::path &filepath)
     , d_universe(std::make_shared<Universe>())
     , d_defaultTagSize(1.0)
     , d_antShapeTypes(std::make_shared<AntShapeTypeContainer>()) {
-
+	av_log_set_level(AV_LOG_QUIET);
 	CreateMeasurementType("head-tail", Measurement::HEAD_TAIL_TYPE);
 
 	auto onNameChange =
