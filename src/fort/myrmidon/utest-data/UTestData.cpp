@@ -513,10 +513,6 @@ void UTestData::WriteTDD(TDDInfo &tddInfo, SpaceID spaceID) {
 		        std::prev(tddInfo.Segments.end(), 2)->RelativePath,
 		    50
 		);
-		fs::remove(
-		    tddInfo.AbsoluteFilePath /
-		    std::prev(tddInfo.Segments.end())->RelativePath
-		);
 	}
 }
 

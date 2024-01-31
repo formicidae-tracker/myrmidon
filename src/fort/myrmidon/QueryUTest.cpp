@@ -1,4 +1,5 @@
 #include "gmock/gmock.h"
+#include <filesystem>
 #include <gtest/gtest.h>
 
 #include "Ant.hpp"
@@ -7,6 +8,7 @@
 
 #include "TestSetup.hpp"
 #include "UtilsUTest.hpp"
+#include "fort/myrmidon/types/IdentifiedFrame.hpp"
 #include "fort/myrmidon/types/Reporter.hpp"
 
 #include <fort/myrmidon/utest-data/UTestData.hpp>
@@ -470,6 +472,33 @@ TEST_F(QueryUTest, GetMetaDataKeyRanges) {
 	EXPECT_THROW(
 	    { ranges = Query::GetMetaDataKeyRanges(*experiment, "alive", Time()); },
 	    std::invalid_argument
+	);
+}
+
+TEST_F(QueryUTest, CorruptedData) {
+	const auto &udata = TestSetup::UTestData();
+	auto        e = Experiment::Create(udata.Basedir() / "corrupted.myrmidon");
+	auto        s = e->CreateSpace("main");
+	e->AddTrackingDataDirectory(
+	    s->ID(),
+	    udata.CorruptedDataDir().AbsoluteFilePath
+	);
+
+	std::vector<IdentifiedFrame::Ptr> res;
+	using ::testing::_;
+
+	auto progress =
+	    std::make_unique<testing::StrictMock<MockTimeProgressReporter>>();
+
+	EXPECT_CALL(*progress, SetBound(_, _)).Times(1);
+	EXPECT_CALL(*progress, Update(_)).Times(::testing::AtLeast(2));
+
+	Query::IdentifyFrames(
+	    *e,
+	    res,
+	    {
+	        {.Progress = std::move(progress)},
+	    }
 	);
 }
 

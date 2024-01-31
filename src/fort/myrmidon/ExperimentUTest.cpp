@@ -1,3 +1,4 @@
+#include <filesystem>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
@@ -18,6 +19,8 @@ protected:
 	void TearDown();
 
 	Experiment::Ptr experiment;
+
+	void ResetCorruptedFile();
 };
 
 void PublicExperimentUTest::SetUp() {
@@ -28,6 +31,21 @@ void PublicExperimentUTest::SetUp() {
 
 void PublicExperimentUTest::TearDown() {
 	experiment.reset();
+	ResetCorruptedFile();
+}
+
+void PublicExperimentUTest::ResetCorruptedFile() {
+	auto path = TestSetup::UTestData().CorruptedDataDir().AbsoluteFilePath /
+	            "tracking.0001.hermes";
+	fs::path corruptedPath = path.string() + ".bak";
+	if (fs::exists(corruptedPath)) {
+		fs::copy_file(
+		    corruptedPath,
+		    path,
+		    fs::copy_options::overwrite_existing
+		);
+		fs::remove(corruptedPath);
+	}
 }
 
 TEST_F(PublicExperimentUTest, OpeningDataLess) {
@@ -521,13 +539,13 @@ TEST_F(PublicExperimentUTest, CanOpenCorruptedDataDir) {
 		URI = experiment->AddTrackingDataDirectory(s->ID(), corruptedPath);
 	} catch (const FixableErrors &e) {
 		const auto &errors = e.Errors();
-		EXPECT_TRUE(errors.size() > 1);
+		EXPECT_GE(errors.size(), 1);
 		bool noError = true;
 		EXPECT_FALSE(errors.front() == nullptr) << (noError = false);
 		if (noError == true) {
 			EXPECT_THAT(
 			    errors.front()->what(),
-			    MatchesRegex("could not read last frame from '.*': .*")
+			    MatchesRegex("Could not find frame .*")
 			);
 			EXPECT_THAT(
 			    errors.front()->FixDescription(),
@@ -572,7 +590,7 @@ TEST_F(PublicExperimentUTest, CanOpenCorruptedDataDir) {
 	}
 
 	ASSERT_FALSE(corruptedFileName.empty());
-	fs::rename(corruptedFileName + ".bak", corruptedFileName);
+	ResetCorruptedFile();
 
 	try {
 		experiment->EnsureAllDataIsLoaded(nullptr, false);
