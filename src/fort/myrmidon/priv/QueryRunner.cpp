@@ -157,6 +157,8 @@ void QueryRunner::RunSingleThread(
 	DataLoader loader(experiment, args);
 	auto       compute = QueryRunner::computeData(experiment, args);
 	// we simply run in a single thread
+	fort::Time current = args.Start;
+
 	for (;;) {
 		auto raw = loader();
 		if (raw.Space == 0) {
@@ -164,6 +166,12 @@ void QueryRunner::RunSingleThread(
 		}
 		auto data = compute(raw);
 		finalizer(data);
+
+		auto time = std::get<1>(data)->FrameTime;
+		if (args.Progress != nullptr && current.Before(time)) {
+			current = time;
+			args.Progress->Update(time);
+		}
 	}
 }
 
@@ -229,6 +237,7 @@ void QueryRunner::RunMultithread(
 
 	std::thread go(process);
 
+	fort::Time current = args.Start;
 	// we consume the queue in the current thread
 	for (;;) {
 		OrderedCollisionData v;
@@ -236,6 +245,12 @@ void QueryRunner::RunMultithread(
 		if (std::get<1>(v) == nullptr && std::get<2>(v) == nullptr) {
 			break;
 		}
+		auto time = std::get<1>(v)->FrameTime;
+		if (args.Progress != nullptr && current.Before(time)) {
+			current = time;
+			args.Progress->Update(time);
+		}
+
 		try {
 			finalizer(v);
 		} catch (...) {

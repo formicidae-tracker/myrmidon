@@ -6,6 +6,7 @@
 #include <fort/time/Time.hpp>
 
 #include <fort/myrmidon/types/Collision.hpp>
+#include <fort/myrmidon/types/Reporter.hpp>
 #include <fort/myrmidon/types/Typedefs.hpp>
 
 #include "ForwardDeclaration.hpp"
@@ -25,11 +26,12 @@ public:
 	};
 
 	struct Args {
-		Time Start;
-		Time End;
-		bool Localize;
-		bool Collide;
-		bool CollisionsIgnoreZones;
+		Time                      Start;
+		Time                      End;
+		bool                      Localize;
+		bool                      Collide;
+		bool                      CollisionsIgnoreZones;
+		TimeProgressReporter::Ptr Progress;
 	};
 
 	using OrderedCollisionData =
