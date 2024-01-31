@@ -5,40 +5,41 @@
 #include <pybind11/pybind11.h>
 
 #include <fort/myrmidon/Experiment.hpp>
+#include <fort/myrmidon/types/Reporter.hpp>
 
-class ItemProgress {
+class ItemProgress : public fort::myrmidon::ProgressReporter {
 public:
-	ItemProgress(const std::string & description,
-	             bool verbose);
-	~ItemProgress();
+	ItemProgress(const std::string &description);
+	virtual ~ItemProgress();
 
-	void Update(int current, int total);
+	void ReportError(const std::string &error) override;
+
+	void SetTotal(size_t total) override;
+
+	void Update(size_t current) override;
 
 private:
 	void ensureTqdm(int total);
 
 	pybind11::object d_progress;
-	bool d_verbose;
-	std::string d_description;
-	int d_last;
+	bool             d_verbose;
+	std::string      d_description;
+	size_t           d_last;
 };
 
-class TimeProgress {
+class TimeProgress : public fort::myrmidon::TimeProgressReporter {
 public:
-	TimeProgress(const fort::myrmidon::Experiment & e,
-	              fort::Time start,
-	              fort::Time end,
-	              const std::string & description,
-	              bool verbose = true);
-	~TimeProgress();
+	TimeProgress(const std::string &description);
+	virtual ~TimeProgress();
 
-	void Update(const fort::Time & t);
+	void ReportError(const std::string &error) override;
+	void SetBound(const fort::Time &start, const fort::Time &end) override;
+	void Update(const fort::Time &t) override;
 
 private:
 	pybind11::object d_progress;
-	fort::Time d_start;
-	int64_t d_lastMinuteReported;
-
+	fort::Time       d_start;
+	int64_t          d_lastMinuteReported;
 };
 
 #define check_py_interrupt() do { \
