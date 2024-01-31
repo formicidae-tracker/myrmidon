@@ -1,5 +1,7 @@
 #include "TrackingVideoFrame.hpp"
+#include <fort/video/Types.hpp>
 #include <iterator>
+#include <libavutil/pixfmt.h>
 #include <qimage.h>
 
 TrackingVideoFrame::TrackingVideoFrame()
@@ -22,18 +24,20 @@ bool TrackingVideoFrame::Contains(quint32 antID) const {
 }
 
 QImage TrackingVideoFrame::AsQImage() const noexcept {
-	if (!Data ||
-	    (Data->Format != AV_PIX_FMT_ARGB && Data->Format != AV_PIX_FMT_RGB24)) {
+	static std::map<fort::video::PixelFormat, QImage::Format> supported = {
+	    {AV_PIX_FMT_BGRA, QImage::Format_RGB32},
+	    {AV_PIX_FMT_RGB24, QImage::Format_RGB888},
+	};
+
+	if (supported.count(Data->Format) == 0) {
 		return QImage();
 	}
 
-	auto format = Data->Format == AV_PIX_FMT_ARGB ? QImage::Format_RGB32
-	                                              : QImage::Format_RGB888;
 	return QImage(
 	    Data->Planes[0],
 	    Data->Size.Width,
 	    Data->Size.Height,
 	    Data->Linesize[0],
-	    format
+	    supported[Data->Format]
 	);
 }

@@ -520,7 +520,7 @@ TrackingVideoPlayerTask::TrackingVideoPlayerTask(
 )
     : QObject(nullptr)
     , d_segment(segment)
-    , d_reader(segment->AbsoluteFilePath().c_str(), AV_PIX_FMT_ARGB)
+    , d_reader(segment->AbsoluteFilePath().c_str(), AV_PIX_FMT_BGRA)
     , d_loader(loader)
     , d_taskID(taskID)
     , d_seekID(0)
@@ -608,7 +608,7 @@ void TrackingVideoPlayerTask::processNewFrameUnsafe(TrackingVideoFrame frame) {
 }
 
 std::shared_ptr<fort::video::Frame> TrackingVideoPlayerTask::allocate() const {
-	return d_reader.CreateFrame(32);
+	return d_reader.CreateFrame(64);
 }
 
 void TrackingVideoPlayerTask::seekUnsafe(
@@ -625,7 +625,7 @@ void TrackingVideoPlayerTask::seekUnsafe(
 	if (d_reader.Position() == frameID) {
 		return;
 	}
-	d_reader.SeekFrame(frameID);
+	d_reader.SeekFrame(frameID, false);
 };
 
 void TrackingVideoPlayerTask::startLoadingFrom(quint32 spaceID,
