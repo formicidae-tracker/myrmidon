@@ -7,7 +7,6 @@
 #include <memory>
 #include <mutex>
 #include <sstream>
-#include <tbb/flow_graph.h>
 #include <thread>
 
 #include <tbb/concurrent_queue.h>
@@ -25,6 +24,8 @@
 #include "fort/myrmidon/priv/TrackingDataDirectoryError.hpp"
 #include "fort/myrmidon/types/Collision.hpp"
 #include "fort/myrmidon/types/Reporter.hpp"
+
+#include <fort/myrmidon/myrmidon-config.h>
 
 namespace fort {
 namespace myrmidon {
@@ -351,7 +352,11 @@ void QueryRunner::RunMultithread(
 	    };
 
 	tbb::flow::make_edge(ordering, finalize);
+#ifdef MYRMIDON_TBB_HAVE_DECREMENTER
+	tbb::flow::make_edge(finalize, limiter.decrementer());
+#else
 	tbb::flow::make_edge(finalize, limiter.decrement);
+#endif
 
 	// we spawn a child process that will feed and close the queue
 	auto process = [&]() {

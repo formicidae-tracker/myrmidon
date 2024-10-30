@@ -1,4 +1,16 @@
-include(CheckCXXSourceRuns)
+set(CMAKE_REQUIRED_LIBRARIES TBB::tbb)
+check_cxx_source_compiles(
+	"#include <tbb/flow_graph.h>
+
+int main(){
+	tbb::flow::graph g;
+	tbb::flow::limiter_node<int> limiter {g,4};
+	limiter.decrementer();
+	return 0;
+}
+"
+	MYRMIDON_TBB_HAVE_DECREMENTER
+)
 
 set(MYRMIDON_USE_SYSTEM_CATEGORY 1)
 
