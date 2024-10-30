@@ -6,8 +6,8 @@
 #include <ios>
 #include <memory>
 #include <mutex>
-#include <oneapi/tbb/flow_graph.h>
 #include <sstream>
+#include <tbb/flow_graph.h>
 #include <thread>
 
 #include <tbb/concurrent_queue.h>
@@ -351,7 +351,7 @@ void QueryRunner::RunMultithread(
 	    };
 
 	tbb::flow::make_edge(ordering, finalize);
-	tbb::flow::make_edge(finalize, limiter.decrementer());
+	tbb::flow::make_edge(finalize, limiter.decrement);
 
 	// we spawn a child process that will feed and close the queue
 	auto process = [&]() {

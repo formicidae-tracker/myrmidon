@@ -29,11 +29,10 @@ tracking datasets.
 INstallation
 ------------
 
-**fort-myrmidon** and all the supported bindings (R,python) are primarly
-distributed with
-[conda](https://docs.conda.io/projects/conda/en/latest/).
+**fort-myrmidon** and all the supported python bindings (python) are primarly
+distributed with `pip`
 
-**fort-studio** is distributed using **snap**.
+**fort-studio** is distributed using **flatpak**.
 
 Detailed installation instructions can be found in the `documentation
 <https:://formicidae-tracker.github.io/myrmidon/latest/installation.html>`_
