@@ -55,7 +55,7 @@ Dependencies
 Under debian, you can install them with the following command.
 
 ```bash
-sudo apt install libeigen3-dev libprotobuf-dev protobuf-compiler libtbb2-dev libasio-dev libavutil-dev libavcodec-dev libavformat-dev libswscale-dev qt6-base-dev libgoogle-glog-dev qt5-qmake libqt5charts5-dev libgoogpybind11-dev python3-tqdm python3-pandas python3-opencv
+sudo apt install libeigen3-dev libprotobuf-dev protobuf-compiler libtbb-dev libasio-dev libavutil-dev libavcodec-dev libavformat-dev libswscale-dev qt6-base-dev libgoogle-glog-dev qt5-qmake libqt5charts5-dev pybind11-dev python3-tqdm python3-pandas python3-opencv
 ```
 
 
