@@ -1,0 +1,45 @@
+id: io.github.formicidae_tracker.Studio
+runtime: org.kde.Platform
+runtime-version: '5.15-23.08'
+sdk: org.kde.Sdk
+command: fort-studio
+modules:
+  - name: fort-studio
+    buildsystem: cmake
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DBUILD_STUDIO=On
+      - -DBUILD_PYTHON=Off
+    build-options:
+      build-args:
+        - --share=network
+    sources:
+      - type: dir
+        path: ../..
+
+    modules:
+      - name: eigen
+        buildsystem: cmake
+        builddir: true
+        sources:
+          - type: archive
+            url: https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz
+            sha512: ba75ecb760e32acf4ceaf27115468e65d4f77c44f8d519b5a13e7940af2c03a304ad433368cb6d55431f307c5c39e2666ab41d34442db3cf441638e51f5c3b6a
+
+      - name: protobuf
+        buildsystem: autotools
+        builddir: true
+        sources:
+          - type: archive
+            url: https://github.com/protocolbuffers/protobuf/releases/download/v3.20.1/protobuf-cpp-3.20.1.tar.gz
+            sha512: aa3e9a3fbd38d6d868586b16f67b79656a693890d5d436b9369db43b9eee11adbf90a1bff117691fb02fd06216314bd8b3b439c99fab5f51c05c8d9ce2dcfe97
+
+      - name: oneTBB
+        buildsystem: cmake
+        builddir: true
+        build-options:
+          - -DTBB_TEST=On
+        sources:
+          - type: archive
+            url: https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2021.13.0.tar.gz
+            sha512: 1f536b98c4eb331c3ba21e4b36362c932d7852b974ea7237b5f7bffb0e996d76f688c7ac534cb56f5866cfdffd5d3f015521b4c2ca21e584503070782ca82a2f
