@@ -8,3 +8,5 @@ perf.data*
 /prime/
 /*.snap
 /.cache/
+/repo/
+/.flatpak-builder/
