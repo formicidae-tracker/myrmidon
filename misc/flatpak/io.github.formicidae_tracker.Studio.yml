@@ -6,6 +6,7 @@ command: fort-studio
 modules:
   - name: fort-studio
     buildsystem: cmake
+    builddir: true
     config-opts:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DBUILD_STUDIO=On
@@ -43,3 +44,19 @@ modules:
           - type: archive
             url: https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2021.13.0.tar.gz
             sha512: 1f536b98c4eb331c3ba21e4b36362c932d7852b974ea7237b5f7bffb0e996d76f688c7ac534cb56f5866cfdffd5d3f015521b4c2ca21e584503070782ca82a2f
+
+      - name: libasio
+        buildsystem: autotools
+        builddir: true
+        sources:
+          - type: archive
+            url: https://downloads.sourceforge.net/project/asio/asio/1.30.2%20%28Stable%29/asio-1.30.2.tar.bz2?ts=gAAAAABnJQczeamiE5DoTUQGZ4EUfzBjPvfSV7WRWYVQzty5yac7ZoKmn7dfYh7B9R6PLpu4bEDUNxnwhcln_VfmJ_CU1hozmw%3D%3D&use_mirror=freefr&r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fasio%2Ffiles%2Fasio%2F1.30.2%2520%2528Stable%2529%2Fasio-1.30.2.tar.bz2%2Fdownload%3Fuse_mirror%3Dfreefr
+            sha512: 2d26cdcfcc0c310e82ab502551b51d70fd95ba4628bd306929e78539299974fc14aa6ba27cf256f1df7a56539cb885012ba02a202ae17bf817ee6311308a795a
+
+      - name: glog
+        buildsystem: cmake
+        builddir: true
+        sources:
+          - type: archive
+            url: https://github.com/google/glog/archive/refs/tags/v0.7.1.zip
+            sha512: 5ebc785affe344ea2f527fd7f74d4568ec6eed30ce2f9542798fc3bcee4da24b46c965fef0eb250f01e0d2238f950e1a0b189a410583db5917ed6e0a6f45bad3

@@ -20,9 +20,9 @@
 cmake_policy(SET CMP0048 NEW)
 cmake_policy(SET CMP0077 NEW)
 
-project(fort-studio LANGUAGES C CXX)
-
 cmake_minimum_required(VERSION 3.11)
+
+project(fort-studio LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED 1)
@@ -126,7 +126,6 @@ FetchContent_MakeAvailable(yaml-cpp semver fort-tags fort-hermes fort-charis)
 include(CheckCXXSourceCompiles)
 
 set(CMAKE_REQUIRED_FLAGS "-lstdc++fs")
-
 check_cxx_source_compiles(
 	"#include <filesystem>
 
@@ -137,15 +136,29 @@ int main(){
 "
 	USE_CXX17_FS_LIBRARY
 )
+set(CMAKE_REQUIRED_FLAGS)
 
 if(USE_CXX17_FS_LIBRARY)
 	set(CXXFS_LIBRARY "-lstdc++fs")
 else(USE_CXX17_FS_LIBRARY)
+	check_cxx_source_compiles(
+		"#include <filesystem>
 
-	find_package(Boost 1.60.0 REQUIRED COMPONENTS filesystem)
-	include_directories(${Boost_filesystem_INCLUDE_DIRS})
-	set(CXXFS_LIBRARY Boost::filesystem)
-	set(MYRMIDON_USE_BOOST_FILESYSTEM 1)
+int main(){
+	std::filesystem::path p;
+	return 0;
+}
+"
+		NO_LINK_CXX17_FS_LIBRARY
+	)
+	if(NO_LINK_CXX17_FS_LIBRARY)
+		set(CXXFS_LIBRARY)
+	else(NO_LINK_CXX17_FS_LIBRARY)
+		find_package(Boost 1.60.0 REQUIRED COMPONENTS filesystem)
+		include_directories(${Boost_filesystem_INCLUDE_DIRS})
+		set(CXXFS_LIBRARY Boost::Filesystem)
+		set(MYRMIDON_USE_BOOST_FILESYSTEM 1)
+	endif(NO_LINK_CXX17_FS_LIBRARY)
 endif(USE_CXX17_FS_LIBRARY)
 
 check_cxx_source_compiles(
