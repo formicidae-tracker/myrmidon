@@ -68,7 +68,7 @@ void CloseUpScroller::setCloseUps(
 }
 
 void CloseUpScroller::next() {
-	if ( (d_closeUps.end() - d_currentCloseUp) <= 1 ) {
+	if ((d_closeUps.cend() - d_currentCloseUp) <= 1) {
 		return;
 	}
 	++d_currentCloseUp;
