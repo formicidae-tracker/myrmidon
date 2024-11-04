@@ -32,8 +32,8 @@ modules:
         builddir: true
         sources:
           - type: archive
-            url: https://github.com/protocolbuffers/protobuf/releases/download/v3.20.1/protobuf-cpp-3.20.1.tar.gz
-            sha512: aa3e9a3fbd38d6d868586b16f67b79656a693890d5d436b9369db43b9eee11adbf90a1bff117691fb02fd06216314bd8b3b439c99fab5f51c05c8d9ce2dcfe97
+            url: https://github.com/protocolbuffers/protobuf/releases/download/v3.12.4/protobuf-cpp-3.12.4.tar.gz
+            sha512: ba175d59f5f8158e9c8cfeb9ed19f80115e31e86458b5599797ca15826925c3e31d63fe2e97407a2c138837617758c78115beb43801178f20c5b0bf7b8e75c50
 
       - name: oneTBB
         buildsystem: cmake
@@ -50,13 +50,13 @@ modules:
         builddir: true
         sources:
           - type: archive
-            url: https://downloads.sourceforge.net/project/asio/asio/1.30.2%20%28Stable%29/asio-1.30.2.tar.bz2?ts=gAAAAABnJQczeamiE5DoTUQGZ4EUfzBjPvfSV7WRWYVQzty5yac7ZoKmn7dfYh7B9R6PLpu4bEDUNxnwhcln_VfmJ_CU1hozmw%3D%3D&use_mirror=freefr&r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fasio%2Ffiles%2Fasio%2F1.30.2%2520%2528Stable%2529%2Fasio-1.30.2.tar.bz2%2Fdownload%3Fuse_mirror%3Dfreefr
-            sha512: 2d26cdcfcc0c310e82ab502551b51d70fd95ba4628bd306929e78539299974fc14aa6ba27cf256f1df7a56539cb885012ba02a202ae17bf817ee6311308a795a
+            url: https://downloads.sourceforge.net/project/asio/asio/1.18.1%20%28Stable%29/asio-1.18.1.tar.bz2?ts=gAAAAABnJfUvlkaqNtgVgyLLVFgJrzcY8-DsD8YWZtULY_FJ9F8tR0ROn1Odwymy3glAV8-0jk7oAhJVqOVTRKbFlhLxLvGigg%3D%3D&r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fasio%2Ffiles%2Fasio%2F1.18.1%2520%2528Stable%2529%2Fasio-1.18.1.tar.bz2%2Fdownload
+            sha512: 06b41869858b69bc523564d5b219f8ebc995ca862e989f65233778c7596143075662880b6c5dd2eb24c21ba6e68a450888ab07a6bc8585bb6ede9a738e1e27c0
 
       - name: glog
         buildsystem: cmake
         builddir: true
         sources:
           - type: archive
-            url: https://github.com/google/glog/archive/refs/tags/v0.7.1.zip
-            sha512: 5ebc785affe344ea2f527fd7f74d4568ec6eed30ce2f9542798fc3bcee4da24b46c965fef0eb250f01e0d2238f950e1a0b189a410583db5917ed6e0a6f45bad3
+            url: https://github.com/google/glog/archive/refs/tags/v0.5.0.zip
+            sha512: 46669f603279edc05e98153247897c8a7b50ebc9e800132cc8c3eef531687691e616b5210ed9a1dfbb5170ea354b76fb9244b383a8d309bacbfcf2810ec07546
