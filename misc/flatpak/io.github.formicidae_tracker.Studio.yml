@@ -38,12 +38,12 @@ modules:
       - name: oneTBB
         buildsystem: cmake
         builddir: true
-        build-options:
-          - -DTBB_TEST=On
+        config-opts:
+          - -DTBB_TEST=Off
         sources:
           - type: archive
-            url: https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2021.13.0.tar.gz
-            sha512: 1f536b98c4eb331c3ba21e4b36362c932d7852b974ea7237b5f7bffb0e996d76f688c7ac534cb56f5866cfdffd5d3f015521b4c2ca21e584503070782ca82a2f
+            url: https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2021.5.0.tar.gz
+            sha512: 0e7b71022e397a6d7abb0cea106847935ae79a1e12a6976f8d038668c6eca8775ed971202c5bd518f7e517092b67af805cc5feb04b5c3a40e9fbf972cc703a46
 
       - name: libasio
         buildsystem: autotools
@@ -60,3 +60,14 @@ modules:
           - type: archive
             url: https://github.com/google/glog/archive/refs/tags/v0.5.0.zip
             sha512: 46669f603279edc05e98153247897c8a7b50ebc9e800132cc8c3eef531687691e616b5210ed9a1dfbb5170ea354b76fb9244b383a8d309bacbfcf2810ec07546
+        modules:
+          - name: gflags
+            buildsystem: cmake
+            builddir: true
+            config-opts:
+              - -DBUILD_STATIC_LIBS=Off
+              - -DBUILD_SHARED_LIBS=On
+            sources:
+              - type: archive
+                url: https://github.com/gflags/gflags/archive/refs/tags/v2.2.2.tar.gz
+                sha512: 98c4703aab24e81fe551f7831ab797fb73d0f7dfc516addb34b9ff6d0914e5fd398207889b1ae555bac039537b1d4677067dae403b64903577078d99c1bdb447
