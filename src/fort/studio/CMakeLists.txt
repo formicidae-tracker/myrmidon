@@ -84,7 +84,6 @@ set(SRC_FILES
 	workspace/ZoningWorkspace.cpp
 	workspace/AntMetadataWorkspace.cpp
 	workspace/VisualizationWorkspace.cpp
-	MyrmidonTypes/Color.cpp
 	MainWindow.cpp
 )
 
