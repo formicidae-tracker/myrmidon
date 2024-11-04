@@ -6,21 +6,23 @@
 #include <fort/studio/bridge/IdentifierBridge.hpp>
 
 IdentificationListWidget::IdentificationListWidget(QWidget *parent)
-	: QWidget(parent)
-	, d_ui(new Ui::IdentificationListWidget)
-	, d_sortedModel(new QSortFilterProxyModel) {
+    : QWidget(parent)
+    , d_ui(new Ui::IdentificationListWidget)
+    , d_sortedModel(new QSortFilterProxyModel) {
 	d_ui->setupUi(this);
-
 
 	d_ui->identificationsView->setModel(d_sortedModel);
 
-	connect(d_ui->identificationFilterEdit,
-	        &QLineEdit::textChanged,
-	        d_sortedModel,
-	        static_cast<void(QSortFilterProxyModel::*)(const QString &)>(&QSortFilterProxyModel::setFilterRegExp));
+	connect(
+	    d_ui->identificationFilterEdit,
+	    &QLineEdit::textChanged,
+	    d_sortedModel,
+	    static_cast<void (QSortFilterProxyModel::*)(const QString &)>(
+	        &QSortFilterProxyModel::setFilterRegularExpression
+	    )
+	);
 
 	d_ui->removeButton->setEnabled(false);
-
 }
 
 IdentificationListWidget::~IdentificationListWidget() {

@@ -54,12 +54,11 @@ void AntListWidget::setUpUI() {
 	d_verticalLayout->addWidget(d_tableView);
 }
 
-AntListWidget::AntListWidget(QWidget * parent)
-	: QWidget(parent)
-	, d_experiment(nullptr)
-	, d_sortedModel(new QSortFilterProxyModel(this))
-	, d_selectedAnt(0) {
-
+AntListWidget::AntListWidget(QWidget *parent)
+    : QWidget(parent)
+    , d_experiment(nullptr)
+    , d_sortedModel(new QSortFilterProxyModel(this))
+    , d_selectedAnt(0) {
 
 	setUpUI();
 
@@ -69,13 +68,15 @@ AntListWidget::AntListWidget(QWidget * parent)
 	auto header = d_tableView->horizontalHeader();
 	header->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-
 	d_sortedModel->setFilterKeyColumn(0);
-	connect(d_filterEdit,
-	        &QLineEdit::textChanged,
-	        d_sortedModel,
-	        static_cast<void (QSortFilterProxyModel::*)(const QString &)>(&QSortFilterProxyModel::setFilterRegExp));
-
+	connect(
+	    d_filterEdit,
+	    &QLineEdit::textChanged,
+	    d_sortedModel,
+	    static_cast<void (QSortFilterProxyModel::*)(const QString &)>(
+	        &QSortFilterProxyModel::setFilterRegularExpression
+	    )
+	);
 }
 
 AntListWidget::~AntListWidget() {

@@ -3,48 +3,54 @@
 
 #include <fort/studio/Format.hpp>
 
-#include <QChart>
+#include <QBarSeries>
 #include <QBarSet>
+#include <QChart>
+#include <QGraphicsLayout>
 
 TagStatisticsWidget::TagStatisticsWidget(QWidget *parent)
-	: QWidget(parent)
-	, d_ui(new Ui::TagStatisticsWidget) {
+    : QWidget(parent)
+    , d_ui(new Ui::TagStatisticsWidget) {
 	d_ui->setupUi(this);
 
 	d_chart = new QChart();
 
-
-
 	d_xAxis = new QBarCategoryAxis();
-	d_xAxis->append({"&lt;0.5s","&lt;1s","&lt;10s","&lt;1m","&lt;10m","&lt;1h","&lt;10h","≥10h"});
+	d_xAxis->append(
+	    {"&lt;0.5s",
+	     "&lt;1s",
+	     "&lt;10s",
+	     "&lt;1m",
+	     "&lt;10m",
+	     "&lt;1h",
+	     "&lt;10h",
+	     "≥10h"}
+	);
 	auto axisFont = d_xAxis->labelsFont();
 	axisFont.setPointSizeF(axisFont.pointSizeF() * 0.8);
 	d_xAxis->setLabelsFont(axisFont);
 	d_xAxis->setLabelsVisible(true);
-	d_chart->addAxis(d_xAxis,Qt::AlignBottom);
+	d_chart->addAxis(d_xAxis, Qt::AlignBottom);
 
 	d_yAxis = new QValueAxis();
-	d_chart->addAxis(d_yAxis,Qt::AlignLeft);
+	d_chart->addAxis(d_yAxis, Qt::AlignLeft);
 	d_yAxis->setLabelsVisible(true);
 	d_yAxis->setLabelFormat("%d");
 	d_yAxis->setLabelsFont(axisFont);
-	d_yAxis->setRange(0,100);
+	d_yAxis->setRange(0, 100);
 	d_yAxis->setTickCount(3);
 
-
 	d_chart->legend()->setVisible(false);
-	d_chart->setMargins(QMargins(0,0,0,0));
-
+	d_chart->setMargins(QMargins(0, 0, 0, 0));
 
 	d_chart->setTitleFont(axisFont);
-	d_chart->layout()->setContentsMargins(0,0,0,0);
+	d_chart->layout()->setContentsMargins(0, 0, 0, 0);
 
 	d_ui->chartView->setRubberBand(QChartView::NoRubberBand);
 
 	d_ui->chartView->setChart(d_chart);
 
 	clear();
-
 }
 
 TagStatisticsWidget::~TagStatisticsWidget() {

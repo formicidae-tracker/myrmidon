@@ -218,11 +218,14 @@ void Vector::mouseReleaseEvent(QGraphicsSceneMouseEvent * e) {
 	emit updated();
 }
 
-
-void Vector::moveUpdate(const QPointF & newPos) {
+void Vector::moveUpdate(const QPointF &newPos) {
 	auto delta = newPos - *d_moveEvent;
 	d_start->setPos(d_start->pos() + delta);
 	d_end->setPos(d_end->pos() + delta);
 	*d_moveEvent = newPos;
 	rebuild();
+}
+
+QDebug operator<<(QDebug d, const Vector *v) {
+	return d << "Vector(  " << v->startPos() << " -> " << v->endPos() << " )";
 }

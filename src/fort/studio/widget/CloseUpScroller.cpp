@@ -3,27 +3,29 @@
 #include <fort/studio/bridge/TagCloseUpBridge.hpp>
 
 #include <QBoxLayout>
-#include <QSlider>
 #include <QLabel>
+#include <QSlider>
+#include <qglobal.h>
 
-CloseUpScroller::CloseUpScroller(QWidget * parent)
-	: QWidget(parent)
-	, d_currentID(-1) {
+CloseUpScroller::CloseUpScroller(QWidget *parent)
+    : QWidget(parent)
+    , d_currentID(-1) {
 	d_currentCloseUp = d_closeUps.end();
 
 	auto layout = new QHBoxLayout(this);
-	d_label = new QLabel(this);
+	d_label     = new QLabel(this);
 	layout->addWidget(d_label);
-	d_slider = new QSlider(Qt::Horizontal,this);
+	d_slider = new QSlider(Qt::Horizontal, this);
 	layout->addWidget(d_slider);
 
-	connect(d_slider,
-	        &QAbstractSlider::valueChanged,
-	        this,
-	        &CloseUpScroller::onSliderValueChanged);
+	connect(
+	    d_slider,
+	    &QAbstractSlider::valueChanged,
+	    this,
+	    &CloseUpScroller::onSliderValueChanged
+	);
 
 	updateWidgets();
-
 }
 
 CloseUpScroller::~CloseUpScroller() {
@@ -38,23 +40,27 @@ const fmp::TagCloseUp::ConstPtr & CloseUpScroller::currentCloseUp() const {
 	return *d_currentCloseUp;
 }
 
-void CloseUpScroller::setCloseUps(uint32_t objectID,
-                                  const QVector<fmp::TagCloseUp::ConstPtr> & closeUps,
-                                  QVector<fmp::TagCloseUp::ConstPtr>::const_iterator current) {
-	if ( objectID == d_currentID ) {
+void CloseUpScroller::setCloseUps(
+    uint32_t                                           objectID,
+    const QVector<fmp::TagCloseUp::ConstPtr>          &closeUps,
+    QVector<fmp::TagCloseUp::ConstPtr>::const_iterator current
+) {
+	if (objectID == d_currentID) {
 		return;
 	}
 
 	d_currentID = objectID;
-	if ( d_currentID == -1 ) {
+	if (d_currentID == -1) {
 		d_closeUps.clear();
 		d_currentCloseUp = d_closeUps.begin();
 
 	} else {
 		d_closeUps = closeUps;
-		d_currentCloseUp = d_closeUps.begin() + std::min(current - closeUps.begin(),
-		                                                 long(closeUps.size()-1));
-
+		d_currentCloseUp =
+		    d_closeUps.begin() + std::min(
+		                             current - closeUps.begin(),
+		                             qsizetype(closeUps.size() - 1)
+		                         );
 	}
 
 	updateWidgets();
@@ -114,18 +120,24 @@ void CloseUpScroller::onCloseUpsChanged(uint32_t objectID,
 }
 
 void CloseUpScroller::updateWidgets() {
-	disconnect(d_slider,
-	           &QAbstractSlider::valueChanged,
-	           this,
-	           &CloseUpScroller::onSliderValueChanged);
-	d_slider->setRange(0,d_closeUps.size()-1);
+	disconnect(
+	    d_slider,
+	    &QAbstractSlider::valueChanged,
+	    this,
+	    &CloseUpScroller::onSliderValueChanged
+	);
+	d_slider->setRange(0, d_closeUps.size() - 1);
 	int value = d_currentCloseUp - d_closeUps.begin();
 	d_slider->setValue(value);
-	d_label->setText(tr("%1/%2").arg(std::min(value+1,d_closeUps.size())).arg(d_closeUps.size()));
-	connect(d_slider,
-	        &QAbstractSlider::valueChanged,
-	        this,
-	        &CloseUpScroller::onSliderValueChanged);
+	d_label->setText(tr("%1/%2")
+	                     .arg(std::min(qsizetype(value + 1), d_closeUps.size()))
+	                     .arg(d_closeUps.size()));
+	connect(
+	    d_slider,
+	    &QAbstractSlider::valueChanged,
+	    this,
+	    &CloseUpScroller::onSliderValueChanged
+	);
 }
 
 void CloseUpScroller::onSliderValueChanged(int position) {

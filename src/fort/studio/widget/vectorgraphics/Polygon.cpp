@@ -183,19 +183,33 @@ void Polygon::mouseReleaseEvent(QGraphicsSceneMouseEvent * e) {
 	d_moveEvent.reset();
 }
 
-void Polygon::moveUpdate(const QPointF & newPos) {
-	if ( !d_moveEvent ) {
+void Polygon::moveUpdate(const QPointF &newPos) {
+	if (!d_moveEvent) {
 		return;
 	}
 
 	QPointF delta = newPos - *d_moveEvent;
-	for ( const auto & h : d_handles ) {
+	for (const auto &h : d_handles) {
 		h->setPos(h->pos() + delta);
 	}
 	auto p = polygon();
-	for ( auto & vertex : p ) {
+	for (auto &vertex : p) {
 		vertex += delta;
 	}
 	setPolygon(p);
 	*d_moveEvent = newPos;
+}
+
+QDebug operator<<(QDebug d, const Polygon *p) {
+	d << "Polygon( ";
+
+	auto sep = "";
+	for (const auto &v : p->vertices()) {
+		d << sep << v;
+		sep = ", ";
+	}
+
+	d << " )";
+
+	return d;
 }

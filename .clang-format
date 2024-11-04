@@ -21,4 +21,7 @@ Cpp11BracedListStyle: true
 AlwaysBreakBeforeMultilineStrings: true
 AlignConsecutiveDeclarations: AcrossComments
 AlignConsecutiveMacros: AcrossComments
+Standard: c++17
+PointerAlignment: Right
+ReferenceAlignment: Right
 ---

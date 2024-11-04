@@ -17,8 +17,6 @@ namespace priv {
 
 
 namespace fm = fort::myrmidon;
-namespace fmp = fort::myrmidon::priv;
-
 
 class Handle;
 class Vector;

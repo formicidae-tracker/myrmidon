@@ -260,10 +260,15 @@ void Capsule::mouseReleaseEvent(QGraphicsSceneMouseEvent * e) {
 	emit updated();
 }
 
-void Capsule::moveUpdate(const QPointF & newPos) {
-	auto delta = newPos - *d_moveEvent;
+void Capsule::moveUpdate(const QPointF &newPos) {
+	auto delta   = newPos - *d_moveEvent;
 	*d_moveEvent = newPos;
 	d_c1->setPos(d_c1->pos() + delta);
 	d_c2->setPos(d_c2->pos() + delta);
 	rebuild();
+}
+
+QDebug operator<<(QDebug d, const Capsule *c) {
+	return d << "Capsule( C1 = " << c->c1Pos() << ", R1 = " << c->r1()
+	         << ", C2 = " << c->c2Pos() << ", R2 = " << c->r2() << " )";
 }

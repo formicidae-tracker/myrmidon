@@ -1,5 +1,7 @@
 #pragma once
 
+#include <fort/studio/MyrmidonTypes/Color.hpp>
+
 #include <QMainWindow>
 
 #include <deque>
@@ -14,7 +16,6 @@ class LogStatusWidget;
 namespace Ui {
 class MainWindow;
 }
-
 
 class MainWindow : public QMainWindow {
 	Q_OBJECT

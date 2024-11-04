@@ -84,6 +84,7 @@ set(SRC_FILES
 	workspace/ZoningWorkspace.cpp
 	workspace/AntMetadataWorkspace.cpp
 	workspace/VisualizationWorkspace.cpp
+	MyrmidonTypes/Color.cpp
 	MainWindow.cpp
 )
 
@@ -249,9 +250,9 @@ add_library(fort-studio-common STATIC ${SRC_FILES} ${HDR_FILES} ${UI_FILES})
 
 target_link_libraries(
 	fort-studio-common
-	Qt5::Widgets
-	Qt5::Concurrent
-	Qt5::Charts
+	Qt6::Widgets
+	Qt6::Concurrent
+	Qt6::Charts
 	fort-myrmidon
 	fort-tags
 	Threads::Threads
@@ -279,7 +280,7 @@ set_target_properties(
 )
 
 target_link_libraries(
-	fort-studio-tests fort-studio-common fort-myrmidon-utest-common Qt5::Test
+	fort-studio-tests fort-studio-common fort-myrmidon-utest-common Qt6::Test
 	gtest gmock
 )
 

@@ -3,33 +3,32 @@
 
 #include <fort/myrmidon/myrmidon-version.h>
 
-#include <QtDebug>
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QCloseEvent>
-#include <QSettings>
 #include <QAbstractItemModel>
+#include <QCloseEvent>
+#include <QComboBox>
+#include <QFileDialog>
+#include <QLabel>
+#include <QMessageBox>
 #include <QPointer>
+#include <QSettings>
 #include <QSortFilterProxyModel>
 #include <QTabBar>
-#include <QComboBox>
-#include <QLabel>
+#include <QtDebug>
 
 #include <fort/studio/bridge/ExperimentBridge.hpp>
 #include <fort/studio/widget/Logger.hpp>
 
-
-#include <QToolBar>
-#include <QPushButton>
+#include <QActionGroup>
 #include <QDesktopServices>
-
+#include <QPushButton>
+#include <QToolBar>
 
 QPointer<Logger> myLogger;
 
-static void myLog(QtMsgType type, const QMessageLogContext &, const QString & msg) {
-	myLogger->logMessage(type,msg);
+static void
+myLog(QtMsgType type, const QMessageLogContext &, const QString &msg) {
+	myLogger->logMessage(type, msg);
 }
-
 
 void MainWindow::setUpLogger() {
 	myLogger = d_logger;

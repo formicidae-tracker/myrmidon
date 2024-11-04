@@ -80,7 +80,7 @@ find_package(TBB REQUIRED)
 
 if(BUILD_STUDIO)
 	find_package(
-		Qt5
+		Qt6
 		COMPONENTS Widgets Concurrent Test Charts
 		REQUIRED
 	)

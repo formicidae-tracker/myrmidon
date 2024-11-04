@@ -21,12 +21,12 @@ public:
 	virtual ~TagStatisticsWidget();
 
 	void clear();
-	void display(fm::TagID tagID, fm::TagStatistics stats,size_t frameCount);
+	void display(fm::TagID tagID, fm::TagStatistics stats, size_t frameCount);
 
 private:
-	Ui::TagStatisticsWidget * d_ui;
+	Ui::TagStatisticsWidget *d_ui;
 
-	QtCharts::QChart           * d_chart;
-	QtCharts::QBarCategoryAxis * d_xAxis;
-	QtCharts::QValueAxis       * d_yAxis;
+	QChart	       *d_chart;
+	QBarCategoryAxis *d_xAxis;
+	QValueAxis       *d_yAxis;
 };

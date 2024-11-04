@@ -136,3 +136,7 @@ void Circle::moveUpdate(const QPointF & newPos) {
 	d_center->setPos(d_center->pos() + delta);
 	update(true);
 }
+
+QDebug operator<<(QDebug d, const Circle *c) {
+	return d << "Circle( C = " << c->pos() << ", R = " << c->radius() << " )";
+}
