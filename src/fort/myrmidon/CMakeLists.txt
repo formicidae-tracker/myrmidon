@@ -384,3 +384,5 @@ set(MYRMIDON_PRIVATE_DOC_FILES
 
 add_executable(benchmarks benchmark/main.cpp)
 target_link_libraries(benchmarks fort-myrmidon ${OpenCV_LIBS})
+
+install(TARGETS yaml-cpp DESTINATION lib)

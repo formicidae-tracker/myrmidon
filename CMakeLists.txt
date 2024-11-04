@@ -90,6 +90,7 @@ set(YAML_BUILD_SHARED_LIBS
 	On
 	CACHE BOOL "Compile shared libraries"
 )
+
 FetchContent_Declare(
 	yaml-cpp
 	GIT_REPOSITORY https://github.com/jbeder/yaml-cpp
