@@ -22,7 +22,7 @@ cmake_policy(SET CMP0077 NEW)
 
 cmake_minimum_required(VERSION 3.11)
 
-project(fort-studio LANGUAGES C CXX)
+project(fort-myrmidon LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED 1)
@@ -119,7 +119,7 @@ set(FORT_CHARIS_BUILD_GL Off)
 FetchContent_Declare(
 	fort-charis
 	GIT_REPOSITORY https://github.com/formicidae-tracker/charis.git
-	GIT_TAG 8a033b2f16176511d7f7cf252529fa40b104b770
+	GIT_TAG c6ea10cacff258281aca2a5b58428a7e0fa0b5e7
 )
 
 FetchContent_MakeAvailable(yaml-cpp semver fort-tags fort-hermes fort-charis)
@@ -237,9 +237,6 @@ add_subdirectory(misc)
 
 if(BUILD_PYTHON OR BUILD_DOCS)
 	find_package(pybind11 REQUIRED)
-	include_directories(${PROJECT_SOURCE_DIR}/src ${PROJECT_BINARY_DIR}/src)
-	set(FORT_MYRMIDON_LIBRARIES fort-myrmidon)
-	set(FORT_MYRMIDON_UTESTDATA_LIBRARIES fort-myrmidon-utestdata)
 
 	add_subdirectory(bindings/python/src)
 	if(FORT_MYRMIDON_MAIN)

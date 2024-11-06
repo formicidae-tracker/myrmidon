@@ -363,8 +363,24 @@ if(FORT_MYRMIDON_MAIN)
 
 	add_dependencies(check myrmidon-tests)
 	add_test(NAME myrmidon-tests COMMAND myrmidon-tests)
-
 endif(FORT_MYRMIDON_MAIN)
+
+add_library(fort-myrmidon::libfort-myrmidon INTERFACE IMPORTED GLOBAL)
+target_link_libraries(fort-myrmidon::libfort-myrmidon INTERFACE fort-myrmidon)
+target_include_directories(
+	fort-myrmidon::libfort-myrmidon INTERFACE ${PROJECT_SOURCE_DIR}/src
+											  ${PROJECT_BINARY_DIR}/src
+)
+
+add_library(fort-myrmidon::libfort-myrmidon-utestdata INTERFACE IMPORTED GLOBAL)
+target_link_libraries(
+	fort-myrmidon::libfort-myrmidon-utestdata INTERFACE fort-myrmidon
+														fort-myrmidon-utestdata
+)
+target_include_directories(
+	fort-myrmidon::libfort-myrmidon-utestdata
+	INTERFACE ${PROJECT_SOURCE_DIR}/src ${PROJECT_BINARY_DIR}/src
+)
 
 foreach(h ${HDR_PUBLIC_FILES})
 	list(APPEND MYRMIDON_API_DOC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/${h})
