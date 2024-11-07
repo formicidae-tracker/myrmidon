@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.15...3.27)
+cmake_minimum_required(VERSION 3.21...3.27)
 
 project(
-	${SK_BUILD_PROJECT_NAME}
-	VERSION ${SKBUILD+PROJECT_VERSION}
+	${SKBUILD_PROJECT_NAME}
+	VERSION ${SKBUILD_PROJECT_VERSION}
 	LANGUAGES CXX
 )
 
@@ -34,3 +34,7 @@ FetchContent_Declare(myrmidon URL ${PROJECT_SOURCE_DIR}/myrmidon)
 FetchContent_MakeAvailable(myrmidon)
 
 add_subdirectory(src)
+
+if(FORT_MYRMIDON_PYTHON_MAIN)
+	install(SCRIPT ${PROJECT_SOURCE_DIR}/PostInstallWheel.cmake)
+endif(FORT_MYRMIDON_PYTHON_MAIN)

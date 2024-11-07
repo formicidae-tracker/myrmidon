@@ -22,8 +22,15 @@ cmake_policy(SET CMP0077 NEW)
 
 cmake_minimum_required(VERSION 3.11)
 
-project(fort-myrmidon LANGUAGES C CXX)
-
+if(${SKBUILD})
+	project(
+		fort-myrmidon
+		VERSION ${SKBUILD_PROJECT_VERSION}
+		LANGUAGES C CXX
+	)
+else(${SKBUILD})
+	project(fort-myrmidon LANGUAGES C CXX)
+endif(${SKBUILD})
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED 1)
 set(CMAKE_C_STANDARD 11)
@@ -72,10 +79,20 @@ endif(FORT_MYRMIDON_MAIN)
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 # only infer version not from SKBUILD
-if(NOT ${SKBUILD})
+if(${SKBUILD})
+	set(PROJECT_VERSION_API ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR})
+
+	if(${PROJECT_VERSION_MAJOR} EQUAL 0)
+		set(PROJECT_VERSION_ABI
+			${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+		)
+	else(${PROJECT_VERSION_MAJOR} EQUAL 0)
+		set(PROJECT_VERSION_ABI ${PROJECT_VERSION_MAJOR})
+	endif(${PROJECT_VERSION_MAJOR} EQUAL 0)
+else(${SKBUILD})
 	include(VersionFromGit)
 	version_from_git()
-endif(NOT ${SKBUILD})
+endif(${SKBUILD})
 
 find_package(Eigen3 3.3.4 REQUIRED NO_MODULE)
 find_package(Protobuf 3.3.0 REQUIRED)

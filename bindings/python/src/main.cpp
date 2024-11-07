@@ -9,31 +9,27 @@
 
 namespace py = pybind11;
 
-
-
-
 PYBIND11_MODULE(py_fort_myrmidon, m) {
-    m.doc() = "Bindings for libfort-myrmidon"; // optional module docstring
+	m.doc() = "Bindings for libfort-myrmidon"; // optional module docstring
 
-    BindTypes(m);
-    BindShapes(m);
+	BindTypes(m);
+	BindShapes(m);
 
-    BindIdentification(m);
-    BindAnt(m);
+	BindIdentification(m);
+	BindAnt(m);
 
+	BindZone(m);
+	BindSpace(m);
+	BindTrackingSolver(m);
+	BindVideoSegment(m);
+	BindExperiment(m);
 
-    BindZone(m);
-    BindSpace(m);
-    BindTrackingSolver(m);
-    BindVideoSegment(m);
-    BindExperiment(m);
-
-    BindMatchers(m);
-    BindQuery(m);
+	BindMatchers(m);
+	BindQuery(m);
 
 #ifdef VERSION_INFO
-    m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
+	m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
 #else
-    m.attr("__version__") = MYRMIDON_VERSION;
+	m.attr("__version__") = MYRMIDON_VERSION;
 #endif
 }
