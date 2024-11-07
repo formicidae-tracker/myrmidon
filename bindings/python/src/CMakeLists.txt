@@ -18,16 +18,33 @@ set(SRC_FILES
 
 set(HDR_FILES BindMethods.hpp Progress.hpp)
 
-pybind11_add_module(py_fort_myrmidon ${SRC_FILES} ${HDR_FILES})
-target_link_libraries(py_fort_myrmidon PRIVATE fort-myrmidon::libfort-myrmidon)
+if(FORT_MYRMIDON_PYTHON_MAIN)
+	python_add_library(
+		py_fort_myrmidon MODULE ${SRC_FILES} ${HDR_FILES} WITH_SOABI
+	)
+	target_link_libraries(
+		py_fort_myrmidon
+		PRIVATE pybind11::headers
+		PUBLIC fort-myrmidon::libfort-myrmidon
+	)
+	target_compile_definitions(
+		py_fort_myrmidon PRIVATE VERSION_INFO=${PROJECT_VERSION}
+	)
 
-# EXAMPLE_VERSION_INFO is defined by setup.py and passed into the C++ code as a
-# define (VERSION_INFO) here.
-target_compile_definitions(
-	py_fort_myrmidon PRIVATE VERSION_INFO=${fort-myrmidon_SEMVER}
-)
+	install(TARGETS py_fort_myrmidon DESTINATION py_fort_myrmidon)
 
-if(NOT FORT_MYRMIDON_PYTHON_MAIN)
+else(FORT_MYRMIDON_PYTHON_MAIN)
+	pybind11_add_module(py_fort_myrmidon ${SRC_FILES} ${HDR_FILES})
+	target_link_libraries(
+		py_fort_myrmidon PRIVATE fort-myrmidon::libfort-myrmidon
+	)
+
+	# EXAMPLE_VERSION_INFO is defined by setup.py and passed into the C++ code
+	# as a define (VERSION_INFO) here.
+	target_compile_definitions(
+		py_fort_myrmidon PRIVATE VERSION_INFO=${fort-myrmidon_SEMVER}
+	)
+
 	pybind11_add_module(py_fort_myrmidon_utestdata UTestData.cpp)
 	target_link_libraries(
 		py_fort_myrmidon_utestdata
@@ -37,5 +54,4 @@ if(NOT FORT_MYRMIDON_PYTHON_MAIN)
 	target_compile_definitions(
 		py_fort_myrmidon_utestdata PRIVATE VERSION_INFO=${fort-myrmidon_SEMVER}
 	)
-
-endif(NOT FORT_MYRMIDON_PYTHON_MAIN)
+endif(FORT_MYRMIDON_PYTHON_MAIN)

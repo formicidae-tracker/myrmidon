@@ -1,9 +1,46 @@
 [build-system]
-requires = [
-    "setuptools>=42",
-    "wheel",
-    "ninja; sys_platform != 'win32'",
-    "cmake>=3.12",
-	"setuptools-git-versioning",
+requires = ["scikit-build-core @ git+https://github.com/atuleu/scikit-build-core","pybind11","setuptools"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name="py-fort-myrmidon"
+dynamic= ["version"]
+description = "Python bindings for fort-myrmidon, a tracking data post-processing library"
+readme="README.md"
+requires-python = ">= 3.7"
+license= { text = "GNU Lesser General Public License v3 (LGPLv3)"}
+authors = [
+    { name = "Alexandre Tuleu", email = "alexandre.tuleu.2005@polytechnique.org" },
 ]
-build-backend = "setuptools.build_meta"
+
+classifiers = [
+    "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: Implementation :: CPython",
+]
+
+dependencies = [
+    "pandas",
+	"tqdm"
+]
+
+[project.urls]
+
+Homepage = "https://github.com/formicidae-tracker/myrmidon"
+Repository = "https://github.com/formicidae-tracker/myrmidon"
+Issues = 'https://github.com/formicidae-tracker/myrmidon/issues'
+
+[tool.scikit-build]
+metadata.version.provider = "scikit_build_core.metadata.setuptools_scm"
+sdist.exclude = [ ".gitignore", ".projectile", "**/myrmidon/src/fort/studio/", "build/" ]
+sdist.dereference = true
+logging.level = "DEBUG"
+
+[tool.setuptools_scm]  # Section required
+search_parent_directories = true

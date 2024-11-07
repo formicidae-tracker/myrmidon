@@ -1,11 +1,16 @@
 cmake_minimum_required(VERSION 3.15...3.27)
 
-project(py-fort-myrmidon)
+project(
+	${SK_BUILD_PROJECT_NAME}
+	VERSION ${SKBUILD+PROJECT_VERSION}
+	LANGUAGES CXX
+)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_C_STANDARD 11)
 
-find_package(pybind11 REQUIRED)
+find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
+find_package(pybind11 CONFIG REQUIRED)
 
 if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
 	set(FORT_MYRMIDON_PYTHON_MAIN TRUE)
@@ -24,9 +29,8 @@ set(BUILD_STUDIO
 	CACHE BOOL "Build Python Bindings"
 )
 
-# include parent project
-add_subdirectory(
-	${CMAKE_CURRENT_SOURCE_DIR}/../.. ${CMAKE_CURRENT_BINARY_DIR}/_myrmidon
-)
+include(FetchContent)
+FetchContent_Declare(myrmidon URL ${PROJECT_SOURCE_DIR}/myrmidon)
+FetchContent_MakeAvailable(myrmidon)
 
 add_subdirectory(src)

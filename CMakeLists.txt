@@ -71,8 +71,11 @@ endif(FORT_MYRMIDON_MAIN)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
-include(VersionFromGit)
-version_from_git()
+# only infer version not from SKBUILD
+if(NOT ${SKBUILD})
+	include(VersionFromGit)
+	version_from_git()
+endif(NOT ${SKBUILD})
 
 find_package(Eigen3 3.3.4 REQUIRED NO_MODULE)
 find_package(Protobuf 3.3.0 REQUIRED)
@@ -194,25 +197,28 @@ set(INCLUDE_PATH include)
 set(INCLUDE_INSTALL_DIR ${INCLUDE_PATH}/fort/myrmidon)
 set(LIB_INSTALL_DIR lib)
 
-include(CMakePackageConfigHelpers)
-configure_package_config_file(
-	FortMyrmidonConfig.cmake.in
-	${CMAKE_CURRENT_BINARY_DIR}/FortMyrmidonConfig.cmake
-	INSTALL_DESTINATION ${LIB_INSTALL_DIR}/FortMyrmidon/cmake
-	PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR INCLUDE_PATH
-)
-write_basic_package_version_file(
-	${CMAKE_CURRENT_BINARY_DIR}/FortMyrmidonConfigVersion.cmake
-	VERSION ${PROJECT_VERSION}
-	COMPATIBILITY SameMajorVersion
-)
+if(FORT_MYRMIDON_MAIN)
+	include(CMakePackageConfigHelpers)
+	configure_package_config_file(
+		FortMyrmidonConfig.cmake.in
+		${CMAKE_CURRENT_BINARY_DIR}/FortMyrmidonConfig.cmake
+		INSTALL_DESTINATION ${LIB_INSTALL_DIR}/FortMyrmidon/cmake
+		PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR INCLUDE_PATH
+	)
+	write_basic_package_version_file(
+		${CMAKE_CURRENT_BINARY_DIR}/FortMyrmidonConfigVersion.cmake
+		VERSION ${PROJECT_VERSION}
+		COMPATIBILITY SameMajorVersion
+	)
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/FortMyrmidonConfig.cmake
-			  ${CMAKE_CURRENT_BINARY_DIR}/FortMyrmidonConfigVersion.cmake
-		DESTINATION ${LIB_INSTALL_DIR}/FortMyrmidon/cmake
-)
+	install(FILES ${CMAKE_CURRENT_BINARY_DIR}/FortMyrmidonConfig.cmake
+				  ${CMAKE_CURRENT_BINARY_DIR}/FortMyrmidonConfigVersion.cmake
+			DESTINATION ${LIB_INSTALL_DIR}/FortMyrmidon/cmake
+	)
 
-add_subdirectory(pkgconfig)
+	add_subdirectory(pkgconfig)
+
+endif(FORT_MYRMIDON_MAIN)
 
 add_subdirectory(src)
 

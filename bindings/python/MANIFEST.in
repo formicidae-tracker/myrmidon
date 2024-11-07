@@ -1,3 +1,0 @@
-include README.md version.py
-graft src
-global-include CMakeLists.txt *.cmake
