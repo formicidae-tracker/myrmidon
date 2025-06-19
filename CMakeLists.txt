@@ -29,7 +29,11 @@ if(${SKBUILD})
 		LANGUAGES C CXX
 	)
 else(${SKBUILD})
-	project(fort-myrmidon LANGUAGES C CXX)
+	project(
+		fort-myrmidon
+		LANGUAGES C CXX
+		VERSION 0.9.0
+	)
 endif(${SKBUILD})
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED 1)

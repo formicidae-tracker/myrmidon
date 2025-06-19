@@ -45,3 +45,7 @@ wheel.exclude = ["lib/" , "include/"]
 
 [tool.setuptools_scm]  # Section required
 search_parent_directories = true
+
+[tool.cibuildwheel]
+build-frontend = "build"
+manylinux-x86_64-image = "manylinux2014_pfm"
