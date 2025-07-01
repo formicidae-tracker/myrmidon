@@ -150,7 +150,7 @@ TEST_F(TrackingDataDirectoryUTest, ExtractInfoFromTrackingDatadirectories) {
 		        TestSetup::UTestData().Basedir()
 		    );
 	    },
-	    YAML::BadFile
+	    std::runtime_error
 	);
 }
 

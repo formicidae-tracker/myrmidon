@@ -28,6 +28,7 @@ extern "C" {
 #include <fort/myrmidon/priv/proto/TagCloseUpCache.hpp>
 #include <fort/myrmidon/priv/proto/TagStatisticsCache.hpp>
 #include <fort/myrmidon/utils/Checker.hpp>
+#include <fort/myrmidon/utils/FileSystem.hpp>
 #include <fort/myrmidon/utils/NotYetImplemented.hpp>
 #include <fort/myrmidon/utils/ObjectPool.hpp>
 
@@ -1282,8 +1283,18 @@ void TrackingDataDirectory::LoadComputedFromCache() {
 }
 
 void TrackingDataDirectory::LoadDetectionSettings() {
-	auto letoConfig =
-	    YAML::LoadFile((AbsoluteFilePath() / "leto-final-config.yml").string());
+	auto path = AbsoluteFilePath() / "leto-final-config.yml";
+	if (fs::exists(path) == false) {
+		path = AbsoluteFilePath() / "leto-final-config.yaml";
+		if (fs::exists(path) == false) {
+			throw std::runtime_error(
+			    "missing either 'leto-final-config.yaml' or "
+			    "'leto-final-config.yml' YAML config file"
+			);
+		}
+	}
+
+	auto letoConfig       = YAML::LoadFile(path.string());
 	auto apriltagSettings = letoConfig["apriltag"];
 	if (!apriltagSettings) {
 		return;
