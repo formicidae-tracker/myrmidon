@@ -130,7 +130,7 @@ FetchContent_Declare(
 FetchContent_Declare(
 	fort-hermes
 	GIT_REPOSITORY https://github.com/formicidae-tracker/hermes.git
-	GIT_TAG v0.5.5
+	GIT_TAG v0.5.6
 )
 
 FetchContent_Declare(
