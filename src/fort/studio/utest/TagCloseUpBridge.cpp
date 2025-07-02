@@ -22,40 +22,38 @@ void TagCloseUpUTest::TearDown() {
 	delete bridge;
 }
 
-
-TEST_F(TagCloseUpUTest,ListTagsForNewFolder) {
+TEST_F(TagCloseUpUTest, ListTagsForNewFolder) {
 	auto model = bridge->tagCloseUps()->tagModel();
 
-	EXPECT_EQ(model->rowCount(),0);
+	EXPECT_EQ(model->rowCount(), 0);
 
 	auto tddInfo = TestSetup::UTestData().NestDataDirs().back();
 
-	auto [foo,errors] = fmp::TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,
-	                                                     TestSetup::UTestData().Basedir());
+	auto [foo, errors] = fmp::TrackingDataDirectory::Open(
+	    tddInfo.AbsoluteFilePath,
+	    TestSetup::UTestData().Basedir()
+	);
 	EXPECT_TRUE(errors.empty());
 	auto loaders = foo->PrepareTagCloseUpsLoaders();
-	for ( const auto & l : loaders ) {
-		EXPECT_NO_THROW({
-				l();
-			});
+	for (const auto &l : loaders) {
+		EXPECT_NO_THROW({ l(); });
 	}
-	std::map<fm::TagID,size_t> tagCounts;
-	for ( const auto & tcu : tddInfo.TagCloseUps ) {
+	std::map<fm::TagID, size_t> tagCounts;
+	for (const auto &tcu : tddInfo.TagCloseUps) {
 		auto tagID = tcu->TagValue();
-		tagCounts.insert({tagID,0});
+		tagCounts.insert({tagID, 0});
 		tagCounts[tagID]++;
 	}
 
-	bridge->universe()->addTrackingDataDirectoryToSpace("foo",foo);
+	bridge->universe()->addTrackingDataDirectoryToSpace("foo", foo);
 
-	ASSERT_EQ(model->rowCount(),tagCounts.size());
-	for ( const auto & [tagID,count] : tagCounts ) {
-		QVariant displayVariant = model->data(model->index(tagID,1));
+	ASSERT_EQ(model->rowCount(), tagCounts.size());
+	for (const auto &[tagID, count] : tagCounts) {
+		QVariant displayVariant = model->data(model->index(tagID, 1));
 
 		// Ensuring that the display variant is not a string but an
 		// integer ensure sorting with a proxy model. see issue #200
-		EXPECT_EQ(displayVariant.type(),QVariant::ULongLong);
-		EXPECT_EQ(displayVariant.toInt(),count);
+		EXPECT_EQ(displayVariant.typeId(), QVariant::ULongLong);
+		EXPECT_EQ(displayVariant.toInt(), count);
 	}
-
 }
