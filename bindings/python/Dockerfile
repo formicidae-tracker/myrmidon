@@ -41,7 +41,7 @@ WORKDIR /deps
 RUN dnf install -y libass-devel freetype-devel gnutls-devel libtool libva-devel libvdpau-devel yasm nasm numactl-devel libdav1d-devel
 RUN git clone --depth 1 https://code.videolan.org/videolan/x264.git
 WORKDIR x264
-RUN ./configure --enable-static --enable-pic
+RUN ./configure --enable-shared --enable-pic
 RUN make
 RUN make install
 
@@ -54,7 +54,7 @@ RUN sed -i 's/find_package_handle_standard_args(NUMA/find_package_handle_standar
 RUN sed -i 's/find_package_handle_standard_args(nasm/find_package_handle_standard_args(Nasm/' ../../source/cmake/FindNasm.cmake
 RUN sed -i 's/cmake_policy(SET CMP0025 OLD)/cmake_policy(SET CMP0025 NEW)/' ../../source/CMakeLists.txt
 RUN sed -i 's/cmake_policy(SET CMP0054 OLD)/cmake_policy(SET CMP0054 NEW)/' ../../source/CMakeLists.txt
-RUN cmake -G "Unix Makefiles" -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DENABLE_SHARED=Off -DCMAKE_BUILD_TYPE=Release  ../../source
+RUN cmake -G "Unix Makefiles" -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DENABLE_SHARED=On -DCMAKE_BUILD_TYPE=Release  ../../source
 RUN make -j 12
 RUN make install
 
@@ -62,7 +62,7 @@ RUN make install
 WORKDIR /deps
 RUN git clone --depth 1 https://aomedia.googlesource.com/aom
 WORKDIR /deps/aom
-RUN cmake -DENABLE_TESTS=OFF -DENABLE_NASM=on -DCMAKE_BUILD_TYPE=Release -B build
+RUN cmake -DENABLE_TESTS=OFF -DENABLE_NASM=On -DBUILD_SHARED_LIBS=On -DCMAKE_BUILD_TYPE=Release -B build
 RUN make -C build -j 12
 RUN make -C build install
 
@@ -70,7 +70,7 @@ WORKDIR /deps
 RUN wget https://ffmpeg.org/releases/ffmpeg-7.1.tar.gz
 RUN tar -xvf ffmpeg-7.1.tar.gz
 WORKDIR /deps/ffmpeg-7.1
-RUN PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig ./configure  --pkg-config-flags="--static" --extra-libs="-lpthread -lm" --ld="g++" --enable-gpl --disable-gnutls --enable-libaom  --enable-libass --enable-libfreetype --enable-libdav1d --enable-libx264 --enable-libx265 --enable-nonfree
+RUN PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig ./configure  --enable-shared --disable-static --extra-libs="-lpthread -lm" --ld="g++" --enable-gpl --disable-gnutls --enable-libaom  --enable-libass --enable-libfreetype --enable-libdav1d --enable-libx264 --enable-libx265 --enable-nonfree
 RUN make -j 12
 RUN make install
 
