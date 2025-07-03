@@ -1,4 +1,4 @@
-FROM quay.io/pypa/manylinux_2_28_x86_64:2025.07.02-1
+FROM quay.io/pypa/manylinux_2_28:2025.07.02-1
 
 RUN dnf install -y --nogpgcheck https://download1.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm
 RUN dnf install -y ffmpeg ffmpeg-devel ffmpeg-libs wget
@@ -33,3 +33,6 @@ RUN ./configure
 RUN make -j 12
 RUN make install
 WORKDIR /project
+LABEL org.opencontainers.image.source=https://github.com/formicidae-tracker/myrmidon/bindings/python
+LABEL org.opencontainers.image.description="Python manylinux image for myrmidon"
+LABEL org.opencontainers.image.licenses=lgpl-3+

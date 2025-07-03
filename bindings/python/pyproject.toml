@@ -48,9 +48,11 @@ cmake.args=["-DCMAKE_POLICY_VERSION_MINIMUM=3.5"]
 search_parent_directories = true
 
 [tool.cibuildwheel]
-build="cp310-*"
+build=["cp*-manylinux*"]
+skip=["*p37-*"]
 build-frontend = "build"
-manylinux-x86_64-image = "manylinux_2_28_pfm"
+archs=["x86_64"]
+manylinux-x86_64-image = "ghcr.io/formicidae-tracker/manylinux_2.28_fort_myrmidon"
 
 [tool.cibuildwheel.linux]
-repair-wheel-command = "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tmp/cibuildwheel/lib/fort_myrmidon.libs auditwheel repair -w {dest_dir} {wheel}"
+repair-wheel-command = "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:/usr/local/lib64:/tmp/cibuildwheel/lib/fort_myrmidon.libs auditwheel repair -w {dest_dir} {wheel}"
