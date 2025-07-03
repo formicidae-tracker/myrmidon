@@ -1,3 +1,3 @@
 from __future__ import annotations
 
-from .fort_myrmidon import *
+from ._fort_myrmidon import *
