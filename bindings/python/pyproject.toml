@@ -3,7 +3,7 @@ requires = ["scikit-build-core @ git+https://github.com/atuleu/scikit-build-core
 build-backend = "scikit_build_core.build"
 
 [project]
-name="py-fort-myrmidon"
+name="formicidae-tracker-myrmidon"
 dynamic= ["version"]
 description = "Python bindings for fort-myrmidon, a tracking data post-processing library"
 readme="README.md"
@@ -17,7 +17,7 @@ classifiers = [
     "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.7",
+	"Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
@@ -41,11 +41,16 @@ metadata.version.provider = "scikit_build_core.metadata.setuptools_scm"
 sdist.exclude = [ ".gitignore", ".projectile", "**/myrmidon/src/fort/studio/", "build/" ]
 sdist.dereference = true
 logging.level = "DEBUG"
-wheel.exclude = ["lib/" , "include/"]
+wheel.exclude = ["lib/" , "include/","lib64/"]
+cmake.args=["-DCMAKE_POLICY_VERSION_MINIMUM=3.5"]
 
 [tool.setuptools_scm]  # Section required
 search_parent_directories = true
 
 [tool.cibuildwheel]
+build="cp310-*"
 build-frontend = "build"
-manylinux-x86_64-image = "manylinux2014_pfm"
+manylinux-x86_64-image = "manylinux_2_28_pfm"
+
+[tool.cibuildwheel.linux]
+repair-wheel-command = "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tmp/cibuildwheel/lib/fort_myrmidon.libs auditwheel repair -w {dest_dir} {wheel}"
