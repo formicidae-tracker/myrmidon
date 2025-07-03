@@ -33,6 +33,7 @@ if(FORT_MYRMIDON_PYTHON_MAIN)
 	)
 
 	install(TARGETS _fort_myrmidon DESTINATION fort_myrmidon)
+	install(FILES fort_myrmidon/__init__.py DESTINATION fort_myrmidon)
 
 else(FORT_MYRMIDON_PYTHON_MAIN)
 	pybind11_add_module(fort_myrmidon ${SRC_FILES} ${HDR_FILES})

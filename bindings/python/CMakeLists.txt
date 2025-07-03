@@ -9,7 +9,11 @@ project(
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_C_STANDARD 11)
 
-find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
+find_package(
+	Python
+	COMPONENTS Interpreter Development.Module
+	REQUIRED
+)
 find_package(pybind11 2.12.0 CONFIG REQUIRED)
 
 if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
