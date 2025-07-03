@@ -1,9 +1,11 @@
-import py_fort_myrmidon as m
-import py_fort_myrmidon_utestdata as ud
+import fort_myrmidon as m
+import fort_myrmidon_utestdata as ud
 import unittest
-import assertions
+
 import cv2
 import numpy.testing as npt
+
+from . import assertions
 
 
 class VideoTestCase(unittest.TestCase, assertions.CustomAssertion):

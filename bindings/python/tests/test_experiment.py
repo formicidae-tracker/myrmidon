@@ -3,10 +3,10 @@ import re
 import sys
 import unittest
 
-import py_fort_myrmidon as m
-import py_fort_myrmidon_utestdata as ud
+import fort_myrmidon as m
+import fort_myrmidon_utestdata as ud
 
-import assertions
+from . import assertions
 
 
 class ExperimentTestCase(unittest.TestCase, assertions.CustomAssertion):

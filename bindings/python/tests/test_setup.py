@@ -1,5 +1,5 @@
 import unittest
-import py_fort_myrmidon_utestdata as md
+import fort_myrmidon_utestdata as md
 
 TestData = None
 

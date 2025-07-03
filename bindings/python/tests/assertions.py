@@ -1,4 +1,4 @@
-import py_fort_myrmidon as m
+import fort_myrmidon as m
 import numpy.testing as npt
 import numpy as np
 
@@ -11,8 +11,9 @@ class CustomAssertion:
         self.assertIsInstance(a, m.Time)
         self.assertIsInstance(b, m.Time)
         if a.Equals(b) == False:
-            raise AssertionError("time a: " + str(a) +
-                                 " and b: " + str(b) + " are not equals")
+            raise AssertionError(
+                "time a: " + str(a) + " and b: " + str(b) + " are not equals"
+            )
 
     def assertCapsuleEqual(self, a, b):
         self.assertVector2dEqual(a.C1, b.C1)
@@ -29,9 +30,10 @@ class CustomAssertion:
     def assertTagStatisticsEqual(self, a, b):
         self.assertEqual(len(a), len(b))
         for tagID, expectedTagStat in b.items():
-            if (tagID not in a):
+            if tagID not in a:
                 raise AssertionError(
-                    "Could not found TagID " + m.FormatTagID(tagID) + " in a")
+                    "Could not found TagID " + m.FormatTagID(tagID) + " in a"
+                )
             self.assertSingleTagStatEqual(a[tagID], expectedTagStat)
 
     def assertIdentifiedFrameEqual(self, a, b):
@@ -47,16 +49,21 @@ class CustomAssertion:
                 npt.assert_almost_equal(aRow, bRow)
             except StopIteration:
                 raise AssertionError(
-                    "Could not found AntID " + m.FormatAntID(antID) + " in a")
+                    "Could not found AntID " + m.FormatAntID(antID) + " in a"
+                )
 
     def assertInteractionTypesEqual(self, a, b):
         self.assertEqual(a.shape, b.shape)
         for i in range(b.shape[0]):
             if np.all(np.any(a == b[i, :], axis=0)) == False:
-                raise AssertionError("Could not find InteractionType("
-                                     + str(b[i, 0]) + "," +
-                                     str(b[i, 1]) + ") in "
-                                     + str(a))
+                raise AssertionError(
+                    "Could not find InteractionType("
+                    + str(b[i, 0])
+                    + ","
+                    + str(b[i, 1])
+                    + ") in "
+                    + str(a)
+                )
 
     def assertCollisionEqual(self, a, b):
         self.assertEqual(a.IDs, b.IDs)
@@ -70,12 +77,17 @@ class CustomAssertion:
         for expectedCollision in b.Collisions:
             try:
                 aCollision = next(
-                    x for x in b.Collisions if x.IDs == expectedCollision.IDs)
+                    x for x in b.Collisions if x.IDs == expectedCollision.IDs
+                )
                 self.assertCollisionEqual(aCollision, expectedCollision)
             except StopIteration:
-                raise AssertionError("Could not found Collision("+str(expectedCollisions.IDs[0])
-                                     + ","+str(expectedCollisions.IDs[0])
-                                     + ") in a")
+                raise AssertionError(
+                    "Could not found Collision("
+                    + str(expectedCollisions.IDs[0])
+                    + ","
+                    + str(expectedCollisions.IDs[0])
+                    + ") in a"
+                )
 
     def assertAntTrajectoryEqual(self, a, b):
         self.assertEqual(a.Ant, b.Ant)
@@ -100,11 +112,13 @@ class CustomAssertion:
         self.assertTimeEqual(a.End, b.End)
         for i in range(2):
             if type(b.Trajectories[i]) == m.AntTrajectorySegment:
-                self.assertAntTrajectorySegmentEqual(a.Trajectories[i],
-                                                     b.Trajectories[i])
+                self.assertAntTrajectorySegmentEqual(
+                    a.Trajectories[i], b.Trajectories[i]
+                )
             else:
-                self.assertAntTrajectorySummaryEqual(a.Trajectories[i],
-                                                     b.Trajectories[i])
+                self.assertAntTrajectorySummaryEqual(
+                    a.Trajectories[i], b.Trajectories[i]
+                )
 
     def assertVideoFrameDataEqual(self, a, b):
         self.assertEqual(a.Position, b.Position)

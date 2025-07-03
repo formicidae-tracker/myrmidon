@@ -1,16 +1,17 @@
 import unittest
-import py_fort_myrmidon as m
-import py_fort_myrmidon_utestdata as ud
-import assertions
+import fort_myrmidon as m
+import fort_myrmidon_utestdata as ud
+
+from . import assertions
 
 
 class IdentificationTestCase(unittest.TestCase, assertions.CustomAssertion):
     def setUp(self):
         self.experiment = m.Experiment(
-            str(ud.UData().Basedir / "identification-utest.myrmidon"))
+            str(ud.UData().Basedir / "identification-utest.myrmidon")
+        )
         self.ant = self.experiment.CreateAnt()
-        self.i = self.experiment.AddIdentification(self.ant.ID,
-                                                   123)
+        self.i = self.experiment.AddIdentification(self.ant.ID, 123)
 
     def tearDown(self):
         self.i = None
@@ -25,12 +26,8 @@ class IdentificationTestCase(unittest.TestCase, assertions.CustomAssertion):
         self.experiment.DeleteIdentification(self.i)
         self.i = None
         idents = [
-            self.experiment.AddIdentification(self.ant.ID,
-                                              123,
-                                              end=m.Time()),
-            self.experiment.AddIdentification(self.ant.ID,
-                                              124,
-                                              start=m.Time()),
+            self.experiment.AddIdentification(self.ant.ID, 123, end=m.Time()),
+            self.experiment.AddIdentification(self.ant.ID, 124, start=m.Time()),
         ]
         self.assertTimeEqual(idents[0].Start, m.Time.SinceEver())
         self.assertTimeEqual(idents[0].End, m.Time())
@@ -74,8 +71,7 @@ class IdentificationTestCase(unittest.TestCase, assertions.CustomAssertion):
         self.assertEqual(self.i.AntAngle, 0.0)
 
     def test_formatting(self):
-        self.assertEqual(
-            str(self.i), "Identification{ID:0x07b ↦ 1, From:-∞, To:+∞}")
+        self.assertEqual(str(self.i), "Identification{ID:0x07b ↦ 1, From:-∞, To:+∞}")
 
     def test_scope_validity(self):
         self.experiment = None

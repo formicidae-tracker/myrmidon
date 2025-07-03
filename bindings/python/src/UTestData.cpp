@@ -104,33 +104,31 @@ void BindUTestData(py::module_ & m) {
 
 }
 
-PYBIND11_MODULE(py_fort_myrmidon_utestdata, m) {
+PYBIND11_MODULE(fort_myrmidon_utestdata, m) {
 	m.doc() = "Unit test data generation for py_fort_myrmidon";
 
-
-	py::module_::import("py_fort_myrmidon");
+	py::module_::import("fort_myrmidon");
 
 	BindUTestData(m);
 
-	m.def("UData",
-	      []() {
-		      if ( !s_utestdata ) {
-			      auto tmpPath = fort::myrmidon::UTestData::TempDirName();
-			      s_utestdata = std::make_unique<fort::myrmidon::UTestData>(tmpPath);
-		      }
-		      return s_utestdata.get();
-	      },
-	      py::return_value_policy::reference);
+	m.def(
+	    "UData",
+	    []() {
+		    if (!s_utestdata) {
+			    auto tmpPath = fort::myrmidon::UTestData::TempDirName();
+			    s_utestdata =
+			        std::make_unique<fort::myrmidon::UTestData>(tmpPath);
+		    }
+		    return s_utestdata.get();
+	    },
+	    py::return_value_policy::reference
+	);
 
-	m.add_object("_cleanup",
-	             py::capsule([]() {
-		                         s_utestdata.reset();
-	                         }));
-
+	m.add_object("_cleanup", py::capsule([]() { s_utestdata.reset(); }));
 
 #ifdef VERSION_INFO
-    m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
+	m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
 #else
-    m.attr("__version__") = MYRMIDON_VERSION;
+	m.attr("__version__") = MYRMIDON_VERSION;
 #endif
 }

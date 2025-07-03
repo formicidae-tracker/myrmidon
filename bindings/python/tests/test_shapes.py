@@ -1,4 +1,4 @@
-import py_fort_myrmidon as m
+import fort_myrmidon as m
 import numpy.testing as npt
 import unittest
 
@@ -56,12 +56,14 @@ class ShapeTestCase(unittest.TestCase):
     def setUp(self):
         self.circle = m.Circle(Center=[0, 0], Radius=1.0)
         self.capsule = m.Capsule(C1=[0, 0], C2=[1, 1], R1=1.0, R2=1.0)
-        self.polygon = m.Polygon(Vertices=[
-            [1, 1],
-            [-1, 1],
-            [-1, -1],
-            [1, -1],
-        ])
+        self.polygon = m.Polygon(
+            Vertices=[
+                [1, 1],
+                [-1, 1],
+                [-1, -1],
+                [1, -1],
+            ]
+        )
 
     def test_type(self):
         self.assertEqual(self.circle.ShapeType, m.Shape.Type.CIRCLE)

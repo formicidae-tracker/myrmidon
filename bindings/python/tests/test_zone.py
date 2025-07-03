@@ -1,12 +1,11 @@
-import py_fort_myrmidon as m
-import py_fort_myrmidon_utestdata as ud
+import fort_myrmidon as m
+import fort_myrmidon_utestdata as ud
 import unittest
 
 
 class ZoneTestCase(unittest.TestCase):
     def setUp(self):
-        self.experiment = m.Experiment(
-            str(ud.UData().Basedir / "zone-utests.myrmidon"))
+        self.experiment = m.Experiment(str(ud.UData().Basedir / "zone-utests.myrmidon"))
         self.space = self.experiment.CreateSpace("nest")
 
     def test_field_manipulation(self):
@@ -22,9 +21,7 @@ class ZoneTestCase(unittest.TestCase):
             zone.AddDefinition([], end=m.Time()),
         ]
         with self.assertRaises(RuntimeError):
-            zone.AddDefinition([],
-                               start=m.Time().Add(-1),
-                               end=m.Time().Add(1))
+            zone.AddDefinition([], start=m.Time().Add(-1), end=m.Time().Add(1))
 
         self.assertEqual(len(zone.Definitions), 2)
         self.assertEqual(zone.Definitions[0], definitions[1])
@@ -44,7 +41,7 @@ class ZoneTestCase(unittest.TestCase):
             self.space.CreateZone("zone"),
         ]
         for i, z in enumerate(zones):
-            self.assertEqual(z.ID, i+1)
+            self.assertEqual(z.ID, i + 1)
 
     def test_zone_definition_have_a_shape(self):
         zone = self.space.CreateZone("food")
@@ -64,10 +61,8 @@ class ZoneTestCase(unittest.TestCase):
             zone.AddDefinition([], start=m.Time()),
         ]
         with self.assertRaises(ValueError):
-            zone.AddDefinition([],
-                               start=m.Time.Forever(),
-                               end=m.Time.SinceEver())
-        
+            zone.AddDefinition([], start=m.Time.Forever(), end=m.Time.SinceEver())
+
         with self.assertRaises(RuntimeError):
             definitions[0].End = m.Time().Add(1)
 
@@ -76,6 +71,4 @@ class ZoneTestCase(unittest.TestCase):
 
         definitions[0].End = m.Time().Add(-1)
         definitions[1].Start = m.Time().Add(1)
-        zone.AddDefinition([],
-                           start=m.Time().Add(-1),
-                           end=m.Time().Add(1))
+        zone.AddDefinition([], start=m.Time().Add(-1), end=m.Time().Add(1))

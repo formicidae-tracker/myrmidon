@@ -9,7 +9,7 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(py_fort_myrmidon, m) {
+PYBIND11_MODULE(fort_myrmidon, m) {
 	m.doc() = "Bindings for libfort-myrmidon"; // optional module docstring
 
 	BindTypes(m);

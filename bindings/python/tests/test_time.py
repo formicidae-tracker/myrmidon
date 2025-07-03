@@ -1,4 +1,4 @@
-import py_fort_myrmidon as m
+import fort_myrmidon as m
 import unittest
 import datetime
 
@@ -9,10 +9,10 @@ class TimeTestCase(unittest.TestCase):
         self.assertEqual(m.Time(), 0.0)
 
     def test_has_infinite_support(self):
-        self.assertEqual(m.Time.SinceEver().ToTimestamp(), float('-inf'))
-        self.assertEqual(m.Time.Forever().ToTimestamp(), float('inf'))
-        self.assertEqual(m.Time(float('-inf')), m.Time.SinceEver())
-        self.assertEqual(m.Time(float('inf')), m.Time.Forever())
+        self.assertEqual(m.Time.SinceEver().ToTimestamp(), float("-inf"))
+        self.assertEqual(m.Time.Forever().ToTimestamp(), float("inf"))
+        self.assertEqual(m.Time(float("-inf")), m.Time.SinceEver())
+        self.assertEqual(m.Time(float("inf")), m.Time.Forever())
         self.assertTrue(m.Time.Forever().IsInfinite())
         self.assertTrue(m.Time.Forever().IsForever())
         self.assertFalse(m.Time.Forever().IsSinceEver())
@@ -28,7 +28,7 @@ class TimeTestCase(unittest.TestCase):
         u = m.Time(t.ToDateTime())
 
         self.assertEqual(t.Add(1).Sub(t), 1)
-        self.assertEqual(t.Add(1*m.Duration.Second).Sub(t), m.Duration.Second)
+        self.assertEqual(t.Add(1 * m.Duration.Second).Sub(t), m.Duration.Second)
 
         # we can use the verbose comparators Equals/After/Before or
         # the overloaded operators
@@ -49,7 +49,8 @@ class TimeTestCase(unittest.TestCase):
     def test_datetime_conversion(self):
         # create a datetime from UTC, and convert it to localtime
         d = datetime.datetime.fromisoformat(
-            "2019-11-02T23:12:13.000014+00:00").astimezone(None)
+            "2019-11-02T23:12:13.000014+00:00"
+        ).astimezone(None)
         t = m.Time(d)
         self.assertEqual(t, m.Time.Parse("2019-11-02T23:12:13.000014Z"))
         self.assertEqual(d, t.ToDateTime().astimezone(None))
@@ -78,50 +79,75 @@ class TimeTestCase(unittest.TestCase):
 
     def test_time_infinite_rounding_is_noop(self):
         self.assertTrue(m.Time.Forever().Round(0).Equals(m.Time().Forever()))
-        self.assertTrue(m.Time.SinceEver().Round(
-            0).Equals(m.Time().SinceEver()))
+        self.assertTrue(m.Time.SinceEver().Round(0).Equals(m.Time().SinceEver()))
 
     def test_time_rounding(self):
         data = [
-            (m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
-             m.Duration(10),
-             m.Time.Parse("2020-03-20T15:34:08.86512357Z")),
-            (m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
-             m.Duration(100),
-             m.Time.Parse("2020-03-20T15:34:08.8651236Z")),
-            (m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
-             1 * m.Duration.Microsecond,
-             m.Time.Parse("2020-03-20T15:34:08.865124Z")),
-            (m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
-             10 * m.Duration.Microsecond,
-             m.Time.Parse("2020-03-20T15:34:08.86512Z")),
-            (m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
-             100 * m.Duration.Microsecond,
-             m.Time.Parse("2020-03-20T15:34:08.8651Z")),
-            (m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
-             1 * m.Duration.Millisecond,
-             m.Time.Parse("2020-03-20T15:34:08.865Z")),
-            (m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
-             10 * m.Duration.Millisecond,
-             m.Time.Parse("2020-03-20T15:34:08.87Z")),
-            (m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
-             100 * m.Duration.Millisecond,
-             m.Time.Parse("2020-03-20T15:34:08.9Z")),
-            (m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
-             m.Duration.Second,
-             m.Time.Parse("2020-03-20T15:34:09Z")),
-            (m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
-             2*m.Duration.Second,
-             m.Time.Parse("2020-03-20T15:34:08Z")),
-            (m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
-             m.Duration.Minute,
-             m.Time.Parse("2020-03-20T15:34:00Z")),
-            (m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
-             m.Duration.Hour,
-             m.Time.Parse("2020-03-20T16:00:00Z")),
-            (m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
-             24 * m.Duration.Hour,
-             m.Time.Parse("2020-03-21T00:00:00Z")),
+            (
+                m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
+                m.Duration(10),
+                m.Time.Parse("2020-03-20T15:34:08.86512357Z"),
+            ),
+            (
+                m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
+                m.Duration(100),
+                m.Time.Parse("2020-03-20T15:34:08.8651236Z"),
+            ),
+            (
+                m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
+                1 * m.Duration.Microsecond,
+                m.Time.Parse("2020-03-20T15:34:08.865124Z"),
+            ),
+            (
+                m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
+                10 * m.Duration.Microsecond,
+                m.Time.Parse("2020-03-20T15:34:08.86512Z"),
+            ),
+            (
+                m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
+                100 * m.Duration.Microsecond,
+                m.Time.Parse("2020-03-20T15:34:08.8651Z"),
+            ),
+            (
+                m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
+                1 * m.Duration.Millisecond,
+                m.Time.Parse("2020-03-20T15:34:08.865Z"),
+            ),
+            (
+                m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
+                10 * m.Duration.Millisecond,
+                m.Time.Parse("2020-03-20T15:34:08.87Z"),
+            ),
+            (
+                m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
+                100 * m.Duration.Millisecond,
+                m.Time.Parse("2020-03-20T15:34:08.9Z"),
+            ),
+            (
+                m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
+                m.Duration.Second,
+                m.Time.Parse("2020-03-20T15:34:09Z"),
+            ),
+            (
+                m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
+                2 * m.Duration.Second,
+                m.Time.Parse("2020-03-20T15:34:08Z"),
+            ),
+            (
+                m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
+                m.Duration.Minute,
+                m.Time.Parse("2020-03-20T15:34:00Z"),
+            ),
+            (
+                m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
+                m.Duration.Hour,
+                m.Time.Parse("2020-03-20T16:00:00Z"),
+            ),
+            (
+                m.Time.Parse("2020-03-20T15:34:08.865123567Z"),
+                24 * m.Duration.Hour,
+                m.Time.Parse("2020-03-21T00:00:00Z"),
+            ),
         ]
         for v, d, expected in data:
             self.assertEqual(v.Round(d), expected)
@@ -130,7 +156,7 @@ class TimeTestCase(unittest.TestCase):
         data = [
             m.Time(),
             m.Time().Add(2 ** 63 - 1),
-            m.Time().Add(-2 ** 63),
+            m.Time().Add(-(2 ** 63)),
         ]
         for t in data:
             self.assertTrue(t < m.Time.Forever())
@@ -146,11 +172,15 @@ class TimeTestCase(unittest.TestCase):
 
     def test_time_parsing(self):
 
-        self.assertEqual(m.Time.Parse("1970-01-02T01:02:03.004Z"),
-                         m.Time().Add(25 * m.Duration.Hour
-                                      + 2 * m.Duration.Minute
-                                      + 3 * m.Duration.Second
-                                      + 4 * m.Duration.Millisecond))
+        self.assertEqual(
+            m.Time.Parse("1970-01-02T01:02:03.004Z"),
+            m.Time().Add(
+                25 * m.Duration.Hour
+                + 2 * m.Duration.Minute
+                + 3 * m.Duration.Second
+                + 4 * m.Duration.Millisecond
+            ),
+        )
 
         with self.assertRaises(RuntimeError):
             m.Time.Parse("-∞")

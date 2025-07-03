@@ -1,24 +1,26 @@
 import unittest
-import py_fort_myrmidon as m
-import py_fort_myrmidon_utestdata as ud
-import assertions
+import fort_myrmidon as m
+import fort_myrmidon_utestdata as ud
+
 import functools
 import os
 import pandas as pd
+
+from . import assertions
 
 
 class QueryTestCase(unittest.TestCase, assertions.CustomAssertion):
     def setUp(self):
         self.experiment = m.Experiment.Open(
-            str(ud.UData().CurrentVersionFile.AbsoluteFilePath))
+            str(ud.UData().CurrentVersionFile.AbsoluteFilePath)
+        )
 
     def tearDown(self):
         self.experiment = None
 
     def test_tag_statistics(self):
         tagStats = m.Query.ComputeTagStatistics(self.experiment)
-        self.assertTagStatisticsEqual(
-            tagStats, ud.UData().ExpectedTagStatistics)
+        self.assertTagStatisticsEqual(tagStats, ud.UData().ExpectedTagStatistics)
 
     def test_identify_frames(self):
         identifieds = m.Query.IdentifyFrames(self.experiment)
@@ -54,33 +56,40 @@ class QueryTestCase(unittest.TestCase, assertions.CustomAssertion):
 
     def test_compute_ant_trajectories(self):
         for expectedResult in ud.UData().ExpectedResults:
-            trajectories = m.Query.ComputeAntTrajectories(self.experiment,
-                                                          start=expectedResult.Start,
-                                                          end=expectedResult.End,
-                                                          maximumGap=expectedResult.MaximumGap,
-                                                          matcher=expectedResult.Matches)
-            self.assertEqual(len(trajectories), len(
-                expectedResult.Trajectories))
+            trajectories = m.Query.ComputeAntTrajectories(
+                self.experiment,
+                start=expectedResult.Start,
+                end=expectedResult.End,
+                maximumGap=expectedResult.MaximumGap,
+                matcher=expectedResult.Matches,
+            )
+            self.assertEqual(len(trajectories), len(expectedResult.Trajectories))
 
-            trajectories = sorted(trajectories,
-                                  key=functools.cmp_to_key(QueryTestCase.compare_trajectories))
+            trajectories = sorted(
+                trajectories,
+                key=functools.cmp_to_key(QueryTestCase.compare_trajectories),
+            )
             for i, expected in enumerate(expectedResult.Trajectories):
                 self.assertAntTrajectoryEqual(trajectories[i], expected)
 
     def test_compute_ant_interactions(self):
         for expectedResult in ud.UData().ExpectedResults:
-            trajectories, interactions = m.Query.ComputeAntInteractions(self.experiment,
-                                                                        start=expectedResult.Start,
-                                                                        end=expectedResult.End,
-                                                                        maximumGap=expectedResult.MaximumGap,
-                                                                        matcher=expectedResult.Matches)
-            self.assertEqual(len(trajectories),
-                             len(expectedResult.InteractionTrajectories))
-            self.assertEqual(len(interactions),
-                             len(expectedResult.Interactions))
+            trajectories, interactions = m.Query.ComputeAntInteractions(
+                self.experiment,
+                start=expectedResult.Start,
+                end=expectedResult.End,
+                maximumGap=expectedResult.MaximumGap,
+                matcher=expectedResult.Matches,
+            )
+            self.assertEqual(
+                len(trajectories), len(expectedResult.InteractionTrajectories)
+            )
+            self.assertEqual(len(interactions), len(expectedResult.Interactions))
 
-            trajectories = sorted(trajectories,
-                                  key=functools.cmp_to_key(QueryTestCase.compare_trajectories))
+            trajectories = sorted(
+                trajectories,
+                key=functools.cmp_to_key(QueryTestCase.compare_trajectories),
+            )
 
             for i, expected in enumerate(expectedResult.InteractionTrajectories):
                 self.assertAntTrajectoryEqual(trajectories[i], expected)
@@ -88,12 +97,14 @@ class QueryTestCase(unittest.TestCase, assertions.CustomAssertion):
             for i, expected in enumerate(expectedResult.Interactions):
                 self.assertAntInteractionEqual(interactions[i], expected)
 
-            trajectories, interactions = m.Query.ComputeAntInteractions(self.experiment,
-                                                                        start=expectedResult.Start,
-                                                                        end=expectedResult.End,
-                                                                        maximumGap=expectedResult.MaximumGap,
-                                                                        matcher=expectedResult.Matches,
-                                                                        reportFullTrajectories=False)
+            trajectories, interactions = m.Query.ComputeAntInteractions(
+                self.experiment,
+                start=expectedResult.Start,
+                end=expectedResult.End,
+                maximumGap=expectedResult.MaximumGap,
+                matcher=expectedResult.Matches,
+                reportFullTrajectories=False,
+            )
             expectedSummarized = expectedResult.Summarized()
             self.assertEqual(len(trajectories), 0)
             self.assertEqual(len(interactions), len(expectedSummarized))
@@ -101,29 +112,27 @@ class QueryTestCase(unittest.TestCase, assertions.CustomAssertion):
                 self.assertAntInteractionEqual(interactions[i], expected)
 
     def test_frame_selection(self):
-        firstDate = min(ud.UData().NestDataDirs[0].Start,
-                        ud.UData().ForagingDataDirs[0].Start)
+        firstDate = min(
+            ud.UData().NestDataDirs[0].Start, ud.UData().ForagingDataDirs[0].Start
+        )
 
         data = m.Query.IdentifyFrames(self.experiment, start=firstDate)
         self.assertEqual(len(data), len(ud.UData().ExpectedFrames))
 
-        data = m.Query.IdentifyFrames(self.experiment,
-                                      start=firstDate,
-                                      end=firstDate.Add(1))
+        data = m.Query.IdentifyFrames(
+            self.experiment, start=firstDate, end=firstDate.Add(1)
+        )
         self.assertTrue(len(data) > 0)
         self.assertTrue(len(data) <= 2)
         self.assertTimeEqual(data[0].FrameTime, firstDate)
         if len(data) == 2:
             self.assertTimeEqual(data[1].FrameTime, firstDate)
 
-        data = m.Query.IdentifyFrames(self.experiment,
-                                      start=firstDate,
-                                      end=firstDate)
+        data = m.Query.IdentifyFrames(self.experiment, start=firstDate, end=firstDate)
         self.assertEqual(len(data), 0)
 
     def test_get_metadata_key_ranges(self):
-        experiment = m.Experiment(os.path.join(
-            ud.UData().Basedir, "foo.myrmidon"))
+        experiment = m.Experiment(os.path.join(ud.UData().Basedir, "foo.myrmidon"))
         experiment.SetMetaDataKey("alive", True)
         experiment.CreateAnt()
         a = experiment.CreateAnt()
@@ -135,9 +144,7 @@ class QueryTestCase(unittest.TestCase, assertions.CustomAssertion):
         a.SetValue(key="alive", value=False, time=m.Time().Add(2))
         a.SetValue(key="alive", value=True, time=m.Time().Add(3))
 
-        ranges = m.Query.GetMetaDataKeyRanges(experiment,
-                                              key="alive",
-                                              value=True)
+        ranges = m.Query.GetMetaDataKeyRanges(experiment, key="alive", value=True)
         self.assertEqual(len(ranges), 4)
         self.assertEqual(ranges[0], (1, m.Time.SinceEver(), m.Time.Forever()))
         self.assertEqual(ranges[1], (2, m.Time.SinceEver(), m.Time()))
@@ -152,6 +159,24 @@ class QueryTestCase(unittest.TestCase, assertions.CustomAssertion):
 
     def test_get_closeup_ranges(self):
         res = m.Query.GetTagCloseUps(self.experiment)
-        self.assertTrue((res.columns == ["path", "ID", "X", "Y", "Theta",
-                                         "c0_X", "c0_Y", "c1_X", "c1_Y", "c2_X", "c2_Y", "c3_X", "c3_Y"]).all())
+        self.assertTrue(
+            (
+                res.columns
+                == [
+                    "path",
+                    "ID",
+                    "X",
+                    "Y",
+                    "Theta",
+                    "c0_X",
+                    "c0_Y",
+                    "c1_X",
+                    "c1_Y",
+                    "c2_X",
+                    "c2_Y",
+                    "c3_X",
+                    "c3_Y",
+                ]
+            ).all()
+        )
         self.assertTrue(res.shape[0] > 0)
