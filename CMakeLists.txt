@@ -263,7 +263,12 @@ endif(FORT_MYRMIDON_MAIN AND ENABLE_COVERAGE)
 add_subdirectory(misc)
 
 if(BUILD_PYTHON OR BUILD_DOCS)
-	find_package(pybind11 REQUIRED)
+	FetchContent_Declare(
+		pybind11
+		GIT_REPOSITORY https://github.com/pybind/pybind11
+		GIT_TAG v2.13.6
+	)
+	FetchContent_MakeAvailable(pybind11)
 
 	add_subdirectory(bindings/python/src)
 	if(FORT_MYRMIDON_MAIN)
@@ -272,14 +277,14 @@ if(BUILD_PYTHON OR BUILD_DOCS)
 			COMMAND
 				${CMAKE_COMMAND} -E env
 				PYTHONPATH=${PROJECT_BINARY_DIR}/bindings/python/src
-				${PYTHON_EXECUTABLE} -m unittest discover -s tests -v
+				${PYTHON_EXECUTABLE} -m pytest
 			WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/bindings/python
-			DEPENDS py_fort_myrmidon py_fort_myrmidon_utestdata
+			DEPENDS fort_myrmidon fort_myrmidon_utestdata
 		)
 
 		add_dependencies(check py_fort_myrmidon-tests)
-		add_dependencies(py_fort_myrmidon fort-myrmidon)
-		add_dependencies(py_fort_myrmidon_utestdata fort-myrmidon-utestdata)
+		add_dependencies(fort_myrmidon fort-myrmidon)
+		add_dependencies(fort_myrmidon_utestdata fort-myrmidon-utestdata)
 	endif(FORT_MYRMIDON_MAIN)
 endif(BUILD_PYTHON OR BUILD_DOCS)
 
