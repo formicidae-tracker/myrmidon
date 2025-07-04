@@ -26,6 +26,7 @@ modules:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DBUILD_STUDIO=On
       - -DBUILD_PYTHON=Off
+      - -DXDESKTOP_APPSTREAM_SUPPORT=On
     build-options:
       build-args:
         - --share=network

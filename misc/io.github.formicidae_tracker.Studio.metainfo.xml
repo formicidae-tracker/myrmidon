@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.formicidae_tracker.Studio</id>
+
+  <name>Formicidae Tracker Studio</name>
+  <summary>Social Insect fiducial tracking metadata tool editor</summary>
+
+  <metadata_license>CC-BY-SA-4.0</metadata_license>
+  <project_license>LGPL-3.0-or-later</project_license>
+
+  <description>
+    <p>
+      This application allows you to visualize, annotate and process tracking data from the Formicidae Tracker (FORT) system, a social insect tracker through fiducial marker.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">io.github.formicidae_tracker.Studio.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/formicidae-tracker/myrmidon/refs/heads/master/misc/studio-screenshots/identification.png</image>
+    </screenshot>
+  </screenshots>
+</component>

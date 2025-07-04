@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=@PROJECT_VERSION@
+Name=FORmicidae Tracker Studio
+Comment=FORT Studio is the GUI to analyze tracking data from the FORmicidae Tracker system.
+Exec=fort-studio
+Icon=io.github.formicidae_tracker.Studio
+Type=Application
+Terminal=false
+Categories=Science;Biology;
+Keywords=FORmicidae Tracker;FORT;
