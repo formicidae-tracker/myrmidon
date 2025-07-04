@@ -10,3 +10,4 @@ perf.data*
 /.cache/
 /repo/
 /.flatpak-builder/
+*.flatpak
