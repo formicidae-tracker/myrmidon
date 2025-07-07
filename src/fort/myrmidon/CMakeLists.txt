@@ -45,8 +45,6 @@ foreach(f ${PROTO_HDR})
 	set_property(SOURCE ${f} PROPERTY SKIP_AUTOGEN ON)
 endforeach(f ${PROTO_HDR})
 
-include_directories(${PROJECT_BINARY_DIR}/src ${PROJECT_SOURCE_DIR}/src)
-
 set(HDR_PRIVATE_FILES
 	utils/StringManipulation.hpp
 	utils/ObjectPool.hpp
@@ -297,6 +295,12 @@ set(UTESTDATA_HDR_FILES
 add_library(
 	fort-myrmidon SHARED ${SRC_FILES} ${SRC_PRIVATE_FILES} ${HDR_PRIVATE_FILES}
 						 ${HDR_PUBLIC_FILES} ${PROTO_HDR} ${PROTO_SRC}
+)
+
+add_library(fort-myrmdion::libfort-myrmidon ALIAS fort-myrmidon)
+
+target_include_directories(
+	fort-myrmidon PUBLIC ${PROJECT_BINARY_DIR}/src ${PROJECT_SOURCE_DIR}/src
 )
 
 target_link_libraries(
