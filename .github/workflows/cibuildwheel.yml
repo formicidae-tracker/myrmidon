@@ -26,10 +26,13 @@ jobs:
       - name: Build sdist
         run: python -m build --sdist
         working-directory: bindings/python
+      - name: list distributed file
+        id: sdist
+        run: echo "file=$(ls bindings/python/dist/formicidae_tracker_myrmidon*.tar.gz )" >> $GITHUB_OUTPUT
 
       - uses: pypa/cibuildwheel@v3.0.1
         with:
-          package-dir: bindings/python/dist/formicidae-tracker-myrmidon-*.tar.gz
+          package-dir: ${{steps.sdist.outputs.file}}
 
       - uses: actions/upload-artifact@v4
         with:
