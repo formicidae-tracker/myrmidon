@@ -34,19 +34,12 @@ jobs:
                                lcov \
                                doxygen \
                                ccache \
-                               python3-pandas \
-                               python3-tqdm \
                                libavcodec-dev \
                                libavutil-dev \
                                libavformat-dev \
                                libswscale-dev
-              pip install sphinx>=4.2.0 \
-                          sphinx_rtd_theme>=1.0.0 \
-                          breathe \
-                          pybind11>=2.12.0 \
-                          pytest
-        - name: Uses ccache
-          uses: hendrikmuhs/ccache-action@v1
+        - run: pip install sphinx>=4.2.0 sphinx_rtd_theme>=1.0.0 breathe pybind11>=2.12.0 pytest opencv-python tqdm pandas numpy
+        - uses: hendrikmuhs/ccache-action@v1
         - name: Configure
           run: |
               export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
