@@ -24,8 +24,8 @@ jobs:
                                libasio-dev \
                                libboost-dev \
                                libgoogle-glog-dev \
-                               qtbase6-dev \
-                               libqt6charts6-dev \
+                               qt6-base-dev \
+                               qt6-charts-dev \
                                libeigen3-dev \
                                libprotobuf-dev \
                                protobuf-compiler \
@@ -37,6 +37,7 @@ jobs:
               pip install sphinx>=4.2.0 \
                           sphinx_rtd_theme>=1.0.0 \
                           breathe \
+                          pybind11 >= 2.12.0
         - name: Uses ccache
           uses: hendrikmuhs/ccache-action@v1
         - name: Configure
