@@ -20,12 +20,12 @@ fort::myrmidon::Matcher::Ptr MatcherOr(py::args args) {
 	return fort::myrmidon::Matcher::Or(matchers);
 }
 
-
-void BindMatchers(py::module_ & m) {
+void BindMatchers(py::module_ &m) {
 	using namespace fort::myrmidon;
-	py::class_<Matcher,std::shared_ptr<Matcher>>(m,
-	                                             "Matcher",
-	                                             R"pydoc(
+	py::class_<Matcher, std::shared_ptr<Matcher>>(
+	    m,
+	    "Matcher",
+	    R"pydoc(
 A Matcher helps to build complex :class:`Query` by adding one or
 several constraints.
 
@@ -57,15 +57,17 @@ Examples:
 
     .. code-block:: python
 
-        import py_fort_myrmidon as fm
+        import fort_myrmidon as fm
         # m will match ant 001 or 002
         m = fm.Matcher.Or(fm.Matcher.AntID(1),fm.Matcher.AntID(2))
 
-  )pydoc")
-		.def_static("AntID",
-		            &Matcher::AntID,
-		            py::arg("antID"),
-		            R"pydoc(
+  )pydoc"
+	)
+	    .def_static(
+	        "AntID",
+	        &Matcher::AntID,
+	        py::arg("antID"),
+	        R"pydoc(
 Matches a given AntID.
 
 In case of interaction, matches any interaction with one of the Ant
@@ -76,10 +78,14 @@ Args:
 
 Returns:
     Matcher: a matcher that matches **antID**.
-)pydoc")
-		.def_static("AntMetaData",&Matcher::AntMetaData,
-		            py::arg("key"),py::arg("value"),
-		            R"pydoc(
+)pydoc"
+	    )
+	    .def_static(
+	        "AntMetaData",
+	        &Matcher::AntMetaData,
+	        py::arg("key"),
+	        py::arg("value"),
+	        R"pydoc(
 Matches a given user meta data value.
 
 In case of interaction, matches any interaction where at least one of
@@ -93,11 +99,13 @@ Args:
 Returns:
     Matcher: a Matcher that matches Ant who current **key** meta data
     value matches **value**.
-)pydoc")
-		.def_static("AntDistanceSmallerThan",
-		            &Matcher::AntDistanceSmallerThan,
-		            py::arg("distance"),
-		            R"pydoc(
+)pydoc"
+	    )
+	    .def_static(
+	        "AntDistanceSmallerThan",
+	        &Matcher::AntDistanceSmallerThan,
+	        py::arg("distance"),
+	        R"pydoc(
 A Matcher that matches ant distance.
 
 In the case of trajectories, it matches anything
@@ -108,11 +116,13 @@ Args:
 Returns:
     Matcher: a Matcher that matches when the two Ant are within
     **distance**.
-)pydoc")
-		.def_static("AntDistanceGreaterThan",
-		            &Matcher::AntDistanceGreaterThan,
-		            py::arg("distance"),
-		            R"pydoc(
+)pydoc"
+	    )
+	    .def_static(
+	        "AntDistanceGreaterThan",
+	        &Matcher::AntDistanceGreaterThan,
+	        py::arg("distance"),
+	        R"pydoc(
 A Matcher that matches ant distance.
 
 In the case of trajectories, it matches anything
@@ -123,11 +133,13 @@ Args:
 Returns:
     Matcher: a Matcher that matches when the two Ant are further than
     **distance**.
-)pydoc")
-		.def_static("AntAngleSmallerThan",
-		            &Matcher::AntAngleSmallerThan,
-		            py::arg("angle"),
-		            R"pydoc(
+)pydoc"
+	    )
+	    .def_static(
+	        "AntAngleSmallerThan",
+	        &Matcher::AntAngleSmallerThan,
+	        py::arg("angle"),
+	        R"pydoc(
 A Matcher that matches ant angles.
 
 In the case of trajectories, it matches anything
@@ -138,11 +150,13 @@ Args:
 Returns:
     Matcher: a Matcher that matches when the two Ant are facing the
     same direction within **angle**
-)pydoc")
-		.def_static("AntAngleGreaterThan",
-		            &Matcher::AntAngleGreaterThan,
-		            py::arg("angle"),
-		            R"pydoc(
+)pydoc"
+	    )
+	    .def_static(
+	        "AntAngleGreaterThan",
+	        &Matcher::AntAngleGreaterThan,
+	        py::arg("angle"),
+	        R"pydoc(
 A Matcher that matches ant angles.
 
 In the case of trajectories, it matches anything
@@ -153,10 +167,12 @@ Args:
 Returns:
     Matcher: a Matcher that matches when the two Ant are facing
     directions which are greater appart than **angle**.
-)pydoc")
-		.def_static("And",
-		            &MatcherAnd,
-		            R"pydoc(
+)pydoc"
+	    )
+	    .def_static(
+	        "And",
+	        &MatcherAnd,
+	        R"pydoc(
 Combines several Matcher together in conjuction
 
 Args:
@@ -165,24 +181,28 @@ Args:
 Returns:
     Matcher: a Matcher that matches when all passed matcher also
     matches.
-)pydoc")
-		.def_static("Or",
-		            &MatcherOr,
-		            R"pydoc(
+)pydoc"
+	    )
+	    .def_static(
+	        "Or",
+	        &MatcherOr,
+	        R"pydoc(
 Combines several Matcher together in disjunction
 
 Args:
-    *args (py_fort_myrmidon.Matcher): several other Matcher
+    *args (fort_myrmidon.Matcher): several other Matcher
 
 Returns:
     Matcher: a Matcher that matches when any of the passed matcher
     matches.
-)pydoc")
-		.def_static("InteractionType",
-		            &Matcher::InteractionType,
-		            py::arg("type1"),
-		            py::arg("type2"),
-		            R"pydoc(
+)pydoc"
+	    )
+	    .def_static(
+	        "InteractionType",
+	        &Matcher::InteractionType,
+	        py::arg("type1"),
+	        py::arg("type2"),
+	        R"pydoc(
 Matches InteractionType (type1,type2) and (type2,type1).
 
 In the case of trajectories it matches anything.
@@ -194,12 +214,14 @@ Args:
 Returns:
     Matcher: A Matcher that matches interactions (type1,type2) or
     (type2,type1).
-)pydoc")
-		.def_static("AntDisplacement",
-		            &Matcher::AntDisplacement,
-		            py::arg("under"),
-		            py::arg("minimumGap") = fort::Duration(0),
-		            R"pydoc(
+)pydoc"
+	    )
+	    .def_static(
+	        "AntDisplacement",
+	        &Matcher::AntDisplacement,
+	        py::arg("under"),
+	        py::arg("minimumGap") = fort::Duration(0),
+	        R"pydoc(
 A Matcher that rejects large ants displacement.
 
 Discards any trajectories and interactions where an Ant shows a
@@ -215,13 +237,14 @@ Args:
 
 Returns:
     Matcher: A Matcher that matches small Ant displacement.
-)pydoc")
-		.def("__str__",
-		     [](const fort::myrmidon::Matcher::Ptr & m) -> std::string {
-			     std::ostringstream oss;
-			     oss << *m;
-			     return oss.str();
-		     })
-		;
-
+)pydoc"
+	    )
+	    .def(
+	        "__str__",
+	        [](const fort::myrmidon::Matcher::Ptr &m) -> std::string {
+		        std::ostringstream oss;
+		        oss << *m;
+		        return oss.str();
+	        }
+	    );
 };

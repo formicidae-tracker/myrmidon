@@ -3,25 +3,25 @@
 2D Geometric Shapes
 ===================
 
-py_fort_myrmidon.Shape
-++++++++++++++++++++++
-.. autoclass:: py_fort_myrmidon.Shape
+fort_myrmidon.Shape
++++++++++++++++++++
+.. autoclass:: fort_myrmidon.Shape
    :members:
 
-py_fort_myrmidon.Circle
-+++++++++++++++++++++++
+fort_myrmidon.Circle
+++++++++++++++++++++
 
-.. autoclass:: py_fort_myrmidon.Circle
+.. autoclass:: fort_myrmidon.Circle
    :members:
 
-py_fort_myrmidon.Capsule
-++++++++++++++++++++++++
+fort_myrmidon.Capsule
++++++++++++++++++++++
 
-.. autoclass:: py_fort_myrmidon.Capsule
+.. autoclass:: fort_myrmidon.Capsule
    :members:
 
-py_fort_myrmidon.Polygon
-++++++++++++++++++++++++
+fort_myrmidon.Polygon
++++++++++++++++++++++
 
-.. autoclass:: py_fort_myrmidon.Polygon
+.. autoclass:: fort_myrmidon.Polygon
    :members:

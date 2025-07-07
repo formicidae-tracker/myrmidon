@@ -15,7 +15,7 @@ A Generic class for a Shape
 	shape.def_property_readonly(
 	    "ShapeType",
 	    &Shape::ShapeType,
-	    "(py_fort_myrmidon.Shape.Type): the type of the shape"
+	    "(fort_myrmidon.Shape.Type): the type of the shape"
 	);
 
 	py::enum_<Shape::Type>(shape, "Type", "Enum for the type of a Shape")
@@ -114,8 +114,8 @@ Note:
 Example:
     .. code-block:: python
 
-        square = py_fort_myrmidon.Polygon(Vertices = [[1,1],[-1,1],[-1,-1],[1,-1]])
-        hourglass = py_fort_myrmidon.Polygon(Vertices = [[1,1],[-1,-1],[1,-1],[-1,1]])
+        square = fort_myrmidon.Polygon(Vertices = [[1,1],[-1,1],[-1,-1],[1,-1]])
+        hourglass = fort_myrmidon.Polygon(Vertices = [[1,1],[-1,-1],[1,-1],[-1,1]])
 )pydoc"
 	)
 	    .def(py::init<Vector2dList>(), py::arg("Vertices"))

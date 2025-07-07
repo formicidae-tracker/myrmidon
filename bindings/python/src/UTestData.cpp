@@ -105,7 +105,7 @@ void BindUTestData(py::module_ & m) {
 }
 
 PYBIND11_MODULE(fort_myrmidon_utestdata, m) {
-	m.doc() = "Unit test data generation for py_fort_myrmidon";
+	m.doc() = "Unit test data generation for fort_myrmidon";
 
 	py::module_::import("fort_myrmidon");
 

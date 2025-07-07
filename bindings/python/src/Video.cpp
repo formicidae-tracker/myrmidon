@@ -150,14 +150,13 @@ private:
 	int32_t d_moviePos;
 };
 
-
-
-void BindVideoSegment(py::module_ & m) {
+void BindVideoSegment(py::module_ &m) {
 	using namespace fort::myrmidon;
 	BindVideoFrameData(m);
-	py::class_<VideoSegment> c(m,
-	                           "VideoSegment",
-	                           R"pydoc(
+	py::class_<VideoSegment> c(
+	    m,
+	    "VideoSegment",
+	    R"pydoc(
 
 A VideoSegment represents a part of a Video file with its associated
 tracking data.
@@ -178,7 +177,7 @@ Note:
 Example:
     .. code-block:: python
 
-        import py_fort_myrmidon as fm
+        import fort_myrmidon as fm
 
         e = fm.Experiment.Open("file.myrmidon")
 
@@ -206,54 +205,73 @@ Example:
                 ## on `data`
                 pass
 
-)pydoc");
-	auto list = py::bind_vector<std::vector<VideoSegment>,
-	                            std::shared_ptr<std::vector<VideoSegment>>>(m,
-		  "VideoSegmentList",
-		  R"pydoc(
+)pydoc"
+	);
+	auto list = py::bind_vector<
+	    std::vector<VideoSegment>,
+	    std::shared_ptr<std::vector<VideoSegment>>>(
+	    m,
+	    "VideoSegmentList",
+	    R"pydoc(
 An opaque list of :class:`VideoSegment`.
 
 It works just as a :class:`list` of :class:`VideoSegment`.
 
-)pydoc");
-	list.def("deepcopy",
-	         [](const std::vector<VideoSegment> & self) {
-		         return std::make_shared<std::vector<VideoSegment>>(self);
-	         },R"pydoc(
+)pydoc"
+	);
+	list.def(
+	    "deepcopy",
+	    [](const std::vector<VideoSegment> &self) {
+		    return std::make_shared<std::vector<VideoSegment>>(self);
+	    },
+	    R"pydoc(
 Performs a deepcopy of the list.
 
 The main purpose is for the unittest implementation.
-)pydoc");
+)pydoc"
+	);
 
-
-	py::implicitly_convertible<py::list,
-	                           std::vector<VideoSegment>>();
-
+	py::implicitly_convertible<py::list, std::vector<VideoSegment>>();
 
 	c.def(py::init([](SpaceID space) {
-		               return std::make_unique<VideoSegment>(VideoSegment{.Space = space});
-	               }));
-	c.def_readonly("Space",
-	               &VideoSegment::Space,
-	               "int: the :class:`Space` the segment belongs to");
-	c.def_readonly("AbsoluteFilePath",
-	               &VideoSegment::AbsoluteFilePath,
-	               "str: the absolute filepath to the video file");
-	c.def_readonly("Begin",
-	               &VideoSegment::Begin,
-	               "int: the first video frame position in the video file corresponding to the segment");
-	c.def_readwrite("End",
-	                &VideoSegment::End,
-	                "int: the last+1 video frame postion in the video file corresponding to the segment");
-	c.def_readwrite("Data",
-	                &VideoSegment::Data,
-	                py::return_value_policy::reference_internal,
-	                "List[VideoFrameData]: matched query result with the video frame in the list. If no tracking data is associated with a given frame, there will be no corresponding object in this field.");
-	c.def_static("Match",
-	             &Match<IdentifiedFrame::Ptr>,
-	             "segments"_a,
-	             "identifiedFrames"_a,
-	             R"pydoc(
+		return std::make_unique<VideoSegment>(VideoSegment{.Space = space});
+	}));
+	c.def_readonly(
+	    "Space",
+	    &VideoSegment::Space,
+	    "int: the :class:`Space` the segment belongs to"
+	);
+	c.def_readonly(
+	    "AbsoluteFilePath",
+	    &VideoSegment::AbsoluteFilePath,
+	    "str: the absolute filepath to the video file"
+	);
+	c.def_readonly(
+	    "Begin",
+	    &VideoSegment::Begin,
+	    "int: the first video frame position in the video file corresponding "
+	    "to the segment"
+	);
+	c.def_readwrite(
+	    "End",
+	    &VideoSegment::End,
+	    "int: the last+1 video frame postion in the video file corresponding "
+	    "to the segment"
+	);
+	c.def_readwrite(
+	    "Data",
+	    &VideoSegment::Data,
+	    py::return_value_policy::reference_internal,
+	    "List[VideoFrameData]: matched query result with the video frame in "
+	    "the list. If no tracking data is associated with a given frame, there "
+	    "will be no corresponding object in this field."
+	);
+	c.def_static(
+	    "Match",
+	    &Match<IdentifiedFrame::Ptr>,
+	    "segments"_a,
+	    "identifiedFrames"_a,
+	    R"pydoc(
 Matches :class:`IdentifiedFrame` with a :class:`VideoSegmentList`
 
 Args:
@@ -262,12 +280,14 @@ Args:
 
 Raises:
     ValueError: if the all segments are not from the same :class:`Space`
-)pydoc");
-	c.def_static("Match",
-	             &Match<CollisionData>,
-	             "segments"_a,
-	             "collisionData"_a,
-	             R"pydoc(
+)pydoc"
+	);
+	c.def_static(
+	    "Match",
+	    &Match<CollisionData>,
+	    "segments"_a,
+	    "collisionData"_a,
+	    R"pydoc(
 Matches :class:`CollisionData` with a :class:`VideoSegmentList`
 
 Args:
@@ -276,12 +296,14 @@ Args:
 
 Raises:
     ValueError: if the all segments are not from the same :class:`Space`
-)pydoc");
-	c.def_static("Match",
-	             &Match<AntTrajectory::Ptr>,
-	             "segments"_a,
-	             "trajectories"_a,
-	             R"pydoc(
+)pydoc"
+	);
+	c.def_static(
+	    "Match",
+	    &Match<AntTrajectory::Ptr>,
+	    "segments"_a,
+	    "trajectories"_a,
+	    R"pydoc(
 Matches :class:`AntTrajectory` with a :class:`VideoSegmentList`
 
 Args:
@@ -290,12 +312,14 @@ Args:
 
 Raises:
     ValueError: if the all segments are not from the same :class:`Space`
-)pydoc");
-	c.def_static("Match",
-	             &Match<AntInteraction::Ptr>,
-	             "segments"_a,
-	             "interactions"_a,
-	             R"pydoc(
+)pydoc"
+	);
+	c.def_static(
+	    "Match",
+	    &Match<AntInteraction::Ptr>,
+	    "segments"_a,
+	    "interactions"_a,
+	    R"pydoc(
 Matches :class:`AntInteraction` with a :class:`VideoSegmentList`
 
 Args:
@@ -304,17 +328,19 @@ Args:
 
 Raises:
     ValueError: if the all segments are not from the same :class:`Space`
-)pydoc");
+)pydoc"
+	);
 
-	py::class_<::VideoSequence>(m,
-	                            "VideoSequence",
-	                            R"pydoc(
+	py::class_<::VideoSequence>(
+	    m,
+	    "VideoSequence",
+	    R"pydoc(
 A contextmanager for iterating over Video Frame and matched data.
 
 Examples:
     .. code-block:: python
 
-        import py_fort_myrmidon as fm
+        import fort_myrmidon as fm
 
         ## will iterate over all video frame of space 1
         segments = fm.Query.FindVideoSegments(e,space = 1)
@@ -322,14 +348,16 @@ Examples:
             for frame, data in sequence:
                 pass
 
-)pydoc")
-		.def(py::init([](const std::shared_ptr<std::vector<VideoSegment>> & l) {
-			              return std::make_unique<::VideoSequence>(*l);
-		              }),py::keep_alive<1,2>())
-		.def("__enter__",&::VideoSequence::Enter)
-		.def("__exit__",&::VideoSequence::Exit)
-		.def("__iter__",&::VideoSequence::Iter)
-		.def("__next__",&::VideoSequence::Next)
-		;
-
+)pydoc"
+	)
+	    .def(
+	        py::init([](const std::shared_ptr<std::vector<VideoSegment>> &l) {
+		        return std::make_unique<::VideoSequence>(*l);
+	        }),
+	        py::keep_alive<1, 2>()
+	    )
+	    .def("__enter__", &::VideoSequence::Enter)
+	    .def("__exit__", &::VideoSequence::Exit)
+	    .def("__iter__", &::VideoSequence::Iter)
+	    .def("__next__", &::VideoSequence::Next);
 }

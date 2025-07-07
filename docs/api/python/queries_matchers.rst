@@ -4,16 +4,16 @@
 Queries And Matchers
 ====================
 
-py_fort_myrmidon.Query
-++++++++++++++++++++++
+fort_myrmidon.Query
++++++++++++++++++++
 
-.. autoclass:: py_fort_myrmidon.Query
+.. autoclass:: fort_myrmidon.Query
    :members:
 
-py_fort_myrmidon.Matcher
-++++++++++++++++++++++++
+fort_myrmidon.Matcher
++++++++++++++++++++++
 
-.. autoclass:: py_fort_myrmidon.Matcher
+.. autoclass:: fort_myrmidon.Matcher
    :members:
 
 
@@ -23,65 +23,65 @@ Queries' result structures
 py_fort_myrmiond.AntTrajectory
 ******************************
 
-.. autoclass:: py_fort_myrmidon.AntTrajectory
+.. autoclass:: fort_myrmidon.AntTrajectory
    :members:
 
 
-py_fort_myrmidon.AntInteraction
-*******************************
+fort_myrmidon.AntInteraction
+****************************
 
-.. autoclass:: py_fort_myrmidon.AntInteraction
+.. autoclass:: fort_myrmidon.AntInteraction
    :members:
 
-py_fort_myrmidon.AntTrajectorySegment
-*************************************
+fort_myrmidon.AntTrajectorySegment
+**********************************
 
-.. autoclass:: py_fort_myrmidon.AntTrajectorySegment
-   :members:
-
-
-py_fort_myrmidon.AntTrajectorySummary
-*************************************
-
-.. autoclass:: py_fort_myrmidon.AntTrajectorySummary
+.. autoclass:: fort_myrmidon.AntTrajectorySegment
    :members:
 
 
-py_fort_myrmidon.IdentifiedFrame
+fort_myrmidon.AntTrajectorySummary
+**********************************
+
+.. autoclass:: fort_myrmidon.AntTrajectorySummary
+   :members:
+
+
+fort_myrmidon.IdentifiedFrame
+*****************************
+
+.. autoclass:: fort_myrmidon.IdentifiedFrame
+   :members:
+
+fort_myrmidon.CollisionFrame
+****************************
+
+.. autoclass:: fort_myrmidon.CollisionFrame
+   :members:
+
+.. autoclass:: fort_myrmidon.Collision
+   :members:
+
+fort_myrmidon.ComputedMeasurement
+*********************************
+
+.. autoclass:: fort_myrmidon.ComputedMeasurement
+   :members:
+
+fort_myrmidon.TagStatistics
+***************************
+
+.. autoclass:: fort_myrmidon.TagStatistics
+   :members:
+
+fort_myrmidon.ExperimentDataInfo
 ********************************
 
-.. autoclass:: py_fort_myrmidon.IdentifiedFrame
+.. autoclass:: fort_myrmidon.ExperimentDataInfo
    :members:
 
-py_fort_myrmidon.CollisionFrame
-*******************************
-
-.. autoclass:: py_fort_myrmidon.CollisionFrame
+.. autoclass:: fort_myrmidon.SpaceDataInfo
    :members:
 
-.. autoclass:: py_fort_myrmidon.Collision
-   :members:
-
-py_fort_myrmidon.ComputedMeasurement
-************************************
-
-.. autoclass:: py_fort_myrmidon.ComputedMeasurement
-   :members:
-
-py_fort_myrmidon.TagStatistics
-******************************
-
-.. autoclass:: py_fort_myrmidon.TagStatistics
-   :members:
-
-py_fort_myrmidon.ExperimentDataInfo
-***********************************
-
-.. autoclass:: py_fort_myrmidon.ExperimentDataInfo
-   :members:
-
-.. autoclass:: py_fort_myrmidon.SpaceDataInfo
-   :members:
-
-.. autoclass:: py_fort_myrmidon.TrackingDataDirectoryInfo
+.. autoclass:: fort_myrmidon.TrackingDataDirectoryInfo
    :members:

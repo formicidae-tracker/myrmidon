@@ -14,13 +14,11 @@
 • `Request a Feature <https://github.com/formicidae-tracker/myrmidon/issues/new?template=feature_request.md>`_
 
 
-**fort-myrmidon** is an API to facilitate access and analyzis of
-manage and visualize large Ant tracking datasets. It is used to
-manipulate metadata files (.myrmidon). Those files catalogs ant
-identifications with the help of fiducial tags, and other properties
-such as size and shapes and user-defined metadata. It proposes python
-and R bindings with **py_fort_myrmidon** and **r-fort-myrmidon**
-packages.
+**fort-myrmidon** is an API to facilitate access and analyzis of manage and
+visualize large Ant tracking datasets. It is used to manipulate metadata files
+(.myrmidon). Those files catalogs ant identifications with the help of fiducial
+tags, and other properties such as size and shapes and user-defined metadata. It
+proposes python with **formicidae-tracker-myrmidon** package.  packages.
 
 **fort-studio** is a graphical interface that helps manual creation and
 editing of **.myrmidon** files, and to provide basic visualization of
@@ -73,5 +71,5 @@ file for details
    :target: https://formicidae-tracker.github.io/myrmidon/latest
 .. |License| image:: https://img.shields.io/github/license/formicidae-tracker/myrmidon.svg
    :target: https://github.com/formicidae-tracker/myrmidon/blob/master/LICENSE
-.. |DOI| image:: https://zenodo.org/badge/209609026.svg 
+.. |DOI| image:: https://zenodo.org/badge/209609026.svg
     :target: https://zenodo.org/doi/10.5281/zenodo.10019150

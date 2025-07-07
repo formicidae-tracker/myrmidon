@@ -26,11 +26,9 @@ If applicable, add screenshots to help explain your problem.
 **Affected packages**
 Please select one or more package by putting a `x` in the brackets
 
-- [ ] `libfort-myrmidon` installed from `conda`
-- [ ] `py_fort_myrmidon`installed from `conda`
-- [ ] `r-fort-myrmidon` installed from `conda`
-- [ ] `fort-studio` installed from  `snap`
-- [ ] `fort-studio` installed from `conda`
+- [ ] `formicidae-tracker-myrmidon`installed from `pip`
+- [ ] `fort-studio` installed from  `flatpak`
+- [ ] `libfort-myrmidon` installed from `sources`
 
 **Installed version**
 Please provide the installed version you are using

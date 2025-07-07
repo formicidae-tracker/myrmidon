@@ -3,28 +3,28 @@
 Video Sequence Matching
 =======================
 
-py_fort_myrmidon.VideoSegment
-+++++++++++++++++++++++++++++
+fort_myrmidon.VideoSegment
+++++++++++++++++++++++++++
 
-.. autoclass:: py_fort_myrmidon.VideoSegment
+.. autoclass:: fort_myrmidon.VideoSegment
    :members:
 
-py_fort_myrmidon.VideoSegmentList
-+++++++++++++++++++++++++++++++++
-
-.. autoclass:: py_fort_myrmidon.VideoSegmentList
-   :members:
-
-
-py_fort_myrmidon.VideoFrameData
-+++++++++++++++++++++++++++++++
-
-.. autoclass:: py_fort_myrmidon.VideoFrameData
-   :members:
-
-
-py_fort_myrmidon.VideoSequence
+fort_myrmidon.VideoSegmentList
 ++++++++++++++++++++++++++++++
 
-.. autoclass:: py_fort_myrmidon.VideoSequence
+.. autoclass:: fort_myrmidon.VideoSegmentList
+   :members:
+
+
+fort_myrmidon.VideoFrameData
+++++++++++++++++++++++++++++
+
+.. autoclass:: fort_myrmidon.VideoFrameData
+   :members:
+
+
+fort_myrmidon.VideoSequence
++++++++++++++++++++++++++++
+
+.. autoclass:: fort_myrmidon.VideoSequence
    :members:

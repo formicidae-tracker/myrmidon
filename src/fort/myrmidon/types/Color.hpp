@@ -22,8 +22,7 @@ namespace myrmidon {
  * Color are RGB triplet (stored in RGB order). `fort-myrmidon` also
  * define a Palette::Default() of color-blind friendly colors.
  */
-typedef std::tuple<uint8_t,uint8_t,uint8_t> Color;
-
+typedef std::tuple<uint8_t, uint8_t, uint8_t> Color;
 
 /**
  * A Palette defines a collection of Color.
@@ -33,13 +32,12 @@ typedef std::tuple<uint8_t,uint8_t,uint8_t> Color;
  */
 typedef std::vector<Color> Palette;
 
-
 /**
  * A Palette of 7 color-blind friendly colors for visualiztion.
  *
  * * Python:
  * ```python
- * py_fort_myrmidon.DefaultPalette() -> List[Tuple[int,int,int]]
+ * fort_myrmidon.DefaultPalette() -> List[Tuple[int,int,int]]
  * ```
  * * R:
  * ```R
@@ -49,14 +47,14 @@ typedef std::vector<Color> Palette;
  * We use the color set from [Wong 2011: Nature methods 8:441].
  *
  */
-const Palette & DefaultPalette();
+const Palette &DefaultPalette();
 
 /**
  * Safely access a color from the DefaultPalette()
  *
  * * Python:
  * ```python
- * py_fort_myrmidon.DefaultPaletteColor(index: int) -> Tuple[int,int,int]
+ * fort_myrmidon.DefaultPaletteColor(index: int) -> Tuple[int,int,int]
  * ```
  * * R:
  * ```R
@@ -72,7 +70,7 @@ const Palette & DefaultPalette();
  * @return the index-th Color of the Palette, wrapped around if `index
  *         >= DefaultPalette().size()`
  */
-const Color & DefaultPaletteColor(size_t index);
+const Color &DefaultPaletteColor(size_t index);
 
 } // namespace myrmidon
 } // namespace fort

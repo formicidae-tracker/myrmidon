@@ -4,20 +4,20 @@ Spaces and Zones
 ================
 
 
-py_fort_myrmidon.Space
-++++++++++++++++++++++
+fort_myrmidon.Space
++++++++++++++++++++
 
-.. autoclass:: py_fort_myrmidon.Space
+.. autoclass:: fort_myrmidon.Space
    :members:
 
-py_fort_myrmidon.Zone
-+++++++++++++++++++++
+fort_myrmidon.Zone
+++++++++++++++++++
 
-.. autoclass:: py_fort_myrmidon.Zone
+.. autoclass:: fort_myrmidon.Zone
    :members:
 
-py_fort_myrmidon.ZoneDefinition
-+++++++++++++++++++++++++++++++
+fort_myrmidon.ZoneDefinition
+++++++++++++++++++++++++++++
 
-.. autoclass:: py_fort_myrmidon.ZoneDefinition
+.. autoclass:: fort_myrmidon.ZoneDefinition
    :members:

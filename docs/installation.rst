@@ -7,8 +7,14 @@ and to install **fort-studio** using ``flatpak``.
 **fort-studio** through flatpak
 +++++++++++++++++++++++++++++++
 
-.. note::
-   In development.
+
+Simply adds the following remotes to install fort studio through its appstream identifier `io.github.formicidae_tracker.Studio`
+
+```bash
+flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak remote-add --if-not-exists --user tuleu.science https://packages.tuleu.science/tuleu.science.flatpakrepo
+flatpak install io.github.formicidae_tracker.Studio
+```
 
 .. note::
 
@@ -18,9 +24,16 @@ and to install **fort-studio** using ``flatpak``.
 **fort-myrmidon** and python bindings
 +++++++++++++++++++++++++++++++++++++
 
+The bindings with it C++ backend can be installed through a wheel.
+
+```bash
+pip install formicidae-tracker-myrmidon
+```
+
+
 .. note::
 
-   In development.
+   Only recent linux distribution are supported at the moment (manylinux_2_28).
 
 .. note::
 
@@ -69,9 +82,8 @@ Including **fort-studio** to your project
 Python
 ------
 
-After installing the **py-fort-myrmidon** package in an environment, the
-**py_fort_myrmidon** module is available to python in that
-environment.
+After installing the **formicidae-tracker-myrmidon** package in an environment,
+the **fort_myrmidon** module is available to python in that environment.
 
 .. note::
 
@@ -79,7 +91,7 @@ environment.
 
    .. code-block:: python
 
-      import py_fort_myrmidon as fm
+      import fort_myrmidon as fm
 
 R
 -
@@ -98,7 +110,7 @@ conda environment. The recommanded way is to use CMake to build your
 project and link with **fort-myrmidon**.
 
 .. code-block:: cmake
-
+G
    find_package(FortMyrmidon REQUIRED)
    include_directories(FORT_MYRMIDON_INCLUDE_DIRS)
    # fort-myrmidon requires at least the c++17 standard
