@@ -10,12 +10,13 @@ on:
     types: published
 
 jobs:
-  snap-fort-studio:
+  build-python-wheels:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-tags: true
+          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
@@ -23,12 +24,12 @@ jobs:
           cache: 'pip'
       - run: pip install build
       - name: Build sdist
-        run: pip -m build --sdist
+        run: python -m build --sdist
         working-directory: bindings/python
 
       - uses: pypa/cibuildwheel@v3.0.1
         with:
-          package-dir: bindings/python/dist/*.tar.gz
+          package-dir: bindings/python/dist/formicidae-tracker-myrmidon-*.tar.gz
 
       - uses: actions/upload-artifact@v4
         with:
