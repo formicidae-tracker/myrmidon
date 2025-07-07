@@ -35,7 +35,11 @@ jobs:
                                doxygen \
                                ccache \
                                python3-pandas \
-                               python3-tqdm
+                               python3-tqdm \
+                               libavcodec-dev \
+                               libavutil-dev \
+                               libavformat-dev \
+                               libswscale-dev
               pip install sphinx>=4.2.0 \
                           sphinx_rtd_theme>=1.0.0 \
                           breathe \
