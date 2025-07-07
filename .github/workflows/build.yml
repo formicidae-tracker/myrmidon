@@ -58,13 +58,8 @@ jobs:
         - name: Test
           uses: GabrielBB/xvfb-action@v1
           with:
-            run: make coverage
+            run: make check
             working-directory: ${{github.workspace}}/build
-        - name: Sends coverage
-          uses: codecov/codecov-action@v2
-          id: send-coverage
-          with:
-            directory: ${{github.workspace}}/build/coverage
         - name: Build documentation
           run: make fort-myrmidon-docs
           working-directory: ${{github.workspace}}/build/
