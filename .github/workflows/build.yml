@@ -30,6 +30,7 @@ jobs:
                                libeigen3-dev \
                                libprotobuf-dev \
                                protobuf-compiler \
+                               libtbb-dev \
                                lcov \
                                doxygen \
                                ccache \
