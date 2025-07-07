@@ -18,8 +18,10 @@ jobs:
       options: --privileged
     steps:
       - uses: actions/checkout@v4
-      - name: Fetches all tags
-        run: git fetch --prune --unshallow --tags -f
+        with:
+          fetch-tags: true
+
+
       - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
         name: "Build"
         with:
