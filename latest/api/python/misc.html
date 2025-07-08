@@ -1,22 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Miscanellous &mdash; fort-myrmidon  documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
   
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
-        <script src="../../_static/../version_dropdown.js?v=4f7105bd"></script>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/../version_dropdown.js?v=4f7105bd"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -35,9 +35,6 @@
           <a href="../../index.html" class="icon icon-home">
             fort-myrmidon
           </a>
-              <div class="version">
-                placeholder
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -85,18 +82,18 @@
 <li class="toctree-l2"><a class="reference internal" href="video.html">Video Sequence Matching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="errors.html">Errors</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Miscanellous</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#py-fort-myrmidon-tagfamily">py_fort_myrmidon.TagFamily</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#py_fort_myrmidon.TagFamily"><code class="docutils literal notranslate"><span class="pre">TagFamily</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fort-myrmidon-tagfamily">fort_myrmidon.TagFamily</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#fort_myrmidon.TagFamily"><code class="docutils literal notranslate"><span class="pre">TagFamily</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#id-formatting">ID formatting</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#py_fort_myrmidon.FormatTagID"><code class="docutils literal notranslate"><span class="pre">FormatTagID()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#py_fort_myrmidon.FormatAntID"><code class="docutils literal notranslate"><span class="pre">FormatAntID()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fort_myrmidon.FormatTagID"><code class="docutils literal notranslate"><span class="pre">FormatTagID()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fort_myrmidon.FormatAntID"><code class="docutils literal notranslate"><span class="pre">FormatAntID()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#color">Color</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#py_fort_myrmidon.DefaultPalette"><code class="docutils literal notranslate"><span class="pre">DefaultPalette()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#py_fort_myrmidon.DefaultPaletteColor"><code class="docutils literal notranslate"><span class="pre">DefaultPaletteColor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fort_myrmidon.DefaultPalette"><code class="docutils literal notranslate"><span class="pre">DefaultPalette()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fort_myrmidon.DefaultPaletteColor"><code class="docutils literal notranslate"><span class="pre">DefaultPaletteColor()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -133,12 +130,12 @@
            <div itemprop="articleBody">
              
   <section id="miscanellous">
-<h1>Miscanellous<a class="headerlink" href="#miscanellous" title="Permalink to this heading"></a></h1>
-<section id="py-fort-myrmidon-tagfamily">
-<h2>py_fort_myrmidon.TagFamily<a class="headerlink" href="#py-fort-myrmidon-tagfamily" title="Permalink to this heading"></a></h2>
+<h1>Miscanellous<a class="headerlink" href="#miscanellous" title="Link to this heading"></a></h1>
+<section id="fort-myrmidon-tagfamily">
+<h2>fort_myrmidon.TagFamily<a class="headerlink" href="#fort-myrmidon-tagfamily" title="Link to this heading"></a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="py_fort_myrmidon.TagFamily">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">TagFamily</span></span><a class="headerlink" href="#py_fort_myrmidon.TagFamily" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fort_myrmidon.TagFamily">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">TagFamily</span></span><a class="headerlink" href="#fort_myrmidon.TagFamily" title="Link to this definition"></a></dt>
 <dd><p>Enumeration of available tag families available in FORT</p>
 <p>Members:</p>
 <blockquote>
@@ -155,87 +152,87 @@
 <p>Undefined : Undefined family value</p>
 </div></blockquote>
 <dl class="py property">
-<dt class="sig sig-object py" id="py_fort_myrmidon.TagFamily.name">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#py_fort_myrmidon.TagFamily.name" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fort_myrmidon.TagFamily.name">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#fort_myrmidon.TagFamily.name" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 </section>
 <section id="id-formatting">
-<h2>ID formatting<a class="headerlink" href="#id-formatting" title="Permalink to this heading"></a></h2>
+<h2>ID formatting<a class="headerlink" href="#id-formatting" title="Link to this heading"></a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="py_fort_myrmidon.FormatTagID">
-<span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">FormatTagID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tagID</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.FormatTagID" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fort_myrmidon.FormatTagID">
+<span class="sig-prename descclassname"><span class="pre">fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">FormatTagID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tagID</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#fort_myrmidon.FormatTagID" title="Link to this definition"></a></dt>
 <dd><p>Formats a TagID to the conventional format.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>tagID</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – the TagID to format</p>
+<dd class="field-odd"><p><strong>tagID</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – the TagID to format</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>tagID formatted in a string</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="py_fort_myrmidon.FormatAntID">
-<span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">FormatAntID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">antID</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#py_fort_myrmidon.FormatAntID" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fort_myrmidon.FormatAntID">
+<span class="sig-prename descclassname"><span class="pre">fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">FormatAntID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">antID</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#fort_myrmidon.FormatAntID" title="Link to this definition"></a></dt>
 <dd><p>Formats an AntID to the conventional format.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>antID</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – the AntID to format</p>
+<dd class="field-odd"><p><strong>antID</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – the AntID to format</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>antID formatted in a string</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 </section>
 <section id="color">
-<h2>Color<a class="headerlink" href="#color" title="Permalink to this heading"></a></h2>
-<p>Colors in <strong>py_fort_myrmidon</strong> are simply <code class="xref py py-obj docutils literal notranslate"><span class="pre">Tuple[int,int,int]</span></code>.</p>
+<h2>Color<a class="headerlink" href="#color" title="Link to this heading"></a></h2>
+<p>Colors in <strong>fort_myrmidon</strong> are simply <code class="xref py py-obj docutils literal notranslate"><span class="pre">Tuple[int,int,int]</span></code>.</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="py_fort_myrmidon.DefaultPalette">
-<span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">DefaultPalette</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#py_fort_myrmidon.DefaultPalette" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fort_myrmidon.DefaultPalette">
+<span class="sig-prename descclassname"><span class="pre">fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">DefaultPalette</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fort_myrmidon.DefaultPalette" title="Link to this definition"></a></dt>
 <dd><p>Returns <strong>fort-myrmidon</strong> default palette.</p>
-<p>In <strong>py_fort_myrmidon</strong>, a Color is simply a Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>,
-<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>].  The default palette has 7 color-blind
+<p>In <strong>fort_myrmidon</strong>, a Color is simply a Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>,
+<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>].  The default palette has 7 color-blind
 friendly colors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>7 color-blind friendly colors.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>List[Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>]]</p>
+<dd class="field-even"><p>List[Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a>]]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="py_fort_myrmidon.DefaultPaletteColor">
-<span class="sig-prename descclassname"><span class="pre">py_fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">DefaultPaletteColor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#py_fort_myrmidon.DefaultPaletteColor" title="Permalink to this definition"></a></dt>
-<dd><p>Safely returns one of the <a class="reference internal" href="#py_fort_myrmidon.DefaultPalette" title="py_fort_myrmidon.DefaultPalette"><code class="xref py py-func docutils literal notranslate"><span class="pre">DefaultPalette()</span></code></a> color for any index.</p>
+<dt class="sig sig-object py" id="fort_myrmidon.DefaultPaletteColor">
+<span class="sig-prename descclassname"><span class="pre">fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">DefaultPaletteColor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fort_myrmidon.DefaultPaletteColor" title="Link to this definition"></a></dt>
+<dd><p>Safely returns one of the <a class="reference internal" href="#fort_myrmidon.DefaultPalette" title="fort_myrmidon.DefaultPalette"><code class="xref py py-func docutils literal notranslate"><span class="pre">DefaultPalette()</span></code></a> color for any index.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – a positive index</p>
+<dd class="field-odd"><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – a positive index</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><dl class="simple">
-<dt>a color from <a class="reference internal" href="#py_fort_myrmidon.DefaultPalette" title="py_fort_myrmidon.DefaultPalette"><code class="xref py py-func docutils literal notranslate"><span class="pre">DefaultPalette()</span></code></a> wrapping</dt><dd><p>arround <strong>index</strong>.</p>
+<dt>a color from <a class="reference internal" href="#fort_myrmidon.DefaultPalette" title="fort_myrmidon.DefaultPalette"><code class="xref py py-func docutils literal notranslate"><span class="pre">DefaultPalette()</span></code></a> wrapping</dt><dd><p>arround <strong>index</strong>.</p>
 </dd>
 </dl>
 </p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>]</p>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a>]</p>
 </dd>
 </dl>
 </dd></dl>

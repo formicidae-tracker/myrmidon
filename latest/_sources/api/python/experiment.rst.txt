@@ -3,17 +3,17 @@
 API Entry Point
 ===============
 
-py_fort_myrmidon.Experiment
-+++++++++++++++++++++++++++
+fort_myrmidon.Experiment
+++++++++++++++++++++++++
 
-.. autoclass:: py_fort_myrmidon.Experiment
+.. autoclass:: fort_myrmidon.Experiment
    :members:
    :special-members: __init__
 
 
-py_fort_myrmidon.TrackingSolver
-+++++++++++++++++++++++++++++++
+fort_myrmidon.TrackingSolver
+++++++++++++++++++++++++++++
 
-.. autoclass:: py_fort_myrmidon.TrackingSolver
+.. autoclass:: fort_myrmidon.TrackingSolver
    :members:
    :special-members: __init__

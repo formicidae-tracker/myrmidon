@@ -22,3 +22,5 @@ fort::myrmidon::VideoSequence
 
 .. doxygenstruct:: fort::myrmidon::VideoSequence
    :members:
+
+.

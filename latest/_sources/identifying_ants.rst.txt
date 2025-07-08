@@ -17,7 +17,7 @@ starting from 1.
 .. code-block:: python
 
    #python
-   import py_fort_myrmidon as fm
+   import fort_myrmidon as fm
 
    e = fm.Experiment("identifying-ants.myrmidon")
 
@@ -240,14 +240,14 @@ This user defined can be *cleared* [#clearUserDefinedAntPose]_ to
 revert to the position/angle derived from manual measurement.
 
 
-.. [#experiment] Python: :py:class:`py_fort_myrmidon.Experiment`, R: :obj:`fmExperiment`, C++: :cpp:class:`fort::myrmidon::Experiment`
-.. [#ant] Python: :py:class:`py_fort_myrmidon.Ant`, R: :obj:`fmAnt`, C++: :cpp:class:`fort::myrmidon::Ant`
-.. [#identification] Python: :py:class:`py_fort_myrmidon.Identification`, R: :obj:`fmIdentification`, C++: :cpp:class:`fort::myrmidon::Identification`
-.. [#time] Python: :py:class:`py_fort_myrmidon.Time`, R: :obj:`fmTime`, C++: :cpp:class:`fort::Time`
-.. [#timeSinceEver] Python: :py:meth:`py_fort_myrmidon.Time.SinceEver`, R: :obj:`fmTimeSinceEver()`, C++: :cpp:func:`fort::Time::SinceEver`
-.. [#timeForever] Python: :py:meth:`py_fort_myrmidon.Time.Forever`, R: :obj:`fmTimeForever()`, C++: :cpp:func:`fort::Time::Forever`
-.. [#createAnt] Python: :py:meth:`py_fort_myrmidon.Experiment.CreateAnt`, R: :obj:`fmExperiment$createAnt()`, C++: :cpp:func:`fort::Experiment::CreateAnt`
-.. [#addIdentification] Python: :py:meth:`py_fort_myrmidon.Experiment.AddIdentification`, R: :obj:`fmExperiment$addIdentification()`, C++: :cpp:func:`fort::Experiment::AddIdentification`
-.. [#antIdentifications] Python: :py:attr:`py_fort_myrmidon.Ant.Identifications`, R: :obj:`fmAnt$identifications`, C++ :cpp:func:`fort::myrmidon::Ant::Identifications`
-.. [#userDefinedAntPose] Python: :py:meth:`py_fort_myrmidon.Identification.SetUserDefinedAntPose`, R: :obj:`fmIdentification$setUserDefinedAntPose`, C++ :cpp:func:`fort::myrmidon::Identification::SetUserDefinedAntPose`
-.. [#clearUserDefinedAntPose] Python: :py:meth:`py_fort_myrmidon.Identification.ClearUserDefinedAntPose`, R: :obj:`fmIdentification$clearUserDefinedAntPose`, C++ :cpp:func:`fort::myrmidon::Identification::ClearUserDefinedAntPose`
+.. [#experiment] Python: :py:class:`fort_myrmidon.Experiment`, R: :obj:`fmExperiment`, C++: :cpp:class:`fort::myrmidon::Experiment`
+.. [#ant] Python: :py:class:`fort_myrmidon.Ant`, R: :obj:`fmAnt`, C++: :cpp:class:`fort::myrmidon::Ant`
+.. [#identification] Python: :py:class:`fort_myrmidon.Identification`, R: :obj:`fmIdentification`, C++: :cpp:class:`fort::myrmidon::Identification`
+.. [#time] Python: :py:class:`fort_myrmidon.Time`, R: :obj:`fmTime`, C++: :cpp:class:`fort::Time`
+.. [#timeSinceEver] Python: :py:meth:`fort_myrmidon.Time.SinceEver`, R: :obj:`fmTimeSinceEver()`, C++: :cpp:func:`fort::Time::SinceEver`
+.. [#timeForever] Python: :py:meth:`fort_myrmidon.Time.Forever`, R: :obj:`fmTimeForever()`, C++: :cpp:func:`fort::Time::Forever`
+.. [#createAnt] Python: :py:meth:`fort_myrmidon.Experiment.CreateAnt`, R: :obj:`fmExperiment$createAnt()`, C++: :cpp:func:`fort::Experiment::CreateAnt`
+.. [#addIdentification] Python: :py:meth:`fort_myrmidon.Experiment.AddIdentification`, R: :obj:`fmExperiment$addIdentification()`, C++: :cpp:func:`fort::Experiment::AddIdentification`
+.. [#antIdentifications] Python: :py:attr:`fort_myrmidon.Ant.Identifications`, R: :obj:`fmAnt$identifications`, C++ :cpp:func:`fort::myrmidon::Ant::Identifications`
+.. [#userDefinedAntPose] Python: :py:meth:`fort_myrmidon.Identification.SetUserDefinedAntPose`, R: :obj:`fmIdentification$setUserDefinedAntPose`, C++ :cpp:func:`fort::myrmidon::Identification::SetUserDefinedAntPose`
+.. [#clearUserDefinedAntPose] Python: :py:meth:`fort_myrmidon.Identification.ClearUserDefinedAntPose`, R: :obj:`fmIdentification$clearUserDefinedAntPose`, C++ :cpp:func:`fort::myrmidon::Identification::ClearUserDefinedAntPose`

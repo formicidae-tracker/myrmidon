@@ -4,20 +4,20 @@
 Ants and Identifications
 ========================
 
-py_fort_myrmidon.Ant
-++++++++++++++++++++
+fort_myrmidon.Ant
++++++++++++++++++
 
 
-.. autoclass:: py_fort_myrmidon.Ant
+.. autoclass:: fort_myrmidon.Ant
    :members:
 
 
-py_fort_myrmidon.Identification
-+++++++++++++++++++++++++++++++
+fort_myrmidon.Identification
+++++++++++++++++++++++++++++
 
-.. autoclass:: py_fort_myrmidon.Identification
+.. autoclass:: fort_myrmidon.Identification
    :members:
 
 
-py_fort_myrmidon.OverlappingIdentification
-++++++++++++++++++++++++++++++++++++++++++
+fort_myrmidon.OverlappingIdentification
++++++++++++++++++++++++++++++++++++++++

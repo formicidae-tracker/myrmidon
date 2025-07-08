@@ -2,11 +2,11 @@ Linking Tracking Data
 =====================
 
 .. note::
-   All examples assumes the **py_fort_myrmidon** module to be included as:
+   All examples assumes the **fort_myrmidon** module to be included as:
 
    .. code-block:: python
 
-	  import py_fort_myrmidon as fm
+	  import fort_myrmidon as fm
 
 
 When working with **fort-myrmidon** the first steps is to link a
@@ -140,12 +140,12 @@ Internally, **fort-myrmidon** ensure the following invariant and will raise exce
 
 
 
-.. [#experiment] Python: :py:class:`py_fort_myrmidon.Experiment`, R: :obj:`fmExperiment`, C++: :cpp:class:`fort::myrmidon::Experiment`
-.. [#space] Python: :py:class:`py_fort_myrmidon.Space`, R: :obj:`fmSpace`, C++: :cpp:class:`fort::myrmidon::Space`
-.. [#ant] Python: :py:class:`py_fort_myrmidon.Ant`, R: :obj:`fmAnt`, C++: :cpp:class:`fort::myrmidon::Ant`
-.. [#experimentCreate] Python: :py:meth:`py_fort_myrmidon.Experiment.__init__`, R: :obj:`fmExperimentCreate()`, C++: :cpp:func:`fort::myrmidon::Experiment::Create`
-.. [#experimentSave] Python: :py:meth:`py_fort_myrmidon.Experiment.Save`, R: :obj:`fmExperiment$save()`, C++ :cpp:func:`fort::myrmidon::Experiment::Save`
-.. [#createSpace] Python: :py:func:`py_fort_myrmidon.Experiment.CreateSpace`, R: :obj:`fmExperiment$createSpace`, C++: :cpp:func:`fort::myrmidon::Experiment::CreateSpace`
-.. [#addTDD] Python: :py:meth:`py_fort_myrmidon.Experiment.AddTrackingDataDirectory`, R :obj:`fmExperiment$addTrackingDataDirectory()`, :cpp:func:`fort::myrmidon::Experiment::AddTrackingDataDirectory`
-.. [#removeTDD] Python: :py:meth:`py_fort_myrmidon.Experiment.RemoveTrackingDataDirectory`, R :obj:`fmExperiment$removeTrackingDataDirectory()`, :cpp:func:`fort::myrmidon::Experiment::RemoveTrackingDataDirectory`
-.. [#reportStats] Python: :py:meth:`py_fort_myrmidon.Query.GetDataInformations`, R :obj:`fmQueryGetDataInformations()`, :cpp:func:`fort::myrmidon::Query::GetDataInformations`
+.. [#experiment] Python: :py:class:`fort_myrmidon.Experiment`, R: :obj:`fmExperiment`, C++: :cpp:class:`fort::myrmidon::Experiment`
+.. [#space] Python: :py:class:`fort_myrmidon.Space`, R: :obj:`fmSpace`, C++: :cpp:class:`fort::myrmidon::Space`
+.. [#ant] Python: :py:class:`fort_myrmidon.Ant`, R: :obj:`fmAnt`, C++: :cpp:class:`fort::myrmidon::Ant`
+.. [#experimentCreate] Python: :py:meth:`fort_myrmidon.Experiment.__init__`, R: :obj:`fmExperimentCreate()`, C++: :cpp:func:`fort::myrmidon::Experiment::Create`
+.. [#experimentSave] Python: :py:meth:`fort_myrmidon.Experiment.Save`, R: :obj:`fmExperiment$save()`, C++ :cpp:func:`fort::myrmidon::Experiment::Save`
+.. [#createSpace] Python: :py:func:`fort_myrmidon.Experiment.CreateSpace`, R: :obj:`fmExperiment$createSpace`, C++: :cpp:func:`fort::myrmidon::Experiment::CreateSpace`
+.. [#addTDD] Python: :py:meth:`fort_myrmidon.Experiment.AddTrackingDataDirectory`, R :obj:`fmExperiment$addTrackingDataDirectory()`, :cpp:func:`fort::myrmidon::Experiment::AddTrackingDataDirectory`
+.. [#removeTDD] Python: :py:meth:`fort_myrmidon.Experiment.RemoveTrackingDataDirectory`, R :obj:`fmExperiment$removeTrackingDataDirectory()`, :cpp:func:`fort::myrmidon::Experiment::RemoveTrackingDataDirectory`
+.. [#reportStats] Python: :py:meth:`fort_myrmidon.Query.GetDataInformations`, R :obj:`fmQueryGetDataInformations()`, :cpp:func:`fort::myrmidon::Query::GetDataInformations`

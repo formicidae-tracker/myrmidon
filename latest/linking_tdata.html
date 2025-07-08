@@ -1,22 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Linking Tracking Data &mdash; fort-myrmidon  documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
   
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
-        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
-        <script src="_static/../version_dropdown.js?v=4f7105bd"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/../version_dropdown.js?v=4f7105bd"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -35,9 +35,6 @@
           <a href="index.html" class="icon icon-home">
             fort-myrmidon
           </a>
-              <div class="version">
-                placeholder
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -111,11 +108,11 @@
            <div itemprop="articleBody">
              
   <section id="linking-tracking-data">
-<h1>Linking Tracking Data<a class="headerlink" href="#linking-tracking-data" title="Permalink to this heading"></a></h1>
+<h1>Linking Tracking Data<a class="headerlink" href="#linking-tracking-data" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>All examples assumes the <strong>py_fort_myrmidon</strong> module to be included as:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">py_fort_myrmidon</span> <span class="k">as</span> <span class="nn">fm</span>
+<p>All examples assumes the <strong>fort_myrmidon</strong> module to be included as:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fort_myrmidon</span> <span class="k">as</span> <span class="nn">fm</span>
 </pre></div>
 </div>
 </div>
@@ -131,7 +128,7 @@ different <cite>Space</cite> should never be compared. This is useful with
 experiment with a different camera for the nest and foraging area,
 where positions should not be mixed together.</p>
 <section id="manipulating-experiment-files">
-<h2>Manipulating <cite>Experiment</cite> files<a class="headerlink" href="#manipulating-experiment-files" title="Permalink to this heading"></a></h2>
+<h2>Manipulating <cite>Experiment</cite> files<a class="headerlink" href="#manipulating-experiment-files" title="Link to this heading"></a></h2>
 <p>In order to do so, one should first <cite>create</cite> <a class="footnote-reference brackets" href="#experimentcreate" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> a
 new <cite>Experiment</cite> <a class="footnote-reference brackets" href="#experiment" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> associated with a file path. Then this
 file can then be <cite>saved</cite> <a class="footnote-reference brackets" href="#experimentsave" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a>. While saving, the
@@ -162,7 +159,7 @@ reflected automatically on the file system, you must <cite>save</cite> them expl
 </div>
 </section>
 <section id="defining-spaces">
-<h2>Defining <cite>Spaces</cite><a class="headerlink" href="#defining-spaces" title="Permalink to this heading"></a></h2>
+<h2>Defining <cite>Spaces</cite><a class="headerlink" href="#defining-spaces" title="Link to this heading"></a></h2>
 <p>The next step is to <cite>create a Space</cite> <a class="footnote-reference brackets" href="#createspace" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a> in that
 <cite>experiment</cite>. This Space has an ID and a <cite>name</cite> that will be used to
 report coordinates. There are no restriction on the <cite>Space</cite> name.</p>
@@ -197,7 +194,7 @@ value for these IDs, excepting by defining objects in the same order.</p>
 </div>
 </section>
 <section id="linking-tracking-data-directories">
-<h2>Linking Tracking Data Directories<a class="headerlink" href="#linking-tracking-data-directories" title="Permalink to this heading"></a></h2>
+<h2>Linking Tracking Data Directories<a class="headerlink" href="#linking-tracking-data-directories" title="Link to this heading"></a></h2>
 <p>Finally, we can <cite>add a Tracking Data Directory (TDD)</cite> <a class="footnote-reference brackets" href="#addtdd" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></a> some data to
 the experiment. This will return to us an <strong>URI</strong> used to identify
 this particular TDD, especially to eventually <cite>remove</cite> <a class="footnote-reference brackets" href="#removetdd" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></a>
@@ -221,7 +218,7 @@ them or to <cite>report</cite> <a class="footnote-reference brackets" href="#rep
 </div>
 </section>
 <section id="tdd-consistency">
-<h2>TDD consistency<a class="headerlink" href="#tdd-consistency" title="Permalink to this heading"></a></h2>
+<h2>TDD consistency<a class="headerlink" href="#tdd-consistency" title="Link to this heading"></a></h2>
 <p>Internally, <strong>fort-myrmidon</strong> ensure the following invariant and will raise exception if :</p>
 <ul class="simple">
 <li><p>A TDD is assigned to multiple spaces.</p></li>
@@ -231,39 +228,39 @@ them or to <cite>report</cite> <a class="footnote-reference brackets" href="#rep
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="experiment" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">1</a><span class="fn-bracket">]</span></span>
-<p>Python: <a class="reference internal" href="api/python/experiment.html#py_fort_myrmidon.Experiment" title="py_fort_myrmidon.Experiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Experiment</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmExperiment</span></code>, C++: <a class="reference internal" href="api/cpp/experiment.html#_CPPv4N4fort8myrmidon10ExperimentE" title="fort::myrmidon::Experiment"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::Experiment</span></code></a></p>
+<p>Python: <a class="reference internal" href="api/python/experiment.html#fort_myrmidon.Experiment" title="fort_myrmidon.Experiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">fort_myrmidon.Experiment</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmExperiment</span></code>, C++: <a class="reference internal" href="api/cpp/experiment.html#_CPPv4N4fort8myrmidon10ExperimentE" title="fort::myrmidon::Experiment"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::Experiment</span></code></a></p>
 </aside>
 <aside class="footnote brackets" id="space" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">2</a><span class="fn-bracket">]</span></span>
-<p>Python: <a class="reference internal" href="api/python/space_zone.html#py_fort_myrmidon.Space" title="py_fort_myrmidon.Space"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Space</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmSpace</span></code>, C++: <a class="reference internal" href="api/cpp/space_zone.html#_CPPv4N4fort8myrmidon5SpaceE" title="fort::myrmidon::Space"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::Space</span></code></a></p>
+<p>Python: <a class="reference internal" href="api/python/space_zone.html#fort_myrmidon.Space" title="fort_myrmidon.Space"><code class="xref py py-class docutils literal notranslate"><span class="pre">fort_myrmidon.Space</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmSpace</span></code>, C++: <a class="reference internal" href="api/cpp/space_zone.html#_CPPv4N4fort8myrmidon5SpaceE" title="fort::myrmidon::Space"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::Space</span></code></a></p>
 </aside>
 <aside class="footnote brackets" id="ant" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id6">3</a><span class="fn-bracket">]</span></span>
-<p>Python: <a class="reference internal" href="api/python/ant_identification.html#py_fort_myrmidon.Ant" title="py_fort_myrmidon.Ant"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Ant</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt</span></code>, C++: <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4N4fort8myrmidon3AntE" title="fort::myrmidon::Ant"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::Ant</span></code></a></p>
+<p>Python: <a class="reference internal" href="api/python/ant_identification.html#fort_myrmidon.Ant" title="fort_myrmidon.Ant"><code class="xref py py-class docutils literal notranslate"><span class="pre">fort_myrmidon.Ant</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt</span></code>, C++: <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4N4fort8myrmidon3AntE" title="fort::myrmidon::Ant"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::Ant</span></code></a></p>
 </aside>
 <aside class="footnote brackets" id="experimentcreate" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">4</a><span class="fn-bracket">]</span></span>
-<p>Python: <a class="reference internal" href="api/python/experiment.html#py_fort_myrmidon.Experiment.__init__" title="py_fort_myrmidon.Experiment.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Experiment.__init__()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmExperimentCreate()</span></code>, C++: <a class="reference internal" href="api/cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment6CreateERKNSt6stringE" title="fort::myrmidon::Experiment::Create"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Experiment::Create()</span></code></a></p>
+<p>Python: <a class="reference internal" href="api/python/experiment.html#fort_myrmidon.Experiment.__init__" title="fort_myrmidon.Experiment.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fort_myrmidon.Experiment.__init__()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmExperimentCreate()</span></code>, C++: <a class="reference internal" href="api/cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment6CreateERKNSt6stringE" title="fort::myrmidon::Experiment::Create"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Experiment::Create()</span></code></a></p>
 </aside>
 <aside class="footnote brackets" id="experimentsave" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">5</a><span class="fn-bracket">]</span></span>
-<p>Python: <a class="reference internal" href="api/python/experiment.html#py_fort_myrmidon.Experiment.Save" title="py_fort_myrmidon.Experiment.Save"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Experiment.Save()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmExperiment$save()</span></code>, C++ <a class="reference internal" href="api/cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment4SaveERKNSt6stringE" title="fort::myrmidon::Experiment::Save"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Experiment::Save()</span></code></a></p>
+<p>Python: <a class="reference internal" href="api/python/experiment.html#fort_myrmidon.Experiment.Save" title="fort_myrmidon.Experiment.Save"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fort_myrmidon.Experiment.Save()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmExperiment$save()</span></code>, C++ <a class="reference internal" href="api/cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment4SaveERKNSt6stringE" title="fort::myrmidon::Experiment::Save"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Experiment::Save()</span></code></a></p>
 </aside>
 <aside class="footnote brackets" id="createspace" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">6</a><span class="fn-bracket">]</span></span>
-<p>Python: <a class="reference internal" href="api/python/experiment.html#py_fort_myrmidon.Experiment.CreateSpace" title="py_fort_myrmidon.Experiment.CreateSpace"><code class="xref py py-func docutils literal notranslate"><span class="pre">py_fort_myrmidon.Experiment.CreateSpace()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmExperiment$createSpace</span></code>, C++: <a class="reference internal" href="api/cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment11CreateSpaceERKNSt6stringE" title="fort::myrmidon::Experiment::CreateSpace"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Experiment::CreateSpace()</span></code></a></p>
+<p>Python: <a class="reference internal" href="api/python/experiment.html#fort_myrmidon.Experiment.CreateSpace" title="fort_myrmidon.Experiment.CreateSpace"><code class="xref py py-func docutils literal notranslate"><span class="pre">fort_myrmidon.Experiment.CreateSpace()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmExperiment$createSpace</span></code>, C++: <a class="reference internal" href="api/cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment11CreateSpaceERKNSt6stringE" title="fort::myrmidon::Experiment::CreateSpace"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Experiment::CreateSpace()</span></code></a></p>
 </aside>
 <aside class="footnote brackets" id="addtdd" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id7">7</a><span class="fn-bracket">]</span></span>
-<p>Python: <a class="reference internal" href="api/python/experiment.html#py_fort_myrmidon.Experiment.AddTrackingDataDirectory" title="py_fort_myrmidon.Experiment.AddTrackingDataDirectory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Experiment.AddTrackingDataDirectory()</span></code></a>, R <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmExperiment$addTrackingDataDirectory()</span></code>, <a class="reference internal" href="api/cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment24AddTrackingDataDirectoryE7SpaceIDRKNSt6stringEb" title="fort::myrmidon::Experiment::AddTrackingDataDirectory"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Experiment::AddTrackingDataDirectory()</span></code></a></p>
+<p>Python: <a class="reference internal" href="api/python/experiment.html#fort_myrmidon.Experiment.AddTrackingDataDirectory" title="fort_myrmidon.Experiment.AddTrackingDataDirectory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fort_myrmidon.Experiment.AddTrackingDataDirectory()</span></code></a>, R <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmExperiment$addTrackingDataDirectory()</span></code>, <a class="reference internal" href="api/cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment24AddTrackingDataDirectoryE7SpaceIDRKNSt6stringEb" title="fort::myrmidon::Experiment::AddTrackingDataDirectory"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Experiment::AddTrackingDataDirectory()</span></code></a></p>
 </aside>
 <aside class="footnote brackets" id="removetdd" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id8">8</a><span class="fn-bracket">]</span></span>
-<p>Python: <a class="reference internal" href="api/python/experiment.html#py_fort_myrmidon.Experiment.RemoveTrackingDataDirectory" title="py_fort_myrmidon.Experiment.RemoveTrackingDataDirectory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Experiment.RemoveTrackingDataDirectory()</span></code></a>, R <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmExperiment$removeTrackingDataDirectory()</span></code>, <a class="reference internal" href="api/cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment27RemoveTrackingDataDirectoryERKNSt6stringE" title="fort::myrmidon::Experiment::RemoveTrackingDataDirectory"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Experiment::RemoveTrackingDataDirectory()</span></code></a></p>
+<p>Python: <a class="reference internal" href="api/python/experiment.html#fort_myrmidon.Experiment.RemoveTrackingDataDirectory" title="fort_myrmidon.Experiment.RemoveTrackingDataDirectory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fort_myrmidon.Experiment.RemoveTrackingDataDirectory()</span></code></a>, R <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmExperiment$removeTrackingDataDirectory()</span></code>, <a class="reference internal" href="api/cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment27RemoveTrackingDataDirectoryERKNSt6stringE" title="fort::myrmidon::Experiment::RemoveTrackingDataDirectory"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Experiment::RemoveTrackingDataDirectory()</span></code></a></p>
 </aside>
 <aside class="footnote brackets" id="reportstats" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id9">9</a><span class="fn-bracket">]</span></span>
-<p>Python: <a class="reference internal" href="api/python/queries_matchers.html#py_fort_myrmidon.Query.GetDataInformations" title="py_fort_myrmidon.Query.GetDataInformations"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Query.GetDataInformations()</span></code></a>, R <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmQueryGetDataInformations()</span></code>, <a class="reference internal" href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query19GetDataInformationsERK10Experiment" title="fort::myrmidon::Query::GetDataInformations"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Query::GetDataInformations()</span></code></a></p>
+<p>Python: <a class="reference internal" href="api/python/queries_matchers.html#fort_myrmidon.Query.GetDataInformations" title="fort_myrmidon.Query.GetDataInformations"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fort_myrmidon.Query.GetDataInformations()</span></code></a>, R <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmQueryGetDataInformations()</span></code>, <a class="reference internal" href="api/cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query19GetDataInformationsERK10Experiment" title="fort::myrmidon::Query::GetDataInformations"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Query::GetDataInformations()</span></code></a></p>
 </aside>
 </aside>
 </section>

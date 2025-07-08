@@ -361,16 +361,16 @@ Miscellaneous Queries
 TODO
 
 
-.. [#query] Python: :py:class:`py_fort_myrmidon.Query`, R: :obj:`fmQuery`, C++: :cpp:class:`fort::myrmidon::Query`
-.. [#identifyFrames] Python: :py:meth:`py_fort_myrmidon.Query.IdentifyFrames`, R: :obj:`fmQueryIdentifyFrames()`, C++: :cpp:func:`fort::myrmidon::Query::IdentifyFrames`
-.. [#collideFrames] Python: :py:meth:`py_fort_myrmidon.Query.CollideFrames`, R: :obj:`fmQueryCollideFrames()`, C++: :cpp:func:`fort::myrmidon::Query::CollideFrames`
-.. [#computeAntTrajectories] Python: :py:meth:`py_fort_myrmidon.Query.ComputeAntTrajectories`, R: :obj:`fmQueryComputeAntTrajectories()`, C++: :cpp:func:`fort::myrmidon::Query::ComputeAntTrajectories`
-.. [#computeAntInteractions] Python: :py:meth:`py_fort_myrmidon.Query.ComputeAntInteractions`, R: :obj:`fmQueryComputeAntInteractions()`, C++: :cpp:func:`fort::myrmidon::Query::ComputeAntInteractions`
-.. [#identifiedFrame] Python: :py:class:`py_fort_myrmidon.IdentifiedFrame`, R: see return value of :obj:`fmQueryIdentifyFrames()`, C++: :cpp:class:`fort::myrmidon::IdentifiedFrame`
-.. [#collisionFrame] Python: :py:class:`py_fort_myrmidon.CollisionFrame`, R: see return value of :obj:`fmQueryCollideFrames()`, C++: :cpp:class:`fort::myrmidon::CollisionFrame`
-.. [#antTrajectory] Python: :py:class:`py_fort_myrmidon.AntTrajectory`, R: see return value of :obj:`fmQueryComputeAntTrajectories()`, C++: :cpp:class:`fort::myrmidon::AntTrajectory`
-.. [#antInteraction] Python: :py:class:`py_fort_myrmidon.AntInteraction`, R: see return value of :obj:`fmQueryComputeAntInteractions()`, C++: :cpp:class:`fort::myrmidon::AntInteraction`
-.. [#antTrajectorySegment] Python: :py:class:`py_fort_myrmidon.AntTrajectorySegment`, R: see return value of :obj:`fmQueryComputeAntInteractions()`, C++: :cpp:class:`fort::myrmidon::AntTrajectorySegment`
-.. [#antTrajectorySummary] Python: :py:class:`py_fort_myrmidon.AntTrajectorySummary`, R: see return value of :obj:`fmQueryComputeAntInteractions()`, C++: :cpp:class:`fort::myrmidon::AntTrajectorySummary`
-.. [#interactionTypes] Python: :py:attr:`py_fort_myrmidon.Collision.Types`, R: N.A., C++: :cpp:type:`fort::myrmidon::InteractionTypes`
-.. [#matcher] Python: :py:class:`py_fort_myrmidon.Matcher`, R: :obj:`fmMatcher`, C++: :cpp:class:`fort::myrmidon::Matcher`
+.. [#query] Python: :py:class:`fort_myrmidon.Query`, R: :obj:`fmQuery`, C++: :cpp:class:`fort::myrmidon::Query`
+.. [#identifyFrames] Python: :py:meth:`fort_myrmidon.Query.IdentifyFrames`, R: :obj:`fmQueryIdentifyFrames()`, C++: :cpp:func:`fort::myrmidon::Query::IdentifyFrames`
+.. [#collideFrames] Python: :py:meth:`fort_myrmidon.Query.CollideFrames`, R: :obj:`fmQueryCollideFrames()`, C++: :cpp:func:`fort::myrmidon::Query::CollideFrames`
+.. [#computeAntTrajectories] Python: :py:meth:`fort_myrmidon.Query.ComputeAntTrajectories`, R: :obj:`fmQueryComputeAntTrajectories()`, C++: :cpp:func:`fort::myrmidon::Query::ComputeAntTrajectories`
+.. [#computeAntInteractions] Python: :py:meth:`fort_myrmidon.Query.ComputeAntInteractions`, R: :obj:`fmQueryComputeAntInteractions()`, C++: :cpp:func:`fort::myrmidon::Query::ComputeAntInteractions`
+.. [#identifiedFrame] Python: :py:class:`fort_myrmidon.IdentifiedFrame`, R: see return value of :obj:`fmQueryIdentifyFrames()`, C++: :cpp:class:`fort::myrmidon::IdentifiedFrame`
+.. [#collisionFrame] Python: :py:class:`fort_myrmidon.CollisionFrame`, R: see return value of :obj:`fmQueryCollideFrames()`, C++: :cpp:class:`fort::myrmidon::CollisionFrame`
+.. [#antTrajectory] Python: :py:class:`fort_myrmidon.AntTrajectory`, R: see return value of :obj:`fmQueryComputeAntTrajectories()`, C++: :cpp:class:`fort::myrmidon::AntTrajectory`
+.. [#antInteraction] Python: :py:class:`fort_myrmidon.AntInteraction`, R: see return value of :obj:`fmQueryComputeAntInteractions()`, C++: :cpp:class:`fort::myrmidon::AntInteraction`
+.. [#antTrajectorySegment] Python: :py:class:`fort_myrmidon.AntTrajectorySegment`, R: see return value of :obj:`fmQueryComputeAntInteractions()`, C++: :cpp:class:`fort::myrmidon::AntTrajectorySegment`
+.. [#antTrajectorySummary] Python: :py:class:`fort_myrmidon.AntTrajectorySummary`, R: see return value of :obj:`fmQueryComputeAntInteractions()`, C++: :cpp:class:`fort::myrmidon::AntTrajectorySummary`
+.. [#interactionTypes] Python: :py:attr:`fort_myrmidon.Collision.Types`, R: N.A., C++: :cpp:type:`fort::myrmidon::InteractionTypes`
+.. [#matcher] Python: :py:class:`fort_myrmidon.Matcher`, R: :obj:`fmMatcher`, C++: :cpp:class:`fort::myrmidon::Matcher`

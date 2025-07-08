@@ -113,7 +113,7 @@ provides utility function or object for this purpose.
 Python
 ------
 
-A :py:class:`py_fort_myrmidon.VideoSequence` context manager is
+A :py:class:`fort_myrmidon.VideoSequence` context manager is
 provided to iterate over the *VideoSegments*.
 
 .. code-block:: python
@@ -155,7 +155,7 @@ provided.
                                           drawInteractions);
 
 
-.. [#VideoSegmentList] Python: :py:class:`py_fort_myrmidon.VideoSegmentList`, R: N.A., C++: :cpp:type:`fort::myrmidon::VideoSegment::List`
-.. [#VideoFrameData] Python: :py:class:`py_fort_myrmidon.VideoFrameData`, R: N.A., C++: :cpp:class:`fort::myrmidon::VideoFrameData`
-.. [#findVideoSegments] Python: :py:meth:`py_fort_myrmidon.Query.FindVideoSegments`, R: N.A., C++: :cpp:func:`fort::myrmidon::Query::FindVideoSegments`
-.. [#videoSegmentMatch] Python: :py:meth:`py_fort_myrmidon.VideoSegment.Match`, R: N.A., C++: :cpp:func:`fort::myrmidon::VideoSegment::Match`
+.. [#VideoSegmentList] Python: :py:class:`fort_myrmidon.VideoSegmentList`, R: N.A., C++: :cpp:type:`fort::myrmidon::VideoSegment::List`
+.. [#VideoFrameData] Python: :py:class:`fort_myrmidon.VideoFrameData`, R: N.A., C++: :cpp:class:`fort::myrmidon::VideoFrameData`
+.. [#findVideoSegments] Python: :py:meth:`fort_myrmidon.Query.FindVideoSegments`, R: N.A., C++: :cpp:func:`fort::myrmidon::Query::FindVideoSegments`
+.. [#videoSegmentMatch] Python: :py:meth:`fort_myrmidon.VideoSegment.Match`, R: N.A., C++: :cpp:func:`fort::myrmidon::VideoSegment::Match`

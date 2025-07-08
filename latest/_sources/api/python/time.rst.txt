@@ -3,17 +3,17 @@
 Time Representation
 ===================
 
-py_fort_myrmidon.Duration
-+++++++++++++++++++++++++
+fort_myrmidon.Duration
+++++++++++++++++++++++
 
-.. autoclass:: py_fort_myrmidon.Duration
+.. autoclass:: fort_myrmidon.Duration
    :special-members: __init__
    :members:
 
 
-py_fort_myrmidon.Time
-+++++++++++++++++++++
+fort_myrmidon.Time
+++++++++++++++++++
 
-.. autoclass:: py_fort_myrmidon.Time
+.. autoclass:: fort_myrmidon.Time
    :special-members: __init__
    :members:

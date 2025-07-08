@@ -30,7 +30,7 @@ Capsule are defined in the ant reference frame.
 .. code-block:: python
 
    #python
-   import py_fort_myrmidon as fm
+   import fort_myrmidon as fm
 
    e = fm.Experiment("defining_ant_metadata.myrmidon")
 
@@ -199,11 +199,11 @@ ants should be displayed in **fort-studio**.
    a->SetDisplayStatus(fort::myrmidon::Ant::DisplayState::SOLO);
 
 
-.. [#time] Python: :py:class:`py_fort_myrmidon.Time`, R: :obj:`fmTime`, C++: :cpp:class:`fort::Time`
-.. [#capsule] Python: :py:class:`py_fort_myrmidon.Capsule`, R: :obj:`fmCapsule`, C++: :cpp:class:`fort::myrmidon::Capsule`
-.. [#createAntShapeType] Python: :py:meth:`py_fort_myrmidon.Experiment.CreateAntShapeType`, R: :obj:`fmExperiment$createAntShapeType()`, C++: :cpp:func:`fort::myrmidon::Experiment::CreateAntShapeType`
-.. [#addCapsule] Python: :py:meth:`py_fort_myrmidon.Ant.AddCapsule`, R: :obj:`fmAnt$addCapsule()`, C++: :cpp:func:`fort::myrmidon::Ant::AddCapsule`
-.. [#setMetadataKey] Python: :py:meth:`py_fort_myrmidon.Experiment.SetMetaDataKey`, R: :obj:`fmExperiment$setMetaDataKey()`, C++: :cpp:func:`fort::myrmidon::Experiment::SetMetaDataKey`
-.. [#setValue] Python: :py:meth:`py_fort_myrmidon.Ant.SetValue`, R: :obj:`fmAnt$setValue()`, C++: :cpp:func:`fort::myrmidon::Ant::SetValue`
-.. [#getValue] Python: :py:meth:`py_fort_myrmidon.Ant.GetValue`, R: :obj:`fmAnt$getValue()`, C++: :cpp:func:`fort::myrmidon::Ant::GetValue`
-.. [#visualization] Python: :py:attr:`py_fort_myrmidon.Ant.DisplayStatus` and :py:attr:`py_fort_myrmidon.Ant.DisplayColor`, R: :obj:`fmAnt$displayStatus` and :obj:`fmAnt$displayColor`, C++ :cpp:func:`fort::myrmidon::Ant::DisplayStatus` and :cpp:func:`fort::myrmidon::Ant::DisplayColor`
+.. [#time] Python: :py:class:`fort_myrmidon.Time`, R: :obj:`fmTime`, C++: :cpp:class:`fort::Time`
+.. [#capsule] Python: :py:class:`fort_myrmidon.Capsule`, R: :obj:`fmCapsule`, C++: :cpp:class:`fort::myrmidon::Capsule`
+.. [#createAntShapeType] Python: :py:meth:`fort_myrmidon.Experiment.CreateAntShapeType`, R: :obj:`fmExperiment$createAntShapeType()`, C++: :cpp:func:`fort::myrmidon::Experiment::CreateAntShapeType`
+.. [#addCapsule] Python: :py:meth:`fort_myrmidon.Ant.AddCapsule`, R: :obj:`fmAnt$addCapsule()`, C++: :cpp:func:`fort::myrmidon::Ant::AddCapsule`
+.. [#setMetadataKey] Python: :py:meth:`fort_myrmidon.Experiment.SetMetaDataKey`, R: :obj:`fmExperiment$setMetaDataKey()`, C++: :cpp:func:`fort::myrmidon::Experiment::SetMetaDataKey`
+.. [#setValue] Python: :py:meth:`fort_myrmidon.Ant.SetValue`, R: :obj:`fmAnt$setValue()`, C++: :cpp:func:`fort::myrmidon::Ant::SetValue`
+.. [#getValue] Python: :py:meth:`fort_myrmidon.Ant.GetValue`, R: :obj:`fmAnt$getValue()`, C++: :cpp:func:`fort::myrmidon::Ant::GetValue`
+.. [#visualization] Python: :py:attr:`fort_myrmidon.Ant.DisplayStatus` and :py:attr:`fort_myrmidon.Ant.DisplayColor`, R: :obj:`fmAnt$displayStatus` and :obj:`fmAnt$displayColor`, C++ :cpp:func:`fort::myrmidon::Ant::DisplayStatus` and :cpp:func:`fort::myrmidon::Ant::DisplayColor`

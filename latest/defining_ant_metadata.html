@@ -1,22 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Defining Ant Metadata &mdash; fort-myrmidon  documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
   
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
-        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
-        <script src="_static/../version_dropdown.js?v=4f7105bd"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/../version_dropdown.js?v=4f7105bd"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -35,9 +35,6 @@
           <a href="index.html" class="icon icon-home">
             fort-myrmidon
           </a>
-              <div class="version">
-                placeholder
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -110,12 +107,12 @@
            <div itemprop="articleBody">
              
   <section id="defining-ant-metadata">
-<h1>Defining Ant Metadata<a class="headerlink" href="#defining-ant-metadata" title="Permalink to this heading"></a></h1>
+<h1>Defining Ant Metadata<a class="headerlink" href="#defining-ant-metadata" title="Link to this heading"></a></h1>
 <p>Once ants are created and identified, the next steps is to fill some
 metadata on the ants that will be used for interaction detection,
 visualisation or for any pre-defined usage.</p>
 <section id="ant-virtual-shapes">
-<h2>Ant virtual shapes<a class="headerlink" href="#ant-virtual-shapes" title="Permalink to this heading"></a></h2>
+<h2>Ant virtual shapes<a class="headerlink" href="#ant-virtual-shapes" title="Link to this heading"></a></h2>
 <p>In <strong>fort-myrmidon</strong> each ant has a virtual shape defined as an union
 of <cite>capsules</cite> <a class="footnote-reference brackets" href="#capsule" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>, as shown in figure
 <a class="reference internal" href="#ant-shape-fig"><span class="std std-numref">Fig. 1</span></a>. There are no predefined type in a new
@@ -124,7 +121,7 @@ experiment, and they must be <em>created</em> <a class="footnote-reference brack
 <figure class="align-center" id="ant-shape-fig">
 <img alt="An ant virtual shape is defined by a collection of typed capsules" src="_images/ant_virtual_shape.png" />
 <figcaption>
-<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Ant virtual shape in <strong>fort-myrmidon</strong>.</span><a class="headerlink" href="#ant-shape-fig" title="Permalink to this image"></a></p>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Ant virtual shape in <strong>fort-myrmidon</strong>.</span><a class="headerlink" href="#ant-shape-fig" title="Link to this image"></a></p>
 <div class="legend">
 <p>Ant virtual shape are defined as a collection of typed capsules. Here
 each type is assigned an unique color. A capsule is defined as
@@ -134,7 +131,7 @@ region inside and between two circles.</p>
 </figure>
 <p>Capsule are defined in the ant reference frame.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#python</span>
-<span class="kn">import</span> <span class="nn">py_fort_myrmidon</span> <span class="k">as</span> <span class="nn">fm</span>
+<span class="kn">import</span> <span class="nn">fort_myrmidon</span> <span class="k">as</span> <span class="nn">fm</span>
 
 <span class="n">e</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Experiment</span><span class="p">(</span><span class="s2">&quot;defining_ant_metadata.myrmidon&quot;</span><span class="p">)</span>
 
@@ -225,7 +222,7 @@ region inside and between two circles.</p>
 </div>
 </section>
 <section id="user-defined-timed-metadata-system">
-<h2>User-defined timed metadata system<a class="headerlink" href="#user-defined-timed-metadata-system" title="Permalink to this heading"></a></h2>
+<h2>User-defined timed metadata system<a class="headerlink" href="#user-defined-timed-metadata-system" title="Link to this heading"></a></h2>
 <p><strong>fort-studio</strong> provides the ability to define timed key/value pair
 for each ant. Like ant shape type, these keys and their default value
 must be <em>defined</em> <a class="footnote-reference brackets" href="#setmetadatakey" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a> in the experiment before,
@@ -272,7 +269,7 @@ boolean, integer, float, strings or <cite>Time</cite> <a class="footnote-referen
 </div>
 </section>
 <section id="ant-visualization-data">
-<h2>Ant visualization data<a class="headerlink" href="#ant-visualization-data" title="Permalink to this heading"></a></h2>
+<h2>Ant visualization data<a class="headerlink" href="#ant-visualization-data" title="Link to this heading"></a></h2>
 <p>It is possible to <em>set or access</em> <a class="footnote-reference brackets" href="#visualization" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></a> properties on how
 ants should be displayed in <strong>fort-studio</strong>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#python</span>
@@ -293,35 +290,35 @@ ants should be displayed in <strong>fort-studio</strong>.</p>
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="time" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id7">1</a><span class="fn-bracket">]</span></span>
-<p>Python: <a class="reference internal" href="api/python/time.html#py_fort_myrmidon.Time" title="py_fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Time</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmTime</span></code>, C++: <a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort4TimeE" title="fort::Time"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::Time</span></code></a></p>
+<p>Python: <a class="reference internal" href="api/python/time.html#fort_myrmidon.Time" title="fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">fort_myrmidon.Time</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmTime</span></code>, C++: <a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort4TimeE" title="fort::Time"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::Time</span></code></a></p>
 </aside>
 <aside class="footnote brackets" id="capsule" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">2</a><span class="fn-bracket">]</span></span>
-<p>Python: <a class="reference internal" href="api/python/shapes.html#py_fort_myrmidon.Capsule" title="py_fort_myrmidon.Capsule"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_fort_myrmidon.Capsule</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmCapsule</span></code>, C++: <a class="reference internal" href="api/cpp/shapes.html#_CPPv4N4fort8myrmidon7CapsuleE" title="fort::myrmidon::Capsule"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::Capsule</span></code></a></p>
+<p>Python: <a class="reference internal" href="api/python/shapes.html#fort_myrmidon.Capsule" title="fort_myrmidon.Capsule"><code class="xref py py-class docutils literal notranslate"><span class="pre">fort_myrmidon.Capsule</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmCapsule</span></code>, C++: <a class="reference internal" href="api/cpp/shapes.html#_CPPv4N4fort8myrmidon7CapsuleE" title="fort::myrmidon::Capsule"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::myrmidon::Capsule</span></code></a></p>
 </aside>
 <aside class="footnote brackets" id="createantshapetype" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">3</a><span class="fn-bracket">]</span></span>
-<p>Python: <a class="reference internal" href="api/python/experiment.html#py_fort_myrmidon.Experiment.CreateAntShapeType" title="py_fort_myrmidon.Experiment.CreateAntShapeType"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Experiment.CreateAntShapeType()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmExperiment$createAntShapeType()</span></code>, C++: <a class="reference internal" href="api/cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment18CreateAntShapeTypeERKNSt6stringE" title="fort::myrmidon::Experiment::CreateAntShapeType"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Experiment::CreateAntShapeType()</span></code></a></p>
+<p>Python: <a class="reference internal" href="api/python/experiment.html#fort_myrmidon.Experiment.CreateAntShapeType" title="fort_myrmidon.Experiment.CreateAntShapeType"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fort_myrmidon.Experiment.CreateAntShapeType()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmExperiment$createAntShapeType()</span></code>, C++: <a class="reference internal" href="api/cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment18CreateAntShapeTypeERKNSt6stringE" title="fort::myrmidon::Experiment::CreateAntShapeType"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Experiment::CreateAntShapeType()</span></code></a></p>
 </aside>
 <aside class="footnote brackets" id="addcapsule" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">4</a><span class="fn-bracket">]</span></span>
-<p>Python: <a class="reference internal" href="api/python/ant_identification.html#py_fort_myrmidon.Ant.AddCapsule" title="py_fort_myrmidon.Ant.AddCapsule"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Ant.AddCapsule()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt$addCapsule()</span></code>, C++: <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4N4fort8myrmidon3Ant10AddCapsuleE14AntShapeTypeIDRKNSt10shared_ptrI7CapsuleEE" title="fort::myrmidon::Ant::AddCapsule"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Ant::AddCapsule()</span></code></a></p>
+<p>Python: <a class="reference internal" href="api/python/ant_identification.html#fort_myrmidon.Ant.AddCapsule" title="fort_myrmidon.Ant.AddCapsule"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fort_myrmidon.Ant.AddCapsule()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt$addCapsule()</span></code>, C++: <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4N4fort8myrmidon3Ant10AddCapsuleE14AntShapeTypeIDRKNSt10shared_ptrI7CapsuleEE" title="fort::myrmidon::Ant::AddCapsule"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Ant::AddCapsule()</span></code></a></p>
 </aside>
 <aside class="footnote brackets" id="setmetadatakey" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">5</a><span class="fn-bracket">]</span></span>
-<p>Python: <a class="reference internal" href="api/python/experiment.html#py_fort_myrmidon.Experiment.SetMetaDataKey" title="py_fort_myrmidon.Experiment.SetMetaDataKey"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Experiment.SetMetaDataKey()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmExperiment$setMetaDataKey()</span></code>, C++: <a class="reference internal" href="api/cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment14SetMetaDataKeyERKNSt6stringE5Value" title="fort::myrmidon::Experiment::SetMetaDataKey"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Experiment::SetMetaDataKey()</span></code></a></p>
+<p>Python: <a class="reference internal" href="api/python/experiment.html#fort_myrmidon.Experiment.SetMetaDataKey" title="fort_myrmidon.Experiment.SetMetaDataKey"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fort_myrmidon.Experiment.SetMetaDataKey()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmExperiment$setMetaDataKey()</span></code>, C++: <a class="reference internal" href="api/cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment14SetMetaDataKeyERKNSt6stringE5Value" title="fort::myrmidon::Experiment::SetMetaDataKey"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Experiment::SetMetaDataKey()</span></code></a></p>
 </aside>
 <aside class="footnote brackets" id="setvalue" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">6</a><span class="fn-bracket">]</span></span>
-<p>Python: <a class="reference internal" href="api/python/ant_identification.html#py_fort_myrmidon.Ant.SetValue" title="py_fort_myrmidon.Ant.SetValue"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Ant.SetValue()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt$setValue()</span></code>, C++: <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4N4fort8myrmidon3Ant8SetValueERKNSt6stringERK5ValueRK4Time" title="fort::myrmidon::Ant::SetValue"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Ant::SetValue()</span></code></a></p>
+<p>Python: <a class="reference internal" href="api/python/ant_identification.html#fort_myrmidon.Ant.SetValue" title="fort_myrmidon.Ant.SetValue"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fort_myrmidon.Ant.SetValue()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt$setValue()</span></code>, C++: <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4N4fort8myrmidon3Ant8SetValueERKNSt6stringERK5ValueRK4Time" title="fort::myrmidon::Ant::SetValue"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Ant::SetValue()</span></code></a></p>
 </aside>
 <aside class="footnote brackets" id="getvalue" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id6">7</a><span class="fn-bracket">]</span></span>
-<p>Python: <a class="reference internal" href="api/python/ant_identification.html#py_fort_myrmidon.Ant.GetValue" title="py_fort_myrmidon.Ant.GetValue"><code class="xref py py-meth docutils literal notranslate"><span class="pre">py_fort_myrmidon.Ant.GetValue()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt$getValue()</span></code>, C++: <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant8GetValueERKNSt6stringERK4Time" title="fort::myrmidon::Ant::GetValue"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Ant::GetValue()</span></code></a></p>
+<p>Python: <a class="reference internal" href="api/python/ant_identification.html#fort_myrmidon.Ant.GetValue" title="fort_myrmidon.Ant.GetValue"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fort_myrmidon.Ant.GetValue()</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt$getValue()</span></code>, C++: <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant8GetValueERKNSt6stringERK4Time" title="fort::myrmidon::Ant::GetValue"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Ant::GetValue()</span></code></a></p>
 </aside>
 <aside class="footnote brackets" id="visualization" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id8">8</a><span class="fn-bracket">]</span></span>
-<p>Python: <a class="reference internal" href="api/python/ant_identification.html#py_fort_myrmidon.Ant.DisplayStatus" title="py_fort_myrmidon.Ant.DisplayStatus"><code class="xref py py-attr docutils literal notranslate"><span class="pre">py_fort_myrmidon.Ant.DisplayStatus</span></code></a> and <a class="reference internal" href="api/python/ant_identification.html#py_fort_myrmidon.Ant.DisplayColor" title="py_fort_myrmidon.Ant.DisplayColor"><code class="xref py py-attr docutils literal notranslate"><span class="pre">py_fort_myrmidon.Ant.DisplayColor</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt$displayStatus</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt$displayColor</span></code>, C++ <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant13DisplayStatusEv" title="fort::myrmidon::Ant::DisplayStatus"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Ant::DisplayStatus()</span></code></a> and <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant12DisplayColorEv" title="fort::myrmidon::Ant::DisplayColor"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Ant::DisplayColor()</span></code></a></p>
+<p>Python: <a class="reference internal" href="api/python/ant_identification.html#fort_myrmidon.Ant.DisplayStatus" title="fort_myrmidon.Ant.DisplayStatus"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fort_myrmidon.Ant.DisplayStatus</span></code></a> and <a class="reference internal" href="api/python/ant_identification.html#fort_myrmidon.Ant.DisplayColor" title="fort_myrmidon.Ant.DisplayColor"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fort_myrmidon.Ant.DisplayColor</span></code></a>, R: <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt$displayStatus</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">fmAnt$displayColor</span></code>, C++ <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant13DisplayStatusEv" title="fort::myrmidon::Ant::DisplayStatus"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Ant::DisplayStatus()</span></code></a> and <a class="reference internal" href="api/cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant12DisplayColorEv" title="fort::myrmidon::Ant::DisplayColor"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">fort::myrmidon::Ant::DisplayColor()</span></code></a></p>
 </aside>
 </aside>
 </section>

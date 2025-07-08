@@ -38,8 +38,8 @@ time object of these object from and to :cpp:class:`fort::Time` and
    For the aforementioned reasons, the c++ classes
    :cpp:class:`fort::Time` and :cpp:class:`fort::Duration` are
    **binded** to python and R. It means that you would find
-   :py:class:`py_fort_myrmidon.Time`,
-   :py:class:`py_fort_myrmidon.Duration`, :obj:`fmTime`,
+   :py:class:`fort_myrmidon.Time`,
+   :py:class:`fort_myrmidon.Duration`, :obj:`fmTime`,
    :obj:`fmDuration` objects, which are used instead of the native
    time object. The following section describes the perticularity of
    casting native time object to and from the **fort-myrmidon**
@@ -77,18 +77,18 @@ Python
 Python convertion to and from **time.Time**
 +++++++++++++++++++++++++++++++++++++++++++
 
-:py:class:`py_fort_myrmidon.Time` objects can be created from and converted to a float
+:py:class:`fort_myrmidon.Time` objects can be created from and converted to a float
 number of seconds from the epoch, as returned by :py:func:`time.time` or
 :py:meth:`datetime.datetime.timestamp`, with:
 
-* :py:meth:`py_fort_myrmidon.Time.__init__`
+* :py:meth:`fort_myrmidon.Time.__init__`
 
   .. code-block:: python
 
 	 # equivalent but less precise than m.Time.Now()
 	 fm.Time(time.time())
 
-* :py:meth:`py_fort_myrmidon.Time.ToTimestamp`
+* :py:meth:`fort_myrmidon.Time.ToTimestamp`
 
   .. code-block:: python
 
@@ -101,10 +101,10 @@ number of seconds from the epoch, as returned by :py:func:`time.time` or
 Python convertion to and from **datetime.datetime**
 +++++++++++++++++++++++++++++++++++++++++++++++++++
 
-:py:class:`py_fort_myrmidon.Time` objects can be created from and
+:py:class:`fort_myrmidon.Time` objects can be created from and
 converted to :class:`datetime.datetime`:
 
-* :py:meth:`py_fort_myrmidon.Time.__init__`
+* :py:meth:`fort_myrmidon.Time.__init__`
 
   .. code-block:: python
 
@@ -112,7 +112,7 @@ converted to :class:`datetime.datetime`:
 	 m.Time(datetime.utcnow()) # use a naïve object
 	 m.Time(datetime.now(timezone.UTC).astimezone(tz=None)) # transform it to a naïve object
 
-* :py:meth:`py_fort_myrmidon.Time.ToDateTime`
+* :py:meth:`fort_myrmidon.Time.ToDateTime`
 
     .. code-block:: python
 
@@ -128,13 +128,13 @@ converted to :class:`datetime.datetime`:
    local time. On the contrary, :cpp:class:`fort::Time` uses only UTC
    time. It means that:
 
-   * :py:meth:`py_fort_myrmidon.Time.ToDateTime`, will return values
+   * :py:meth:`fort_myrmidon.Time.ToDateTime`, will return values
      that differs from one can read from the
-     :py:meth:`py_fort_myrmidon.Time.__str__` if not careful to take
+     :py:meth:`fort_myrmidon.Time.__str__` if not careful to take
      into account the local timezone.
 
    * before passing any :py:class:`datetime.datetime` object to
-     :py:meth:`py_fort_myrmidon.Time.__init__`, one must ensure they are
+     :py:meth:`fort_myrmidon.Time.__init__`, one must ensure they are
      converted to localtime first. One could use
      :py:meth:`datetime.datetime.astimezone` with ``tz=None`` to do
      that.
@@ -143,13 +143,13 @@ converted to :class:`datetime.datetime`:
 Example
 +++++++
 
-:py:class:`py_fort_myrmidon.Time` and
-:py:class:`py_fort_myrmidon.Duration` provides overloaded operator
+:py:class:`fort_myrmidon.Time` and
+:py:class:`fort_myrmidon.Duration` provides overloaded operator
 that gives a natural feeling on time manipulation.
 
 .. code-block:: python
 
-   import py_fort_myrmidon as fm
+   import fort_myrmidon as fm
 
    start = fm.Time.Now()
    somefunction()
