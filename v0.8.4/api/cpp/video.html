@@ -1,0 +1,405 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Video Sequence Matching &mdash; fort-myrmidon  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/../version_dropdown.js?v=4f7105bd"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Errors" href="errors.html" />
+    <link rel="prev" title="2D Geometric Shapes" href="shapes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            fort-myrmidon
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-myrmidon Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defining_ant_metadata.html">Defining Ant Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../performing_queries.html">Performing Queries</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-studio Manual</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/defining_ant_shapes.html">Defining Ant Shapes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/measuring_ants.html">Measuring Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/metadata_edition.html">Ant Metadata Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/visualization.html">Tracking Data Visualization</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../space_zoning.html">Segmenting Spaces in Zones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matching_video.html">Matching Video and Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../time.html">Time Representation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API References</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Python</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html#c">C++</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="experiment.html">API Entry Point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ant_identification.html">Ants and Identifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="space_zone.html">Spaces and Zones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="queries_matchers.html">Queries And Matchers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="time.html">Time Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shapes.html">2D Geometric Shapes</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Video Sequence Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fort-myrmidon-videosegment">fort::myrmidon::VideoSegment</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N4fort8myrmidon12VideoSegmentE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::VideoSegment</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#fort-myrmidon-videoframedata">fort::myrmidon::VideoFrameData</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N4fort8myrmidon14VideoFrameDataE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::VideoFrameData</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#fort-myrmidon-videosequence">fort::myrmidon::VideoSequence</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N4fort8myrmidon13VideoSequenceE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::VideoSequence</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typedef.html">API generic types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html#r">R</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fort-myrmidon</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Python</a></li>
+      <li class="breadcrumb-item active">Video Sequence Matching</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/api/cpp/video.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="video-sequence-matching">
+<h1>Video Sequence Matching<a class="headerlink" href="#video-sequence-matching" title="Link to this heading"></a></h1>
+<section id="fort-myrmidon-videosegment">
+<h2>fort::myrmidon::VideoSegment<a class="headerlink" href="#fort-myrmidon-videosegment" title="Link to this heading"></a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon12VideoSegmentE">
+<span id="_CPPv3N4fort8myrmidon12VideoSegmentE"></span><span id="_CPPv2N4fort8myrmidon12VideoSegmentE"></span><span id="fort::myrmidon::VideoSegment"></span><span class="target" id="structfort_1_1myrmidon_1_1VideoSegment"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">VideoSegment</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon12VideoSegmentE" title="Link to this definition"></a><br /></dt>
+<dd><p>Represents parts of a video file with its associated tracking data. </p>
+<p><a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment"><span class="std std-ref">VideoSegment</span></a> are queried with <a class="reference internal" href="queries_matchers.html#classfort_1_1myrmidon_1_1Query_1ac758e8193eb6f82f811b838dea78b6e7"><span class="std std-ref">Query::FindVideoSegments()</span></a>. Once queried they are blank, i.e. no query results will appears in their Data field. One would call <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment_1a4b0b753062f448c77bbc76f14da6044d"><span class="std std-ref">Match()</span></a> to associate queries results with a <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment_1a0362f558fa0c2279a5830352fa63dd8d"><span class="std std-ref">VideoSegment::List</span></a>. Finally one would call <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSequence_1a338426c595ae9375b7472e2bf315170b"><span class="std std-ref">VideoSequence::ForEach</span></a> to iterate over each video frame in the <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment_1a0362f558fa0c2279a5830352fa63dd8d"><span class="std std-ref">VideoSegment::List</span></a>.</p>
+<p><p><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fort/myrmidon/Experiment.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fort/myrmidon/Query.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fort/myrmidon/Video.hpp&gt;</span>
+
+<span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">fort</span><span class="o">::</span><span class="nn">myrmidon</span><span class="p">;</span>
+
+<span class="k">auto</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Experiment</span><span class="o">::</span><span class="n">Open</span><span class="p">(</span><span class="s">&quot;file.myrmidon&quot;</span><span class="p">);</span>
+
+<span class="c1">// Note: it would be extremly computationally intensive to iterate</span>
+<span class="c1">// over the whole experiment, we therefore select a time region.</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fort</span><span class="o">::</span><span class="n">Time</span><span class="o">::</span><span class="n">Parse</span><span class="p">(</span><span class="s">&quot;2019-11-02T20:00:00.000Z&quot;</span><span class="p">);</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">start</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="mi">30</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">fort</span><span class="o">::</span><span class="n">Duration</span><span class="o">::</span><span class="n">Second</span><span class="p">);</span>
+
+<span class="c1">// step 0: perform some queries on the experiment.</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">AntTrajectory</span><span class="o">::</span><span class="n">Ptr</span><span class="o">&gt;</span><span class="w"> </span><span class="n">trajectories</span><span class="p">;</span>
+<span class="n">Query</span><span class="o">::</span><span class="n">ComputeAntTrajectoriesArgs</span><span class="w"> </span><span class="n">args</span><span class="p">;</span>
+<span class="n">args</span><span class="p">.</span><span class="n">Start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">start</span><span class="p">;</span>
+<span class="n">args</span><span class="p">.</span><span class="n">End</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">end</span><span class="p">;</span>
+<span class="n">Query</span><span class="o">::</span><span class="n">ComputeAntTrajectories</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">trajectories</span><span class="p">,</span><span class="n">args</span><span class="p">);</span>
+
+<span class="c1">// step 1: look up a VideoSegment::List</span>
+<span class="n">VideoSegment</span><span class="o">::</span><span class="n">List</span><span class="w"> </span><span class="n">segments</span><span class="p">;</span>
+<span class="n">Query</span><span class="o">::</span><span class="n">FindVideoSegments</span><span class="p">(</span><span class="n">e</span><span class="p">,</span>
+<span class="w">                         </span><span class="n">segments</span><span class="p">,</span>
+<span class="w">                         </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="c1">// space we are looking for</span>
+<span class="w">                         </span><span class="n">start</span><span class="p">,</span>
+<span class="w">                         </span><span class="n">end</span><span class="p">);</span>
+
+<span class="c1">// step 2: match the query results with the VideoSegment::List</span>
+<span class="n">VideoSegment</span><span class="o">::</span><span class="n">Match</span><span class="p">(</span><span class="n">segments</span><span class="p">,</span><span class="n">trajectories</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="n">trajectories</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+
+<span class="c1">// step 3: iterate over all video frames</span>
+<span class="n">VideoSequence</span><span class="o">::</span><span class="n">ForEach</span><span class="p">(</span><span class="n">segments</span><span class="p">,</span>
+<span class="w">                       </span><span class="p">[](</span><span class="n">cv</span><span class="o">::</span><span class="n">Mat</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">frame</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">VideoFrameData</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                           </span><span class="c1">// step 3.1: on each `frame`, perform an</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>operation based on <cite>data</cite></dt><dd><p>});</p>
+</dd>
+</dl>
+</p>
+ </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="queries_matchers.html#classfort_1_1myrmidon_1_1Query_1ac758e8193eb6f82f811b838dea78b6e7"><span class="std std-ref">Query::FindVideoSegments()</span></a>, <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment_1a4b0b753062f448c77bbc76f14da6044d"><span class="std std-ref">Match()</span></a> and <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSequence_1a338426c595ae9375b7472e2bf315170b"><span class="std std-ref">VideoSequence::ForEach</span></a> accepts a <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment_1a0362f558fa0c2279a5830352fa63dd8d"><span class="std std-ref">VideoSegment::List</span></a> as argument. Indeed it could happen that the desired <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSequence"><span class="std std-ref">VideoSequence</span></a> would span multiple video file.</p>
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon12VideoSegment4ListE">
+<span id="_CPPv3N4fort8myrmidon12VideoSegment4ListE"></span><span id="_CPPv2N4fort8myrmidon12VideoSegment4ListE"></span><span id="fort::myrmidon::VideoSegment::List"></span><span class="target" id="structfort_1_1myrmidon_1_1VideoSegment_1a0362f558fa0c2279a5830352fa63dd8d"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon12VideoSegmentE" title="fort::myrmidon::VideoSegment"><span class="n"><span class="pre">VideoSegment</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">List</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon12VideoSegment4ListE" title="Link to this definition"></a><br /></dt>
+<dd><p>A std::vector of <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment"><span class="std std-ref">VideoSegment</span></a>. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon12VideoSegment5SpaceE">
+<span id="_CPPv3N4fort8myrmidon12VideoSegment5SpaceE"></span><span id="_CPPv2N4fort8myrmidon12VideoSegment5SpaceE"></span><span id="fort::myrmidon::VideoSegment::Space__SpaceID"></span><span class="target" id="structfort_1_1myrmidon_1_1VideoSegment_1a92fc4033b0124f9e394d4446f4b1cfd7"></span><a class="reference internal" href="typedef.html#_CPPv4N4fort8myrmidon7SpaceIDE" title="fort::myrmidon::SpaceID"><span class="n"><span class="pre">SpaceID</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Space</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon12VideoSegment5SpaceE" title="Link to this definition"></a><br /></dt>
+<dd><p>The SpaceID of the <a class="reference internal" href="space_zone.html#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a> this <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment"><span class="std std-ref">VideoSegment</span></a> belongs to. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon12VideoSegment16AbsoluteFilePathE">
+<span id="_CPPv3N4fort8myrmidon12VideoSegment16AbsoluteFilePathE"></span><span id="_CPPv2N4fort8myrmidon12VideoSegment16AbsoluteFilePathE"></span><span id="fort::myrmidon::VideoSegment::AbsoluteFilePath__ss"></span><span class="target" id="structfort_1_1myrmidon_1_1VideoSegment_1ab1d2a187eecad12e5c798ae483716cde"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AbsoluteFilePath</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon12VideoSegment16AbsoluteFilePathE" title="Link to this definition"></a><br /></dt>
+<dd><p>the abolute file path to the video file. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon12VideoSegment4DataE">
+<span id="_CPPv3N4fort8myrmidon12VideoSegment4DataE"></span><span id="_CPPv2N4fort8myrmidon12VideoSegment4DataE"></span><span id="fort::myrmidon::VideoSegment::Data__std::vector:VideoFrameData:"></span><span class="target" id="structfort_1_1myrmidon_1_1VideoSegment_1a2de3682dd7e043fef58d9d57799c14cb"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon14VideoFrameDataE" title="fort::myrmidon::VideoFrameData"><span class="n"><span class="pre">VideoFrameData</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Data</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon12VideoSegment4DataE" title="Link to this definition"></a><br /></dt>
+<dd><p>Matched queries result and acquisition time for the frames in the segment. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon12VideoSegment5BeginE">
+<span id="_CPPv3N4fort8myrmidon12VideoSegment5BeginE"></span><span id="_CPPv2N4fort8myrmidon12VideoSegment5BeginE"></span><span id="fort::myrmidon::VideoSegment::Begin__uint32_t"></span><span class="target" id="structfort_1_1myrmidon_1_1VideoSegment_1acb09666241be9c2bdab82e55954d3a1a"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Begin</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon12VideoSegment5BeginE" title="Link to this definition"></a><br /></dt>
+<dd><p>Position of the first video frame in the file for the segment. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon12VideoSegment3EndE">
+<span id="_CPPv3N4fort8myrmidon12VideoSegment3EndE"></span><span id="_CPPv2N4fort8myrmidon12VideoSegment3EndE"></span><span id="fort::myrmidon::VideoSegment::End__uint32_t"></span><span class="target" id="structfort_1_1myrmidon_1_1VideoSegment_1aab89ea977b17235b065525f07fdc5da1"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">End</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon12VideoSegment3EndE" title="Link to this definition"></a><br /></dt>
+<dd><p>Position of the last video frame + 1 in the file for the segment. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN4fort8myrmidon12VideoSegment5MatchEvR4List8IterType8IterType">
+<span id="_CPPv3I0EN4fort8myrmidon12VideoSegment5MatchER4List8IterType8IterType"></span><span id="_CPPv2I0EN4fort8myrmidon12VideoSegment5MatchER4List8IterType8IterType"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IterType</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structfort_1_1myrmidon_1_1VideoSegment_1a4b0b753062f448c77bbc76f14da6044d"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Match</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4fort8myrmidon12VideoSegment4ListE" title="fort::myrmidon::VideoSegment::List"><span class="n"><span class="pre">List</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">list</span></span>, <a class="reference internal" href="#_CPPv4I0EN4fort8myrmidon12VideoSegment5MatchEvR4List8IterType8IterType" title="fort::myrmidon::VideoSegment::Match::IterType"><span class="n"><span class="pre">IterType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">begin</span></span>, <a class="reference internal" href="#_CPPv4I0EN4fort8myrmidon12VideoSegment5MatchEvR4List8IterType8IterType" title="fort::myrmidon::VideoSegment::Match::IterType"><span class="n"><span class="pre">IterType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">end</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN4fort8myrmidon12VideoSegment5MatchEvR4List8IterType8IterType" title="Link to this definition"></a><br /></dt>
+<dd><p>Matches a query result with a <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment_1a0362f558fa0c2279a5830352fa63dd8d"><span class="std std-ref">VideoSegment::List</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>iterator</strong> – type of the sequence of object to match. These objects should define fort::myrmidon::data_traits. This is the case for any result of <a class="reference internal" href="queries_matchers.html#classfort_1_1myrmidon_1_1Query_1a5f5dfc54a82412639d51fdae260823c5"><span class="std std-ref">Query::IdentifyFrames</span></a>, <a class="reference internal" href="queries_matchers.html#classfort_1_1myrmidon_1_1Query_1a7e410e93a8dba547aa2fa91c2ef93127"><span class="std std-ref">Query::CollideFrames</span></a>, <a class="reference internal" href="queries_matchers.html#classfort_1_1myrmidon_1_1Query_1a92ef3bcaa07cddc40236f0adc7baef8c"><span class="std std-ref">Query::ComputeAntTrajectories</span></a> and <a class="reference internal" href="queries_matchers.html#classfort_1_1myrmidon_1_1Query_1a6c895043bb5ed072f5cbc9bb7da568a9"><span class="std std-ref">Query::ComputeAntInteractions</span></a></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>list</strong> – the VideoSegments to associate data with </p></li>
+<li><p><strong>begin</strong> – start iterator of the sequence to match </p></li>
+<li><p><strong>end</strong> – past over end iterator of the sequence to match </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if all <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment"><span class="std std-ref">VideoSegment</span></a> in list are not from the same <a class="reference internal" href="space_zone.html#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="fort-myrmidon-videoframedata">
+<h2>fort::myrmidon::VideoFrameData<a class="headerlink" href="#fort-myrmidon-videoframedata" title="Link to this heading"></a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon14VideoFrameDataE">
+<span id="_CPPv3N4fort8myrmidon14VideoFrameDataE"></span><span id="_CPPv2N4fort8myrmidon14VideoFrameDataE"></span><span id="fort::myrmidon::VideoFrameData"></span><span class="target" id="structfort_1_1myrmidon_1_1VideoFrameData"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">VideoFrameData</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14VideoFrameDataE" title="Link to this definition"></a><br /></dt>
+<dd><p>Represents the tracking data and query results associated with a video frame. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>After a call to <a class="reference internal" href="queries_matchers.html#classfort_1_1myrmidon_1_1Query_1ac758e8193eb6f82f811b838dea78b6e7"><span class="std std-ref">Query::FindVideoSegments()</span></a> all pointer values will be set to <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>. One must call <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment_1a4b0b753062f448c77bbc76f14da6044d"><span class="std std-ref">VideoSegment::Match()</span></a> to query results with the <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoFrameData"><span class="std std-ref">VideoFrameData</span></a> present in the <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment_1a0362f558fa0c2279a5830352fa63dd8d"><span class="std std-ref">VideoSegment::List</span></a>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In the unlikely case of a <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoFrameData"><span class="std std-ref">VideoFrameData</span></a> without any tracking data ( the video frame was exported but not even a tracking timeout/frame drop was reported), the value of <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoFrameData_1ada7e8844da9ccb8417ad6903e1a36694"><span class="std std-ref">VideoFrameData::Time</span></a> will be set to <a class="reference internal" href="time.html#classfort_1_1Time_1a9593a5d95440d83965255957deb60226"><span class="std std-ref">Time::SinceEver()</span></a>, and all other field would be empty or set to <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>. </p>
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4fort8myrmidon14VideoFrameData5EmptyEv">
+<span id="_CPPv3NK4fort8myrmidon14VideoFrameData5EmptyEv"></span><span id="_CPPv2NK4fort8myrmidon14VideoFrameData5EmptyEv"></span><span id="fort::myrmidon::VideoFrameData::EmptyC"></span><span class="target" id="structfort_1_1myrmidon_1_1VideoFrameData_1aaad6cd8314ac384d274ff8aa21914d5b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Empty</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4fort8myrmidon14VideoFrameData5EmptyEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Indicates the (unlikely) case where no tracking data is associated with this video frame. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if there is no tracking data (not even a timeout / frame drop report) associated with this video frame. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon14VideoFrameData8PositionE">
+<span id="_CPPv3N4fort8myrmidon14VideoFrameData8PositionE"></span><span id="_CPPv2N4fort8myrmidon14VideoFrameData8PositionE"></span><span id="fort::myrmidon::VideoFrameData::Position__uint32_t"></span><span class="target" id="structfort_1_1myrmidon_1_1VideoFrameData_1a0ab63d3c5fdcebcfe815228a3c711d20"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Position</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14VideoFrameData8PositionE" title="Link to this definition"></a><br /></dt>
+<dd><p>the video frame position in the video file </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon14VideoFrameData4TimeE">
+<span id="_CPPv3N4fort8myrmidon14VideoFrameData4TimeE"></span><span id="_CPPv2N4fort8myrmidon14VideoFrameData4TimeE"></span><span id="fort::myrmidon::VideoFrameData::Time__fort::Time"></span><span class="target" id="structfort_1_1myrmidon_1_1VideoFrameData_1ada7e8844da9ccb8417ad6903e1a36694"></span><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Time</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14VideoFrameData4TimeE" title="Link to this definition"></a><br /></dt>
+<dd><p>the video frame acquisition time. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon14VideoFrameData10IdentifiedE">
+<span id="_CPPv3N4fort8myrmidon14VideoFrameData10IdentifiedE"></span><span id="_CPPv2N4fort8myrmidon14VideoFrameData10IdentifiedE"></span><span id="fort::myrmidon::VideoFrameData::Identified__IdentifiedFrame::Ptr"></span><span class="target" id="structfort_1_1myrmidon_1_1VideoFrameData_1a3f091d6872424080239b098d4e9eb7b6"></span><a class="reference internal" href="queries_matchers.html#_CPPv4N4fort8myrmidon15IdentifiedFrameE" title="fort::myrmidon::IdentifiedFrame"><span class="n"><span class="pre">IdentifiedFrame</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="queries_matchers.html#_CPPv4N4fort8myrmidon15IdentifiedFrame3PtrE" title="fort::myrmidon::IdentifiedFrame::Ptr"><span class="n"><span class="pre">Ptr</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Identified</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14VideoFrameData10IdentifiedE" title="Link to this definition"></a><br /></dt>
+<dd><p>The ants position (if previously <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment_1a4b0b753062f448c77bbc76f14da6044d"><span class="std std-ref">VideoSegment::Match()</span></a> ‘ed) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon14VideoFrameData8CollidedE">
+<span id="_CPPv3N4fort8myrmidon14VideoFrameData8CollidedE"></span><span id="_CPPv2N4fort8myrmidon14VideoFrameData8CollidedE"></span><span id="fort::myrmidon::VideoFrameData::Collided__CollisionFrame::Ptr"></span><span class="target" id="structfort_1_1myrmidon_1_1VideoFrameData_1aa9f3197080c8d9cbffbcf8598cfe90d5"></span><a class="reference internal" href="queries_matchers.html#_CPPv4N4fort8myrmidon14CollisionFrameE" title="fort::myrmidon::CollisionFrame"><span class="n"><span class="pre">CollisionFrame</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="queries_matchers.html#_CPPv4N4fort8myrmidon14CollisionFrame3PtrE" title="fort::myrmidon::CollisionFrame::Ptr"><span class="n"><span class="pre">Ptr</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Collided</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14VideoFrameData8CollidedE" title="Link to this definition"></a><br /></dt>
+<dd><p>The ants collision (if previously <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment_1a4b0b753062f448c77bbc76f14da6044d"><span class="std std-ref">VideoSegment::Match()</span></a> ‘ed) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon14VideoFrameData12TrajectoriesE">
+<span id="_CPPv3N4fort8myrmidon14VideoFrameData12TrajectoriesE"></span><span id="_CPPv2N4fort8myrmidon14VideoFrameData12TrajectoriesE"></span><span id="fort::myrmidon::VideoFrameData::Trajectories__std::vector:AntTrajectory::Ptr:"></span><span class="target" id="structfort_1_1myrmidon_1_1VideoFrameData_1ab1c7ddd4731a00d8ddffe224d0d7a377"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="queries_matchers.html#_CPPv4N4fort8myrmidon13AntTrajectoryE" title="fort::myrmidon::AntTrajectory"><span class="n"><span class="pre">AntTrajectory</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="queries_matchers.html#_CPPv4N4fort8myrmidon13AntTrajectory3PtrE" title="fort::myrmidon::AntTrajectory::Ptr"><span class="n"><span class="pre">Ptr</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Trajectories</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14VideoFrameData12TrajectoriesE" title="Link to this definition"></a><br /></dt>
+<dd><p>The ants trajectories (if previously <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment_1a4b0b753062f448c77bbc76f14da6044d"><span class="std std-ref">VideoSegment::Match()</span></a> ‘ed) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon14VideoFrameData12InteractionsE">
+<span id="_CPPv3N4fort8myrmidon14VideoFrameData12InteractionsE"></span><span id="_CPPv2N4fort8myrmidon14VideoFrameData12InteractionsE"></span><span id="fort::myrmidon::VideoFrameData::Interactions__std::vector:AntInteraction::Ptr:"></span><span class="target" id="structfort_1_1myrmidon_1_1VideoFrameData_1aec41f581832f55aba79354da9bfaa9bf"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="queries_matchers.html#_CPPv4N4fort8myrmidon14AntInteractionE" title="fort::myrmidon::AntInteraction"><span class="n"><span class="pre">AntInteraction</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="queries_matchers.html#_CPPv4N4fort8myrmidon14AntInteraction3PtrE" title="fort::myrmidon::AntInteraction::Ptr"><span class="n"><span class="pre">Ptr</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Interactions</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14VideoFrameData12InteractionsE" title="Link to this definition"></a><br /></dt>
+<dd><p>The ants interactions (if previously <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment_1a4b0b753062f448c77bbc76f14da6044d"><span class="std std-ref">VideoSegment::Match()</span></a> ‘ed) </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="fort-myrmidon-videosequence">
+<h2>fort::myrmidon::VideoSequence<a class="headerlink" href="#fort-myrmidon-videosequence" title="Link to this heading"></a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon13VideoSequenceE">
+<span id="_CPPv3N4fort8myrmidon13VideoSequenceE"></span><span id="_CPPv2N4fort8myrmidon13VideoSequenceE"></span><span id="fort::myrmidon::VideoSequence"></span><span class="target" id="structfort_1_1myrmidon_1_1VideoSequence"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">VideoSequence</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon13VideoSequenceE" title="Link to this definition"></a><br /></dt>
+<dd><p>Operations on <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment_1a0362f558fa0c2279a5830352fa63dd8d"><span class="std std-ref">VideoSegment::List</span></a> ( as they form a sequence) </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon13VideoSequence7ForEachERKN12VideoSegment4ListENSt8functionIFvRKN5video5FrameERK14VideoFrameDataEEE">
+<span id="_CPPv3N4fort8myrmidon13VideoSequence7ForEachERKN12VideoSegment4ListENSt8functionIFvRKN5video5FrameERK14VideoFrameDataEEE"></span><span id="_CPPv2N4fort8myrmidon13VideoSequence7ForEachERKN12VideoSegment4ListENSt8functionIFvRKN5video5FrameERK14VideoFrameDataEEE"></span><span class="target" id="structfort_1_1myrmidon_1_1VideoSequence_1a338426c595ae9375b7472e2bf315170b"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ForEach</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon12VideoSegmentE" title="fort::myrmidon::VideoSegment"><span class="n"><span class="pre">VideoSegment</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon12VideoSegment4ListE" title="fort::myrmidon::VideoSegment::List"><span class="n"><span class="pre">List</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">list</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">(</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">video</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Frame</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n"><span class="pre">frame</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon14VideoFrameDataE" title="fort::myrmidon::VideoFrameData"><span class="n"><span class="pre">VideoFrameData</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">operation</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon13VideoSequence7ForEachERKN12VideoSegment4ListENSt8functionIFvRKN5video5FrameERK14VideoFrameDataEEE" title="Link to this definition"></a><br /></dt>
+<dd><p>Iterates over all frames of a sequence. </p>
+<p><p><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fort/myrmidon/Query.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fort/myrmidon/Video.hpp&gt;</span>
+
+<span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">fort</span><span class="o">::</span><span class="nn">myrmidon</span><span class="p">;</span>
+
+<span class="n">VideoSegment</span><span class="o">::</span><span class="n">List</span><span class="w"> </span><span class="n">segments</span><span class="p">;</span>
+<span class="n">Query</span><span class="o">::</span><span class="n">FindVideoSegments</span><span class="p">(</span><span class="n">e</span><span class="p">,</span>
+<span class="w">                         </span><span class="n">segments</span><span class="p">,</span>
+<span class="w">                         </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">                         </span><span class="n">fort</span><span class="o">::</span><span class="n">Time</span><span class="o">::</span><span class="n">SinceEver</span><span class="p">(),</span>
+<span class="w">                         </span><span class="n">fort</span><span class="o">::</span><span class="n">Time</span><span class="o">::</span><span class="n">Forever</span><span class="p">());</span>
+
+<span class="n">VideoSequence</span><span class="o">::</span><span class="n">ForEach</span><span class="p">(</span><span class="n">segments</span><span class="p">,</span>
+<span class="w">                       </span><span class="p">[](</span><span class="k">const</span><span class="w"> </span><span class="n">VideoFrameData</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                           </span><span class="c1">// do something on frame based on data</span>
+<span class="w">                       </span><span class="p">});</span>
+</pre></div>
+</div>
+</p>
+ </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>list</strong> – the <a class="reference internal" href="#structfort_1_1myrmidon_1_1VideoSegment_1a0362f558fa0c2279a5830352fa63dd8d"><span class="std std-ref">VideoSegment::List</span></a> to iterate on </p></li>
+<li><p><strong>operation</strong> – the operation to perform on each video frame of the sequence.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<p>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="shapes.html" class="btn btn-neutral float-left" title="2D Geometric Shapes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="errors.html" class="btn btn-neutral float-right" title="Errors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Université de Lausanne.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
