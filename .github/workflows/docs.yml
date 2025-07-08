@@ -22,3 +22,30 @@ jobs:
         with:
           branch: gh-pages
           folder: .
+
+
+name: Manual Documentation tagging
+on:
+    workflow_dispatch:
+    input:
+      version:
+        description: 'Version to tag'
+        required: true
+
+jobs:
+  pins-documentation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+      - name: Release new version
+        run:  |
+          set -x
+          RELEASE="${{ github.event.inputs.version }}"
+          rsync -avh latest / $RELEASE --delete
+          ./linkVersion.sh
+      - uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: .
