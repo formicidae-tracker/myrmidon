@@ -13,8 +13,16 @@ Simply adds the following remotes to install fort studio through its appstream i
 ```bash
 flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 flatpak remote-add --if-not-exists --user tuleu.science https://packages.tuleu.science/tuleu.science.flatpakrepo
+flatpak install org.freedesktop.Platform.ffmpeg-full
 flatpak install io.github.formicidae_tracker.Studio
 ```
+
+.. warning::
+
+   If videos fails to load in **fort-studio**, please make sure that the full
+   ffmpeg version is installed with `flatpak install
+   org.freedesktop.Platform.ffmpeg-full`. Unfortunately flatpak does not allow
+   automatic install of extensions.
 
 .. note::
 

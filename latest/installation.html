@@ -126,8 +126,16 @@ and to install <strong>fort-studio</strong> using <code class="docutils literal 
 <p><code class="docutils literal notranslate"><span class="pre">`bash</span>
 <span class="pre">flatpak</span> <span class="pre">remote-add</span> <span class="pre">--if-not-exists</span> <span class="pre">--user</span> <span class="pre">flathub</span> <span class="pre">https://dl.flathub.org/repo/flathub.flatpakrepo</span>
 <span class="pre">flatpak</span> <span class="pre">remote-add</span> <span class="pre">--if-not-exists</span> <span class="pre">--user</span> <span class="pre">tuleu.science</span> <span class="pre">https://packages.tuleu.science/tuleu.science.flatpakrepo</span>
+<span class="pre">flatpak</span> <span class="pre">install</span> <span class="pre">org.freedesktop.Platform.ffmpeg-full</span>
 <span class="pre">flatpak</span> <span class="pre">install</span> <span class="pre">io.github.formicidae_tracker.Studio</span>
 <span class="pre">`</span></code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If videos fails to load in <strong>fort-studio</strong>, please make sure that the full
+ffmpeg version is installed with <cite>flatpak install
+org.freedesktop.Platform.ffmpeg-full</cite>. Unfortunately flatpak does not allow
+automatic install of extensions.</p>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><strong>fort-studio</strong> used to be distribued via a snap. This is not maintained
