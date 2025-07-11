@@ -37,12 +37,14 @@ void ItemProgress::ensureTqdm(int total) {
 		return;
 	}
 	if (d_description.empty() == true) {
-		d_progress = py::module_::import("tqdm").attr("tqdm"
-		)("total"_a = total, "ncols"_a = 80);
+		d_progress = py::module_::import("tqdm.autonotebook")
+		                 .attr("tqdm")("total"_a = total, "ncols"_a = 80);
 
 	} else {
-		d_progress = py::module_::import("tqdm").attr("tqdm"
-		)("total"_a = total, "ncols"_a = 80, "desc"_a = d_description);
+		d_progress =
+		    py::module_::import("tqdm.autonotebook")
+		        .attr("tqdm"
+		        )("total"_a = total, "ncols"_a = 80, "desc"_a = d_description);
 	}
 	d_last = 0;
 }
@@ -66,11 +68,12 @@ void TimeProgress::SetBound(const fort::Time &start, const fort::Time &end) {
 	d_start              = start;
 	d_lastMinuteReported = 0;
 	int64_t minutes      = std::ceil(end.Sub(start).Minutes());
-	d_progress           = py::module_::import("tqdm").attr("tqdm"
-    )("total"_a = minutes,
-      "desc"_a  = d_description,
-      "ncols"_a = 80,
-      "unit"_a  = "tracked min");
+	d_progress           = py::module_::import("tqdm.autonotebook")
+	                 .attr("tqdm"
+	                 )("total"_a = minutes,
+	                   "desc"_a  = d_description,
+	                   "ncols"_a = 80,
+	                   "unit"_a  = "tracked min");
 }
 
 void TimeProgress::Update(const fort::Time &t) {
