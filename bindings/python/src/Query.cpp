@@ -3,24 +3,27 @@
 #include "Progress.hpp"
 
 #include <condition_variable>
+#include <fort/myrmidon/types/AntInteraction.hpp>
+#include <fort/myrmidon/types/AntTrajectory.hpp>
+#include <fort/myrmidon/types/IdentifiedFrame.hpp>
 #include <thread>
 
-#include <fort/myrmidon/Query.hpp>
-#include <fort/myrmidon/Matchers.hpp>
 #include <fort/myrmidon/Experiment.hpp>
+#include <fort/myrmidon/Matchers.hpp>
+#include <fort/myrmidon/Query.hpp>
 #include <fort/myrmidon/Video.hpp>
 
 namespace py = pybind11;
 
-py::list QueryIdentifyFrames(
-    const fort::myrmidon::Experiment &experiment,
-    fort::Time                        start,
-    fort::Time                        end,
-    bool                              singleThreaded,
-    bool                              computeZones,
-    bool                              reportProgress
+std::optional<py::list> QueryIdentifyFrames(
+    const fort::myrmidon::Experiment                            &experiment,
+    fort::Time                                                   start,
+    fort::Time                                                   end,
+    bool                                                         singleThreaded,
+    bool                                                         computeZones,
+    bool                                                         reportProgress,
+    std::optional<fort::myrmidon::Query::IdentifyFramesCallback> onEachFrame
 ) {
-	py::list                                  res;
 	fort::myrmidon::Query::IdentifyFramesArgs args;
 	args.Start          = start;
 	args.End            = end;
@@ -29,25 +32,35 @@ py::list QueryIdentifyFrames(
 	if (reportProgress) {
 		args.Progress = std::make_unique<TimeProgress>("Identifiying frames");
 	}
-	fort::myrmidon::Query::IdentifyFramesFunctor(
-	    experiment,
-	    [&res](const fort::myrmidon::IdentifiedFrame::Ptr &f) {
-		    res.append(f);
-	    },
-	    args
-	);
-	return res;
+	if (onEachFrame.has_value() == false) {
+		py::list res;
+		fort::myrmidon::Query::IdentifyFramesFunctor(
+		    experiment,
+		    [&res](const fort::myrmidon::IdentifiedFrame::Ptr &f) {
+			    res.append(f);
+		    },
+		    args
+		);
+		return res;
+	} else {
+		fort::myrmidon::Query::IdentifyFramesFunctor(
+		    experiment,
+		    onEachFrame.value(),
+		    args
+		);
+		return std::nullopt;
+	}
 }
 
-py::list QueryCollideFrames(
+std::optional<py::list> QueryCollideFrames(
     const fort::myrmidon::Experiment &experiment,
     fort::Time                        start,
     fort::Time                        end,
     bool                              collisionsIgnoreZones,
     bool                              singleThreaded,
-    bool                              reportProgress
+    bool                              reportProgress,
+    std::optional<fort::myrmidon::Query::CollideFramesCallback> onEachFrame
 ) {
-	py::list                                 res;
 	fort::myrmidon::Query::CollideFramesArgs args;
 	args.Start                 = start;
 	args.End                   = end;
@@ -56,15 +69,27 @@ py::list QueryCollideFrames(
 	if (reportProgress) {
 		args.Progress = std::make_unique<TimeProgress>("Colliding frames");
 	}
-	fort::myrmidon::Query::CollideFramesFunctor(
-	    experiment,
-	    [&](const fort::myrmidon::CollisionData &d) { res.append(d); },
-	    args
-	);
-	return res;
+
+	if (onEachFrame.has_value()) {
+		fort::myrmidon::Query::CollideFramesFunctor(
+		    experiment,
+		    onEachFrame.value(),
+		    args
+		);
+		return std::nullopt;
+	} else {
+		py::list res;
+
+		fort::myrmidon::Query::CollideFramesFunctor(
+		    experiment,
+		    [&](const fort::myrmidon::CollisionData &d) { res.append(d); },
+		    args
+		);
+		return res;
+	}
 }
 
-py::list QueryComputeAntTrajectories(
+std::optional<py::list> QueryComputeAntTrajectories(
     const fort::myrmidon::Experiment   &experiment,
     fort::Time                          start,
     fort::Time                          end,
@@ -73,10 +98,10 @@ py::list QueryComputeAntTrajectories(
     bool                                computeZones,
     bool                                segmentOnMatcherValueChange,
     bool                                singleThreaded,
-    bool                                reportProgress
+    bool                                reportProgress,
+    std::optional<fort::myrmidon::Query::NewTrajectoryCallback> onNewTrajectory
 ) {
 
-	py::list                                          res;
 	fort::myrmidon::Query::ComputeAntTrajectoriesArgs args;
 	args.Start                       = start;
 	args.End                         = end;
@@ -89,15 +114,25 @@ py::list QueryComputeAntTrajectories(
 		args.Progress =
 		    std::make_unique<TimeProgress>("Computing ant trajectories");
 	}
+
+	if (onNewTrajectory.has_value() == false) {
+		py::list res;
+		fort::myrmidon::Query::ComputeAntTrajectoriesFunctor(
+		    experiment,
+		    [&](const fort::myrmidon::AntTrajectory::Ptr &t) { res.append(t); },
+		    args
+		);
+		return res;
+	}
 	fort::myrmidon::Query::ComputeAntTrajectoriesFunctor(
 	    experiment,
-	    [&](const fort::myrmidon::AntTrajectory::Ptr &t) { res.append(t); },
+	    onNewTrajectory.value(),
 	    args
 	);
-	return res;
+	return std::nullopt;
 }
 
-py::tuple QueryComputeAntInteractions(
+std::optional<std::tuple<py::list, py::list>> QueryComputeAntInteractions(
     const fort::myrmidon::Experiment   &experiment,
     fort::Time                          start,
     fort::Time                          end,
@@ -107,11 +142,11 @@ py::tuple QueryComputeAntInteractions(
     bool                                reportFullTrajectories,
     bool                                segmentOnMatcherValueChange,
     bool                                singleThreaded,
-    bool                                reportProgress
+    bool                                reportProgress,
+    std::optional<fort::myrmidon::Query::NewTrajectoryCallback> onNewTrajectory,
+    std::optional<fort::myrmidon::Query::NewInteractionCallback>
+        onNewInteraction
 ) {
-
-	py::list trajectories;
-	py::list interactions;
 
 	fort::myrmidon::Query::ComputeAntInteractionsArgs args;
 	args.Start                       = start;
@@ -126,17 +161,39 @@ py::tuple QueryComputeAntInteractions(
 		args.Progress =
 		    std::make_unique<TimeProgress>("Computing ant interactions");
 	}
+
+	if (onNewInteraction.has_value() == false &&
+	    onNewTrajectory.has_value() == false) {
+		py::list trajectories;
+		py::list interactions;
+
+		fort::myrmidon::Query::ComputeAntInteractionsFunctor(
+		    experiment,
+		    [&](const fort::myrmidon::AntTrajectory::Ptr &t) {
+			    trajectories.append(t);
+		    },
+		    [&](const fort::myrmidon::AntInteraction::Ptr &i) {
+			    interactions.append(i);
+		    },
+		    args
+		);
+		return std::make_tuple(trajectories, interactions);
+	}
+
+	if (onNewInteraction.has_value() == false) {
+		onNewInteraction = [](const fort::myrmidon::AntInteraction::Ptr &) {};
+	}
+	if (onNewTrajectory.has_value() == false) {
+		onNewTrajectory = [](const fort::myrmidon::AntTrajectory::Ptr &) {};
+	}
 	fort::myrmidon::Query::ComputeAntInteractionsFunctor(
 	    experiment,
-	    [&](const fort::myrmidon::AntTrajectory::Ptr &t) {
-		    trajectories.append(t);
-	    },
-	    [&](const fort::myrmidon::AntInteraction::Ptr &i) {
-		    interactions.append(i);
-	    },
+	    onNewTrajectory.value(),
+	    onNewInteraction.value(),
 	    args
 	);
-	return py::make_tuple(trajectories, interactions);
+
+	return std::nullopt;
 }
 
 std::shared_ptr<fort::myrmidon::VideoSegment::List>
@@ -256,18 +313,27 @@ Raises:
 	        "singleThreaded"_a = identifyArgs.SingleThreaded,
 	        "computeZones"_a   = identifyArgs.ComputeZones,
 	        "reportProgress"_a = true,
+	        "onEachFrame"_a    = nullptr,
 	        R"pydoc(
-Gets Ant positions in video frames.
+Gets Ant positions in tracked frames.There is two modes of operation: using a
+onEachFrame callback, that will allow you to perform computation on each tracked
+frame, or using the return value. The latter may require a lot of memory, so it
+will be safer to only query a small time subset.
 
 Args:
     experiment (Experiment): the experiment to query
     start (Time): the first video acquisition time to consider
     end (Time): the last video acquisition time to consider
     singleThreaded (bool): limits computation to happen in a single thread.
-    computeZones (bool): computes the zone for the Ant, otherwise 0 will always be returned for the ants' current ZoneID.
+    computeZones (bool): computes the zone for the Ant, otherwise 0 will always
+        be returned for the ants' current ZoneID.
+    onEachFrame (Callable[fort_myrmidon.IdentifiedFrame,None]): a callback
+        function for each Identified frames. If specified, IdentifyFrames() will
+        return None. If you only care about a few informations, this callback
+        can be used to remove memory pressure.
 
 Returns:
-    List[IdentifiedFrame]: the detected position of the Ant in video frames in [**start**;**end**[
+    List[IdentifiedFrame] | None: the detected position of the Ant in video frames in [ **start** ; **end** [ when **onEachFrame** is `None`.
 )pydoc"
 	    )
 	    .def_static(
@@ -280,8 +346,12 @@ Returns:
 	        "collisionsIgnoreZones"_a = collideArgs.CollisionsIgnoreZones,
 	        "singleThreaded"_a        = collideArgs.SingleThreaded,
 	        "reportProgress"_a        = true,
+	        "onEachFrame"_a           = std::nullopt,
 	        R"pydoc(
-Gets Ant collision in video frames.
+Gets Ant collision in tracked frames. There is two modes of operation: using a
+onEachFrame callback, that will allow you to perform computation on each tracked
+frame, or using the return value. The latter may require a lot of memory, so it
+will be safer to only query a small time subset.
 
 Args:
     experiment (Experiment): the experiment to query
@@ -289,10 +359,14 @@ Args:
     end (Time): the last video acquisition time to consider
     singleThreaded (bool): limits computation to happen in a single thread.
     collisionsIgnoreZones (bool): collision detection ignore zones definition
+    onNewFrame(Callable[Tuple[fort_myrmidon.IdentifiedFrame,fort_myrmidon.CollidedFrame],None]):
+        a callback function to get the result for each frames. If specified,
+        this function will return None. It could be used to reduce the memory
+        pressure of parsing large datasets.
 
 Returns:
-    List[Tuple[IdentifiedFrame,CollisionFrame]]: the detected position and collision of the Ants in video frames in [**start**;**end**[
- )pydoc"
+    List[Tuple[IdentifiedFrame,CollisionFrame]] | None: If **onNewFrame** is `None`, the detected position and collision of the Ants in tracked frames in [ **start** ; **end** [.
+)pydoc"
 	    )
 	    .def_static(
 	        "ComputeAntTrajectories",
@@ -306,10 +380,15 @@ Returns:
 	        "computeZones"_a = trajectoryArgs.ComputeZones,
 	        "segmentOnMatcherValueChange"_a =
 	            trajectoryArgs.SegmentOnMatcherValueChange,
-	        "singleThreaded"_a = trajectoryArgs.SingleThreaded,
-	        "reportProgress"_a = true,
+	        "singleThreaded"_a  = trajectoryArgs.SingleThreaded,
+	        "reportProgress"_a  = true,
+	        "onNewTrajectory"_a = std::nullopt,
 	        R"pydoc(
-Conputes Ant Trajectories between two times.
+Conputes Ant Trajectories between two times. There is two modes of operation:
+using a **onNewTrajectory** callback, that will allow you to perform computation on
+each computed trajectories, or using the return value. The latter may require a
+lot of memory, so it will be safer to only query a small time subset.
+
 
 Args:
     experiment (Experiment): the experiment to query
@@ -322,8 +401,13 @@ Args:
     segmentOnMatcherValueChange (bool): if True, when a combined
         matcher ( "behavior" == "grooming" || "behavior" = "sleeping"
         ) value change, create a new trajectory.
+    onNewTrajectory (Callable[fort_myrmidon.AntTrajectory,None]): If specified,
+        no data will be returned, but this callabled will be called for each
+        results. It allows to reduce memory pressure when only a few metrics are
+        needed from the results.
+
 Returns:
-    List[AntTrajectory]: a list of all :class:`AntTrajectory` taking place in [**start**;**end**[ given the **matcher** and **maximumGap** criterions.
+    List[AntTrajectory]|None: a list of all :class:`AntTrajectory` taking place in [ **start** ; **end** [ given the **matcher** and **maximumGap** criterions. If **onNewTrajectory** is specified, it will return None.
 
 )pydoc"
 	    )
@@ -340,17 +424,27 @@ Returns:
 	        "reportFullTrajectories"_a = interactionArgs.ReportFullTrajectories,
 	        "segmentOnMatcherValueChange"_a =
 	            interactionArgs.SegmentOnMatcherValueChange,
-	        "singleThreaded"_a = interactionArgs.SingleThreaded,
-	        "reportProgress"_a = true,
+	        "singleThreaded"_a   = interactionArgs.SingleThreaded,
+	        "reportProgress"_a   = true,
+	        "onNewTrajectory"_a  = std::nullopt,
+	        "onNewInteraction"_a = std::nullopt,
 	        R"pydoc(
-Conputes Ant Interctions between two times.
+
+Computes Ant Interactions between two times. There is two modes of operation:
+using a **onNewTrajectory** *and/or* **onNewInteraction** callbacks, that will
+allow you to perform computation on each type of result as they are queried, or
+using the return value. The latter may require a lot of memory, so it will be
+safer to only query a small time subset.
+
 
 Args:
     experiment (Experiment): the experiment to query
     start (Time): the first video acquisition time to consider
     end (Time): the last video acquisition time to consider
-    maximumGap (Duration): maximum tracking gap allowed in  :class:`AntInteraction` or :class:`AntTrajectory` objects.
-    matcher (Matcher): a Matcher that reduces down the query to more specific use case.
+    maximumGap (Duration): maximum tracking gap allowed in
+        :class:`AntInteraction` or :class:`AntTrajectory` objects.
+    matcher (Matcher): a Matcher that reduces down the query to more specific
+        use case.
     reportFullTrajectories (bool): if true, full AntTrajectories
         will be computed and returned. Otherwise, none will be
         returned and only the average Ants position will be
@@ -359,8 +453,15 @@ Args:
     segmentOnMatcherValueChange (bool): if True, when a combined
         matcher ( "behavior" == "grooming" || "behavior" = "sleeping"
         ) value change, create a new trajectory.
+    onNewTrajectory (Callable[fort_myrmidon.AntTrajectory,None]): If specified,
+        this query will return None, and any discovered trajectory will be
+        passed to this callback as they are computed.
+    onNewInteraction (Callable[fort_myrmidon.AntInteraction,None]): If
+        specified, this query will return None, and any discovered interactions
+        will be passed to this callback as they are computed.
+
 Returns:
-    Tuple[List[AntTrajectory],List[AntInteraction]]:
+    Tuple[List[AntTrajectory],List[AntInteraction]] | None: If neither **onNewTrajectory**, nor **onNewInteraction** is specified, it will return:
         * a list of all AntTrajectory taking place in [start;end[
           given the matcher criterion and maximumGap if
           reportFullTrajectories is `true`. Otherwise it will be an

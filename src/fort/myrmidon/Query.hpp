@@ -106,6 +106,11 @@ public:
 	};
 
 	/**
+	 * Callback for IdentifyFrames
+	 */
+	typedef std::function<void(const IdentifiedFrame::Ptr &)>
+	            IdentifyFramesCallback;
+	/**
 	 * Identifies ants in frames - functor version
 	 * @param experiment the Experiment to query for
 	 * @param storeData a functor to store/convert the data
@@ -121,9 +126,9 @@ public:
 	 * avoid large data copy.
 	 */
 	static void IdentifyFramesFunctor(
-	    const Experiment	                             &experiment,
-	    std::function<void(const IdentifiedFrame::Ptr &)> storeData,
-	    const IdentifyFramesArgs                         &args
+	    const Experiment         &experiment,
+	    IdentifyFramesCallback    storeData,
+	    const IdentifyFramesArgs &args
 	);
 
 	/**
@@ -154,6 +159,12 @@ public:
 	};
 
 	/**
+	 * Callback for CollideFrames
+	 */
+	typedef std::function<void(const CollisionData &data)>
+	    CollideFramesCallback;
+
+	/**
 	 * Finds Collision in tracking frames - functor version
 	 * @param experiment the Experiment to query for
 	 * @param storeData a functor to store the data as it is produced
@@ -166,9 +177,9 @@ public:
 	 * avoid large data copy.
 	 */
 	static void CollideFramesFunctor(
-	    const Experiment	                          &experiment,
-	    std::function<void(const CollisionData &data)> storeData,
-	    const CollideFramesArgs                       &args
+	    const Experiment        &experiment,
+	    CollideFramesCallback    storeData,
+	    const CollideFramesArgs &args
 	);
 
 	/**
@@ -209,6 +220,12 @@ public:
 	};
 
 	/**
+	 * Callback for newly discovered AntTrajectories
+	 */
+	typedef std::function<void(const AntTrajectory::Ptr &)>
+	    NewTrajectoryCallback;
+
+	/**
 	 * Computes trajectories for ants - functor version
 	 * @param experiment the Experiment to query for
 	 * @param storeTrajectory a functor to store/covert the data
@@ -223,9 +240,9 @@ public:
 	 * avoid large data copy.
 	 */
 	static void ComputeAntTrajectoriesFunctor(
-	    const Experiment	                           &experiment,
-	    std::function<void(const AntTrajectory::Ptr &)> storeTrajectory,
-	    const ComputeAntTrajectoriesArgs               &args
+	    const Experiment                 &experiment,
+	    NewTrajectoryCallback             storeTrajectory,
+	    const ComputeAntTrajectoriesArgs &args
 	);
 
 	/**
@@ -275,6 +292,12 @@ public:
 	};
 
 	/**
+	 * Callback for ComputeAntInteractions
+	 */
+	typedef std::function<void(const AntInteraction::Ptr &)>
+	    NewInteractionCallback;
+
+	/**
 	 * Computes interactions for ants - functor version
 	 * @param experiment the Experiment to query for
 	 * @param storeTrajectory a functor to store/convert trajectories
@@ -295,10 +318,10 @@ public:
 	 * avoid large data copy.
 	 */
 	static void ComputeAntInteractionsFunctor(
-	    const Experiment	                            &experiment,
-	    std::function<void(const AntTrajectory::Ptr &)>  storeTrajectory,
-	    std::function<void(const AntInteraction::Ptr &)> storeInteraction,
-	    const ComputeAntInteractionsArgs                &args
+	    const Experiment                 &experiment,
+	    NewTrajectoryCallback             storeTrajectory,
+	    NewInteractionCallback            storeInteraction,
+	    const ComputeAntInteractionsArgs &args
 	);
 
 	/**
