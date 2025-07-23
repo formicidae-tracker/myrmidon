@@ -146,7 +146,19 @@ FetchContent_Declare(
 	GIT_TAG 93d378afd3e28ca1e13467a80b89aa67ca523ef9
 )
 
-FetchContent_MakeAvailable(yaml-cpp semver fort-tags fort-hermes fort-charis)
+if(NOT SKBUILD AND EXISTS ${PROJECT_SOURCE_DIR}/deps/slogpp)
+	FetchContent_Declare(slogpp SOURCE_DIR ${PROJECT_SOURCE_DIR}/deps/slogpp)
+else()
+	FetchContent_Declare(
+		slogpp
+		GIT_REPOSITORY https://github.com/atuleu/slogpp.git
+		GIT_TAG main
+	)
+endif()
+
+FetchContent_MakeAvailable(
+	yaml-cpp semver fort-tags fort-hermes fort-charis slogpp
+)
 
 include(CheckCXXSourceCompiles)
 

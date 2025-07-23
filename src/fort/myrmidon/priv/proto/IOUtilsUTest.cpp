@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "IOUtils.hpp"
+#include "fort/myrmidon/types/OpenArguments.hpp"
 
 #include <fort/myrmidon/AntDescription.pb.h>
 #include <fort/myrmidon/Experiment.pb.h>
@@ -608,7 +609,8 @@ TEST_F(IOUtilsUTest, ExperimentIO) {
 
 		std::tie(tdd, errors) = TrackingDataDirectory::Open(
 		    TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
-		    TestSetup::UTestData().Basedir()
+		    TestSetup::UTestData().Basedir(),
+		    {}
 		);
 		auto s = e->CreateSpace("box");
 		e->AddTrackingDataDirectory(s, tdd);
@@ -757,8 +759,11 @@ TEST_F(IOUtilsUTest, SpaceIO) {
 	auto dS = e->CreateSpace("foo");
 	auto tddPath =
 	    TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath;
-	auto [tdd, errors] =
-	    TrackingDataDirectory::Open(tddPath, TestSetup::UTestData().Basedir());
+	auto [tdd, errors] = TrackingDataDirectory::Open(
+	    tddPath,
+	    TestSetup::UTestData().Basedir(),
+	    {}
+	);
 	EXPECT_TRUE(errors.empty());
 	e->AddTrackingDataDirectory(dS, tdd);
 	auto      z = dS->CreateZone("bar");
@@ -770,7 +775,7 @@ TEST_F(IOUtilsUTest, SpaceIO) {
 
 	IOUtils::SaveSpace(&s, *dS);
 	EXPECT_MESSAGE_EQ(s, expected);
-	IOUtils::LoadSpace(*e2, s);
+	IOUtils::LoadSpace(*e2, s, OpenArguments{});
 	ASSERT_EQ(e2->Spaces().size(), 1);
 	auto res = e2->Spaces().begin()->second;
 	EXPECT_EQ(res->ID(), dS->ID());

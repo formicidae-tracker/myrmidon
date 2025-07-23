@@ -1,6 +1,9 @@
 #pragma once
 
 #include <memory>
+#include <optional>
+
+#include <fort/myrmidon/types/OpenArguments.hpp>
 #include <fort/myrmidon/utils/FileSystem.hpp>
 
 #include "ForwardDeclaration.hpp"
@@ -45,7 +48,9 @@ public:
 	// as the file format is free to use this own function if its
 	// comes from a third party library. The implementation is allowed
 	// to throw std::exception
-	virtual ExperimentPtr DoOpen(const fs::path & filename, bool dataLess) = 0;
+	virtual ExperimentPtr DoOpen(
+	    const fs::path &filename, const std::optional<OpenArguments> &openData
+	) = 0;
 
 	// Actually saves an Experiment on the filesystem
 	// @experiment the <priv::Experiment> to save
@@ -55,9 +60,8 @@ public:
 	// as the file format is free to use this own function if its
 	// comes from a third party library. The implementation is allowed
 	// to throw std::exception
-	virtual void DoSave(const Experiment & experiment, const fs::path & filename) = 0;
-
-
+	virtual void
+	DoSave(const Experiment &experiment, const fs::path &filename) = 0;
 
 	// Opens a file with the preferred file format
 	// @filename the path to file to open
@@ -65,7 +69,9 @@ public:
 	//
 	// Opens a file with the preferred file format. This method can
 	// throws std:exception
-	static ExperimentPtr Open(const fs::path & filename, bool dataLess = false);
+	static ExperimentPtr Open(
+	    const fs::path &filename, const std::optional<OpenArguments> &openData
+	);
 
 	// Saves a file with the preferred file format
 	// @experiment the <priv::Experiment> to save
@@ -74,9 +80,9 @@ public:
 	// Creates a file and saves the Experiment inside it. Truncate it
 	// if it is already existing. This ,method can throws
 	// std::exception.
-	static void Save(const Experiment & experiment, const fs::path & filename);
+	static void Save(const Experiment &experiment, const fs::path &filename);
 };
 
-} //namespace priv;
-} //namespace myrmidon
-} //namespace fort
+} // namespace priv
+} // namespace myrmidon
+} // namespace fort

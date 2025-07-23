@@ -18,57 +18,68 @@ namespace proto {
 ExperimentReadWriter::ExperimentReadWriter() {}
 ExperimentReadWriter::~ExperimentReadWriter() {}
 
-Experiment::Ptr ExperimentReadWriter::DoOpen(const fs::path & filename, bool dataLess) {
-	typedef FileReadWriter<pb::FileHeader,pb::FileLine> ReadWriter;
-	auto res = Experiment::Create(filename);
+Experiment::Ptr ExperimentReadWriter::DoOpen(
+    const fs::path &filename, const std::optional<OpenArguments> &openData
+) {
+	typedef FileReadWriter<pb::FileHeader, pb::FileLine> ReadWriter;
+	auto                               res = Experiment::Create(filename);
 	std::vector<Measurement::ConstPtr> measurements;
-	ReadWriter::Read(filename,
-	                 [filename,dataLess](const pb::FileHeader & h) {
-		                 semver::version fileVersion{uint8_t(h.majorversion()),
-		                                             uint8_t(h.minorversion()),
-		                                             0};
+	bool                               dataless = openData.has_value() == false;
+	ReadWriter::Read(
+	    filename,
+	    [filename, dataless](const pb::FileHeader &h) {
+		    semver::version fileVersion{
+		        uint8_t(h.majorversion()),
+		        uint8_t(h.minorversion()),
+		        0
+		    };
 
-		                 semver::version dataLessSupportBoundaryVersion("0.2.0");
-		                 semver::version maxSupportedVersion("0.3.0");
-		                 if ( fileVersion >  maxSupportedVersion) {
-			                 std::ostringstream os;
-			                 os << "Unexpected myrmidon file version " << fileVersion
-			                    << " in " << filename
-			                    << ": can only works with versions below or equal to 0.3.0";
-			                 throw std::runtime_error(os.str());
-		                 }
-		                 if ( dataLess == true && fileVersion < dataLessSupportBoundaryVersion ) {
-			                 throw std::runtime_error("Uncorrect myrmidon file version "
-			                                          + fileVersion.to_string()
-			                                          + ": data-less opening is only supported for myrmidon file version above 0.2.0");
-		                 }
-	                 },
-	                 [&measurements,&res,filename,dataLess](const pb::FileLine & line) {
-		                 if (line.has_experiment() == true ) {
-			                 IOUtils::LoadExperiment(*res, line.experiment());
-		                 }
+		    semver::version dataLessSupportBoundaryVersion("0.2.0");
+		    semver::version maxSupportedVersion("0.3.0");
+		    if (fileVersion > maxSupportedVersion) {
+			    std::ostringstream os;
+			    os << "Unexpected myrmidon file version " << fileVersion
+			       << " in " << filename
+			       << ": can only works with versions below or equal to 0.3.0";
+			    throw std::runtime_error(os.str());
+		    }
+		    if (dataless == true &&
+		        fileVersion < dataLessSupportBoundaryVersion) {
+			    throw std::runtime_error(
+			        "Uncorrect myrmidon file version " +
+			        fileVersion.to_string() +
+			        ": data-less opening is only supported for myrmidon file "
+			        "version above 0.2.0"
+			    );
+		    }
+	    },
+	    [&measurements, &res, filename, &openData](const pb::FileLine &line) {
+		    if (line.has_experiment() == true) {
+			    IOUtils::LoadExperiment(*res, line.experiment());
+		    }
 
-		                 if (line.has_antdescription() == true ) {
-			                 IOUtils::LoadAnt(*res, line.antdescription());
-		                 }
+		    if (line.has_antdescription() == true) {
+			    IOUtils::LoadAnt(*res, line.antdescription());
+		    }
 
-		                 if (line.has_measurement() == true && dataLess == false ) {
-			                 auto m = IOUtils::LoadMeasurement(line.measurement());
-			                 measurements.push_back(m);
-		                 }
+		    if (line.has_measurement() == true &&
+		        openData.has_value() == true) {
+			    auto m = IOUtils::LoadMeasurement(line.measurement());
+			    measurements.push_back(m);
+		    }
 
-		                 if (line.has_space() == true ) {
-			                 IOUtils::LoadSpace(*res,line.space(),dataLess == false);
-		                 }
-	                 });
+		    if (line.has_space() == true) {
+			    IOUtils::LoadSpace(*res, line.space(), openData);
+		    }
+	    }
+	);
 
-	for ( const auto & m : measurements ) {
+	for (const auto &m : measurements) {
 		res->SetMeasurement(m);
 	}
 
 	return res;
 }
-
 
 void ExperimentReadWriter::DoSave(const Experiment & experiment, const fs::path & filepath) {
 	typedef FileReadWriter<pb::FileHeader,pb::FileLine> ReadWriter;

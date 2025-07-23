@@ -23,6 +23,7 @@
 #include "Space.hpp"
 #include "TagCloseUp.hpp"
 #include "TrackingDataDirectory.hpp"
+#include "fort/myrmidon/types/OpenArguments.hpp"
 
 #include <tbb/parallel_for.h>
 
@@ -156,12 +157,13 @@ Experiment::Ptr Experiment::Create(const fs::path &filename) {
 	return std::shared_ptr<Experiment>(new Experiment(filename));
 }
 
-Experiment::Ptr Experiment::Open(const fs::path &filepath) {
-	return ExperimentReadWriter::Open(filepath);
+Experiment::Ptr
+Experiment::Open(const fs::path &filepath, OpenArguments &&args) {
+	return ExperimentReadWriter::Open(filepath, std::move(args));
 }
 
 Experiment::Ptr Experiment::OpenDataLess(const fs::path &filepath) {
-	return ExperimentReadWriter::Open(filepath, true);
+	return ExperimentReadWriter::Open(filepath, std::nullopt);
 }
 
 void Experiment::Save(const fs::path &filepath) {
@@ -694,9 +696,7 @@ Experiment::CompileCollisionSolver(bool collisionsIgnoreZones) const {
 	);
 }
 
-void Experiment::EnsureAllDataIsLoaded(
-    ProgressReporter::Ptr &&progress, bool fixCorruptedData
-) const {
+void Experiment::EnsureAllDataIsLoaded(OpenArguments &&args) const {
 	std::vector<TrackingDataDirectory::Loader> loaders;
 
 	for (const auto &[URI, tdd] : TrackingDataDirectories()) {
@@ -716,7 +716,11 @@ void Experiment::EnsureAllDataIsLoaded(
 			loaders.insert(loaders.end(), c.begin(), c.end());
 		}
 	}
-	Query::ProcessLoaders(loaders, std::move(progress), fixCorruptedData);
+	Query::ProcessLoaders(
+	    loaders,
+	    std::move(args.Progress),
+	    args.FixCorruptedData
+	);
 }
 
 } // namespace priv

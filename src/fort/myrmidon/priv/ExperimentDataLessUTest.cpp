@@ -36,7 +36,8 @@ void ExperimentDataLessUTest::SetUpTestSuite() {
 	for (const auto &tddInfo : TestSetup::UTestData().NestDataDirs()) {
 		auto [tdd, errors] = TrackingDataDirectory::Open(
 		    tddInfo.AbsoluteFilePath,
-		    TestSetup::UTestData().Basedir()
+		    TestSetup::UTestData().Basedir(),
+		    {}
 		);
 		experiment->AddTrackingDataDirectory(nest, tdd);
 	}
@@ -45,7 +46,8 @@ void ExperimentDataLessUTest::SetUpTestSuite() {
 	for (const auto &tddInfo : TestSetup::UTestData().ForagingDataDirs()) {
 		auto [tdd, errors] = TrackingDataDirectory::Open(
 		    tddInfo.AbsoluteFilePath,
-		    TestSetup::UTestData().Basedir()
+		    TestSetup::UTestData().Basedir(),
+		    {}
 		);
 		EXPECT_TRUE(errors.empty());
 		experiment->AddTrackingDataDirectory(foraging, tdd);

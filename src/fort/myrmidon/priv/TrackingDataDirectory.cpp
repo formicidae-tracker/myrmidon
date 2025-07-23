@@ -241,13 +241,13 @@ MovieSegment::List TrackingDataDirectory::LoadMovieSegments(
 }
 
 void TrackingDataDirectory::BuildFrameReferenceCache(
-    const std::string             &URI,
-    Time::MonoclockID              monoID,
-    const fs::path                &tddPath,
-    const TrackingIndex::ConstPtr &trackingIndexer,
-    FrameReferenceCache           &cache,
-    const ProgressCallback        &progress,
-    FixableErrorList              &errors
+    const std::string                       &URI,
+    Time::MonoclockID                        monoID,
+    const fs::path                          &tddPath,
+    const TrackingIndex::ConstPtr           &trackingIndexer,
+    FrameReferenceCache                     &cache,
+    const std::unique_ptr<ProgressReporter> &progress,
+    FixableErrorList                        &errors
 ) {
 	struct CacheSegment {
 		std::string             AbsoluteFilePath;
@@ -311,7 +311,9 @@ void TrackingDataDirectory::BuildFrameReferenceCache(
 	std::atomic<int> counts;
 	counts.store(0);
 	// do the parrallel computations
-	progress(0, flattened.size());
+	if (progress != nullptr) {
+		progress->SetTotal(flattened.size());
+	}
 	tbb::parallel_for(
 	    tbb::blocked_range<size_t>(0, flattened.size()),
 	    [&flattened, monoID, &counts, &progress](
@@ -319,7 +321,9 @@ void TrackingDataDirectory::BuildFrameReferenceCache(
 	    ) {
 		    for (size_t idx = range.begin(); idx != range.end(); ++idx) {
 			    flattened[idx].Load(monoID);
-			    progress(counts.fetch_add(1) + 1, flattened.size());
+			    if (progress != nullptr) {
+				    progress->Update(counts.fetch_add(1) + 1);
+			    }
 		    }
 	    }
 	);
@@ -475,187 +479,191 @@ TrackingDataDirectory::BuildIndexes(
 		}
 
 		return res;
-	}
+    }
 
-	std::tuple<TrackingDataDirectory::Ptr, FixableErrorList>
-	TrackingDataDirectory::Open(
-	    const fs::path         &filepath,
-	    const fs::path         &experimentRoot,
-	    const ProgressCallback &progress
-	) {
-		CheckPaths(filepath, experimentRoot);
+    std::tuple<TrackingDataDirectory::Ptr, FixableErrorList>
+    TrackingDataDirectory::Open(
+        const fs::path      &filepath,
+        const fs::path      &experimentRoot,
+        const OpenArguments &args
+    ) {
+	    CheckPaths(filepath, experimentRoot);
 
-		auto absoluteFilePath = fs::weakly_canonical(fs::absolute(filepath));
-		auto URI = fs::relative(absoluteFilePath, fs::absolute(experimentRoot));
+	    auto absoluteFilePath = fs::weakly_canonical(fs::absolute(filepath));
+	    auto URI = fs::relative(absoluteFilePath, fs::absolute(experimentRoot));
 
-		Ptr              res;
-		FixableErrorList errors;
-		try {
-			res = LoadFromCache(absoluteFilePath, URI.generic_string());
-		} catch (const std::exception &e) {
-			std::tie(res, errors) =
-			    OpenFromFiles(absoluteFilePath, URI.generic_string(), progress);
-			if (errors.empty()) {
-				try {
-					res->SaveToCache();
-				} catch (const std::exception &e) {
-				}
-			}
-		}
-
-		res->LoadComputedFromCache();
-		res->LoadDetectionSettings();
-
-		return std::make_tuple(res, std::move(errors));
-	}
-
-	std::tuple<TrackingDataDirectory::Ptr, FixableErrorList>
-	TrackingDataDirectory::OpenFromFiles(
-	    const fs::path         &absoluteFilePath,
-	    const std::string      &URI,
-	    const ProgressCallback &progress
-	) {
-
-		auto ti             = std::make_shared<TrackingIndex>();
-		auto mi             = std::make_shared<MovieIndex>();
-		auto referenceCache = std::make_shared<FrameReferenceCache>();
-		FixableErrorList errors;
-
-		auto [hermesFiles, moviesPaths] = LookUpFiles(absoluteFilePath);
-		if (hermesFiles.empty()) {
-			throw std::invalid_argument(
-			    absoluteFilePath.string() +
-			    " does not contains any .hermes file"
-			);
-		}
-
-		Time::MonoclockID monoID = GetUID(absoluteFilePath);
-
-		auto [start, end, error] = BuildIndexes(URI, monoID, hermesFiles, ti);
-		auto [startFrame, startDate] = start;
-		auto [endFrame, endDate]     = end;
-
-		if (error != nullptr) {
-			errors.push_back(std::move(error));
-		}
-
-		auto closeUpFiles = ListTagCloseUpFiles(absoluteFilePath / "ants");
-
-		for (const auto &[frameID, s] : closeUpFiles) {
-			auto [filepath, filter] = s;
-			if (frameID > endFrame) {
-				errors.push_back(std::make_unique<NoKnownAcquisitionTimeFor>(
-				    "could not access acquisition time for '" +
-				        filepath.string() +
-				        "': last readable TrackingFrameID is " +
-				        std::to_string(endFrame),
-				    filepath
-				));
-			} else {
-				referenceCache->insert(
-				    std::make_pair(frameID, FrameReference(URI, 0, Time()))
-				);
-			}
-		}
-
-		auto movies = LoadMovieSegments(moviesPaths, URI);
-		movies.erase(
-		    std::remove_if(
-		        movies.begin(),
-		        movies.end(),
-		        [endFrame](const MovieSegment::Ptr &ms) {
-			        return ms->StartFrame() > endFrame;
-		        }
-		    ),
-		    movies.end()
-		);
-		for (const auto &m : movies) {
-			referenceCache->insert(
-			    std::make_pair(m->StartFrame(), FrameReference(URI, 0, Time()))
-			);
-			if (m->EndFrame() <= endFrame) {
-				referenceCache->insert(std::make_pair(
-				    m->EndFrame(),
-				    FrameReference(URI, 0, Time())
-				));
-			}
-		}
-
-		BuildFrameReferenceCache(
-		    URI,
-		    monoID,
-		    absoluteFilePath,
-		    ti,
-		    *referenceCache,
-		    progress,
-		    errors
-		);
-		// caches the last frame
-		referenceCache->insert(std::make_pair(
-		    endFrame,
-		    FrameReference(URI, endFrame, endDate.Add(-1))
-		));
-		Time emptyTime;
-
-		std::set<FrameID> toErase;
-		for (const auto &[frameID, ref] : *referenceCache) {
-			if (ref.FrameID() == 0 || ref.Time().Equals(emptyTime)) {
-				toErase.insert(frameID);
-			}
-		}
-
-		for (const auto &m : movies) {
-			auto fi = referenceCache->find(m->StartFrame());
-			if (fi == referenceCache->cend() ||
-			    (fi->second.FrameID() == 0 ||
-			     fi->second.Time().Equals(emptyTime))) {
-
-				std::ostringstream oss;
-				oss << "could not access acquisition time for frame "
-				    << m->StartFrame() << ", starting frame of movie segment '"
-				    << m->AbsoluteFilePath()
-				    << "', likely due to data corruption.";
-				errors.push_back(std::make_unique<NoKnownAcquisitionTimeFor>(
-				    oss.str(),
-				    m->AbsoluteFilePath()
-				));
-			} else {
-				mi->Insert(fi->second, m);
-			}
-		}
-
-		for (const auto &[frameID, s] : closeUpFiles) {
-			if (toErase.count(frameID) == 0) {
-				continue;
-			}
-			auto [filepath, filter] = s;
-			errors.push_back(std::make_unique<NoKnownAcquisitionTimeFor>(
-			    "could not access acquisition time for '" + filepath.string() +
-			        "', likely due to data corruption",
-			    filepath
-			));
-		}
-
-		for (auto frameID : toErase) {
-			referenceCache->erase(frameID);
-		}
-
-		return {
-		    TrackingDataDirectory::Create(
-		        URI,
+	    Ptr              res;
+	    FixableErrorList errors;
+	    try {
+		    res = LoadFromCache(absoluteFilePath, URI.generic_string());
+	    } catch (const std::exception &e) {
+		    std::tie(res, errors) = OpenFromFiles(
 		        absoluteFilePath,
-		        startFrame,
-		        endFrame,
-		        startDate,
-		        endDate,
-		        ti,
-		        mi,
-		        referenceCache
-		    ),
-		    std::move(errors)};
-	}
+		        URI.generic_string(),
+		        args.Progress
+		    );
+		    if (errors.empty()) {
+			    try {
+				    res->SaveToCache();
+			    } catch (const std::exception &e) {
+			    }
+		    }
+	    }
 
-	const TrackingDataDirectory::TrackingIndex &
+	    res->LoadComputedFromCache();
+	    res->LoadDetectionSettings();
+
+	    return std::make_tuple(res, std::move(errors));
+    }
+
+    std::tuple<TrackingDataDirectory::Ptr, FixableErrorList>
+    TrackingDataDirectory::OpenFromFiles(
+        const fs::path                          &absoluteFilePath,
+        const std::string                       &URI,
+        const std::unique_ptr<ProgressReporter> &progress
+    ) {
+
+	    auto ti             = std::make_shared<TrackingIndex>();
+	    auto mi             = std::make_shared<MovieIndex>();
+	    auto referenceCache = std::make_shared<FrameReferenceCache>();
+	    FixableErrorList errors;
+
+	    auto [hermesFiles, moviesPaths] = LookUpFiles(absoluteFilePath);
+	    if (hermesFiles.empty()) {
+		    throw std::invalid_argument(
+		        absoluteFilePath.string() +
+		        " does not contains any .hermes file"
+		    );
+	    }
+
+	    Time::MonoclockID monoID = GetUID(absoluteFilePath);
+
+	    auto [start, end, error] = BuildIndexes(URI, monoID, hermesFiles, ti);
+	    auto [startFrame, startDate] = start;
+	    auto [endFrame, endDate]     = end;
+
+	    if (error != nullptr) {
+		    errors.push_back(std::move(error));
+	    }
+
+	    auto closeUpFiles = ListTagCloseUpFiles(absoluteFilePath / "ants");
+
+	    for (const auto &[frameID, s] : closeUpFiles) {
+		    auto [filepath, filter] = s;
+		    if (frameID > endFrame) {
+			    errors.push_back(std::make_unique<NoKnownAcquisitionTimeFor>(
+			        "could not access acquisition time for '" +
+			            filepath.string() +
+			            "': last readable TrackingFrameID is " +
+			            std::to_string(endFrame),
+			        filepath
+			    ));
+		    } else {
+			    referenceCache->insert(
+			        std::make_pair(frameID, FrameReference(URI, 0, Time()))
+			    );
+		    }
+	    }
+
+	    auto movies = LoadMovieSegments(moviesPaths, URI);
+	    movies.erase(
+	        std::remove_if(
+	            movies.begin(),
+	            movies.end(),
+	            [endFrame](const MovieSegment::Ptr &ms) {
+		            return ms->StartFrame() > endFrame;
+	            }
+	        ),
+	        movies.end()
+	    );
+	    for (const auto &m : movies) {
+		    referenceCache->insert(
+		        std::make_pair(m->StartFrame(), FrameReference(URI, 0, Time()))
+		    );
+		    if (m->EndFrame() <= endFrame) {
+			    referenceCache->insert(std::make_pair(
+			        m->EndFrame(),
+			        FrameReference(URI, 0, Time())
+			    ));
+		    }
+	    }
+
+	    BuildFrameReferenceCache(
+	        URI,
+	        monoID,
+	        absoluteFilePath,
+	        ti,
+	        *referenceCache,
+	        progress,
+	        errors
+	    );
+	    // caches the last frame
+	    referenceCache->insert(std::make_pair(
+	        endFrame,
+	        FrameReference(URI, endFrame, endDate.Add(-1))
+	    ));
+	    Time emptyTime;
+
+	    std::set<FrameID> toErase;
+	    for (const auto &[frameID, ref] : *referenceCache) {
+		    if (ref.FrameID() == 0 || ref.Time().Equals(emptyTime)) {
+			    toErase.insert(frameID);
+		    }
+	    }
+
+	    for (const auto &m : movies) {
+		    auto fi = referenceCache->find(m->StartFrame());
+		    if (fi == referenceCache->cend() ||
+		        (fi->second.FrameID() == 0 ||
+		         fi->second.Time().Equals(emptyTime))) {
+
+			    std::ostringstream oss;
+			    oss << "could not access acquisition time for frame "
+			        << m->StartFrame() << ", starting frame of movie segment '"
+			        << m->AbsoluteFilePath()
+			        << "', likely due to data corruption.";
+			    errors.push_back(std::make_unique<NoKnownAcquisitionTimeFor>(
+			        oss.str(),
+			        m->AbsoluteFilePath()
+			    ));
+		    } else {
+			    mi->Insert(fi->second, m);
+		    }
+	    }
+
+	    for (const auto &[frameID, s] : closeUpFiles) {
+		    if (toErase.count(frameID) == 0) {
+			    continue;
+		    }
+		    auto [filepath, filter] = s;
+		    errors.push_back(std::make_unique<NoKnownAcquisitionTimeFor>(
+		        "could not access acquisition time for '" + filepath.string() +
+		            "', likely due to data corruption",
+		        filepath
+		    ));
+	    }
+
+	    for (auto frameID : toErase) {
+		    referenceCache->erase(frameID);
+	    }
+
+	    return {
+	        TrackingDataDirectory::Create(
+	            URI,
+	            absoluteFilePath,
+	            startFrame,
+	            endFrame,
+	            startDate,
+	            endDate,
+	            ti,
+	            mi,
+	            referenceCache
+	        ),
+	        std::move(errors)
+	    };
+    }
+
+    const TrackingDataDirectory::TrackingIndex &
 	TrackingDataDirectory::TrackingSegments() const {
 		return *d_segments;
 	}

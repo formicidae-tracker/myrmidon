@@ -12,6 +12,7 @@
 #include <fort/hermes/FileContext.hpp>
 
 #include <fort/myrmidon/types/FixableError.hpp>
+#include <fort/myrmidon/types/OpenArguments.hpp>
 #include <fort/myrmidon/utils/FileSystem.hpp>
 
 #include "ForwardDeclaration.hpp"
@@ -19,6 +20,7 @@
 #include "SegmentIndexer.hpp"
 #include "TagStatistics.hpp"
 #include "TimeValid.hpp"
+#include "fort/myrmidon/types/Reporter.hpp"
 
 namespace fort {
 namespace myrmidon {
@@ -52,8 +54,6 @@ public:
 
 	typedef std::pair<fs::path, std::shared_ptr<TagID>> TagCloseUpFileAndFilter;
 	typedef std::multimap<FrameID, TagCloseUpFileAndFilter> TagCloseUpListing;
-
-	typedef std::function<void(int, int)> ProgressCallback;
 
 	class const_iterator {
 	public:
@@ -109,9 +109,9 @@ public:
 	// look for tracking data file open the first and last segment to
 	// obtain infoirmation on the first and last frame.
 	static std::tuple<TrackingDataDirectory::Ptr, FixableErrorList> Open(
-	    const fs::path         &TDpath,
-	    const fs::path         &experimentRoot,
-	    const ProgressCallback &progress = [](int, int) {}
+	    const fs::path      &TDpath,
+	    const fs::path      &experimentRoot,
+	    const OpenArguments &args
 	);
 
 	static TrackingDataDirectory::Ptr Create(
@@ -119,8 +119,8 @@ public:
 	    const fs::path                    &absoluteFilePath,
 	    uint64_t                           startFrame,
 	    uint64_t                           endFrame,
-	    const Time	                    &start,
-	    const Time	                    &end,
+	    const Time                        &start,
+	    const Time                        &end,
 	    const TrackingIndex::Ptr          &segments,
 	    const MovieIndex::Ptr             &movies,
 	    const FrameReferenceCacheConstPtr &referenceCache
@@ -230,7 +230,7 @@ private:
 
 	static MovieSegment::List LoadMovieSegments(
 	    const std::map<uint32_t, std::pair<fs::path, fs::path>> &moviesPaths,
-	    const std::string	                                   &parentURI
+	    const std::string                                       &parentURI
 	);
 
 	static TrackingDataDirectory::Ptr
@@ -244,19 +244,19 @@ private:
 	);
 
 	static void BuildFrameReferenceCache(
-	    const std::string             &URI,
-	    Time::MonoclockID              monoID,
-	    const fs::path                &tddPath,
-	    const TrackingIndex::ConstPtr &trackingIndexer,
-	    FrameReferenceCache           &cache,
-	    const ProgressCallback        &progress,
-	    FixableErrorList              &errors
+	    const std::string                       &URI,
+	    Time::MonoclockID                        monoID,
+	    const fs::path                          &tddPath,
+	    const TrackingIndex::ConstPtr           &trackingIndexer,
+	    FrameReferenceCache                     &cache,
+	    const std::unique_ptr<ProgressReporter> &progress,
+	    FixableErrorList                        &errors
 	);
 
 	static std::tuple<Ptr, FixableErrorList> OpenFromFiles(
-	    const fs::path         &absoluteFilePath,
-	    const std::string      &URI,
-	    const ProgressCallback &progress
+	    const fs::path                          &absoluteFilePath,
+	    const std::string                       &URI,
+	    const std::unique_ptr<ProgressReporter> &progress
 	);
 
 	TrackingDataDirectory(
@@ -264,8 +264,8 @@ private:
 	    const fs::path                    &absoluteFilePath,
 	    uint64_t                           startFrame,
 	    uint64_t                           endFrame,
-	    const Time	                    &start,
-	    const Time	                    &end,
+	    const Time                        &start,
+	    const Time                        &end,
 	    const TrackingIndex::Ptr          &segments,
 	    const MovieIndex::Ptr             &movies,
 	    const FrameReferenceCacheConstPtr &referenceCache

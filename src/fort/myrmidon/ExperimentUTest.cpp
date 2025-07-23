@@ -580,11 +580,17 @@ TEST_F(PublicExperimentUTest, CanOpenCorruptedDataDir) {
 		ADD_FAILURE() << "unexpected error: " << e.what();
 	}
 	try {
-		URI =
-		    experiment->AddTrackingDataDirectory(s->ID(), corruptedPath, true);
+		URI = experiment->AddTrackingDataDirectory(
+		    s->ID(),
+		    corruptedPath,
+		    {.FixCorruptedData = true}
+		);
 		experiment->RemoveTrackingDataDirectory(URI);
-		URI =
-		    experiment->AddTrackingDataDirectory(s->ID(), corruptedPath, false);
+		URI = experiment->AddTrackingDataDirectory(
+		    s->ID(),
+		    corruptedPath,
+		    {.FixCorruptedData = false}
+		);
 	} catch (const std::exception &e) {
 		ADD_FAILURE() << "Unexpected error: " << e.what();
 	}
@@ -593,7 +599,7 @@ TEST_F(PublicExperimentUTest, CanOpenCorruptedDataDir) {
 	ResetCorruptedFile();
 
 	try {
-		experiment->EnsureAllDataIsLoaded(nullptr, false);
+		experiment->EnsureAllDataIsLoaded({.FixCorruptedData = false});
 		ADD_FAILURE() << "Should throw an error while ensuring old data";
 	} catch (const FixableErrors &e) {
 		const auto &errors = e.Errors();
@@ -613,9 +619,13 @@ TEST_F(PublicExperimentUTest, CanOpenCorruptedDataDir) {
 
 	experiment->RemoveTrackingDataDirectory(URI);
 	// no need to fix here, the cache has the fix
-	URI = experiment->AddTrackingDataDirectory(s->ID(), corruptedPath, false);
+	URI = experiment->AddTrackingDataDirectory(
+	    s->ID(),
+	    corruptedPath,
+	    {.FixCorruptedData = false}
+	);
 	try {
-		experiment->EnsureAllDataIsLoaded(nullptr, true);
+		experiment->EnsureAllDataIsLoaded({.FixCorruptedData = true});
 	} catch (const std::exception &e) {
 		ADD_FAILURE() << "Unexpected error : " << e.what();
 		return;
@@ -623,9 +633,13 @@ TEST_F(PublicExperimentUTest, CanOpenCorruptedDataDir) {
 
 	experiment->RemoveTrackingDataDirectory(URI);
 	// no need to fix here, the cache has the fix
-	URI = experiment->AddTrackingDataDirectory(s->ID(), corruptedPath, false);
+	URI = experiment->AddTrackingDataDirectory(
+	    s->ID(),
+	    corruptedPath,
+	    {.FixCorruptedData = false}
+	);
 	try {
-		experiment->EnsureAllDataIsLoaded(nullptr, false);
+		experiment->EnsureAllDataIsLoaded({.FixCorruptedData = false});
 	} catch (const std::exception &e) {
 		ADD_FAILURE() << "Unexpected error : " << e.what();
 		return;

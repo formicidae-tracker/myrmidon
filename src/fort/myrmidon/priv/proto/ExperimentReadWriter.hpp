@@ -19,11 +19,13 @@ public:
 	virtual ~ExperimentReadWriter();
 
 	// Implements DoOpen
-	virtual ExperimentPtr DoOpen(const fs::path & filename, bool dataLess = false);
+	ExperimentPtr DoOpen(
+	    const fs::path &filename, const std::optional<OpenArguments> &openData
+	) override;
 
 	// Implements DoSave
-	virtual void DoSave(const Experiment & experiment, const fs::path & filename);
-
+	void
+	DoSave(const Experiment &experiment, const fs::path &filename) override;
 };
 
 } // namespace proto

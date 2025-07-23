@@ -6,7 +6,7 @@
 #include <fort/tags/fort-tags.hpp>
 
 #include <fort/myrmidon/types/FixableError.hpp>
-#include <fort/myrmidon/types/Reporter.hpp>
+#include <fort/myrmidon/types/OpenArguments.hpp>
 #include <fort/myrmidon/types/Typedefs.hpp>
 
 #include "Ant.hpp"
@@ -106,11 +106,13 @@ public:
 	 * @throws std::runtime_error if **filepath** is not a valid
 	 *         `.myrmidon` file.
 	 */
-	static Experiment::Ptr Open(const std::string &filepath) {
-		return Ptr(new Experiment(OpenUnsafe(filepath)));
+	static Experiment::Ptr
+	Open(const std::string &filepath, OpenArguments &&args = {}) {
+		return Ptr(new Experiment(OpenUnsafe(filepath, std::move(args))));
 	}
 
-	static Experiment OpenUnsafe(const std::string &filepath);
+	static Experiment
+	OpenUnsafe(const std::string &filepath, OpenArguments &&args);
 
 	/**
 	 * Opens an Experiment without associated tracking data
@@ -210,9 +212,7 @@ public:
 	 *
 	 * @param spaceID the Space the data directory should be associated with
 	 * @param filepath path to the directory we want to add
-	 * @param fixCorruptedData silently fix any corrupted data,with
-	 *        potentially loss of a large chunk of data. Otherwise a
-	 *        FixableErrors will be thrown.
+	 * @param args a collection of OpenArguments to open a large dataset.
 	 *
 	 * @return the URI used to designate the tracking data directory
 	 *
@@ -221,7 +221,7 @@ public:
 	 * @throws std::runtime_error if **filepath** is not a valid tracking
 	 *         data directory
 	 * @throws FixableErrors if the directory contains corrupted data,
-	 *         and fixCorruptedData is false.
+	 *         and args.fixCorruptedData is false.
 	 * @throws std::domain_error if **filepath** contains data that
 	 *         would overlap in Time with another tracking data
 	 *         directory associated with the same space.
@@ -229,9 +229,7 @@ public:
 	 *         is already in use in this experiment.
 	 */
 	std::string AddTrackingDataDirectory(
-	    SpaceID            spaceID,
-	    const std::string &filepath,
-	    bool               fixCorruptedData = false
+	    SpaceID spaceID, const std::string &filepath, OpenArguments &&args = {}
 	);
 	/**
 	 * Removes a Tracking Data Directory from the Experiment.
@@ -563,20 +561,13 @@ public:
 	 *
 	 * This operation can take some time.
 	 *
-	 * @param progressCallback a callback to indicate progress. Only
-	 *        called if an operation is actually performed.
-	 * @param fixCorruptedData if \true, will try to silently fix
-	 *        corrupted data, leading to potential loss of large
-	 *        chunck of tracking data or a few tag
-	 *        close-ups. Otherwise an exception will be thrown in case
-	 *        of corruption.
+	 * @param args a collection of OpenArguments when a large amount of data
+	 *        will be opened.
 	 *
 	 * @throws std::runtime_error in case of data corruption if
-	 *         fixCorruptedData is \false
+	 *         args.FixCorruptedData is \false
 	 */
-	void EnsureAllDataIsLoaded(
-	    ProgressReporter::Ptr &&progressCallback, bool fixCorruptedData = false
-	) const;
+	void EnsureAllDataIsLoaded(OpenArguments &&args = {}) const;
 
 	~Experiment();
 
