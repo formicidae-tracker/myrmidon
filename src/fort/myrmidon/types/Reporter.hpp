@@ -17,6 +17,8 @@ public:
 
 	virtual void SetTotal(size_t total) = 0;
 
+	virtual void Reset() = 0;
+
 	virtual void Update(size_t index) = 0;
 };
 

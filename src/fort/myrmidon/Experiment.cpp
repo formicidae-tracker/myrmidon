@@ -1,5 +1,6 @@
 #include "Experiment.hpp"
 
+#include "fort/myrmidon/types/OpenArguments.hpp"
 #include "handle/ExperimentHandle.hpp"
 
 #include "priv/AntShapeType.hpp"
@@ -15,8 +16,9 @@ namespace myrmidon {
 const MeasurementTypeID Experiment::HEAD_TAIL_MEASUREMENT_TYPE_ID =
     priv::Measurement::HEAD_TAIL_TYPE;
 
-Experiment Experiment::OpenUnsafe(const std::string &filepath) {
-	priv::Experiment::Ptr e = priv::Experiment::Open(filepath);
+Experiment
+Experiment::OpenUnsafe(const std::string &filepath, OpenArguments &&args) {
+	priv::Experiment::Ptr e = priv::Experiment::Open(filepath, std::move(args));
 	return Experiment(std::make_unique<ExperimentHandle>(e));
 }
 
@@ -52,7 +54,7 @@ const SpaceByID &Experiment::Spaces() const {
 }
 
 std::string Experiment::AddTrackingDataDirectory(
-    SpaceID spaceID, const std::string &filepath, bool fixCorruptedData
+    SpaceID spaceID, const std::string &filepath, OpenArguments &&args
 ) {
 	auto fi = d_p->Get().Spaces().find(spaceID);
 	if (fi == d_p->Get().Spaces().end()) {
@@ -60,9 +62,13 @@ std::string Experiment::AddTrackingDataDirectory(
 	}
 	priv::TrackingDataDirectory::Ptr tdd;
 	FixableErrorList                 errors;
+	bool                             fixCorruptedData = args.FixCorruptedData;
 	try {
-		std::tie(tdd, errors) =
-		    priv::TrackingDataDirectory::Open(filepath, d_p->Get().Basedir());
+		std::tie(tdd, errors) = priv::TrackingDataDirectory::Open(
+		    filepath,
+		    d_p->Get().Basedir(),
+		    std::move(args)
+		);
 	} catch (const std::exception &e) {
 		throw std::runtime_error(e.what());
 	}
@@ -265,10 +271,8 @@ TrackingSolver::Ptr Experiment::CompileTrackingSolver(bool collisionsIgnoreZones
 	return std::unique_ptr<TrackingSolver>(new TrackingSolver(privateSolver));
 }
 
-void Experiment::EnsureAllDataIsLoaded(
-    ProgressReporter::Ptr &&progress, bool fixCorruptedData
-) const {
-	d_p->Get().EnsureAllDataIsLoaded(std::move(progress), fixCorruptedData);
+void Experiment::EnsureAllDataIsLoaded(OpenArguments &&args) const {
+	d_p->Get().EnsureAllDataIsLoaded(std::move(args));
 }
 
 } // namespace myrmidon

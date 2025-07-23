@@ -15,6 +15,7 @@
 #include "AntMetadata.hpp"
 #include "ForwardDeclaration.hpp"
 #include "LocatableTypes.hpp"
+#include "fort/myrmidon/types/OpenArguments.hpp"
 
 namespace fort {
 namespace myrmidon {
@@ -52,7 +53,7 @@ public:
 	// Opens an existing experiment given its fs::path
 	// @filename the fs::path to the ".myrmidon" file
 	// @return a <Ptr> to the <Experiment>.
-	static Ptr Open(const fs::path &filename);
+	static Ptr Open(const fs::path &filename, OpenArguments &&args);
 
 	// Opens an existing experiment given its fs::path, without
 	// opening any actual data.
@@ -253,9 +254,7 @@ public:
 	// @return the right ratio
 	static double CornerWidthRatio(fort::tags::Family f);
 
-	void EnsureAllDataIsLoaded(
-	    ProgressReporter::Ptr &&progressCallback, bool fixCorruptedData
-	) const;
+	void EnsureAllDataIsLoaded(OpenArguments &&args) const;
 
 private:
 	typedef std::map<

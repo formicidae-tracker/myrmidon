@@ -317,6 +317,7 @@ target_link_libraries(
 	yaml-cpp::yaml-cpp
 	Eigen3::Eigen
 	semver::semver
+	slog++::slog++
 )
 
 set_target_properties(

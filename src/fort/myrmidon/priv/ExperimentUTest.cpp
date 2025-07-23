@@ -51,7 +51,8 @@ TEST_F(ExperimentUTest, CanAddTrackingDataDirectory) {
 		auto s             = e->CreateSpace("nest");
 		auto [tdd, errors] = TrackingDataDirectory::Open(
 		    TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
-		    TestSetup::UTestData().Basedir()
+		    TestSetup::UTestData().Basedir(),
+		    {}
 		);
 
 		e->AddTrackingDataDirectory(s, tdd);
@@ -62,7 +63,8 @@ TEST_F(ExperimentUTest, CanAddTrackingDataDirectory) {
 		    {
 			    auto artagData = TrackingDataDirectory::Open(
 			        TestSetup::UTestData().ARTagDataDir().AbsoluteFilePath,
-			        TestSetup::UTestData().Basedir()
+			        TestSetup::UTestData().Basedir(),
+			        {}
 			    );
 			    ASSERT_EQ(
 			        std::get<0>(artagData)->DetectionSettings().Family,
@@ -85,7 +87,7 @@ TEST_F(ExperimentUTest, IOTest) {
 	auto binaryResPath =
 	    TestSetup::UTestData().Basedir() / "test-binary-io-match.myrmidon";
 	try {
-		e = Experiment::Open(experimentPath);
+		e = Experiment::Open(experimentPath, {});
 		ASSERT_EQ(e->Spaces().size(), 2);
 		ASSERT_EQ(
 		    e->Spaces().at(1)->TrackingDataDirectories().size(),
@@ -180,12 +182,14 @@ TEST_F(ExperimentUTest, MeasurementEndToEnd) {
 		s                       = e->CreateSpace("box");
 		std::tie(nest0, errors) = TrackingDataDirectory::Open(
 		    TestSetup::UTestData().NestDataDirs()[0].AbsoluteFilePath,
-		    TestSetup::UTestData().Basedir()
+		    TestSetup::UTestData().Basedir(),
+		    {}
 		);
 		EXPECT_TRUE(errors.empty());
 		std::tie(nest1, errors) = TrackingDataDirectory::Open(
 		    TestSetup::UTestData().NestDataDirs()[1].AbsoluteFilePath,
-		    TestSetup::UTestData().Basedir()
+		    TestSetup::UTestData().Basedir(),
+		    {}
 		);
 		EXPECT_TRUE(errors.empty());
 
@@ -301,10 +305,8 @@ TEST_F(ExperimentUTest, MeasurementEndToEnd) {
 
 	EXPECT_THROW({ e->SetMeasurement(badType); }, std::out_of_range);
 
-	std::vector<Measurement::ConstPtr> list = {
-	    goodCustom,
-	    goodDefault,
-	    defaultWithBadPath};
+	std::vector<Measurement::ConstPtr> list =
+	    {goodCustom, goodDefault, defaultWithBadPath};
 	ListAllMeasurements(e->Measurements(), list);
 	EXPECT_EQ(list.size(), 2);
 	auto listContains = [&list](const Measurement::ConstPtr &m) {
@@ -363,7 +365,8 @@ TEST_F(ExperimentUTest, MeasurementEndToEnd) {
 	    {nest1, 1, 0, 1},
 	    {nest1, 1, 0, 2},
 	    {nest1, 1, 1, 1},
-	    {nest1, 1, 1, 2}};
+	    {nest1, 1, 1, 2}
+	};
 	std::vector<std::string> paths;
 	paths.reserve(mData.size());
 
@@ -556,7 +559,8 @@ TEST_F(ExperimentUTest, TooSmallHeadTailMeasurementAreNotPermitted) {
 		);
 		std::tie(nest0, errors) = TrackingDataDirectory::Open(
 		    TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
-		    TestSetup::UTestData().Basedir()
+		    TestSetup::UTestData().Basedir(),
+		    {}
 		);
 		s = e->CreateSpace("nest");
 		e->AddTrackingDataDirectory(s, nest0);
@@ -734,17 +738,16 @@ TEST_F(ExperimentUTest, AntCloning) {
 	ASSERT_NO_THROW({
 		std::tie(nest0, errors) = TrackingDataDirectory::Open(
 		    TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
-		    TestSetup::UTestData().Basedir()
+		    TestSetup::UTestData().Basedir(),
+		    {}
 		);
 	});
 	EXPECT_TRUE(errors.empty());
 	auto s = e->CreateSpace("nest");
 	e->AddTrackingDataDirectory(s, nest0);
 
-	std::vector<Ant::Ptr> ants = {
-	    e->CreateAnt(),
-	    e->CreateAnt(),
-	    e->CreateAnt()};
+	std::vector<Ant::Ptr> ants =
+	    {e->CreateAnt(), e->CreateAnt(), e->CreateAnt()};
 
 	e->SetMeasurement(std::make_shared<Measurement>(
 	    fs::path(nest0->URI()) / "frames" /
@@ -840,14 +843,14 @@ TEST_F(ExperimentUTest, AntCloning) {
 
 TEST_F(ExperimentUTest, OldFilesAreOpenable) {
 	for (const auto &eInfo : TestSetup::UTestData().OldVersionFiles()) {
-		EXPECT_NO_THROW({ Experiment::Open(eInfo.AbsoluteFilePath); });
+		EXPECT_NO_THROW({ Experiment::Open(eInfo.AbsoluteFilePath, {}); });
 	}
 }
 
 TEST_F(ExperimentUTest, WillNotOpenFileWhichAreTooRecent) {
 	auto path = TestSetup::UTestData().FutureExperimentFile().AbsoluteFilePath;
 	try {
-		Experiment::Open(path);
+		Experiment::Open(path, {});
 		ADD_FAILURE() << "Opening " << path
 		              << " should have thrown a std::runtime_error";
 	} catch (const std::runtime_error &e) {

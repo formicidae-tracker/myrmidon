@@ -25,7 +25,8 @@ void SpaceUTest::SetUpTestSuite() {
 		try {
 			auto [tdd, errors] = TrackingDataDirectory::Open(
 			    tddInfo.AbsoluteFilePath,
-			    TestSetup::UTestData().Basedir()
+			    TestSetup::UTestData().Basedir(),
+			    {}
 			);
 			s_nest.push_back(tdd);
 		} catch (const std::exception &e) {

@@ -43,7 +43,7 @@ TEST_F(TDDCacheUTest, CacheIO) {
 	ASSERT_NO_THROW({
 		// will open it one first, and saving the cache
 		std::tie(opened, openedErrors) =
-		    TrackingDataDirectory::Open(cacheURI, basedir);
+		    TrackingDataDirectory::Open(cacheURI, basedir, {});
 
 		cached = TDDCache::Load(cacheURI, basedir);
 	});
