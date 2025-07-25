@@ -230,7 +230,8 @@ private:
 
 	static MovieSegment::List LoadMovieSegments(
 	    const std::map<uint32_t, std::pair<fs::path, fs::path>> &moviesPaths,
-	    const std::string                                       &parentURI
+	    const std::string                                       &parentURI,
+	    const slog::Logger<1>                                   &logger
 	);
 
 	static TrackingDataDirectory::Ptr
@@ -240,7 +241,8 @@ private:
 	    const std::string           &URI,
 	    Time::MonoclockID            monoID,
 	    const std::vector<fs::path> &hermesFile,
-	    const TrackingIndex::Ptr    &trackingIndexer
+	    const TrackingIndex::Ptr    &trackingIndexer,
+	    const slog::Logger<1>       &logger
 	);
 
 	static void BuildFrameReferenceCache(
@@ -250,13 +252,15 @@ private:
 	    const TrackingIndex::ConstPtr           &trackingIndexer,
 	    FrameReferenceCache                     &cache,
 	    const std::unique_ptr<ProgressReporter> &progress,
-	    FixableErrorList                        &errors
+	    FixableErrorList                        &errors,
+	    const slog::Logger<1>                   &logger
 	);
 
 	static std::tuple<Ptr, FixableErrorList> OpenFromFiles(
 	    const fs::path                          &absoluteFilePath,
 	    const std::string                       &URI,
-	    const std::unique_ptr<ProgressReporter> &progress
+	    const std::unique_ptr<ProgressReporter> &progress,
+	    const slog::Logger<1>                   &logger
 	);
 
 	TrackingDataDirectory(

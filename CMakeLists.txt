@@ -140,11 +140,17 @@ FetchContent_Declare(
 )
 
 set(FORT_CHARIS_BUILD_GL Off)
-FetchContent_Declare(
-	fort-charis
-	GIT_REPOSITORY https://github.com/formicidae-tracker/charis.git
-	GIT_TAG 93d378afd3e28ca1e13467a80b89aa67ca523ef9
-)
+if(NOT SKBUILD AND EXISTS ${PROJECT_SOURCE_DIR}/deps/charis)
+	FetchContent_Declare(
+		fort-charis SOURCE_DIR ${PROJECT_SOURCE_DIR}/deps/charis
+	)
+else()
+	FetchContent_Declare(
+		fort-charis
+		GIT_REPOSITORY https://github.com/formicidae-tracker/charis.git
+		GIT_TAG 7d9f58d1281b7ca8eb89061a888b7ee98719380d
+	)
+endif()
 
 if(NOT SKBUILD AND EXISTS ${PROJECT_SOURCE_DIR}/deps/slogpp)
 	FetchContent_Declare(slogpp SOURCE_DIR ${PROJECT_SOURCE_DIR}/deps/slogpp)
