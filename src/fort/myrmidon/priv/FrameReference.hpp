@@ -15,23 +15,25 @@ namespace priv {
 
 class FrameReference : public Identifiable {
 public:
-	typedef std::shared_ptr<FrameReference> Ptr;
+	typedef std::shared_ptr<FrameReference>       Ptr;
 	typedef std::shared_ptr<const FrameReference> ConstPtr;
 
 	FrameReference();
 
-	FrameReference(const std::string & parentURI,
-	               priv::FrameID frameID,
-	               const fort::Time & Time);
+	FrameReference(
+	    const std::string &parentURI,
+	    priv::FrameID      frameID,
+	    const fort::Time  &Time
+	);
 
 	virtual ~FrameReference();
 
-	const std::string & ParentURI() const;
+	const std::string &ParentURI() const;
 
 	// The Time of the Frame
 	//
 	// @return the <Time> of the designated frame
-	const fort::Time & Time() const;
+	const fort::Time &Time() const;
 
 	// The FrameID of the frame
 	//
@@ -41,16 +43,17 @@ public:
 	// A Path uniquely defining the FramePointer
 	//
 	// @return a fs::path uniquely identifying the Frame
-	const std::string & URI() const override;
+	const std::string &URI() const override;
 
-	bool operator<(const FrameReference & other) const;
+	bool operator<(const FrameReference &other) const;
 
+	bool Valid() const;
 
 private:
-	std::string    d_parentURI;
-	std::string    d_URI;
-	priv::FrameID  d_id;
-	fort::Time     d_time;
+	std::string   d_parentURI;
+	std::string   d_URI;
+	priv::FrameID d_id;
+	fort::Time    d_time;
 };
 
 // Formats a FrameReference
