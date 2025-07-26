@@ -66,7 +66,7 @@ void Query::ProcessLoaders(
 	FixableErrorList errors;
 	int              i = 0;
 
-	if (progress) {
+	if (progress != nullptr) {
 		progress->SetTotal(loaders.size());
 	}
 
@@ -99,6 +99,9 @@ void Query::ProcessLoaders(
 	}
 	for (auto &e : errors) {
 		e->Fix();
+		if (progress != nullptr) {
+			progress->ReportError(e->what());
+		}
 	}
 }
 
