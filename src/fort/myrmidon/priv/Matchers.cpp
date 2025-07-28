@@ -165,53 +165,95 @@ Matcher::Ptr Matcher::AntIDMatcher(AntID ID) {
 	return std::make_shared<AntIDMatcher>(ID);
 }
 
-Matcher::Ptr Matcher::AntColumnMatcher(const std::string & name, const Value & value) {
+Matcher::Ptr Matcher::AntColumnMatcher(
+    const std::string &name, const std::optional<Value> &value
+) {
 	class AntColumnMatcher : public Matcher {
 	private:
-		std::string d_name;
-		Value    d_value;
-		AntByID     d_ants;
-		Time        d_time;
+		std::string          d_name;
+		std::optional<Value> d_value;
+		AntByID              d_ants;
+		Time                 d_time;
+
 	public:
-		AntColumnMatcher (const std::string & name,
-		                  const Value & value)
-			: d_name(name)
-			, d_value(value){
-		}
+		AntColumnMatcher(
+		    const std::string &name, const std::optional<Value> &value
+		)
+		    : d_name(name)
+		    , d_value(value) {}
+
 		virtual ~AntColumnMatcher() {}
-		void SetUpOnce(const AntByID & ants) override {
+
+		void SetUpOnce(const AntByID &ants) override {
 			d_ants = ants;
 		}
 
-		void SetUp(const IdentifiedFrame & identifiedFrame) override {
+		void SetUp(const IdentifiedFrame &identifiedFrame) override {
 			d_time = identifiedFrame.FrameTime;
 		}
 
-		uint64_t Match(fort::myrmidon::AntID ant1,
-		               fort::myrmidon::AntID ant2,
-		               const fort::myrmidon::InteractionTypes & types) override {
-			auto fi = d_ants.find(ant2);
-			if ( fi != d_ants.end()
-			     && fi->second->GetValue(d_name,d_time) == d_value ) {
-				return 1;
-			}
+		uint64_t Match(
+		    fort::myrmidon::AntID                   ant1,
+		    fort::myrmidon::AntID                   ant2,
+		    const fort::myrmidon::InteractionTypes &types
+		) override {
+			auto fi1       = d_ants.find(ant1);
+			auto fi2       = d_ants.find(ant2);
+			auto singleAnt = d_ants.cend();
 
-			fi = d_ants.find(ant1);
-			if ( fi == d_ants.end() ) {
+			if (fi1 == d_ants.end() && fi2 == d_ants.end()) {
 				return 0;
 			}
-			return fi->second->GetValue(d_name,d_time) == d_value ? 1 : 0;
+
+			if (fi1 == d_ants.end()) {
+				singleAnt = fi2;
+			}
+
+			if (fi2 == d_ants.end()) {
+				singleAnt = fi1;
+			}
+
+			if (singleAnt != d_ants.end()) {
+
+				if (d_value.has_value() == false) {
+					return 1;
+				}
+
+				return singleAnt->second->GetValue(d_name, d_time) ==
+				               d_value.value()
+				           ? 1
+				           : 0;
+			}
+
+			if (d_value.has_value()) {
+				return fi1->second->GetValue(d_name, d_time) ==
+				                   d_value.value() ||
+				               fi2->second->GetValue(d_name, d_time) ==
+				                   d_value.value()
+				           ? 1
+				           : 0;
+			}
+
+			return fi1->second->GetValue(d_name, d_time) ==
+			               fi2->second->GetValue(d_name, d_time)
+			           ? 1
+			           : 0;
 		}
 
-		void Format(std::ostream & out ) const override {
+		void Format(std::ostream &out) const override {
+
 			using fort::myrmidon::operator<<;
-			out << "Ant.'" << d_name << "' == " << d_value;
+			if (d_value.has_value()) {
+				out << "Ant.'" << d_name << "' == " << d_value.value();
+			} else {
+				out << "Ant1.'" << d_name << "' == "
+				    << "Ant2.'" << d_name << "'";
+			}
 		}
-
 	};
-	return std::make_shared<AntColumnMatcher>(name,value);
-}
 
+	return std::make_shared<AntColumnMatcher>(name, value);
+}
 
 class AntGeometryMatcher : public Matcher {
 protected:
