@@ -2,6 +2,7 @@
 
 #include <QDir>
 #include <QFileInfo>
+#include <QProgressDialog>
 #include <QtConcurrent>
 
 #include <QDebug>
@@ -25,6 +26,8 @@
 #include "TagCloseUpBridge.hpp"
 #include "UniverseBridge.hpp"
 #include "ZoneBridge.hpp"
+#include "fort/myrmidon/priv/Experiment.hpp"
+#include "fort/myrmidon/types/Reporter.hpp"
 #include "fort/studio/widget/ProgressDialog.hpp"
 
 namespace fm  = fort::myrmidon;
@@ -90,55 +93,87 @@ bool ExperimentBridge::save() {
 	return saveAs(d_experiment->AbsoluteFilePath().c_str());
 }
 
-
-bool ExperimentBridge::saveAs(const QString & path ) {
-	if ( !d_experiment ) {
-		qDebug() << "[ExperimentBridge]: Ignoring ExperimentBridge::saveAs(): no experience loaded";
+bool ExperimentBridge::saveAs(const QString &path) {
+	if (!d_experiment) {
+		qDebug() << "[ExperimentBridge]: Ignoring ExperimentBridge::saveAs(): "
+		            "no experience loaded";
 		return false;
 	}
 	try {
-		qDebug() << "[ExperimentBridge]: Calling fort::myrmidon::priv::Experiment::Save('" << path << "')";
+		qDebug() << "[ExperimentBridge]: Calling "
+		            "fort::myrmidon::priv::Experiment::Save('"
+		         << path << "')";
 		d_experiment->Save(path.toUtf8().constData());
 		setModified(false);
 		resetChildModified();
 		qInfo() << "Saved experiment to '" << path << "'";
-	} catch (const std::exception & e ) {
-		qCritical() << "Could not save experiment to '"
-		            << path << "': " << e.what();
+	} catch (const std::exception &e) {
+		qCritical() << "Could not save experiment to '" << path
+		            << "': " << e.what();
 		return false;
 	}
 	setAbsoluteFilePathProperty(path);
 	return true;
 }
 
-bool ExperimentBridge::open(const QString &path, QWidget *parent) {
+fmp::Experiment::Ptr ExperimentBridge::tryOpen(
+    const QString                                      &path,
+    std::unique_ptr<fort::myrmidon::ProgressReporter> &&progress
+) {
+	try {
+		qDebug() << "[ExperimentBridge]: Calling "
+		            "fort::myrmidon::priv::Experiment::Open('"
+		         << path << "')";
+		return fmp::Experiment::Open(
+		    path.toUtf8().constData(),
+		    {.Progress = std::move(progress)}
+		);
+	} catch (const std::exception &e) {
+		qCritical() << "Could not open '" << path << "': " << e.what();
+	}
+	return nullptr;
+}
+
+fmp::Experiment::Ptr
+ExperimentBridge::openWithDialog(const QString &path, QWidget *parent) {
 	fmp::Experiment::Ptr experiment;
+	QFutureWatcher<void> watcher;
+	QEventLoop           loop;
+	connect(
+	    &watcher,
+	    &QFutureWatcher<void>::finished,
+	    &loop,
+	    &QEventLoop::quit
+	);
+	QProgressDialog	                  *dialog;
+	fort::myrmidon::ProgressReporter::Ptr progress;
 
-	auto dialog =
-	    new ItemProgressDialog(tr("Loading frame references"), parent);
+	std::tie(dialog, progress) = OpenItemProgressDialog(
+	    tr("Loading %1 frame references").arg(path),
+	    parent
+	);
 
-	auto openExperiment = [&experiment, dialog, &path]() {
-		try {
-			qDebug() << "[ExperimentBridge]: Calling "
-			            "fort::myrmidon::priv::Experiment::Open('"
-			         << path << "')";
-			experiment = fmp::Experiment::Open(
-			    path.toUtf8().constData(),
-			    {.Progress = dialog->GetProgressReporter()}
-			);
-		} catch (const std::exception &e) {
-			qCritical() << "Could not open '" << path << "': " << e.what();
-		}
+	auto openExperiment = [&experiment, dialog, &progress, &path, this]() {
+		experiment = tryOpen(path, std::move(progress));
 		dialog->close();
 		dialog->reset();
 	};
 
-	QFutureWatcher<void> watcher;
-	QEventLoop           loop;
 	watcher.setFuture(QtConcurrent::run(openExperiment));
 
 	loop.exec();
 	dialog->deleteLater();
+	return experiment;
+}
+
+bool ExperimentBridge::open(const QString &path, QWidget *parent) {
+
+	fmp::Experiment::Ptr experiment;
+	if (parent != nullptr) {
+		experiment = openWithDialog(path, parent);
+	} else {
+		experiment = tryOpen(path, nullptr);
+	}
 
 	if (experiment == nullptr) {
 		return false;
@@ -169,7 +204,7 @@ bool ExperimentBridge::create(const QString & path) {
 		fs::path fpath = path.toUtf8().constData();
 		experiment = fmp::Experiment::Create(fpath);
 		experiment->Save(fpath);
-	} catch ( const std::exception & e ) {
+	} catch (const std::exception &e) {
 		qCritical() << "Could not create file '" << path
 		            << "': " << e.what();
 		return false;
@@ -277,7 +312,7 @@ fmp::Ant::Ptr ExperimentBridge::createAnt() {
 	try {
 		qDebug() << "[ExperimentBridge]: Calling fort::myrmidon::priv::Experiment::CreateAnt()";
 		ant = d_experiment->CreateAnt();
-	} catch ( const std::exception & e) {
+	} catch (const std::exception &e) {
 		qCritical() << "Could not create Ant: " << e.what();
 		return nullptr;
 	}
@@ -299,7 +334,7 @@ void ExperimentBridge::deleteAnt(fm::AntID antID) {
 		qDebug() << "[ExperimentBridge]: Calling fort::myrmidon::priv::Identifier::DeleteAnt("
 		         << fm::FormatAntID(antID).c_str() << ")";
 		d_experiment->Identifier()->DeleteAnt(antID);
-	} catch (const std::exception & e) {
+	} catch (const std::exception &e) {
 		qCritical() << "Could not delete Ant '" <<  fm::FormatAntID(antID).c_str()
 		            << "': " << e.what();
 		return;

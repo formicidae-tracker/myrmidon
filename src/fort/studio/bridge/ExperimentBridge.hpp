@@ -21,64 +21,60 @@ class QWidget;
 
 namespace fmp = fort::myrmidon::priv;
 
-
 class ExperimentBridge : public Bridge {
 	Q_OBJECT
-	Q_PROPERTY(QString absoluteFilePath
-	           READ absoluteFilePath()
-	           NOTIFY absoluteFilePathChanged)
+	Q_PROPERTY(QString absoluteFilePath READ absoluteFilePath()
+	               NOTIFY                    absoluteFilePathChanged)
 
 public:
-
-	ExperimentBridge(QObject * parent = NULL);
+	ExperimentBridge(QObject *parent = NULL);
 	virtual ~ExperimentBridge();
 
-	const QString & absoluteFilePath() const;
+	const QString &absoluteFilePath() const;
 
 	bool isActive() const override;
 
-	bool open(const QString & path,
-	          QWidget * parent = nullptr);
+	bool open(const QString &path, QWidget *parent = nullptr);
 
-	bool create(const QString & path);
+	bool create(const QString &path);
 
-	UniverseBridge * universe() const;
+	UniverseBridge *universe() const;
 
-	MeasurementBridge * measurements() const;
+	MeasurementBridge *measurements() const;
 
-	IdentifierBridge * identifier() const;
+	IdentifierBridge *identifier() const;
 
-	AntDisplayBridge * antDisplay() const;
+	AntDisplayBridge *antDisplay() const;
 
-	GlobalPropertyBridge * globalProperties() const;
+	GlobalPropertyBridge *globalProperties() const;
 
-	ConcurrentFrameLoader * frameLoader() const;
+	ConcurrentFrameLoader *frameLoader() const;
 
-	AntShapeTypeBridge * antShapeTypes() const;
+	AntShapeTypeBridge *antShapeTypes() const;
 
-	AntKeyValueBridge * antKeyValues() const;
+	AntKeyValueBridge *antKeyValues() const;
 
-	MovieBridge * movies() const;
+	MovieBridge *movies() const;
 
-	ZoneBridge * zones() const;
+	ZoneBridge *zones() const;
 
-	StatisticsBridge * statistics() const;
+	StatisticsBridge *statistics() const;
 
-	TagCloseUpBridge * tagCloseUps() const;
+	TagCloseUpBridge *tagCloseUps() const;
 
-	AntMeasurementBridge * antMeasurements() const;
+	AntMeasurementBridge *antMeasurements() const;
 
-	AntShapeBridge * antShapes() const;
+	AntShapeBridge *antShapes() const;
 
 	fmp::Ant::Ptr ant(fmp::AntID antID) const;
 
-	void setExperiment(const fmp::Experiment::Ptr & );
+	void setExperiment(const fmp::Experiment::Ptr &);
 
 	quint32 selectedAntID() const;
 
 public slots:
 	bool save();
-	bool saveAs(const QString & path);
+	bool saveAs(const QString &path);
 
 	fmp::Ant::Ptr createAnt();
 
@@ -87,7 +83,7 @@ public slots:
 	void selectAnt(quint32 antID);
 
 signals:
-	void absoluteFilePathChanged(const QString & filepath);
+	void absoluteFilePathChanged(const QString &filepath);
 
 	void antCreated(quint32);
 	void antDeleted(quint32);
@@ -96,28 +92,35 @@ signals:
 
 private slots:
 	void onChildModified(bool);
+
 private:
 	friend class ExperimentBridgeUTest_ActiveModifiedState_Test;
 
+	fmp::Experiment::Ptr tryOpen(
+	    const QString	                                  &path,
+	    std::unique_ptr<fort::myrmidon::ProgressReporter> &&progress
+	);
+	fmp::Experiment::Ptr openWithDialog(const QString &path, QWidget *parent);
+
 	void resetChildModified();
-	void setAbsoluteFilePathProperty(const QString & path);
+	void setAbsoluteFilePathProperty(const QString &path);
 
 	fmp::Experiment::Ptr              d_experiment;
-	UniverseBridge                  * d_universe;
-	MeasurementBridge               * d_measurements;
-	IdentifierBridge                * d_identifier;
-	AntDisplayBridge                * d_antDisplay;
-	GlobalPropertyBridge            * d_globalProperties;
-	ConcurrentFrameLoader           * d_frameLoader;
-	AntShapeTypeBridge              * d_antShapeTypes;
-	AntKeyValueBridge               * d_antKeyValues;
-	MovieBridge                     * d_movies;
-	ZoneBridge                      * d_zones;
-	StatisticsBridge                * d_statistics;
-	TagCloseUpBridge                * d_tagCloseUps;
-	AntMeasurementBridge            * d_antMeasurements;
-	AntShapeBridge                  * d_antShapes;
-	const std::vector<GlobalBridge*>  d_children;
+	UniverseBridge	               *d_universe;
+	MeasurementBridge                *d_measurements;
+	IdentifierBridge                 *d_identifier;
+	AntDisplayBridge                 *d_antDisplay;
+	GlobalPropertyBridge             *d_globalProperties;
+	ConcurrentFrameLoader            *d_frameLoader;
+	AntShapeTypeBridge               *d_antShapeTypes;
+	AntKeyValueBridge                *d_antKeyValues;
+	MovieBridge	                  *d_movies;
+	ZoneBridge	                   *d_zones;
+	StatisticsBridge                 *d_statistics;
+	TagCloseUpBridge                 *d_tagCloseUps;
+	AntMeasurementBridge             *d_antMeasurements;
+	AntShapeBridge	               *d_antShapes;
+	const std::vector<GlobalBridge *> d_children;
 	quint32                           d_selectedID;
 	QString                           d_absoluteFilePath;
 };

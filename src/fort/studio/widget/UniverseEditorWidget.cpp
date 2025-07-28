@@ -1,4 +1,5 @@
 #include "UniverseEditorWidget.hpp"
+#include "fort/myrmidon/types/Reporter.hpp"
 #include "ui_UniverseEditorWidget.h"
 
 #include <fort/studio/bridge/UniverseBridge.hpp>
@@ -11,6 +12,7 @@
 #include <QMessageBox>
 #include <QProgressDialog>
 #include <QtConcurrent>
+#include <qprogressdialog.h>
 
 #include "SpaceChoiceDialog.hpp"
 
@@ -76,18 +78,22 @@ UniverseEditorWidget::openTDD(const QString &path) {
 	    &QEventLoop::quit
 	);
 
-	auto dialog = new ItemProgressDialog(
+	QProgressDialog	                  *dialog;
+	fort::myrmidon::ProgressReporter::Ptr progress;
+
+	std::tie(dialog, progress) = OpenItemProgressDialog(
 	    tr("Loading %1 frame references").arg(path),
 	    this
 	);
 
-	auto openDataDir = [&res, &errors, &path, dialog, this]() {
+	auto openDataDir = [&res, &errors, &path, &progress, dialog, this]() {
 		try {
 			std::tie(res, errors) = fmp::TrackingDataDirectory::Open(
 			    path.toUtf8().constData(),
 			    d_universe->basepath().toUtf8().constData(),
-			    {.Progress = dialog->GetProgressReporter()}
+			    {.Progress = std::move(progress)}
 			);
+
 		} catch (const std::exception &e) {
 			qCritical() << "Could not open TrackingDataDirectory" << path
 			            << ": " << e.what();
@@ -98,7 +104,7 @@ UniverseEditorWidget::openTDD(const QString &path) {
 
 	loop.exec();
 	dialog->deleteLater();
-
+	qWarning() << "done";
 	if (errors.empty() == false) {
 		if (FixableErrorDialog::promptForFix(path, std::move(errors), this) ==
 		    false) {
@@ -128,31 +134,31 @@ void UniverseEditorWidget::on_addButton_clicked() {
 	addTrackingDataDirectory(tddFilePath);
 }
 
-
-void UniverseEditorWidget::addTrackingDataDirectory(const QString & filepath) {
+void UniverseEditorWidget::addTrackingDataDirectory(const QString &filepath) {
 
 	fmp::TrackingDataDirectory::Ptr tdd = openTDD(filepath);
-	if ( !tdd == true ) {
+	if (!tdd == true) {
 		return;
 	}
+
 	try {
-		TrackingDataDirectoryLoader::EnsureLoaded({tdd},this);
-	} catch ( const std::exception & e ) {
+		TrackingDataDirectoryLoader::EnsureLoaded({tdd}, this);
+	} catch (const std::exception &e) {
 		return;
 	}
 
-	auto space = SpaceChoiceDialog::Get(d_universe,this);
+	auto space = SpaceChoiceDialog::Get(d_universe, this);
 
-	if ( space.isEmpty() ) {
+	if (space.isEmpty()) {
 		qDebug() << "[UniverseEditorWidget]: TDD addition aborded by user";
 		return;
 	}
 
-	if ( d_universe->spaceExists(space) == false ) {
+	if (d_universe->spaceExists(space) == false) {
 		d_universe->addSpace(space);
 	}
 
-	d_universe->addTrackingDataDirectoryToSpace(space,tdd);
+	d_universe->addTrackingDataDirectoryToSpace(space, tdd);
 }
 
 void UniverseEditorWidget::on_deleteButton_clicked() {
