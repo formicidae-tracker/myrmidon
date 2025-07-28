@@ -24,7 +24,7 @@ proposes python with **formicidae-tracker-myrmidon** package.  packages.
 editing of **.myrmidon** files, and to provide basic visualization of
 tracking datasets.
 
-INstallation
+Installation
 ------------
 
 **fort-myrmidon** and all the supported python bindings (python) are primarly
