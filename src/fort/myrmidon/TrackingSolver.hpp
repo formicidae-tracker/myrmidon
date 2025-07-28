@@ -30,7 +30,7 @@ class TrackingSolver;
  */
 
 class TrackingSolver {
-public :
+public:
 	typedef std::unique_ptr<TrackingSolver> Ptr;
 	/**
 	 *  Identifies a single ant
@@ -41,7 +41,7 @@ public :
 	 * @return returns the AntID of the Ant tagID is identifying at
 	 *         time, or 0 if there is no matching identification.
 	 */
-	AntID IdentifyAnt(TagID tagID, const Time & time);
+	AntID IdentifyAnt(TagID tagID, const Time &time);
 
 	/**
 	 * Identifies Ants from a `fort::hermes::FrameReadout`
@@ -52,9 +52,13 @@ public :
 	 * @param spaceID the spaceID the frame correspond to
 	 *
 	 */
-	void IdentifyFrame(IdentifiedFrame & identified,
-	                   const fort::hermes::FrameReadout & frame,
-	                   SpaceID spaceID) const;
+	void IdentifyFrame(
+	    IdentifiedFrame                  &identified,
+	    const fort::hermes::FrameReadout &frame,
+	    SpaceID                           spaceID,
+	    size_t                            zoneDepth,
+	    ZonePriority                      zoneOrder
+	) const;
 
 	/**
 	 * Collides Ants from an IdentifiedFrame
@@ -69,8 +73,8 @@ public :
 	 * identified.
 	 *
 	 */
-	void CollideFrame(IdentifiedFrame & identified,
-	                  CollisionFrame & collision) const;
+	void
+	CollideFrame(IdentifiedFrame &identified, CollisionFrame &collision) const;
 
 private:
 	friend class Experiment;
@@ -82,15 +86,13 @@ private:
 	//
 	// User cannot create a TrackingSolver directly. They must use
 	// <Experiment::CompileTrackingSolver>.
-	TrackingSolver(const PPtr & pTracker);
+	TrackingSolver(const PPtr &pTracker);
 
-	TrackingSolver & operator=(const TrackingSolver &) = delete;
-	TrackingSolver(const TrackingSolver &) = delete;
+	TrackingSolver &operator=(const TrackingSolver &) = delete;
+	TrackingSolver(const TrackingSolver &)            = delete;
 
 	PPtr d_p;
 };
-
-
 
 } //namespace myrmidon
 } //namespace fort

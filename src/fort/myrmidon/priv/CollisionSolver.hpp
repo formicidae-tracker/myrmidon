@@ -18,51 +18,58 @@ class AntZoner {
 public:
 	typedef std::shared_ptr<AntZoner>       Ptr;
 	typedef std::shared_ptr<const AntZoner> ConstPtr;
-	typedef std::vector<std::pair<ZoneID,Zone::Geometry::ConstPtr> > ZoneGeometries;
+	typedef std::vector<std::pair<ZoneID, Zone::Geometry::ConstPtr>>
+	    ZoneGeometries;
 
-	AntZoner(const ZoneGeometries & zoneGeometries);
+	AntZoner(const ZoneGeometries &zoneGeometries);
 
-	ZoneID LocateAnt(PositionedAntRef antRow) const;
+	void LocateAnts(
+	    IdentifiedFrame::PositionMatrix &ants, ZonePriority priority
+	) const;
+
 private:
 	ZoneGeometries d_zoneGeometries;
-};
 
+	void locateAntsHigher(IdentifiedFrame::PositionMatrix &ants) const;
+
+	void locateAntsLower(IdentifiedFrame::PositionMatrix &ants) const;
+};
 
 class CollisionSolver {
 public:
 	typedef std::shared_ptr<CollisionSolver>       Ptr;
 	typedef std::shared_ptr<const CollisionSolver> ConstPtr;
 
-	CollisionSolver(const SpaceByID & spaces,
-	                const AntByID & ants,
-	                bool ignoreZones);
+	CollisionSolver(
+	    const SpaceByID &spaces, const AntByID &ants, bool ignoreZones
+	);
 
-	AntZoner::ConstPtr ZonerFor(const IdentifiedFrame & frame) const;
+	AntZoner::ConstPtr ZonerFor(const IdentifiedFrame &frame) const;
 
-	void ComputeCollisions(CollisionFrame & collision,
-	                       IdentifiedFrame & frame) const;
+	void
+	ComputeCollisions(CollisionFrame &collision, IdentifiedFrame &frame) const;
 
 private:
-	typedef DenseMap<AntID,TypedCapsuleList>                                AntGeometriesByID;
-	typedef TimeMap<ZoneID,ZoneGeometry::ConstPtr>                          ZoneGeometriesByTime;
-	typedef DenseMap<SpaceID,ZoneGeometriesByTime>                          GeometriesBySpaceID;
-	typedef DenseMap<SpaceID,std::vector<ZoneID>>                           ZoneIDsBySpaceID;
-	typedef std::unordered_map<ZoneID,std::vector<PositionedAntConstRef>>   LocatedAnts;
+	typedef DenseMap<AntID, TypedCapsuleList>      AntGeometriesByID;
+	typedef TimeMap<SpaceID, AntZoner::ConstPtr>   AntZonerByTime;
+	typedef DenseMap<SpaceID, AntZonerByTime>      AntZonerBySpaceID;
+	typedef DenseMap<SpaceID, std::vector<ZoneID>> ZoneIDsBySpaceID;
+	typedef std::unordered_map<ZoneID, std::vector<PositionedAntConstRef>>
+	    LocatedAnts;
 
-	void LocateAnts(LocatedAnts & locatedAnts,
-	                IdentifiedFrame & frame) const;
+	void LocateAnts(LocatedAnts &locatedAnts, IdentifiedFrame &frame) const;
 
-	void ComputeCollisions(std::vector<Collision> &  result,
-	                       const std::vector<PositionedAntConstRef> & positions,
-	                       ZoneID zoneID) const;
+	void ComputeCollisions(
+	    std::vector<Collision>                   &result,
+	    const std::vector<PositionedAntConstRef> &positions,
+	    ZoneID                                    zoneID
+	) const;
 
-	AntGeometriesByID    d_antGeometries;
-	GeometriesBySpaceID  d_spaceDefinitions;
-	ZoneIDsBySpaceID     d_zoneIDs;
-	bool                 d_ignoreZones;
-
+	AntGeometriesByID d_antGeometries;
+	AntZonerByTime    d_spaceZoners;
+	ZoneIDsBySpaceID  d_zoneIDs;
+	bool              d_ignoreZones;
 };
-
 
 } // namespace priv
 } // namespace myrmidon

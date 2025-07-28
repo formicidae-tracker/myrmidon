@@ -44,7 +44,14 @@ TEST_F(PublicTrackingSolverUTest, CanIdentifyAnts) {
 TEST_F(PublicTrackingSolverUTest, CanIdentifyAndCollideFrames) {
 	IdentifiedFrame identified;
 	CollisionFrame  collision;
-	EXPECT_NO_THROW(solver->IdentifyFrame(identified, readout, 1));
+	EXPECT_NO_THROW(solver->IdentifyFrame(
+	    identified,
+	    readout,
+	    1,
+	    0,
+	    ZonePriority::PREDECENCE_LOWER
+	));
+	EXPECT_EQ(identified.Positions.cols(), 4);
 	EXPECT_EQ(identified.Positions.rows(), 3);
 	EXPECT_NO_THROW(solver->CollideFrame(identified, collision));
 	EXPECT_TRUE(collision.Collisions.empty());

@@ -1,19 +1,19 @@
 #include "ConcurrentFrameLoader.hpp"
+#include "fort/myrmidon/types/IdentifiedFrame.hpp"
 
 #include <QtConcurrent>
 
 #include <fort/studio/Format.hpp>
 
+#include <fort/myrmidon/priv/CollisionSolver.hpp>
 #include <fort/myrmidon/priv/Experiment.hpp>
 #include <fort/myrmidon/priv/Identifier.hpp>
 #include <fort/myrmidon/priv/MovieSegment.hpp>
 #include <fort/myrmidon/priv/RawFrame.hpp>
 #include <fort/myrmidon/priv/TrackingDataDirectory.hpp>
-#include <fort/myrmidon/priv/CollisionSolver.hpp>
 
-#include <fort/studio/MyrmidonTypes/Time.hpp>
 #include <fort/studio/MyrmidonTypes/Experiment.hpp>
-
+#include <fort/studio/MyrmidonTypes/Time.hpp>
 
 #ifdef NDEBUG
 #define FORT_STUDIO_CONC_LOADER_NDEBUG 1
@@ -21,21 +21,21 @@
 #ifndef FORT_STUDIO_CONC_LOADER_NDEBUG
 #include <mutex>
 std::mutex clDebugMutex;
-#define CONC_LOADER_DEBUG(statements) do{	  \
-		std::lock_guard<std::mutex> dlock(clDebugMutex); \
-		statements; \
-	}while(0)
+#define CONC_LOADER_DEBUG(statements)                                          \
+	do {                                                                       \
+		std::lock_guard<std::mutex> dlock(clDebugMutex);                       \
+		statements;                                                            \
+	} while (0)
 #else
 #define CONC_LOADER_DEBUG(statements)
 #endif
 
-
-ConcurrentFrameLoader::ConcurrentFrameLoader(QObject * parent)
-	: QObject(parent)
-	, d_done(0)
-	, d_toDo(-1)
-	, d_currentLoadingID(-1)
-	, d_connectionType(Qt::QueuedConnection) {
+ConcurrentFrameLoader::ConcurrentFrameLoader(QObject *parent)
+    : QObject(parent)
+    , d_done(0)
+    , d_toDo(-1)
+    , d_currentLoadingID(-1)
+    , d_connectionType(Qt::QueuedConnection) {
 	qRegisterMetaType<fmp::Experiment::ConstPtr>();
 	qRegisterMetaType<fort::Time>();
 }
@@ -224,8 +224,17 @@ void ConcurrentFrameLoader::loadMovieSegment(
 						// TODO optimize memory allocation here
 						auto identified =
 						    std::make_shared<fm::IdentifiedFrame>();
-						rawFrame
-						    ->IdentifyFrom(*identified, *identifier, spaceID);
+						rawFrame->IdentifyFrom(
+						    *identified,
+						    *identifier,
+						    spaceID,
+						    1
+						);
+						auto zoner = solver->ZonerFor(*identified);
+						zoner->LocateAnts(
+						    identified->Positions,
+						    fort::myrmidon::ZonePriority::PREDECENCE_LOWER
+						);
 						// TODO optimize memory allocation here
 						auto collisions =
 						    std::make_shared<fm::CollisionFrame>();

@@ -406,36 +406,48 @@ QueryRunner::Computer QueryRunner::computeData(
     const Experiment &experiment, const QueryRunner::Args &args
 ) {
 	auto identifier = Identifier::Compile(experiment.Identifier());
-	if (args.Collide == false && args.Localize == false) {
+	if (args.Collide == false && args.ZoneDepth == 0) {
 		return [identifier](const RawData &raw) {
 			// TODO optimize memory allocation here
 			auto identified = std::make_shared<IdentifiedFrame>();
-			raw.Frame->IdentifyFrom(*identified, *identifier, raw.Space);
-			return std::make_tuple(raw.ID, identified, nullptr);
-		};
-	}
-	auto collider =
-	    experiment.CompileCollisionSolver(args.CollisionsIgnoreZones);
-	if (args.Collide == false) {
-		return [identifier, collider](const RawData &raw) {
-			// TODO optimize memory allocation here
-			auto identified = std::make_shared<IdentifiedFrame>();
-			raw.Frame->IdentifyFrom(*identified, *identifier, raw.Space);
-			auto zoner = collider->ZonerFor(*identified);
-			for (size_t i = 0; i < identified->Positions.rows(); ++i) {
-				zoner->LocateAnt(identified->Positions.row(i));
-			}
+			raw.Frame->IdentifyFrom(*identified, *identifier, raw.Space, 0);
 			return std::make_tuple(raw.ID, identified, nullptr);
 		};
 	}
 
-	return [identifier, collider](const RawData &raw) {
+	auto collider =
+	    experiment.CompileCollisionSolver(args.CollisionsIgnoreZones);
+	if (args.Collide == false) {
+		return [identifier,
+		        collider,
+		        zoneDepth = args.ZoneDepth,
+		        order     = args.ZoneOrder](const RawData &raw) {
+			// TODO optimize memory allocation here
+			auto identified = std::make_shared<IdentifiedFrame>();
+			raw.Frame
+			    ->IdentifyFrom(*identified, *identifier, raw.Space, zoneDepth);
+			auto zoner = collider->ZonerFor(*identified);
+			zoner->LocateAnts(identified->Positions, order);
+			return std::make_tuple(raw.ID, identified, nullptr);
+		};
+	}
+
+	return [identifier,
+	        collider,
+	        zoneDepth = args.ZoneDepth,
+	        order     = args.ZoneOrder](const RawData &raw) {
 		// TODO optimize memory allocation here
 		auto identified = std::make_shared<IdentifiedFrame>();
-		raw.Frame->IdentifyFrom(*identified, *identifier, raw.Space);
+		raw.Frame->IdentifyFrom(*identified, *identifier, raw.Space, zoneDepth);
 		// TODO optimize memory allocation here
 		auto collided = std::make_shared<CollisionFrame>();
+
+		if (zoneDepth > 0) {
+			collider->ZonerFor(*identified)
+			    ->LocateAnts(identified->Positions, order);
+		}
 		collider->ComputeCollisions(*collided, *identified);
+
 		return std::make_tuple(raw.ID, identified, collided);
 	};
 }

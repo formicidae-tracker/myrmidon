@@ -30,38 +30,42 @@ struct IdentifiedFrame {
 	/**
 	 * A pointer to an IdentifiedFrame
 	 */
-	typedef std::shared_ptr<IdentifiedFrame>       Ptr;
+	typedef std::shared_ptr<IdentifiedFrame> Ptr;
 
 	/**
 	 * A Matrix of ant position.
 	 *
 	 * * The first column is the AntID
-	 * * The second and third columns are the x,y position in the original video frame.
+	 * * The second and third columns are the x,y position in the original video
+	 * frame.
 	 * * The fourth column is the ant angle
-	 * * The fifth column is the ant current zone or 0 if in no zone or zones aren't computed.
+	 * * The fifth column and further (if presents) are the ant current zones
+	 *   IDs or 0 if not in any zones.
 	 */
-	typedef Eigen::Matrix<double,Eigen::Dynamic,5,Eigen::RowMajor> PositionMatrix;
+	typedef Eigen::
+	    Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>
+	        PositionMatrix;
 
 	/**
 	 * The acquisition Time of this frame
 	 */
-	Time              FrameTime;
+	Time           FrameTime;
 	/**
 	 *  The Space this frame belongs to.
 	 */
-	SpaceID           Space;
+	SpaceID        Space;
 	/**
 	 *  The original height of the video frame
 	 */
-	size_t            Height;
+	size_t         Height;
 	/**
 	 *  The original width of the video frame
 	 */
-	size_t            Width;
+	size_t         Width;
 	/**
 	 * The position of each ant in that frame
 	 */
-	PositionMatrix    Positions;
+	PositionMatrix Positions;
 
 	/**
 	 * Tests if the frame contains an Ant
@@ -75,14 +79,23 @@ struct IdentifiedFrame {
 	 * Extract Ant position data at a given row
 	 * @param index the row we want to extract data from
 	 *
-	 * @return the AntID, x,y,angle position and the ZoneID for the
+	 * @return the AntID, x,y,angle position and the zones IDs for the
 	 *         Ant at index.
 	 */
-	std::tuple<AntID,const Eigen::Ref<const Eigen::Vector3d>,ZoneID> At(size_t index) const;
+	std::tuple<
+	    AntID,
+	    const Eigen::Ref<const Eigen::Vector3d>,
+	    const Eigen::Ref<const Eigen::VectorXd>>
+	At(size_t index) const;
 
 	// type traits;
 	typedef timed_data data_category;
 };
 
-}
-}
+enum class ZonePriority {
+	PREDECENCE_LOWER  = 0,
+	PREDECENCE_HIGHER = 1,
+};
+
+} // namespace myrmidon
+} // namespace fort

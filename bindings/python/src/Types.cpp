@@ -327,29 +327,41 @@ void BindExperimentDataInfo(py::module_ & m) {
 		;
 }
 
-void BindTypes(py::module_ & m) {
+void BindTypes(py::module_ &m) {
 	BindTime(m);
 
 	using namespace fort::myrmidon;
-	py::class_<Value>(m,"Value")
-		.def(py::init<bool>())
-		.def(py::init<int>())
-		.def(py::init<double>())
-		.def(py::init<std::string>())
-		.def(py::init<fort::Time>())
-		;
-	py::implicitly_convertible<bool,Value>();
-	py::implicitly_convertible<int,Value>();
-	py::implicitly_convertible<double,Value>();
-	py::implicitly_convertible<std::string,Value>();
-	py::implicitly_convertible<fort::Time,Value>();
-	py::enum_<ValueType>(m,"ValueType")
-		.value("BOOL",ValueType::BOOL)
-		.value("INT",ValueType::INT)
-		.value("DOUBLE",ValueType::DOUBLE)
-		.value("STRING",ValueType::STRING)
-		.value("TIME",ValueType::TIME)
-		;
+	py::class_<Value>(m, "Value")
+	    .def(py::init<bool>())
+	    .def(py::init<int>())
+	    .def(py::init<double>())
+	    .def(py::init<std::string>())
+	    .def(py::init<fort::Time>());
+	py::implicitly_convertible<bool, Value>();
+	py::implicitly_convertible<int, Value>();
+	py::implicitly_convertible<double, Value>();
+	py::implicitly_convertible<std::string, Value>();
+	py::implicitly_convertible<fort::Time, Value>();
+	py::enum_<ValueType>(m, "ValueType")
+	    .value("BOOL", ValueType::BOOL)
+	    .value("INT", ValueType::INT)
+	    .value("DOUBLE", ValueType::DOUBLE)
+	    .value("STRING", ValueType::STRING)
+	    .value("TIME", ValueType::TIME);
+
+	py::enum_<ZonePriority>(m, "ZonePriority")
+	    .value(
+	        "PREDECENCE_HIGHER",
+	        ZonePriority::PREDECENCE_HIGHER,
+	        "Zone with Higher ZoneID will take predecence over lower ID zones"
+	    )
+	    .value(
+	        "PREDECENCE_LOWER",
+	        ZonePriority::PREDECENCE_LOWER,
+	        "Zone with lower ZoneID will take predecence over higher ID zones"
+	    )
+	    .export_values();
+
 	BindColor(m);
 
 	BindTagStatistics(m);
@@ -360,27 +372,30 @@ void BindTypes(py::module_ & m) {
 	BindAntInteraction(m);
 	BindExperimentDataInfo(m);
 
-	m.def("FormatAntID",
-	      &fort::myrmidon::FormatAntID,
-	      py::arg("antID"),
-	      R"pydoc(
+	m.def(
+	    "FormatAntID",
+	    &fort::myrmidon::FormatAntID,
+	    py::arg("antID"),
+	    R"pydoc(
     Formats an AntID to the conventional format.
 
     Args:
         antID (int): the AntID to format
     Returns:
         str: antID formatted in a string
-)pydoc");
-	m.def("FormatTagID",
-	      &fort::myrmidon::FormatTagID,
-	      py::arg("tagID"),
-	      R"pydoc(
+)pydoc"
+	);
+	m.def(
+	    "FormatTagID",
+	    &fort::myrmidon::FormatTagID,
+	    py::arg("tagID"),
+	    R"pydoc(
     Formats a TagID to the conventional format.
 
     Args:
         tagID (int): the TagID to format
     Returns:
         str: tagID formatted in a string
-)pydoc");
-
+)pydoc"
+	);
 }

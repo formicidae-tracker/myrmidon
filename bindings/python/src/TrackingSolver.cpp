@@ -1,16 +1,21 @@
 #include "BindMethods.hpp"
 
 #include <fort/myrmidon/TrackingSolver.hpp>
+#include <fort/myrmidon/types/IdentifiedFrame.hpp>
 
-fort::myrmidon::IdentifiedFrame::Ptr
-TrackingSolverIdentifyFrame(const fort::myrmidon::TrackingSolver & self,
-                                 const py::object & frame_readout,
-                                 fort::myrmidon::SpaceID spaceID) {
-	std::string serialized = frame_readout.attr("SerializeToString")().cast<std::string>();
+fort::myrmidon::IdentifiedFrame::Ptr TrackingSolverIdentifyFrame(
+    const fort::myrmidon::TrackingSolver &self,
+    const py::object                     &frame_readout,
+    fort::myrmidon::SpaceID               spaceID,
+    size_t                                zoneDepth,
+    fort::myrmidon::ZonePriority          zoneOrder
+) {
+	std::string serialized =
+	    frame_readout.attr("SerializeToString")().cast<std::string>();
 	fort::hermes::FrameReadout ro;
 	ro.ParseFromString(serialized);
 	auto res = std::make_shared<fort::myrmidon::IdentifiedFrame>();
-	self.IdentifyFrame(*res,ro,spaceID);
+	self.IdentifyFrame(*res, ro, spaceID, zoneDepth, zoneOrder);
 	return res;
 }
 
@@ -45,12 +50,18 @@ void BindTrackingSolver(py::module_ &m) {
 	        &TrackingSolverIdentifyFrame,
 	        py::arg("frameReadout"),
 	        py::arg("spaceID"),
+	        py::arg("zoneDepth") = 1,
+	        py::arg("zoneOrder") =
+	            fort::myrmidon::ZonePriority::PREDECENCE_LOWER,
 	        R"pydoc(
     Identifies Ant in a raw frame readout
 
     Args:
         frame (py_fort_hermes.FrameReadout): the raw data to identify
         spaceID (int): the SpaceID associated with frame
+        zoneDepth (int): the maximal number of zone to compute.
+        zoneOrder(fort_myrmidon.ZonePriority): specifies if lower zone ID takes
+            predecence over higher zoneID (default) or the opposite.
 
     Returns:
 

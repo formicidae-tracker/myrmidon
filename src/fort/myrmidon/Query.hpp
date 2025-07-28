@@ -101,8 +101,10 @@ public:
 	 * Arguments for IdentifyFrames() and IdentifyFramesFunctor().
 	 */
 	struct IdentifyFramesArgs : public QueryArgs {
-		//! enables zone computation without collision detection
-		bool ComputeZones = true;
+		//! sets zone computation depth.
+		size_t       ZoneDepth = 1;
+		//! sets zones computation predecence.
+		ZonePriority Order     = ZonePriority::PREDECENCE_LOWER;
 	};
 
 	/**
@@ -153,7 +155,7 @@ public:
 	 *
 	 * Arguments for CollideFrames() and CollideFramesFunctor().
 	 */
-	struct CollideFramesArgs : public QueryArgs {
+	struct CollideFramesArgs : public IdentifyFramesArgs {
 		//! Collision detection happens over different zones (default: false).
 		bool CollisionsIgnoreZones = false;
 	};
@@ -203,7 +205,7 @@ public:
 	 * Arguments for ComputeAntTrajectories() and
 	 * ComputeAntTrajectoriesFunctor().
 	 */
-	struct ComputeAntTrajectoriesArgs : public QueryArgs {
+	struct ComputeAntTrajectoriesArgs : public IdentifyFramesArgs {
 		//! Maximum Duration before considering the trajectory be two
 		//! different parts (default: 1s)
 		Duration MaximumGap = Duration::Second;
@@ -211,9 +213,6 @@ public:
 		//! Matcher to reduce the query to an Ant subset (default: to
 		//! nullptr, i.e. anything).
 		std::shared_ptr<myrmidon::Matcher> Matcher = nullptr;
-
-		//! Computes the zone of each Ant (default: false)
-		bool ComputeZones = false;
 
 		//! If a combined matcher value changes, create a new object
 		bool SegmentOnMatcherValueChange = false;
@@ -268,7 +267,7 @@ public:
 	 * Arguments for ComputeAntInteractions() and
 	 * ComputeAntInteractionsFunctor().
 	 */
-	struct ComputeAntInteractionsArgs : public QueryArgs {
+	struct ComputeAntInteractionsArgs : public CollideFramesArgs {
 		//! Maximum Duration before considering the trajectory be two
 		//! different parts (default: 1s)
 		Duration MaximumGap = Duration::Second;
@@ -282,10 +281,6 @@ public:
 		//! will be computed like ComputeAntTrajectories() and
 		//! AntInteraction wil points to sub-segment (default: true).
 		bool ReportFullTrajectories = true;
-
-		//! Collisions, and therefore interactions, happens over
-		//! different zones.
-		bool CollisionsIgnoreZones = false;
 
 		//! If a combined matcher value changes, create a new object
 		bool SegmentOnMatcherValueChange = false;

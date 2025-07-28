@@ -61,34 +61,41 @@ const FrameReference & RawFrame::Frame() const {
 	return d_frame;
 }
 
-void RawFrame::IdentifyFrom(IdentifiedFrame & frame,const IdentifierIF & identifier,SpaceID spaceID ) const {
-	frame.Space = spaceID;
+void RawFrame::IdentifyFrom(
+    IdentifiedFrame    &frame,
+    const IdentifierIF &identifier,
+    SpaceID             spaceID,
+    size_t              zoneDepth
+) const {
+	frame.Space     = spaceID;
 	frame.FrameTime = Frame().Time();
-	frame.Width = d_width;
-	frame.Height = d_height;
+	frame.Width     = d_width;
+	frame.Height    = d_height;
 
-
-	frame.Positions.resize(d_tags.size(),5);
+	frame.Positions.resize(d_tags.size(), 4 + zoneDepth);
 	size_t index = 0;
-	for ( const auto & t : d_tags ) {
-		auto identification = identifier.Identify(t.id(),frame.FrameTime);
-		if ( !identification ) {
+	for (const auto &t : d_tags) {
+		auto identification = identifier.Identify(t.id(), frame.FrameTime);
+		if (!identification) {
 			continue;
 		}
 		double angle;
-		frame.Positions(index,0) = identification->Target()->AntID();
-		frame.Positions(index,4) = 0;
+		frame.Positions(index, 0) = identification->Target()->AntID();
+		if (zoneDepth > 0) {
+			frame.Positions.block(index, 4, 1, zoneDepth).setConstant(0.0);
+		}
 
-		identification->ComputePositionFromTag(frame.Positions(index,1),
-		                                       frame.Positions(index,2),
-		                                       frame.Positions(index,3),
-		                                       Eigen::Vector2d(t.x(),t.y()),
-		                                       t.theta());
+		identification->ComputePositionFromTag(
+		    frame.Positions(index, 1),
+		    frame.Positions(index, 2),
+		    frame.Positions(index, 3),
+		    Eigen::Vector2d(t.x(), t.y()),
+		    t.theta()
+		);
 		++index;
 	}
-	frame.Positions.conservativeResize(index,5);
+	frame.Positions.conservativeResize(index, 5);
 }
-
 
 } //namespace priv
 } //namespace myrmidon

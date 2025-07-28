@@ -27,7 +27,8 @@ TEST_F(PublicTypesUTest, IdentifiedFrameMethods) {
 
 	auto [antID, position, zoneID] = data->At(0);
 	EXPECT_EQ(antID, 1);
-	EXPECT_EQ(zoneID, 0);
+
+	EXPECT_EQ(zoneID, Eigen::VectorXd{{0.0}});
 }
 
 TEST_F(PublicTypesUTest, AntTrajectoryMethods) {

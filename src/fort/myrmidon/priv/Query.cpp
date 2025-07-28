@@ -167,7 +167,7 @@ void Query::IdentifyFrames(
 	    {
 	        .Start                 = args.Start,
 	        .End                   = args.End,
-	        .Localize              = args.ComputeZones,
+	        .ZoneDepth             = args.ZoneDepth,
 	        .Collide               = false,
 	        .CollisionsIgnoreZones = false,
 	        .Progress              = args.Progress.get(),
@@ -190,7 +190,7 @@ void Query::CollideFrames(
 	    {
 	        .Start                 = args.Start,
 	        .End                   = args.End,
-	        .Localize              = false,
+	        .ZoneDepth             = args.ZoneDepth,
 	        .Collide               = true,
 	        .CollisionsIgnoreZones = args.CollisionsIgnoreZones,
 	        .Progress              = args.Progress.get(),
@@ -227,7 +227,7 @@ void Query::ComputeTrajectories(
 	    {
 	        .Start                 = args.Start,
 	        .End                   = args.End,
-	        .Localize              = args.ComputeZones,
+	        .ZoneDepth             = args.ZoneDepth,
 	        .Collide               = false,
 	        .CollisionsIgnoreZones = false,
 	        .Progress              = args.Progress.get(),
@@ -269,7 +269,7 @@ void Query::ComputeAntInteractions(
 	    {
 	        .Start                 = args.Start,
 	        .End                   = args.End,
-	        .Localize              = false,
+	        .ZoneDepth             = args.ZoneDepth,
 	        .Collide               = true,
 	        .CollisionsIgnoreZones = args.CollisionsIgnoreZones,
 	        .Progress              = args.Progress.get(),

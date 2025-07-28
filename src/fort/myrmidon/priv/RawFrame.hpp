@@ -39,9 +39,9 @@ public:
 	// Any error on the frame
 	fort::hermes::FrameReadout_Error Error() const;
 
-	const std::string & URI() const override;
+	const std::string &URI() const override;
 
-	const FrameReference & Frame() const;
+	const FrameReference &Frame() const;
 
 	// The width of the frame
 	int32_t Width() const;
@@ -49,28 +49,35 @@ public:
 	// The height of the frame
 	int32_t Height() const;
 
-	const ::google::protobuf::RepeatedPtrField<::fort::hermes::Tag> & Tags() const;
+	const ::google::protobuf::RepeatedPtrField<::fort::hermes::Tag> &
+	Tags() const;
 
-	void IdentifyFrom(IdentifiedFrame & frame,const IdentifierIF & identifier,SpaceID spaceID) const;
+	void IdentifyFrom(
+	    IdentifiedFrame    &frame,
+	    const IdentifierIF &identifier,
+	    SpaceID             spaceID,
+	    size_t              zoneDepth
+	) const;
 
-	static RawFrame::ConstPtr Create(const std::string & parentURI,
-	                                 fort::hermes::FrameReadout & pb,
-	                                 Time::MonoclockID clockID);
+	static RawFrame::ConstPtr Create(
+	    const std::string          &parentURI,
+	    fort::hermes::FrameReadout &pb,
+	    Time::MonoclockID           clockID
+	);
 
 private:
-
-	RawFrame(const std::string & parentURI,
-	         fort::hermes::FrameReadout & pb,
-	         Time::MonoclockID clockID);
-
+	RawFrame(
+	    const std::string          &parentURI,
+	    fort::hermes::FrameReadout &pb,
+	    Time::MonoclockID           clockID
+	);
 
 	fort::hermes::FrameReadout_Error                      d_error;
-	int32_t                                               d_width,d_height;
+	int32_t                                               d_width, d_height;
 	google::protobuf::RepeatedPtrField<fort::hermes::Tag> d_tags;
 	FrameReference                                        d_frame;
 	std::string                                           d_URI;
 };
-
-}
+} // namespace priv
 }
 }

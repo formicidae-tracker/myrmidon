@@ -20,15 +20,18 @@ std::optional<py::list> QueryIdentifyFrames(
     fort::Time                                                   start,
     fort::Time                                                   end,
     bool                                                         singleThreaded,
-    bool                                                         computeZones,
+    size_t                                                       zoneDepth,
+    fort::myrmidon::ZonePriority                                 zoneOrder,
     bool                                                         reportProgress,
     std::optional<fort::myrmidon::Query::IdentifyFramesCallback> onEachFrame
 ) {
+
 	fort::myrmidon::Query::IdentifyFramesArgs args;
 	args.Start          = start;
 	args.End            = end;
 	args.SingleThreaded = singleThreaded;
-	args.ComputeZones   = computeZones;
+	args.ZoneDepth      = zoneDepth;
+	args.Order          = zoneOrder;
 	if (reportProgress) {
 		args.Progress = std::make_unique<TimeProgress>("Identifiying frames");
 	}
@@ -56,6 +59,8 @@ std::optional<py::list> QueryCollideFrames(
     const fort::myrmidon::Experiment &experiment,
     fort::Time                        start,
     fort::Time                        end,
+    size_t                            zoneDepth,
+    fort::myrmidon::ZonePriority      zoneOrder,
     bool                              collisionsIgnoreZones,
     bool                              singleThreaded,
     bool                              reportProgress,
@@ -95,7 +100,8 @@ std::optional<py::list> QueryComputeAntTrajectories(
     fort::Time                          end,
     fort::Duration                      maximumGap,
     const fort::myrmidon::Matcher::Ptr &matcher,
-    bool                                computeZones,
+    size_t                              zoneDepth,
+    fort::myrmidon::ZonePriority        zoneOrder,
     bool                                segmentOnMatcherValueChange,
     bool                                singleThreaded,
     bool                                reportProgress,
@@ -107,7 +113,8 @@ std::optional<py::list> QueryComputeAntTrajectories(
 	args.End                         = end;
 	args.MaximumGap                  = maximumGap;
 	args.Matcher                     = matcher;
-	args.ComputeZones                = computeZones;
+	args.ZoneDepth                   = zoneDepth;
+	args.Order                       = zoneOrder;
 	args.SingleThreaded              = singleThreaded;
 	args.SegmentOnMatcherValueChange = segmentOnMatcherValueChange;
 	if (reportProgress) {
@@ -138,6 +145,8 @@ std::optional<std::tuple<py::list, py::list>> QueryComputeAntInteractions(
     fort::Time                          end,
     fort::Duration                      maximumGap,
     const fort::myrmidon::Matcher::Ptr &matcher,
+    size_t                              zoneDepth,
+    fort::myrmidon::ZonePriority        zoneOrder,
     bool                                collisionsIgnoreZones,
     bool                                reportFullTrajectories,
     bool                                segmentOnMatcherValueChange,
@@ -311,7 +320,8 @@ Raises:
 	        "start"_a          = identifyArgs.Start,
 	        "end"_a            = identifyArgs.End,
 	        "singleThreaded"_a = identifyArgs.SingleThreaded,
-	        "computeZones"_a   = identifyArgs.ComputeZones,
+	        "zoneDepth"_a      = identifyArgs.ZoneDepth,
+	        "zoneOrder"_a      = identifyArgs.Order,
 	        "reportProgress"_a = true,
 	        "onEachFrame"_a    = nullptr,
 	        R"pydoc(
@@ -325,8 +335,8 @@ Args:
     start (Time): the first video acquisition time to consider
     end (Time): the last video acquisition time to consider
     singleThreaded (bool): limits computation to happen in a single thread.
-    computeZones (bool): computes the zone for the Ant, otherwise 0 will always
-        be returned for the ants' current ZoneID.
+    zoneDepth (int): number of zones that will be computed for each ant.
+    zoneOrder (fort_myrmidon.ZonePriority): priority of zone in case of conflict.
     onEachFrame (Callable[fort_myrmidon.IdentifiedFrame,None]): a callback
         function for each Identified frames. If specified, IdentifyFrames() will
         return None. If you only care about a few informations, this callback
@@ -343,6 +353,8 @@ Returns:
 	        py::kw_only(),
 	        "start"_a                 = collideArgs.Start,
 	        "end"_a                   = collideArgs.End,
+	        "zoneDepth"_a             = collideArgs.ZoneDepth,
+	        "zoneOrder"_a             = collideArgs.Order,
 	        "collisionsIgnoreZones"_a = collideArgs.CollisionsIgnoreZones,
 	        "singleThreaded"_a        = collideArgs.SingleThreaded,
 	        "reportProgress"_a        = true,
@@ -358,8 +370,10 @@ Args:
     start (Time): the first video acquisition time to consider
     end (Time): the last video acquisition time to consider
     singleThreaded (bool): limits computation to happen in a single thread.
+    zoneDepth (int): number of zones that will be computed for each ant.
+    zoneOrder (fort_myrmidon.ZonePriority): priority of zone in case of conflict.
     collisionsIgnoreZones (bool): collision detection ignore zones definition
-    onNewFrame(Callable[Tuple[fort_myrmidon.IdentifiedFrame,fort_myrmidon.CollidedFrame],None]):
+    onNewFrame(Callable[Tuple[fort_myrmidon.IdentifiedFrame,fort_myrmidon.CollisionFrame],None]):
         a callback function to get the result for each frames. If specified,
         this function will return None. It could be used to reduce the memory
         pressure of parsing large datasets.
@@ -373,11 +387,12 @@ Returns:
 	        &QueryComputeAntTrajectories,
 	        "experiment"_a,
 	        py::kw_only(),
-	        "start"_a        = trajectoryArgs.Start,
-	        "end"_a          = trajectoryArgs.End,
-	        "maximumGap"_a   = trajectoryArgs.MaximumGap,
-	        "matcher"_a      = trajectoryArgs.Matcher,
-	        "computeZones"_a = trajectoryArgs.ComputeZones,
+	        "start"_a      = trajectoryArgs.Start,
+	        "end"_a        = trajectoryArgs.End,
+	        "maximumGap"_a = trajectoryArgs.MaximumGap,
+	        "matcher"_a    = trajectoryArgs.Matcher,
+	        "zoneDepth"_a  = trajectoryArgs.ZoneDepth,
+	        "zoneOrder"_a  = trajectoryArgs.Order,
 	        "segmentOnMatcherValueChange"_a =
 	            trajectoryArgs.SegmentOnMatcherValueChange,
 	        "singleThreaded"_a  = trajectoryArgs.SingleThreaded,
@@ -396,7 +411,8 @@ Args:
     end (Time): the last video acquisition time to consider
     maximumGap (Duration): maximum tracking gap allowed in a :class:`AntTrajectory` object.
     matcher (Matcher): a :class:`Matcher` that reduces down the query to more specific use case.
-    computeZones (bool): computes the zone of the Ant. Otherwise 0 will always be returned.
+    zoneDepth (int): number of zones that will be computed for each ant.
+    zoneOrder (fort_myrmidon.ZonePriority): priority of zone in case of conflict.
     singleThreaded (bool): limits computation to happen in a single thread.
     segmentOnMatcherValueChange (bool): if True, when a combined
         matcher ( "behavior" == "grooming" || "behavior" = "sleeping"
@@ -420,6 +436,8 @@ Returns:
 	        "end"_a                    = interactionArgs.End,
 	        "maximumGap"_a             = interactionArgs.MaximumGap,
 	        "matcher"_a                = interactionArgs.Matcher,
+	        "zoneDepth"_a              = trajectoryArgs.ZoneDepth,
+	        "zoneOrder"_a              = trajectoryArgs.Order,
 	        "collisionsIgnoreZones"_a  = interactionArgs.CollisionsIgnoreZones,
 	        "reportFullTrajectories"_a = interactionArgs.ReportFullTrajectories,
 	        "segmentOnMatcherValueChange"_a =
@@ -445,6 +463,9 @@ Args:
         :class:`AntInteraction` or :class:`AntTrajectory` objects.
     matcher (Matcher): a Matcher that reduces down the query to more specific
         use case.
+    zoneDepth (int): number of zones that will be computed for each ant.
+    zoneOrder (fort_myrmidon.ZonePriority): priority of zone in case of conflict.
+    collisionsIgnoreZones (bool): collision detection ignore zones definition
     reportFullTrajectories (bool): if true, full AntTrajectories
         will be computed and returned. Otherwise, none will be
         returned and only the average Ants position will be

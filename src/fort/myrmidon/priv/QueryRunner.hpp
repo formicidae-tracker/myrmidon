@@ -10,6 +10,7 @@
 #include <fort/myrmidon/types/Typedefs.hpp>
 
 #include "ForwardDeclaration.hpp"
+#include "fort/myrmidon/types/IdentifiedFrame.hpp"
 
 namespace fort {
 namespace myrmidon {
@@ -28,7 +29,8 @@ public:
 	struct Args {
 		Time                  Start;
 		Time                  End;
-		bool                  Localize;
+		size_t                ZoneDepth;
+		ZonePriority          ZoneOrder;
 		bool                  Collide;
 		bool                  CollisionsIgnoreZones;
 		TimeProgressReporter *Progress;
