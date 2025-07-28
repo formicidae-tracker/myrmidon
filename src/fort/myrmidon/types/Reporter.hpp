@@ -15,9 +15,9 @@ class ProgressReporter : public ErrorReporter {
 public:
 	using Ptr = std::unique_ptr<ProgressReporter>;
 
-	virtual void SetTotal(size_t total) = 0;
+	virtual void AddTotal(size_t delta) = 0;
 
-	virtual void Update(size_t index) = 0;
+	virtual void Add(size_t value) = 0;
 };
 
 class TimeProgressReporter : public ErrorReporter {

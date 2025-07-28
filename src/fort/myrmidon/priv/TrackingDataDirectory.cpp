@@ -272,6 +272,7 @@ void TrackingDataDirectory::BuildFrameReferenceCache(
 	typedef std::tuple<FrameReference, std::unique_ptr<FixableError>>
 	                                           CacheResult;
 	tbb::concurrent_bounded_queue<CacheResult> queue;
+	size_t                                     total{0};
 
 	struct CacheSegment {
 		std::string                                 AbsoluteFilePath;
@@ -353,8 +354,7 @@ void TrackingDataDirectory::BuildFrameReferenceCache(
 			         .URI              = URI,
 			         .Logger = logger.With(slog::String("file", file)),
 			         .Stop   = stop,
-			         .Queue  = queue
-			     }}
+			         .Queue  = queue}}
 			);
 		}
 		toFind.at(file).ToFind.insert(frameID);
@@ -364,12 +364,13 @@ void TrackingDataDirectory::BuildFrameReferenceCache(
 
 	for (auto &[file, segment] : toFind) {
 		segment.AbsoluteFilePath = (tddPath / file).string();
+		total += segment.ToFind.size();
 		flattened.push_back(std::move(segment));
 	}
 
 	// do the parrallel computations
 	if (progress != nullptr) {
-		progress->SetTotal(cache.size());
+		progress->AddTotal(total);
 	}
 
 	std::exception_ptr excpt = nullptr;
@@ -393,7 +394,7 @@ void TrackingDataDirectory::BuildFrameReferenceCache(
 		queue.push({FrameReference(), nullptr});
 	});
 
-	for (size_t i = 0;;) {
+	for (;;) {
 		CacheResult r;
 		queue.pop(r);
 		auto [ref, err] = std::move(r);
@@ -408,7 +409,7 @@ void TrackingDataDirectory::BuildFrameReferenceCache(
 		}
 		if (progress != nullptr) {
 			try {
-				progress->Update(++i);
+				progress->Add(1);
 			} catch (const std::exception &e) {
 				stop.store(true, std::memory_order_release);
 				go.join();

@@ -64,10 +64,9 @@ void Query::ProcessLoaders(
 	});
 
 	FixableErrorList errors;
-	int              i = 0;
 
 	if (progress != nullptr) {
-		progress->SetTotal(loaders.size());
+		progress->AddTotal(loaders.size());
 	}
 
 	for (;;) {
@@ -81,7 +80,7 @@ void Query::ProcessLoaders(
 		}
 		try {
 			if (progress) {
-				progress->Update(++i);
+				progress->Add(1);
 			}
 		} catch (const std::exception &e) {
 			stop.store(true);

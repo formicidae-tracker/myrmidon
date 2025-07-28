@@ -16,16 +16,16 @@ public:
 	ItemProgress &operator=(const ItemProgress &other) = delete;
 
 	void ReportError(const std::string &error) override;
-	void SetTotal(size_t total) override;
-	void Update(size_t current) override;
+	void AddTotal(size_t delta) override;
+	void Add(size_t delta) override;
 
 private:
-	void ensureTqdm(int total);
+	bool ensureTqdm();
 
 	pybind11::object d_progress;
 	bool             d_verbose;
 	std::string      d_description;
-	size_t           d_last;
+	size_t           d_total = 0;
 };
 
 class TimeProgress : public fort::myrmidon::TimeProgressReporter {

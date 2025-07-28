@@ -18,34 +18,37 @@ ItemProgress::~ItemProgress() {
 	d_progress.attr("close")();
 }
 
-void ItemProgress::SetTotal(size_t total) {
+void ItemProgress::AddTotal(size_t delta) {
 	check_py_interrupt();
-	ensureTqdm(total);
+	d_total += delta;
+	if (ensureTqdm() == false) {
+		d_progress.attr("total") = d_total;
+		d_progress.attr("refresh")();
+	}
 }
 
-void ItemProgress::Update(size_t current) {
+void ItemProgress::Add(size_t delta) {
 	check_py_interrupt();
 	if (d_progress.is_none() == true) {
 		return;
 	}
-	d_progress.attr("update")("n"_a = current - d_last);
-	d_last = current;
+	d_progress.attr("update")("n"_a = delta);
 }
 
-void ItemProgress::ensureTqdm(int total) {
+bool ItemProgress::ensureTqdm() {
 	if (d_progress.is_none() == false) {
-		return;
+		return false;
 	}
+
 	if (d_description.empty() == true) {
 		d_progress =
-		    py::module_::import("tqdm.auto").attr("tqdm")("total"_a = total);
-
+		    py::module_::import("tqdm.auto").attr("tqdm")("total"_a = d_total);
 	} else {
 		d_progress =
 		    py::module_::import("tqdm.auto")
-		        .attr("tqdm")("total"_a = total, "desc"_a = d_description);
+		        .attr("tqdm")("total"_a = d_total, "desc"_a = d_description);
 	}
-	d_last = 0;
+	return true;
 }
 
 TimeProgress::TimeProgress(const std::string &description)
