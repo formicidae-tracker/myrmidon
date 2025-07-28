@@ -1,14 +1,14 @@
 #pragma once
 
 #include <memory>
-#include <vector>
+#include <optional>
 #include <string>
+#include <vector>
 
 #include <fort/time/Time.hpp>
 
 #include <fort/myrmidon/types/Typedefs.hpp>
 #include <fort/myrmidon/types/Value.hpp>
-
 
 namespace fort {
 namespace myrmidon {
@@ -21,12 +21,10 @@ class Matcher;
  *
  * @return a reference to out
  */
-std::ostream & operator<<(std::ostream & out,
-                          const fort::myrmidon::Matcher & m);
+std::ostream &operator<<(std::ostream &out, const fort::myrmidon::Matcher &m);
 
-}
-}
-
+} // namespace myrmidon
+} // namespace fort
 
 namespace fort {
 namespace myrmidon {
@@ -53,8 +51,8 @@ class Query;
  *
  *  * AntID() : one of the considered Ant in the result should
  *    match a given AntID
- *  * AntMetaData() : one of the key-value user defined meta-data pair
- *    for one of the Ant should match.
+ *  * AntMetaData() : one of the key-value user defined meta-data pair for one
+ *    of the Ant should match, or the two value should match for the two ants.
  *  * AntDistanceSmallerThan(),AntDistanceGreaterThan() : for
  *    interaction queries only, ensure some criterion for the distance
  *    between the two considedred Ant.
@@ -90,7 +88,7 @@ public:
 	 * @return a new Matcher which will match only when all matchers
 	 *         also matches.
 	 */
-	static Ptr And(std::vector<Ptr> matchers);
+	static Ptr                       And(std::vector<Ptr> matchers);
 
 	/**
 	 * Combines several Matcher together in disjunction.
@@ -118,14 +116,16 @@ public:
 	 *  Matches a given user meta data key/value
 	 *
 	 * @param key the key to match against
-	 * @param value the value to match against
+	 * @param value the value to match against, or None
 	 *
-	 * In case of interactions, matches any interaction with one of
-	 * the Ant meeting the criterion.
+	 * In case of interactions, is value is std::nullopt, matches any
+	 * interaction with the two ants having the same key value. Otherwise
+	 * matches if one of the two ants value matches.
 	 *
 	 * @return a Matcher that matches Ant with key is value.
 	 */
-	static Ptr AntMetaData(const std::string & key, const Value & value);
+	static Ptr
+	AntMetaData(const std::string &key, const std::optional<Value> &value);
 
 	/**
 	 * Matches a distance between two Ants
@@ -175,7 +175,6 @@ public:
 	 */
 	static Ptr AntAngleGreaterThan(double angle);
 
-
 	/**
 	 * Matches an InteractionType
 	 *
@@ -189,8 +188,6 @@ public:
 	 *         opposite.
 	 */
 	static Ptr InteractionType(AntShapeTypeID type1, AntShapeTypeID type2);
-
-
 
 	/**
 	 * Matches Ant displacement
@@ -207,29 +204,26 @@ public:
 	 * @return a Matcher that reject large displacements in a tracking
 	 *         gap.
 	 */
-	static Ptr AntDisplacement(double under , Duration minimumGap);
-
+	static Ptr AntDisplacement(double under, Duration minimumGap);
 
 private:
 	friend class Query;
 	friend class fort::myrmidon::priv::Query;
 	friend class PublicMatchersUTest_RightMatcher_Test;
 
-	friend std::ostream & operator<<(std::ostream & out,
-	                                 const fort::myrmidon::Matcher & m);
+	friend std::ostream &
+	operator<<(std::ostream &out, const fort::myrmidon::Matcher &m);
 
 	// opaque pointer to implementation
 	typedef std::shared_ptr<priv::Matcher> PPtr;
-
 
 	// Private implementation constructor
 	// @pMatcher opaque pointer to implementation
 	//
 	// User should not build a matcher directly, they must use this
 	// class static methods instead.
-	inline Matcher(const PPtr & pMatcher)
-		: d_p(pMatcher) {
-	}
+	inline Matcher(const PPtr &pMatcher)
+	    : d_p(pMatcher) {}
 
 	// Cast to opaque implementation
 	//
@@ -238,7 +232,6 @@ private:
 
 	PPtr d_p;
 };
-
 
 } // namespace myrmidon
 } // namespace fortoio

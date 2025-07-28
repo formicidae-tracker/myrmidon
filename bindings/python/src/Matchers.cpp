@@ -93,8 +93,9 @@ the Ant meets the criterion.
 
 Args:
     key (str): the key to match from
-    value (str): the value for key. Should be a bool, int, float, str
-        or :class:`Time`
+    value (bool|int|float|str|fort_myrmidon.Time|None): the value for key. If
+        none is passed, it will only works on interaction, and make sure the two
+        individuals value for key are the same values.
 
 Returns:
     Matcher: a Matcher that matches Ant who current **key** meta data
