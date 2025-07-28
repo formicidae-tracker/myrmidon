@@ -1,31 +1,34 @@
 #include "ExperimentBridge.hpp"
 
-#include <QFileInfo>
 #include <QDir>
+#include <QFileInfo>
+#include <QtConcurrent>
 
 #include <QDebug>
 
 #include <fort/myrmidon/priv/Identifier.hpp>
 
+#include <fort/studio/widget/ProgressDialog.hpp>
 #include <fort/studio/widget/TrackingDataDirectoryLoader.hpp>
 
-#include "UniverseBridge.hpp"
-#include "MeasurementBridge.hpp"
-#include "GlobalPropertyBridge.hpp"
-#include "IdentifierBridge.hpp"
-#include "ConcurrentFrameLoader.hpp"
-#include "AntShapeTypeBridge.hpp"
-#include "AntKeyValueBridge.hpp"
-#include "MovieBridge.hpp"
-#include "ZoneBridge.hpp"
-#include "StatisticsBridge.hpp"
-#include "TagCloseUpBridge.hpp"
 #include "AntDisplayBridge.hpp"
+#include "AntKeyValueBridge.hpp"
 #include "AntMeasurementBridge.hpp"
 #include "AntShapeBridge.hpp"
+#include "AntShapeTypeBridge.hpp"
+#include "ConcurrentFrameLoader.hpp"
+#include "GlobalPropertyBridge.hpp"
+#include "IdentifierBridge.hpp"
+#include "MeasurementBridge.hpp"
+#include "MovieBridge.hpp"
+#include "StatisticsBridge.hpp"
+#include "TagCloseUpBridge.hpp"
+#include "UniverseBridge.hpp"
+#include "ZoneBridge.hpp"
+#include "fort/studio/widget/ProgressDialog.hpp"
 
-namespace fm=fort::myrmidon;
-namespace fmp=fm::priv;
+namespace fm  = fort::myrmidon;
+namespace fmp = fm::priv;
 
 ExperimentBridge::~ExperimentBridge() {}
 
@@ -108,29 +111,49 @@ bool ExperimentBridge::saveAs(const QString & path ) {
 	return true;
 }
 
-
-bool ExperimentBridge::open(const QString & path,QWidget * parent) {
+bool ExperimentBridge::open(const QString &path, QWidget *parent) {
 	fmp::Experiment::Ptr experiment;
-	try {
-		qDebug() << "[ExperimentBridge]: Calling fort::myrmidon::priv::Experiment::Open('" << path << "')";
-		experiment = fmp::Experiment::Open(path.toUtf8().constData());
-	} catch ( const std::exception & e ) {
-		qCritical() << "Could not open '" << path
-		            << "': " << e.what();
+
+	auto dialog =
+	    new ItemProgressDialog(tr("Loading frame references"), parent);
+
+	auto openExperiment = [&experiment, dialog, &path]() {
+		try {
+			qDebug() << "[ExperimentBridge]: Calling "
+			            "fort::myrmidon::priv::Experiment::Open('"
+			         << path << "')";
+			experiment = fmp::Experiment::Open(
+			    path.toUtf8().constData(),
+			    {.Progress = dialog->GetProgressReporter()}
+			);
+		} catch (const std::exception &e) {
+			qCritical() << "Could not open '" << path << "': " << e.what();
+		}
+		dialog->close();
+		dialog->reset();
+	};
+
+	QFutureWatcher<void> watcher;
+	QEventLoop           loop;
+	watcher.setFuture(QtConcurrent::run(openExperiment));
+
+	loop.exec();
+	dialog->deleteLater();
+
+	if (experiment == nullptr) {
 		return false;
 	}
 
 	try {
 		std::vector<fmp::TrackingDataDirectory::Ptr> tdds;
-		for(const auto & [tddURI,tdd] : experiment->TrackingDataDirectories() ) {
+		for (const auto &[tddURI, tdd] :
+		     experiment->TrackingDataDirectories()) {
 			tdds.push_back(tdd);
 		}
-		TrackingDataDirectoryLoader::EnsureLoaded(tdds,parent);
-	} catch ( const std::exception & e ) {
-		qCritical() << "Could not open '"
-		            << path
-		            << "': could not load computed data: "
-		            << e.what();
+		TrackingDataDirectoryLoader::EnsureLoaded(tdds, parent);
+	} catch (const std::exception &e) {
+		qCritical() << "Could not open '" << path
+		            << "': could not load computed data: " << e.what();
 		return false;
 	}
 
@@ -138,7 +161,6 @@ bool ExperimentBridge::open(const QString & path,QWidget * parent) {
 	setExperiment(experiment);
 	return true;
 }
-
 
 bool ExperimentBridge::create(const QString & path) {
 	fmp::Experiment::Ptr experiment;

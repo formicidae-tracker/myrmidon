@@ -119,7 +119,8 @@ TEST_F(GlobalPropertyUTest, SignalStateTest) {
 		fm::FixableErrorList            errors;
 		std::tie(tdd, errors) = fmp::TrackingDataDirectory::Open(
 		    TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
-		    TestSetup::UTestData().Basedir()
+		    TestSetup::UTestData().Basedir(),
+		    {}
 		);
 		EXPECT_TRUE(errors.empty());
 		experiment->AddTrackingDataDirectory(s, tdd);
@@ -132,29 +133,33 @@ TEST_F(GlobalPropertyUTest, SignalStateTest) {
 	);
 }
 
-TEST_F(GlobalPropertyUTest,WidgetTest) {
+TEST_F(GlobalPropertyUTest, WidgetTest) {
 	fmp::Experiment::Ptr experiment;
 
-	ExperimentBridge experimentBridge(NULL);
+	ExperimentBridge     experimentBridge(NULL);
 	GlobalPropertyWidget globalPropertiesWidget(NULL);
-	auto globalProperties = experimentBridge.globalProperties();
+	auto                 globalProperties = experimentBridge.globalProperties();
 	ASSERT_NO_THROW({
-			experiment = fmp::priv::Experiment::Create(TestSetup::UTestData().Basedir() / "globalProperty.myrmidon");
-			experiment->Save(TestSetup::UTestData().Basedir() / "globalProperty.myrmidon");
-			globalPropertiesWidget.setup(&experimentBridge);
-		});
+		experiment = fmp::priv::Experiment::Create(
+		    TestSetup::UTestData().Basedir() / "globalProperty.myrmidon"
+		);
+		experiment->Save(
+		    TestSetup::UTestData().Basedir() / "globalProperty.myrmidon"
+		);
+		globalPropertiesWidget.setup(&experimentBridge);
+	});
 
 	EXPECT_FALSE(globalPropertiesWidget.d_ui->nameEdit->isEnabled());
-	EXPECT_EQ(globalPropertiesWidget.d_ui->nameEdit->text(),"");
+	EXPECT_EQ(globalPropertiesWidget.d_ui->nameEdit->text(), "");
 
 	EXPECT_FALSE(globalPropertiesWidget.d_ui->authorEdit->isEnabled());
-	EXPECT_EQ(globalPropertiesWidget.d_ui->authorEdit->text(),"");
+	EXPECT_EQ(globalPropertiesWidget.d_ui->authorEdit->text(), "");
 
 	EXPECT_FALSE(globalPropertiesWidget.d_ui->commentEdit->isEnabled());
-	EXPECT_EQ(globalPropertiesWidget.d_ui->commentEdit->toPlainText(),"");
+	EXPECT_EQ(globalPropertiesWidget.d_ui->commentEdit->toPlainText(), "");
 
 	EXPECT_FALSE(globalPropertiesWidget.d_ui->tagSizeEdit->isEnabled());
-	EXPECT_EQ(globalPropertiesWidget.d_ui->tagSizeEdit->value(),1.0);
+	EXPECT_EQ(globalPropertiesWidget.d_ui->tagSizeEdit->value(), 1.0);
 
 	experiment->SetName("foo");
 	experiment->SetAuthor("tests");
@@ -164,46 +169,61 @@ TEST_F(GlobalPropertyUTest,WidgetTest) {
 	globalProperties->setExperiment(experiment);
 
 	EXPECT_TRUE(globalPropertiesWidget.d_ui->nameEdit->isEnabled());
-	EXPECT_EQ(globalPropertiesWidget.d_ui->nameEdit->text(),"foo");
+	EXPECT_EQ(globalPropertiesWidget.d_ui->nameEdit->text(), "foo");
 
 	EXPECT_TRUE(globalPropertiesWidget.d_ui->authorEdit->isEnabled());
-	EXPECT_EQ(globalPropertiesWidget.d_ui->authorEdit->text(),"tests");
+	EXPECT_EQ(globalPropertiesWidget.d_ui->authorEdit->text(), "tests");
 
 	EXPECT_TRUE(globalPropertiesWidget.d_ui->commentEdit->isEnabled());
-	EXPECT_EQ(globalPropertiesWidget.d_ui->commentEdit->toPlainText(),"for tests");
+	EXPECT_EQ(
+	    globalPropertiesWidget.d_ui->commentEdit->toPlainText(),
+	    "for tests"
+	);
 
 	EXPECT_TRUE(globalPropertiesWidget.d_ui->tagSizeEdit->isEnabled());
-	EXPECT_EQ(globalPropertiesWidget.d_ui->tagSizeEdit->value(),0.67);
+	EXPECT_EQ(globalPropertiesWidget.d_ui->tagSizeEdit->value(), 0.67);
 
-	QTest::keyClicks(globalPropertiesWidget.d_ui->nameEdit,"bar");
-	EXPECT_EQ(globalProperties->name(),"foobar");
+	QTest::keyClicks(globalPropertiesWidget.d_ui->nameEdit, "bar");
+	EXPECT_EQ(globalProperties->name(), "foobar");
 
-	QTest::keyClicks(globalPropertiesWidget.d_ui->authorEdit,"b");
-	EXPECT_EQ(globalProperties->author(),"testsb");
+	QTest::keyClicks(globalPropertiesWidget.d_ui->authorEdit, "b");
+	EXPECT_EQ(globalProperties->author(), "testsb");
 
-	QTest::keyClick(globalPropertiesWidget.d_ui->tagSizeEdit,Qt::Key_Delete);
-	QTest::keyClicks(globalPropertiesWidget.d_ui->tagSizeEdit,"2");
-	EXPECT_EQ(globalProperties->tagSize(),2.67);
+	QTest::keyClick(globalPropertiesWidget.d_ui->tagSizeEdit, Qt::Key_Delete);
+	QTest::keyClicks(globalPropertiesWidget.d_ui->tagSizeEdit, "2");
+	EXPECT_EQ(globalProperties->tagSize(), 2.67);
 
-
-	QTest::keyClicks(globalPropertiesWidget.d_ui->commentEdit,"This is ");
-	EXPECT_EQ(std::string(globalProperties->comment().toUtf8().constData()),
-	          std::string("This is for tests"));
+	QTest::keyClicks(globalPropertiesWidget.d_ui->commentEdit, "This is ");
+	EXPECT_EQ(
+	    std::string(globalProperties->comment().toUtf8().constData()),
+	    std::string("This is for tests")
+	);
 
 	// no tracking data directory: its undefined
-	EXPECT_EQ(globalProperties->tagFamily(),fort::tags::Family::Undefined);
-	EXPECT_EQ(std::string(globalPropertiesWidget.d_ui->familyValueLabel->text().toUtf8().constData()),
-	          "undefined");
+	EXPECT_EQ(globalProperties->tagFamily(), fort::tags::Family::Undefined);
+	EXPECT_EQ(
+	    std::string(globalPropertiesWidget.d_ui->familyValueLabel->text()
+	                    .toUtf8()
+	                    .constData()),
+	    "undefined"
+	);
 	ASSERT_NO_THROW({
-			auto s = experiment->CreateSpace("foo");
-			fmp::TrackingDataDirectory::Ptr tdd;
-			fm::FixableErrorList errors;
-			std::tie(tdd,errors) = fmp::TrackingDataDirectory::Open(TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
-			                                                        TestSetup::UTestData().Basedir() );
-			EXPECT_TRUE(errors.empty());
-			experiment->AddTrackingDataDirectory(s,tdd);
-		});
+		auto                            s = experiment->CreateSpace("foo");
+		fmp::TrackingDataDirectory::Ptr tdd;
+		fm::FixableErrorList            errors;
+		std::tie(tdd, errors) = fmp::TrackingDataDirectory::Open(
+		    TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath,
+		    TestSetup::UTestData().Basedir(),
+		    {}
+		);
+		EXPECT_TRUE(errors.empty());
+		experiment->AddTrackingDataDirectory(s, tdd);
+	});
 	globalProperties->onTDDModified();
-	EXPECT_EQ(std::string(globalPropertiesWidget.d_ui->familyValueLabel->text().toUtf8().constData()),
-	          "36h11");
+	EXPECT_EQ(
+	    std::string(globalPropertiesWidget.d_ui->familyValueLabel->text()
+	                    .toUtf8()
+	                    .constData()),
+	    "36h11"
+	);
 }

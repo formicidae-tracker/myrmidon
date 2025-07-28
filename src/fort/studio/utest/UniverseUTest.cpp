@@ -22,7 +22,8 @@ void UniverseUTest::SetUpTestSuite() {
 			fm::FixableErrorList            errors;
 			std::tie(tdd, errors) = fmp::priv::TrackingDataDirectory::Open(
 			    tddInfo.AbsoluteFilePath,
-			    TestSetup::UTestData().Basedir()
+			    TestSetup::UTestData().Basedir(),
+			    {}
 			);
 			EXPECT_TRUE(errors.empty());
 			s_nest.push_back(tdd);
