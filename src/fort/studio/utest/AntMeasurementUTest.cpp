@@ -12,26 +12,31 @@
 
 void AntMeasurementUTest::SetUp() {
 	ASSERT_NO_THROW({
-			auto experiment = fmp::Experiment::Create(TestSetup::UTestData().Basedir() / "ant-measurement-bridge.myrmidon");
-			auto s = experiment->CreateSpace("foo");
-			auto & tddInfo = TestSetup::UTestData().NestDataDirs().back();
-			fmp::TrackingDataDirectory::Ptr tdd;
-			fm::FixableErrorList errors;
-			std::tie(tdd,errors) = fmp::TrackingDataDirectory::Open(tddInfo.AbsoluteFilePath,
-			                                                     TestSetup::UTestData().Basedir());
+		auto experiment = fmp::Experiment::Create(
+		    TestSetup::UTestData().Basedir() / "ant-measurement-bridge.myrmidon"
+		);
+		auto  s       = experiment->CreateSpace("foo");
+		auto &tddInfo = TestSetup::UTestData().NestDataDirs().back();
+		fmp::TrackingDataDirectory::Ptr tdd;
+		fm::FixableErrorList            errors;
+		std::tie(tdd, errors) = fmp::TrackingDataDirectory::Open(
+		    tddInfo.AbsoluteFilePath,
+		    TestSetup::UTestData().Basedir(),
+		    {}
+		);
 
-			if ( tdd->TagCloseUpsComputed() == false ) {
-				for (const auto & l : tdd->PrepareTagCloseUpsLoaders() ) {
-					l();
-				}
+		if (tdd->TagCloseUpsComputed() == false) {
+			for (const auto &l : tdd->PrepareTagCloseUpsLoaders()) {
+				l();
 			}
-			experiment->AddTrackingDataDirectory(s,tdd);
-			d_experiment.setExperiment(experiment);
+		}
+		experiment->AddTrackingDataDirectory(s, tdd);
+		d_experiment.setExperiment(experiment);
 
-			for ( const auto & tcu : tddInfo.TagCloseUps ) {
-				d_closeUps[tcu->TagValue()].push_back(tcu);
-			}
-		});
+		for (const auto &tcu : tddInfo.TagCloseUps) {
+			d_closeUps[tcu->TagValue()].push_back(tcu);
+		}
+	});
 	ASSERT_TRUE(d_closeUps[0].size() >= 2);
 	ASSERT_TRUE(d_closeUps[1].size() >= 2);
 }

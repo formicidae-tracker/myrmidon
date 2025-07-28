@@ -6,27 +6,24 @@
 
 #include <glog/logging.h>
 
-int main(int argc, char ** argv) {
+int main(int argc, char **argv) {
 
 	FLAGS_logtostderr = false;
-	FLAGS_log_prefix = false;
+	FLAGS_log_prefix  = false;
 	::google::InitGoogleLogging(argv[0]);
 	::google::InstallFailureSignalHandler();
-
 
 	QCoreApplication::setOrganizationName("FORmicidae Tracker");
 	QCoreApplication::setOrganizationDomain("formicidae-tracker.github.io");
 	QCoreApplication::setApplicationName("FORT Studio");
-	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
-
-	QApplication fortStudio(argc,argv);
-
+	QApplication fortStudio(argc, argv);
 
 	MainWindow window;
 	window.show();
 
-	if ( fortStudio.arguments().size() >= 2 && fortStudio.arguments()[1] == "--debug-quit" ) {
+	if (fortStudio.arguments().size() >= 2 &&
+	    fortStudio.arguments()[1] == "--debug-quit") {
 		return 0;
 	}
 

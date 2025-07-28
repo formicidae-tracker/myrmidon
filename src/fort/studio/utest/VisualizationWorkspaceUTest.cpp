@@ -17,7 +17,8 @@
 void VisualizationWorkspaceUTest::SetUp() {
 	ws     = new VisualizationWorkspace();
 	auto e = fmp::Experiment::Open(
-	    TestSetup::UTestData().CurrentVersionFile().AbsoluteFilePath
+	    TestSetup::UTestData().CurrentVersionFile().AbsoluteFilePath,
+	    {}
 	);
 
 	std::vector<fmp::TrackingDataDirectory::Ptr> tdds;

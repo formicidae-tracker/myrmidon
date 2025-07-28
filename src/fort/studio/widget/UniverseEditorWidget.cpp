@@ -2,14 +2,15 @@
 #include "ui_UniverseEditorWidget.h"
 
 #include <fort/studio/bridge/UniverseBridge.hpp>
+#include <fort/studio/widget/ProgressDialog.hpp>
 
 #include <QDebug>
+#include <QEventLoop>
 #include <QFileDialog>
+#include <QFutureWatcher>
 #include <QMessageBox>
 #include <QProgressDialog>
-#include <QFutureWatcher>
 #include <QtConcurrent>
-#include <QEventLoop>
 
 #include "SpaceChoiceDialog.hpp"
 
@@ -18,15 +19,15 @@
 #include "FixableErrorDialog.hpp"
 
 UniverseEditorWidget::UniverseEditorWidget(QWidget *parent)
-	: QWidget(parent)
-	, d_ui(new Ui::UniverseEditorWidget) {
+    : QWidget(parent)
+    , d_ui(new Ui::UniverseEditorWidget) {
 	d_ui->setupUi(this);
 
 	d_ui->addButton->setEnabled(false);
 	d_ui->deleteButton->setEnabled(false);
 
-	d_ui->treeView->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
-
+	d_ui->treeView->header()->setSectionResizeMode(QHeaderView::ResizeToContents
+	);
 }
 
 UniverseEditorWidget::~UniverseEditorWidget() {
@@ -58,62 +59,51 @@ void UniverseEditorWidget::setup(UniverseBridge * universe) {
 			        d_ui->treeView->expand(d_universe->model()->index(first,0,parent));
 		        }
 	        });
-
 }
 
-
-
-fmp::TrackingDataDirectory::Ptr UniverseEditorWidget::openTDD(const QString & path) {
+fmp::TrackingDataDirectory::Ptr
+UniverseEditorWidget::openTDD(const QString &path) {
 
 	QFutureWatcher<void> watcher;
-	QEventLoop loop;
+	QEventLoop           loop;
 
 	fmp::TrackingDataDirectory::Ptr res;
-	fm::FixableErrorList errors;
-	connect(&watcher,&QFutureWatcher<void>::finished,
-	        &loop,&QEventLoop::quit);
+	fm::FixableErrorList            errors;
+	connect(
+	    &watcher,
+	    &QFutureWatcher<void>::finished,
+	    &loop,
+	    &QEventLoop::quit
+	);
 
-	auto dialog  = new QProgressDialog(tr("Gathering %1 time data").arg(path),
-	                                   QString(),
-	                                   0,-1,
-	                                   this,
-	                                   Qt::Dialog | Qt::WindowTitleHint | Qt::FramelessWindowHint);
-	dialog->setAutoReset(false);
-	dialog->setMinimumDuration(250);
-	dialog->setValue(0);
-	dialog->setWindowModality(Qt::ApplicationModal);
+	auto dialog = new ItemProgressDialog(
+	    tr("Loading %1 frame references").arg(path),
+	    this
+	);
 
-	auto openDataDir
-		= [&res,
-		   &errors,
-		   &path,
-		   dialog,
-		   this]() {
-			  try {
-				  std::tie(res,errors)
-					  = fmp::TrackingDataDirectory::Open(path.toUtf8().constData(),
-					                                     d_universe->basepath().toUtf8().constData(),
-					                                     [dialog](int done, int total ) {
-						                                     QMetaObject::invokeMethod(dialog, "setMaximum", Qt::QueuedConnection,
-						                                                               Q_ARG( int, total ) );
-						                                     QMetaObject::invokeMethod(dialog, "setValue", Qt::QueuedConnection,
-						                                                               Q_ARG( int, done ) );
-
-					                                     });
-			  } catch (const std::exception & e) {
-				  qCritical() << "Could not open TrackingDataDirectory"
-				              << path << ": " << e.what();
-			  }
-			  dialog->reset();
-		  };
+	auto openDataDir = [&res, &errors, &path, dialog, this]() {
+		try {
+			std::tie(res, errors) = fmp::TrackingDataDirectory::Open(
+			    path.toUtf8().constData(),
+			    d_universe->basepath().toUtf8().constData(),
+			    {.Progress = dialog->GetProgressReporter()}
+			);
+		} catch (const std::exception &e) {
+			qCritical() << "Could not open TrackingDataDirectory" << path
+			            << ": " << e.what();
+		}
+		dialog->reset();
+	};
 	watcher.setFuture(QtConcurrent::run(openDataDir));
 
 	loop.exec();
 	dialog->deleteLater();
 
-	if (errors.empty() == false ) {
-		if ( FixableErrorDialog::promptForFix(path,std::move(errors),this) == false ) {
-			qWarning() << "[UniverseEditorWidget]: Fixing errors discarded by user";
+	if (errors.empty() == false) {
+		if (FixableErrorDialog::promptForFix(path, std::move(errors), this) ==
+		    false) {
+			qWarning(
+			) << "[UniverseEditorWidget]: Fixing errors discarded by user";
 			return fmp::TrackingDataDirectory::Ptr();
 		}
 		res->SaveToCache();
