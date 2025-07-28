@@ -1,20 +1,10 @@
 #pragma once
 
-#include <QProgressDialog>
+#include "fort/myrmidon/types/Reporter.hpp"
 
-namespace fort {
-namespace myrmidon {
-class ProgressReporter;
-}
-} // namespace fort
+class QProgressDialog;
+class QString;
+class QWidget;
 
-class ItemProgressDialog : public QProgressDialog {
-	Q_OBJECT
-public:
-	explicit ItemProgressDialog(const QString &title, QWidget *parent);
-
-	virtual ~ItemProgressDialog() = default;
-
-	friend class ItemProgress;
-	std::unique_ptr<fort::myrmidon::ProgressReporter> GetProgressReporter();
-};
+std::tuple<QProgressDialog *, std::unique_ptr<fort::myrmidon::ProgressReporter>>
+OpenItemProgressDialog(const QString &title, QWidget *parent);
