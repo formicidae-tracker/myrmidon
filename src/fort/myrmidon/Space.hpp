@@ -47,14 +47,14 @@ public:
 	 *
 	 * @return the Space name
 	 */
-	const std::string & Name() const;
+	const std::string &Name() const;
 
 	/**
 	 * Sets the Space name
 	 *
 	 * @param name the wanted name
 	 */
-	void SetName(const std::string & name);
+	void SetName(const std::string &name);
 
 	/**
 	 * Creates a new Zone in this Space
@@ -63,14 +63,15 @@ public:
 	 *
 	 * @return the newly created Zone
 	 */
-	Zone::Ptr CreateZone(const std::string & name);
+	Zone::Ptr CreateZone(const std::string &name);
 
 	/**
 	 * Deletes a Zone in this Space.
 	 *
 	 * @param zoneID the ZoneID of the Zone to delete.
 	 *
-	 * @throws std::out_of_range if zoneID is not the ID of a Zone owned by this Space.
+	 * @throws std::out_of_range if zoneID is not the ID of a Zone owned by this
+	 * Space.
 	 */
 	void DeleteZone(ZoneID zoneID);
 
@@ -79,7 +80,7 @@ public:
 	 *
 	 * @return a map of Zone::ByID of all Zone in this Space.
 	 */
-	const ZoneByID & Zones() const;
+	const ZoneByID &Zones() const;
 
 	/**
 	 * Locates a movie file and frame number
@@ -92,10 +93,12 @@ public:
 	 * @throws std::out_of_range if a movie frame for the specified
 	 *         Time could not be found.
 	 */
-	std::pair<std::string,uint64_t> LocateMovieFrame(const Time & time) const;
+	std::pair<std::string, uint64_t> LocateMovieFrame(const Time &time) const;
 
 	// needed as SpaceHandle is opaque and we store a unique_ptr.
 	~Space();
+
+	std::string Format() const;
 
 private:
 	friend class ExperimentHandle;
@@ -107,7 +110,7 @@ private:
 	// accessed from <Experiment>.
 	Space(std::unique_ptr<SpaceHandle> handle);
 
-	Space & operator=(const Space &) = delete;
+	Space &operator=(const Space &) = delete;
 
 	Space(const Space &) = delete;
 

@@ -74,24 +74,24 @@ public:
 	/**
 	 * A pointer to an Ant
 	 */
-	typedef std::shared_ptr<Ant>       Ptr;
+	typedef std::shared_ptr<Ant> Ptr;
 
 	/**
 	 * The DisplayState of an Ant in an Experiment
 	 */
 	enum class DisplayState {
-	                         /**
-	                          * the Ant is visible
-	                          */
-	                         VISIBLE = 0,
-	                         /**
-	                          * the Ant is hidden
-	                          */
-	                         HIDDEN  = 1,
-	                         /**
-	                          * Ant is visible and all non-SOLO Ant will be hidden.
-	                          */
-	                         SOLO    = 2,
+		/**
+		 * the Ant is visible
+		 */
+		VISIBLE = 0,
+		/**
+		 * the Ant is hidden
+		 */
+		HIDDEN  = 1,
+		/**
+		 * Ant is visible and all non-SOLO Ant will be hidden.
+		 */
+		SOLO    = 2,
 	};
 
 	/**
@@ -106,10 +106,10 @@ public:
 	 *
 	 * @return a ::TagID that identify this ant at this time.
 	 *
-	 * @throws std::runtime_error if there no valid Identification for this time.
+	 * @throws std::runtime_error if there no valid Identification for this
+	 * time.
 	 */
-	TagID IdentifiedAt(const Time & time) const;
-
+	TagID IdentifiedAt(const Time &time) const;
 
 	/**
 	 * Gets the Identification targetting this Ant.
@@ -117,9 +117,10 @@ public:
 	 * Gets the Identification targetting this Ant. These
 	 * Identification will always be sorted in Time and never overlaps.
 	 *
-	 * @return an Identification::List of Identification that target this object.
+	 * @return an Identification::List of Identification that target this
+	 * object.
 	 */
-	const IdentificationList & Identifications() const;
+	const IdentificationList &Identifications() const;
 
 	/**
 	 *  Gets the AntID of an Ant.
@@ -131,7 +132,6 @@ public:
 	 */
 	fort::myrmidon::AntID ID() const;
 
-
 	/**
 	 *  Gets the Display Color of an Ant.
 	 *
@@ -140,8 +140,7 @@ public:
 	 * @return a const reference to the Color used to display the Ant
 	 *         in `fort-studio`.
 	 */
-	const Color & DisplayColor() const;
-
+	const Color &DisplayColor() const;
 
 	/**
 	 * Sets the Ant display color
@@ -149,7 +148,7 @@ public:
 	 * @param color the new Color to use to display the Ant in `fort-studio`.
 	 */
 
-	void SetDisplayColor(const Color & color);
+	void SetDisplayColor(const Color &color);
 
 	/**
 	 *  Gets the Ant display state
@@ -186,10 +185,10 @@ public:
 	 *
 	 * @return the wanted Value for key at time, or the Experiment default one
 	 *
-	 * @throws std::out_of_range if name is not a defined metadata key in Experiment.
+	 * @throws std::out_of_range if name is not a defined metadata key in
+	 * Experiment.
 	 */
-	const Value & GetValue(const std::string & key,
-	                                const Time & time) const;
+	const Value &GetValue(const std::string &key, const Time &time) const;
 
 	/**
 	 *  Sets a user defined timed metadata
@@ -208,9 +207,7 @@ public:
 	 * @throws std::runtime_error if value is not of the right type for key
 	 *
 	 */
-	void SetValue(const std::string & key,
-	              const Value & value,
-	              const Time & time);
+	void SetValue(const std::string &key, const Value &value, const Time &time);
 
 	/**
 	 * Removes any user defined value at a given time
@@ -223,8 +220,7 @@ public:
 	 * @throws std::out_of_range if no value for key at time have
 	 *         been previously set with SetValue().
 	 */
-	void DeleteValue(const std::string & key,
-	                 const Time & time);
+	void DeleteValue(const std::string &key, const Time &time);
 
 	/**
 	 * Gets all metadata key value changes over time
@@ -232,7 +228,7 @@ public:
 	 * @param key the key to list
 	 * @return the values of key over the time
 	 */
-	const std::map<Time,Value> & GetValues(const std::string & key) const;
+	const std::map<Time, Value> &GetValues(const std::string &key) const;
 
 	/**
 	 *  Adds a Capsule to the Ant virtual shape list.
@@ -245,8 +241,9 @@ public:
 	 *
 	 * @throws std::invalid_argument if shapeTypeID is not defined in Experiment
 	 */
-	void AddCapsule(AntShapeTypeID shapeTypeID,
-	                const std::shared_ptr<Capsule> & capsule);
+	void AddCapsule(
+	    AntShapeTypeID shapeTypeID, const std::shared_ptr<Capsule> &capsule
+	);
 
 	/**
 	 * Gets all capsules for this Ant
@@ -254,14 +251,15 @@ public:
 	 * @return a TypedCapsuleList representing the virtual shape of
 	 *        the Ant
 	 */
-	const TypedCapsuleList & Capsules() const;
+	const TypedCapsuleList &Capsules() const;
 
 	/**
 	 * Delete one of the virtual shape
 	 *
 	 * @param index the index in the Capsules() to remove
 	 *
-	 * @throws std::out_of_range if index is greate or equal to the size of Capsules().
+	 * @throws std::out_of_range if index is greate or equal to the size of
+	 * Capsules().
 	 */
 	void DeleteCapsule(const size_t index);
 
@@ -283,12 +281,13 @@ private:
 	// from <Experiment>.
 	Ant(std::unique_ptr<AntHandle> handle);
 
-	Ant & operator=(const Ant &) = delete;
-	Ant(const Ant &) = delete;
+	Ant &operator=(const Ant &) = delete;
+	Ant(const Ant &)            = delete;
 
 	std::unique_ptr<AntHandle> d_p;
 };
 
-
 } // namespace myrmidon
-} //namespace fort
+} // namespace fort
+
+std::ostream &operator<<(std::ostream &, const fort::myrmidon::Ant &);

@@ -86,5 +86,7 @@ Within a single Space , it could be relevant to define
     Raises:
         IndexError: if time is outside of this Space tracking data
 )pydoc"
-	    );
+	    )
+	    .def("__str__", [](const Space::Ptr &s) { return s->Format(); })
+	    .def("__repr__", [](const Space::Ptr &s) { return s->Format(); });
 }

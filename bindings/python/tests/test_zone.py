@@ -72,3 +72,8 @@ class ZoneTestCase(unittest.TestCase):
         definitions[0].End = m.Time().Add(-1)
         definitions[1].Start = m.Time().Add(1)
         zone.AddDefinition([], start=m.Time().Add(-1), end=m.Time().Add(1))
+
+    def test_format(self):
+        zone = self.space.CreateZone("feeding_area")
+        self.assertEqual(str(zone), "Zone{ID:1,Name:'feeding_area',Definitions:0}")
+        self.assertEqual(repr(zone), "Zone{ID:1,Name:'feeding_area',Definitions:0}")

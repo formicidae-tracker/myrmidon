@@ -38,3 +38,7 @@ class SpaceTestCase(unittest.TestCase):
         self.assertEqual(frame, 0)
         with self.assertRaises(IndexError):
             filepath, frame = self.experiment.Spaces[1].LocateMovieFrame(tddInfo.End)
+
+    def test_format(self):
+        self.assertEqual(str(self.space), "Space{ID:1,Name:'foo',Zones:0}")
+        self.assertEqual(repr(self.space), "Space{ID:1,Name:'foo',Zones:0}")

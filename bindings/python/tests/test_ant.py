@@ -129,3 +129,16 @@ class AntTestCase(unittest.TestCase):
         self.experiment.SetMetaDataKey("alive", True)
         self.experiment = None
         a.SetValue("alive", False, m.Time())
+
+    def test_ant_formatting(self):
+        a = self.experiment.CreateAnt()
+        t1 = m.Time.Now()
+        t2 = t1.Add(1 * m.Duration.Second)
+
+        i3 = self.experiment.AddIdentification(a.ID, 2, t2, m.Time.Forever())
+        i2 = self.experiment.AddIdentification(a.ID, 1, t1, t2)
+        i1 = self.experiment.AddIdentification(a.ID, 0, m.Time.SinceEver(), t1)
+
+        expected = "Ant{ID:001,↤{0x000,0x001,0x002}}"
+        self.assertEqual(str(a), expected)
+        self.assertEqual(repr(a), expected)

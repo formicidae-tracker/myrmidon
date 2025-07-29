@@ -15,6 +15,10 @@ class MatchersTestCase(unittest.TestCase):
             ),
             (m.Matcher.AntID(1), "Ant.ID == 001"),
             (m.Matcher.AntMetaData(key="group", value="nurse"), "Ant.'group' == nurse"),
+            (
+                m.Matcher.AntMetaData(key="group", value=None),
+                "Ant1.'group' == Ant2.'group'",
+            ),
             (m.Matcher.AntDistanceSmallerThan(10.0), "Distance(Ant1, Ant2) < 10"),
             (m.Matcher.AntDistanceGreaterThan(10.0), "Distance(Ant1, Ant2) > 10"),
             (m.Matcher.AntAngleSmallerThan(1.0), "Angle(Ant1, Ant2) < 1"),
@@ -28,3 +32,4 @@ class MatchersTestCase(unittest.TestCase):
         ]
         for matcher, e in testdata:
             self.assertEqual(str(matcher), e)
+            self.assertEqual(repr(matcher), e)
