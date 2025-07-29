@@ -2,15 +2,16 @@
 
 #include <fort/myrmidon/Ant.hpp>
 #include <fort/myrmidon/Identification.hpp>
+#include <sstream>
 
 namespace py = pybind11;
 
-
-void BindAnt(py::module_ & m) {
+void BindAnt(py::module_ &m) {
 	using namespace fort::myrmidon;
-	py::class_<Ant,Ant::Ptr> ant(m,
-	                             "Ant",
-	                             R"pydoc(
+	py::class_<Ant, Ant::Ptr> ant(
+	    m,
+	    "Ant",
+	    R"pydoc(
 
 Ant are the main object of interest of an :class:`Experiment`. They
 are identified from tags with :class:`Identification`, have a virtual
@@ -45,34 +46,49 @@ Ant can stores timed user defined metadata. These are modifiable
 using :meth:`SetValue` and :meth:`DeleteValue` and accesible through
 :meth:`GetValue`.
 
-)pydoc");
+)pydoc"
+	);
 
-	py::enum_<Ant::DisplayState>(ant,
-	                             "DisplayState",
-	                             "Enumerates the possible display state for an Ant")
-		.value("VISIBLE",Ant::DisplayState::VISIBLE,"the Ant is visible")
-		.value("HIDDEN",Ant::DisplayState::HIDDEN,"the Ant is hidden")
-		.value("SOLO",Ant::DisplayState::SOLO,"the Ant is visible and all other non-solo ant are hidden");
+	py::enum_<Ant::DisplayState>(
+	    ant,
+	    "DisplayState",
+	    "Enumerates the possible display state for an Ant"
+	)
+	    .value("VISIBLE", Ant::DisplayState::VISIBLE, "the Ant is visible")
+	    .value("HIDDEN", Ant::DisplayState::HIDDEN, "the Ant is hidden")
+	    .value(
+	        "SOLO",
+	        Ant::DisplayState::SOLO,
+	        "the Ant is visible and all other non-solo ant are hidden"
+	    );
 
-
-	ant.def_property_readonly("Identifications",
-		                       &Ant::Identifications,
-	                          "List[Identification]: all Identification that target this Ant, ordered by validity time.")
-		.def_property_readonly("ID",
-		                       &Ant::ID,
-		                       "int: the AntID for this Ant")
-		.def_property("DisplayColor",
-		              &Ant::DisplayColor,
-		              &Ant::SetDisplayColor,
-		              "Tuple[int,int,int]: the color used to display the Ant in **fort-studio**")
-		.def_property("DisplayStatus",
-		              &Ant::DisplayStatus,
-		              &Ant::SetDisplayStatus,
-		              "Ant.DisplayState: the DisplayState in **fort-studio** for this Ant")
-		.def_property_readonly("Capsules",
-		                       &Ant::Capsules,
-		                       "List[Tuple[int,Capsule]]: a list of capsules and their type")
-		.def("IdentifiedAt",
+	ant.def_property_readonly(
+	       "Identifications",
+	       &Ant::Identifications,
+	       "List[Identification]: all Identification that target this Ant, "
+	       "ordered by validity time."
+	)
+	    .def_property_readonly("ID", &Ant::ID, "int: the AntID for this Ant")
+	    .def_property(
+	        "DisplayColor",
+	        &Ant::DisplayColor,
+	        &Ant::SetDisplayColor,
+	        "Tuple[int,int,int]: the color used to display the Ant in "
+	        "**fort-studio**"
+	    )
+	    .def_property(
+	        "DisplayStatus",
+	        &Ant::DisplayStatus,
+	        &Ant::SetDisplayStatus,
+	        "Ant.DisplayState: the DisplayState in **fort-studio** for this Ant"
+	    )
+	    .def_property_readonly(
+	        "Capsules",
+	        &Ant::Capsules,
+	        "List[Tuple[int,Capsule]]: a list of capsules and their type"
+	    )
+	    .def(
+	        "IdentifiedAt",
 	        &Ant::IdentifiedAt,
 	        py::arg("time"),
 	        R"pydoc(
@@ -86,12 +102,14 @@ Returns:
 
 Raises:
     Error: if no tag identifies this Ant at **time**.
-)pydoc")
-		.def("GetValue",
-		     &Ant::GetValue,
-		     py::arg("key"),
-		     py::arg("time"),
-		     R"pydoc(
+)pydoc"
+	    )
+	    .def(
+	        "GetValue",
+	        &Ant::GetValue,
+	        py::arg("key"),
+	        py::arg("time"),
+	        R"pydoc(
 Gets user defined timed metadata.
 
 Args:
@@ -104,16 +122,23 @@ Returns:
 
 Raises:
     IndexError: if **key** is not defined in :class:`Experiment`
-)pydoc")
-		.def("GetValues",
-		     [](const Ant & self, const std::string & key) -> std::vector<std::pair<fort::Time,Value>> {
-			     std::vector<std::pair<fort::Time,Value>> res;
-			     const auto & values = self.GetValues(key);
-			     std::copy(values.begin(),values.end(),std::back_inserter(res));
-			     return res;
-		     },
-		     py::arg("key"),
-		     R"pydoc(
+)pydoc"
+	    )
+	    .def(
+	        "GetValues",
+	        [](const Ant &self, const std::string &key
+	        ) -> std::vector<std::pair<fort::Time, Value>> {
+		        std::vector<std::pair<fort::Time, Value>> res;
+		        const auto &values = self.GetValues(key);
+		        std::copy(
+		            values.begin(),
+		            values.end(),
+		            std::back_inserter(res)
+		        );
+		        return res;
+	        },
+	        py::arg("key"),
+	        R"pydoc(
 Gets metadata key changes over time.
 
 Args:
@@ -121,13 +146,15 @@ Args:
 
 Raises:
     IndexError: if **key** is not defined in :class:`Experiment`
-)pydoc")
-		.def("SetValue",
-		     &Ant::SetValue,
-		     py::arg("key"),
-		     py::arg("value"),
-		     py::arg("time"),
-		     R"pydoc(
+)pydoc"
+	    )
+	    .def(
+	        "SetValue",
+	        &Ant::SetValue,
+	        py::arg("key"),
+	        py::arg("value"),
+	        py::arg("time"),
+	        R"pydoc(
 Sets a user defined timed metadata
 
 Args:
@@ -141,12 +168,14 @@ Raises:
     IndexError: if **key** is not defined in the :class:`Experiment`
     ValueError: if **time** is :meth:`Time.Forever`
     RuntimeError: if **value** is not of the right type for **key**
-)pydoc")
-		.def("DeleteValue",
-		     &Ant::DeleteValue,
-		     py::arg("key"),
-		     py::arg("time"),
-		     R"pydoc(
+)pydoc"
+	    )
+	    .def(
+	        "DeleteValue",
+	        &Ant::DeleteValue,
+	        py::arg("key"),
+	        py::arg("time"),
+	        R"pydoc(
 Clears a user defined timed metadata.
 
 Args:
@@ -156,12 +185,14 @@ Args:
 Raises:
     IndexError: if **key** was not previously set for **time** with
         :meth:`SetValue`.
-)pydoc")
-		.def("AddCapsule",
-		     &Ant::AddCapsule,
-		     py::arg("shapeTypeID"),
-		     py::arg("capsule"),
-		     R"pydoc(
+)pydoc"
+	    )
+	    .def(
+	        "AddCapsule",
+	        &Ant::AddCapsule,
+	        py::arg("shapeTypeID"),
+	        py::arg("capsule"),
+	        R"pydoc(
 Adds a Capsule to the Ant virtual shape.
 
 Args:
@@ -171,11 +202,13 @@ Args:
 Raises:
     ValueError: if **shapeTypeID** is not defined in the
         :class:`Experiment`
-)pydoc")
-		.def("DeleteCapsule",
-		     &Ant::DeleteCapsule,
-		     py::arg("index"),
-		     R"pydoc(
+)pydoc"
+	    )
+	    .def(
+	        "DeleteCapsule",
+	        &Ant::DeleteCapsule,
+	        py::arg("index"),
+	        R"pydoc(
 Removes one of the shape
 
 Args:
@@ -183,12 +216,26 @@ Args:
 
 Raises:
     IndexError: if ``index >= len(self.Capsules())``
-)pydoc")
-		.def("ClearCapsules",
-		     &Ant::ClearCapsules,
-		     R"pydoc(
+)pydoc"
+	    )
+	    .def(
+	        "ClearCapsules",
+	        &Ant::ClearCapsules,
+	        R"pydoc(
 Removes all capsules for this Ant.
-)pydoc")
-		;
-
+)pydoc"
+	    )
+	    .def(
+	        "__str__",
+	        [](const Ant &a) -> std::string {
+		        std::ostringstream oss;
+		        oss << a;
+		        return oss.str();
+	        }
+	    )
+	    .def("__repr__", [](const Ant &a) -> std::string {
+		    std::ostringstream oss;
+		    oss << a;
+		    return oss.str();
+	    });
 }

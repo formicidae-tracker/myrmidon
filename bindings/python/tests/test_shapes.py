@@ -106,6 +106,18 @@ class ShapeTestCase(unittest.TestCase):
         npt.assert_almost_equal(self.polygon.Vertices[2], [1, -1])
         npt.assert_almost_equal(self.polygon.Vertices[3], [2, 3])
 
+    def test_format(self):
+        self.assertEqual(str(self.circle), "Circle{Center:{0 0},Radius:1}")
+        self.assertEqual(repr(self.circle), "Circle{Center:{0 0},Radius:1}")
+        self.assertEqual(
+            str(self.polygon), "Polygon{Vertices:{{1 1},{-1  1},{-1 -1},{ 1 -1}}}"
+        )
+        self.assertEqual(
+            repr(self.polygon), "Polygon{Vertices:{{1 1},{-1  1},{-1 -1},{ 1 -1}}}"
+        )
+        self.assertEqual(str(self.capsule), "Capsule{C1:{0 0},R1:1,C2:{1 1},R2:1}")
+        self.assertEqual(repr(self.capsule), "Capsule{C1:{0 0},R1:1,C2:{1 1},R2:1}")
+
 
 class ShapeListTestCase(unittest.TestCase):
     def test_initialization(self):

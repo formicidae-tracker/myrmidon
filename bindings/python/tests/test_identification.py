@@ -72,6 +72,7 @@ class IdentificationTestCase(unittest.TestCase, assertions.CustomAssertion):
 
     def test_formatting(self):
         self.assertEqual(str(self.i), "Identification{ID:0x07b ↦ 1, From:-∞, To:+∞}")
+        self.assertEqual(repr(self.i), "Identification{ID:0x07b ↦ 1, From:-∞, To:+∞}")
 
     def test_scope_validity(self):
         self.experiment = None

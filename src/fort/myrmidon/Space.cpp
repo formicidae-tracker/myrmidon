@@ -59,7 +59,12 @@ std::pair<std::string,uint64_t> Space::LocateMovieFrame(const Time & time) const
 	throw std::out_of_range(oss.str());
 }
 
-
+std::string Space::Format() const {
+	std::ostringstream oss;
+	oss << "Space{ID:" << ID() << ",Name:'" << Name()
+	    << "',Zones:" << Zones().size() << "}";
+	return oss.str();
+}
 
 } // namespace myrmidon
 } // namespace fort

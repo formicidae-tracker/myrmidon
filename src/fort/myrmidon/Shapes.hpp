@@ -65,6 +65,8 @@ public:
 	 */
 	Type ShapeType() const;
 
+	virtual std::string Format() const = 0;
+
 	/** \cond PRIVATE */
 	virtual bool Contains(const Eigen::Vector2d & point) const = 0;
 
@@ -86,7 +88,7 @@ protected:
 class Circle : public Shape {
 public:
 	/** A pointer to a Circle */
-	typedef std::shared_ptr<Circle>       Ptr;
+	typedef std::shared_ptr<Circle> Ptr;
 
 	/**
 	 *  public constructor
@@ -94,7 +96,7 @@ public:
 	 * @param center the center of the circle
 	 * @param radius the radius of the circle
 	 */
-	Circle(const Eigen::Vector2d & center, double radius);
+	Circle(const Eigen::Vector2d &center, double radius);
 
 	virtual ~Circle();
 
@@ -103,15 +105,14 @@ public:
 	 *
 	 * @param center the center of the circle
 	 */
-	void SetCenter( const Eigen::Vector2d & center);
+	void SetCenter(const Eigen::Vector2d &center);
 
 	/**
 	 *  Gets the center of the circle
 	 *
 	 * @return the circle center
 	 */
-	const Eigen::Vector2d & Center() const;
-
+	const Eigen::Vector2d &Center() const;
 
 	/**
 	 *  Sets the radius of the circle
@@ -127,9 +128,11 @@ public:
 	 */
 	double Radius() const;
 
+	std::string Format() const override;
+
 	/** \cond PRIVATE */
 
-	bool Contains(const Eigen::Vector2d & point) const override;
+	bool Contains(const Eigen::Vector2d &point) const override;
 
 	AABB ComputeAABB() const override;
 
@@ -139,7 +142,7 @@ public:
 	/** \endcond PRIVATE */
 private:
 	Eigen::Vector2d d_center;
-	double d_radius;
+	double          d_radius;
 };
 
 /**
@@ -241,6 +244,8 @@ public:
 		return d_r2;
 	}
 
+	std::string Format() const override;
+
 	/** \cond PRIVATE */
 	bool Contains(const Eigen::Vector2d & point) const override;
 
@@ -283,19 +288,19 @@ private:
  * Note that order matters as {(-1,-1),(1,-1),(1,1),(-1,1)} is a
  * square, and {(-1,-1),(1,-1),(-1,1),(1,1)} is an hourglass.
  */
-class Polygon  : public Shape {
+class Polygon : public Shape {
 public:
 	/**
 	 * A pointer to a Polygon
 	 */
-	typedef std::shared_ptr<Polygon>       Ptr;
+	typedef std::shared_ptr<Polygon> Ptr;
 
 	/**
 	 * Public constructor
 	 *
 	 * @param vertices the vertices of the polygon
 	 */
-	Polygon(const Vector2dList & vertices);
+	Polygon(const Vector2dList &vertices);
 
 	virtual ~Polygon();
 
@@ -304,14 +309,14 @@ public:
 	 *
 	 * @returns a Vector2dList of the polygon vertices
 	 */
-	const Vector2dList & Vertices() const;
+	const Vector2dList &Vertices() const;
 
 	/**
 	 * Sets the Polygon's vertices
 	 *
 	 * @param vertices a Vector2dList of the polygon vertices
 	 */
-	void SetVertices(const Vector2dList & vertices);
+	void SetVertices(const Vector2dList &vertices);
 
 	/**
 	 * Gets the number of vertices in the polygon
@@ -328,7 +333,7 @@ public:
 	 * @return a const reference to the wanted vertex
 	 * @throws std::out_of_range if i is >= Size().
 	 */
-	const Eigen::Vector2d & Vertex(size_t i) const;
+	const Eigen::Vector2d &Vertex(size_t i) const;
 
 	/**
 	 * Sets a Polygon vertex
@@ -337,7 +342,7 @@ public:
 	 * @param v the new value for the vertex
 	 * @throws std::out_of_range if i is >= Size().
 	 */
-	void SetVertex(size_t i, const Eigen::Vector2d & v);
+	void SetVertex(size_t i, const Eigen::Vector2d &v);
 
 	/**
 	 * Deletes a Polygon vertex
@@ -347,8 +352,10 @@ public:
 	 */
 	void DeleteVertex(size_t i);
 
+	std::string Format() const override;
+
 	/** \cond PRIVATE */
-	bool Contains(const Eigen::Vector2d & point) const override;
+	bool Contains(const Eigen::Vector2d &point) const override;
 
 	AABB ComputeAABB() const override;
 

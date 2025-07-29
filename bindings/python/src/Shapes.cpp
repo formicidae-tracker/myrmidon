@@ -1,5 +1,6 @@
 #include "BindTypes.hpp"
 #include <pybind11/stl_bind.h>
+#include <sstream>
 
 namespace py = pybind11;
 
@@ -12,11 +13,14 @@ void BindShapes(py::module_ &m) {
 A Generic class for a Shape
 )pydoc"
 	);
-	shape.def_property_readonly(
-	    "ShapeType",
-	    &Shape::ShapeType,
-	    "(fort_myrmidon.Shape.Type): the type of the shape"
-	);
+	shape
+	    .def_property_readonly(
+	        "ShapeType",
+	        &Shape::ShapeType,
+	        "(fort_myrmidon.Shape.Type): the type of the shape"
+	    )
+	    .def("__str__", [](const Shape::Ptr &ptr) { return ptr->Format(); })
+	    .def("__repr__", [](const Shape::Ptr &ptr) { return ptr->Format(); });
 
 	py::enum_<Shape::Type>(shape, "Type", "Enum for the type of a Shape")
 	    .value("CIRCLE", Shape::Type::CIRCLE, "int: a circle")

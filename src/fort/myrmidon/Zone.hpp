@@ -34,14 +34,14 @@ public:
 	 * @return a list of Shape that define the Shape of the Zone for
 	 *         [Start();End()[
 	 */
-	const Shape::List & Shapes() const;
+	const Shape::List &Shapes() const;
 
 	/**
 	 * Sets the Shapes of this ZoneDefinition
 	 *
 	 * @param shapes a union of Shape defining the Zone shapes.
 	 */
-	void SetShapes(const Shape::List & shapes);
+	void SetShapes(const Shape::List &shapes);
 
 	/**
 	 * Gets the first valid time of the ZoneDefinition
@@ -49,7 +49,7 @@ public:
 	 * @return the first valid Time of this definition. It can be
 	 *         Time::SinceEver().
 	 */
-	const Time & Start() const;
+	const Time &Start() const;
 
 	/**
 	 * Gets the first invalid time of the ZoneDefinition
@@ -57,7 +57,7 @@ public:
 	 * @return the first invalid Time of this definition. It can be
 	 *         Time::Forever().
 	 */
-	const Time & End() const;
+	const Time &End() const;
 
 	/**
 	 * Sets the first valid time of the ZoneDefinition
@@ -65,7 +65,7 @@ public:
 	 * @param start the first valid Time of this definition. It can be
 	 *        Time::SinceEver().
 	 */
-	void SetStart(const Time & start);
+	void SetStart(const Time &start);
 
 	/**
 	 * Sets the first invalid time of the ZoneDefinition
@@ -73,10 +73,10 @@ public:
 	 * @param end the first invalid Time of this definition. It can be
 	 *        Time::Forever().
 	 */
-	void SetEnd(const Time & end);
+	void SetEnd(const Time &end);
 
-	ZoneDefinition & operator=( const ZoneDefinition &) = delete;
-	ZoneDefinition(const ZoneDefinition & ) = delete;
+	ZoneDefinition &operator=(const ZoneDefinition &) = delete;
+	ZoneDefinition(const ZoneDefinition &)            = delete;
 
 	~ZoneDefinition();
 
@@ -92,7 +92,6 @@ private:
 
 	std::unique_ptr<ZoneDefinitionHandle> d_p;
 };
-
 
 /**
  * A tracking region where collisions/interactions are computed.
@@ -151,9 +150,9 @@ public:
 	 *         resulting definition overlap in time with another
 	 *         ZoneDefinition for this Zone.
 	 */
-	ZoneDefinition::Ptr AddDefinition(const Shape::List & shapes,
-	                                  const Time & start,
-	                                  const Time & end);
+	ZoneDefinition::Ptr           AddDefinition(
+	              const Shape::List &shapes, const Time &start, const Time &end
+	          );
 
 	/**
 	 * Gets the Zone's ZoneDefinition
@@ -161,7 +160,7 @@ public:
 	 * @return a ZoneDefinition::List of ZoneDefinition for this Zone
 	 *
 	 */
-	const ZoneDefinitionList & Definitions() const;
+	const ZoneDefinitionList &Definitions() const;
 
 	/**
 	 * Removes a ZoneDefinition
@@ -177,14 +176,14 @@ public:
 	 *
 	 * @return the Zone name
 	 */
-	const std::string & Name() const;
+	const std::string &Name() const;
 
 	/**
 	 * Gets the Zone name
 	 *
 	 * @param name the wanted Name()
 	 */
-	void SetName(const std::string & name);
+	void SetName(const std::string &name);
 
 	/**
 	 * Gets the Zone ID
@@ -193,6 +192,7 @@ public:
 	 */
 	ZoneID ID() const;
 
+	std::string Format() const;
 
 	~Zone();
 
@@ -206,12 +206,11 @@ private:
 	// accessed from <Space>.
 	Zone(std::unique_ptr<ZoneHandle> handle);
 
-	Zone & operator=( const Zone &) = delete;
-	Zone(const Zone &) = delete;
+	Zone &operator=(const Zone &) = delete;
+	Zone(const Zone &)            = delete;
 
 	std::unique_ptr<ZoneHandle> d_p;
 };
-
 
 } // namespace myrmidon
 } // namespace fort
