@@ -301,28 +301,30 @@ public:
 	}
 };
 
-
 class AntAngleMatcher : public AntGeometryMatcher {
 private:
-	double                 d_angle;
-	bool                   d_greater;
+	double d_angle;
+	bool   d_greater;
+
 public:
-	AntAngleMatcher (double angle, bool greater)
-		: d_angle(Isometry2Dd(angle,{0,0}).angle())
-		, d_greater(greater) {
-	}
+	AntAngleMatcher(double angle, bool greater)
+	    : d_angle(AngleMod(angle))
+	    , d_greater(greater) {}
+
 	virtual ~AntAngleMatcher() {}
 
-	uint64_t Match(fort::myrmidon::AntID ant1,
-	               fort::myrmidon::AntID ant2,
-	               const fort::myrmidon::InteractionTypes & types) override {
+	uint64_t Match(
+	    fort::myrmidon::AntID                   ant1,
+	    fort::myrmidon::AntID                   ant2,
+	    const fort::myrmidon::InteractionTypes &types
+	) override {
 		auto fi1 = d_positions.find(ant1);
 		auto fi2 = d_positions.find(ant2);
-		if ( fi1 == d_positions.end() || fi2 == d_positions.end() ) {
+		if (fi1 == d_positions.end() || fi2 == d_positions.end()) {
 			return 1;
 		}
-		double angle = std::abs(fi1->second.z() - fi2->second.z());
-		if ( d_greater == true ) {
+		double angle = std::abs(AngleMod(fi1->second.z() - fi2->second.z()));
+		if (d_greater == true) {
 			return angle > d_angle ? 1 : 0;
 		} else {
 			return angle < d_angle ? 1 : 0;
@@ -332,10 +334,7 @@ public:
 	void Format(std::ostream & out ) const override {
 		out << "Angle(Ant1, Ant2) " << (d_greater == true ? ">" : "<" ) << " " << d_angle;
 	}
-
-
 };
-
 
 class InteractionTypeSingleMatcher : public Matcher {
 private:

@@ -1,15 +1,14 @@
 #pragma once
 
-
 #include <Eigen/Core>
 #include <Eigen/Geometry>
+#include <cmath>
 
 namespace fort {
 namespace myrmidon {
 namespace priv {
 
-template <typename T>
-class Isometry2D;
+template <typename T> class Isometry2D;
 
 // Applies the <fort::myrmidon::priv::Isometry2D> to a point.
 // @ T the scalar type such as float or double
@@ -21,9 +20,11 @@ class Isometry2D;
 // vector please use i.rotation()*p
 //
 // @return a new point representing the tranformed point.
-template<typename T>
-fort::myrmidon::priv::Isometry2D<T> operator*(const fort::myrmidon::priv::Isometry2D<T> & a,
-                                              const fort::myrmidon::priv::Isometry2D<T> & b);
+template <typename T>
+fort::myrmidon::priv::Isometry2D<T> operator*(
+    const fort::myrmidon::priv::Isometry2D<T> &a,
+    const fort::myrmidon::priv::Isometry2D<T> &b
+);
 
 // Concatenates two <fort::myrmidon::priv::Isometry2D>
 // @T the scalar type to use, float or double
@@ -32,23 +33,35 @@ fort::myrmidon::priv::Isometry2D<T> operator*(const fort::myrmidon::priv::Isomet
 //
 // Note that `a * b` could be different than `b * a` most of the time.
 //
-// @return the two concatened isometry <b>, then <a>, as an <fort::myrmidon::priv::Isometry2D>
-template<typename T>
-Eigen::Matrix<T,2,1> operator*(const fort::myrmidon::priv::Isometry2D<T> & i,
-                               const Eigen::Matrix<T,2,1> & p);
-
+// @return the two concatened isometry <b>, then <a>, as an
+// <fort::myrmidon::priv::Isometry2D>
+template <typename T>
+Eigen::Matrix<T, 2, 1> operator*(
+    const fort::myrmidon::priv::Isometry2D<T> &i,
+    const Eigen::Matrix<T, 2, 1>              &p
+);
 
 } // namespace priv
 } // namespace myrmidon
 } // namespace fort
-
-
 
 namespace fort {
 
 namespace myrmidon {
 
 namespace priv {
+
+template <typename Float> Float AngleMod(Float angle) {
+	static constexpr Float M_2PI = 2.0 * M_PI;
+	angle                        = std::fmod(angle, M_2PI);
+	if (angle < -M_PI) {
+		angle += M_2PI;
+	}
+	if (angle >= M_PI) {
+		angle -= M_2PI;
+	}
+	return angle;
+}
 
 // Represents a 2D isometric transformation
 // @T the scalar type used to represent the transformation, either double or float
@@ -77,16 +90,9 @@ public:
 	// @angle: the rotation angle
 	// @translation: the translation
 
-	Isometry2D(T angle, const Eigen::Matrix<T,2,1> & translation)
-		: d_angle(angle)
-		, d_translation(translation) {
-		while(d_angle < -M_PI ) {
-			d_angle += 2.0 * M_PI;
-		}
-		while( d_angle >= M_PI ) {
-			d_angle -= 2.0 * M_PI;
-		}
-	}
+	Isometry2D(T angle, const Eigen::Matrix<T, 2, 1> &translation)
+	    : d_angle(AngleMod<T>(angle))
+	    , d_translation(translation) {}
 
 	// gets the rotation part if the transformation
 	//
