@@ -1,21 +1,20 @@
 #include "Handle.hpp"
 
-
-#include <QPen>
 #include "VectorialScene.hpp"
+#include <QPen>
 
-const qreal Handle::SIZE = 9;
-const QColor Handle::COLOR = QColor(127,127,127,255);
-const QColor Handle::SELECTED_COLOR = QColor(200,200,200,255);
-
+const qreal  Handle::SIZE           = 9;
+const QColor Handle::COLOR          = QColor(180, 180, 180, 255);
+const QColor Handle::SELECTED_COLOR = QColor(200, 200, 200, 255);
 
 QRectF Handle::build() {
-	return QRectF(-d_factor * SIZE/2,
-	              -d_factor * SIZE/2,
-	              d_factor * SIZE,
-	              d_factor * SIZE);
+	return QRectF(
+	    -d_factor * SIZE / 2,
+	    -d_factor * SIZE / 2,
+	    d_factor * SIZE,
+	    d_factor * SIZE
+	);
 }
-
 
 Handle::Handle(MovedCallback onMove,
                ReleasedCallback onRelease,
@@ -54,8 +53,20 @@ void Handle::addToScene(QGraphicsScene * scene) {
 	}
 }
 
-void Handle::mouseMoveEvent(QGraphicsSceneMouseEvent * e) {
+void Handle::mouseMoveEvent(QGraphicsSceneMouseEvent *e) {
 	QGraphicsItemGroup::mouseMoveEvent(e);
+	if (x() < 0) {
+		setPos(0, y());
+	} else if (x() > scene()->width()) {
+		setPos(scene()->width(), y());
+	}
+
+	if (y() < 0) {
+		setPos(x(), 0);
+	} else if (y() > scene()->height()) {
+		setPos(x(), scene()->height());
+	}
+
 	d_onMove();
 }
 
