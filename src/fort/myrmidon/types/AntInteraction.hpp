@@ -69,37 +69,42 @@ struct AntInteraction {
 	 * The ID of the two Ant. Always reports `IDs.first <
 	 * IDs.second`.
 	 */
-	InteractionID                      IDs;
+	InteractionID    IDs;
 	/**
 	 * Virtual shape body part that were in contact.
 	 *
 	 * Virtual shape body part that were in contact during the
 	 * interaction.
 	 */
-	InteractionTypes                  Types;
+	InteractionTypes Types;
 	/**
 	 * Reports the AntTrajectory or their summary for each Ant during
 	 * the interaction. The trajectories are truncated to the
 	 * interaction timing.
 	 */
-	std::variant<std::pair<AntTrajectorySegment,
-	                       AntTrajectorySegment>,
-	             std::pair<AntTrajectorySummary,
-	                       AntTrajectorySummary>> Trajectories;
+	std::variant<
+	    std::pair<AntTrajectorySegment, AntTrajectorySegment>,
+	    std::pair<AntTrajectorySummary, AntTrajectorySummary>>
+	        Trajectories;
 	/**
 	 * Reports the Time the interaction starts
 	 */
-	Time                               Start;
+	Time    Start;
 	/**
 	 * Reports the Time the interaction ends
 	 */
-	Time                               End;
+	Time    End;
 	/**
 	 * Reports the SpaceID where the interaction happend
 	 */
-	SpaceID                            Space;
+	SpaceID Space;
 
 	typedef time_ranged_data data_category;
+
+	/**
+	 * Reports if the interaction has the following type
+	 */
+	bool HasInteractionType(AntShapeTypeID type1, AntShapeTypeID type2) const;
 };
 
 } // namespace myrmidon

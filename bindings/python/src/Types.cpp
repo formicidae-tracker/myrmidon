@@ -189,79 +189,128 @@ Returns:
 
 }
 
-void BindAntInteraction(py::module_ & m) {
+void BindAntInteraction(py::module_ &m) {
 	using namespace fort::myrmidon;
 
-	py::class_<AntTrajectorySegment>(m,
-	                                 "AntTrajectorySegment",
-	                                 R"pydoc(
+	py::class_<AntTrajectorySegment>(
+	    m,
+	    "AntTrajectorySegment",
+	    R"pydoc(
 Represents a section  of an :class:`AntTrajectory`.
-)pydoc")
-		.def_readonly("Trajectory",
-		              &AntTrajectorySegment::Trajectory,
-		              "Trajectory: the AntTrajectory it refers to.")
-		.def_readonly("Begin",
-		              &AntTrajectorySegment::Begin,
-		              "int: the first index in Trajectory this segment refers to.")
-		.def_readonly("End",
-		              &AntTrajectorySegment::End,
-		              "int: the last index+1 in Trajectory this segment refers to.")
-		.def("StartTime",
-		     &AntTrajectorySegment::StartTime,
-		     R"pydoc(
+)pydoc"
+	)
+	    .def_readonly(
+	        "Trajectory",
+	        &AntTrajectorySegment::Trajectory,
+	        "Trajectory: the AntTrajectory it refers to."
+	    )
+	    .def_readonly(
+	        "Begin",
+	        &AntTrajectorySegment::Begin,
+	        "int: the first index in Trajectory this segment refers to."
+	    )
+	    .def_readonly(
+	        "End",
+	        &AntTrajectorySegment::End,
+	        "int: the last index+1 in Trajectory this segment refers to."
+	    )
+	    .def(
+	        "StartTime",
+	        &AntTrajectorySegment::StartTime,
+	        R"pydoc(
 Computes the starting Time of the AntTrajectorySegment
 
 Returns:
     Time: the starting Time of the AntTrajectorySegment.
-)pydoc")
-		.def("EndTime",
-		     &AntTrajectorySegment::EndTime,
-		     R"pydoc(
+)pydoc"
+	    )
+	    .def(
+	        "EndTime",
+	        &AntTrajectorySegment::EndTime,
+	        R"pydoc(
 Computes the ending Time of the AntTrajectorySegment
 
 Returns:
     Time: the ending Time of the AntTrajectorySegment.
-)pydoc")
-;
-	py::class_<AntTrajectorySummary>(m,
-	                                 "AntTrajectorySummary",
-	                                 R"pydoc(
+)pydoc"
+	    );
+	py::class_<AntTrajectorySummary>(
+	    m,
+	    "AntTrajectorySummary",
+	    R"pydoc(
 Represents a summary  of an :class:`AntTrajectory` section.
-)pydoc")
-		.def_readonly("Mean",
-		              &AntTrajectorySummary::Mean,
-		              "Trajectory: the AntTrajectory it refers to.")
-		.def_readonly("Zones",
-		              &AntTrajectorySummary::Zones,
-		              "List[int]: all the ZoneID the trajectory crossed.")
-;
+)pydoc"
+	)
+	    .def_readonly(
+	        "Mean",
+	        &AntTrajectorySummary::Mean,
+	        "Trajectory: the AntTrajectory it refers to."
+	    )
+	    .def_readonly(
+	        "Zones",
+	        &AntTrajectorySummary::Zones,
+	        "List[int]: all the ZoneID the trajectory crossed."
+	    );
 
+	py::class_<AntInteraction, std::shared_ptr<AntInteraction>>(
+	    m,
+	    "AntInteraction",
+	    "Represent an interaction between two Ant"
+	)
+	    .def_readonly(
+	        "IDs",
+	        &AntInteraction::IDs,
+	        "Tuple[int,int]: the AntIDs of the two Ant interaction"
+	    )
+	    .def_property_readonly(
+	        "Types",
+	        [](const AntInteraction &i) -> const InteractionTypes & {
+		        return i.Types;
+	        },
+	        py::return_value_policy::reference_internal,
+	        "numpy.ndarray: The AntShapeTypeID that were in contact during the "
+	        "interaction. Any body part interacting at least once will add a "
+	        "row in this array. The first column refers to the first Ant, and "
+	        "the second column to the other Ant."
+	    )
+	    .def_readonly(
+	        "Trajectories",
+	        &AntInteraction::Trajectories,
+	        "Union[Tuple[AntTrajectorySegment,AntTrajectorySegment],Tuple["
+	        "AntTrajectorySummary,AntTrajectorySummary]]: The two section of "
+	        "trajectory for the two Ant during this interaction. Either the "
+	        "segments or their summaries."
+	    )
+	    .def_readonly(
+	        "Start",
+	        &AntInteraction::Start,
+	        "Time: the start Time of the interaction."
+	    )
+	    .def_readonly(
+	        "End",
+	        &AntInteraction::End,
+	        "Time: the end Time of the interaction."
+	    )
+	    .def_readonly(
+	        "Space",
+	        &AntInteraction::Space,
+	        "int: the SpaceID of the Space the interaction takes place."
+	    )
+	    .def(
+	        "HasInteractionType",
+	        &AntInteraction::HasInteractionType,
+	        R"pydoc(Tests if interaction contains a given interaction type.
 
-	py::class_<AntInteraction,std::shared_ptr<AntInteraction>>(m,
-	                                                           "AntInteraction",
-	                                                           "Represent an interaction between two Ant")
-		.def_readonly("IDs",
-		              &AntInteraction::IDs,
-		              "Tuple[int,int]: the AntIDs of the two Ant interaction")
-		.def_property_readonly("Types",
-		                       [](const AntInteraction & i) -> const InteractionTypes & {
-			                       return i.Types;
-		                       },
-		                       py::return_value_policy::reference_internal,
-		                       "numpy.ndarray: The AntShapeTypeID that were in contact during the interaction. Any body part interacting at least once will add a row in this array. The first column refers to the first Ant, and the second column to the other Ant.")
-		.def_readonly("Trajectories",
-		              &AntInteraction::Trajectories,
-		              "Union[Tuple[AntTrajectorySegment,AntTrajectorySegment],Tuple[AntTrajectorySummary,AntTrajectorySummary]]: The two section of trajectory for the two Ant during this interaction. Either the segments or their summaries.")
-		.def_readonly("Start",
-		              &AntInteraction::Start,
-		              "Time: the start Time of the interaction.")
-		.def_readonly("End",
-		              &AntInteraction::End,
-		              "Time: the end Time of the interaction.")
-		.def_readonly("Space",
-		              &AntInteraction::Space,
-		              "int: the SpaceID of the Space the interaction takes place.")
-		;
+Args:
+    type1(int): The first type to test again.
+    type2(int): The second type to test again.
+
+Returns:
+    bool: True if the interaction type (type1,type2) is present. Note that order matter.
+)pydoc"
+	    )
+
+	    ;
 }
 
 void BindExperimentDataInfo(py::module_ & m) {

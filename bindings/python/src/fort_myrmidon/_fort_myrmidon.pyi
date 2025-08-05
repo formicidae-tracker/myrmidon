@@ -219,6 +219,19 @@ class AntInteraction:
     """Represent an interaction between two Ant"""
     def __init__(self, *args, **kwargs) -> None:
         """Initialize self.  See help(type(self)) for accurate signature."""
+    def HasInteractionType(self, arg0: int, arg1: int) -> bool:
+        """HasInteractionType(self: fort_myrmidon.AntInteraction, arg0: int, arg1: int) -> bool
+
+        Tests if interaction contains a given interaction type.
+
+        Args:
+            type1(int): The first type to test again.
+            type2(int): The second type to test again.
+
+        Returns:
+            bool: True if the interaction type (type1,type2) is present. Note that order matter.
+
+        """
     @property
     def End(self) -> Time:
         """Time: the end Time of the interaction.
