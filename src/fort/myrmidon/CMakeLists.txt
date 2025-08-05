@@ -268,6 +268,7 @@ set(SRC_UTEST_FILES
 	types/ColorUTest.cpp
 	types/ValueUTest.cpp
 	types/ValueUtilsUTest.cpp
+	types/AntInteractionUTest.cpp
 )
 
 set(HDR_UTEST_FILES priv/UtilsUTest.hpp UtilsUTest.hpp)
