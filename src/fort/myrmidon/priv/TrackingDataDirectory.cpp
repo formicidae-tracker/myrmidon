@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <memory>
 #include <optional>
+#include <slog++/Attribute.hpp>
 #include <slog++/Config.hpp>
 #include <slog++/Level.hpp>
 #include <variant>
@@ -720,6 +721,10 @@ TrackingDataDirectory::OpenFromFiles(
 	auto [endFrame, endDate]     = end;
 
 	if (error != nullptr) {
+		logger.Error(
+		    "Tracking segment indexation error",
+		    slog::Err(error->what())
+		);
 		errors.push_back(std::move(error));
 	}
 
@@ -866,8 +871,7 @@ TrackingDataDirectory::OpenFromFiles(
 	        mi,
 	        referenceCache
 	    ),
-	    std::move(errors)
-	};
+	    std::move(errors)};
 }
 
 const TrackingDataDirectory::TrackingIndex &
