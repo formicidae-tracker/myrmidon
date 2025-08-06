@@ -515,7 +515,7 @@ TrackingDataDirectory::BuildIndexes(
 		// DO nothing, we just reached EOF
 	} catch (const fort::hermes::UnexpectedEndOfFileSequence &e) {
 		error = std::make_unique<CorruptedHermesFileError>(
-		    "could not read last frame from '" + last + "': " + e.what(),
+		    "could not read last frame from '" + last + "': " + e.message(),
 		    last,
 		    end
 		);
@@ -696,6 +696,7 @@ TrackingDataDirectory::OpenFromFiles(
     const std::unique_ptr<ProgressReporter> &progress,
     const slog::Logger<1>                   &logger
 ) {
+
 	auto             ti             = std::make_shared<TrackingIndex>();
 	auto             mi             = std::make_shared<MovieIndex>();
 	auto             referenceCache = std::make_shared<FrameReferenceCache>();
@@ -714,17 +715,16 @@ TrackingDataDirectory::OpenFromFiles(
 	);
 
 	Time::MonoclockID monoID = GetUID(absoluteFilePath);
-
 	auto [start, end, error] =
 	    BuildIndexes(URI, monoID, hermesFiles, ti, logger);
 	auto [startFrame, startDate] = start;
 	auto [endFrame, endDate]     = end;
 
 	if (error != nullptr) {
-		// logger.Error(
-		//     "Tracking segment indexation error",
-		//     slog::String("error", error->what())
-		// );
+		logger.Error(
+		    "Tracking segment indexation error",
+		    slog::String("error", error->what())
+		);
 		errors.push_back(std::move(error));
 	}
 

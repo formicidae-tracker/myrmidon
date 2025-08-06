@@ -14,9 +14,15 @@ set(SRC_FILES
 	Video.cpp
 	main.cpp
 	Progress.cpp
+	SignalHandling.cpp
 )
 
 set(HDR_FILES BindMethods.hpp Progress.hpp)
+
+add_executable(fort_myrmidon_stack_resolver ResolveStack.cpp)
+target_link_libraries(
+	fort_myrmidon_stack_resolver fort-myrmidon::libfort-myrmidon
+)
 
 if(FORT_MYRMIDON_PYTHON_MAIN)
 	python_add_library(
@@ -33,7 +39,9 @@ if(FORT_MYRMIDON_PYTHON_MAIN)
 	)
 	target_compile_options(_fort_myrmidon PRIVATE -fvisibility=hidden)
 
-	install(TARGETS _fort_myrmidon DESTINATION fort_myrmidon)
+	install(TARGETS _fort_myrmidon fort_myrmidon_stack_resolver
+			DESTINATION fort_myrmidon
+	)
 	install(FILES fort_myrmidon/__init__.py DESTINATION fort_myrmidon)
 
 	install(FILES fort_myrmidon/_fort_myrmidon.pyi DESTINATION fort_myrmidon)

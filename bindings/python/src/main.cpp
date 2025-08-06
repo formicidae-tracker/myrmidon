@@ -30,6 +30,7 @@ PYBIND11_MODULE(FM_PYTHON_PACKAGE_NAME, m) {
 
 	BindMatchers(m);
 	BindQuery(m);
+	BindSignalHandling(m);
 
 #ifdef VERSION_INFO
 	m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
