@@ -116,6 +116,12 @@ set(YAML_BUILD_SHARED_LIBS
 )
 
 FetchContent_Declare(
+	cpptrace
+	GIT_REPOSITORY https://github.com/jeremy-rifkin/cpptrace
+	GIT_TAG v1.0.4
+)
+
+FetchContent_Declare(
 	yaml-cpp
 	GIT_REPOSITORY https://github.com/jbeder/yaml-cpp
 	GIT_TAG yaml-cpp-0.7.0
