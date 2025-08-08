@@ -682,6 +682,16 @@ TrackingDataDirectory::Open(
 					args.Progress->ReportError(e->what());
 				}
 			}
+
+			if (args.FixCorruptedData == true) {
+				for (const auto &e : errors) {
+					logger.Info(
+					    "applying fix",
+					    slog::String("what", e->FixDescription())
+					);
+					e->Fix();
+				}
+			}
 		}
 	}
 
