@@ -361,7 +361,8 @@ class ExperimentTestCase(unittest.TestCase, assertions.CustomAssertion):
         self.experiment.RemoveTrackingDataDirectory(URI)
         self.experiment.AddTrackingDataDirectory(spaceID=s.ID, filepath=corruptedPath)
         self.maxDiff = None
-        match = re.search("Could not find frame .* in (.*)", str(e.exception))
+        match = re.search("Could not find frame .* in (.*):\\n", str(e.exception))
+
         filename = match.group(1)
         os.replace(filename + ".bak", filename)
 

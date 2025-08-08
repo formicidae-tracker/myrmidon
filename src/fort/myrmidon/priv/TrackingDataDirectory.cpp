@@ -318,12 +318,13 @@ void TrackingDataDirectory::BuildFrameReferenceCache(
 						    " is outside of file " + AbsoluteFilePath
 						);
 					}
-				} catch (const hermes::UnexpectedEndOfFileSequence &e) {
+				} catch (hermes::UnexpectedEndOfFileSequence &e) {
 					auto error = std::make_unique<CorruptedHermesFileError>(
 					    "Could not find frame " + std::to_string(*iter) +
 					        " in " + AbsoluteFilePath,
 					    this->AbsoluteFilePath,
-					    curFrameID
+					    curFrameID,
+					    std::move(e)
 					);
 					Logger.Error(
 					    "missing frame reference",
@@ -513,11 +514,12 @@ TrackingDataDirectory::BuildIndexes(
 		}
 	} catch (const fort::hermes::EndOfFile &) {
 		// DO nothing, we just reached EOF
-	} catch (const fort::hermes::UnexpectedEndOfFileSequence &e) {
+	} catch (fort::hermes::UnexpectedEndOfFileSequence &e) {
 		error = std::make_unique<CorruptedHermesFileError>(
-		    "could not read last frame from '" + last + "': " + e.what(),
+		    "could not read last frame from '" + last + "': " + e.message(),
 		    last,
-		    end
+		    end,
+		    std::move(e)
 		);
 	} catch (const std::exception &e) {
 		throw std::runtime_error(
@@ -994,8 +996,7 @@ const RawFrameConstPtr &TrackingDataDirectory::const_iterator::operator*() {
 			    lastValidID,
 			    lastValidTime,
 			    next,
-			    parent,
-			};
+			    parent};
 		} catch (const fort::hermes::EndOfFile &) {
 			d_current = parent->d_endFrame + 1;
 			d_frame.reset();
@@ -1269,7 +1270,7 @@ private:
 
 		std::tuple<std::vector<TagCloseUp::ConstPtr>, FixableError::Ptr> Detect(
 		    const TrackingDataDirectory::TagCloseUpFileAndFilter &fileAndFilter,
-		    const FrameReference                                 &reference
+		    const FrameReference		                         &reference
 		) {
 
 			std::vector<TagCloseUp::ConstPtr> res;
@@ -1319,8 +1320,7 @@ private:
 				    std::make_unique<NoKnownAcquisitionTimeFor>(
 				        oss.str(),
 				        fileAndFilter.first
-				    )
-				};
+				    )};
 			}
 
 			return {res, nullptr};

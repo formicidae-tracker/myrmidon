@@ -150,7 +150,7 @@ public:
 
 		std::ostringstream oss;
 
-		oss << e.what() << "; lost " << e.Lost().Truncate(Duration::Second)
+		oss << e.message() << "; lost " << e.Lost().Truncate(Duration::Second)
 		    << ", " << std::setprecision(2) << std::fixed << lost
 		    << "% of total query time of "
 		    << d_duration.Truncate(Duration::Second);

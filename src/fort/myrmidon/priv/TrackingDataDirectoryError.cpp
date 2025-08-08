@@ -9,13 +9,17 @@
 #include <sstream>
 
 namespace fort {
+
 namespace myrmidon {
 namespace priv {
 
 CorruptedHermesFileError::CorruptedHermesFileError(
-    const std::string &reason, const std::string &file, uint64_t until
+    std::string              &&reason,
+    const std::string         &file,
+    uint64_t                   until,
+    cpptrace::lazy_exception &&origin
 )
-    : FixableError(reason)
+    : FixableError(std::move(reason), std::move(origin))
     , d_file(file)
     , d_until(until) {
 	if (d_file.is_absolute() == false) {
@@ -99,9 +103,11 @@ void CorruptedHermesFileError::Fix() {
 }
 
 NoKnownAcquisitionTimeFor::NoKnownAcquisitionTimeFor(
-    const std::string &reason, const fs::path &filepath
+    std::string              &&reason,
+    const fs::path            &filepath,
+    cpptrace::lazy_exception &&origin
 )
-    : FixableError(reason)
+    : FixableError(std::move(reason), std::move(origin))
     , d_filepath(filepath) {
 	if (d_filepath.is_absolute() == false) {
 		throw std::invalid_argument("needed an absolute filepath");
@@ -122,20 +128,26 @@ void NoKnownAcquisitionTimeFor::Fix() {
 	fs::rename(d_filepath, d_disabledPath);
 }
 
+static std::string buildReason(const fs::path &filepath, FrameID lastValid) {
+	std::ostringstream oss;
+	oss << "could not read " << filepath << " after frame " << lastValid;
+	return oss.str();
+}
+
 CorruptedHermesFileIterator::CorruptedHermesFileIterator(
     const fs::path            &filepath,
     FrameID                    lastValid,
     const Time                &lastTime,
     std::optional<FrameID>     next,
-    TrackingDataDirectory::Ptr tdd
+    TrackingDataDirectory::Ptr tdd,
+    cpptrace::lazy_exception &&origin
 ) noexcept
-    : d_lastValid{lastTime}
+
+    : details::
+          WrapLazyException{buildReason(filepath, lastValid), std::move(origin)}
+    , d_lastValid{lastTime}
     , d_tdd{tdd}
-    , d_next{next} {
-	std::ostringstream oss;
-	oss << "could not read " << filepath << " after frame " << lastValid;
-	d_what = oss.str();
-}
+    , d_next{next} {}
 
 const char *CorruptedHermesFileIterator::what() const noexcept {
 	return d_what.c_str();

@@ -14,7 +14,10 @@ namespace priv {
 class CorruptedHermesFileError : public FixableError {
 public:
 	CorruptedHermesFileError(
-	    const std::string &reason, const std::string &file, uint64_t until
+	    std::string              &&reason,
+	    const std::string         &file,
+	    uint64_t                   until,
+	    cpptrace::lazy_exception &&origin = cpptrace::lazy_exception{}
 	);
 	virtual ~CorruptedHermesFileError();
 
@@ -27,14 +30,15 @@ private:
 	uint64_t d_until;
 };
 
-class CorruptedHermesFileIterator : public std::exception {
+class CorruptedHermesFileIterator : public details::WrapLazyException {
 public:
 	CorruptedHermesFileIterator(
 	    const fs::path            &filepath,
 	    FrameID                    lastValid,
 	    const Time                &lastTime,
 	    std::optional<FrameID>     next,
-	    TrackingDataDirectory::Ptr tdd
+	    TrackingDataDirectory::Ptr tdd,
+	    cpptrace::lazy_exception &&origin = cpptrace::lazy_exception{}
 	) noexcept;
 
 	const char *what() const noexcept override;
@@ -55,7 +59,9 @@ private:
 class NoKnownAcquisitionTimeFor : public FixableError {
 public:
 	NoKnownAcquisitionTimeFor(
-	    const std::string &reason, const fs::path &filepath
+	    std::string              &&reason,
+	    const fs::path            &filepath,
+	    cpptrace::lazy_exception &&origin = cpptrace::lazy_exception{}
 	);
 	virtual ~NoKnownAcquisitionTimeFor();
 	std::string FixDescription() const noexcept override;

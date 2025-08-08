@@ -502,9 +502,8 @@ TEST_F(QueryUTest, CorruptedData) {
 	    .Times(1);
 	EXPECT_CALL(
 	    *progress,
-	    ReportError(MatchesRegex(
-	        "data corruption during query representing .*% of total query time"
-	    ))
+	    ReportError(MatchesRegex("data corruption during query representing "
+	                             ".*% of total query time"))
 	)
 	    .Times(1);
 

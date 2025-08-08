@@ -1,12 +1,29 @@
 #pragma once
 
-#include <stdexcept>
+#include <cpptrace/exceptions.hpp>
 #include <memory>
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace fort {
 namespace myrmidon {
+
+namespace details {
+class WrapLazyException : public cpptrace::lazy_exception {
+public:
+	explicit WrapLazyException(
+	    std::string &&message, cpptrace::lazy_exception &&wrapped
+	);
+	virtual ~WrapLazyException() noexcept = default;
+
+	const char	             *message() const noexcept override;
+	const cpptrace::stacktrace &trace() const noexcept override;
+
+private:
+	mutable std::string      d_message;
+	cpptrace::lazy_exception d_wrapped;
+};
+} // namespace details
 
 /**
  * Represents an error that could be potentially fixed.
@@ -16,15 +33,18 @@ namespace myrmidon {
  * internally.
  */
 
-class FixableError : public std::runtime_error {
+class FixableError : public details::WrapLazyException {
 public:
 	/**
 	 * A pointer to the error.
 	 */
 	typedef std::unique_ptr<FixableError> Ptr;
 
-	FixableError(const std::string & reason);
-	virtual ~FixableError() noexcept;
+	FixableError(
+	    std::string              &&reason,
+	    cpptrace::lazy_exception &&origin = cpptrace::lazy_exception{}
+	);
+	virtual ~FixableError() noexcept = default;
 
 	/**
 	 * Description of the fix.
@@ -51,30 +71,29 @@ typedef std::vector<FixableError::Ptr> FixableErrorList;
  */
 class FixableErrors : public FixableError {
 public:
-	FixableErrors(FixableErrorList errors);
-	virtual ~FixableErrors() noexcept;
+	FixableErrors(
+	    FixableErrorList           errors,
+	    cpptrace::lazy_exception &&origin = cpptrace::lazy_exception{}
+	);
+	virtual ~FixableErrors() noexcept = default;
 
 	/**
 	 * Access indiviudal FixableError
 	 * @return the individual FixableError of this FixableErrors
 	 */
-	const FixableErrorList & Errors() const noexcept;
+	const FixableErrorList &Errors() const noexcept;
 
 	std::string FixDescription() const noexcept override;
 
 	void Fix() override;
 
-	FixableErrorList & Errors() noexcept;
-
+	FixableErrorList &Errors() noexcept;
 
 private:
-	static std::string BuildReason(const FixableErrorList & errors) noexcept;
+	static std::string BuildReason(const FixableErrorList &errors) noexcept;
 
 	FixableErrorList d_errors;
-
 };
 
-
-
-}  // myrmidon
-}  // fort
+} // namespace myrmidon
+} // namespace fort

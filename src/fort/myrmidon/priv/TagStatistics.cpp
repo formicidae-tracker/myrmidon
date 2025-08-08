@@ -46,15 +46,12 @@ TagStatistics::CountHeader TagStatisticsHelper::ComputeGap(const Time & lastSeen
 	return fi->second;
 }
 
-
-
-std::tuple<TagStatisticsHelper::Timed,FixableError::Ptr>
-TagStatisticsHelper::BuildStats(const std::string & hermesFile) {
+std::tuple<TagStatisticsHelper::Timed, FixableError::Ptr>
+TagStatisticsHelper::BuildStats(const std::string &hermesFile) {
 	Timed res;
 
-
-	auto & stats = res.TagStats;
-	hermes::FileContext file(hermesFile,false);
+	auto	            &stats = res.TagStats;
+	hermes::FileContext  file(hermesFile, false);
 	hermes::FrameReadout ro;
 
 	struct LastSeen {
@@ -62,74 +59,84 @@ TagStatisticsHelper::BuildStats(const std::string & hermesFile) {
 		Time          FrameTime;
 	};
 
-
-	std::map<TagID,LastSeen> lastSeens;
-	bool hasStart = false;
-	FrameID last = 0;
+	std::map<TagID, LastSeen> lastSeens;
+	bool                      hasStart = false;
+	FrameID                   last     = 0;
 	for (;;) {
 		try {
 			file.Read(&ro);
 			last = ro.frameid();
-		} catch ( const fort::hermes::EndOfFile & ) {
-			for ( const auto & [tagID,last] : lastSeens ) {
-				if ( last.FrameTime < res.End ) {
-					UpdateGaps(stats.at(tagID),last.FrameTime,res.End);
+		} catch (const fort::hermes::EndOfFile &) {
+			for (const auto &[tagID, last] : lastSeens) {
+				if (last.FrameTime < res.End) {
+					UpdateGaps(stats.at(tagID), last.FrameTime, res.End);
 				}
 			}
 
-			return {res,nullptr};
+			return {res, nullptr};
 
-		} catch ( const hermes::UnexpectedEndOfFileSequence & e ) {
-			return {res,
-			        std::make_unique<CorruptedHermesFileError>("Could not fully read '"
-			                                                   + hermesFile + "'",
-			                                                   hermesFile,
-			                                                   last)};
+		} catch (hermes::UnexpectedEndOfFileSequence &e) {
+			return {
+			    res,
+			    std::make_unique<CorruptedHermesFileError>(
+			        "Could not fully read '" + hermesFile + "'",
+			        hermesFile,
+			        last,
+			        std::move(e)
+			    ),
+			};
 
-		} catch ( const std::exception & e ) {
-			throw std::runtime_error("Could not build statistic for '"
-			                         + hermesFile + "':" + e.what());
+		} catch (const std::exception &e) {
+			throw cpptrace::runtime_error(
+			    "Could not build statistic for '" + hermesFile + "':" + e.what()
+			);
 		}
 		FrameID current = ro.frameid();
 
 		// current time stripped from any monotonic data
-		auto currentTime = TimeFromFrameReadout(ro,1).Round(1);
-		if ( hasStart == false ) {
-			hasStart = true;
+		auto currentTime = TimeFromFrameReadout(ro, 1).Round(1);
+		if (hasStart == false) {
+			hasStart  = true;
 			res.Start = currentTime;
 		}
 
 		res.End = currentTime;
-		for ( const auto & tag : ro.tags() ) {
+		for (const auto &tag : ro.tags()) {
 			auto key = tag.id();
-			if ( stats.count(key) == 0 ) {
-				lastSeens.insert(std::make_pair(key,LastSeen{current,currentTime}));
-				auto tagStats = TagStatisticsHelper::Create(tag.id(),currentTime);
-				if ( currentTime > res.Start ) {
-					UpdateGaps(tagStats,res.Start,currentTime);
+			if (stats.count(key) == 0) {
+				lastSeens.insert(
+				    std::make_pair(key, LastSeen{current, currentTime})
+				);
+				auto tagStats =
+				    TagStatisticsHelper::Create(tag.id(), currentTime);
+				if (currentTime > res.Start) {
+					UpdateGaps(tagStats, res.Start, currentTime);
 				}
-				stats.insert(std::make_pair(key,tagStats));
+				stats.insert(std::make_pair(key, tagStats));
 			} else {
-				auto & last = lastSeens.at(key);
-				auto & tagStats = stats.at(key);
-				if ( last.FrameID == current ) {
-					tagStats.Counts(TagStatistics::CountHeader::MULTIPLE_SEEN) += 1;
+				auto &last     = lastSeens.at(key);
+				auto &tagStats = stats.at(key);
+				if (last.FrameID == current) {
+					tagStats.Counts(TagStatistics::CountHeader::MULTIPLE_SEEN
+					) += 1;
 				} else {
-					tagStats.Counts(TagStatistics::CountHeader::TOTAL_SEEN) += 1;
-					if ( last.FrameID < current-1) {
-						UpdateGaps(tagStats,last.FrameTime,currentTime);
+					tagStats.Counts(TagStatistics::CountHeader::TOTAL_SEEN) +=
+					    1;
+					if (last.FrameID < current - 1) {
+						UpdateGaps(tagStats, last.FrameTime, currentTime);
 					}
 					tagStats.LastSeen = currentTime;
 				}
-				last.FrameID = current;
+				last.FrameID   = current;
 				last.FrameTime = currentTime;
 			}
 		}
 	}
 }
-void TagStatisticsHelper::UpdateGaps(TagStatistics & stats,
-                                     const Time & lastSeen,
-                                     const Time & currentTime) {
+
+void TagStatisticsHelper::UpdateGaps(
+    TagStatistics &stats, const Time &lastSeen, const Time &currentTime
+) {
 	auto gap = ComputeGap(lastSeen,currentTime);
 	if ( gap < TagStatistics::GAP_500MS ) {
 		return;

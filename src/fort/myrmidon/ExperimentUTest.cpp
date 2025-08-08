@@ -607,7 +607,7 @@ TEST_F(PublicExperimentUTest, CanOpenCorruptedDataDir) {
 		for (const auto &e : errors) {
 			EXPECT_THAT(
 			    e->what(),
-			    MatchesRegex("Could not fully read '.*.hermes'")
+			    MatchesRegex("Could not fully read '.*.hermes':\nStack trace.*")
 			);
 			EXPECT_THAT(
 			    e->FixDescription(),
