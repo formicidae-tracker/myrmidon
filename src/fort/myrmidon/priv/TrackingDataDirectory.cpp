@@ -632,6 +632,8 @@ TrackingDataDirectory::Open(
 
 	Ptr              res;
 	FixableErrorList errors;
+	bool             saveCache = false;
+
 	try {
 		res = LoadFromCache(absoluteFilePath, URI.generic_string());
 	} catch (const std::exception &e) {
@@ -652,45 +654,54 @@ TrackingDataDirectory::Open(
 		);
 		logger.Info("loaded from file", slog::Int("num_errors", errors.size()));
 		if (errors.empty()) {
-			try {
-				res->SaveToCache();
-				logger.Info("cached tracking data");
-			} catch (const std::exception &e) {
-				logger.Error(
-				    "could not cache tracking data",
-				    slog::String("error", e.what())
+			saveCache = true;
+		} else {
+			if (args.FixCorruptedData == false) {
+				logger.Warn(
+				    "not saving to cache",
+				    slog::Int("num_errors", errors.size())
 				);
 				if (args.Progress != nullptr) {
 					args.Progress->ReportError(
-					    "could not cache tracking data: " +
-					    std::string(e.what())
+					    "not saving to cache as it got " +
+					    std::to_string(errors.size()) + " errors"
 					);
+					for (const auto &e : errors) {
+						args.Progress->ReportError(e->what());
+					}
 				}
-			}
-		} else {
-			logger.Warn(
-			    "not saving to cache",
-			    slog::Int("num_errors", errors.size())
-			);
-
-			if (args.Progress != nullptr) {
-				args.Progress->ReportError(
-				    "not saving to cache as it got " +
-				    std::to_string(errors.size()) + " errors"
-				);
-				for (const auto &e : errors) {
-					args.Progress->ReportError(e->what());
-				}
-			}
-
-			if (args.FixCorruptedData == true) {
+			} else {
+				saveCache = true;
 				for (const auto &e : errors) {
 					logger.Info(
 					    "applying fix",
 					    slog::String("what", e->FixDescription())
 					);
+					if (args.Progress != nullptr) {
+						args.Progress->ReportError(
+						    std::string("Got error: ") + e->message() +
+						    "\nApplying fix: " + e->FixDescription()
+						);
+					}
 					e->Fix();
 				}
+			}
+		}
+	}
+
+	if (saveCache == true) {
+		try {
+			res->SaveToCache();
+			logger.Info("cached tracking data");
+		} catch (const std::exception &e) {
+			logger.Error(
+			    "could not cache tracking data",
+			    slog::String("error", e.what())
+			);
+			if (args.Progress != nullptr) {
+				args.Progress->ReportError(
+				    "could not cache tracking data: " + std::string(e.what())
+				);
 			}
 		}
 	}
