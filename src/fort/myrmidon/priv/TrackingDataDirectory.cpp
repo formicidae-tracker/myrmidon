@@ -636,6 +636,7 @@ TrackingDataDirectory::Open(
 
 	try {
 		res = LoadFromCache(absoluteFilePath, URI.generic_string());
+		logger.Debug("loaded from cache");
 	} catch (const std::exception &e) {
 		logger.Warn(
 		    "could not load from cache",
@@ -708,7 +709,8 @@ TrackingDataDirectory::Open(
 
 	res->LoadComputedFromCache();
 	res->LoadDetectionSettings();
-	logger.Info("opened");
+	logger.Debug("opened");
+
 	return std::make_tuple(res, std::move(errors));
 }
 
