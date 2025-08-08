@@ -1,5 +1,6 @@
 #include "TrackingDataDirectoryError.hpp"
 
+#include <filesystem>
 #include <iomanip>
 
 #include <fort/hermes/FrameReadout.pb.h>
@@ -37,6 +38,23 @@ std::string CorruptedHermesFileError::FixDescription() const noexcept {
 	return "rewrite '" + d_file.string() + "' up to frame " +
 	       std::to_string(d_until) +
 	       " and to continue if possible to next segment";
+}
+
+fs::path getFileActuallyRead(const fs::path &path) {
+	auto toTest = {
+	    path.parent_path() / ("uncompressed-" + path.filename().string()),
+	    path.parent_path() / (path.stem().string() + ".unc.hermes"),
+	    path.parent_path() / (path.stem().string() + "-unc.hermes"),
+	    path.parent_path() / (path.stem().string() + "-unc"),
+	    path.parent_path() / (path.stem().string() + "unc"),
+	};
+
+	for (const auto &p : toTest) {
+		if (fs::exists(p)) {
+			return p;
+		}
+	}
+	return path;
 }
 
 void CorruptedHermesFileError::Fix() {
@@ -96,9 +114,11 @@ void CorruptedHermesFileError::Fix() {
 		});
 	}
 
+	auto actualFile = getFileActuallyRead(d_file);
+
 	auto backupName =
-	    d_file.parent_path() / (d_file.filename().string() + ".bak");
-	fs::rename(d_file, backupName);
+	    actualFile.parent_path() / (actualFile.filename().string() + ".bak");
+	fs::rename(actualFile, backupName);
 	RW::Write(d_file, header, lineWriters);
 }
 
