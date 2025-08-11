@@ -1,73 +1,81 @@
-#include <utility>
+#include "gtest/gtest.h"
 #include <iostream>
+#include <utility>
 
-#include <fort/time/Time.hpp>
 #include <fort/myrmidon/types/Collision.hpp>
+#include <fort/time/Time.hpp>
 
 #include "UtilsUTest.hpp"
-
 
 #include <google/protobuf/util/message_differencer.h>
 
 #include <Eigen/Geometry>
 
 #include <fort/myrmidon/Shapes.hpp>
-#include <fort/myrmidon/types/Value.hpp>
-#include <fort/myrmidon/types/IdentifiedFrame.hpp>
-#include <fort/myrmidon/types/AntTrajectory.hpp>
 #include <fort/myrmidon/types/AntInteraction.hpp>
+#include <fort/myrmidon/types/AntTrajectory.hpp>
+#include <fort/myrmidon/types/IdentifiedFrame.hpp>
+#include <fort/myrmidon/types/Value.hpp>
 
+#define failure_helper(aExpr, bExpr, a, b, field)                              \
+	::testing::AssertionFailure()                                              \
+	    << "Value of: " << aExpr << "." << #field << std::endl                 \
+	    << "  Actual: " << ::testing::PrintToString(a.field) << std::endl      \
+	    << "Expected: " << bExpr << "." << #field << std::endl                 \
+	    << "Which is: " << ::testing::PrintToString(b.field)
 
-
-#define failure_helper(aExpr,bExpr,a,b,field) \
-	::testing::AssertionFailure() \
-	<< "Value of: " << aExpr << "." << #field << std::endl \
-	<< "  Actual: " << ::testing::PrintToString(a.field) << std::endl \
-	<< "Expected: " << bExpr << "." << #field << std::endl \
-	<< "Which is: " << ::testing::PrintToString(b.field)
-
-::testing::AssertionResult AssertTimeEqual(const char * aExpr,
-                                           const char * bExpr,
-                                           const fort::Time & a,
-                                           const fort::Time & b) {
-	if ( a.Equals(b) == false ) {
-		return ::testing::AssertionFailure() << "Value of: " << aExpr << std::endl
-		                                     << "  Actual: " << a.Format() << std::endl
-		                                     << "Expected: " << bExpr << std::endl
-		                                     << "Which is: " << b.Format();
+::testing::AssertionResult AssertTimeEqual(
+    const char       *aExpr,
+    const char       *bExpr,
+    const fort::Time &a,
+    const fort::Time &b,
+    bool              checkMono
+) {
+	if (a.Equals(b) == false) {
+		return ::testing::AssertionFailure()
+		       << "Value of: " << aExpr << std::endl
+		       << "  Actual: " << a.Format() << std::endl
+		       << "Expected: " << bExpr << std::endl
+		       << "Which is: " << b.Format();
 	}
 
-	if ( google::protobuf::util::MessageDifferencer::Equals(a.ToTimestamp(),b.ToTimestamp()) == false ) {
-		return ::testing::AssertionFailure() << "Value of: " << aExpr << ".Timestamp()" << std::endl
-		                                     << "  Actual: " << a.ToTimestamp().DebugString() << std::endl
-		                                     << "Expected: " << bExpr << ".Timestamp()" << std::endl
-		                                     << "Which is: " << b.ToTimestamp().DebugString();
+	if (google::protobuf::util::MessageDifferencer::Equals(
+	        a.ToTimestamp(),
+	        b.ToTimestamp()
+	    ) == false) {
+		return ::testing::AssertionFailure()
+		       << "Value of: " << aExpr << ".Timestamp()" << std::endl
+		       << "  Actual: " << a.ToTimestamp().DebugString() << std::endl
+		       << "Expected: " << bExpr << ".Timestamp()" << std::endl
+		       << "Which is: " << b.ToTimestamp().DebugString();
 	}
 
-	if ( a.HasMono() != b.HasMono() ) {
-		return ::testing::AssertionFailure() << "Value of: " << aExpr << ".HasMono()" << std::endl
-		                                     << "  Actual: " << std::boolalpha << a.HasMono() << std::endl
-		                                     << "Expected: " << bExpr << ".HasMono()" << std::endl
-		                                     << "Which is: " << std::boolalpha << b.HasMono();
-	}
-
-	if ( a.HasMono() == false ) {
+	if (checkMono == false) {
 		return ::testing::AssertionSuccess();
 	}
 
-
-	if ( a.MonoID() != b.MonoID() ) {
-		return failure_helper(aExpr,bExpr,a,b,MonoID());
+	if (a.HasMono() != b.HasMono()) {
+		return ::testing::AssertionFailure()
+		       << "Value of: " << aExpr << ".HasMono()" << std::endl
+		       << "  Actual: " << std::boolalpha << a.HasMono() << std::endl
+		       << "Expected: " << bExpr << ".HasMono()" << std::endl
+		       << "Which is: " << std::boolalpha << b.HasMono();
 	}
 
-	if ( a.MonotonicValue() != b.MonotonicValue() ) {
-		return failure_helper(aExpr,bExpr,a,b,MonotonicValue());
+	if (a.HasMono() == false) {
+		return ::testing::AssertionSuccess();
+	}
+
+	if (a.MonoID() != b.MonoID()) {
+		return failure_helper(aExpr, bExpr, a, b, MonoID());
+	}
+
+	if (a.MonotonicValue() != b.MonotonicValue()) {
+		return failure_helper(aExpr, bExpr, a, b, MonotonicValue());
 	}
 
 	return ::testing::AssertionSuccess();
 }
-
-
 
 ::testing::AssertionResult AssertVectorAlmostEqual(const char * aExpr,
                                                    const char * bExpr,
@@ -510,43 +518,51 @@ AssertCollisionFrameEqual(const char * aExpr,
 	return ::testing::AssertionSuccess();
 }
 
-::testing::AssertionResult
-AssertAntTrajectoryEqual(const char * aExpr,
-                         const char * bExpr,
-                         const fort::myrmidon::AntTrajectory & a,
-                         const fort::myrmidon::AntTrajectory & b) {
-	if ( a.Ant != b.Ant ) {
-		return failure_helper(aExpr,bExpr,a,b,Ant);
+::testing::AssertionResult AssertAntTrajectoryEqual(
+    const char                          *aExpr,
+    const char                          *bExpr,
+    const fort::myrmidon::AntTrajectory &a,
+    const fort::myrmidon::AntTrajectory &b
+) {
+	if (a.Ant != b.Ant) {
+		return failure_helper(aExpr, bExpr, a, b, Ant);
 	}
-	if ( a.Space != b.Space ) {
-		return failure_helper(aExpr,bExpr,a,b,Space);
+	if (a.Space != b.Space) {
+		return failure_helper(aExpr, bExpr, a, b, Space);
 	}
 
-	auto tmp = AssertTimeEqual((std::string(aExpr)+".Start").c_str(),
-	                           (std::string(bExpr)+".Start").c_str(),
-	                           a.Start,b.Start);
+	if (a.Duration_s != b.Duration_s) {
+		return failure_helper(aExpr, bExpr, a, b, Duration_s);
+	}
+
+	auto tmp = AssertTimeEqual(
+	    (std::string(aExpr) + ".Start").c_str(),
+	    (std::string(bExpr) + ".Start").c_str(),
+	    a.Start,
+	    b.Start
+	);
 	if (!tmp) {
 		return tmp;
 	}
-	if ( a.Positions.rows() != b.Positions.rows() ) {
-		return failure_helper(aExpr,bExpr,a,b,Positions.rows());
+	if (a.Positions.rows() != b.Positions.rows()) {
+		return failure_helper(aExpr, bExpr, a, b, Positions.rows());
 	}
-	for ( size_t i = 0; i < b.Positions.rows(); ++i ) {
-		for ( size_t j = 0; j < b.Positions.cols(); ++j ) {
-			if ( std::abs(a.Positions(i,j) - b.Positions(i,j)) > 1.0e-3 ) {
+	for (size_t i = 0; i < b.Positions.rows(); ++i) {
+		for (size_t j = 0; j < b.Positions.cols(); ++j) {
+			if (std::abs(a.Positions(i, j) - b.Positions(i, j)) > 1.0e-3) {
 				return ::testing::AssertionFailure()
-					<< "Value of: " << aExpr << ".Positions(" << i << "," << j << ")" << std::endl
-					<< "  Actual: " << a.Positions(i,j) << std::endl
-					<< "  Within: " << 1.0e-3 << std::endl
-					<< "      Of: " << bExpr << ".Positions(" << i << "," << j << ")" << std::endl
-					<< "Which is: " << b.Positions(i,j);
+				       << "Value of: " << aExpr << ".Positions(" << i << ","
+				       << j << ")" << std::endl
+				       << "  Actual: " << a.Positions(i, j) << std::endl
+				       << "  Within: " << 1.0e-3 << std::endl
+				       << "      Of: " << bExpr << ".Positions(" << i << ","
+				       << j << ")" << std::endl
+				       << "Which is: " << b.Positions(i, j);
 			}
 		}
 	}
 	return ::testing::AssertionSuccess();
 }
-
-
 
 ::testing::AssertionResult
 AssertTrajectorySegmentEqual(const char * aExpr,
@@ -611,70 +627,85 @@ AssertTrajectorySummaryEqual(const char * aExpr,
 	return ::testing::AssertionSuccess();
 }
 
-
-::testing::AssertionResult
-AssertAntInteractionEqual(const char * aExpr,
-                          const char * bExpr,
-                          const fort::myrmidon::AntInteraction & a,
-                          const fort::myrmidon::AntInteraction & b){
-	if ( a.IDs != a.IDs ) {
-		return failure_helper(aExpr,bExpr,a,b,IDs);
+::testing::AssertionResult AssertAntInteractionEqual(
+    const char                           *aExpr,
+    const char                           *bExpr,
+    const fort::myrmidon::AntInteraction &a,
+    const fort::myrmidon::AntInteraction &b
+) {
+	if (a.IDs != a.IDs) {
+		return failure_helper(aExpr, bExpr, a, b, IDs);
 	}
-	if ( a.Space != a.Space ) {
-		return failure_helper(aExpr,bExpr,a,b,Space);
+	if (a.Space != a.Space) {
+		return failure_helper(aExpr, bExpr, a, b, Space);
 	}
 
-	auto tmp = AssertInteractionTypesEqual((std::string(aExpr) + ".Types").c_str(),
-	                                       (std::string(bExpr) + ".Types").c_str(),
-	                                       a.Types,
-	                                       b.Types);
+	auto tmp = AssertInteractionTypesEqual(
+	    (std::string(aExpr) + ".Types").c_str(),
+	    (std::string(bExpr) + ".Types").c_str(),
+	    a.Types,
+	    b.Types
+	);
 	if (!tmp) {
 		return tmp;
 	}
 
-	tmp = AssertTimeEqual((std::string(aExpr) + ".Start").c_str(),
-	                      (std::string(bExpr) + ".Start").c_str(),
-	                      a.Start,
-	                      b.Start);
+	tmp = AssertTimeEqual(
+	    (std::string(aExpr) + ".Start").c_str(),
+	    (std::string(bExpr) + ".Start").c_str(),
+	    a.Start,
+	    b.Start
+	);
+
 	if (!tmp) {
 		return tmp;
 	}
 
-	tmp = AssertTimeEqual((std::string(aExpr) + ".End").c_str(),
-	                      (std::string(bExpr) + ".End").c_str(),
-	                      a.End,
-	                      b.End);
+	tmp = AssertTimeEqual(
+	    (std::string(aExpr) + ".End").c_str(),
+	    (std::string(bExpr) + ".End").c_str(),
+	    a.End,
+	    b.End,
+	    false
+	);
 	if (!tmp) {
 		return tmp;
 	}
 
-	if ( a.Trajectories.index() == 0 ) {
-		tmp = AssertTrajectorySegmentEqual((std::string(aExpr) + ".Trajectories.first").c_str(),
-		                                   (std::string(bExpr) + ".Trajectories.first").c_str(),
-		                                   std::get<0>(a.Trajectories).first,
-		                                   std::get<0>(b.Trajectories).first);
+	if (a.Trajectories.index() == 0) {
+		tmp = AssertTrajectorySegmentEqual(
+		    (std::string(aExpr) + ".Trajectories.first").c_str(),
+		    (std::string(bExpr) + ".Trajectories.first").c_str(),
+		    std::get<0>(a.Trajectories).first,
+		    std::get<0>(b.Trajectories).first
+		);
 
 		if (!tmp) {
 			return tmp;
 		}
 
-		return AssertTrajectorySegmentEqual((std::string(aExpr) + ".Trajectories.second").c_str(),
-		                                    (std::string(bExpr) + ".Trajectories.second").c_str(),
-		                                    std::get<0>(a.Trajectories).second,
-		                                    std::get<0>(b.Trajectories).second);
+		return AssertTrajectorySegmentEqual(
+		    (std::string(aExpr) + ".Trajectories.second").c_str(),
+		    (std::string(bExpr) + ".Trajectories.second").c_str(),
+		    std::get<0>(a.Trajectories).second,
+		    std::get<0>(b.Trajectories).second
+		);
 	} else {
-		tmp = AssertTrajectorySummaryEqual((std::string(aExpr) + ".Trajectories.first").c_str(),
-		                                   (std::string(bExpr) + ".Trajectories.first").c_str(),
-		                                   std::get<1>(a.Trajectories).first,
-		                                   std::get<1>(b.Trajectories).first);
+		tmp = AssertTrajectorySummaryEqual(
+		    (std::string(aExpr) + ".Trajectories.first").c_str(),
+		    (std::string(bExpr) + ".Trajectories.first").c_str(),
+		    std::get<1>(a.Trajectories).first,
+		    std::get<1>(b.Trajectories).first
+		);
 
 		if (!tmp) {
 			return tmp;
 		}
-		return AssertTrajectorySummaryEqual((std::string(aExpr) + ".Trajectories.second").c_str(),
-		                                    (std::string(bExpr) + ".Trajectories.second").c_str(),
-		                                    std::get<1>(a.Trajectories).second,
-		                                    std::get<1>(b.Trajectories).second);
+		return AssertTrajectorySummaryEqual(
+		    (std::string(aExpr) + ".Trajectories.second").c_str(),
+		    (std::string(bExpr) + ".Trajectories.second").c_str(),
+		    std::get<1>(a.Trajectories).second,
+		    std::get<1>(b.Trajectories).second
+		);
 	}
-
 }

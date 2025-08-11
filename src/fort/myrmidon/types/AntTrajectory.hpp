@@ -24,18 +24,18 @@ struct AntTrajectory {
 	/**
 	 * Reports the AntID of the Ant this trajectory refers to.
 	 */
-	AntID   Ant;
+	AntID                                    Ant;
 	/**
 	 * Reports the Space this trajectory is taking place.
 	 */
-	SpaceID Space;
+	SpaceID                                  Space;
 	/**
 	 * Reports the starting Time of this trajectory.
 	 *
 	 * Reports the starting Time of this trajectory. Positions
 	 * first column are second offset from this time.
 	 */
-	Time    Start;
+	Time                                     Start;
 	/**
 	 * Reports the time and position in the frame.
 	 *
@@ -48,7 +48,14 @@ struct AntTrajectory {
 	 *   angle appears clockwise.
 	 * * fith column: the zone of the ant
 	 */
-	Eigen::Matrix<double,Eigen::Dynamic,5> Positions;
+	Eigen::Matrix<double, Eigen::Dynamic, 5> Positions;
+
+	/**
+	 * Reports the trajectory duration, including the duration of the last
+	 * reported frame ( i.e. the time of the next frame where there is no
+	 * trajectory).
+	 */
+	double Duration_s;
 
 	/**
 	 * End Time for this Trajectory

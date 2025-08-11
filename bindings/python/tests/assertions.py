@@ -93,6 +93,7 @@ class CustomAssertion:
         self.assertEqual(a.Ant, b.Ant)
         self.assertEqual(a.Space, b.Space)
         self.assertTimeEqual(a.Start, b.Start)
+        self.assertEqual(a.Duration_s, b.Duration_s)
         npt.assert_almost_equal(a.Positions, b.Positions)
 
     def assertAntTrajectorySegmentEqual(self, a, b):

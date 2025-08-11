@@ -3,6 +3,7 @@
 #include "Config.hpp"
 
 #include <fort/time/Time.hpp>
+#include <limits>
 #include <random>
 
 #include <fort/myrmidon/priv/TagStatistics.hpp>
@@ -11,7 +12,7 @@
 namespace fort {
 namespace myrmidon {
 
-std::vector<Time> GeneratedData::DrawFrameTicks(const Config &config) {
+std::map<Time, Time> GeneratedData::DrawFrameTicks(const Config &config) {
 	std::random_device rd{};
 	std::mt19937       gen{rd()};
 
@@ -20,8 +21,9 @@ std::vector<Time> GeneratedData::DrawFrameTicks(const Config &config) {
 
 	std::normal_distribution<> d{0.0, period.Microseconds() * config.Jitter};
 	std::uniform_real_distribution<float> u(0, 1);
-	std::vector<Time>                     res;
+	std::vector<Time>                     ticks;
 	Duration                              increment;
+	Duration minTimestep = std::numeric_limits<int64_t>::max();
 	for (Time current = config.Start; current.Before(config.End);
 	     current      = current.Add(increment)) {
 		increment = period + std::clamp(int64_t(d(gen)), -15000L, 15000L) *
@@ -29,8 +31,19 @@ std::vector<Time> GeneratedData::DrawFrameTicks(const Config &config) {
 		if (current > config.Start && u(gen) < 0.05) { // 5% uniform framedrop
 			continue;
 		}
-		res.push_back(current.Round(Duration::Microsecond));
+		ticks.push_back(current.Round(Duration::Microsecond));
+		minTimestep = std::min(minTimestep, increment);
 	}
+
+	std::map<Time, Time> res;
+	for (auto it = ticks.cbegin(); it != ticks.cend(); ++it) {
+		if ((it + 1) != ticks.cend()) {
+			res[*it] = *(it + 1);
+		} else {
+			res[*it] = it->Add(minTimestep);
+		}
+	}
+
 	return res;
 }
 
@@ -42,16 +55,20 @@ GeneratedData::GeneratedData(const Config &config, const fs::path &path) {
 	GenerateTagStatistics(config);
 }
 
-void CheckFrameDrop(const std::vector<Time> &ticks, Duration framerate) {
+void CheckFrameDrop(const std::map<Time, Time> &ticks, Duration framerate) {
 	framerate = 1.5 * framerate.Nanoseconds();
-	Time last = ticks.front();
-	auto fi   = std::find_if(ticks.begin(), ticks.end(), [&](const Time &t) {
-        if (t.Sub(last) > framerate) {
-            return true;
+	Time last = ticks.begin()->first;
+	auto fi   = std::find_if(
+        ticks.begin(),
+        ticks.end(),
+        [&](const std::pair<Time, Time> &it) {
+            if (it.first.Sub(last) > framerate) {
+                return true;
+            }
+            last = it.first;
+            return false;
         }
-        last = t;
-        return false;
-    });
+    );
 	if (fi == ticks.end()) {
 		throw std::runtime_error("No framedrop found");
 	}
@@ -61,11 +78,11 @@ Duration RoundDuration(Duration v, Duration r) {
 	return (v.Nanoseconds() / r.Nanoseconds()) * r;
 }
 
-void DrawHistogram(const std::vector<Time> &time) {
+void DrawHistogram(const std::map<Time, Time> &time) {
 	std::map<Duration, int> hist;
 	Duration                round = 125 * Duration::Millisecond;
-	for (auto it = time.begin() + 1; it != time.end(); ++it) {
-		auto d = RoundDuration(it->Sub(*(it - 1)), round);
+	for (const auto &[cur, next] : time) {
+		auto d = RoundDuration(next.Sub(cur), round);
 		++hist[d];
 	}
 	std::cerr << "histogram of ticks" << std::endl;
@@ -77,7 +94,7 @@ void DrawHistogram(const std::vector<Time> &time) {
 }
 
 void GeneratedData::AssignTicks(
-    const std::vector<Time>    &ticks,
+    const std::map<Time, Time> &ticks,
     SpaceID                     spaceID,
     const std::vector<TDDData> &TDDs,
     const fs::path             &basepath
@@ -86,7 +103,7 @@ void GeneratedData::AssignTicks(
 	auto monoID  = priv::TrackingDataDirectory::GetUID(
         basepath / current->RelativeFilePath
     );
-	for (const auto &t : ticks) {
+	for (const auto &[t, next] : ticks) {
 		Ticks.push_back({spaceID, t});
 		if (t > current->End) {
 			++current;
@@ -161,11 +178,20 @@ void GeneratedData::GenerateTrajectories(const Config &config) {
 		    return aEnd < bEnd;
 	    }
 	);
+
+	for (auto &t : Trajectories) {
+		if (t->Space == 1) {
+			t->Duration_s = NestTicks.at(t->End()).Sub(t->Start).Seconds();
+		} else {
+			t->Duration_s = ForagingTicks.at(t->End()).Sub(t->Start).Seconds();
+		}
+	}
+
 #ifndef NDEBUG
 	for (const auto &t : Trajectories) {
 		std::cerr << "AntTrajectory{ Ant:" << t->Ant << " , Space: " << t->Space
 		          << " , Start: " << t->Start.Sub(config.Start)
-		          << " , End: " << t->End().Sub(config.Start) << std::endl;
+		          << " , Duration_s: " << t->Duration_s << std::endl;
 	}
 #endif
 }
@@ -257,6 +283,15 @@ void GeneratedData::GenerateInteractions(const Config &config) {
 		    return a->End < b->End;
 	    }
 	);
+
+	for (auto &i : Interactions) {
+		if (i->Space == 1) {
+			i->End = NestTicks.at(i->End);
+		} else {
+			i->End = ForagingTicks.at(i->End);
+		}
+	}
+
 #ifndef NDEBUG
 	for (const auto &i : Interactions) {
 		std::cerr << "AntInteraction{ IDs:{" << i->IDs.first << ","
@@ -420,7 +455,7 @@ void GeneratedData::GenerateFrames(const Config &config) {
 		collision->Space     = spaceID;
 
 		for (const auto &i : Interactions) {
-			if (i->Space != spaceID || i->Start > time || i->End < time) {
+			if (i->Space != spaceID || i->Start > time || i->End <= time) {
 				continue;
 			}
 			Collision c;
@@ -429,6 +464,7 @@ void GeneratedData::GenerateFrames(const Config &config) {
 			c.Zone  = 0;
 			collision->Collisions.push_back(c);
 		}
+
 		Frames.push_back({identified, collision});
 	}
 }

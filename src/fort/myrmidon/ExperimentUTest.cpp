@@ -1,4 +1,6 @@
 #include <filesystem>
+#include <fstream>
+
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
@@ -6,6 +8,9 @@
 #include "Query.hpp"
 #include "TestSetup.hpp"
 #include "UtilsUTest.hpp"
+
+#include "fort/myrmidon/types/FixableError.hpp"
+#include "fort/myrmidon/types/Reporter.hpp"
 #include <fort/myrmidon/utest-data/UTestData.hpp>
 
 #include <regex>
@@ -35,10 +40,15 @@ void PublicExperimentUTest::TearDown() {
 }
 
 void PublicExperimentUTest::ResetCorruptedFile() {
-	auto path = TestSetup::UTestData().CorruptedDataDir().AbsoluteFilePath /
-	            "tracking.0001.hermes";
+	const auto &dataDir =
+	    TestSetup::UTestData().CorruptedDataDir().AbsoluteFilePath;
+
+	auto path = dataDir / "tracking.0001.hermes";
+
 	fs::path corruptedPath = path.string() + ".bak";
+
 	if (fs::exists(corruptedPath)) {
+
 		fs::copy_file(
 		    corruptedPath,
 		    path,
@@ -533,6 +543,7 @@ TEST_F(PublicExperimentUTest, CanOpenCorruptedDataDir) {
 	std::string URI;
 	auto        corruptedPath =
 	    TestSetup::UTestData().CorruptedDataDir().AbsoluteFilePath;
+
 	auto        s = experiment->CreateSpace("main");
 	std::string corruptedFileName;
 	try {
@@ -579,12 +590,14 @@ TEST_F(PublicExperimentUTest, CanOpenCorruptedDataDir) {
 	} catch (const std::exception &e) {
 		ADD_FAILURE() << "unexpected error: " << e.what();
 	}
+
 	try {
 		URI = experiment->AddTrackingDataDirectory(
 		    s->ID(),
 		    corruptedPath,
 		    {.FixCorruptedData = true}
 		);
+
 		experiment->RemoveTrackingDataDirectory(URI);
 		URI = experiment->AddTrackingDataDirectory(
 		    s->ID(),

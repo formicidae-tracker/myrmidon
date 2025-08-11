@@ -25,10 +25,13 @@ class AntInteraction;
 } // namespace myrmidon
 } // namespace fort
 
-::testing::AssertionResult AssertTimeEqual(const char * aExpr,
-                                           const char * bExpr,
-                                           const fort::Time & a,
-                                           const fort::Time & b);
+::testing::AssertionResult AssertTimeEqual(
+    const char       *aExpr,
+    const char       *bExpr,
+    const fort::Time &a,
+    const fort::Time &b,
+    bool              checkMono = true
+);
 
 #define EXPECT_TIME_EQ(a,b) EXPECT_PRED_FORMAT2(AssertTimeEqual,a,b)
 

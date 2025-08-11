@@ -147,46 +147,57 @@ void BindCollisionFrame(py::module_ & m) {
 		;
 }
 
-void BindAntTrajectory(py::module_ & m) {
+void BindAntTrajectory(py::module_ &m) {
 	using namespace fort::myrmidon;
-	py::class_<AntTrajectory,std::shared_ptr<AntTrajectory> >(m,
-	                                                          "AntTrajectory",
-	                                                          "An Ant trajectory represents a continuous spatial trajectory of an Ant")
-		.def_readonly("Ant",
-		              &AntTrajectory::Ant,
-		              "int: the AntID of the Ant")
-		.def_readonly("Space",
-		              &AntTrajectory::Space,
-		              "int: the SpaceID where the trajectory takes place.")
-		.def_readonly("Start",
-		              &AntTrajectory::Start,
-		              "Time: the starting time of this trajectory.")
-		.def("End",
-		     &AntTrajectory::End,
-		     R"pydoc(
+	py::class_<AntTrajectory, std::shared_ptr<AntTrajectory>>(
+	    m,
+	    "AntTrajectory",
+	    "An Ant trajectory represents a continuous spatial trajectory of an Ant"
+	)
+	    .def_readonly("Ant", &AntTrajectory::Ant, "int: the AntID of the Ant")
+	    .def_readonly(
+	        "Space",
+	        &AntTrajectory::Space,
+	        "int: the SpaceID where the trajectory takes place."
+	    )
+	    .def_readonly(
+	        "Start",
+	        &AntTrajectory::Start,
+	        "Time: the starting time of this trajectory."
+	    )
+	    .def_readonly(
+	        "Duration_s",
+	        &AntTrajectory::Duration_s,
+	        "float: the duration (including last frame duration) of this "
+	        "trajectory."
+	    )
+	    .def(
+	        "End",
+	        &AntTrajectory::End,
+	        R"pydoc(
 Computes the End time of the AntTrajectory.
 
 Returns:
     Time: the last Time found in this trajectory
-)pydoc")
-		.def_property_readonly("Positions",
-		                       [](const AntTrajectory & t) -> const Eigen::Matrix<double,Eigen::Dynamic,5> & {
-			                       return t.Positions;
-		                       },
-		                       py::return_value_policy::reference_internal,
-		                       "numpy.ndarray: a N row array of position. Columns are (t,x,y,angle,zone), where t is the offset from Start in seconds.")
-		.def("__str__",
-		     [](const AntTrajectory & self) {
-			     std::ostringstream oss;
-			     oss << "AntTrajectory{ Ant = " << self.Ant
-			         << " , Space = " << self.Space
-			         << " , Start = " << self.Start
-			         << " , NPos = " << self.Positions.rows()
-			         << "}";
-			     return oss.str();
-		     })
-		;
-
+)pydoc"
+	    )
+	    .def_property_readonly(
+	        "Positions",
+	        [](const AntTrajectory &t
+	        ) -> const Eigen::Matrix<double, Eigen::Dynamic, 5> & {
+		        return t.Positions;
+	        },
+	        py::return_value_policy::reference_internal,
+	        "numpy.ndarray: a N row array of position. Columns are "
+	        "(t,x,y,angle,zone), where t is the offset from Start in seconds."
+	    )
+	    .def("__str__", [](const AntTrajectory &self) {
+		    std::ostringstream oss;
+		    oss << "AntTrajectory{ Ant = " << self.Ant
+		        << " , Space = " << self.Space << " , Start = " << self.Start
+		        << " , NPos = " << self.Positions.rows() << "}";
+		    return oss.str();
+	    });
 }
 
 void BindAntInteraction(py::module_ &m) {
