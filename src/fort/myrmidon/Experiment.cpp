@@ -72,14 +72,10 @@ std::string Experiment::AddTrackingDataDirectory(
 	} catch (const std::exception &e) {
 		throw std::runtime_error(e.what());
 	}
-	if (errors.empty() == false) {
-		if (fixCorruptedData == false) {
-			throw FixableErrors(std::move(errors));
-		} else {
-			FixableErrors(std::move(errors)).Fix();
-			tdd->SaveToCache();
-		}
+	if (errors.empty() == false && fixCorruptedData == false) {
+		throw FixableErrors(std::move(errors));
 	}
+
 	d_p->Get().AddTrackingDataDirectory(fi->second, tdd);
 	return tdd->URI();
 }

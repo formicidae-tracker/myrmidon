@@ -1,5 +1,6 @@
 #include "UTestData.hpp"
 
+#include <filesystem>
 #include <fstream>
 
 #include "CloseUpWriter.hpp"
@@ -450,7 +451,7 @@ private:
 void TruncateFile(const std::filesystem::path &filepath, int bytes) {
 #ifndef NDEBUG
 	std::cerr << "Truncating " << bytes << " bytes of " << filepath
-	          << std::endl;
+	          << " (size: " << fs::file_size(filepath) << ")" << std::endl;
 #endif // NDEBUG
 
 	FILE *file = fopen(filepath.c_str(), "r+");
@@ -467,8 +468,6 @@ void TruncateFile(const std::filesystem::path &filepath, int bytes) {
 		);
 	}
 	auto offset = ftello(file);
-	std::cerr << "File is " << offset + bytes << " bytes " << std::endl;
-
 	if (ftruncate(fileno(file), offset) != 0) {
 		throw std::runtime_error(
 		    "ftruncate('" + filepath.string() + "'," + std::to_string(offset) +

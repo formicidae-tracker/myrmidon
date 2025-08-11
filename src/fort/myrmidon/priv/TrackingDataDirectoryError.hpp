@@ -5,6 +5,7 @@
 #include <fort/myrmidon/types/Typedefs.hpp>
 #include <fort/myrmidon/utils/FileSystem.hpp>
 #include <fort/time/Time.hpp>
+#include <mutex>
 #include <optional>
 
 namespace fort {
@@ -26,8 +27,11 @@ public:
 	void Fix() override;
 
 private:
-	fs::path d_file;
-	uint64_t d_until;
+	void fix();
+
+	std::once_flag d_once;
+	fs::path       d_file;
+	uint64_t       d_until;
 };
 
 class CorruptedHermesFileIterator : public details::WrapLazyException {

@@ -7,6 +7,7 @@
 #include <fort/hermes/Header.pb.h>
 
 #include <fort/myrmidon/priv/proto/FileReadWriter.hpp>
+#include <mutex>
 #include <sstream>
 
 namespace fort {
@@ -58,6 +59,10 @@ fs::path getFileActuallyRead(const fs::path &path) {
 }
 
 void CorruptedHermesFileError::Fix() {
+	std::call_once(d_once, [this]() { fix(); });
+}
+
+void CorruptedHermesFileError::fix() {
 	typedef proto::FileReadWriter<hermes::Header, hermes::FileLine> RW;
 	fort::hermes::Header                                            header;
 	std::vector<RW::LineWriter>                                     lineWriters;
