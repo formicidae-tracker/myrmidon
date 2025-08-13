@@ -32,6 +32,7 @@ public:
 		priv::Matcher::Ptr Matcher;
 		bool               SummarizeSegment;
 		bool               SegmentOnMatcherValueChange;
+		bool               ReportSmall;
 	};
 
 	DataSegmenter(const Args &args);
@@ -88,7 +89,7 @@ private:
 			);
 		}
 
-		AntTrajectory::Ptr Terminate();
+		AntTrajectory::Ptr Terminate(bool reportSmall);
 	};
 
 	struct BuildingInteraction {
@@ -125,7 +126,7 @@ private:
 
 		bool Matches(const Matcher &m);
 
-		AntInteraction::Ptr Terminate(bool summarize);
+		AntInteraction::Ptr Terminate(bool summarize, bool reportSmall);
 	};
 
 	void BuildTrajectories(

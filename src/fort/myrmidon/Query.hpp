@@ -216,6 +216,9 @@ public:
 
 		//! If a combined matcher value changes, create a new object
 		bool SegmentOnMatcherValueChange = false;
+
+		//! Report small trajectories (with a single frame) or discard them.
+		bool ReportSmall = false;
 	};
 
 	/**
@@ -284,6 +287,9 @@ public:
 
 		//! If a combined matcher value changes, create a new object
 		bool SegmentOnMatcherValueChange = false;
+
+		//! Report small trajectories (with a single frame) or discard them.
+		bool ReportSmall = false;
 	};
 
 	/**

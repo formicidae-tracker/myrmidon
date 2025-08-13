@@ -58,7 +58,11 @@ void DataSegmenter::BuildingTrajectory::PushPastEnd(const Time &time) {
 	PastEnd = time;
 }
 
-AntTrajectory::Ptr DataSegmenter::BuildingTrajectory::Terminate() {
+AntTrajectory::Ptr DataSegmenter::BuildingTrajectory::Terminate(bool reportSmall
+) {
+	if (reportSmall == false && Size() < 2) {
+		return nullptr;
+	}
 	Trajectory->Positions = Eigen::Map<
 	    const Eigen::Matrix<double, Eigen::Dynamic, 5, Eigen::RowMajor>>(
 	    &DataPoints[0],
@@ -187,8 +191,13 @@ DataSegmenter::BuildingInteraction::SummarizeBuildingTrajectory(
 	return AntTrajectorySummary{.Mean = mean, .Zones = zones};
 }
 
-AntInteraction::Ptr DataSegmenter::BuildingInteraction::Terminate(bool summarize
+AntInteraction::Ptr DataSegmenter::BuildingInteraction::Terminate(
+    bool summarize, bool reportSmall
 ) {
+	if (reportSmall == false && Start == Last) {
+		return AntInteraction::Ptr();
+	}
+
 	auto res   = std::make_shared<AntInteraction>();
 	res->IDs   = IDs;
 	res->Space = Trajectories.first->Trajectory->Space;
@@ -248,7 +257,8 @@ DataSegmenter::DataSegmenter(const Args &args)
 DataSegmenter::~DataSegmenter() {
 	for (auto &[id, interaction] : d_interactions) {
 		interaction->PushPastEnd(d_extenders[interaction->Space].ExtendLast());
-		auto i = interaction->Terminate(d_args.SummarizeSegment);
+		auto i =
+		    interaction->Terminate(d_args.SummarizeSegment, d_args.ReportSmall);
 		if (i == nullptr) {
 			continue;
 		}
@@ -263,7 +273,7 @@ DataSegmenter::~DataSegmenter() {
 		    trajectory->ForceKeep == false) {
 			continue;
 		}
-		auto t = trajectory->Terminate();
+		auto t = trajectory->Terminate(d_args.ReportSmall);
 		if (t == nullptr) {
 			continue;
 		}
@@ -376,7 +386,8 @@ void DataSegmenter::TerminateTrajectory(
 	}
 
 	for (const auto &interaction : toRemove) {
-		auto i = interaction->Terminate(d_args.SummarizeSegment);
+		auto i =
+		    interaction->Terminate(d_args.SummarizeSegment, d_args.ReportSmall);
 		if (i == nullptr) {
 			continue;
 		}
@@ -389,7 +400,7 @@ void DataSegmenter::TerminateTrajectory(
 		return;
 	}
 
-	auto t = trajectory->Terminate();
+	auto t = trajectory->Terminate(d_args.ReportSmall);
 	if (t == nullptr) {
 		return;
 	}
@@ -442,7 +453,10 @@ void DataSegmenter::BuildInteractions(const CollisionFrame::Ptr &collisions) {
 		if (MonoIDMismatch(collisions->FrameTime, fi->second->Last) == true ||
 		    matchValue != fi->second->LastValue ||
 		    collisions->FrameTime.Sub(fi->second->Last) > d_args.MaximumGap) {
-			auto i = fi->second->Terminate(d_args.SummarizeSegment);
+			auto i = fi->second->Terminate(
+			    d_args.SummarizeSegment,
+			    d_args.ReportSmall
+			);
 			if (i != nullptr) {
 				d_args.StoreInteraction(i);
 			}
@@ -470,7 +484,8 @@ void DataSegmenter::BuildInteractions(const CollisionFrame::Ptr &collisions) {
 			continue;
 		}
 		terminated.push_back(IDs);
-		auto i = interaction->Terminate(d_args.SummarizeSegment);
+		auto i =
+		    interaction->Terminate(d_args.SummarizeSegment, d_args.ReportSmall);
 		if (i != nullptr) {
 			d_args.StoreInteraction(i);
 		}

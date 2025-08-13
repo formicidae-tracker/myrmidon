@@ -103,6 +103,7 @@ std::optional<py::list> QueryComputeAntTrajectories(
     size_t                              zoneDepth,
     fort::myrmidon::ZonePriority        zoneOrder,
     bool                                segmentOnMatcherValueChange,
+    bool                                reportSmall,
     bool                                singleThreaded,
     bool                                reportProgress,
     std::optional<fort::myrmidon::Query::NewTrajectoryCallback> onNewTrajectory
@@ -117,6 +118,7 @@ std::optional<py::list> QueryComputeAntTrajectories(
 	args.Order                       = zoneOrder;
 	args.SingleThreaded              = singleThreaded;
 	args.SegmentOnMatcherValueChange = segmentOnMatcherValueChange;
+	args.ReportSmall                 = reportSmall;
 	if (reportProgress) {
 		args.Progress =
 		    std::make_unique<TimeProgress>("Computing ant trajectories");
@@ -150,6 +152,7 @@ std::optional<std::tuple<py::list, py::list>> QueryComputeAntInteractions(
     bool                                collisionsIgnoreZones,
     bool                                reportFullTrajectories,
     bool                                segmentOnMatcherValueChange,
+    bool                                reportSmall,
     bool                                singleThreaded,
     bool                                reportProgress,
     std::optional<fort::myrmidon::Query::NewTrajectoryCallback> onNewTrajectory,
@@ -166,6 +169,7 @@ std::optional<std::tuple<py::list, py::list>> QueryComputeAntInteractions(
 	args.SingleThreaded              = singleThreaded;
 	args.CollisionsIgnoreZones       = collisionsIgnoreZones;
 	args.SegmentOnMatcherValueChange = segmentOnMatcherValueChange;
+	args.ReportSmall                 = reportSmall;
 	if (reportProgress) {
 		args.Progress =
 		    std::make_unique<TimeProgress>("Computing ant interactions");
@@ -395,6 +399,7 @@ Returns:
 	        "zoneOrder"_a  = trajectoryArgs.Order,
 	        "segmentOnMatcherValueChange"_a =
 	            trajectoryArgs.SegmentOnMatcherValueChange,
+	        "reportSmall"_a     = trajectoryArgs.ReportSmall,
 	        "singleThreaded"_a  = trajectoryArgs.SingleThreaded,
 	        "reportProgress"_a  = true,
 	        "onNewTrajectory"_a = std::nullopt,
@@ -442,6 +447,7 @@ Returns:
 	        "reportFullTrajectories"_a = interactionArgs.ReportFullTrajectories,
 	        "segmentOnMatcherValueChange"_a =
 	            interactionArgs.SegmentOnMatcherValueChange,
+	        "reportSmall"_a      = interactionArgs.ReportSmall,
 	        "singleThreaded"_a   = interactionArgs.SingleThreaded,
 	        "reportProgress"_a   = true,
 	        "onNewTrajectory"_a  = std::nullopt,

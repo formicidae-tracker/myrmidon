@@ -215,6 +215,7 @@ void Query::ComputeTrajectories(
 	     .MaximumGap                  = args.MaximumGap,
 	     .SummarizeSegment            = false,
 	     .SegmentOnMatcherValueChange = args.SegmentOnMatcherValueChange,
+	     .ReportSmall                 = args.ReportSmall,
     };
 	if (args.Matcher) {
 		sargs.Matcher = args.Matcher->ToPrivate();
@@ -246,9 +247,11 @@ void Query::ComputeAntInteractions(
 ) {
 
 	auto runner = QueryRunner::RunnerFor(args.SingleThreaded == false);
-	DataSegmenter::Args sargs;
-	sargs.MaximumGap                  = args.MaximumGap;
-	sargs.SegmentOnMatcherValueChange = args.SegmentOnMatcherValueChange;
+	DataSegmenter::Args sargs{
+	    .MaximumGap                  = args.MaximumGap,
+	    .SegmentOnMatcherValueChange = args.SegmentOnMatcherValueChange,
+	    .ReportSmall                 = args.ReportSmall,
+	};
 	if (args.Matcher) {
 		sargs.Matcher = args.Matcher->ToPrivate();
 		sargs.Matcher->SetUpOnce(experiment.Identifier()->Ants());

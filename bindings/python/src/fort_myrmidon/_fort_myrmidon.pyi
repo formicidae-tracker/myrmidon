@@ -283,6 +283,11 @@ class AntTrajectory:
         (self: fort_myrmidon.AntTrajectory) -> int
         """
     @property
+    def Duration_s(self) -> float:
+        """float: the duration (including last frame duration) of this trajectory.
+        (self: fort_myrmidon.AntTrajectory) -> float
+        """
+    @property
     def Positions(self) -> numpy.ndarray[numpy.float64[m, 5]]:
         """numpy.ndarray: a N row array of position. Columns are (t,x,y,angle,zone), where t is the offset from Start in seconds.
         (arg0: fort_myrmidon.AntTrajectory) -> numpy.ndarray[numpy.float64[m, 5]]
@@ -1686,8 +1691,8 @@ class Query:
 
         """
     @staticmethod
-    def ComputeAntInteractions(experiment: Experiment, start: Time = ..., end: Time = ..., maximumGap: Duration = ..., matcher: Matcher = ..., zoneDepth: int = ..., zoneOrder: ZonePriority = ..., collisionsIgnoreZones: bool = ..., reportFullTrajectories: bool = ..., segmentOnMatcherValueChange: bool = ..., singleThreaded: bool = ..., reportProgress: bool = ..., onNewTrajectory: Callable[[AntTrajectory], None] | None = ..., onNewInteraction: Callable[[AntInteraction], None] | None = ...) -> tuple[list, list] | None:
-        '''ComputeAntInteractions(experiment: fort_myrmidon.Experiment, *, start: fort_myrmidon.Time = -∞, end: fort_myrmidon.Time = +∞, maximumGap: fort_myrmidon.Duration = 1s, matcher: fort_myrmidon.Matcher = None, zoneDepth: int = 1, zoneOrder: fort_myrmidon.ZonePriority = <ZonePriority.PREDECENCE_LOWER: 0>, collisionsIgnoreZones: bool = False, reportFullTrajectories: bool = True, segmentOnMatcherValueChange: bool = False, singleThreaded: bool = False, reportProgress: bool = True, onNewTrajectory: Optional[Callable[[fort_myrmidon.AntTrajectory], None]] = None, onNewInteraction: Optional[Callable[[fort_myrmidon.AntInteraction], None]] = None) -> Optional[tuple[list, list]]
+    def ComputeAntInteractions(experiment: Experiment, start: Time = ..., end: Time = ..., maximumGap: Duration = ..., matcher: Matcher = ..., zoneDepth: int = ..., zoneOrder: ZonePriority = ..., collisionsIgnoreZones: bool = ..., reportFullTrajectories: bool = ..., segmentOnMatcherValueChange: bool = ..., reportSmall: bool = ..., singleThreaded: bool = ..., reportProgress: bool = ..., onNewTrajectory: Callable[[AntTrajectory], None] | None = ..., onNewInteraction: Callable[[AntInteraction], None] | None = ...) -> tuple[list, list] | None:
+        '''ComputeAntInteractions(experiment: fort_myrmidon.Experiment, *, start: fort_myrmidon.Time = -∞, end: fort_myrmidon.Time = +∞, maximumGap: fort_myrmidon.Duration = 1s, matcher: fort_myrmidon.Matcher = None, zoneDepth: int = 1, zoneOrder: fort_myrmidon.ZonePriority = <ZonePriority.PREDECENCE_LOWER: 0>, collisionsIgnoreZones: bool = False, reportFullTrajectories: bool = True, segmentOnMatcherValueChange: bool = False, reportSmall: bool = False, singleThreaded: bool = False, reportProgress: bool = True, onNewTrajectory: Optional[Callable[[fort_myrmidon.AntTrajectory], None]] = None, onNewInteraction: Optional[Callable[[fort_myrmidon.AntInteraction], None]] = None) -> Optional[tuple[list, list]]
 
 
 
@@ -1735,8 +1740,8 @@ class Query:
 
         '''
     @staticmethod
-    def ComputeAntTrajectories(experiment: Experiment, start: Time = ..., end: Time = ..., maximumGap: Duration = ..., matcher: Matcher = ..., zoneDepth: int = ..., zoneOrder: ZonePriority = ..., segmentOnMatcherValueChange: bool = ..., singleThreaded: bool = ..., reportProgress: bool = ..., onNewTrajectory: Callable[[AntTrajectory], None] | None = ...) -> list | None:
-        '''ComputeAntTrajectories(experiment: fort_myrmidon.Experiment, *, start: fort_myrmidon.Time = -∞, end: fort_myrmidon.Time = +∞, maximumGap: fort_myrmidon.Duration = 1s, matcher: fort_myrmidon.Matcher = None, zoneDepth: int = 1, zoneOrder: fort_myrmidon.ZonePriority = <ZonePriority.PREDECENCE_LOWER: 0>, segmentOnMatcherValueChange: bool = False, singleThreaded: bool = False, reportProgress: bool = True, onNewTrajectory: Optional[Callable[[fort_myrmidon.AntTrajectory], None]] = None) -> Optional[list]
+    def ComputeAntTrajectories(experiment: Experiment, start: Time = ..., end: Time = ..., maximumGap: Duration = ..., matcher: Matcher = ..., zoneDepth: int = ..., zoneOrder: ZonePriority = ..., segmentOnMatcherValueChange: bool = ..., reportSmall: bool = ..., singleThreaded: bool = ..., reportProgress: bool = ..., onNewTrajectory: Callable[[AntTrajectory], None] | None = ...) -> list | None:
+        '''ComputeAntTrajectories(experiment: fort_myrmidon.Experiment, *, start: fort_myrmidon.Time = -∞, end: fort_myrmidon.Time = +∞, maximumGap: fort_myrmidon.Duration = 1s, matcher: fort_myrmidon.Matcher = None, zoneDepth: int = 1, zoneOrder: fort_myrmidon.ZonePriority = <ZonePriority.PREDECENCE_LOWER: 0>, segmentOnMatcherValueChange: bool = False, reportSmall: bool = False, singleThreaded: bool = False, reportProgress: bool = True, onNewTrajectory: Optional[Callable[[fort_myrmidon.AntTrajectory], None]] = None) -> Optional[list]
 
 
         Conputes Ant Trajectories between two times. There is two modes of operation:
