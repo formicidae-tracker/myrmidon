@@ -178,7 +178,7 @@ void BindAntTrajectory(py::module_ &m) {
 Computes the End time of the AntTrajectory.
 
 Returns:
-    Time: the last Time found in this trajectory
+    Time: the last Time found in this trajectory. It does not contains Duration.
 )pydoc"
 	    )
 	    .def_property_readonly(

@@ -274,7 +274,7 @@ class AntTrajectory:
         Computes the End time of the AntTrajectory.
 
         Returns:
-            Time: the last Time found in this trajectory
+            Time: the last Time found in this trajectory. It does not contains Duration.
 
         """
     @property
@@ -1722,6 +1722,8 @@ class Query:
             segmentOnMatcherValueChange (bool): if True, when a combined
                 matcher ( "behavior" == "grooming" || "behavior" = "sleeping"
                 ) value change, create a new trajectory.
+            reportSmall (bool): Reports trajectories and interactions with a single time
+                point.
             onNewTrajectory (Callable[fort_myrmidon.AntTrajectory,None]): If specified,
                 this query will return None, and any discovered trajectory will be
                 passed to this callback as they are computed.
@@ -1762,6 +1764,7 @@ class Query:
             segmentOnMatcherValueChange (bool): if True, when a combined
                 matcher ( "behavior" == "grooming" || "behavior" = "sleeping"
                 ) value change, create a new trajectory.
+            reportSmall (bool): Reports trajectories with a single time point.
             onNewTrajectory (Callable[fort_myrmidon.AntTrajectory,None]): If specified,
                 no data will be returned, but this callabled will be called for each
                 results. It allows to reduce memory pressure when only a few metrics are
