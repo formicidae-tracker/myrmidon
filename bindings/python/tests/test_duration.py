@@ -48,6 +48,7 @@ class DurationTestCase(unittest.TestCase):
         ]
         for expected, d in data:
             self.assertEqual(str(d), expected)
+            self.assertEqual(repr(d), expected)
 
     def test_constant(self):
         with self.assertRaises(Exception):

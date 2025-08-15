@@ -1,12 +1,14 @@
 #include "BindMethods.hpp"
 
+#include <chrono>
 #include <fort/time/Time.hpp>
+#include <pybind11/pytypes.h>
 
-
-void BindDuration(py::module_ & m) {
-	py::class_<fort::Duration>(m,
-	                           "Duration",
-	                           R"pydoc(
+void BindDuration(py::module_ &m) {
+	py::class_<fort::Duration>(
+	    m,
+	    "Duration",
+	    R"pydoc(
 Represents an amount of nanoseconds as a signed 64-bit integer
 
 Note:
@@ -20,51 +22,75 @@ Attributes:
     Second (Duration): the value for a second
     Millisecond (Duration): the value for a millisecond
     Microsecond (Duration): the value for a microsecond
-)pydoc")
-		.def(py::init<int64_t>(),
-		     py::arg("ns"),
-		     R"pydoc(
+)pydoc"
+	)
+	    .def(
+	        py::init<int64_t>(),
+	        py::arg("ns"),
+	        R"pydoc(
 Initialize a Duration from an amount of nanoseconds
 
 Args:
     ns (int): the number of nanosecond to represent
-)pydoc")
-		.def(py::init([](double ns){
-			              return fort::Duration(int64_t(ns));
-		              }),
-			py::arg("ns"),
-			R"pydoc(
+)pydoc"
+	    )
+	    .def(
+	        py::init([](double ns) { return fort::Duration(int64_t(ns)); }),
+	        py::arg("ns"),
+	        R"pydoc(
 Initialize a Duration from an amount of nanoseconds
 
 Args:
     ns (float): the number of nanosecond to represent
-)pydoc")
-		.def(py::init<>(),
-		     "Initialize a zero second Duration.")
-		.def("__str__",[](const fort::Duration & d) -> std::string {
-			               std::ostringstream oss;
-			               oss << d;
-			               return oss.str();
-		               })
-		.def_readonly_static("Hour",
-		                     &fort::Duration::Hour,
-		                     "Duration : the value for one hour.")
-		.def_readonly_static("Minute",
-		                     &fort::Duration::Minute,
-		                     "Duration: A minute as a Duration")
-		.def_readonly_static("Second",
-		                     &fort::Duration::Second,
-		                     "Duration: A second as a Duration")
-		.def_readonly_static("Millisecond",
-		                     &fort::Duration::Millisecond,
-		                     "Duration: A millisecond as a Duration")
-		.def_readonly_static("Microsecond",
-		                     &fort::Duration::Microsecond,
-		                     "Duration: A microsecond as a Duration")
-		.def_static("Parse",
-		            &fort::Duration::Parse,
-		            py::arg("d"),
-		            R"pydoc(
+)pydoc"
+	    )
+	    .def(py::init<>(), "Initialize a zero second Duration.")
+	    .def(
+	        "__str__",
+	        [](const fort::Duration &d) -> std::string {
+		        std::ostringstream oss;
+		        oss << d;
+		        return oss.str();
+	        }
+	    )
+	    .def(
+	        "__repr__",
+	        [](const fort::Duration &d) -> std::string {
+		        std::ostringstream oss;
+		        oss << d;
+		        return oss.str();
+	        }
+	    )
+	    .def_readonly_static(
+	        "Hour",
+	        &fort::Duration::Hour,
+	        "Duration : the value for one hour."
+	    )
+	    .def_readonly_static(
+	        "Minute",
+	        &fort::Duration::Minute,
+	        "Duration: A minute as a Duration"
+	    )
+	    .def_readonly_static(
+	        "Second",
+	        &fort::Duration::Second,
+	        "Duration: A second as a Duration"
+	    )
+	    .def_readonly_static(
+	        "Millisecond",
+	        &fort::Duration::Millisecond,
+	        "Duration: A millisecond as a Duration"
+	    )
+	    .def_readonly_static(
+	        "Microsecond",
+	        &fort::Duration::Microsecond,
+	        "Duration: A microsecond as a Duration"
+	    )
+	    .def_static(
+	        "Parse",
+	        &fort::Duration::Parse,
+	        py::arg("d"),
+	        R"pydoc(
 Parses a string to a Duration.
 
 Args:
@@ -80,105 +106,124 @@ Returns:
 Raises:
     RuntimeError: when the parsed amount will not hold in a 64-bit
         signed integer
-)pydoc")
-		.def("Hours",
-		     &fort::Duration::Hours,
-		     R"pydoc(
+)pydoc"
+	    )
+	    .def(
+	        "Hours",
+	        &fort::Duration::Hours,
+	        R"pydoc(
     this Duration in hours.
 
     Returns:
         float: the duration as an amount of hours
-)pydoc")
-		.def("Minutes",
-		     &fort::Duration::Minutes,
-		     R"pydoc(
+)pydoc"
+	    )
+	    .def(
+	        "Minutes",
+	        &fort::Duration::Minutes,
+	        R"pydoc(
 This Duration in minutes.
 
 Returns:
     float: the duration as an amount of minutes
-)pydoc")
-		.def("Seconds",
-		     &fort::Duration::Seconds,
-		     R"pydoc(
+)pydoc"
+	    )
+	    .def(
+	        "Seconds",
+	        &fort::Duration::Seconds,
+	        R"pydoc(
 This Duration in seconds.
 
 Returns:
     float: the duration as an amount of seconds
-)pydoc")
-		.def("Milliseconds",
-		     &fort::Duration::Milliseconds,
-		     R"pydoc(
+)pydoc"
+	    )
+	    .def(
+	        "Milliseconds",
+	        &fort::Duration::Milliseconds,
+	        R"pydoc(
 This Duration in milliseconds.
 
 Returns:
     float: the duration as an amount of milliseconds
-)pydoc")
-		.def("Microseconds",
-		     &fort::Duration::Microseconds,
-		     R"pydoc(
+)pydoc"
+	    )
+	    .def(
+	        "Microseconds",
+	        &fort::Duration::Microseconds,
+	        R"pydoc(
 This Duration in microseconds.
 
 Returns:
     float: the duration as an amount of microseconds
-)pydoc")
-		.def("Nanoseconds",
-		     &fort::Duration::Nanoseconds,
-		     R"pydoc(
+)pydoc"
+	    )
+	    .def(
+	        "Nanoseconds",
+	        &fort::Duration::Nanoseconds,
+	        R"pydoc(
 This Duration in nanoseconds.
 
 Returns:
     int: the duration as an amount of nanoseconds
-)pydoc")
-		.def(py::self + py::self)
-		.def(py::self + int())
-		.def("__radd__",[](const fort::Duration & d, int64_t v) -> fort::Duration {
-			                return fort::Duration(v) + d;
-		                },
-			py::is_operator())
-		.def(py::self - py::self)
-		.def(py::self - int())
-		.def("__rsub__",[](const fort::Duration & d, int64_t v) -> fort::Duration {
-			                return fort::Duration(v) - d;
-		                },
-			py::is_operator())
+)pydoc"
+	    )
+	    .def(py::self + py::self)
+	    .def(py::self + int())
+	    .def(
+	        "__radd__",
+	        [](const fort::Duration &d, int64_t v) -> fort::Duration {
+		        return fort::Duration(v) + d;
+	        },
+	        py::is_operator()
+	    )
+	    .def(py::self - py::self)
+	    .def(py::self - int())
+	    .def(
+	        "__rsub__",
+	        [](const fort::Duration &d, int64_t v) -> fort::Duration {
+		        return fort::Duration(v) - d;
+	        },
+	        py::is_operator()
+	    )
 
-		.def(py::self * py::self)
-		.def(py::self * int())
-		.def("__rmul__",[](const fort::Duration & d, int64_t v) -> fort::Duration {
-			                return v * d;
-		                },
-			py::is_operator())
-		.def(py::self < py::self)
-		.def(py::self <= py::self)
-		.def(py::self > py::self)
-		.def(py::self >= py::self)
-		.def(py::self == py::self)
-		;
+	    .def(py::self * py::self)
+	    .def(py::self * int())
+	    .def(
+	        "__rmul__",
+	        [](const fort::Duration &d, int64_t v) -> fort::Duration {
+		        return v * d;
+	        },
+	        py::is_operator()
+	    )
+	    .def(py::self < py::self)
+	    .def(py::self <= py::self)
+	    .def(py::self > py::self)
+	    .def(py::self >= py::self)
+	    .def(py::self == py::self);
 
-	py::implicitly_convertible<int64_t,fort::Duration>();
-	py::implicitly_convertible<double,fort::Duration>();
+	py::implicitly_convertible<int64_t, fort::Duration>();
+	py::implicitly_convertible<double, fort::Duration>();
 }
 
-fort::Time timeFromPythonTimestamp(const double & t) {
-	if ( std::isinf(t) ) {
+static py::object &pyLocalTZInfo() {
+	static py::module_ datetime = py::module_::import("datetime");
+	static py::object  utc      = datetime.attr("timezone").attr("utc");
+	static py::object  tzinfo   = datetime.attr("datetime")
+	                               .attr("now")(utc)
+	                               .attr("astimezone")()
+	                               .attr("tzinfo");
+
+	return tzinfo;
+}
+
+fort::Time timeFromPythonTimestamp(const double &t) {
+	if (std::isinf(t)) {
 		return t > 0 ? fort::Time::Forever() : fort::Time::SinceEver();
 	}
-	int64_t s = std::floor(t);
+	int64_t s  = std::floor(t);
 	int32_t ns = 1e9 * (t - s);
-	return fort::Time::FromUnix(s,ns);
-}
-
-fort::Time timeFromPythonDatetime(const std::chrono::system_clock::time_point & t) {
-	using namespace std::chrono;
-
-	auto ns = duration_cast<nanoseconds>(t.time_since_epoch() % seconds(1));
-	if ( ns.count() < 0 ) {
-		ns += seconds(1);
-	}
-
-	std::time_t ltime = system_clock::to_time_t(time_point_cast<system_clock::duration>(t - ns));
-
-	return fort::Time::FromUnix(ltime,ns.count());
+	return fort::Time::FromUnix(s, ns);
 }
 
 void BindTime(py::module_ &m) {
@@ -230,26 +275,16 @@ Note:
     year 2020.
 )pydoc"
 	    )
-	    .def(
-	        py::init(&timeFromPythonDatetime),
+	    .def_static(
+	        "_FromDateTime",
+	        &fort::Time::FromTimePoint,
 	        py::arg("dt"),
 	        R"pydoc(
 Initialize from a :class:`datetime.datetime` object.
 
-Creates a Time from a :class:`datetime.datetime`. The object will be
-treated as a local naive datetime, i.e. expressed in localtime and
-ignoring any time information.
-
+Creates a Time from a :class:`datetime.datetime`.
 Args:
     dt (datetime.datetime): a naïve :class:`datetime.datetime`.
-
-Warning:
-    The dt parameter will be treated as a naïve object, disregarding any
-    associated timezone information. Therefore one must call
-    :meth:`datetime.datetime.astimezone` with ``tz =None`` to convert the
-    object in localtime so it would be correctly converted to UTC
-    internally, which is the default representation in
-    **fort-myrmidon** and **fort-studio**.
 )pydoc"
 	    )
 	    .def_static(
@@ -324,25 +359,10 @@ Returns:
 )pydoc"
 	    )
 	    .def(
-	        "ToDateTime",
-	        [](const fort::Time &t) -> std::chrono::system_clock::time_point {
-		        if (t.IsInfinite() == true) {
-			        throw std::runtime_error(
-			            "Cannot cast " + t.Format() +
-			            " to a datetime.datetime object"
-			        );
-		        }
-		        auto ts = t.ToTimestamp();
-		        return std::chrono::system_clock::time_point(
-		            std::chrono::seconds(ts.seconds()) +
-		            std::chrono::nanoseconds(ts.nanos())
-		        );
-	        },
+	        "_ToDateTime",
+	        &fort::Time::ToTimePoint,
 	        R"pydoc(
-Converts to a :class:`datetime.datetime`
-
-The returned object will be a naïve datetime, i.e. expressed in
-localtime without any timezone information.
+Converts to a :class:`datetime.datetime` in local timezone
 
 Returns:
     datetime.datetime: a naive datetime.datetime object.
@@ -501,7 +521,7 @@ Raises:
 )pydoc"
 	    )
 	    .def("__str__", &fort::Time::Format)
-	    .def("__repr__", &fort::Time::DebugString)
+	    .def("__repr__", &fort::Time::Format)
 	    .def(py::self == py::self)
 	    .def(py::self < py::self)
 	    .def(py::self <= py::self)

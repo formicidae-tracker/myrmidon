@@ -2,6 +2,10 @@ import fort_myrmidon as m
 import unittest
 import datetime
 
+if "unittest.util" in __import__("sys").modules:
+    # Show full diff in self.assertEqual.
+    __import__("sys").modules["unittest.util"]._MAX_LENGTH = 999999999
+
 
 class TimeTestCase(unittest.TestCase):
     def test_constructor(self):
@@ -25,7 +29,7 @@ class TimeTestCase(unittest.TestCase):
 
         # we makes a deep copy of the time we use by passing it forth
         # and back to a float
-        u = m.Time(t.ToDateTime())
+        u = m.Time.FromDateTime(t.ToDateTime())
 
         self.assertEqual(t.Add(1).Sub(t), 1)
         self.assertEqual(t.Add(1 * m.Duration.Second).Sub(t), m.Duration.Second)
@@ -47,13 +51,16 @@ class TimeTestCase(unittest.TestCase):
         self.assertEqual(t, u)
 
     def test_datetime_conversion(self):
+        localTZ = datetime.datetime.now(datetime.timezone.utc).astimezone().tzinfo
+
         # create a datetime from UTC, and convert it to localtime
-        d = datetime.datetime.fromisoformat(
-            "2019-11-02T23:12:13.000014+00:00"
-        ).astimezone(None)
-        t = m.Time(d)
-        self.assertEqual(t, m.Time.Parse("2019-11-02T23:12:13.000014Z"))
-        self.assertEqual(d, t.ToDateTime().astimezone(None))
+        dt = datetime.datetime.fromisoformat(
+            "2019-11-02T23:12:13.000014+02:00"
+        ).astimezone(localTZ)
+        t = m.Time.FromDateTime(dt)
+        self.assertEqual(t, m.Time.Parse("2019-11-02T21:12:13.000014Z"))
+        dtRes = t.ToDateTime()
+        self.assertEqual(dt, dtRes)
 
     def test_time_overflow(self):
         with self.assertRaises(RuntimeError):

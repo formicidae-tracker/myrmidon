@@ -2526,18 +2526,6 @@ class Time:
             Time: A Time representing +∞
 
         """
-    @staticmethod
-    def FromDateTime(dt: object) -> Time:
-        """FromDateTime(dt: object) -> fort_myrmidon._fort_myrmidon.Time
-
-
-        Initialize from a :class:`datetime.datetime` object.
-
-        Creates a Time from a :class:`datetime.datetime`.
-        Args:
-            dt (datetime.datetime): a naïve :class:`datetime.datetime`.
-
-        """
     def IsForever(self) -> bool:
         """IsForever(self: fort_myrmidon._fort_myrmidon.Time) -> bool
 
@@ -2661,16 +2649,6 @@ class Time:
         Raises:
             Error: if the result would not fit in a Duration (i.e. if one
                 of the :meth:`Time.IsInfinite`)
-
-        """
-    def ToDateTime(self) -> object:
-        """ToDateTime(self: fort_myrmidon._fort_myrmidon.Time) -> object
-
-
-        Converts to a :class:`datetime.datetime` in local timezone
-
-        Returns:
-            datetime.datetime: a naive datetime.datetime object.
 
         """
     def ToTimestamp(self) -> float:
