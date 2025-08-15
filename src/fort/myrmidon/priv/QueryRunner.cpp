@@ -386,6 +386,7 @@ void QueryRunner::RunMultithread(
 		OrderedCollisionData v;
 		queue.pop(v);
 		if (std::get<1>(v) == nullptr && std::get<2>(v) == nullptr) {
+			// the signal that our process have finished the graph.
 			break;
 		}
 		auto time = std::get<1>(v)->FrameTime;
@@ -397,14 +398,22 @@ void QueryRunner::RunMultithread(
 		try {
 			finalizer(v);
 		} catch (...) {
+			// this will close the graph input node, and ultimately all the
+			// nodes and the graph.wait_for_all() call will terminate.
 			loader->Stop();
+			// draining the queue to avoid deadlock on join. Since the queue is
+			// now bounded. Some of the nodes may be blocking on queue.push if
+			// we do not fully drain it so graph.wait_for_all() can terminate.
+			while (queue.try_pop(v)) {
+			}
+			// no we are good to join safely.
 			go.join();
 			throw;
 		}
 	}
 
-	// we wait for our thread to finish, should be the case as it is the one
-	// closing the queue
+	// we wait for our thread to finish, should be the case as the queue is
+	// fully drained if we reach here.
 	go.join();
 }
 
