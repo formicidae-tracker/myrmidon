@@ -294,7 +294,7 @@ if(BUILD_PYTHON OR BUILD_DOCS)
 	)
 	FetchContent_MakeAvailable(pybind11)
 
-	add_subdirectory(bindings/python/src)
+	add_subdirectory(bindings/python/src/fort_myrmidon)
 	if(FORT_MYRMIDON_MAIN)
 		add_custom_target(
 			py_fort_myrmidon-tests
@@ -303,12 +303,10 @@ if(BUILD_PYTHON OR BUILD_DOCS)
 				PYTHONPATH=${PROJECT_BINARY_DIR}/bindings/python/src
 				${PYTHON_EXECUTABLE} -m pytest
 			WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/bindings/python
-			DEPENDS fort_myrmidon fort_myrmidon_utestdata
+			DEPENDS setup_fort_myrmidon_py_module fort_myrmidon_utestdata
 		)
 
 		add_dependencies(check py_fort_myrmidon-tests)
-		add_dependencies(fort_myrmidon fort-myrmidon)
-		add_dependencies(fort_myrmidon_utestdata fort-myrmidon-utestdata)
 	endif(FORT_MYRMIDON_MAIN)
 endif(BUILD_PYTHON OR BUILD_DOCS)
 

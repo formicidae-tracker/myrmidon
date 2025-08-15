@@ -37,7 +37,7 @@ include(FetchContent)
 FetchContent_Declare(myrmidon URL ${PROJECT_SOURCE_DIR}/myrmidon)
 FetchContent_MakeAvailable(myrmidon)
 
-add_subdirectory(src)
+add_subdirectory(src/fort_myrmidon)
 
 if(FORT_MYRMIDON_PYTHON_MAIN)
 	install(SCRIPT ${PROJECT_SOURCE_DIR}/PostInstallWheel.cmake)
