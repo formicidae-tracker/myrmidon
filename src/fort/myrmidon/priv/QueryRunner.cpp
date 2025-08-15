@@ -1,7 +1,8 @@
 #include "QueryRunner.hpp"
 
-#include <fort/hermes/Error.hpp>
-#include <fort/hermes/FileContext.hpp>
+#include <sys/sysinfo.h>
+#include <sys/types.h>
+
 #include <iomanip>
 #include <ios>
 #include <memory>
@@ -12,7 +13,8 @@
 #include <tbb/concurrent_queue.h>
 #include <tbb/flow_graph.h>
 
-#include <fort/myrmidon/utils/Defer.hpp>
+#include <fort/hermes/Error.hpp>
+#include <fort/hermes/FileContext.hpp>
 
 #include "CollisionSolver.hpp"
 #include "Experiment.hpp"
@@ -24,6 +26,7 @@
 #include "fort/myrmidon/priv/TrackingDataDirectoryError.hpp"
 #include "fort/myrmidon/types/Collision.hpp"
 #include "fort/myrmidon/types/Reporter.hpp"
+#include <fort/myrmidon/utils/Defer.hpp>
 
 #include <fort/myrmidon/myrmidon-config.h>
 
@@ -306,7 +309,16 @@ void QueryRunner::RunMultithread(
 ) {
 	// we use a queue to retrieve all data in the main thread
 	tbb::concurrent_bounded_queue<OrderedCollisionData> queue;
-
+	// a very high amount compaired to the limiter, but negligible in memory.
+	// What happend next only depends on the user regarding memory management
+	queue.set_capacity(8 * 1024);
+#ifndef NDEBUG
+	std::cerr << "Upper bound on queue memory is ~"
+	          << ((queue.capacity() * (4 + args.ZoneDepth) * sizeof(double) *
+	               experiment.Identifier()->Ants().size()) /
+	              1024.0 / 1024.0)
+	          << "MiB." << std::endl;
+#endif
 	auto loader = std::make_shared<DataLoader>(experiment, args);
 
 	tbb::flow::graph g;
@@ -322,18 +334,18 @@ void QueryRunner::RunMultithread(
 	    },
 	};
 
-	tbb::flow::limiter_node<RawData> limiter{
+	tbb::flow::limiter_node<RawData> limiter_raw{
 	    g,
-	    4 * std::thread::hardware_concurrency(),
+	    16 * std::thread::hardware_concurrency(),
 	};
-	tbb::flow::make_edge(input, limiter);
+	tbb::flow::make_edge(input, limiter_raw);
 
 	tbb::flow::function_node<RawData, OrderedCollisionData> compute{
 	    g,
 	    tbb::flow::unlimited,
 	    QueryRunner::computeData(experiment, args),
 	};
-	tbb::flow::make_edge(limiter, compute);
+	tbb::flow::make_edge(limiter_raw, compute);
 
 	tbb::flow::sequencer_node<OrderedCollisionData> ordering{
 	    g,
@@ -352,10 +364,11 @@ void QueryRunner::RunMultithread(
 	    };
 
 	tbb::flow::make_edge(ordering, finalize);
+
 #ifdef MYRMIDON_TBB_HAVE_DECREMENTER
-	tbb::flow::make_edge(finalize, limiter.decrementer());
+	tbb::flow::make_edge(finalize, limiter_raw.decrementer());
 #else
-	tbb::flow::make_edge(finalize, limiter.decrement);
+	tbb::flow::make_edge(finalize, limiter_raw.decrement);
 #endif
 
 	// we spawn a child process that will feed and close the queue
