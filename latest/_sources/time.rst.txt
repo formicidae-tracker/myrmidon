@@ -104,41 +104,25 @@ Python convertion to and from **datetime.datetime**
 :py:class:`fort_myrmidon.Time` objects can be created from and
 converted to :class:`datetime.datetime`:
 
-* :py:meth:`fort_myrmidon.Time.__init__`
+* :py:meth:`fort_myrmidon.Time.FromDateTime`
 
   .. code-block:: python
 
 	 # equivalent to m.Time.Now()
-	 m.Time(datetime.utcnow()) # use a naïve object
-	 m.Time(datetime.now(timezone.UTC).astimezone(tz=None)) # transform it to a naïve object
+	 m.Time.FromDateTime(datetime.utcnow()) # use a naïve object
+	 m.Time.FromDateTime(datetime.now()) # transform it to a naïve object
 
 * :py:meth:`fort_myrmidon.Time.ToDateTime`
 
     .. code-block:: python
 
-	 # equivalent to datetime.utcnow()
-	 m.Time.Now().ToDateTime()
+	 # equivalent to datetime.now()
+	 m.Time.Now().ToDateTime() # returns the current time with local timezone
 
-.. warning::
+.. note::
 
-
-   As cpython and c++17 lacks supports for timezone, these
-   :py:class:`datetime.datetime` objects are treated as naïve objects,
-   i.e. object wihtout an associated timezone, and assumed to be in
-   local time. On the contrary, :cpp:class:`fort::Time` uses only UTC
-   time. It means that:
-
-   * :py:meth:`fort_myrmidon.Time.ToDateTime`, will return values
-     that differs from one can read from the
-     :py:meth:`fort_myrmidon.Time.__str__` if not careful to take
-     into account the local timezone.
-
-   * before passing any :py:class:`datetime.datetime` object to
-     :py:meth:`fort_myrmidon.Time.__init__`, one must ensure they are
-     converted to localtime first. One could use
-     :py:meth:`datetime.datetime.astimezone` with ``tz=None`` to do
-     that.
-
+   In previous version, exlicit transformation to naïve datetime object was
+   required. Now the bindings take care of any needed transformation.
 
 Example
 +++++++

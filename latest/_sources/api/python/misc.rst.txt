@@ -25,3 +25,10 @@ Colors in **fort_myrmidon** are simply :obj:`Tuple[int,int,int]`.
 
 .. autofunction:: fort_myrmidon.DefaultPalette
 .. autofunction:: fort_myrmidon.DefaultPaletteColor
+
+
+ZonePriority
+++++++++++++
+
+.. autoclass:: fort_myrmidon.ZonePriority
+   :members:

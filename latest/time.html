@@ -214,40 +214,26 @@ number of seconds from the epoch, as returned by <a class="reference external" h
 <p><a class="reference internal" href="api/python/time.html#fort_myrmidon.Time" title="fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">fort_myrmidon.Time</span></code></a> objects can be created from and
 converted to <a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a>:</p>
 <ul>
-<li><p><a class="reference internal" href="api/python/time.html#fort_myrmidon.Time.__init__" title="fort_myrmidon.Time.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fort_myrmidon.Time.__init__()</span></code></a></p>
+<li><p><a class="reference internal" href="api/python/time.html#fort_myrmidon.Time.FromDateTime" title="fort_myrmidon.Time.FromDateTime"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fort_myrmidon.Time.FromDateTime()</span></code></a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># equivalent to m.Time.Now()</span>
-<span class="n">m</span><span class="o">.</span><span class="n">Time</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">())</span> <span class="c1"># use a naïve object</span>
-<span class="n">m</span><span class="o">.</span><span class="n">Time</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">UTC</span><span class="p">)</span><span class="o">.</span><span class="n">astimezone</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span> <span class="c1"># transform it to a naïve object</span>
+<span class="n">m</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">FromDateTime</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">())</span> <span class="c1"># use a naïve object</span>
+<span class="n">m</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">FromDateTime</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span> <span class="c1"># transform it to a naïve object</span>
 </pre></div>
 </div>
 </li>
 <li><p><a class="reference internal" href="api/python/time.html#fort_myrmidon.Time.ToDateTime" title="fort_myrmidon.Time.ToDateTime"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fort_myrmidon.Time.ToDateTime()</span></code></a></p>
 <blockquote>
-<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># equivalent to datetime.utcnow()</span>
-<span class="n">m</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">Now</span><span class="p">()</span><span class="o">.</span><span class="n">ToDateTime</span><span class="p">()</span>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># equivalent to datetime.now()</span>
+<span class="n">m</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">Now</span><span class="p">()</span><span class="o">.</span><span class="n">ToDateTime</span><span class="p">()</span> <span class="c1"># returns the current time with local timezone</span>
 </pre></div>
 </div>
 </div></blockquote>
 </li>
 </ul>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>As cpython and c++17 lacks supports for timezone, these
-<a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a> objects are treated as naïve objects,
-i.e. object wihtout an associated timezone, and assumed to be in
-local time. On the contrary, <a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort4TimeE" title="fort::Time"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::Time</span></code></a> uses only UTC
-time. It means that:</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="api/python/time.html#fort_myrmidon.Time.ToDateTime" title="fort_myrmidon.Time.ToDateTime"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fort_myrmidon.Time.ToDateTime()</span></code></a>, will return values
-that differs from one can read from the
-<code class="xref py py-meth docutils literal notranslate"><span class="pre">fort_myrmidon.Time.__str__()</span></code> if not careful to take
-into account the local timezone.</p></li>
-<li><p>before passing any <a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a> object to
-<a class="reference internal" href="api/python/time.html#fort_myrmidon.Time.__init__" title="fort_myrmidon.Time.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fort_myrmidon.Time.__init__()</span></code></a>, one must ensure they are
-converted to localtime first. One could use
-<a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime.astimezone" title="(in Python v3.13)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">datetime.datetime.astimezone()</span></code></a> with <code class="docutils literal notranslate"><span class="pre">tz=None</span></code> to do
-that.</p></li>
-</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In previous version, exlicit transformation to naïve datetime object was
+required. Now the bindings take care of any needed transformation.</p>
 </div>
 </section>
 <section id="id1">
