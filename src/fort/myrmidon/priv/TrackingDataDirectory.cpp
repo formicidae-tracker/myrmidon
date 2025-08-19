@@ -757,11 +757,11 @@ TrackingDataDirectory::OpenFromFiles(
 
 	for (const auto &[frameID, s] : closeUpFiles) {
 		auto [filepath, filter] = s;
-		if (frameID > endFrame) {
+		if (frameID > endFrame || frameID < startFrame) {
 			errors.push_back(std::make_unique<NoKnownAcquisitionTimeFor>(
 			    "could not access acquisition time for '" + filepath.string() +
-			        "': last readable TrackingFrameID is " +
-			        std::to_string(endFrame),
+			        "': frame range is [" + std::to_string(startFrame) + "; " +
+			        std::to_string(endFrame) + "]",
 			    filepath
 			));
 			logger.Error(

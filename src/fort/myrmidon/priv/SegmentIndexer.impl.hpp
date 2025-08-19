@@ -95,9 +95,12 @@ inline std::pair<FrameReference, T> SegmentIndexer<T>::Find(uint64_t frameID
 ) const {
 	auto fi = d_byID.lower_bound(frameID);
 	if (fi == d_byID.end()) {
-		std::ostringstream os;
-		os << frameID << " is too small";
-		throw cpptrace::out_of_range(os.str());
+		std::ostringstream oss;
+		oss << "Frame ID=" << frameID << " is too small";
+		if (d_byID.empty() == false) {
+			oss << " (min:" << d_byID.begin()->first << ")";
+		}
+		throw cpptrace::out_of_range(oss.str());
 	}
 	return *fi->second;
 }
