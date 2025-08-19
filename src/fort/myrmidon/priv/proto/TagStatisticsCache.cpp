@@ -53,13 +53,13 @@ TagStatisticsCache::Load(const fs::path & tddAbsolutePath) {
 	ReadWriter::Read(tddAbsolutePath / CACHE_PATH ,
 	                 [&res](const pb::TagStatisticsCacheHeader & pb) {
 		                 if ( pb.version() != CACHE_VERSION) {
-			                 throw std::runtime_error("Mismatched cache version "
+			                 throw cpptrace::runtime_error("Mismatched cache version "
 			                                          + std::to_string(pb.version())
 			                                          + " (expected:"
 			                                          + std::to_string(CACHE_VERSION));
 		                 }
 		                 if ( pb.has_start() == false || pb.has_end() == false ){
-			                 throw std::runtime_error("Missing start or end time");
+			                 throw cpptrace::runtime_error("Missing start or end time");
 		                 }
 
 		                 res.Start = Time::FromTimestamp(pb.start());

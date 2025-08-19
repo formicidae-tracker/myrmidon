@@ -3,6 +3,8 @@
 #include <functional>
 #include <vector>
 
+#include <cpptrace/cpptrace.hpp>
+
 #include <fort/time/Time.hpp>
 
 #include <fort/myrmidon/types/AntInteraction.hpp>
@@ -172,7 +174,7 @@ struct VideoSegment {
 	 * @param list the VideoSegments to associate data with
 	 * @param begin start iterator of the sequence to match
 	 * @param end past over end iterator of the sequence to match
-	 * @throws std::invalid_argument if all VideoSegment in list are
+	 * @throws cpptrace::invalid_argument if all VideoSegment in list are
 	 * not from the same Space.
 	 */
 	template <typename IterType>
@@ -259,7 +261,7 @@ inline void VideoSegment::Match(List &list, IterType begin, IterType end) {
 		        return s.Space != list.front().Space;
 	        }
 	    ) != list.end()) {
-		throw std::invalid_argument(
+		throw cpptrace::invalid_argument(
 		    "This implementation only supports matching of segment from the "
 		    "same space"
 		);

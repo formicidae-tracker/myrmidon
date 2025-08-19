@@ -32,7 +32,7 @@ TrackingDataDirectory::Ptr TDDCache::Load(const fs::path & absoluteFilePath ,
 	ReadWriter::Read(cachePath,
 	                 [&start,&end,URI,monoID](const pb::TrackingDataDirectory & pb) {
 		                 if ( pb.cacheversion() != CACHE_VERSION) {
-			                 throw std::runtime_error("Cache file has wrong version '"
+			                 throw cpptrace::runtime_error("Cache file has wrong version '"
 			                                          + std::to_string(pb.cacheversion())
 			                                          + "' expected '"
 			                                          + std::to_string(CACHE_VERSION)
@@ -44,7 +44,7 @@ TrackingDataDirectory::Ptr TDDCache::Load(const fs::path & absoluteFilePath ,
 	                 [=](const pb::TrackingDataDirectoryFileLine & line) {
 		                 if ( line.has_movie() == true ) {
 			                 if ( line.has_moviestarttime() == false ) {
-				                 throw std::runtime_error("Movie is missing start time");
+				                 throw cpptrace::runtime_error("Movie is missing start time");
 			                 }
 			                 auto movieStartTime = IOUtils::LoadTime(line.moviestarttime(),monoID);
 			                 auto ms = IOUtils::LoadMovieSegment(line.movie(),

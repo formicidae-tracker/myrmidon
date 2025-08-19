@@ -113,7 +113,7 @@ struct ROI {
 std::unique_ptr<video::Frame>
 GetROI(const video::Frame &image, const ROI &roi) {
 	if (image.Format != AV_PIX_FMT_GRAY8) {
-		throw std::invalid_argument{
+		throw cpptrace::invalid_argument{
 		    std::string("Only ") + av_get_pix_fmt_name(AV_PIX_FMT_GRAY8) +
 		    " is supported"};
 	}
@@ -184,7 +184,7 @@ void CloseUpWriter::SaveExpectedCloseUp(
 	}
 
 	if (index < 0) {
-		throw std::runtime_error("could not find ant " + std::to_string(antID));
+		throw cpptrace::runtime_error("could not find ant " + std::to_string(antID));
 	}
 
 	Eigen::Vector2d position;

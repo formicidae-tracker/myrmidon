@@ -1,15 +1,17 @@
+#include <memory>
+#include <stdexcept>
+#include <string>
+
+#include <cpptrace/cpptrace.hpp>
+
 #include "FrameDrawer.hpp"
 
 #include "Config.hpp"
 
 #include <fort/myrmidon/priv/Isometry2D.hpp>
 
-#include <memory>
-#include <stdexcept>
-
 #include <fort/video/Frame.hpp>
 #include <fort/video/TypesIO.hpp>
-#include <string>
 
 namespace fort {
 namespace myrmidon {
@@ -32,7 +34,7 @@ void FrameDrawer::Draw(video::Frame &buffer, const IdentifiedFrame &frame)
 	};
 
 	if (buffer.Size != wantedResolution || buffer.Format != AV_PIX_FMT_GRAY8) {
-		throw std::invalid_argument{
+		throw cpptrace::invalid_argument{
 		    "Output buffer must be a " + std::to_string(wantedResolution) +
 		    " buffer GRAY8 image, got a " + std::to_string(buffer.Size) + " " +
 		    std::to_string(buffer.Format) + " buffer"};

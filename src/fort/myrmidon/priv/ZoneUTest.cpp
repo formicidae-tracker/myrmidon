@@ -78,13 +78,13 @@ TEST_F(ZoneUTest,DefinitionAreTimeValidObject) {
 			zone->AddDefinition(shapes,
 			                    Time::FromTimeT(0),
 			                    Time::Forever());
-		},std::runtime_error);
+		},cpptrace::runtime_error);
 
 	definition->SetStart(Time::FromTimeT(1));
 
 	EXPECT_THROW({
 			definition->SetEnd(Time::FromTimeT(0));
-		},std::invalid_argument);
+		},cpptrace::invalid_argument);
 
 	EXPECT_NO_THROW({
 			definition->SetEnd(Time::FromTimeT(2));

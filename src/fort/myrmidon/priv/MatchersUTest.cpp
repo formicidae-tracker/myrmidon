@@ -225,7 +225,7 @@ TEST_F(MatchersUTest, AngleMatcher) {
 
 InteractionTypes BuildTypes(const std::vector<uint32_t> &types) {
 	if ((types.size() % 2) != 0) {
-		throw std::invalid_argument("even number of types");
+		throw cpptrace::invalid_argument("even number of types");
 	}
 	InteractionTypes res(types.size() / 2, 2);
 	for (size_t i = 0; i < types.size() / 2; ++i) {

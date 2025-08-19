@@ -58,20 +58,18 @@ std::string Experiment::AddTrackingDataDirectory(
 ) {
 	auto fi = d_p->Get().Spaces().find(spaceID);
 	if (fi == d_p->Get().Spaces().end()) {
-		throw std::out_of_range("Unknown SpaceID " + std::to_string(spaceID));
+		throw cpptrace::out_of_range(
+		    "Unknown SpaceID " + std::to_string(spaceID)
+		);
 	}
 	priv::TrackingDataDirectory::Ptr tdd;
 	FixableErrorList                 errors;
 	bool                             fixCorruptedData = args.FixCorruptedData;
-	try {
-		std::tie(tdd, errors) = priv::TrackingDataDirectory::Open(
-		    filepath,
-		    d_p->Get().Basedir(),
-		    std::move(args)
-		);
-	} catch (const std::exception &e) {
-		throw std::runtime_error(e.what());
-	}
+	std::tie(tdd, errors) = priv::TrackingDataDirectory::Open(
+	    filepath,
+	    d_p->Get().Basedir(),
+	    std::move(args)
+	);
 	if (errors.empty() == false && fixCorruptedData == false) {
 		throw FixableErrors(std::move(errors));
 	}
@@ -97,7 +95,7 @@ void Experiment::DeleteAnt(AntID antID) {
 		d_p->DeleteAnt(antID);
 	} catch (const priv::AlmostContiguousIDContainer<AntID, priv::Ant>::
 	             UnmanagedObject &) {
-		throw std::out_of_range("Unknown AntID " + std::to_string(antID));
+		throw cpptrace::out_of_range("Unknown AntID " + std::to_string(antID));
 	}
 }
 
@@ -112,7 +110,7 @@ void Experiment::DeleteIdentification(const Identification::Ptr &identification
 	try {
 		d_p->DeleteIdentification(identification);
 	} catch (const priv::Identifier::UnmanagedIdentification &e) {
-		throw std::invalid_argument(e.what());
+		throw cpptrace::invalid_argument(e.what());
 	}
 }
 
@@ -124,7 +122,7 @@ Experiment::FreeIdentificationRangeAt(TagID tagID, const Time &time) const {
 		std::ostringstream oss;
 		oss << fort::myrmidon::FormatTagID(tagID) << " identifies an Ant at "
 		    << time;
-		throw std::runtime_error(oss.str());
+		throw cpptrace::runtime_error(oss.str());
 	}
 	return {start, end};
 }
@@ -178,7 +176,7 @@ void Experiment::SetMeasurementTypeName(
 ) {
 	auto fi = d_p->Get().MeasurementTypes().find(mTypeID);
 	if (fi == d_p->Get().MeasurementTypes().end()) {
-		throw std::out_of_range(
+		throw cpptrace::out_of_range(
 		    "Unknown MeasurementTypeID " + std::to_string(mTypeID)
 		);
 	}
@@ -211,7 +209,7 @@ void Experiment::SetAntShapeTypeName(
 ) {
 	auto fi = d_p->Get().AntShapeTypes().find(antShapeTypeID);
 	if (fi == d_p->Get().AntShapeTypes().end()) {
-		throw std::out_of_range(
+		throw cpptrace::out_of_range(
 		    "Unknown AntShapeTypeID " + std::to_string(antShapeTypeID)
 		);
 	}

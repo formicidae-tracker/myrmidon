@@ -49,7 +49,7 @@ TEST_F(MovieSegmentUTest, CanResolveFrameMatching) {
 		        offsets
 		    );
 	    },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 	EXPECT_NO_THROW({
 		ms = std::make_shared<MovieSegment>(
@@ -89,7 +89,7 @@ TEST_F(MovieSegmentUTest, CanResolveFrameMatching) {
 	EXPECT_EQ(1278, ms->ToTrackingFrameID(42));
 	EXPECT_EQ(1336, ms->ToTrackingFrameID(100));
 
-	EXPECT_THROW({ ms->ToTrackingFrameID(101); }, std::out_of_range);
+	EXPECT_THROW({ ms->ToTrackingFrameID(101); }, cpptrace::out_of_range);
 
 	EXPECT_EQ(0, ms->ToMovieFrameID(1234));
 	EXPECT_EQ(9, ms->ToMovieFrameID(1243));
@@ -100,9 +100,9 @@ TEST_F(MovieSegmentUTest, CanResolveFrameMatching) {
 	EXPECT_EQ(42, ms->ToMovieFrameID(1278));
 	EXPECT_EQ(100, ms->ToMovieFrameID(1336));
 
-	EXPECT_THROW({ ms->ToMovieFrameID(1233); }, std::out_of_range);
+	EXPECT_THROW({ ms->ToMovieFrameID(1233); }, cpptrace::out_of_range);
 
-	EXPECT_THROW({ ms->ToMovieFrameID(1337); }, std::out_of_range);
+	EXPECT_THROW({ ms->ToMovieFrameID(1337); }, cpptrace::out_of_range);
 }
 
 TEST_F(MovieSegmentUTest, CanBeParsed) {
@@ -147,7 +147,7 @@ TEST_F(MovieSegmentUTest, CanBeParsed) {
 		    f << "a 1234" << std::endl;
 		    MovieSegment::Open(0, movieFile, badMatchFile, "bar");
 	    },
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 
 	EXPECT_THROW(
@@ -157,7 +157,7 @@ TEST_F(MovieSegmentUTest, CanBeParsed) {
 		    f << "23 b" << std::endl;
 		    MovieSegment::Open(0, movieFile, badMatchFile, "bar");
 	    },
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 
 	EXPECT_THROW(
@@ -169,7 +169,7 @@ TEST_F(MovieSegmentUTest, CanBeParsed) {
 		        "bar"
 		    );
 	    },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 
 	EXPECT_THROW(
@@ -181,7 +181,7 @@ TEST_F(MovieSegmentUTest, CanBeParsed) {
 		        "bar"
 		    );
 	    },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 }
 

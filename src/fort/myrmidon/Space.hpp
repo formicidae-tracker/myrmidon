@@ -70,7 +70,7 @@ public:
 	 *
 	 * @param zoneID the ZoneID of the Zone to delete.
 	 *
-	 * @throws std::out_of_range if zoneID is not the ID of a Zone owned by this
+	 * @throws cpptrace::out_of_range if zoneID is not the ID of a Zone owned by this
 	 * Space.
 	 */
 	void DeleteZone(ZoneID zoneID);
@@ -90,7 +90,7 @@ public:
 	 * @return a pair of an absolute file path to the movie file, and
 	 *         the wanted movie frame number.
 	 *
-	 * @throws std::out_of_range if a movie frame for the specified
+	 * @throws cpptrace::out_of_range if a movie frame for the specified
 	 *         Time could not be found.
 	 */
 	std::pair<std::string, uint64_t> LocateMovieFrame(const Time &time) const;

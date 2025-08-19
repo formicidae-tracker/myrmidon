@@ -173,7 +173,7 @@ TEST_F(TagCloseUpUTest, ClassInvariants) {
 		        }
 		    );
 	    },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 
 	EXPECT_THROW(
@@ -192,7 +192,7 @@ TEST_F(TagCloseUpUTest, ClassInvariants) {
 		        }
 		    );
 	    },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 }
 

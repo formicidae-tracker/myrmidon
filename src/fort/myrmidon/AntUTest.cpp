@@ -69,7 +69,7 @@ TEST_F(PublicAntUTest,AntHaveSortedIdentifications) {
 
 	EXPECT_EQ(a->IdentifiedAt(t2),2);
 
-	EXPECT_THROW(a->IdentifiedAt(t1.Add(-1)),std::runtime_error);
+	EXPECT_THROW(a->IdentifiedAt(t1.Add(-1)),cpptrace::runtime_error);
 }
 
 
@@ -101,11 +101,11 @@ TEST_F(PublicAntUTest,AntHaveStaticValue) {
 	EXPECT_VALUE_EQ(values.at(Time::SinceEver()),true);
 
 
-	EXPECT_THROW(a->GetValue("isDead",t),std::out_of_range);
+	EXPECT_THROW(a->GetValue("isDead",t),cpptrace::out_of_range);
 
-	EXPECT_THROW(a->SetValue("isDead",true,t),std::out_of_range);
-	EXPECT_THROW(a->SetValue("alive",42,t),std::runtime_error);
-	EXPECT_THROW(a->SetValue("alive",false,Time::Forever()),std::invalid_argument);
+	EXPECT_THROW(a->SetValue("isDead",true,t),cpptrace::out_of_range);
+	EXPECT_THROW(a->SetValue("alive",42,t),cpptrace::runtime_error);
+	EXPECT_THROW(a->SetValue("alive",false,Time::Forever()),cpptrace::invalid_argument);
 
 
 	EXPECT_NO_THROW(a->SetValue("alive",false,t));
@@ -117,7 +117,7 @@ TEST_F(PublicAntUTest,AntHaveStaticValue) {
 	EXPECT_VALUE_EQ(values.at(Time::SinceEver()),true);
 	EXPECT_VALUE_EQ(values.at(t),false);
 
-	EXPECT_THROW(a->GetValues("isDead"),std::out_of_range);
+	EXPECT_THROW(a->GetValues("isDead"),cpptrace::out_of_range);
 
 
 	EXPECT_VALUE_EQ(a->GetValue("alive",Time::SinceEver()),true);
@@ -125,8 +125,8 @@ TEST_F(PublicAntUTest,AntHaveStaticValue) {
 	EXPECT_VALUE_EQ(a->GetValue("alive",t),false);
 	EXPECT_VALUE_EQ(a->GetValue("alive",Time::Forever()),false);
 
-	EXPECT_THROW(a->DeleteValue("isDead",t),std::out_of_range);
-	EXPECT_THROW(a->DeleteValue("alive",t.Add(1)),std::out_of_range);
+	EXPECT_THROW(a->DeleteValue("isDead",t),cpptrace::out_of_range);
+	EXPECT_THROW(a->DeleteValue("alive",t.Add(1)),cpptrace::out_of_range);
 
 	EXPECT_NO_THROW(a->DeleteValue("alive",t));
 	EXPECT_VALUE_EQ(a->GetValue("alive",t),true);
@@ -155,7 +155,7 @@ TEST_F(PublicAntUTest,AntHaveVirtualShape) {
 	                                    Eigen::Vector2d(-1,-1),
 	                                    1,
 	                                    1);
-	EXPECT_THROW(a->AddCapsule(42,c1),std::invalid_argument);
+	EXPECT_THROW(a->AddCapsule(42,c1),cpptrace::invalid_argument);
 	EXPECT_NO_THROW(a->AddCapsule(1,c1));
 	EXPECT_NO_THROW(a->AddCapsule(1,c2));
 	EXPECT_NO_THROW(a->AddCapsule(2,c1)); // capsules can overlap
@@ -166,7 +166,7 @@ TEST_F(PublicAntUTest,AntHaveVirtualShape) {
 	EXPECT_EQ(a->Capsules()[2].second,c1); // they are the same shared object
 
 
-	EXPECT_THROW(a->DeleteCapsule(42),std::out_of_range);
+	EXPECT_THROW(a->DeleteCapsule(42),cpptrace::out_of_range);
 	EXPECT_NO_THROW(a->DeleteCapsule(1));
 
 	EXPECT_EQ(a->Capsules().size(),2);

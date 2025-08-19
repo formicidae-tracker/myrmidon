@@ -379,8 +379,8 @@ public:
 	 * @return a vector of tuple of AntID and time range where key is
 	 * equal to value.
 	 *
-	 * @throws std::out_of_range if key is not defined in Experiment
-	 * @throws std::invalid_argument if value is not of the right type for key
+	 * @throws cpptrace::out_of_range if key is not defined in Experiment
+	 * @throws cpptrace::invalid_argument if value is not of the right type for key
 	 */
 
 	static std::vector<std::tuple<AntID, Time, Time>> GetMetaDataKeyRanges(

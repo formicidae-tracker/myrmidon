@@ -180,7 +180,7 @@ public:
 
 	const FrameReferenceCache &ReferenceCache() const;
 
-	class ComputedRessourceUnavailable : public std::runtime_error {
+	class ComputedRessourceUnavailable : public cpptrace::runtime_error {
 	public:
 		ComputedRessourceUnavailable(const std::string &typeName) noexcept;
 		virtual ~ComputedRessourceUnavailable() noexcept;

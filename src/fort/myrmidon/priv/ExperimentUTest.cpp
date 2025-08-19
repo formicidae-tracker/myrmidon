@@ -1,3 +1,4 @@
+#include <cpptrace/exceptions.hpp>
 #include <gtest/gtest.h>
 
 #include "Ant.hpp"
@@ -73,7 +74,7 @@ TEST_F(ExperimentUTest, CanAddTrackingDataDirectory) {
 			    // Could not add wrong family to experiment
 			    e->AddTrackingDataDirectory(s, std::get<0>(artagData));
 		    },
-		    std::invalid_argument
+		    cpptrace::invalid_argument
 		);
 
 	} catch (const std::exception &e) {
@@ -211,7 +212,7 @@ TEST_F(ExperimentUTest, MeasurementEndToEnd) {
 		    // we can't create a new one with the same type
 		    e->CreateMeasurementType("foo", Measurement::HEAD_TAIL_TYPE);
 	    },
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 
 	EXPECT_THROW(
@@ -219,7 +220,7 @@ TEST_F(ExperimentUTest, MeasurementEndToEnd) {
 		    // we can't delete the default one
 		    e->DeleteMeasurementType(Measurement::HEAD_TAIL_TYPE);
 	    },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 
 	EXPECT_THROW(
@@ -227,7 +228,7 @@ TEST_F(ExperimentUTest, MeasurementEndToEnd) {
 		    // we can't delete an inexistant one
 		    e->DeleteMeasurementType(Measurement::HEAD_TAIL_TYPE + 1);
 	    },
-	    std::out_of_range
+	    cpptrace::out_of_range
 	);
 
 	EXPECT_THROW(
@@ -241,7 +242,7 @@ TEST_F(ExperimentUTest, MeasurementEndToEnd) {
 		        12.0
 		    ));
 	    },
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 
 	EXPECT_NO_THROW({ e->CreateMeasurementType("foo"); });
@@ -295,18 +296,20 @@ TEST_F(ExperimentUTest, MeasurementEndToEnd) {
 	EXPECT_FALSE(e->TrackingDataDirectoryIsDeletable(nest0->URI()));
 	EXPECT_THROW(
 	    { e->DeleteTrackingDataDirectory(nest0->URI()); },
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 
 	EXPECT_THROW(
 	    { e->SetMeasurement(defaultWithBadPath); },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 
-	EXPECT_THROW({ e->SetMeasurement(badType); }, std::out_of_range);
+	EXPECT_THROW({ e->SetMeasurement(badType); }, cpptrace::out_of_range);
 
-	std::vector<Measurement::ConstPtr> list =
-	    {goodCustom, goodDefault, defaultWithBadPath};
+	std::vector<Measurement::ConstPtr> list = {
+	    goodCustom,
+	    goodDefault,
+	    defaultWithBadPath};
 	ListAllMeasurements(e->Measurements(), list);
 	EXPECT_EQ(list.size(), 2);
 	auto listContains = [&list](const Measurement::ConstPtr &m) {
@@ -365,8 +368,7 @@ TEST_F(ExperimentUTest, MeasurementEndToEnd) {
 	    {nest1, 1, 0, 1},
 	    {nest1, 1, 0, 2},
 	    {nest1, 1, 1, 1},
-	    {nest1, 1, 1, 2}
-	};
+	    {nest1, 1, 1, 2}};
 	std::vector<std::string> paths;
 	paths.reserve(mData.size());
 
@@ -441,7 +443,7 @@ TEST_F(ExperimentUTest, MeasurementEndToEnd) {
 		        1
 		    );
 	    },
-	    std::out_of_range
+	    cpptrace::out_of_range
 	);
 
 	auto antLast = e->CreateAnt();
@@ -472,7 +474,7 @@ TEST_F(ExperimentUTest, MeasurementEndToEnd) {
 		    e->DeleteMeasurement("none/frames/23/closeups/0x01a/measurements/1"
 		    );
 	    },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 
 	EXPECT_THROW(
@@ -481,7 +483,7 @@ TEST_F(ExperimentUTest, MeasurementEndToEnd) {
 		        "nest.0000/frames/1/closeups/0x01a/measurements/1"
 		    );
 	    },
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 
 	EXPECT_THROW(
@@ -490,7 +492,7 @@ TEST_F(ExperimentUTest, MeasurementEndToEnd) {
 		        "nest.0000/frames/1/closeups/0x015/measurements/34"
 		    );
 	    },
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 
 	EXPECT_NO_THROW({
@@ -503,7 +505,7 @@ TEST_F(ExperimentUTest, MeasurementEndToEnd) {
 		    // contains a tracking data directory
 		    e->DeleteSpace(s->ID());
 	    },
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 
 	EXPECT_THROW(
@@ -511,7 +513,7 @@ TEST_F(ExperimentUTest, MeasurementEndToEnd) {
 		    // contains 2 measurements
 		    e->DeleteTrackingDataDirectory(nest0->URI());
 	    },
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 
 	EXPECT_THROW(
@@ -519,7 +521,7 @@ TEST_F(ExperimentUTest, MeasurementEndToEnd) {
 		    // It contains data !!
 		    e->DeleteMeasurementType(Measurement::HEAD_TAIL_TYPE + 1);
 	    },
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 
 	EXPECT_NO_THROW({
@@ -592,7 +594,7 @@ TEST_F(ExperimentUTest, TooSmallHeadTailMeasurementAreNotPermitted) {
 	ComputedMeasurement::List lengths;
 	ASSERT_NO_THROW({ e->ComputeMeasurementsForAnt(lengths, 1, 1); });
 	ASSERT_EQ(lengths.size(), 0);
-	EXPECT_THROW({ e->SetMeasurement(m); }, std::invalid_argument);
+	EXPECT_THROW({ e->SetMeasurement(m); }, cpptrace::invalid_argument);
 	ASSERT_NO_THROW({ e->ComputeMeasurementsForAnt(lengths, 1, 1); });
 	// measurement should not have been stored as it fails
 	EXPECT_EQ(lengths.size(), 0);
@@ -617,7 +619,7 @@ TEST_F(ExperimentUTest, TooSmallHeadTailMeasurementAreNotPermitted) {
 	    Eigen::Vector2d(0, 0),
 	    1.0
 	);
-	EXPECT_THROW({ e->SetMeasurement(m); }, std::invalid_argument);
+	EXPECT_THROW({ e->SetMeasurement(m); }, cpptrace::invalid_argument);
 	ASSERT_NO_THROW({ e->ComputeMeasurementsForAnt(lengths, 1, 1); });
 	// old measurment should have been kept;
 	EXPECT_EQ(lengths.size(), 1);
@@ -655,7 +657,7 @@ TEST_F(ExperimentUTest, CornerWidthRatioForFamilies) {
 
 	EXPECT_THROW(
 	    { Experiment::CornerWidthRatio(tags::Family::Undefined); },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 }
 
@@ -677,12 +679,12 @@ TEST_F(ExperimentUTest, AntShapeTypeManipulation) {
 
 	EXPECT_THROW(
 	    { e->DeleteAntShapeType(bodyType->TypeID()); },
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 
 	EXPECT_THROW(
 	    { e->DeleteAntShapeType(antennaType->TypeID()); },
-	    std::out_of_range
+	    cpptrace::out_of_range
 	);
 }
 
@@ -696,7 +698,7 @@ TEST_F(ExperimentUTest, AntMetadataManipulation) {
 		ant->SetValue("group", std::string("nurse"), Time::SinceEver());
 	});
 	// should throw because ant has a value
-	EXPECT_THROW(group->SetDefaultValue(12), std::runtime_error);
+	EXPECT_THROW(group->SetDefaultValue(12), cpptrace::runtime_error);
 	// OK to change a column without any values
 	EXPECT_NO_THROW(alive->SetDefaultValue(0));
 	ASSERT_EQ(alive->Type(), ValueType::INT);
@@ -710,8 +712,8 @@ TEST_F(ExperimentUTest, AntMetadataManipulation) {
 		ageInDays->SetName("age-in-days");
 		group->SetName("social-group");
 	});
-	EXPECT_THROW(ant->GetValue("group", Time()), std::out_of_range);
-	EXPECT_THROW(ant->GetValue("age", Time()), std::out_of_range);
+	EXPECT_THROW(ant->GetValue("group", Time()), cpptrace::out_of_range);
+	EXPECT_THROW(ant->GetValue("age", Time()), cpptrace::out_of_range);
 	EXPECT_NO_THROW({
 		EXPECT_EQ(
 		    std::get<std::string>(ant->GetValue("social-group", Time())),
@@ -720,16 +722,16 @@ TEST_F(ExperimentUTest, AntMetadataManipulation) {
 		EXPECT_EQ(std::get<double>(ant->GetValue("age-in-days", Time())), 0.0);
 	});
 
-	EXPECT_THROW(e->DeleteMetaDataKey("social-group"), std::runtime_error);
-	EXPECT_THROW(e->RenameMetaDataKey("foo", "bar"), std::out_of_range);
+	EXPECT_THROW(e->DeleteMetaDataKey("social-group"), cpptrace::runtime_error);
+	EXPECT_THROW(e->RenameMetaDataKey("foo", "bar"), cpptrace::out_of_range);
 	EXPECT_THROW(
 	    e->RenameMetaDataKey("social-group", "age-in-days"),
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 	EXPECT_NO_THROW(e->RenameMetaDataKey("social-group", "group"));
 
 	EXPECT_NO_THROW(e->DeleteMetaDataKey("age-in-days"));
-	EXPECT_THROW(ant->GetValue("age-in-days", Time()), std::out_of_range);
+	EXPECT_THROW(ant->GetValue("age-in-days", Time()), cpptrace::out_of_range);
 }
 
 TEST_F(ExperimentUTest, AntCloning) {
@@ -746,8 +748,10 @@ TEST_F(ExperimentUTest, AntCloning) {
 	auto s = e->CreateSpace("nest");
 	e->AddTrackingDataDirectory(s, nest0);
 
-	std::vector<Ant::Ptr> ants =
-	    {e->CreateAnt(), e->CreateAnt(), e->CreateAnt()};
+	std::vector<Ant::Ptr> ants = {
+	    e->CreateAnt(),
+	    e->CreateAnt(),
+	    e->CreateAnt()};
 
 	e->SetMeasurement(std::make_shared<Measurement>(
 	    fs::path(nest0->URI()) / "frames" /
@@ -794,12 +798,12 @@ TEST_F(ExperimentUTest, AntCloning) {
 	    )
 	);
 
-	EXPECT_THROW(e->CloneAntShape(42, false, false), std::out_of_range);
+	EXPECT_THROW(e->CloneAntShape(42, false, false), cpptrace::out_of_range);
 	EXPECT_NO_THROW(e->CloneAntShape(2, false, false)
 	); // do nothing as second ant has no shape
 	EXPECT_THROW(
 	    e->CloneAntShape(3, true, true),
-	    std::runtime_error
+	    cpptrace::runtime_error
 	); // cannot work has ant 3 has no shape
 
 	EXPECT_NO_THROW(e->CloneAntShape(1, false, false));
@@ -852,14 +856,14 @@ TEST_F(ExperimentUTest, WillNotOpenFileWhichAreTooRecent) {
 	try {
 		Experiment::Open(path, {});
 		ADD_FAILURE() << "Opening " << path
-		              << " should have thrown a std::runtime_error";
-	} catch (const std::runtime_error &e) {
+		              << " should have thrown a cpptrace::runtime_error";
+	} catch (const cpptrace::runtime_error &e) {
 		std::ostringstream expected;
 		expected << "Unexpected myrmidon file version "
 		         << TestSetup::UTestData().FutureExperimentFile().Version
 		         << " in " << path
 		         << ": can only works with versions below or equal to 0.3.0";
-		EXPECT_EQ(expected.str(), e.what());
+		EXPECT_EQ(e.message(), expected.str());
 	}
 }
 
@@ -871,7 +875,7 @@ TEST_F(ExperimentUTest, CannotChangeDirectory) {
 		        "exp.myrmidon"
 		    );
 	    },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 }
 

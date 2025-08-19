@@ -17,14 +17,14 @@ IdentifierIF::~IdentifierIF() {}
 
 
 Identifier::UnmanagedIdentification::UnmanagedIdentification(const Identification & ident) noexcept
-	: std::runtime_error([&ident](){
+	: cpptrace::runtime_error([&ident](){
 		                     std::ostringstream os;
 		                     os << ident <<  " is not managed by this Experiment";
 		                     return os.str();
 	                     }()) {}
 
 Identifier::UnmanagedTag::UnmanagedTag(TagID ID) noexcept
-	: std::runtime_error([ID](){
+	: cpptrace::runtime_error([ID](){
 		                     std::ostringstream os;
 		                     os << "Tag:" << FormatTagID(ID) <<  " is not used in this Experiment";
 		                     return os.str();
@@ -57,12 +57,12 @@ AntPtr Identifier::CreateAnt(const AntShapeTypeContainerConstPtr & shapeTypes,
 void Identifier::DeleteAnt(fort::myrmidon::AntID ID) {
 	auto fi = Ants().find(ID);
 	if ( fi == Ants().end()) {
-		throw std::out_of_range("Unknown AntID " + std::to_string(ID));
+		throw cpptrace::out_of_range("Unknown AntID " + std::to_string(ID));
 	}
 	if ( fi->second->Identifications().empty() == false ) {
 		std::ostringstream os;
 		os <<"Cannot remove Ant{ID:" <<fi->second->FormattedID() << "}: it has some identifications left";
-		throw std::runtime_error(os.str());
+		throw cpptrace::runtime_error(os.str());
 	}
 
 	DeleteObject(ID);
@@ -81,7 +81,7 @@ Identification::Ptr Identifier::AddIdentification(const Identifier::Ptr & itself
                                                   const Time & end) {
 	auto fi = itself->Ants().find(ID);
 	if ( fi == itself->Ants().end() ) {
-		throw std::out_of_range("Unknown AntID " + std::to_string(ID));
+		throw cpptrace::out_of_range("Unknown AntID " + std::to_string(ID));
 	}
 	auto ant = fi->second;
 
@@ -247,7 +247,7 @@ bool Identifier::FreeRangeContaining(Time & start,
 		end = UpperUnidentifiedBound(tag,t);
 		start = LowerUnidentifiedBound(tag,t);
 		return true;
-	} catch ( const std::invalid_argument &) {
+	} catch ( const cpptrace::invalid_argument &) {
 		return false;
 	}
 }
@@ -343,7 +343,7 @@ Identification::ConstPtr Identifier::Compiled::Identify(TagID tagID, const Time 
 					return i;
 			}
 		}
-	} catch ( const std::out_of_range & ) {
+	} catch ( const cpptrace::out_of_range & ) {
 		return Identification::Ptr();
 	}
 	return Identification::Ptr();

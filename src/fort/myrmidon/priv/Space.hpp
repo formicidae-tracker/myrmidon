@@ -29,43 +29,46 @@ public:
 	typedef std::shared_ptr<const Space> ConstPtr;
 
 	// Exception sent when two TrackingDataDirectory overlaps in time.
-	class TDDOverlap : public std::domain_error {
+	class TDDOverlap : public cpptrace::domain_error {
 	public:
 		// Constructor from two TrackingDataDirectory
-		TDDOverlap(const TrackingDataDirectoryPtr & a,
-		           const TrackingDataDirectoryPtr & b) noexcept;
+		TDDOverlap(
+		    const TrackingDataDirectoryPtr &a, const TrackingDataDirectoryPtr &b
+		) noexcept;
 		// A Reference to the first TrackingDataDirectory
 		//
 		// @return a <TrackingDataDirectory::ConstPtr> to the first
 		//         <TrackingDataDirectory>
-		const TrackingDataDirectoryPtr & A() const;
+		const TrackingDataDirectoryPtr &A() const;
 		// A Reference to the second TrackingDataDirectory
 		//
 		// @return a <TrackingDataDirectory::ConstPtr> to the second
 		//         <TrackingDataDirectory>
-		const TrackingDataDirectoryPtr & B() const;
+		const TrackingDataDirectoryPtr &B() const;
+
 	private:
-		static std::string BuildWhat(const TrackingDataDirectoryPtr & a,
-		                             const TrackingDataDirectoryPtr & b) noexcept;
-		TrackingDataDirectoryPtr d_a,d_b;
+		static std::string BuildWhat(
+		    const TrackingDataDirectoryPtr &a, const TrackingDataDirectoryPtr &b
+		) noexcept;
+		TrackingDataDirectoryPtr d_a, d_b;
 	};
 
 	// Exception sent when the desired TrackingDataDirectory is unknown.
-	class UnmanagedTrackingDataDirectory : public std::invalid_argument {
+	class UnmanagedTrackingDataDirectory : public cpptrace::invalid_argument {
 	public:
 		// Constructor
 		UnmanagedTrackingDataDirectory(const std::string & URI) noexcept;
 	};
 
 	// Exception sent when the desired Space is unknown
-	class UnmanagedSpace : public std::out_of_range {
+	class UnmanagedSpace : public cpptrace::out_of_range {
 	public:
 		// Constructor
 		UnmanagedSpace(SpaceID spaceID) noexcept;
 	};
 
 	// Exception sent when the chosen name is invalid
-	class InvalidName : public std::invalid_argument {
+	class InvalidName : public cpptrace::invalid_argument {
 	public:
 		// Constructor
 		InvalidName(const std::string & name,
@@ -73,7 +76,7 @@ public:
 	};
 
 	// Exception sent when the Space is not empty
-	class SpaceNotEmpty : public std::runtime_error {
+	class SpaceNotEmpty : public cpptrace::runtime_error {
 	public :
 		SpaceNotEmpty(const Space & z);
 
@@ -83,7 +86,7 @@ public:
 
 	// Exception sent when the TrackingDataDirectory is used in
 	// another space
-	class TDDAlreadyInUse : public std::invalid_argument {
+	class TDDAlreadyInUse : public cpptrace::invalid_argument {
 	public:
 		TDDAlreadyInUse(const std::string & tddURI, SpaceID spaceID);
 	};

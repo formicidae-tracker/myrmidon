@@ -2,8 +2,12 @@
 
 #include <Eigen/Dense>
 
+#include <cpptrace/exceptions.hpp>
 #include <fort/myrmidon/priv/Isometry2D.hpp>
 #include <sstream>
+
+#include <cpptrace/cpptrace.hpp>
+#include <cpptrace/from_current.hpp>
 
 #define PRIV(Class) (static_cast<priv::Class *>(d_ptr))
 
@@ -197,7 +201,7 @@ Polygon::Polygon(const Vector2dList &vertices)
     : Shape(Type::POLYGON)
     , d_vertices(vertices) {
 	if (d_vertices.size() < 3) {
-		throw std::invalid_argument("A polygon needs at least 3 points");
+		throw cpptrace::invalid_argument("A polygon needs at least 3 points");
 	}
 }
 
@@ -208,16 +212,32 @@ size_t Polygon::Size() const {
 }
 
 const Eigen::Vector2d &Polygon::Vertex(size_t i) const {
-	return d_vertices.at(i);
+	CPPTRACE_TRY {
+		return d_vertices.at(i);
+	}
+	CPPTRACE_CATCH(const std::out_of_range &e) {
+		throw cpptrace::out_of_range(
+		    e.what(),
+		    cpptrace::raw_trace{cpptrace::raw_trace_from_current_exception()}
+		);
+	}
 }
 
 void Polygon::SetVertex(size_t i, const Eigen::Vector2d &v) {
-	d_vertices.at(i) = v;
+	CPPTRACE_TRY {
+		d_vertices.at(i) = v;
+	}
+	CPPTRACE_CATCH(const std::out_of_range &e) {
+		throw cpptrace::out_of_range(
+		    e.what(),
+		    cpptrace::raw_trace{cpptrace::raw_trace_from_current_exception()}
+		);
+	}
 }
 
 void Polygon::DeleteVertex(size_t i) {
 	if (i >= d_vertices.size()) {
-		throw std::out_of_range(
+		throw cpptrace::out_of_range(
 		    "index " + std::to_string(i) + " should be in [0;" +
 		    std::to_string(d_vertices.size()) + "["
 		);

@@ -29,7 +29,7 @@ struct ValueUtils  {
 	 * Gives the type name of a ValueType
 	 * @param type the type to query for its name
 	 * @return the conventional name for type
-	 * @throws std::invalid_argument if type is unknown
+	 * @throws cpptrace::invalid_argument if type is unknown
 	 */
 
 	static const std::string & TypeName(ValueType type);

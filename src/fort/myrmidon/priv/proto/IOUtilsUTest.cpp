@@ -908,11 +908,11 @@ TEST_F(IOUtilsUTest, MovieSegmentIO) {
 	// not using an absolute path as arguments
 	EXPECT_THROW(
 	    { IOUtils::SaveMovieSegment(&pbRes, *ms, "nest.0000"); },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 	EXPECT_THROW(
 	    { IOUtils::LoadMovieSegment(pbRes, "nest.0000", "nest.0000"); },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 }
 
@@ -1022,7 +1022,7 @@ TEST_F(IOUtilsUTest, TagCloseUpIO) {
 			    expected.clear_corners();
 			    IOUtils::LoadTagCloseUp(expected, basedir, resolver);
 		    },
-		    std::invalid_argument
+		    cpptrace::invalid_argument
 		);
 	}
 }

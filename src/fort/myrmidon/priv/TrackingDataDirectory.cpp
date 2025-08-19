@@ -110,14 +110,14 @@ TrackingDataDirectory::TrackingDataDirectory(
 		std::ostringstream os;
 		os << "TrackingDataDirectory: startFrame:" << d_startFrame
 		   << " >= endDate: " << d_endFrame;
-		throw std::invalid_argument(os.str());
+		throw cpptrace::invalid_argument(os.str());
 	}
 
 	if (startdate.Before(enddate) == false) {
 		std::ostringstream os;
 		os << "TrackingDataDirectory: startDate:" << startdate
 		   << " >= endDate: " << enddate;
-		throw std::invalid_argument(os.str());
+		throw cpptrace::invalid_argument(os.str());
 	}
 
 	for (const auto &[frameID, ref] : *referenceCache) {
@@ -172,13 +172,13 @@ void TrackingDataDirectory::CheckPaths(
     const fs::path &path, const fs::path &experimentRoot
 ) {
 	if (fs::is_directory(experimentRoot) == false) {
-		throw std::invalid_argument(
+		throw cpptrace::invalid_argument(
 		    "experiment root path " + experimentRoot.string() +
 		    " is not a directory"
 		);
 	}
 	if (fs::is_directory(path) == false) {
-		throw std::invalid_argument(path.string() + " is not a directory");
+		throw cpptrace::invalid_argument(path.string() + " is not a directory");
 	}
 }
 
@@ -194,7 +194,7 @@ TrackingDataDirectory::LookUpFiles(const fs::path &absoluteFilePath) {
 		iss.ignore(std::numeric_limits<std::streamsize>::max(), '.');
 		iss >> res;
 		if (!iss) {
-			throw std::runtime_error("Could not extract id in " + p.string());
+			throw cpptrace::runtime_error("Could not extract id in " + p.string());
 		}
 		return res;
 	};
@@ -313,7 +313,7 @@ void TrackingDataDirectory::BuildFrameReferenceCache(
 					}
 				} catch (const fort::hermes::EndOfFile &) {
 					if (iter != ToFind.end()) {
-						throw std::runtime_error(
+						throw cpptrace::runtime_error(
 						    "Frame " + std::to_string(*iter) +
 						    " is outside of file " + AbsoluteFilePath
 						);
@@ -334,7 +334,7 @@ void TrackingDataDirectory::BuildFrameReferenceCache(
 					Queue.push({FrameReference(), std::move(error)});
 					return;
 				} catch (const std::exception &e) {
-					throw std::runtime_error(
+					throw cpptrace::runtime_error(
 					    "[TDD.BuildCache]: Could not find frame " +
 					    std::to_string(*iter) + ": " + e.what()
 					);
@@ -480,7 +480,7 @@ TrackingDataDirectory::BuildIndexes(
 			last = f.string();
 		} catch (const std::exception &e) {
 			if (last.empty()) {
-				throw std::runtime_error(
+				throw cpptrace::runtime_error(
 				    "Could not read first frame from " + f.string() + ": " +
 				    e.what()
 				);
@@ -522,7 +522,7 @@ TrackingDataDirectory::BuildIndexes(
 		    std::move(e)
 		);
 	} catch (const std::exception &e) {
-		throw std::runtime_error(
+		throw cpptrace::runtime_error(
 		    "could not extract last frame from " + last + ": " + e.what()
 		);
 	}
@@ -728,7 +728,7 @@ TrackingDataDirectory::OpenFromFiles(
 
 	auto [hermesFiles, moviesPaths] = LookUpFiles(absoluteFilePath);
 	if (hermesFiles.empty()) {
-		throw std::invalid_argument(
+		throw cpptrace::invalid_argument(
 		    absoluteFilePath.string() + " does not contains any .hermes file"
 		);
 	}
@@ -1071,7 +1071,7 @@ TrackingDataDirectory::FrameAfter(const Time &t) const {
 	if (t < Start()) {
 		std::ostringstream oss;
 		oss << t << " is not in [" << Start() << ",+∞[";
-		throw std::out_of_range(oss.str());
+		throw cpptrace::out_of_range(oss.str());
 	}
 	auto iter    = FrameAt(d_segments->Find(t).first.FrameID());
 	Time curTime = (*iter)->Frame().Time();
@@ -1094,7 +1094,7 @@ FrameReference TrackingDataDirectory::FrameReferenceAt(FrameID frameID) const {
 	}
 	auto it = FrameAt(frameID);
 	if (it == end()) {
-		throw std::out_of_range(
+		throw cpptrace::out_of_range(
 		    "Could not find frame " + std::to_string(frameID) + " in [" +
 		    std::to_string(d_startFrame) + ";" + std::to_string(d_endFrame) +
 		    "]"
@@ -1111,7 +1111,7 @@ FrameReference TrackingDataDirectory::FrameReferenceAfter(const Time &t) const {
 	}
 	auto it = FrameAfter(t);
 	if (it == end()) {
-		throw std::out_of_range(
+		throw cpptrace::out_of_range(
 		    "Could not find frame after " + t.Format() + " in [" +
 		    d_start.Format() + ";" + d_end.Format() + "["
 		);
@@ -1168,7 +1168,7 @@ TrackingDataDirectory::EnumerateFullFrames(const fs::path &subpath
 
 TrackingDataDirectory::ComputedRessourceUnavailable::
     ComputedRessourceUnavailable(const std::string &typeName) noexcept
-    : std::runtime_error(
+    : cpptrace::runtime_error(
           "Computed ressource " + typeName + " is not available"
       ) {}
 
@@ -1537,7 +1537,7 @@ void TrackingDataDirectory::LoadDetectionSettings() {
 	if (fs::exists(path) == false) {
 		path = AbsoluteFilePath() / "leto-final-config.yaml";
 		if (fs::exists(path) == false) {
-			throw std::runtime_error(
+			throw cpptrace::runtime_error(
 			    "missing either 'leto-final-config.yaml' or "
 			    "'leto-final-config.yml' YAML config file"
 			);

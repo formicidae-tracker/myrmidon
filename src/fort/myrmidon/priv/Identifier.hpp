@@ -110,13 +110,13 @@ public:
 	void DeleteIdentification(const IdentificationPtr & ident);
 
 	// An exeption when a TagID is not managed by this Identifier
-	class UnmanagedTag : public std::runtime_error {
+	class UnmanagedTag : public cpptrace::runtime_error {
 	public:
 		UnmanagedTag(TagID tagValue) noexcept;
 		virtual ~UnmanagedTag() noexcept {};
 	};
 	// An exeption when an Identification is not managed by this Identifier
-	class UnmanagedIdentification : public std::runtime_error {
+	class UnmanagedIdentification : public cpptrace::runtime_error {
 	public:
 		UnmanagedIdentification(const Identification & ident) noexcept;
 		virtual ~UnmanagedIdentification() noexcept {};

@@ -331,7 +331,7 @@ public:
 	 * @param i the index of the wanted vertex in [0;Size()-1]
 	 *
 	 * @return a const reference to the wanted vertex
-	 * @throws std::out_of_range if i is >= Size().
+	 * @throws cpptrace::out_of_range if i is >= Size().
 	 */
 	const Eigen::Vector2d &Vertex(size_t i) const;
 
@@ -340,7 +340,7 @@ public:
 	 *
 	 * @param i the index of the wanted vertex in [0;Size()-1]
 	 * @param v the new value for the vertex
-	 * @throws std::out_of_range if i is >= Size().
+	 * @throws cpptrace::out_of_range if i is >= Size().
 	 */
 	void SetVertex(size_t i, const Eigen::Vector2d &v);
 
@@ -348,7 +348,7 @@ public:
 	 * Deletes a Polygon vertex
 	 *
 	 * @param i the index of the wanted vertex in [0;Size()-1]
-	 * @throws std::out_of_range if i is >= Size().
+	 * @throws cpptrace::out_of_range if i is >= Size().
 	 */
 	void DeleteVertex(size_t i);
 

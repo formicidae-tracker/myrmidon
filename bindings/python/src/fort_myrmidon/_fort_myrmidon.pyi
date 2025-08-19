@@ -2400,6 +2400,8 @@ class Time:
     precise to the nanosecond.
 
     """
+    FromDateTime: ClassVar[Callable] = ...
+    ToDateTime: ClassVar[Callable] = ...
     @overload
     def __init__(self) -> None:
         """__init__(*args, **kwargs)

@@ -56,7 +56,7 @@ SegmentIndexer<T>::Insert(const FrameReference &ref, const T &value) {
 			os << "(no previous time)";
 		}
 		os << "} is inconsistent with internal data";
-		throw std::invalid_argument(os.str());
+		throw cpptrace::invalid_argument(os.str());
 	}
 
 	auto toInsert = std::make_shared<SegmentIndexer<T>::Segment>(ref, value);
@@ -97,7 +97,7 @@ inline std::pair<FrameReference, T> SegmentIndexer<T>::Find(uint64_t frameID
 	if (fi == d_byID.end()) {
 		std::ostringstream os;
 		os << frameID << " is too small";
-		throw std::out_of_range(os.str());
+		throw cpptrace::out_of_range(os.str());
 	}
 	return *fi->second;
 }
@@ -109,7 +109,7 @@ inline std::pair<FrameReference, T> SegmentIndexer<T>::Find(const Time &t
 	if (fi == d_byTime.end()) {
 		std::ostringstream os;
 		os << t << " is too small";
-		throw std::out_of_range(os.str());
+		throw cpptrace::out_of_range(os.str());
 	}
 
 	return *fi->second;

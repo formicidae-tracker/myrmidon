@@ -280,7 +280,7 @@ tags::Family IOUtils::LoadFamily(int pb) {
 	};
 	auto fi = mapping.find(pb);
 	if (fi == mapping.end()) {
-		throw std::runtime_error("invalid protobuf enum value");
+		throw cpptrace::runtime_error("invalid protobuf enum value");
 	}
 	return fi->second;
 }
@@ -301,7 +301,7 @@ int IOUtils::SaveFamily(tags::Family f) {
 	};
 	auto fi = mapping.find(f);
 	if (fi == mapping.end()) {
-		throw std::runtime_error("invalid Experiment::TagFamily enum value");
+		throw cpptrace::runtime_error("invalid Experiment::TagFamily enum value");
 	}
 	return fi->second;
 }
@@ -529,7 +529,7 @@ void IOUtils::SaveMovieSegment(
 ) {
 
 	if (parentAbsoluteFilePath.is_absolute() == false) {
-		throw std::invalid_argument(
+		throw cpptrace::invalid_argument(
 		    "parentAbsoluteFilePath:'" + parentAbsoluteFilePath.string() +
 		    "' is not an absolute path"
 		);
@@ -559,7 +559,7 @@ TagCloseUp::ConstPtr IOUtils::LoadTagCloseUp(
 
 	Vector2dList corners;
 	if (pb.corners_size() != 4) {
-		throw std::invalid_argument(
+		throw cpptrace::invalid_argument(
 		    "protobuf message does not contains 4 corners"
 		);
 	}

@@ -58,7 +58,7 @@ TagCloseUp::TagCloseUp(
     , d_corners(corners) {
 	FORT_MYRMIDON_CHECK_PATH_IS_ABSOLUTE(absoluteFilePath);
 	if (corners.size() != 4) {
-		throw std::invalid_argument(
+		throw cpptrace::invalid_argument(
 		    "A tag needs 4 corners, only got " + std::to_string(corners.size())
 		);
 	}

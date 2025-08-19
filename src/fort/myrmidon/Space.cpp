@@ -56,7 +56,7 @@ std::pair<std::string,uint64_t> Space::LocateMovieFrame(const Time & time) const
 	}
 	std::ostringstream oss;
 	oss << "Could not find time " << time << " in space " << d_p->Get().Name();
-	throw std::out_of_range(oss.str());
+	throw cpptrace::out_of_range(oss.str());
 }
 
 std::string Space::Format() const {

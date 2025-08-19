@@ -67,7 +67,7 @@ TEST_F(IdentifierUTest,AntsCanBeDeleted) {
 
 	EXPECT_THROW({
 			i->DeleteAnt(a->AntID()+1);
-		}, std::out_of_range);
+		}, cpptrace::out_of_range);
 
 	IdentificationPtr ident;
 	EXPECT_NO_THROW({
@@ -76,7 +76,7 @@ TEST_F(IdentifierUTest,AntsCanBeDeleted) {
 
 	EXPECT_THROW({
 			i->DeleteAnt(a->AntID());
-		}, std::runtime_error);
+		}, cpptrace::runtime_error);
 
 
 	EXPECT_NO_THROW({
@@ -93,7 +93,7 @@ TEST_F(IdentifierUTest,AntCanBeAttachedToIdentification) {
 	auto a = i->CreateAnt(shapeTypes,metadata);
 	EXPECT_THROW({
 			Identifier::AddIdentification(i,a->AntID()+1,123,Time::SinceEver(),Time::Forever());
-		},std::out_of_range);
+		},cpptrace::out_of_range);
 
 	IdentificationPtr ident1,ident2;
 	EXPECT_NO_THROW(ident1 = Identifier::AddIdentification(i,a->AntID(),123,Time::SinceEver(),Time::Forever()));
@@ -134,14 +134,14 @@ TEST_F(IdentifierUTest,CanIdentifyAntByTag) {
 
 	EXPECT_THROW({
 			i->UpperUnidentifiedBound(123,start);
-		}, std::invalid_argument);
+		}, cpptrace::invalid_argument);
 	EXPECT_EQ(i->UpperUnidentifiedBound(124,start),Time::Forever());
 	EXPECT_EQ(i->UpperUnidentifiedBound(123,start.Add(-1)),start);
 	EXPECT_EQ(i->UpperUnidentifiedBound(123,end),Time::Forever());
 
 	EXPECT_THROW({
 			i->LowerUnidentifiedBound(123,start);
-		}, std::invalid_argument);
+		}, cpptrace::invalid_argument);
 	EXPECT_EQ(i->LowerUnidentifiedBound(124,start),Time::SinceEver());
 	EXPECT_EQ(i->LowerUnidentifiedBound(123,end),end);
 	EXPECT_EQ(i->LowerUnidentifiedBound(123,start.Add(-1)),Time::SinceEver());

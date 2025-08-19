@@ -1,3 +1,4 @@
+#include <cpptrace/exceptions.hpp>
 #include <filesystem>
 #include <fstream>
 
@@ -157,13 +158,13 @@ TEST_F(PublicExperimentUTest, OpeningDataLess) {
 	    Experiment::Open(
 	        TestSetup::UTestData().Basedir() / "does-not-exists.myrmidon"
 	    ),
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 	EXPECT_THROW(
 	    Experiment::OpenDataLess(
 	        TestSetup::UTestData().Basedir() / "does-not-exists.myrmidon"
 	    ),
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 }
 
@@ -180,7 +181,7 @@ TEST_F(PublicExperimentUTest, FileManipulation) {
 	auto e           = Experiment::Create(filepath);
 	EXPECT_NO_THROW(e->Save(filepath));
 	EXPECT_NO_THROW(e->Save(goodNewPath));
-	EXPECT_THROW(e->Save(badNewPath), std::invalid_argument);
+	EXPECT_THROW(e->Save(badNewPath), cpptrace::invalid_argument);
 }
 
 TEST_F(PublicExperimentUTest, SpaceManipulation) {
@@ -197,7 +198,7 @@ TEST_F(PublicExperimentUTest, SpaceManipulation) {
 	EXPECT_NO_THROW({
 		EXPECT_EQ(experiment->Spaces().at(spaces[1]->ID()), spaces[1]);
 	});
-	EXPECT_THROW({ experiment->DeleteSpace(42); }, std::out_of_range);
+	EXPECT_THROW({ experiment->DeleteSpace(42); }, cpptrace::out_of_range);
 
 	EXPECT_NO_THROW(experiment->DeleteSpace(spaces[0]->ID()));
 	EXPECT_EQ(experiment->Spaces().size(), 1);
@@ -208,7 +209,7 @@ TEST_F(PublicExperimentUTest, SpaceManipulation) {
 	experiment->AddTrackingDataDirectory(spaces[1]->ID(), tdd.AbsoluteFilePath);
 	EXPECT_THROW(
 	    { experiment->DeleteSpace(spaces[1]->ID()); },
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 }
 
@@ -227,12 +228,12 @@ TEST_F(PublicExperimentUTest, TDDManipulation) {
 	std::string URI;
 	EXPECT_THROW(
 	    { experiment->AddTrackingDataDirectory(42, foragingTDDPath); },
-	    std::out_of_range
+	    cpptrace::out_of_range
 	);
 
 	EXPECT_THROW(
 	    { experiment->AddTrackingDataDirectory(foragingID, badTDDPath); },
-	    std::runtime_error
+	    cpptrace::invalid_argument
 	);
 
 	EXPECT_NO_THROW({
@@ -243,13 +244,13 @@ TEST_F(PublicExperimentUTest, TDDManipulation) {
 	// Note nestTDDPath and goodTDDPath overlaps in time
 	EXPECT_THROW(
 	    { experiment->AddTrackingDataDirectory(foragingID, nestTDDPath); },
-	    std::domain_error
+	    cpptrace::domain_error
 	);
 
 	// Note goodTDDPath is already in use in another space
 	EXPECT_THROW(
 	    { experiment->AddTrackingDataDirectory(nestID, foragingTDDPath); },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 
 	EXPECT_NO_THROW({
@@ -259,7 +260,7 @@ TEST_F(PublicExperimentUTest, TDDManipulation) {
 
 	EXPECT_THROW(
 	    { experiment->RemoveTrackingDataDirectory(badTDDPath.filename()); },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 	EXPECT_NO_THROW({ experiment->RemoveTrackingDataDirectory(URI); });
 }
@@ -270,14 +271,14 @@ TEST_F(PublicExperimentUTest, AntManipulation) {
 	// they are the same objects
 	EXPECT_EQ(experiment->Ants().at(a->ID()), a);
 
-	EXPECT_THROW({ experiment->DeleteAnt(42); }, std::out_of_range);
+	EXPECT_THROW({ experiment->DeleteAnt(42); }, cpptrace::out_of_range);
 
 	ASSERT_NO_THROW({
 		experiment
 		    ->AddIdentification(a->ID(), 0, Time::SinceEver(), Time::Forever());
 	});
 
-	EXPECT_THROW({ experiment->DeleteAnt(a->ID()); }, std::runtime_error);
+	EXPECT_THROW({ experiment->DeleteAnt(a->ID()); }, cpptrace::runtime_error);
 
 	ASSERT_NO_THROW({
 		experiment->DeleteIdentification(a->Identifications().front());
@@ -296,7 +297,7 @@ TEST_F(PublicExperimentUTest, IdentificationManipulation) {
 		    experiment
 		        ->AddIdentification(42, 0, Time::SinceEver(), Time::Forever());
 	    },
-	    std::out_of_range
+	    cpptrace::out_of_range
 	);
 
 	EXPECT_NO_THROW(experiment->AddIdentification(
@@ -343,7 +344,7 @@ TEST_F(PublicExperimentUTest, IdentificationManipulation) {
 	// cannot delete Identification from another Experiment
 	EXPECT_THROW(
 	    { experiment->DeleteIdentification(i2); },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 
 	ants[0]->Identifications().front()->SetEnd(Time());
@@ -354,7 +355,7 @@ TEST_F(PublicExperimentUTest, IdentificationManipulation) {
 		        Time().Add(-1)
 		    );
 	    },
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 
 	EXPECT_NO_THROW({
@@ -419,16 +420,19 @@ TEST_F(PublicExperimentUTest, MeasurementTypeManipulation) {
 	EXPECT_EQ(experiment->MeasurementTypeNames()[1], "head-tail");
 	EXPECT_THROW(
 	    { experiment->SetMeasurementTypeName(42, "foo"); },
-	    std::out_of_range
+	    cpptrace::out_of_range
 	);
 
 	EXPECT_NO_THROW({ experiment->SetMeasurementTypeName(1, "foo"); });
 
-	EXPECT_THROW({ experiment->DeleteMeasurementType(42); }, std::out_of_range);
+	EXPECT_THROW(
+	    { experiment->DeleteMeasurementType(42); },
+	    cpptrace::out_of_range
+	);
 
 	EXPECT_THROW(
 	    { experiment->DeleteMeasurementType(1); },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 
 	EXPECT_NO_THROW({ experiment->DeleteMeasurementType(mtID); });
@@ -442,12 +446,15 @@ TEST_F(PublicExperimentUTest, AntShapeTypeManipulation) {
 	EXPECT_EQ(experiment->AntShapeTypeNames()[headID], "head");
 	EXPECT_THROW(
 	    { experiment->SetAntShapeTypeName(42, "foo"); },
-	    std::out_of_range
+	    cpptrace::out_of_range
 	);
 
 	EXPECT_NO_THROW({ experiment->SetAntShapeTypeName(bodyID, "foo"); });
 
-	EXPECT_THROW({ experiment->DeleteAntShapeType(42); }, std::out_of_range);
+	EXPECT_THROW(
+	    { experiment->DeleteAntShapeType(42); },
+	    cpptrace::out_of_range
+	);
 
 	ASSERT_NO_THROW({
 		auto a = experiment->CreateAnt();
@@ -464,7 +471,7 @@ TEST_F(PublicExperimentUTest, AntShapeTypeManipulation) {
 
 	EXPECT_THROW(
 	    { experiment->DeleteAntShapeType(bodyID); },
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 
 	EXPECT_NO_THROW({ experiment->DeleteAntShapeType(headID); });
@@ -483,21 +490,24 @@ TEST_F(PublicExperimentUTest, MetaDataKeyManipulation) {
 		a->SetValue("group", std::string("nurse"), Time::SinceEver());
 	});
 
-	EXPECT_THROW({ experiment->DeleteMetaDataKey("foo"); }, std::out_of_range);
+	EXPECT_THROW(
+	    { experiment->DeleteMetaDataKey("foo"); },
+	    cpptrace::out_of_range
+	);
 
 	EXPECT_THROW(
 	    { experiment->DeleteMetaDataKey("group"); },
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 
 	EXPECT_THROW(
 	    { experiment->RenameMetaDataKey("foo", "bar"); },
-	    std::out_of_range
+	    cpptrace::out_of_range
 	);
 
 	EXPECT_THROW(
 	    { experiment->RenameMetaDataKey("alive", "group"); },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 
 	EXPECT_NO_THROW({
@@ -511,7 +521,7 @@ TEST_F(PublicExperimentUTest, MetaDataKeyManipulation) {
 
 	EXPECT_THROW(
 	    { experiment->SetMetaDataKey("group", int(1)); },
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 
 	// changing default value of key change ant values

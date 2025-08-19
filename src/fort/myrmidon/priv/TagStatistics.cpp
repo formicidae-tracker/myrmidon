@@ -147,7 +147,7 @@ void TagStatisticsHelper::UpdateGaps(
 void TagStatisticsHelper::Merge(Timed & stats, const Timed & other) {
 
 	if ( stats.End > other.Start ) {
-		throw std::runtime_error("Could ony merge time-upward");
+		throw cpptrace::runtime_error("Could ony merge time-upward");
 	}
 	for ( const auto & [tagID,tagStats] : other.TagStats ) {
 		auto fi = stats.TagStats.find(tagID);
@@ -176,14 +176,14 @@ TagStatistics
 TagStatisticsHelper::MergeTimed(const TagStatistics & old, const Time & oldEnd,
                                 const TagStatistics & newer, const Time & newerStart) {
 	if ( old.ID != newer.ID ) {
-		throw std::invalid_argument("Mismatched ID "
+		throw cpptrace::invalid_argument("Mismatched ID "
 		                            + std::to_string(newer.ID)
 		                            + " (expected:" + std::to_string(old.ID) + ")");
 	}
 
 
 	if ( oldEnd > newerStart ) {
-		throw std::runtime_error("Older statistics must happen after newer one");
+		throw cpptrace::runtime_error("Older statistics must happen after newer one");
 	}
 	TagStatistics res(old);
 	res.Counts += newer.Counts;
@@ -206,7 +206,7 @@ TagStatisticsHelper::MergeTimed(const TagStatistics & old, const Time & oldEnd,
 
 TagStatistics TagStatisticsHelper::MergeSpaced(const TagStatistics & a, const TagStatistics & b) {
 	if ( a.ID != b.ID ) {
-		throw std::invalid_argument("Mismatched ID "
+		throw cpptrace::invalid_argument("Mismatched ID "
 		                            + std::to_string(a.ID)
 		                            + " (expected:" + std::to_string(b.ID) + ")");
 	}

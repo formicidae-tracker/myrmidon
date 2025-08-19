@@ -20,7 +20,7 @@ CloneShapeDialog::CloneShapeDialog(ExperimentBridge * experiment,
 	auto antIDStr = fm::FormatAntID(sourceID).c_str();
 
 	if ( ant == nullptr ) {
-		throw std::runtime_error("Could not find ant " + std::string(antIDStr) );
+		throw cpptrace::runtime_error("Could not find ant " + std::string(antIDStr) );
 	}
 
 

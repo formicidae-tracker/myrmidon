@@ -1,5 +1,7 @@
 #include "IdentifiedFrame.hpp"
 
+#include <cpptrace/cpptrace.hpp>
+
 namespace fort {
 namespace myrmidon {
 
@@ -13,7 +15,7 @@ std::tuple<
     const Eigen::Ref<const Eigen::VectorXd>>
 IdentifiedFrame::At(size_t index) const {
 	if (index > Positions.rows()) {
-		throw std::out_of_range(
+		throw cpptrace::out_of_range(
 		    std::to_string(index) + " is out of range [0," +
 		    std::to_string(Positions.rows()) + "["
 		);

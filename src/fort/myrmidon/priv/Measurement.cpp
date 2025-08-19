@@ -66,54 +66,54 @@ const Eigen::Vector2d & Measurement::EndFromTag() const {
 	return d_end;
 }
 
-std::tuple<std::string,FrameID,TagID,MeasurementType::ID>
-Measurement::DecomposeURI(const std::string & measurementURI) {
-	std::string tddURI;
-	FrameID frameID;
-	TagID  tagID;
+std::tuple<std::string, FrameID, TagID, MeasurementType::ID>
+Measurement::DecomposeURI(const std::string &measurementURI) {
+	std::string         tddURI;
+	FrameID             frameID;
+	TagID               tagID;
 	MeasurementType::ID mtID;
-	fs::path URI = measurementURI;
+	fs::path            URI = measurementURI;
 
 	try {
 		try {
 			mtID = std::stoul(URI.filename().string());
-		} catch( const std::exception & e) {
-			throw std::runtime_error("cannot parse MeasurementType::ID");
+		} catch (const std::exception &e) {
+			throw cpptrace::runtime_error("cannot parse MeasurementType::ID");
 		}
 		URI = URI.parent_path();
-		if ( URI.filename() != "measurements" ) {
-			throw std::runtime_error("no 'measurements' in URI");
+		if (URI.filename() != "measurements") {
+			throw cpptrace::runtime_error("no 'measurements' in URI");
 		}
 		URI = URI.parent_path();
 		try {
-			tagID = std::stoul(URI.filename().string(),NULL,0);
-		} catch( const std::exception & e) {
-			throw std::runtime_error("cannot parse TagID");
+			tagID = std::stoul(URI.filename().string(), NULL, 0);
+		} catch (const std::exception &e) {
+			throw cpptrace::runtime_error("cannot parse TagID");
 		}
 		URI = URI.parent_path();
-		if ( URI.filename() != "closeups" ) {
-			throw std::runtime_error("no 'closeups' in URI");
+		if (URI.filename() != "closeups") {
+			throw cpptrace::runtime_error("no 'closeups' in URI");
 		}
 		URI = URI.parent_path();
 		try {
 			frameID = std::stoull(URI.filename().string());
-		} catch( const std::exception & e) {
-			throw std::runtime_error("cannot parse FrameID");
+		} catch (const std::exception &e) {
+			throw cpptrace::runtime_error("cannot parse FrameID");
 		}
 		URI = URI.parent_path();
-		if ( URI.filename() != "frames" ) {
-			throw std::runtime_error("no 'frames' in URI");
+		if (URI.filename() != "frames") {
+			throw cpptrace::runtime_error("no 'frames' in URI");
 		}
 		tddURI = URI.parent_path().generic_string();
-		if (tddURI.empty() || tddURI == "/" ) {
-			throw std::runtime_error("no URI for TrackingDataDirectory");
+		if (tddURI.empty() || tddURI == "/") {
+			throw cpptrace::runtime_error("no URI for TrackingDataDirectory");
 		}
-	} catch ( const std::exception & e) {
-		throw std::runtime_error("Invalid URI '"
-		                         + measurementURI
-		                         + "':" + e.what());
+	} catch (const cpptrace::exception &e) {
+		throw cpptrace::runtime_error(
+		    "Invalid URI '" + measurementURI + "':" + e.message()
+		);
 	}
-	return std::make_tuple(tddURI,frameID,tagID,mtID);
+	return std::make_tuple(tddURI, frameID, tagID, mtID);
 }
 
 double Measurement::TagSizePx() const {

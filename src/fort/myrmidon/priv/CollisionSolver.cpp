@@ -78,7 +78,7 @@ void CollisionSolver::ComputeCollisions(
     CollisionFrame &collision, IdentifiedFrame &frame
 ) const {
 	if (d_spaceZoners.Count(frame.Space) == 0) {
-		throw std::invalid_argument(
+		throw cpptrace::invalid_argument(
 		    "Unknown SpaceID " + std::to_string(frame.Space) +
 		    " in IdentifiedFrame"
 		);
@@ -98,8 +98,8 @@ AntZoner::ConstPtr CollisionSolver::ZonerFor(const IdentifiedFrame &frame
 ) const {
 	try {
 		return d_spaceZoners.At(frame.Space, frame.FrameTime);
-	} catch (const std::out_of_range &e) {
-		throw std::invalid_argument(
+	} catch (const cpptrace::out_of_range &e) {
+		throw cpptrace::invalid_argument(
 		    "Unknown SpaceID " + std::to_string(frame.Space) +
 		    " in collision solver: " + std::string(e.what()) +
 		    d_spaceZoners.DebugString()

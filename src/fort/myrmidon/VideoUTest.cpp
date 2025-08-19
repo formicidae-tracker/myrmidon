@@ -169,7 +169,7 @@ TEST_F(VideoUTest,MatchDataEdgeCases) {
 			VideoSegment::Match(segments,
 			                    data.begin(),
 			                    data.end());
-		},std::invalid_argument);
+		},cpptrace::invalid_argument);
 };
 
 TEST_F(VideoUTest, ForEachFramesEdgeCases) {

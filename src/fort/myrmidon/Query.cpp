@@ -174,10 +174,10 @@ Query::GetMetaDataKeyRanges(const Experiment & e,
                             const Value & value) {
 	std::vector<std::tuple<AntID,Time,Time>> res;
 	if ( e.MetaDataKeys().count(key) == 0 ) {
-		throw std::out_of_range("Invalid key '" + key + "'");
+		throw cpptrace::out_of_range("Invalid key '" + key + "'");
 	}
 	if ( e.MetaDataKeys().at(key).index() != value.index() ) {
-		throw std::invalid_argument("Value is not of the right type");
+		throw cpptrace::invalid_argument("Value is not of the right type");
 	}
 
 	for ( const auto & [antID,ant] : e.Ants() ) {

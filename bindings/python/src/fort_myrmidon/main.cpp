@@ -2,9 +2,13 @@
 #include <atomic>
 #include <cpptrace/cpptrace.hpp>
 
+#include <cpptrace/exceptions.hpp>
 #include <cstring>
+#include <exception>
 #include <execinfo.h>
 #include <mutex>
+#include <pybind11/pybind11.h>
+#include <pyerrors.h>
 #include <signal.h>
 #include <unistd.h>
 
@@ -68,6 +72,27 @@ PYBIND11_MODULE(FM_PYTHON_PACKAGE_NAME, m) {
 	BindQuery(m);
 
 	std::call_once(handler_installed, installCpptraceHandler);
+
+	py::register_exception_translator([](std::exception_ptr p) {
+		if (p == nullptr) {
+			return;
+		}
+		try {
+			std::rethrow_exception(p);
+		} catch (const cpptrace::overflow_error &e) {
+			py::set_error(PyExc_OverflowError, e.what());
+		} catch (const cpptrace::range_error &e) {
+			py::set_error(PyExc_ValueError, e.what());
+		} catch (const cpptrace::out_of_range &e) {
+			py::set_error(PyExc_IndexError, e.what());
+		} catch (const cpptrace::length_error &e) {
+			py::set_error(PyExc_ValueError, e.what());
+		} catch (const cpptrace::invalid_argument &e) {
+			py::set_error(PyExc_ValueError, e.what());
+		} catch (const cpptrace::domain_error &e) {
+			py::set_error(PyExc_ValueError, e.what());
+		}
+	});
 
 #ifdef VERSION_INFO
 	m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);

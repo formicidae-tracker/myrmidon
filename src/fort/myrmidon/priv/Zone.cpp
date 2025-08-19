@@ -89,7 +89,7 @@ void ZoneDefinition::SetBound(const Time & start, const Time & end) {
 	if ( end.Before(start) ) {
 		std::ostringstream os;
 		os << "Invalid time range [" << start << "," << end << "]";
-		throw std::invalid_argument(os.str());
+		throw cpptrace::invalid_argument(os.str());
 	}
 
 	auto zone = d_zone.lock();
@@ -105,7 +105,7 @@ void ZoneDefinition::SetBound(const Time & start, const Time & end) {
 	if ( res.first != res.second ) {
 		d_start = oldStart;
 		d_end = oldEnd;
-		throw std::runtime_error("Zone definition would overlaps with another");
+		throw cpptrace::runtime_error("Zone definition would overlaps with another");
 	}
 }
 
@@ -130,7 +130,7 @@ ZoneDefinition::Ptr Zone::AddDefinition(const Shape::List & shapes,
 	auto check = TimeValid::SortAndCheckOverlap(d_definitions.begin(),d_definitions.end());
 	if ( check.first != check.second ) {
 		d_definitions = oldDefinitions;
-		throw std::runtime_error("Zone definition would overlaps with another");
+		throw cpptrace::runtime_error("Zone definition would overlaps with another");
 	}
 	return def;
 }
@@ -158,7 +158,7 @@ const Shape::List & Zone::AtTime(const Time & t) {
 			return d->Shapes();
 		}
 	}
-	throw std::out_of_range("No Zone geometry definition at " + t.Format());
+	throw cpptrace::out_of_range("No Zone geometry definition at " + t.Format());
 }
 
 Zone::~Zone() {}
@@ -187,7 +187,7 @@ bool Zone::NextFreeTimeRegion(Time & start,Time & end) const {
 			end = TimeValid::UpperUnvalidBound(t,d_definitions.begin(),d_definitions.end());
 			start = TimeValid::LowerUnvalidBound(t,d_definitions.begin(),d_definitions.end());
 			return true;
-		} catch ( const std::invalid_argument &) {
+		} catch ( const cpptrace::invalid_argument &) {
 		}
 	}
 
@@ -200,14 +200,14 @@ bool Zone::NextFreeTimeRegion(Time & start,Time & end) const {
 		end = TimeValid::UpperUnvalidBound(t,d_definitions.begin(),d_definitions.end());
 		start = TimeValid::LowerUnvalidBound(t,d_definitions.begin(),d_definitions.end());
 		return true;
-	} catch ( const std::invalid_argument &) {
+	} catch ( const cpptrace::invalid_argument &) {
 		return false;
 	}
 }
 
 void Zone::EraseDefinition(size_t index) {
 	if ( index >= d_definitions.size() ) {
-		throw std::out_of_range(std::to_string(index) + " is out of range [0," + std::to_string(d_definitions.size()) + "[");
+		throw cpptrace::out_of_range(std::to_string(index) + " is out of range [0," + std::to_string(d_definitions.size()) + "[");
 	}
 	d_definitions.erase(d_definitions.begin() + index);
 }

@@ -39,7 +39,7 @@ TEST_F(PublicZoneUTest, ZoneDefinitionManipulation) {
 
 	EXPECT_THROW(
 	    { zone->AddDefinition({}, Time().Add(-1), Time().Add(1)); },
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 
 	// it should be the same objects, but ordered
@@ -47,7 +47,7 @@ TEST_F(PublicZoneUTest, ZoneDefinitionManipulation) {
 	EXPECT_EQ(zone->Definitions()[0], definitions[1]);
 	EXPECT_EQ(zone->Definitions()[1], definitions[0]);
 
-	EXPECT_THROW({ zone->DeleteDefinition(42); }, std::out_of_range);
+	EXPECT_THROW({ zone->DeleteDefinition(42); }, cpptrace::out_of_range);
 	EXPECT_NO_THROW({ zone->DeleteDefinition(0); });
 
 	EXPECT_EQ(zone->Definitions()[0], definitions[0]);
@@ -88,7 +88,7 @@ TEST_F(PublicZoneUTest, ZoneDefinitionHaveTimeValidity) {
 	auto zone = space->CreateZone("food");
 	EXPECT_THROW(
 	    zone->AddDefinition({}, Time::Forever(), Time::SinceEver()),
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 
 	ZoneDefinition::Ptr definitions[2] = {
@@ -98,12 +98,12 @@ TEST_F(PublicZoneUTest, ZoneDefinitionHaveTimeValidity) {
 
 	EXPECT_THROW(
 	    { definitions[0]->SetEnd(Time().Add(1)); },
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 
 	EXPECT_THROW(
 	    { definitions[1]->SetStart(Time().Add(-1)); },
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 
 	EXPECT_NO_THROW({

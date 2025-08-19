@@ -106,7 +106,7 @@ public:
 	 *
 	 * @return a ::TagID that identify this ant at this time.
 	 *
-	 * @throws std::runtime_error if there no valid Identification for this
+	 * @throws cpptrace::runtime_error if there no valid Identification for this
 	 * time.
 	 */
 	TagID IdentifiedAt(const Time &time) const;
@@ -185,7 +185,7 @@ public:
 	 *
 	 * @return the wanted Value for key at time, or the Experiment default one
 	 *
-	 * @throws std::out_of_range if name is not a defined metadata key in
+	 * @throws cpptrace::out_of_range if name is not a defined metadata key in
 	 * Experiment.
 	 */
 	const Value &GetValue(const std::string &key, const Time &time) const;
@@ -202,9 +202,9 @@ public:
 	 * Time::SinceEver(), sets the starting value for name instead of
 	 * the Experiment's default value for key.
 	 *
-	 * @throws std::out_of_range if name is not a defined key in Experiment
-	 * @throws std::invalid_argument if time is Time::Forever()
-	 * @throws std::runtime_error if value is not of the right type for key
+	 * @throws cpptrace::out_of_range if name is not a defined key in Experiment
+	 * @throws cpptrace::invalid_argument if time is Time::Forever()
+	 * @throws cpptrace::runtime_error if value is not of the right type for key
 	 *
 	 */
 	void SetValue(const std::string &key, const Value &value, const Time &time);
@@ -217,7 +217,7 @@ public:
 	 *
 	 * Removes any value defined at a time.
 	 *
-	 * @throws std::out_of_range if no value for key at time have
+	 * @throws cpptrace::out_of_range if no value for key at time have
 	 *         been previously set with SetValue().
 	 */
 	void DeleteValue(const std::string &key, const Time &time);
@@ -239,7 +239,7 @@ public:
 	 * Adds a Capsule to the Ant virtual shape, associated with the
 	 * shapeTypeID body part.
 	 *
-	 * @throws std::invalid_argument if shapeTypeID is not defined in Experiment
+	 * @throws cpptrace::invalid_argument if shapeTypeID is not defined in Experiment
 	 */
 	void AddCapsule(
 	    AntShapeTypeID shapeTypeID, const std::shared_ptr<Capsule> &capsule
@@ -258,7 +258,7 @@ public:
 	 *
 	 * @param index the index in the Capsules() to remove
 	 *
-	 * @throws std::out_of_range if index is greate or equal to the size of
+	 * @throws cpptrace::out_of_range if index is greate or equal to the size of
 	 * Capsules().
 	 */
 	void DeleteCapsule(const size_t index);

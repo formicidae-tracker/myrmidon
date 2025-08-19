@@ -456,20 +456,20 @@ void TruncateFile(const std::filesystem::path &filepath, int bytes) {
 
 	FILE *file = fopen(filepath.c_str(), "r+");
 	if (file == nullptr) {
-		throw std::runtime_error(
+		throw cpptrace::runtime_error(
 		    "open('" + filepath.string() +
 		    "',O_CREAT | O_TRUNC | O_RDWR | O_BINARY): " + std::to_string(errno)
 		);
 	}
 	if (fseeko(file, -bytes, SEEK_END) != 0) {
-		throw std::runtime_error(
+		throw cpptrace::runtime_error(
 		    "fseeko('" + filepath.string() + "'," + std::to_string(-bytes) +
 		    ",SEEK_END): " + std::to_string(errno)
 		);
 	}
 	auto offset = ftello(file);
 	if (ftruncate(fileno(file), offset) != 0) {
-		throw std::runtime_error(
+		throw cpptrace::runtime_error(
 		    "ftruncate('" + filepath.string() + "'," + std::to_string(offset) +
 		    "): " + std::to_string(errno)
 		);
@@ -659,7 +659,7 @@ void UTestData::WriteExperimentFile(const ExperimentInfo &info) {
 	    0644
 	);
 	if (fd <= 0) {
-		throw std::runtime_error(
+		throw cpptrace::runtime_error(
 		    "open('" + info.AbsoluteFilePath.string() +
 		    "',O_RDONLY | O_BINARY): " + std::to_string(errno)
 		);
@@ -673,7 +673,7 @@ void UTestData::WriteExperimentFile(const ExperimentInfo &info) {
 	        header,
 	        gunziped.get()
 	    )) {
-		throw std::runtime_error("could not write header message");
+		throw cpptrace::runtime_error("could not write header message");
 	}
 
 	l.set_allocated_experiment(&e);
@@ -681,7 +681,7 @@ void UTestData::WriteExperimentFile(const ExperimentInfo &info) {
 	        l,
 	        gunziped.get()
 	    )) {
-		throw std::runtime_error("could not write experiment data");
+		throw cpptrace::runtime_error("could not write experiment data");
 	}
 	l.release_experiment();
 
@@ -699,7 +699,7 @@ void UTestData::WriteExperimentFile(const ExperimentInfo &info) {
 	        l,
 	        gunziped.get()
 	    )) {
-		throw std::runtime_error("could not write space data");
+		throw cpptrace::runtime_error("could not write space data");
 	}
 	l.release_space();
 
@@ -717,7 +717,7 @@ void UTestData::WriteExperimentFile(const ExperimentInfo &info) {
 	        l,
 	        gunziped.get()
 	    )) {
-		throw std::runtime_error("could not write space data");
+		throw cpptrace::runtime_error("could not write space data");
 	}
 	l.release_space();
 
@@ -754,7 +754,7 @@ void UTestData::WriteExperimentFile(const ExperimentInfo &info) {
 		        l,
 		        gunziped.get()
 		    )) {
-			throw std::runtime_error(
+			throw cpptrace::runtime_error(
 			    "could not write ant data " + std::to_string(antID)
 			);
 		}

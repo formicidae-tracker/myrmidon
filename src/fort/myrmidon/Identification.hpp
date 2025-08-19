@@ -9,6 +9,8 @@
 
 #include <fort/myrmidon/types/Typedefs.hpp>
 
+#include <cpptrace/cpptrace.hpp>
+
 namespace fort {
 namespace myrmidon {
 class Identification;
@@ -19,13 +21,12 @@ class Experiment;
 // @identification the <fort::myrmidon::Identification> to format
 //
 // @return a reference to <out>
-std::ostream & operator<<(std::ostream & out,
-                          const fort::myrmidon::Identification & identification);
+std::ostream &operator<<(
+    std::ostream &out, const fort::myrmidon::Identification &identification
+);
 
-}
-}
-
-
+} // namespace myrmidon
+} // namespace fort
 
 namespace fort {
 namespace myrmidon {
@@ -282,7 +283,7 @@ private:
  * modification that will break this invariant will throw this
  * exception.
  */
-class OverlappingIdentification : public std::runtime_error {
+class OverlappingIdentification : public cpptrace::runtime_error {
 public:
 	// Default constructor
 	// @a the first overlapping identification

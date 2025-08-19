@@ -139,7 +139,7 @@ class ExperimentTestCase(unittest.TestCase, assertions.CustomAssertion):
         badTDDPath = ud.UData().Basedir / "does-not-exist.0000"
         with self.assertRaises(IndexError):
             self.experiment.AddTrackingDataDirectory(42, str(foragingTDDPath))
-        with self.assertRaises(RuntimeError):
+        with self.assertRaises(ValueError):
             self.experiment.AddTrackingDataDirectory(foragingID, str(badTDDPath))
         URI = self.experiment.AddTrackingDataDirectory(foragingID, str(foragingTDDPath))
         self.assertEqual(URI, foragingTDDPath.name)

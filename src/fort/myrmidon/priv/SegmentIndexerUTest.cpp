@@ -74,11 +74,11 @@ TEST_F(SegmentIndexerUTest,CanFindSegment) {
 
 	EXPECT_THROW({
 			auto res = d_si.Find(0);
-		},std::out_of_range);
+		},cpptrace::out_of_range);
 
 	EXPECT_THROW({
 			auto res = d_si.Find(Time::FromTimeT(0));
-		},std::out_of_range);
+		},cpptrace::out_of_range);
 
 }
 
@@ -87,8 +87,8 @@ TEST_F(SegmentIndexerUTest,EnforceIncreasingInvariant) {
 	SegmentIndexer<std::string> si;
 	EXPECT_NO_THROW(si.Insert(FrameReference("",1,Time::FromTimeT(1)),"0"));
 	EXPECT_NO_THROW(si.Insert(FrameReference("",11,Time::FromTimeT(11)),"1"));
-	EXPECT_THROW({si.Insert(FrameReference("",21,Time::FromTimeT(6)),"2");},std::invalid_argument);
-	EXPECT_THROW({si.Insert(FrameReference("",6,Time::FromTimeT(21)),"2");},std::invalid_argument);
+	EXPECT_THROW({si.Insert(FrameReference("",21,Time::FromTimeT(6)),"2");},cpptrace::invalid_argument);
+	EXPECT_THROW({si.Insert(FrameReference("",6,Time::FromTimeT(21)),"2");},cpptrace::invalid_argument);
 	// It is permitted to make two segment have the same end value
 	EXPECT_NO_THROW(si.Insert(FrameReference("",21,Time::FromTimeT(21)),"0"));
 

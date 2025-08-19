@@ -467,12 +467,12 @@ TEST_F(QueryUTest, GetMetaDataKeyRanges) {
 
 	EXPECT_THROW(
 	    { ranges = Query::GetMetaDataKeyRanges(*experiment, "isDead", false); },
-	    std::out_of_range
+	    cpptrace::out_of_range
 	);
 
 	EXPECT_THROW(
 	    { ranges = Query::GetMetaDataKeyRanges(*experiment, "alive", Time()); },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 }
 

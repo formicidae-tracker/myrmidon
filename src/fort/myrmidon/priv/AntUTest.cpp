@@ -51,14 +51,14 @@ TEST_F(AntUTest,CapsuleEdition) {
 	                0.1);
 
 
-	EXPECT_THROW(ant->AddCapsule(3,std::make_unique<Capsule>()),std::invalid_argument);
+	EXPECT_THROW(ant->AddCapsule(3,std::make_unique<Capsule>()),cpptrace::invalid_argument);
 	EXPECT_NO_THROW({
 			ant->AddCapsule(1,std::make_shared<Capsule>(capsule));
 			ant->AddCapsule(2,std::make_shared<Capsule>(capsule));
 			ant->AddCapsule(2,std::make_shared<Capsule>(capsule));
 		});
 	EXPECT_EQ(ant->Capsules().size(),3);
-	EXPECT_THROW(ant->DeleteCapsule(3),std::out_of_range);
+	EXPECT_THROW(ant->DeleteCapsule(3),cpptrace::out_of_range);
 	EXPECT_NO_THROW(ant->DeleteCapsule(1));
 	EXPECT_EQ(ant->Capsules().size(),2);
 	EXPECT_NO_THROW(ant->ClearCapsules());
@@ -73,9 +73,9 @@ TEST_F(AntUTest,StaticDataTest) {
 		ADD_FAILURE() << "Got unexpected exception: " << e.what();
 	}
 
-	EXPECT_THROW(ant->SetValue("isQueen",true,Time::SinceEver()),std::out_of_range);
-	EXPECT_THROW(ant->SetValue("dead",0,Time::SinceEver()),std::runtime_error);
-	EXPECT_THROW({ant->SetValue("dead",false,Time::Forever());},std::invalid_argument);
+	EXPECT_THROW(ant->SetValue("isQueen",true,Time::SinceEver()),cpptrace::out_of_range);
+	EXPECT_THROW(ant->SetValue("dead",0,Time::SinceEver()),cpptrace::runtime_error);
+	EXPECT_THROW({ant->SetValue("dead",false,Time::Forever());},cpptrace::invalid_argument);
 	EXPECT_NO_THROW({
 			ant->SetValue("dead",true,Time::SinceEver());
 			ant->SetValue("dead",false,Time::FromTimeT(42));
@@ -88,16 +88,16 @@ TEST_F(AntUTest,StaticDataTest) {
 
 		});
 
-	EXPECT_THROW(ant->DeleteValue("isQueen",Time::SinceEver()),std::out_of_range);
-	EXPECT_THROW(ant->DeleteValue("dead",Time()),std::out_of_range);
+	EXPECT_THROW(ant->DeleteValue("isQueen",Time::SinceEver()),cpptrace::out_of_range);
+	EXPECT_THROW(ant->DeleteValue("dead",Time()),cpptrace::out_of_range);
 	EXPECT_NO_THROW(ant->DeleteValue("dead",Time::SinceEver()));
 
 
-	EXPECT_THROW(ant->GetBaseValue("dead"),std::out_of_range);
+	EXPECT_THROW(ant->GetBaseValue("dead"),cpptrace::out_of_range);
 
 
 	EXPECT_NO_THROW(ant->SetValue("dead",false,Time(),true));
-	EXPECT_THROW(ant->SetValue("dead",false,Time(),true),std::runtime_error);
+	EXPECT_THROW(ant->SetValue("dead",false,Time(),true),cpptrace::runtime_error);
 
 	EXPECT_NO_THROW(ant->DeleteValue("group",Time::SinceEver()));
 }
@@ -123,7 +123,7 @@ TEST_F(AntUTest,IdentificationAt) {
 	EXPECT_NO_THROW({
 			EXPECT_EQ(a->IdentifiedAt(Time::FromTimeT(0)),0);
 		});
-	EXPECT_THROW(a->IdentifiedAt(Time::FromTimeT(1)),std::runtime_error);
+	EXPECT_THROW(a->IdentifiedAt(Time::FromTimeT(1)),cpptrace::runtime_error);
 }
 
 } // namespace priv

@@ -97,7 +97,7 @@ TEST_F(AntPoseEstimateUTest,CanBeComputedFromPoints) {
 			                123,
 			                Eigen::Vector2d(0,0.5),
 			                Eigen::Vector2d(0,0));
-		},std::invalid_argument);
+		},cpptrace::invalid_argument);
 
 }
 

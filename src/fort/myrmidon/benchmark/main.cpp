@@ -1,5 +1,7 @@
 #include <random>
 
+#include <cpptrace/cpptrace.hpp>
+
 #include <fort/time/Time.hpp>
 
 #include <fort/myrmidon/Shapes.hpp>
@@ -181,13 +183,13 @@ namespace fmp = fort::myrmidon::priv;
 
 void Execute(int argc, char **argv) {
 	if (argc != 2) {
-		throw std::invalid_argument(
+		throw cpptrace::invalid_argument(
 		    "Need a directory to save the benchmark results"
 		);
 	}
 	fs::path dirpath(argv[1]);
 	if (fs::is_directory(dirpath) == false) {
-		throw std::invalid_argument(dirpath.string() + " is not a directory");
+		throw cpptrace::invalid_argument(dirpath.string() + " is not a directory");
 	}
 
 	fmp::BenchmarkKDTreeBuilding(dirpath / "benchmark_kdtree.txt");

@@ -98,6 +98,7 @@ UniverseEditorWidget::openTDD(const QString &path) {
 			qCritical() << "Could not open TrackingDataDirectory" << path
 			            << ": " << e.what();
 		}
+
 		dialog->reset();
 	};
 	watcher.setFuture(QtConcurrent::run(openDataDir));

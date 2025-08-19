@@ -78,7 +78,7 @@ bool Identification::HasDefaultTagSize() const {
 
 OverlappingIdentification::OverlappingIdentification(const priv::Identification & a,
                                                      const priv::Identification & b) noexcept
-	: std::runtime_error(Reason(a,b)){
+	: cpptrace::runtime_error(Reason(a,b)){
 }
 
 OverlappingIdentification::~OverlappingIdentification() {}

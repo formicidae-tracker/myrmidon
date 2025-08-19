@@ -102,11 +102,11 @@ TEST_F(ExperimentDataLessUTest, DataLessSupports) {
 		);
 		ADD_FAILURE(
 		) << "No exception thrown when opening outdated myrmidon file";
-	} catch (const std::runtime_error &e) {
+	} catch (const cpptrace::runtime_error &e) {
 		EXPECT_STREQ(
+		    e.message(),
 		    "Uncorrect myrmidon file version 0.1.0: data-less opening is only "
-		    "supported for myrmidon file version above 0.2.0",
-		    e.what()
+		    "supported for myrmidon file version above 0.2.0"
 		);
 	}
 }

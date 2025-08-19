@@ -103,7 +103,7 @@ public:
 	 *
 	 * @return a pointer to the Experiment
 	 *
-	 * @throws std::runtime_error if **filepath** is not a valid
+	 * @throws cpptrace::runtime_error if **filepath** is not a valid
 	 *         `.myrmidon` file.
 	 */
 	static Experiment::Ptr
@@ -129,7 +129,7 @@ public:
 	 *
 	 * @return the Experiment
 	 *
-	 * @throws std::runtime_error if **filepath** is not a valid
+	 * @throws cpptrace::runtime_error if **filepath** is not a valid
 	 *         `.myrmidon` file.
 	 */
 	static Experiment::Ptr OpenDataLess(const std::string &filepath) {
@@ -164,7 +164,7 @@ public:
 	 *
 	 * @param filepath the desired filesystem location to save the Experiment to
 	 *
-	 * @throws std::invalid_argument if **filepath** will change the
+	 * @throws cpptrace::invalid_argument if **filepath** will change the
 	 *         parent directory of the Experiment.
 	 */
 	void Save(const std::string &filepath);
@@ -190,9 +190,9 @@ public:
 	 *
 	 * @param spaceID the SpaceID of the Space we want to delete.
 	 *
-	 * @throws std::out_of_range if **spaceID** is not a valid ID for
+	 * @throws cpptrace::out_of_range if **spaceID** is not a valid ID for
 	 *         one of this Experiment Space.
-	 * @throws std::runtime_error if **spaceID** still contains any
+	 * @throws cpptrace::runtime_error if **spaceID** still contains any
 	 *         tracking data directories.
 	 */
 	void DeleteSpace(SpaceID spaceID);
@@ -216,16 +216,16 @@ public:
 	 *
 	 * @return the URI used to designate the tracking data directory
 	 *
-	 * @throws std::out_of_range if **spaceID** is not valid for this
+	 * @throws cpptrace::out_of_range if **spaceID** is not valid for this
 	 *         Experiment
-	 * @throws std::runtime_error if **filepath** is not a valid tracking
+	 * @throws cpptrace::runtime_error if **filepath** is not a valid tracking
 	 *         data directory
 	 * @throws FixableErrors if the directory contains corrupted data,
 	 *         and args.fixCorruptedData is false.
-	 * @throws std::domain_error if **filepath** contains data that
+	 * @throws cpptrace::domain_error if **filepath** contains data that
 	 *         would overlap in Time with another tracking data
 	 *         directory associated with the same space.
-	 * @throws std::invalid_argument if the tracking data directory
+	 * @throws cpptrace::invalid_argument if the tracking data directory
 	 *         is already in use in this experiment.
 	 */
 	std::string AddTrackingDataDirectory(
@@ -236,7 +236,7 @@ public:
 	 *
 	 * @param URI the URI of the tracking data directory to remove
 	 *
-	 * @throws std::invalid_argument if **URI** does not designate a
+	 * @throws cpptrace::invalid_argument if **URI** does not designate a
 	 *         tracking data directory in the experiment.
 	 */
 	void RemoveTrackingDataDirectory(const std::string &URI);
@@ -260,8 +260,8 @@ public:
 	 *
 	 * @param antID the AntID of the Ant to delete from the experiment
 	 *
-	 * @throws std::out_of_range if **antID** is not valid for this Experiment
-	 * @throws std::runtime_error if the Ant stills have an identification
+	 * @throws cpptrace::out_of_range if **antID** is not valid for this Experiment
+	 * @throws cpptrace::runtime_error if the Ant stills have an identification
 	 */
 	void DeleteAnt(AntID antID);
 
@@ -279,7 +279,7 @@ public:
 	 *
 	 * @return the new Identification
 	 *
-	 * @throws std::out_of_range if **antID** is not valid for this
+	 * @throws cpptrace::out_of_range if **antID** is not valid for this
 	 *         Experiment
 	 * @throws OverlapingIdentification if it will conflict in time
 	 *         with another Identification with the same **antID** or
@@ -293,7 +293,7 @@ public:
 	 *
 	 * @param identification the Identification to delete
 	 *
-	 * @throws std::invalid_argument if **identification** is not an
+	 * @throws cpptrace::invalid_argument if **identification** is not an
 	 *         Identification for an Ant of this Experiment.
 	 */
 	void DeleteIdentification(const Identification::Ptr &identification);
@@ -312,7 +312,7 @@ public:
 	 * @return two Time that represents an available [start,end[ range
 	 *         for **tagID**
 	 *
-	 * @throws std::runtime_error if **tagID** already identifies an
+	 * @throws cpptrace::runtime_error if **tagID** already identifies an
 	 *         Ant at **time**.
 	 */
 	std::tuple<fort::Time, fort::Time>
@@ -411,11 +411,11 @@ public:
 	 *
 	 * @param measurementTypeID the MeasurementTypeID to delete
 	 *
-	 * @throws std::out_of_range if **measurementTypeID** is not valid
+	 * @throws cpptrace::out_of_range if **measurementTypeID** is not valid
 	 *         for this Experiment.
-	 * @throws std::invalid_argument if **measurementTypeID** is
+	 * @throws cpptrace::invalid_argument if **measurementTypeID** is
 	 *         HEAD_TAIL_MEASUREMENT_TYPE_ID.
-	 * @throws std::runtime_error if some measurement for
+	 * @throws cpptrace::runtime_error if some measurement for
 	 *         **measurementTypeID** exists in the Experiment.
 	 */
 	void DeleteMeasurementType(MeasurementTypeID measurementTypeID);
@@ -426,7 +426,7 @@ public:
 	 * @param measurementTypeID the MeasurementTypeID to modify
 	 * @param name the wanted name
 	 *
-	 * @throws std::out_of_range if **measurementTypeID** is not valid
+	 * @throws cpptrace::out_of_range if **measurementTypeID** is not valid
 	 *         for this Experiment.
 	 */
 	void SetMeasurementTypeName(
@@ -463,7 +463,7 @@ public:
 	 * @param shapeTypeID the AntShapeTypeID of the shape type to rename
 	 * @param name param the new name for the Ant shape type
 	 *
-	 * @throws std::out_of_range if **shapeTypeID** is not valid for
+	 * @throws cpptrace::out_of_range if **shapeTypeID** is not valid for
 	 *         this Experiment.
 	 */
 	void
@@ -474,9 +474,9 @@ public:
 	 *
 	 * @param shapeTypeID the AntShapeTypeID of the shape type to remove
 	 *
-	 * @throws std::out_of_range if **shapeTypeID** is not valid for
+	 * @throws cpptrace::out_of_range if **shapeTypeID** is not valid for
 	 *         this Experiment.
-	 * @throws std::runtime_error if at least one Ant still have a
+	 * @throws cpptrace::runtime_error if at least one Ant still have a
 	 *         Capsule for **shapeTypeID**
 	 */
 	void DeleteAntShapeType(AntShapeTypeID shapeTypeID);
@@ -491,7 +491,7 @@ public:
 	 * Adds a non-tracking metadata **key** with type and
 	 * default defined by **defaultValue**.
 	 *
-	 * @throws std::runtime_error if the following conditions are met:
+	 * @throws cpptrace::runtime_error if the following conditions are met:
 	 *         * **key** is already registered
 	 *         * **defaultValue** would change the type of key
 	 *         * at least one Ant has a value registered for **key**
@@ -503,9 +503,9 @@ public:
 	 *
 	 * @param key the key to remove
 	 *
-	 * @throws std::out_of_range if **key** is not valid for this
+	 * @throws cpptrace::out_of_range if **key** is not valid for this
 	 *         Experiment.
-	 * @throws std::runtime_error if at least one Ant has a defined
+	 * @throws cpptrace::runtime_error if at least one Ant has a defined
 	 *         value for **key**.
 	 */
 	void DeleteMetaDataKey(const std::string &key);
@@ -524,9 +524,9 @@ public:
 	 * @param newKey the new key name
 	 *
 	 *
-	 * @throws std::out_of_range if **oldKey** is not valid for this
+	 * @throws cpptrace::out_of_range if **oldKey** is not valid for this
 	 *         Experiment.
-	 * @throws std::invalid_argument if **newKey** is already used in this
+	 * @throws cpptrace::invalid_argument if **newKey** is already used in this
 	 *         Experiment.
 	 */
 	void
@@ -564,7 +564,7 @@ public:
 	 * @param args a collection of OpenArguments when a large amount of data
 	 *        will be opened.
 	 *
-	 * @throws std::runtime_error in case of data corruption if
+	 * @throws cpptrace::runtime_error in case of data corruption if
 	 *         args.FixCorruptedData is \false
 	 */
 	void EnsureAllDataIsLoaded(OpenArguments &&args = {}) const;

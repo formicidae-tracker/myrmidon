@@ -7,12 +7,12 @@ namespace fort {
 namespace myrmidon {
 namespace priv {
 
-Space::TDDOverlap::TDDOverlap(const TrackingDataDirectory::Ptr & a,
-                              const TrackingDataDirectory::Ptr & b) noexcept
-	: std::domain_error(BuildWhat(a,b))
-	, d_a(a)
-	, d_b(b) {
-}
+Space::TDDOverlap::TDDOverlap(
+    const TrackingDataDirectory::Ptr &a, const TrackingDataDirectory::Ptr &b
+) noexcept
+    : cpptrace::domain_error(BuildWhat(a, b))
+    , d_a(a)
+    , d_b(b) {}
 
 const TrackingDataDirectoryPtr & Space::TDDOverlap::A() const {
 	return d_a;
@@ -32,20 +32,19 @@ std::string Space::TDDOverlap::BuildWhat(const TrackingDataDirectory::Ptr & a,
 }
 
 Space::UnmanagedTrackingDataDirectory::UnmanagedTrackingDataDirectory(const std::string & URI) noexcept
-	: std::invalid_argument("Unknown TDD{URI:'" + URI + "'}") {
+	: cpptrace::invalid_argument("Unknown TDD{URI:'" + URI + "'}") {
 }
 
 Space::UnmanagedSpace::UnmanagedSpace(SpaceID spaceID) noexcept
-	: std::out_of_range("Unknown SpaceID " + std::to_string(spaceID)) {
-}
+    : cpptrace::out_of_range("Unknown SpaceID " + std::to_string(spaceID)) {}
 
 Space::InvalidName::InvalidName(const std::string & name,
                                 const std::string & reason) noexcept
-	: std::invalid_argument("Invalid Space name '" + name + "': " + reason) {
+	: cpptrace::invalid_argument("Invalid Space name '" + name + "': " + reason) {
 }
 
 Space::SpaceNotEmpty::SpaceNotEmpty(const Space & z)
-	: std::runtime_error(BuildReason(z)) {
+	: cpptrace::runtime_error(BuildReason(z)) {
 }
 
 std::string Space::SpaceNotEmpty::BuildReason(const Space & z) {
@@ -62,7 +61,7 @@ std::string Space::SpaceNotEmpty::BuildReason(const Space & z) {
 }
 
 Space::TDDAlreadyInUse::TDDAlreadyInUse(const std::string & tddURI, SpaceID spaceID)
-	: std::invalid_argument("TDD{URI:'"
+	: cpptrace::invalid_argument("TDD{URI:'"
 	                        + tddURI
 	                        + "'} is in use in Space{ID:"
 	                        + std::to_string(spaceID) + "}") {
@@ -126,7 +125,7 @@ void Space::Accessor::AddTrackingDataDirectory(const Space::Ptr & itself,
 
 void Space::AddTrackingDataDirectory(const TrackingDataDirectory::Ptr & tdd) {
 	if ( utils::HasPrefix(tdd->URI(),"spaces/") == true ) {
-		throw std::runtime_error("Invalid TDD path '" + tdd->URI() + "': starts with 'spaces/'");
+		throw cpptrace::runtime_error("Invalid TDD path '" + tdd->URI() + "': starts with 'spaces/'");
 	}
 
 	auto newList = d_tdds;
@@ -277,11 +276,13 @@ Zone::Ptr Universe::CreateZone(ZoneID zoneID,
 void Universe::DeleteZone(ZoneID zoneID) {
 	try {
 		d_zones.DeleteObject(zoneID);
-	} catch ( const AlmostContiguousIDContainer<ZoneID, Zone>::UnmanagedObject &) {
-		throw std::out_of_range("Unknown ZoneID " + std::to_string(zoneID));
+	} catch (const AlmostContiguousIDContainer<ZoneID, Zone>::UnmanagedObject
+	             &) {
+		throw cpptrace::out_of_range(
+		    "Unknown ZoneID " + std::to_string(zoneID)
+		);
 	}
 }
-
 
 Zone::Ptr Space::CreateZone(const std::string & name, ZoneID zoneID) {
 	auto zone = LockUniverse()->CreateZone(zoneID,name,d_URI);

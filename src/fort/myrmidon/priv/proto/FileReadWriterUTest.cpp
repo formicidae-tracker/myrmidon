@@ -27,7 +27,7 @@ TEST_F(FileReadWriterUTest, TestBadIO) {
 		        {}
 		    );
 	    },
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 
 	EXPECT_THROW(
@@ -39,7 +39,7 @@ TEST_F(FileReadWriterUTest, TestBadIO) {
 		        [](const pb::FileLine &line) {}
 		    );
 	    },
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 }
 

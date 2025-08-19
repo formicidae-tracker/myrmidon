@@ -21,7 +21,7 @@ TagCloseUpCache::Load(const fs::path & tddAbsoluteFilePath,
 	ReadWriter::Read(tddAbsoluteFilePath / CACHE_PATH ,
 	                 [&res](const pb::TagCloseUpCacheHeader & pb) {
 		                 if ( pb.version() != CACHE_VERSION) {
-			                 throw std::runtime_error("Mismatched cache version "
+			                 throw cpptrace::runtime_error("Mismatched cache version "
 			                                          + std::to_string(pb.version())
 			                                          + " (expected:"
 			                                          + std::to_string(CACHE_VERSION));

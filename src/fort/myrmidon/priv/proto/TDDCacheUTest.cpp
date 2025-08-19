@@ -25,7 +25,7 @@ TEST_F(TDDCacheUTest, CacheIO) {
 		    // Should be an absolute path as first argument
 		    TDDCache::Load("nest.0000", "nest.0000");
 	    },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 
 	UTestData::ClearCachedData(cacheURI);
@@ -35,7 +35,7 @@ TEST_F(TDDCacheUTest, CacheIO) {
 		    // Was never opened, so there is no cache
 		    TDDCache::Load(cacheURI, basedir);
 	    },
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 
 	TrackingDataDirectory::Ptr opened, cached;
@@ -71,7 +71,7 @@ TEST_F(TDDCacheUTest, CacheIO) {
 	auto cacheFilepath = cacheURI / TDDCache::CACHE_FILENAME;
 	ASSERT_NO_THROW({ TDDCache::ReadWriter::Write(cacheFilepath, h, lines); });
 
-	EXPECT_THROW({ TDDCache::Load(cacheURI, basedir); }, std::runtime_error);
+	EXPECT_THROW({ TDDCache::Load(cacheURI, basedir); }, cpptrace::runtime_error);
 
 	ASSERT_NO_THROW({ fs::remove_all(cacheFilepath); });
 }

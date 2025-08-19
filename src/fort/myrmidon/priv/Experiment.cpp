@@ -1,9 +1,16 @@
 #include "Experiment.hpp"
 
+#include <cpptrace/exceptions.hpp>
+#include <cpptrace/from_current_macros.hpp>
+#include <exception>
+#include <stdexcept>
 #include <sys/file.h>
 #include <unistd.h>
 
 #include <fstream>
+
+#include <cpptrace/cpptrace.hpp>
+#include <cpptrace/from_current.hpp>
 
 #include <fort/myrmidon/utils/Checker.hpp>
 #include <fort/myrmidon/utils/Defer.hpp>
@@ -65,7 +72,7 @@ Experiment::Experiment(const fs::path &filepath)
 		    }
 		    for (const auto &[aID, a] : d_identifier->Ants()) {
 			    if (a->DataMap().count(name) == 1) {
-				    throw std::runtime_error(
+				    throw cpptrace::runtime_error(
 				        "Could not change type for key '" + name +
 				        "': Ant{ID:" + a->FormattedID() +
 				        "} contains timed data"
@@ -121,21 +128,21 @@ public:
 
 		try {
 			p_call(flock, d_fd, lock);
-		} catch (std::system_error &e) {
+		} catch (cpptrace::system_error &e) {
 			if (e.code() != std::errc::resource_unavailable_try_again) {
-				throw std::runtime_error(
+				throw cpptrace::runtime_error(
 				    "Could not acquire lock on '" + filepath.string() +
-				    "': " + e.what()
+				    "': " + e.message()
 				);
 			}
 
 			if (shared == true) {
-				throw std::runtime_error(
+				throw cpptrace::runtime_error(
 				    "Could not acquire shared lock on '" + filepath.string() +
 				    "':  another program has write access on it"
 				);
 			} else {
-				throw std::runtime_error(
+				throw cpptrace::runtime_error(
 				    "Could not acquire exclusive lock on '" +
 				    filepath.string() +
 				    "':  another program has write or read access on it"
@@ -171,7 +178,7 @@ void Experiment::Save(const fs::path &filepath) {
 	auto newBasedir = fs::weakly_canonical(filepath).parent_path();
 	// TODO: should not be an error.
 	if (basedir != newBasedir) {
-		throw std::invalid_argument(
+		throw cpptrace::invalid_argument(
 		    "Changing experiment file directory is not yet supported"
 		);
 	}
@@ -217,7 +224,7 @@ void Experiment::CheckTDDIsDeletable(const std::string &URI) const {
 	if (fi != d_measurementByURI.end()) {
 		auto reason = "Could not remove TrackingDataDirectory '" + URI +
 		              "': it contains measurement '" + fi->first + "'";
-		throw std::runtime_error(reason);
+		throw cpptrace::runtime_error(std::move(reason));
 	}
 }
 
@@ -243,7 +250,7 @@ void Experiment::AddTrackingDataDirectory(
 	auto myFamily  = Family();
 	if (myFamily != tags::Family::Undefined &&
 	    tddFamily != tags::Family::Undefined && myFamily != tddFamily) {
-		throw std::invalid_argument(
+		throw cpptrace::invalid_argument(
 		    "Family for TrackingDataDirectory '" + tdd->URI() + "' (" +
 		    tags::GetFamilyName(tddFamily) +
 		    ") does not match family of other directories (" +
@@ -299,7 +306,7 @@ Ant::Ptr Experiment::CreateAnt(fort::myrmidon::AntID antID) {
 
 void Experiment::SetMeasurement(const Measurement::ConstPtr &m) {
 	if (d_measurementTypes.Objects().count(m->Type()) == 0) {
-		throw std::out_of_range(
+		throw cpptrace::out_of_range(
 		    "Unknown MeasurementType::ID " + std::to_string(m->Type())
 		);
 	}
@@ -311,7 +318,7 @@ void Experiment::SetMeasurement(const Measurement::ConstPtr &m) {
 	if (fi == d_universe->TrackingDataDirectories().end()) {
 		std::ostringstream oss;
 		oss << "Unknown data directory '" << tddURI << "'";
-		throw std::invalid_argument(oss.str());
+		throw cpptrace::invalid_argument(oss.str());
 	}
 
 	auto ref = fi->second->FrameReferenceAt(frameID);
@@ -353,7 +360,7 @@ void Experiment::DeleteMeasurement(const std::string &URI) {
 	if (tfi == d_universe->TrackingDataDirectories().end()) {
 		std::ostringstream oss;
 		oss << "Unknown data directory '" << tddURI << "'";
-		throw std::invalid_argument(oss.str());
+		throw cpptrace::invalid_argument(oss.str());
 	}
 	auto ref = tfi->second->FrameReferenceAt(frameID);
 
@@ -369,11 +376,11 @@ void Experiment::DeleteMeasurement(const std::string &URI) {
 	auto tagCloseUpURI = TagCloseUp::FormatURI(tddURI, frameID, tagID);
 	auto fi            = d_measurementByURI.find(tagCloseUpURI);
 	if (fi == d_measurementByURI.end()) {
-		throw std::runtime_error("Unknown measurement '" + URI + "'");
+		throw cpptrace::runtime_error("Unknown measurement '" + URI + "'");
 	}
 	auto ffi = fi->second.find(mtID);
 	if (ffi == fi->second.end()) {
-		throw std::runtime_error("Unknown measurement '" + URI + "'");
+		throw cpptrace::runtime_error("Unknown measurement '" + URI + "'");
 	}
 	fi->second.erase(ffi);
 	if (fi->second.empty()) {
@@ -433,15 +440,35 @@ double Experiment::CornerWidthRatio(tags::Family f) {
 	if (fi != cache.end()) {
 		return fi->second;
 	}
-	auto [familyConstructor, familyDestructor] = tags::GetFamily(f);
-	auto  familyDefinition                     = familyConstructor();
-	Defer cleanup([familyDefinition = familyDefinition,
-	               familyDestructor = familyDestructor]() {
-		familyDestructor(familyDefinition);
-	});
-	auto  res = double(familyDefinition->width_at_border) /
-	           double(familyDefinition->total_width);
-	cache[f] = res;
+
+	double res;
+	cpptrace::try_catch(
+	    [&]() {
+		    auto [familyConstructor, familyDestructor] = tags::GetFamily(f);
+		    auto  familyDefinition                     = familyConstructor();
+		    Defer cleanup([familyDefinition = familyDefinition,
+		                   familyDestructor = familyDestructor]() {
+			    familyDestructor(familyDefinition);
+		    });
+		    res = double(familyDefinition->width_at_border) /
+		          double(familyDefinition->total_width);
+		    cache[f] = res;
+	    },
+	    [&](const std::invalid_argument &e) {
+		    throw cpptrace::invalid_argument(
+		        e.what(),
+		        cpptrace::raw_trace{
+		            cpptrace::raw_trace_from_current_exception()}
+		    );
+	    },
+	    [&](const cpptrace::out_of_range &e) {
+		    throw cpptrace::out_of_range(
+		        e.what(),
+		        cpptrace::raw_trace{
+		            cpptrace::raw_trace_from_current_exception()}
+		    );
+	    }
+	);
 	return res;
 }
 
@@ -452,13 +479,13 @@ void Experiment::ComputeMeasurementsForAnt(
 ) const {
 	auto afi = d_identifier->Ants().find(antID);
 	if (afi == d_identifier->Ants().cend()) {
-		throw std::out_of_range("Unknown AntID " + std::to_string(antID));
+		throw cpptrace::out_of_range("Unknown AntID " + std::to_string(antID));
 	}
 	result.clear();
 	double cornerWidthRatio;
 	try {
 		cornerWidthRatio = CornerWidthRatio(Family());
-	} catch (const std::invalid_argument &e) {
+	} catch (const cpptrace::invalid_argument &e) {
 		return;
 	}
 
@@ -520,21 +547,21 @@ MeasurementType::Ptr Experiment::CreateMeasurementType(
 void Experiment::DeleteMeasurementType(MeasurementType::ID MTID) {
 	auto fi = d_measurementTypes.Objects().find(MTID);
 	if (d_measurements.count(MTID) != 0) {
-		throw std::runtime_error(
+		throw cpptrace::runtime_error(
 		    "Could not remove MeasurementTypeID '" + fi->second->Name() +
 		    "' has experiment still contains measurement"
 		);
 	}
 
 	if (MTID == Measurement::HEAD_TAIL_TYPE) {
-		throw std::invalid_argument(
+		throw cpptrace::invalid_argument(
 		    "Could not remove default measurement type 'head-tail'"
 		);
 	}
 	try {
 		d_measurementTypes.DeleteObject(MTID);
 	} catch (const MeasurementTypeContainer::UnmanagedObject &) {
-		throw std::out_of_range(
+		throw cpptrace::out_of_range(
 		    "Unknown MeasurementTypeID " + std::to_string(MTID)
 		);
 	}
@@ -561,7 +588,7 @@ Experiment::CreateAntShapeType(const std::string &name, AntShapeTypeID typeID) {
 void Experiment::DeleteAntShapeType(AntShapeTypeID typeID) {
 	auto fi = d_antShapeTypes->Find(typeID);
 	if (fi == d_antShapeTypes->End()) {
-		throw std::out_of_range(
+		throw cpptrace::out_of_range(
 		    "Unknown AntShapeTypeID " + std::to_string(typeID)
 		);
 	}
@@ -569,7 +596,7 @@ void Experiment::DeleteAntShapeType(AntShapeTypeID typeID) {
 	for (const auto &[aID, a] : d_identifier->Ants()) {
 		for (const auto &[type, c] : a->Capsules()) {
 			if (type == typeID) {
-				throw std::runtime_error(
+				throw cpptrace::runtime_error(
 				    "Could not delete AntShapeType{ID:" +
 				    std::to_string(fi->first) + ", Name:'" +
 				    fi->second->Name() + "'}: Ant{ID:" + FormatAntID(aID) +
@@ -601,7 +628,7 @@ Experiment::SetMetaDataKey(const std::string &name, const Value &defaultValue) {
 void Experiment::DeleteMetaDataKey(const std::string &key) {
 	for (const auto &[aID, a] : d_identifier->Ants()) {
 		if (a->DataMap().count(key) != 0) {
-			throw std::runtime_error(
+			throw cpptrace::runtime_error(
 			    "Cannot remove metadata key '" + key +
 			    "': Ant{ID:" + FormatAntID(aID) + "} contains timed data"
 			);
@@ -620,7 +647,7 @@ void Experiment::RenameMetaDataKey(
 ) {
 	auto fi = d_antMetadata->Keys().find(oldName);
 	if (fi == d_antMetadata->Keys().end()) {
-		throw std::out_of_range("Unknown key '" + oldName + "'");
+		throw cpptrace::out_of_range("Unknown key '" + oldName + "'");
 	}
 	fi->second->SetName(newName);
 }
@@ -630,7 +657,9 @@ void Experiment::CloneAntShape(
 ) {
 	auto sourceIt = d_identifier->Ants().find(sourceAntID);
 	if (sourceIt == d_identifier->Ants().cend()) {
-		throw std::out_of_range("Cannot find ant " + FormatAntID(sourceAntID));
+		throw cpptrace::out_of_range(
+		    "Cannot find ant " + FormatAntID(sourceAntID)
+		);
 	}
 
 	auto source = sourceIt->second;
@@ -658,7 +687,7 @@ void Experiment::CloneAntShape(
 
 	double baseSize = computeSize(sourceAntID);
 	if (baseSize == 0.0 && scaleToSize == true) {
-		throw std::runtime_error(
+		throw cpptrace::runtime_error(
 		    "Ant " + FormatAntID(sourceAntID) + " has a size of zero"
 		);
 	}

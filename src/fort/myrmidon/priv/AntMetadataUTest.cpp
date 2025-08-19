@@ -36,7 +36,7 @@ TEST_F(AntMetadataUTest,KeyHaveUniqueName) {
 
 	EXPECT_THROW({
 			foo->SetName("bar");
-		},std::invalid_argument);
+		},cpptrace::invalid_argument);
 
 	foo->SetName("foobar");
 	AntMetadata::SetKey(metadata,"foo",std::string(""));
@@ -58,7 +58,7 @@ TEST_F(AntMetadataUTest,ColumnAdditionDeletion) {
 
 	EXPECT_THROW({
 			metadata->Delete("foobar");
-		},std::out_of_range);
+		},cpptrace::out_of_range);
 
 	EXPECT_NO_THROW({
 			metadata->Delete("foo");
@@ -69,7 +69,7 @@ TEST_F(AntMetadataUTest,ColumnAdditionDeletion) {
 
 	EXPECT_THROW({
 			metadata->Delete("foo");
-		},std::out_of_range);
+		},cpptrace::out_of_range);
 
 	EXPECT_EQ(metadata->Keys().size(),2);
 }
@@ -103,7 +103,7 @@ TEST_F(AntMetadataUTest,DataTypeStringValidation) {
 
 	EXPECT_EQ(AntMetadata::Validate(ValueType::TIME,"<any-string>"),AntMetadata::Validity::Intermediate);
 
-	EXPECT_THROW(AntMetadata::Validate(ValueType(42), ""),std::invalid_argument);
+	EXPECT_THROW(AntMetadata::Validate(ValueType(42), ""),cpptrace::invalid_argument);
 }
 
 

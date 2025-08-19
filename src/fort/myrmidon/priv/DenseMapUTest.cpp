@@ -22,7 +22,7 @@ TEST_F(DenseMapUTest,TestInsertion) {
 	EXPECT_THROW({
 			// could not insert object 0
 			auto res = map.insert(std::make_pair(0,0));
-		},std::invalid_argument);
+		},cpptrace::invalid_argument);
 
 	auto res = map.insert(std::make_pair(1,0));
 	EXPECT_TRUE(res.second);
@@ -85,7 +85,7 @@ TEST_F(DenseMapUTest,IterationAndErase) {
 	map.erase(begin);
 	EXPECT_NO_THROW(map.erase(begin));
 	EXPECT_NO_THROW(map.erase(1));
-	EXPECT_THROW(map.at(1),std::out_of_range);
+	EXPECT_THROW(map.at(1),cpptrace::out_of_range);
 	EXPECT_EQ(--(map.begin()),map.begin());
 	EXPECT_EQ(--(const_cast<const DM*>(&map)->begin()),map.cbegin());
 	EXPECT_EQ(--(map.cbegin()),map.cbegin());

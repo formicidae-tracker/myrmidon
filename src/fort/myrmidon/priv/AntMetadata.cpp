@@ -15,7 +15,7 @@ namespace priv {
 void AntMetadata::CheckName(const std::string & name) const {
 	auto fi = d_keys.find(name);
 	if ( fi != d_keys.cend() ) {
-		throw std::invalid_argument("Key '" + name + "' is already used");
+		throw cpptrace::invalid_argument("Key '" + name + "' is already used");
 	}
 }
 
@@ -36,7 +36,7 @@ AntMetadata::Key::Ptr AntMetadata::SetKey(const Ptr & itself,
 void AntMetadata::Delete(const std::string & name) {
 	auto fi =  d_keys.find(name);
 	if ( fi == d_keys.end() ) {
-		throw std::out_of_range("Unknown key '" + name + "'");
+		throw cpptrace::out_of_range("Unknown key '" + name + "'");
 	}
 	d_keys.erase(fi);
 }
@@ -118,7 +118,7 @@ AntMetadata::Validity AntMetadata::Validate(ValueType type, const std::string & 
 		};
 	size_t idx = size_t(type);
 	if ( idx >= validators.size() ) {
-		throw std::invalid_argument("Unknown AntMetadata::Type value " + std::to_string(idx));
+		throw cpptrace::invalid_argument("Unknown AntMetadata::Type value " + std::to_string(idx));
 	}
 	return validators[idx](value);
 }
@@ -159,7 +159,7 @@ AntMetadata::Key::Key(const std::weak_ptr<AntMetadata> & metadata,
 	, d_name(name)
 	, d_default(defaultValue) {
 	if ( d_default.index() == std::variant_npos) {
-		throw std::runtime_error("Invalid Value passed as default value");
+		throw cpptrace::runtime_error("Invalid Value passed as default value");
 	}
 }
 

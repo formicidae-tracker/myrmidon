@@ -242,7 +242,7 @@ TEST_F(CollisionSolverUTest, TestE2E) {
 		    frame->Space = 2;
 		    solver->ComputeCollisions(*res, *frame);
 	    },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 	EXPECT_NO_THROW({
 		frame->Space = 1;

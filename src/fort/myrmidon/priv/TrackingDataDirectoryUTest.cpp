@@ -108,7 +108,7 @@ TEST_F(TrackingDataDirectoryUTest, ExtractInfoFromTrackingDatadirectories) {
 		        {}
 		    );
 	    },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 
 	EXPECT_THROW(
@@ -120,7 +120,7 @@ TEST_F(TrackingDataDirectoryUTest, ExtractInfoFromTrackingDatadirectories) {
 		        {}
 		    );
 	    },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 
 	EXPECT_THROW(
@@ -132,7 +132,7 @@ TEST_F(TrackingDataDirectoryUTest, ExtractInfoFromTrackingDatadirectories) {
 		        {}
 		    );
 	    },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 
 	EXPECT_THROW(
@@ -144,7 +144,7 @@ TEST_F(TrackingDataDirectoryUTest, ExtractInfoFromTrackingDatadirectories) {
 		        {}
 		    );
 	    },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 
 	EXPECT_THROW(
@@ -156,7 +156,7 @@ TEST_F(TrackingDataDirectoryUTest, ExtractInfoFromTrackingDatadirectories) {
 		        {}
 		    );
 	    },
-	    std::runtime_error
+	    cpptrace::runtime_error
 	);
 }
 
@@ -233,7 +233,7 @@ TEST_F(TrackingDataDirectoryUTest, HaveConstructorChecks) {
 		        cache
 		    );
 	    },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 
 	EXPECT_THROW(
@@ -250,7 +250,7 @@ TEST_F(TrackingDataDirectoryUTest, HaveConstructorChecks) {
 		        cache
 		    );
 	    },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 
 	EXPECT_THROW(
@@ -267,7 +267,7 @@ TEST_F(TrackingDataDirectoryUTest, HaveConstructorChecks) {
 		        cache
 		    );
 	    },
-	    std::invalid_argument
+	    cpptrace::invalid_argument
 	);
 }
 
@@ -291,7 +291,7 @@ TEST_F(TrackingDataDirectoryUTest, AlmostRandomAccess) {
 
 	EXPECT_THROW(
 	    { tdd->FrameReferenceAt(tdd->EndFrame() + 1); },
-	    std::out_of_range
+	    cpptrace::out_of_range
 	);
 
 	EXPECT_NO_THROW({
@@ -307,10 +307,10 @@ TEST_F(TrackingDataDirectoryUTest, AlmostRandomAccess) {
 
 	EXPECT_THROW(
 	    { auto iterEnd = tdd->FrameAfter(tdd->Start().Add(-1)); },
-	    std::out_of_range
+	    cpptrace::out_of_range
 	);
 
-	EXPECT_THROW({ tdd->FrameReferenceAfter(tdd->End()); }, std::out_of_range);
+	EXPECT_THROW({ tdd->FrameReferenceAfter(tdd->End()); }, cpptrace::out_of_range);
 
 	EXPECT_NO_THROW({
 		auto ref = tdd->FrameReferenceAfter(tdd->Start());

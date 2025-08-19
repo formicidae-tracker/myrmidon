@@ -146,7 +146,7 @@ public:
 	 *
 	 * @return the new ZoneDefinition
 	 *
-	 * @throws std::invalid_argument if start or end would make the
+	 * @throws cpptrace::invalid_argument if start or end would make the
 	 *         resulting definition overlap in time with another
 	 *         ZoneDefinition for this Zone.
 	 */
@@ -167,7 +167,7 @@ public:
 	 *
 	 * @param index the index in Definitions() to remove.
 	 *
-	 * @throws std::out_of_range if index >= Definitions().size()
+	 * @throws cpptrace::out_of_range if index >= Definitions().size()
 	 */
 	void DeleteDefinition(size_t index);
 

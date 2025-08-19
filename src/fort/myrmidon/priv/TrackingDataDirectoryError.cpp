@@ -25,7 +25,7 @@ CorruptedHermesFileError::CorruptedHermesFileError(
     , d_file(file)
     , d_until(until) {
 	if (d_file.is_absolute() == false) {
-		throw std::invalid_argument("needed an absolute filepath");
+		throw cpptrace::invalid_argument("needed an absolute filepath");
 	}
 }
 
@@ -93,7 +93,7 @@ void CorruptedHermesFileError::fix() {
 	}
 
 	if (d_until != std::numeric_limits<uint64_t>::max() && last < d_until) {
-		throw std::runtime_error(
+		throw cpptrace::runtime_error(
 		    "could not read '" + d_file.string() + "' until expected frame " +
 		    std::to_string(d_until)
 		);
@@ -135,7 +135,7 @@ NoKnownAcquisitionTimeFor::NoKnownAcquisitionTimeFor(
     : FixableError(std::move(reason), std::move(origin))
     , d_filepath(filepath) {
 	if (d_filepath.is_absolute() == false) {
-		throw std::invalid_argument("needed an absolute filepath");
+		throw cpptrace::invalid_argument("needed an absolute filepath");
 	}
 	d_disabledPath =
 	    d_filepath.parent_path() /

@@ -35,7 +35,7 @@ TEST_F(PublicSpaceUTest, ZoneManipulation) {
 	// they are the same objects
 	EXPECT_NO_THROW({ EXPECT_EQ(space->Zones().at(z->ID()), z); });
 
-	EXPECT_THROW({ space->DeleteZone(42); }, std::out_of_range);
+	EXPECT_THROW({ space->DeleteZone(42); }, cpptrace::out_of_range);
 
 	EXPECT_NO_THROW(space->DeleteZone(z->ID()));
 }
@@ -60,7 +60,7 @@ TEST_F(PublicSpaceUTest, CanLocateMovieFrame) {
 		    fileAndFrame =
 		        experiment->Spaces().at(1)->LocateMovieFrame(tddInfo.End);
 	    },
-	    std::out_of_range
+	    cpptrace::out_of_range
 	);
 }
 

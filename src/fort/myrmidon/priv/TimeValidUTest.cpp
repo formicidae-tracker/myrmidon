@@ -181,10 +181,10 @@ TEST_F(TimeValidUTest,CanGiveBoundaries) {
 		auto t = fort::Time::FromTimeT(tt);
 		EXPECT_THROW({
 				TimeValid::LowerUnvalidBound(t,list.begin(),list.end());
-			},std::invalid_argument) << " for time " << t;
+			},cpptrace::invalid_argument) << " for time " << t;
 		EXPECT_THROW({
 				TimeValid::UpperUnvalidBound(t,list.begin(),list.end());
-			},std::invalid_argument) << " for time " << t;
+			},cpptrace::invalid_argument) << " for time " << t;
 
 	}
 

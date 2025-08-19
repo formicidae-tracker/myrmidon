@@ -41,11 +41,11 @@ Experiment::Ptr ExperimentReadWriter::DoOpen(
 			    os << "Unexpected myrmidon file version " << fileVersion
 			       << " in " << filename
 			       << ": can only works with versions below or equal to 0.3.0";
-			    throw std::runtime_error(os.str());
+			    throw cpptrace::runtime_error(os.str());
 		    }
 		    if (dataless == true &&
 		        fileVersion < dataLessSupportBoundaryVersion) {
-			    throw std::runtime_error(
+			    throw cpptrace::runtime_error(
 			        "Uncorrect myrmidon file version " +
 			        fileVersion.to_string() +
 			        ": data-less opening is only supported for myrmidon file "

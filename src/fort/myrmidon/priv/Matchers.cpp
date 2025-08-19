@@ -24,7 +24,7 @@ Matcher::Ptr Matcher::And(const std::vector<Ptr>  &matchers) {
 				d_depths.push_back(m->Depth() + d_depths.back());
 			}
 			if ( d_depths.back() > 64 ) {
-				throw std::runtime_error("Maximal depth of this implementation is 64");
+				throw cpptrace::runtime_error("Maximal depth of this implementation is 64");
 			}
 		}
 		virtual ~AndMatcher() {}
@@ -87,7 +87,7 @@ Matcher::Ptr Matcher::Or(const std::vector<Ptr> & matchers) {
 				d_depths.push_back(m->Depth() + d_depths.back());
 			}
 			if ( d_depths.back() > 64 ) {
-				throw std::runtime_error("Maximal depth of this implementation is 64");
+				throw cpptrace::runtime_error("Maximal depth of this implementation is 64");
 			}
 		}
 		virtual ~OrMatcher() {}
@@ -379,7 +379,7 @@ public:
 			d_type1 = type2;
 			d_type2 = type1;
 		} else {
-			throw std::runtime_error("type1 must be different than type2");
+			throw cpptrace::runtime_error("type1 must be different than type2");
 		}
 	}
 	virtual ~InteractionTypeDualMatcher() {}

@@ -70,7 +70,7 @@ void CheckFrameDrop(const std::map<Time, Time> &ticks, Duration framerate) {
         }
     );
 	if (fi == ticks.end()) {
-		throw std::runtime_error("No framedrop found");
+		throw cpptrace::runtime_error("No framedrop found");
 	}
 }
 
@@ -345,7 +345,7 @@ std::vector<AntTrajectorySegment> GeneratedData::FindTrajectorySegments(
 		);
 
 		if (fi == Trajectories.end()) {
-			throw std::runtime_error("could not find any suitable trajectory");
+			throw cpptrace::runtime_error("could not find any suitable trajectory");
 		}
 		AntTrajectorySegment s;
 		s.Trajectory = *fi;

@@ -1,13 +1,12 @@
 #pragma once
 
-#include <stdexcept>
+#include <cpptrace/cpptrace.hpp>
 
 namespace fort {
 
 namespace myrmidon {
 
 namespace priv {
-
 
 // Exception for deleted reference
 // @T the type of reference
@@ -24,14 +23,18 @@ namespace priv {
 // one of these object.
 //
 // TODO: maybe it hsould be a std::logic_error
-template<typename T>
-class DeletedReference : public std::runtime_error {
+template <typename T> class DeletedReference : public cpptrace::runtime_error {
 public:
 	// Its Constructor
 	//
 	// It initialize the reason of the exception to Deleted reference
 	// to <T> with <T> actually replaced by the typeid name.
-	inline DeletedReference() noexcept : std::runtime_error(std::string("Deleted reference to ") + typeid(T).name() + " object") {};
+	inline DeletedReference() noexcept
+	    : cpptrace::runtime_error(
+	          std::string("Deleted reference to ") + typeid(T).name() +
+	          " object"
+	      ){};
+
 	// Its destructor
 	inline virtual ~DeletedReference() noexcept {}
 };
@@ -40,4 +43,4 @@ public:
 
 } // namespace myrmidon
 
-} // fort
+} // namespace fort

@@ -23,7 +23,7 @@ TEST_F(PublicTypesUTest, IdentifiedFrameMethods) {
 	EXPECT_TRUE(data->Contains(3));
 	EXPECT_FALSE(data->Contains(43));
 
-	EXPECT_THROW({ data->At(42); }, std::out_of_range);
+	EXPECT_THROW({ data->At(42); }, cpptrace::out_of_range);
 
 	auto [antID, position, zoneID] = data->At(0);
 	EXPECT_EQ(antID, 1);

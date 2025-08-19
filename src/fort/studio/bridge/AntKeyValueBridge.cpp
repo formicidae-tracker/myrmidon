@@ -24,93 +24,95 @@ public:
 	KeyModel(QObject * parent)
 		: QAbstractItemModel(parent) {
 	}
-	virtual ~KeyModel() {
-	}
+	virtual ~KeyModel() {}
 
-	bool setKey(const QString & name,
-	            const fm::Value & defaultValue) {
+	bool setKey(const QString &name, const fm::Value &defaultValue) {
 		auto sname = ToStdString(name);
-		auto fi = find(sname);
-		if ( fi == d_keys.end() ) {
-			return addKey(sname,defaultValue);
+		auto fi    = find(sname);
+		if (fi == d_keys.end()) {
+			return addKey(sname, defaultValue);
 		}
 
 		try {
-			qInfo() << "[AntKeyValueBridge]: Setting default value of '"
-			        << name << "' to '"
-			        << ToQString(defaultValue) << "'";
-			d_experiment->SetMetaDataKey((*fi)->Name(),defaultValue);
-		} catch ( const std::exception & e ) {
-			qCritical() << "[AntKeyValueBridge]: Could not set default value of '"
-			            << name << "' to '"
-			            << ToQString(defaultValue)
-			            << "': " << e.what();
+			qInfo() << "[AntKeyValueBridge]: Setting default value of '" << name
+			        << "' to '" << ToQString(defaultValue) << "'";
+			d_experiment->SetMetaDataKey((*fi)->Name(), defaultValue);
+		} catch (const std::exception &e) {
+			qCritical(
+			) << "[AntKeyValueBridge]: Could not set default value of '"
+			  << name << "' to '" << ToQString(defaultValue)
+			  << "': " << e.what();
 			return false;
 		}
 
-		int pos = std::distance(d_keys.cbegin(),fi);
-		emit dataChanged(index(pos,1),index(pos,2));
+		int  pos = std::distance(d_keys.cbegin(), fi);
+		emit dataChanged(index(pos, 1), index(pos, 2));
 
 		return true;
 	}
 
-	bool removeKey(const QString & name) {
+	bool removeKey(const QString &name) {
 		auto sname = ToStdString(name);
-		auto fi = find(sname);
-		if ( fi == d_keys.end() ) {
+		auto fi    = find(sname);
+		if (fi == d_keys.end()) {
 			return false;
 		}
 		try {
 			qInfo() << "[AntKeyValueBridge]: Removing key '" << name << "'";
 			d_experiment->DeleteMetaDataKey(sname);
-		} catch ( const std::exception & e ) {
+		} catch (const std::exception &e) {
 			qCritical() << "[AntKeyValueBridge]: Could not remove key '" << name
 			            << "': " << e.what();
 			return false;
 		}
 
-		int pos = std::distance(d_keys.cbegin(),fi);
+		int pos = std::distance(d_keys.cbegin(), fi);
 		beginRemoveRows(QModelIndex(), pos, pos);
 		d_keys.erase(fi);
 		endRemoveRows();
 		return true;
 	}
 
-
-	bool renameKey(const QString & oldKey, const QString & newKey) {
+	bool renameKey(const QString &oldKey, const QString &newKey) {
 		auto sOldKey = ToStdString(oldKey);
 		auto sNewKey = ToStdString(newKey);
-		auto fi = find(sOldKey);
-		if ( oldKey == newKey || fi == d_keys.end() ) {
+		auto fi      = find(sOldKey);
+		if (oldKey == newKey || fi == d_keys.end()) {
 			return false;
 		}
 		auto dest = lower_bound(sNewKey);
 		try {
-			qInfo() << "[AntKeyValueBridge]: Renaming key " << oldKey
-			        <<" to " << newKey;
-			d_experiment->RenameMetaDataKey(sOldKey,sNewKey);
-		} catch ( const std::exception & e ) {
-			qCritical() << "[AntKeyValueBridge]: Could not rename key " << oldKey
-			            <<" to " << newKey << ": " << e.what();
+			qInfo() << "[AntKeyValueBridge]: Renaming key " << oldKey << " to "
+			        << newKey;
+			d_experiment->RenameMetaDataKey(sOldKey, sNewKey);
+		} catch (const std::exception &e) {
+			qCritical() << "[AntKeyValueBridge]: Could not rename key "
+			            << oldKey << " to " << newKey << ": " << e.what();
 			return false;
 		}
 
-		int srcPos = fi - d_keys.begin();
-		int destPos = dest - d_keys.begin();
+		int srcPos   = fi - d_keys.begin();
+		int destPos  = dest - d_keys.begin();
 		int finalPos = destPos > srcPos ? destPos - 1 : destPos;
-		if ( finalPos != srcPos ) {
-			beginMoveRows(QModelIndex(),
-			              srcPos,
-			              srcPos,
-			              QModelIndex(),
-			              destPos);
-			std::sort(d_keys.begin(),d_keys.end(),
-			          [](const fmp::AntMetadata::Key::Ptr & a,const fmp::AntMetadata::Key::Ptr & b) {
-				          return a->Name() < b->Name();
-			          });
+		if (finalPos != srcPos) {
+			beginMoveRows(
+			    QModelIndex(),
+			    srcPos,
+			    srcPos,
+			    QModelIndex(),
+			    destPos
+			);
+			std::sort(
+			    d_keys.begin(),
+			    d_keys.end(),
+			    [](const fmp::AntMetadata::Key::Ptr &a,
+			       const fmp::AntMetadata::Key::Ptr &b) {
+				    return a->Name() < b->Name();
+			    }
+			);
 			endMoveRows();
 		}
-		emit dataChanged(index(finalPos,0),index(finalPos,0));
+		emit dataChanged(index(finalPos, 0), index(finalPos, 0));
 		return true;
 	}
 
@@ -1009,7 +1011,7 @@ private:
 
 	std::string keyNameAt(int key) const {
 		if ( key < 0 || key >= d_keyModel->rowCount() ) {
-			throw std::out_of_range("key index is invalid");
+			throw cpptrace::out_of_range("key index is invalid");
 		}
 		return ToStdString(d_keyModel->index(key,0).data(Qt::DisplayRole).toString());
 	}

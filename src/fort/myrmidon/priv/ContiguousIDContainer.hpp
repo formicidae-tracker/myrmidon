@@ -6,6 +6,8 @@
 #include <functional>
 #include <set>
 
+#include <cpptrace/cpptrace.hpp>
+
 namespace fort {
 namespace myrmidon {
 namespace priv {
@@ -17,20 +19,20 @@ public:
 	typedef std::set<TID>                           SetOfObjectID;
 	typedef std::function<std::shared_ptr<T>(TID)>  Creator;
 
-	class AlreadyExistingObject : public std::runtime_error {
+	class AlreadyExistingObject : public cpptrace::runtime_error {
 	public:
 		AlreadyExistingObject(TID ID) noexcept
-		    : std::runtime_error(
+		    : cpptrace::runtime_error(
 		          std::string(typeid(T).name()) + " " + std::to_string(ID) +
 		          " already exists"
 		      ){};
 		virtual ~AlreadyExistingObject() noexcept {};
 	};
 
-	class UnmanagedObject : public std::out_of_range {
+	class UnmanagedObject : public cpptrace::out_of_range {
 	public:
 		UnmanagedObject(TID ID) noexcept
-		    : std::out_of_range(
+		    : cpptrace::out_of_range(
 		          std::string(typeid(T).name()) + " " + std::to_string(ID) +
 		          " is not managed"
 		      ){};

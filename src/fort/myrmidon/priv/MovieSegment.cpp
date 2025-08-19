@@ -17,11 +17,11 @@ MovieSegment::Ptr MovieSegment::Open(MovieSegment::MovieID id,
                                      const std::string & parentURI) {
 
 	if ( fs::is_regular_file(frameMatchingPath) == false ) {
-		throw std::invalid_argument("'" + frameMatchingPath.string() + "' is not a regular file");
+		throw cpptrace::invalid_argument("'" + frameMatchingPath.string() + "' is not a regular file");
 	}
 
 	if ( fs::is_regular_file(moviePath) == false ) {
-		throw std::invalid_argument("'" + moviePath.string() + "' is not a regular file");
+		throw cpptrace::invalid_argument("'" + moviePath.string() + "' is not a regular file");
 	}
 
 
@@ -39,11 +39,11 @@ MovieSegment::Ptr MovieSegment::Open(MovieSegment::MovieID id,
 		MovieFrameID movieID;
 		iss >> movieID;
 		if (!iss) {
-			throw std::runtime_error("Could not read movie frame in line '" + line + "'");
+			throw cpptrace::runtime_error("Could not read movie frame in line '" + line + "'");
 		}
 		iss >> trackingID;
 		if (!iss) {
-			throw std::runtime_error("Could not read tracking frame in line '" + line + "'");
+			throw cpptrace::runtime_error("Could not read tracking frame in line '" + line + "'");
 		}
 		FrameID currentOffset = trackingID - movieID;
 		if ( offsets.empty() == true ) {
@@ -74,7 +74,7 @@ uint64_t MovieSegment::ToTrackingFrameID(uint64_t movieFrameID) const {
 		std::ostringstream oss;
 		oss << movieFrameID << " is not in ["
 		    << d_movieStart << ";" << d_movieEnd << "]";
-		throw std::out_of_range(oss.str());
+		throw cpptrace::out_of_range(oss.str());
 	}
 	auto fi = d_byMovie.lower_bound(movieFrameID);
 
@@ -90,7 +90,7 @@ uint64_t MovieSegment::ToMovieFrameID(uint64_t trackingFrameID) const {
 		std::ostringstream oss;
 		oss << trackingFrameID << " is not in ["
 		    << d_trackingStart << ";" << d_trackingEnd << "]";
-		throw std::out_of_range(oss.str());
+		throw cpptrace::out_of_range(oss.str());
 	}
 	auto fi = d_byTracking.lower_bound(trackingFrameID);
 
@@ -124,7 +124,7 @@ MovieSegment::MovieSegment(MovieID ID,
 	if ( d_byMovie.count(startMovieID) == 0 ) {
 		std::ostringstream oss;
 		oss << startMovieID << " movie frame ID is missing from offsets lists";
-		throw std::invalid_argument(oss.str());
+		throw cpptrace::invalid_argument(oss.str());
 	}
 }
 
