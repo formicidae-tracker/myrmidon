@@ -2566,6 +2566,8 @@ class VideoFrameData:
         """
     def __init__(self, position: int, time: Time) -> None:
         ...
+    def __repr__(self) -> str:
+        ...
     @property
     def Collided(self) -> CollisionFrame:
         """
@@ -2780,6 +2782,8 @@ class VideoSegment:
         """
     def __init__(self, arg0: int) -> None:
         ...
+    def __repr__(self) -> str:
+        ...
     @property
     def AbsoluteFilePath(self) -> str:
         """
@@ -2928,6 +2932,8 @@ class VideoSequence:
     def __iter__(self) -> VideoSequence:
         ...
     def __next__(self) -> tuple:
+        ...
+    def __repr__(self) -> str:
         ...
 class Zone:
     """
@@ -3111,4 +3117,4 @@ def FormatTagID(tagID: int) -> str:
     """
 PREDECENCE_HIGHER: ZonePriority  # value = <ZonePriority.PREDECENCE_HIGHER: 1>
 PREDECENCE_LOWER: ZonePriority  # value = <ZonePriority.PREDECENCE_LOWER: 0>
-__version__: str = '0.9.0+3.bcd61cc0'
+__version__: str = '0.9.0+3.bdd264f5'

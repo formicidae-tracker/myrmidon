@@ -1,18 +1,19 @@
 #include "BindTypes.hpp"
 
 #include <fort/myrmidon/Video.hpp>
+#include <ios>
+#include <sstream>
 
 using namespace pybind11::literals;
 
 namespace py = pybind11;
 
-
-
-void BindVideoFrameData(py::module_ & m) {
+void BindVideoFrameData(py::module_ &m) {
 	using namespace fort::myrmidon;
-	py::class_<VideoFrameData>(m,
-	                           "VideoFrameData",
-	                           R"pydoc(
+	py::class_<VideoFrameData>(
+	    m,
+	    "VideoFrameData",
+	    R"pydoc(
 The tracking data and query results associated with a Video frame.
 
 Note:
@@ -27,44 +28,77 @@ Warning:
     reported ), the value of :attr:`VideoFrameData.Time` will be set
     to :meth:`Time.SinceEver` and all other query result field will be
     set to `None`.
-)pydoc")
-		.def(py::init([](uint32_t position,
-		                 const fort::Time & time) {
-			              return std::make_unique<VideoFrameData>(VideoFrameData{.Position = position,.Time = time});
-		              }),
-		     "position"_a,
-		     "time"_a)
-		.def_readonly("Time",
-		              &VideoFrameData::Time,
-		              "Time: the video frame acquisition time (if available)")
-		.def_readonly("Position",
-		              &VideoFrameData::Position,
-		              "int: the frame position in the video file")
-		.def_readonly("Identified",
-		              &VideoFrameData::Identified,
-		              "IdentifiedFrame: the ants position (if previously matched)")
-		.def_readonly("Collided",
-		              &VideoFrameData::Collided,
-		              "CollisionFrame: the ants collision (if previously matched)")
-		.def_readonly("Trajectories",
-		              &VideoFrameData::Trajectories,
-		              "List[AntTrajectory]: the trajectories in this frame (if previously matched)")
-		.def_readonly("Interactions",
-		              &VideoFrameData::Interactions,
-		              "List[AntInteraction]: the interactions in this frame (if previously matched)")
-		.def("Empty",
-		     &VideoFrameData::Empty,
-		     R"pydoc(
+)pydoc"
+	)
+	    .def(
+	        py::init([](uint32_t position, const fort::Time &time) {
+		        return std::make_unique<VideoFrameData>(
+		            VideoFrameData{.Position = position, .Time = time}
+		        );
+	        }),
+	        "position"_a,
+	        "time"_a
+	    )
+	    .def_readonly(
+	        "Time",
+	        &VideoFrameData::Time,
+	        "Time: the video frame acquisition time (if available)"
+	    )
+	    .def_readonly(
+	        "Position",
+	        &VideoFrameData::Position,
+	        "int: the frame position in the video file"
+	    )
+	    .def_readonly(
+	        "Identified",
+	        &VideoFrameData::Identified,
+	        "IdentifiedFrame: the ants position (if previously matched)"
+	    )
+	    .def_readonly(
+	        "Collided",
+	        &VideoFrameData::Collided,
+	        "CollisionFrame: the ants collision (if previously matched)"
+	    )
+	    .def_readonly(
+	        "Trajectories",
+	        &VideoFrameData::Trajectories,
+	        "List[AntTrajectory]: the trajectories in this frame (if "
+	        "previously matched)"
+	    )
+	    .def_readonly(
+	        "Interactions",
+	        &VideoFrameData::Interactions,
+	        "List[AntInteraction]: the interactions in this frame (if "
+	        "previously matched)"
+	    )
+	    .def(
+	        "Empty",
+	        &VideoFrameData::Empty,
+	        R"pydoc(
 Indicates the (unlikely) case where no tracking data is associated
 with this video frame.
 
 Returns:
     bool: `True` if there is no tracking data (even a timeout / frame drop report) associated with this video frame.
-)pydoc")
-		;
+)pydoc"
+	    )
+	    .def(
+	        "__repr__",
+	        [](const fort::myrmidon::VideoFrameData &self) -> std::string {
+		        std::ostringstream oss;
+		        oss << std::boolalpha;
+		        oss << "VideoFrameData{.Time=" << self.Time //
+		            << ", .Identified=" << (self.Identified != nullptr)
+		            << ", .Collided=" << (self.Collided != nullptr)
+		            << ", .len(Trajectories)=" << (self.Trajectories).size()
+		            << ", .len(Interactions)=" << (self.Interactions).size()
+		            << "}";
+		        return oss.str();
+	        }
+	    );
 
-	py::bind_vector<std::vector<VideoFrameData>>(m,"VideoFrameDataList");
-	py::implicitly_convertible<py::list,std::vector<VideoFrameData>>();
+	py::bind_vector<std::vector<VideoFrameData>>(m, "VideoFrameDataList");
+	py::implicitly_convertible<py::list, std::vector<VideoFrameData>>();
 }
 
 template <typename T>
@@ -75,15 +109,23 @@ void Match(fort::myrmidon::VideoSegment::List & list,
 
 class VideoSequence {
 public:
-	VideoSequence(const fort::myrmidon::VideoSegment::List & list)
-		: d_segmentIter(list.begin())
-		, d_segmentEnd(list.end()) {
-		d_cv2 = py::module_::import("cv2");
-		d_capture = py::none();
+	VideoSequence(const fort::myrmidon::VideoSegment::List &list)
+	    : d_segmentIter(list.begin())
+	    , d_segmentEnd(list.end()) {
+		d_cv2      = py::module_::import("cv2");
+		d_capture  = py::none();
 		d_moviePos = -1;
 	}
 
-	VideoSequence & Enter() {
+	size_t Frames() const {
+		size_t n = 0;
+		for (auto iter = d_segmentIter; iter < d_segmentEnd; ++iter) {
+			n += iter->End - iter->Begin;
+		}
+		return n;
+	}
+
+	VideoSequence &Enter() {
 		return *this;
 	}
 
@@ -315,11 +357,11 @@ Raises:
 )pydoc"
 	);
 	c.def_static(
-	    "Match",
-	    &Match<AntInteraction::Ptr>,
-	    "segments"_a,
-	    "interactions"_a,
-	    R"pydoc(
+	     "Match",
+	     &Match<AntInteraction::Ptr>,
+	     "segments"_a,
+	     "interactions"_a,
+	     R"pydoc(
 Matches :class:`AntInteraction` with a :class:`VideoSegmentList`
 
 Args:
@@ -329,7 +371,16 @@ Args:
 Raises:
     ValueError: if the all segments are not from the same :class:`Space`
 )pydoc"
-	);
+	)
+	    .def("__repr__", [](const VideoSegment &self) -> std::string {
+		    std::ostringstream oss;
+		    oss << "fm.VideoSegment{.Path=" << self.AbsoluteFilePath //
+		        << ", .Begin=" << self.Begin                         //
+		        << ", .End=" << self.End                             //
+		        << ", len(.Data)=" << self.Data.size()               //
+		        << "}";
+		    return oss.str();
+	    });
 
 	py::class_<::VideoSequence>(
 	    m,
@@ -359,5 +410,10 @@ Examples:
 	    .def("__enter__", &::VideoSequence::Enter)
 	    .def("__exit__", &::VideoSequence::Exit)
 	    .def("__iter__", &::VideoSequence::Iter)
-	    .def("__next__", &::VideoSequence::Next);
+	    .def("__next__", &::VideoSequence::Next)
+	    .def("__repr__", [](const ::VideoSequence &self) -> std::string {
+		    std::ostringstream oss;
+		    oss << "fm.VideoSegment{.Frames=" << self.Frames() << "}";
+		    return oss.str();
+	    });
 }
