@@ -77,19 +77,21 @@ else(FORT_MYRMIDON_PYTHON_MAIN)
 
 	add_custom_target(
 		setup_fort_myrmidon_py_module ALL
-		DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/__init__.py
+		DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/__init__.py _fort_myrmidon
 	)
 
-	find_program(STUBGEN_EXECUTABLE stubgen REQUIRED)
+	find_program(PYBIND11_STUBGEN_EXECUTABLE pybind11-stubgen REQUIRED)
 
 	add_custom_target(
 		fort_myrmidon-python-index ALL
 		DEPENDS setup_fort_myrmidon_py_module
-		COMMAND ${STUBGEN_EXECUTABLE} -m fort_myrmidon._fort_myrmidon -o .
-				--include-docstrings
-		COMMAND ${CMAKE_COMMAND} -E copy fort_myrmidon/_fort_myrmidon.pyi
+		COMMAND
+			${CMAKE_COMMAND} -E env PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}
+			${PYBIND11_STUBGEN_EXECUTABLE} _fort_myrmidon --ignore-all-errors -o
+			.
+		COMMAND ${CMAKE_COMMAND} -E copy _fort_myrmidon.pyi
 				${CMAKE_CURRENT_SOURCE_DIR}/_fort_myrmidon.pyi
-		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/..
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 		COMMENT "Generating .pyi for fort_myrmidon"
 	)
 
