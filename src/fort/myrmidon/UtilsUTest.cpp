@@ -596,32 +596,37 @@ AssertTrajectorySegmentEqual(const char * aExpr,
 	return ::testing::AssertionSuccess();
 }
 
-::testing::AssertionResult
-AssertTrajectorySummaryEqual(const char * aExpr,
-                             const char * bExpr,
-                             const fort::myrmidon::AntTrajectorySummary & a,
-                             const fort::myrmidon::AntTrajectorySummary & b) {
-	for ( size_t i = 0; i < 3; ++i ) {
-		if ( std::abs(a.Mean(i) - b.Mean(i)) > 1.0e-3 ) {
+::testing::AssertionResult AssertTrajectorySummaryEqual(
+    const char                                 *aExpr,
+    const char                                 *bExpr,
+    const fort::myrmidon::AntTrajectorySummary &a,
+    const fort::myrmidon::AntTrajectorySummary &b
+) {
+	if (a.Ant != b.Ant) {
+		return failure_helper(aExpr, bExpr, a, b, Ant);
+	}
+
+	for (size_t i = 0; i < 3; ++i) {
+		if (std::abs(a.Mean(i) - b.Mean(i)) > 1.0e-3) {
 			return ::testing::AssertionFailure()
-				<< "Value of: " << aExpr << ".Mean(" << i << ")" <<std::endl
-				<< "  Actual: " << a.Mean(i) << std::endl
-				<< "  Within: " << 1.0e-3 << std::endl
-				<< "      Of: " << bExpr << ".Mean(" << i << ")" <<std::endl
-				<< "Which is: " << b.Mean(i);
+			       << "Value of: " << aExpr << ".Mean(" << i << ")" << std::endl
+			       << "  Actual: " << a.Mean(i) << std::endl
+			       << "  Within: " << 1.0e-3 << std::endl
+			       << "      Of: " << bExpr << ".Mean(" << i << ")" << std::endl
+			       << "Which is: " << b.Mean(i);
 		}
 	}
 
-	if ( a.Zones.size() != b.Zones.size() ) {
-		return failure_helper(aExpr,bExpr,a,b,Zones.size());
+	if (a.Zones.size() != b.Zones.size()) {
+		return failure_helper(aExpr, bExpr, a, b, Zones.size());
 	}
 
-	for ( const auto & zoneID : b.Zones ) {
-		if ( a.Zones.count(zoneID) == 0 ) {
+	for (const auto &zoneID : b.Zones) {
+		if (a.Zones.count(zoneID) == 0) {
 			return ::testing::AssertionFailure()
-				<< "   Value: " << aExpr << ".Zones" <<std::endl
-				<< "Contains: " << zoneID << std::endl
-				<< "  Actual: it doesn't";
+			       << "   Value: " << aExpr << ".Zones" << std::endl
+			       << "Contains: " << zoneID << std::endl
+			       << "  Actual: it doesn't";
 		}
 	}
 	return ::testing::AssertionSuccess();

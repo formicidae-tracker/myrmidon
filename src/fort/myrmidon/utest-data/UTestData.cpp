@@ -8,6 +8,8 @@
 #include "GeneratedData.hpp"
 #include "HermesFileWriter.hpp"
 #include "MovieWriter.hpp"
+#include "fort/myrmidon/types/ExperimentDataInfo.hpp"
+#include "fort/time/Time.hpp"
 
 #include <google/protobuf/io/gzip_stream.h>
 #include <google/protobuf/util/delimited_message_util.h>
@@ -924,6 +926,55 @@ void UTestData::GenerateMovieSegmentData(
 
 const Config &UTestData::Config() const {
 	return d_config;
+}
+
+fort::myrmidon::TrackingDataDirectoryInfo UTestData::TDDInfo::ToInfo() const {
+	return fort::myrmidon::TrackingDataDirectoryInfo{
+	    .URI              = AbsoluteFilePath.filename(),
+	    .AbsoluteFilePath = AbsoluteFilePath,
+	    .Frames           = EndFrame - StartFrame,
+	    .Start            = Start,
+	    .End              = End,
+	};
+}
+
+fort::myrmidon::ExperimentDataInfo
+UTestData::CurrentExperimentDataInfo() const {
+	constexpr auto buildSpaceInfo = [](SpaceID                     ID,
+	                                   const std::string          &name,
+	                                   const std::vector<TDDInfo> &infos) {
+		fort::myrmidon::SpaceDataInfo res{
+		    .URI    = "spaces/" + std::to_string(ID),
+		    .Name   = name,
+		    .Frames = 0,
+		    .Start  = fort::Time::Forever(),
+		    .End    = fort::Time::SinceEver(),
+		};
+		std::vector<fort::myrmidon::TrackingDataDirectoryInfo> tdds;
+		for (const auto i_ : infos) {
+			auto i = i_.ToInfo();
+			res.TrackingDataDirectories.push_back(i);
+			res.Start = std::min(res.Start, i.Start);
+			res.End   = std::max(res.End, i.End);
+			res.Frames += i.Frames;
+		}
+		return res;
+	};
+
+	fort::myrmidon::ExperimentDataInfo res{
+	    .Frames = 0,
+	    .Start  = fort::Time::Forever(),
+	    .End    = fort::Time::SinceEver(),
+	    .Spaces =
+	        {{1, buildSpaceInfo(1, "nest", d_nestTDDs)},
+	         {2, buildSpaceInfo(2, "foraging", d_foragingTDDs)}},
+	};
+	for (const auto [sID, s] : res.Spaces) {
+		res.Frames += s.Frames;
+		res.Start = std::min(res.Start, s.Start);
+		res.End   = std::max(res.End, s.End);
+	}
+	return res;
 }
 
 } // namespace myrmidon

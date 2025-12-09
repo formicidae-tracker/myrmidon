@@ -43,16 +43,16 @@ struct AntTrajectorySegment {
  * Defines a trajectory sub-segment summary
  */
 struct AntTrajectorySummary {
+	AntID            Ant;
 	/**
 	 * The mean position during the trajectory.
 	 */
-	Eigen::Vector3d Mean;
+	Eigen::Vector3d  Mean;
 	/**
 	 * The list of zone traversed by the trajectory.
 	 */
 	std::set<ZoneID> Zones;
 };
-
 
 /**
  * Defines an interaction between two Ants

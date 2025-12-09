@@ -174,7 +174,11 @@ DataSegmenter::SummarizeTrajectorySegment(AntTrajectorySegment &s) {
 		        (s.End - s.Begin);
 		zones.insert(s.Trajectory->Positions(i, 4));
 	}
-	return AntTrajectorySummary{.Mean = mean, .Zones = zones};
+	return AntTrajectorySummary{
+	    .Ant   = s.Trajectory->Ant,
+	    .Mean  = mean,
+	    .Zones = zones
+	};
 }
 
 AntTrajectorySummary
@@ -188,7 +192,11 @@ DataSegmenter::BuildingInteraction::SummarizeBuildingTrajectory(
 		mean += mapped.block<1, 3>(i, 1).transpose() / (end - begin);
 		zones.insert(mapped(i, 4));
 	}
-	return AntTrajectorySummary{.Mean = mean, .Zones = zones};
+	return AntTrajectorySummary{
+	    .Ant   = trajectory.Trajectory->Ant,
+	    .Mean  = mean,
+	    .Zones = zones
+	};
 }
 
 AntInteraction::Ptr DataSegmenter::BuildingInteraction::Terminate(

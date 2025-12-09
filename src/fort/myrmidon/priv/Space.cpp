@@ -174,7 +174,7 @@ void Space::DeleteTrackingDataDirectory(const std::string & URI) {
 	d_tdds.erase(fi);
 }
 
-const std::string & Space::URI() const {
+const std::string &Space::URI() const {
 	return d_URI;
 }
 

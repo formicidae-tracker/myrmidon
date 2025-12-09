@@ -269,6 +269,8 @@ class AntTrajectory:
         Returns:
             Time: the last Time found in this trajectory. It does not contains Duration.
         """
+    def __repr__(self) -> str:
+        ...
     def __str__(self) -> str:
         ...
     @property
