@@ -161,14 +161,6 @@ Removes any user-defined ant-tag relative geometry data and re-enable
 the one computed from manual measurement made in **fort-studio**.
 )pydoc"
 	    )
-	    .def(
-	        "__str__",
-	        [](const Identification::Ptr &i) -> std::string {
-		        std::ostringstream oss;
-		        oss << *i;
-		        return oss.str();
-	        }
-	    )
 	    .def("__repr__", [](const Identification::Ptr &i) -> std::string {
 		    std::ostringstream oss;
 		    oss << *i;

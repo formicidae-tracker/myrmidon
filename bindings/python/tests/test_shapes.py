@@ -54,8 +54,8 @@ class Vector2dListTestCase(unittest.TestCase):
 
 class ShapeTestCase(unittest.TestCase):
     def setUp(self):
-        self.circle = m.Circle(Center=[0, 0], Radius=1.0)
-        self.capsule = m.Capsule(C1=[0, 0], C2=[1, 1], R1=1.0, R2=1.0)
+        self.circle = m.Circle(Center=[2, 3], Radius=1.0)
+        self.capsule = m.Capsule(C1=[0, 1], C2=[2, 3], R1=1.0, R2=1.0)
         self.polygon = m.Polygon(
             Vertices=[
                 [1, 1],
@@ -71,7 +71,7 @@ class ShapeTestCase(unittest.TestCase):
         self.assertEqual(self.polygon.ShapeType, m.Shape.Type.POLYGON)
 
     def test_circle_fields_manipulation(self):
-        npt.assert_almost_equal(self.circle.Center, [0, 0])
+        npt.assert_almost_equal(self.circle.Center, [2, 3])
         npt.assert_almost_equal(self.circle.Radius, 1.0)
         self.circle.Center = [1, 2]
         self.circle.Radius = 3.0
@@ -79,9 +79,9 @@ class ShapeTestCase(unittest.TestCase):
         npt.assert_almost_equal(self.circle.Radius, 3)
 
     def test_capsule_fields_manipulation(self):
-        npt.assert_almost_equal(self.capsule.C1, [0, 0])
+        npt.assert_almost_equal(self.capsule.C1, [0, 1])
         npt.assert_almost_equal(self.capsule.R1, 1.0)
-        npt.assert_almost_equal(self.capsule.C2, [1, 1])
+        npt.assert_almost_equal(self.capsule.C2, [2, 3])
         npt.assert_almost_equal(self.capsule.R2, 1.0)
         self.capsule.C1 = [-1, 0]
         self.capsule.R1 = 1.0
@@ -107,16 +107,16 @@ class ShapeTestCase(unittest.TestCase):
         npt.assert_almost_equal(self.polygon.Vertices[3], [2, 3])
 
     def test_format(self):
-        self.assertEqual(str(self.circle), "Circle{Center:{0 0},Radius:1}")
-        self.assertEqual(repr(self.circle), "Circle{Center:{0 0},Radius:1}")
+        self.assertEqual(str(self.circle), "Circle{Center:[2, 3], Radius:1}")
+        self.assertEqual(repr(self.circle), "Circle{Center:[2, 3], Radius:1}")
         self.assertEqual(
-            str(self.polygon), "Polygon{Vertices:{{1 1},{-1  1},{-1 -1},{ 1 -1}}}"
+            str(self.polygon), "Polygon{Vertices:[[1, 1], [-1, 1], [-1, -1], [1, -1]]}"
         )
         self.assertEqual(
-            repr(self.polygon), "Polygon{Vertices:{{1 1},{-1  1},{-1 -1},{ 1 -1}}}"
+            repr(self.polygon), "Polygon{Vertices:[[1, 1], [-1, 1], [-1, -1], [1, -1]]}"
         )
-        self.assertEqual(str(self.capsule), "Capsule{C1:{0 0},R1:1,C2:{1 1},R2:1}")
-        self.assertEqual(repr(self.capsule), "Capsule{C1:{0 0},R1:1,C2:{1 1},R2:1}")
+        self.assertEqual(str(self.capsule), "Capsule{C1:[0, 1], R1:1, C2:[2, 3], R2:1}")
+        self.assertEqual(repr(self.capsule), "Capsule{C1:[0, 1], R1:1, C2:[2, 3], R2:1}")
 
 
 class ShapeListTestCase(unittest.TestCase):

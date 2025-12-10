@@ -241,14 +241,6 @@ Returns:
 )pydoc"
 	    )
 	    .def(
-	        "__str__",
-	        [](const fort::myrmidon::Matcher::Ptr &m) -> std::string {
-		        std::ostringstream oss;
-		        oss << *m;
-		        return oss.str();
-	        }
-	    )
-	    .def(
 	        "__repr__",
 	        [](const fort::myrmidon::Matcher::Ptr &m) -> std::string {
 		        std::ostringstream oss;

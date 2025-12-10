@@ -225,14 +225,6 @@ Raises:
 Removes all capsules for this Ant.
 )pydoc"
 	    )
-	    .def(
-	        "__str__",
-	        [](const Ant &a) -> std::string {
-		        std::ostringstream oss;
-		        oss << a;
-		        return oss.str();
-	        }
-	    )
 	    .def("__repr__", [](const Ant &a) -> std::string {
 		    std::ostringstream oss;
 		    oss << a;

@@ -299,14 +299,21 @@ std::unique_ptr<Shape> Polygon::Clone() const {
 
 std::string Capsule::Format() const {
 	std::ostringstream oss;
-	oss << "Capsule{C1:{" << d_c1.transpose() << "},R1:" << d_r1 << ",C2:{"
-	    << d_c2.transpose() << "},R2:" << d_r2 << "}";
+	oss << "Capsule{C1:[" << d_c1.x() //
+	    << ", " << d_c1.y()           //
+	    << "], R1:" << d_r1           //
+	    << ", C2:[" << d_c2.x()       //
+	    << ", " << d_c2.y()           //
+	    << "], R2:" << d_r2           //
+	    << "}";
 	return oss.str();
 }
 
 std::string Circle::Format() const {
 	std::ostringstream oss;
-	oss << "Circle{Center:{" << d_center.transpose() << "},Radius:" << d_radius
+	oss << "Circle{Center:[" << d_center.x() //
+	    << ", " << d_center.y()              //
+	    << "], Radius:" << d_radius          //
 	    << "}";
 	return oss.str();
 }
@@ -314,12 +321,12 @@ std::string Circle::Format() const {
 std::string Polygon::Format() const {
 	std::ostringstream oss;
 	oss << "Polygon{Vertices:";
-	std::string sep = "{";
+	std::string sep = "[";
 	for (const auto &v : d_vertices) {
-		oss << sep << "{" << v.transpose() << "}";
-		sep = ",";
+		oss << sep << "[" << v.x() << ", " << v.y() << "]";
+		sep = ", ";
 	}
-	oss << "}}";
+	oss << "]}";
 	return oss.str();
 }
 
