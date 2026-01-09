@@ -19,6 +19,11 @@ A Generic class for a Shape
 	        &Shape::ShapeType,
 	        "(fort_myrmidon.Shape.Type): the type of the shape"
 	    )
+	    .def(
+	        "contains",
+	        &Shape::Contains,
+	        "Tests if a point is contained within this shape"
+	    )
 	    .def("__repr__", [](const Shape::Ptr &ptr) { return ptr->Format(); });
 
 	py::enum_<Shape::Type>(shape, "Type", "Enum for the type of a Shape")

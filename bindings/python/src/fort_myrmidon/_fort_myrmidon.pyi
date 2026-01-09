@@ -180,8 +180,6 @@ class Ant:
         """
     def __repr__(self) -> str:
         ...
-    def __str__(self) -> str:
-        ...
     @property
     def Capsules(self) -> list[tuple[int, Capsule]]:
         """
@@ -228,6 +226,8 @@ class AntInteraction:
         Returns:
             bool: True if the interaction type (type1,type2) is present. Note that order matter.
         """
+    def __repr__(self) -> str:
+        ...
     @property
     def End(self) -> Time:
         """
@@ -270,8 +270,6 @@ class AntTrajectory:
             Time: the last Time found in this trajectory. It does not contains Duration.
         """
     def __repr__(self) -> str:
-        ...
-    def __str__(self) -> str:
         ...
     @property
     def Ant(self) -> int:
@@ -317,6 +315,8 @@ class AntTrajectorySegment:
         Returns:
             Time: the starting Time of the AntTrajectorySegment.
         """
+    def __repr__(self) -> str:
+        ...
     @property
     def Begin(self) -> int:
         """
@@ -337,6 +337,13 @@ class AntTrajectorySummary:
     
     Represents a summary  of an :class:`AntTrajectory` section.
     """
+    def __repr__(self) -> str:
+        ...
+    @property
+    def Ant(self) -> int:
+        """
+        The ID of the Ant it refers to
+        """
     @property
     def Mean(self) -> numpy.ndarray[numpy.float64[3, 1]]:
         """
@@ -415,6 +422,8 @@ class Collision:
     """
     A Collision describe an instantaneous contact between two ants
     """
+    def __repr__(self) -> str:
+        ...
     @property
     def IDs(self) -> tuple[int, int]:
         """
@@ -434,6 +443,8 @@ class CollisionFrame:
     """
     A CollisionFrame regroups all Collision that happen in a video frame
     """
+    def __repr__(self) -> str:
+        ...
     @property
     def Collisions(self) -> list[Collision]:
         """
@@ -455,6 +466,10 @@ class ComputedMeasurement:
     A manual **fort-studio** measurement and its estimated value in
     millimeters.
     """
+    def __init__(self, arg0: Time, arg1: float, arg2: float) -> None:
+        ...
+    def __repr__(self) -> str:
+        ...
     @property
     def LengthMM(self) -> float:
         """
@@ -1061,6 +1076,8 @@ class ExperimentDataInfo:
     """
     Tracking Data information summary for an Experiment
     """
+    def __repr__(self) -> str:
+        ...
     @property
     def End(self) -> Time:
         """
@@ -1176,8 +1193,6 @@ class Identification:
         """
     def __repr__(self) -> str:
         ...
-    def __str__(self) -> str:
-        ...
     @property
     def AntAngle(self) -> float:
         """
@@ -1248,6 +1263,8 @@ class IdentifiedFrame:
         Returns:
             bool: True if antID is present in this frame
         """
+    def __repr__(self) -> str:
+        ...
     @property
     def FrameTime(self) -> Time:
         """
@@ -1460,8 +1477,6 @@ class Matcher:
             matches.
         """
     def __repr__(self) -> str:
-        ...
-    def __str__(self) -> str:
         ...
 class OverlappingIdentification(RuntimeError):
     pass
@@ -1757,8 +1772,10 @@ class Shape:
             ...
     def __repr__(self) -> str:
         ...
-    def __str__(self) -> str:
-        ...
+    def contains(self, arg0: numpy.ndarray[numpy.float64[2, 1]]) -> bool:
+        """
+        Tests if a point is contained within this shape
+        """
     @property
     def ShapeType(self) -> ...:
         """
@@ -1937,6 +1954,8 @@ class SpaceDataInfo:
     """
     Tracking Data information summary for a Space.
     """
+    def __repr__(self) -> str:
+        ...
     @property
     def End(self) -> Time:
         """
@@ -2037,6 +2056,8 @@ class TagStatistics:
     """
     Tag detection statistics for a given TagID
     """
+    def __repr__(self) -> str:
+        ...
     @property
     def Counts(self) -> numpy.ndarray[numpy.uint64[m, 1]]:
         """
@@ -2309,6 +2330,8 @@ class TrackingDataDirectoryInfo:
     """
     Tracking Data informations summary for a Tracking Data Directory.
     """
+    def __repr__(self) -> str:
+        ...
     @property
     def AbsoluteFilePath(self) -> str:
         """
@@ -2317,7 +2340,7 @@ class TrackingDataDirectoryInfo:
     @property
     def End(self) -> Time:
         """
-        Time: The Time plus a nanosecond, of the last frame found in This Tracking Data Directory
+        Time: The Time plus a nanosecond, of the last frame found in This Tracking Data Directorey
         """
     @property
     def Frames(self) -> int:
@@ -3119,4 +3142,4 @@ def FormatTagID(tagID: int) -> str:
     """
 PREDECENCE_HIGHER: ZonePriority  # value = <ZonePriority.PREDECENCE_HIGHER: 1>
 PREDECENCE_LOWER: ZonePriority  # value = <ZonePriority.PREDECENCE_LOWER: 0>
-__version__: str = '0.9.0+3.bdd264f5'
+__version__: str = '0.9.0+6.0027221e'
