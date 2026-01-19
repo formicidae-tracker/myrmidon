@@ -8,14 +8,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Spaces and Zones &mdash; fort-myrmidon  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/../version_dropdown.js?v=4f7105bd"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -204,7 +204,7 @@
 <dd class="field-odd"><p><strong>zoneID</strong> – the ZoneID of the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> to delete.</p>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if zoneID is not the ID of a <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> owned by this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a>. </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if zoneID is not the ID of a <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> owned by this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a>. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -229,7 +229,7 @@
 <dd class="field-odd"><p><strong>time</strong> – the <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> we want a movie frame for.</p>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if a movie frame for the specified <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> could not be found. </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if a movie frame for the specified <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> could not be found. </p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a pair of an absolute file path to the movie file, and the wanted movie frame number.</p>
@@ -287,7 +287,7 @@
 </ul>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if start or end would make the resulting definition overlap in time with another <a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition"><span class="std std-ref">ZoneDefinition</span></a> for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a>. </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if start or end would make the resulting definition overlap in time with another <a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition"><span class="std std-ref">ZoneDefinition</span></a> for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a>. </p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the new <a class="reference internal" href="#classfort_1_1myrmidon_1_1ZoneDefinition"><span class="std std-ref">ZoneDefinition</span></a></p>
@@ -315,7 +315,7 @@
 <dd class="field-odd"><p><strong>index</strong> – the index in <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone_1a55b450e2dae409d9276a769f3be296fe"><span class="std std-ref">Definitions()</span></a> to remove.</p>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if index &gt;= <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone_1a55b450e2dae409d9276a769f3be296fe"><span class="std std-ref">Definitions()</span></a>.size() </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if index &gt;= <a class="reference internal" href="#classfort_1_1myrmidon_1_1Zone_1a55b450e2dae409d9276a769f3be296fe"><span class="std std-ref">Definitions()</span></a>.size() </p>
 </dd>
 </dl>
 </dd></dl>

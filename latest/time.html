@@ -8,14 +8,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Time Representation &mdash; fort-myrmidon  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/../version_dropdown.js?v=4f7105bd"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -138,7 +138,7 @@ concurrently by multiple clock source).</p></li>
 time object of these object from and to <a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort4TimeE" title="fort::Time"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::Time</span></code></a> and
 <a class="reference internal" href="api/cpp/time.html#_CPPv4N4fort8DurationE" title="fort::Duration"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fort::Duration</span></code></a>. Indeed:</p>
 <ul class="simple">
-<li><p>python <a class="reference external" href="https://docs.python.org/3/library/time.html#time.time" title="(in Python v3.13)"><code class="xref py py-func docutils literal notranslate"><span class="pre">time.time()</span></code></a> representation and R <strong>POSIXct</strong> as a
+<li><p>python <a class="reference external" href="https://docs.python.org/3/library/time.html#time.time" title="(in Python v3.14)"><code class="xref py py-func docutils literal notranslate"><span class="pre">time.time()</span></code></a> representation and R <strong>POSIXct</strong> as a
 <strong>double</strong> precision floating point number of second ellapsed
 from the system epoch, is only guaranted 10us precision for time
 arround the year 2020. However the framegrabber used in the FORT
@@ -188,8 +188,8 @@ operators for manipulating duration naturally:</p>
 <section id="python-convertion-to-and-from-time-time">
 <h3>Python convertion to and from <strong>time.Time</strong><a class="headerlink" href="#python-convertion-to-and-from-time-time" title="Link to this heading"></a></h3>
 <p><a class="reference internal" href="api/python/time.html#fort_myrmidon.Time" title="fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">fort_myrmidon.Time</span></code></a> objects can be created from and converted to a float
-number of seconds from the epoch, as returned by <a class="reference external" href="https://docs.python.org/3/library/time.html#time.time" title="(in Python v3.13)"><code class="xref py py-func docutils literal notranslate"><span class="pre">time.time()</span></code></a> or
-<a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime.timestamp" title="(in Python v3.13)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">datetime.datetime.timestamp()</span></code></a>, with:</p>
+number of seconds from the epoch, as returned by <a class="reference external" href="https://docs.python.org/3/library/time.html#time.time" title="(in Python v3.14)"><code class="xref py py-func docutils literal notranslate"><span class="pre">time.time()</span></code></a> or
+<a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime.timestamp" title="(in Python v3.14)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">datetime.datetime.timestamp()</span></code></a>, with:</p>
 <ul>
 <li><p><a class="reference internal" href="api/python/time.html#fort_myrmidon.Time.__init__" title="fort_myrmidon.Time.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fort_myrmidon.Time.__init__()</span></code></a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># equivalent but less precise than m.Time.Now()</span>
@@ -212,7 +212,7 @@ number of seconds from the epoch, as returned by <a class="reference external" h
 <section id="python-convertion-to-and-from-datetime-datetime">
 <h3>Python convertion to and from <strong>datetime.datetime</strong><a class="headerlink" href="#python-convertion-to-and-from-datetime-datetime" title="Link to this heading"></a></h3>
 <p><a class="reference internal" href="api/python/time.html#fort_myrmidon.Time" title="fort_myrmidon.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">fort_myrmidon.Time</span></code></a> objects can be created from and
-converted to <a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a>:</p>
+converted to <a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a>:</p>
 <ul>
 <li><p><a class="reference internal" href="api/python/time.html#fort_myrmidon.Time.FromDateTime" title="fort_myrmidon.Time.FromDateTime"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fort_myrmidon.Time.FromDateTime()</span></code></a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># equivalent to m.Time.Now()</span>

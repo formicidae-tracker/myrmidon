@@ -8,14 +8,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>API Entry Point &mdash; fort-myrmidon  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/../version_dropdown.js?v=4f7105bd"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -174,7 +174,7 @@
 <dd class="field-odd"><p><strong>filepath</strong> – the desired filesystem location to save the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> to</p>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <strong>filepath</strong> will change the parent directory of the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <strong>filepath</strong> will change the parent directory of the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -214,8 +214,8 @@
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>spaceID</strong> is not a valid ID for one of this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> <a class="reference internal" href="space_zone.html#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a>. </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if <strong>spaceID</strong> still contains any tracking data directories. </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>spaceID</strong> is not a valid ID for one of this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> <a class="reference internal" href="space_zone.html#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a>. </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if <strong>spaceID</strong> still contains any tracking data directories. </p></li>
 </ul>
 </dd>
 </dl>
@@ -247,11 +247,11 @@
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>spaceID</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a></p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if <strong>filepath</strong> is not a valid tracking data directory </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>spaceID</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a></p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if <strong>filepath</strong> is not a valid tracking data directory </p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="errors.html#_CPPv4N4fort8myrmidon13FixableErrorsE" title="fort::myrmidon::FixableErrors"><span class="n">FixableErrors</span></a></span></span> – if the directory contains corrupted data, and args.fixCorruptedData is false. </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">domain_error</span></span></span> – if <strong>filepath</strong> contains data that would overlap in <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> with another tracking data directory associated with the same space. </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if the tracking data directory is already in use in this experiment. </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">domain_error</span></span></span> – if <strong>filepath</strong> contains data that would overlap in <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> with another tracking data directory associated with the same space. </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if the tracking data directory is already in use in this experiment. </p></li>
 </ul>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -269,7 +269,7 @@
 <dd class="field-odd"><p><strong>URI</strong> – the URI of the tracking data directory to remove</p>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <strong>URI</strong> does not designate a tracking data directory in the experiment. </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <strong>URI</strong> does not designate a tracking data directory in the experiment. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -306,8 +306,8 @@
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>antID</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a></p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if the <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> stills have an identification </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>antID</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a></p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if the <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> stills have an identification </p></li>
 </ul>
 </dd>
 </dl>
@@ -329,7 +329,7 @@
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>antID</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a></p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>antID</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a></p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">OverlapingIdentification</span></span></span> – if it will conflict in time with another <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> with the same <strong>antID</strong> or <strong>tagID</strong>. </p></li>
 </ul>
 </dd>
@@ -348,7 +348,7 @@
 <dd class="field-odd"><p><strong>identification</strong> – the <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> to delete</p>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <strong>identification</strong> is not an <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> for an <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> of this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <strong>identification</strong> is not an <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> for an <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> of this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -367,7 +367,7 @@ Queries for a valid time range for a given TagID and <a class="reference interna
 </ul>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if <strong>tagID</strong> already identifies an <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> at <strong>time</strong>. </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if <strong>tagID</strong> already identifies an <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> at <strong>time</strong>. </p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>two <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> that represents an available [start,end[ range for <strong>tagID</strong></p>
@@ -501,9 +501,9 @@ Queries for a valid time range for a given TagID and <a class="reference interna
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>measurementTypeID</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <strong>measurementTypeID</strong> is HEAD_TAIL_MEASUREMENT_TYPE_ID. </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if some measurement for <strong>measurementTypeID</strong> exists in the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>measurementTypeID</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <strong>measurementTypeID</strong> is HEAD_TAIL_MEASUREMENT_TYPE_ID. </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if some measurement for <strong>measurementTypeID</strong> exists in the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p></li>
 </ul>
 </dd>
 </dl>
@@ -521,7 +521,7 @@ Queries for a valid time range for a given TagID and <a class="reference interna
 </ul>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>measurementTypeID</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>measurementTypeID</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -574,7 +574,7 @@ Queries for a valid time range for a given TagID and <a class="reference interna
 </ul>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>shapeTypeID</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>shapeTypeID</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -589,8 +589,8 @@ Queries for a valid time range for a given TagID and <a class="reference interna
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>shapeTypeID</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if at least one <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> still have a <a class="reference internal" href="shapes.html#classfort_1_1myrmidon_1_1Capsule"><span class="std std-ref">Capsule</span></a> for <strong>shapeTypeID</strong></p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>shapeTypeID</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if at least one <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> still have a <a class="reference internal" href="shapes.html#classfort_1_1myrmidon_1_1Capsule"><span class="std std-ref">Capsule</span></a> for <strong>shapeTypeID</strong></p></li>
 </ul>
 </dd>
 </dl>
@@ -610,7 +610,7 @@ Adds a non-tracking metadata <strong>key</strong> with type and default defined 
 </ul>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if the following conditions are met:<ul class="simple">
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if the following conditions are met:<ul class="simple">
 <li><p><strong>key</strong> is already registered</p></li>
 <li><p><strong>defaultValue</strong> would change the type of key</p></li>
 <li><p>at least one <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> has a value registered for <strong>key</strong></p></li>
@@ -630,8 +630,8 @@ Adds a non-tracking metadata <strong>key</strong> with type and default defined 
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>key</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if at least one <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> has a defined value for <strong>key</strong>. </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>key</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if at least one <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> has a defined value for <strong>key</strong>. </p></li>
 </ul>
 </dd>
 </dl>
@@ -661,8 +661,8 @@ Adds a non-tracking metadata <strong>key</strong> with type and default defined 
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>oldKey</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p></li>
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <strong>newKey</strong> is already used in this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">out_of_range</span></span></span> – if <strong>oldKey</strong> is not valid for this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <strong>newKey</strong> is already used in this <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>. </p></li>
 </ul>
 </dd>
 </dl>
@@ -707,7 +707,7 @@ Adds a non-tracking metadata <strong>key</strong> with type and default defined 
 <dd class="field-odd"><p><strong>args</strong> – a collection of OpenArguments when a large amount of data will be opened.</p>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – in case of data corruption if args.FixCorruptedData is \false </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – in case of data corruption if args.FixCorruptedData is \false </p>
 </dd>
 </dl>
 </dd></dl>
@@ -724,7 +724,7 @@ Adds a non-tracking metadata <strong>key</strong> with type and default defined 
 <dd class="field-odd"><p><strong>filepath</strong> – the path to the wanted file</p>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if <strong>filepath</strong> is not a valid <code class="docutils literal notranslate"><span class="pre">.myrmidon</span></code> file. </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if <strong>filepath</strong> is not a valid <code class="docutils literal notranslate"><span class="pre">.myrmidon</span></code> file. </p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a pointer to the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a></p>
@@ -742,7 +742,7 @@ Adds a non-tracking metadata <strong>key</strong> with type and default defined 
 <dd class="field-odd"><p><strong>filepath</strong> – the path to the wanted file.</p>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if <strong>filepath</strong> is not a valid <code class="docutils literal notranslate"><span class="pre">.myrmidon</span></code> file. </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if <strong>filepath</strong> is not a valid <code class="docutils literal notranslate"><span class="pre">.myrmidon</span></code> file. </p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the <a class="reference internal" href="#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a></p>

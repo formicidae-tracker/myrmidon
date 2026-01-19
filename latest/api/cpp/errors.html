@@ -8,14 +8,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Errors &mdash; fort-myrmidon  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/../version_dropdown.js?v=4f7105bd"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -131,7 +131,7 @@
 <h2>fort::myrmidon::OverlappingIdentification<a class="headerlink" href="#fort-myrmidon-overlappingidentification" title="Link to this heading"></a></h2>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon25OverlappingIdentificationE">
-<span id="_CPPv3N4fort8myrmidon25OverlappingIdentificationE"></span><span id="_CPPv2N4fort8myrmidon25OverlappingIdentificationE"></span><span id="fort::myrmidon::OverlappingIdentification"></span><span class="target" id="classfort_1_1myrmidon_1_1OverlappingIdentification"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OverlappingIdentification</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">runtime_error</span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon25OverlappingIdentificationE" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3N4fort8myrmidon25OverlappingIdentificationE"></span><span id="_CPPv2N4fort8myrmidon25OverlappingIdentificationE"></span><span id="fort::myrmidon::OverlappingIdentification"></span><span class="target" id="classfort_1_1myrmidon_1_1OverlappingIdentification"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OverlappingIdentification</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">cpptrace</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">runtime_error</span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon25OverlappingIdentificationE" title="Link to this definition"></a><br /></dt>
 <dd><p>Exception when two <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> overlaps in time. </p>
 <p>Two <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a> overlaps in time if they have overlapping boundary and they either use the same TagID or targets the same <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>. This is an invariant condition that should never happen and modification that will break this invariant will throw this exception. </p>
 </dd></dl>

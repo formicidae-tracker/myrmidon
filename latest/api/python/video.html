@@ -8,14 +8,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Video Sequence Matching &mdash; fort-myrmidon  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/../version_dropdown.js?v=4f7105bd"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -137,7 +137,7 @@
 <h2>fort_myrmidon.VideoSegment<a class="headerlink" href="#fort-myrmidon-videosegment" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="fort_myrmidon.VideoSegment">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">VideoSegment</span></span><a class="headerlink" href="#fort_myrmidon.VideoSegment" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">VideoSegment</span></span><a class="headerlink" href="#fort_myrmidon.VideoSegment" title="Link to this definition"></a></dt>
 <dd><p>A VideoSegment represents a part of a Video file with its associated
 tracking data.</p>
 <p>VideoSegment are most often queried with
@@ -185,29 +185,29 @@ sequence of images span over multiple video file.</p>
 </div>
 <dl class="py property">
 <dt class="sig sig-object py" id="fort_myrmidon.VideoSegment.AbsoluteFilePath">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AbsoluteFilePath</span></span><a class="headerlink" href="#fort_myrmidon.VideoSegment.AbsoluteFilePath" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">AbsoluteFilePath</span></span><a class="headerlink" href="#fort_myrmidon.VideoSegment.AbsoluteFilePath" title="Link to this definition"></a></dt>
 <dd><p>the absolute filepath to the video file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fort_myrmidon.VideoSegment.Begin">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Begin</span></span><a class="headerlink" href="#fort_myrmidon.VideoSegment.Begin" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Begin</span></span><a class="headerlink" href="#fort_myrmidon.VideoSegment.Begin" title="Link to this definition"></a></dt>
 <dd><p>the first video frame position in the video file corresponding to the segment</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fort_myrmidon.VideoSegment.Data">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Data</span></span><a class="headerlink" href="#fort_myrmidon.VideoSegment.Data" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Data</span></span><a class="headerlink" href="#fort_myrmidon.VideoSegment.Data" title="Link to this definition"></a></dt>
 <dd><p>matched query result with the video frame in the list. If no tracking data is associated with a given frame, there will be no corresponding object in this field.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -218,18 +218,18 @@ sequence of images span over multiple video file.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fort_myrmidon.VideoSegment.End">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">End</span></span><a class="headerlink" href="#fort_myrmidon.VideoSegment.End" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">End</span></span><a class="headerlink" href="#fort_myrmidon.VideoSegment.End" title="Link to this definition"></a></dt>
 <dd><p>the last+1 video frame postion in the video file corresponding to the segment</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fort_myrmidon.VideoSegment.Match">
-<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fort_myrmidon.VideoSegment.Match" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fort_myrmidon.VideoSegment.Match" title="Link to this definition"></a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>Match(segments: fort_myrmidon._fort_myrmidon.VideoSegmentList, identifiedFrames: list[fort_myrmidon._fort_myrmidon.IdentifiedFrame]) -&gt; None</p></li>
@@ -243,7 +243,7 @@ sequence of images span over multiple video file.</p>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – if the all segments are not from the same <a class="reference internal" href="space_zone.html#fort_myrmidon.Space" title="fort_myrmidon.Space"><code class="xref py py-class docutils literal notranslate"><span class="pre">Space</span></code></a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – if the all segments are not from the same <a class="reference internal" href="space_zone.html#fort_myrmidon.Space" title="fort_myrmidon.Space"><code class="xref py py-class docutils literal notranslate"><span class="pre">Space</span></code></a></p>
 </dd>
 </dl>
 <ol class="arabic simple" start="2">
@@ -258,7 +258,7 @@ sequence of images span over multiple video file.</p>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – if the all segments are not from the same <a class="reference internal" href="space_zone.html#fort_myrmidon.Space" title="fort_myrmidon.Space"><code class="xref py py-class docutils literal notranslate"><span class="pre">Space</span></code></a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – if the all segments are not from the same <a class="reference internal" href="space_zone.html#fort_myrmidon.Space" title="fort_myrmidon.Space"><code class="xref py py-class docutils literal notranslate"><span class="pre">Space</span></code></a></p>
 </dd>
 </dl>
 <ol class="arabic simple" start="3">
@@ -273,7 +273,7 @@ sequence of images span over multiple video file.</p>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – if the all segments are not from the same <a class="reference internal" href="space_zone.html#fort_myrmidon.Space" title="fort_myrmidon.Space"><code class="xref py py-class docutils literal notranslate"><span class="pre">Space</span></code></a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – if the all segments are not from the same <a class="reference internal" href="space_zone.html#fort_myrmidon.Space" title="fort_myrmidon.Space"><code class="xref py py-class docutils literal notranslate"><span class="pre">Space</span></code></a></p>
 </dd>
 </dl>
 <ol class="arabic simple" start="4">
@@ -288,18 +288,18 @@ sequence of images span over multiple video file.</p>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – if the all segments are not from the same <a class="reference internal" href="space_zone.html#fort_myrmidon.Space" title="fort_myrmidon.Space"><code class="xref py py-class docutils literal notranslate"><span class="pre">Space</span></code></a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – if the all segments are not from the same <a class="reference internal" href="space_zone.html#fort_myrmidon.Space" title="fort_myrmidon.Space"><code class="xref py py-class docutils literal notranslate"><span class="pre">Space</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fort_myrmidon.VideoSegment.Space">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Space</span></span><a class="headerlink" href="#fort_myrmidon.VideoSegment.Space" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Space</span></span><a class="headerlink" href="#fort_myrmidon.VideoSegment.Space" title="Link to this definition"></a></dt>
 <dd><p>the <a class="reference internal" href="space_zone.html#fort_myrmidon.Space" title="fort_myrmidon.Space"><code class="xref py py-class docutils literal notranslate"><span class="pre">Space</span></code></a> the segment belongs to</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -311,18 +311,18 @@ sequence of images span over multiple video file.</p>
 <h2>fort_myrmidon.VideoSegmentList<a class="headerlink" href="#fort-myrmidon-videosegmentlist" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="fort_myrmidon.VideoSegmentList">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">VideoSegmentList</span></span><a class="headerlink" href="#fort_myrmidon.VideoSegmentList" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">VideoSegmentList</span></span><a class="headerlink" href="#fort_myrmidon.VideoSegmentList" title="Link to this definition"></a></dt>
 <dd><p>An opaque list of <a class="reference internal" href="#fort_myrmidon.VideoSegment" title="fort_myrmidon.VideoSegment"><code class="xref py py-class docutils literal notranslate"><span class="pre">VideoSegment</span></code></a>.</p>
-<p>It works just as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference internal" href="#fort_myrmidon.VideoSegment" title="fort_myrmidon.VideoSegment"><code class="xref py py-class docutils literal notranslate"><span class="pre">VideoSegment</span></code></a>.</p>
+<p>It works just as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference internal" href="#fort_myrmidon.VideoSegment" title="fort_myrmidon.VideoSegment"><code class="xref py py-class docutils literal notranslate"><span class="pre">VideoSegment</span></code></a>.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fort_myrmidon.VideoSegmentList.append">
-<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#fort_myrmidon.VideoSegmentList" title="fort_myrmidon._fort_myrmidon.VideoSegmentList"><span class="pre">fort_myrmidon._fort_myrmidon.VideoSegmentList</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#fort_myrmidon.VideoSegment" title="fort_myrmidon._fort_myrmidon.VideoSegment"><span class="pre">fort_myrmidon._fort_myrmidon.VideoSegment</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#fort_myrmidon.VideoSegmentList.append" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#fort_myrmidon.VideoSegmentList" title="fort_myrmidon._fort_myrmidon.VideoSegmentList"><span class="pre">fort_myrmidon._fort_myrmidon.VideoSegmentList</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#fort_myrmidon.VideoSegment" title="fort_myrmidon._fort_myrmidon.VideoSegment"><span class="pre">fort_myrmidon._fort_myrmidon.VideoSegment</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#fort_myrmidon.VideoSegmentList.append" title="Link to this definition"></a></dt>
 <dd><p>Add an item to the end of the list</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fort_myrmidon.VideoSegmentList.clear">
-<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#fort_myrmidon.VideoSegmentList" title="fort_myrmidon._fort_myrmidon.VideoSegmentList"><span class="pre">fort_myrmidon._fort_myrmidon.VideoSegmentList</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#fort_myrmidon.VideoSegmentList.clear" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#fort_myrmidon.VideoSegmentList" title="fort_myrmidon._fort_myrmidon.VideoSegmentList"><span class="pre">fort_myrmidon._fort_myrmidon.VideoSegmentList</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#fort_myrmidon.VideoSegmentList.clear" title="Link to this definition"></a></dt>
 <dd><p>Clear the contents</p>
 </dd></dl>
 
@@ -349,7 +349,7 @@ sequence of images span over multiple video file.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fort_myrmidon.VideoSegmentList.insert">
-<span class="sig-name descname"><span class="pre">insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#fort_myrmidon.VideoSegmentList" title="fort_myrmidon._fort_myrmidon.VideoSegmentList"><span class="pre">fort_myrmidon._fort_myrmidon.VideoSegmentList</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#fort_myrmidon.VideoSegment" title="fort_myrmidon._fort_myrmidon.VideoSegment"><span class="pre">fort_myrmidon._fort_myrmidon.VideoSegment</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#fort_myrmidon.VideoSegmentList.insert" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#fort_myrmidon.VideoSegmentList" title="fort_myrmidon._fort_myrmidon.VideoSegmentList"><span class="pre">fort_myrmidon._fort_myrmidon.VideoSegmentList</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#fort_myrmidon.VideoSegment" title="fort_myrmidon._fort_myrmidon.VideoSegment"><span class="pre">fort_myrmidon._fort_myrmidon.VideoSegment</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#fort_myrmidon.VideoSegmentList.insert" title="Link to this definition"></a></dt>
 <dd><p>Insert an item at a given position.</p>
 </dd></dl>
 
@@ -374,7 +374,7 @@ sequence of images span over multiple video file.</p>
 <h2>fort_myrmidon.VideoFrameData<a class="headerlink" href="#fort-myrmidon-videoframedata" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="fort_myrmidon.VideoFrameData">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">VideoFrameData</span></span><a class="headerlink" href="#fort_myrmidon.VideoFrameData" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">VideoFrameData</span></span><a class="headerlink" href="#fort_myrmidon.VideoFrameData" title="Link to this definition"></a></dt>
 <dd><p>The tracking data and query results associated with a Video frame.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -393,7 +393,7 @@ set to <cite>None</cite>.</p>
 </div>
 <dl class="py property">
 <dt class="sig sig-object py" id="fort_myrmidon.VideoFrameData.Collided">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Collided</span></span><a class="headerlink" href="#fort_myrmidon.VideoFrameData.Collided" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Collided</span></span><a class="headerlink" href="#fort_myrmidon.VideoFrameData.Collided" title="Link to this definition"></a></dt>
 <dd><p>the ants collision (if previously matched)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -404,7 +404,7 @@ set to <cite>None</cite>.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fort_myrmidon.VideoFrameData.Empty">
-<span class="sig-name descname"><span class="pre">Empty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#fort_myrmidon.VideoFrameData" title="fort_myrmidon._fort_myrmidon.VideoFrameData"><span class="pre">fort_myrmidon._fort_myrmidon.VideoFrameData</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#fort_myrmidon.VideoFrameData.Empty" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">Empty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#fort_myrmidon.VideoFrameData" title="fort_myrmidon._fort_myrmidon.VideoFrameData"><span class="pre">fort_myrmidon._fort_myrmidon.VideoFrameData</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#fort_myrmidon.VideoFrameData.Empty" title="Link to this definition"></a></dt>
 <dd><p>Indicates the (unlikely) case where no tracking data is associated
 with this video frame.</p>
 <dl class="field-list simple">
@@ -412,14 +412,14 @@ with this video frame.</p>
 <dd class="field-odd"><p><cite>True</cite> if there is no tracking data (even a timeout / frame drop report) associated with this video frame.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)">bool</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fort_myrmidon.VideoFrameData.Identified">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Identified</span></span><a class="headerlink" href="#fort_myrmidon.VideoFrameData.Identified" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Identified</span></span><a class="headerlink" href="#fort_myrmidon.VideoFrameData.Identified" title="Link to this definition"></a></dt>
 <dd><p>the ants position (if previously matched)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -430,7 +430,7 @@ with this video frame.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fort_myrmidon.VideoFrameData.Interactions">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Interactions</span></span><a class="headerlink" href="#fort_myrmidon.VideoFrameData.Interactions" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Interactions</span></span><a class="headerlink" href="#fort_myrmidon.VideoFrameData.Interactions" title="Link to this definition"></a></dt>
 <dd><p>the interactions in this frame (if previously matched)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -441,18 +441,18 @@ with this video frame.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fort_myrmidon.VideoFrameData.Position">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Position</span></span><a class="headerlink" href="#fort_myrmidon.VideoFrameData.Position" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Position</span></span><a class="headerlink" href="#fort_myrmidon.VideoFrameData.Position" title="Link to this definition"></a></dt>
 <dd><p>the frame position in the video file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fort_myrmidon.VideoFrameData.Time">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Time</span></span><a class="headerlink" href="#fort_myrmidon.VideoFrameData.Time" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Time</span></span><a class="headerlink" href="#fort_myrmidon.VideoFrameData.Time" title="Link to this definition"></a></dt>
 <dd><p>the video frame acquisition time (if available)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -463,7 +463,7 @@ with this video frame.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fort_myrmidon.VideoFrameData.Trajectories">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Trajectories</span></span><a class="headerlink" href="#fort_myrmidon.VideoFrameData.Trajectories" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Trajectories</span></span><a class="headerlink" href="#fort_myrmidon.VideoFrameData.Trajectories" title="Link to this definition"></a></dt>
 <dd><p>the trajectories in this frame (if previously matched)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -479,7 +479,7 @@ with this video frame.</p>
 <h2>fort_myrmidon.VideoSequence<a class="headerlink" href="#fort-myrmidon-videosequence" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="fort_myrmidon.VideoSequence">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">VideoSequence</span></span><a class="headerlink" href="#fort_myrmidon.VideoSequence" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">fort_myrmidon.</span></span><span class="sig-name descname"><span class="pre">VideoSequence</span></span><a class="headerlink" href="#fort_myrmidon.VideoSequence" title="Link to this definition"></a></dt>
 <dd><p>A contextmanager for iterating over Video Frame and matched data.</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fort_myrmidon</span> <span class="k">as</span> <span class="nn">fm</span>
