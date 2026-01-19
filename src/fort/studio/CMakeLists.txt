@@ -238,11 +238,10 @@ set(HDR_UTEST_FILES
 )
 
 include_directories(
-	${PROJECT_BINARY_DIR}/src
-	${PROJECT_BINARY_DIR}/src/myrmidon
+	${PROJECT_BINARY_DIR}/src #
+	${PROJECT_BINARY_DIR}/src/myrmidon #
 	${PROJECT_BINARY_DIR}/src/fort-studio
 	${PROJECT_SOURCE_DIR}/src
-	${GLOG_INCLUDE_DIRS}
 	${apriltag_INCLUDE_DIR}
 	${GLOG_INCLUDE_DIRS}
 )
@@ -262,7 +261,7 @@ target_link_libraries(
 
 add_executable(fort-studio ${RCC_FILES} main.cpp)
 
-target_link_libraries(fort-studio ${GLOG_LIBRARIES} fort-studio-common)
+target_link_libraries(fort-studio fort-studio-common ${GLOG_LIBRARIES})
 
 set_target_properties(
 	fort-studio PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION

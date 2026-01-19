@@ -1,10 +1,10 @@
 id: io.github.formicidae_tracker.Studio
 runtime: org.kde.Platform
-runtime-version: '6.7'
+runtime-version: '6.9'
 sdk: org.kde.Sdk
 add-extensions:
   org.freedesktop.Platform.ffmpeg-full:
-    version: '23.08'
+    version: '24.08'
     directory: lib/ffmpeg
     add-ld-path: .
 cleanup-commands:
@@ -30,6 +30,7 @@ modules:
     buildsystem: cmake
     builddir: true
     config-opts:
+      - -DCMAKE_INSTALL_LIBDIR=lib
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DBUILD_STUDIO=On
       - -DBUILD_PYTHON=Off
@@ -45,6 +46,8 @@ modules:
       - name: eigen
         buildsystem: cmake
         builddir: true
+        config-opts:
+          - -DCMAKE_INSTALL_LIBDIR=lib
         sources:
           - type: archive
             url: https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz
@@ -62,6 +65,7 @@ modules:
         buildsystem: cmake
         builddir: true
         config-opts:
+          - -DCMAKE_INSTALL_LIBDIR=lib
           - -DTBB_TEST=Off
         sources:
           - type: archive
@@ -79,6 +83,8 @@ modules:
       - name: glog
         buildsystem: cmake
         builddir: true
+        config-opts:
+          - -DCMAKE_INSTALL_LIBDIR=lib
         sources:
           - type: archive
             url: https://github.com/google/glog/archive/refs/tags/v0.5.0.zip
@@ -88,6 +94,7 @@ modules:
             buildsystem: cmake
             builddir: true
             config-opts:
+              - -DCMAKE_INSTALL_LIBDIR=lib
               - -DBUILD_STATIC_LIBS=Off
               - -DBUILD_SHARED_LIBS=On
             sources:
