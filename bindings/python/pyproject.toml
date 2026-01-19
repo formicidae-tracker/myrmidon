@@ -53,7 +53,7 @@ search_parent_directories = true
 
 [tool.cibuildwheel]
 build=["cp*-manylinux*"]
-skip=["*p37-*"]
+skip=["*p314t-*"]
 build-frontend = "build"
 archs=["x86_64"]
 manylinux-x86_64-image = "ghcr.io/formicidae-tracker/manylinux_2_28_fort_myrmidon:latest"
