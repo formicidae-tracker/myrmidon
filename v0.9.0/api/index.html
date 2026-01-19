@@ -1,0 +1,1238 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python &mdash; fort-myrmidon  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/../version_dropdown.js?v=4f7105bd"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API Entry Point" href="python/experiment.html" />
+    <link rel="prev" title="Time Representation" href="../time.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            fort-myrmidon
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-myrmidon Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../defining_ant_metadata.html">Defining Ant Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performing_queries.html">Performing Queries</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-studio Manual</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../studio/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../studio/linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../studio/identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../studio/defining_ant_shapes.html">Defining Ant Shapes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../studio/measuring_ants.html">Measuring Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../studio/metadata_edition.html">Ant Metadata Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../studio/visualization.html">Tracking Data Visualization</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../space_zoning.html">Segmenting Spaces in Zones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../matching_video.html">Matching Video and Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../time.html">Time Representation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API References</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python/experiment.html">API Entry Point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/ant_identification.html">Ants and Identifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/space_zone.html">Spaces and Zones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/queries_matchers.html">Queries And Matchers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/time.html">Time Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/shapes.html">2D Geometric Shapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/video.html">Video Sequence Matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python/misc.html">Miscanellous</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#c">C++</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp/experiment.html">API Entry Point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/ant_identification.html">Ants and Identifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/space_zone.html">Spaces and Zones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/queries_matchers.html">Queries And Matchers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/time.html">Time Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/shapes.html">2D Geometric Shapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/video.html">Video Sequence Matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/typedef.html">API generic types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#r">R</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="R.html">Disclaimer</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fort-myrmidon</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Python</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/api/index.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="python">
+<span id="api"></span><h1>Python<a class="headerlink" href="#python" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="python/experiment.html">API Entry Point</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python/experiment.html#fort-myrmidon-experiment">fort_myrmidon.Experiment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment"><code class="docutils literal notranslate"><span class="pre">Experiment</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.AbsoluteFilePath"><code class="docutils literal notranslate"><span class="pre">Experiment.AbsoluteFilePath</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.AddIdentification"><code class="docutils literal notranslate"><span class="pre">Experiment.AddIdentification()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.AddTrackingDataDirectory"><code class="docutils literal notranslate"><span class="pre">Experiment.AddTrackingDataDirectory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.AntShapeTypeNames"><code class="docutils literal notranslate"><span class="pre">Experiment.AntShapeTypeNames</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.Ants"><code class="docutils literal notranslate"><span class="pre">Experiment.Ants</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.Author"><code class="docutils literal notranslate"><span class="pre">Experiment.Author</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.Comment"><code class="docutils literal notranslate"><span class="pre">Experiment.Comment</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.CompileTrackingSolver"><code class="docutils literal notranslate"><span class="pre">Experiment.CompileTrackingSolver()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.CreateAnt"><code class="docutils literal notranslate"><span class="pre">Experiment.CreateAnt()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.CreateAntShapeType"><code class="docutils literal notranslate"><span class="pre">Experiment.CreateAntShapeType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.CreateMeasurementType"><code class="docutils literal notranslate"><span class="pre">Experiment.CreateMeasurementType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.CreateSpace"><code class="docutils literal notranslate"><span class="pre">Experiment.CreateSpace()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.DefaultTagSize"><code class="docutils literal notranslate"><span class="pre">Experiment.DefaultTagSize</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.DeleteAnt"><code class="docutils literal notranslate"><span class="pre">Experiment.DeleteAnt()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.DeleteAntShapeType"><code class="docutils literal notranslate"><span class="pre">Experiment.DeleteAntShapeType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.DeleteIdentification"><code class="docutils literal notranslate"><span class="pre">Experiment.DeleteIdentification()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.DeleteMeasurementType"><code class="docutils literal notranslate"><span class="pre">Experiment.DeleteMeasurementType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.DeleteMetaDataKey"><code class="docutils literal notranslate"><span class="pre">Experiment.DeleteMetaDataKey()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.DeleteSpace"><code class="docutils literal notranslate"><span class="pre">Experiment.DeleteSpace()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.EnsureAllDataIsLoaded"><code class="docutils literal notranslate"><span class="pre">Experiment.EnsureAllDataIsLoaded()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.Family"><code class="docutils literal notranslate"><span class="pre">Experiment.Family</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.FreeIdentificationRangeAt"><code class="docutils literal notranslate"><span class="pre">Experiment.FreeIdentificationRangeAt()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.IdentificationsAt"><code class="docutils literal notranslate"><span class="pre">Experiment.IdentificationsAt()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.MeasurementTypeNames"><code class="docutils literal notranslate"><span class="pre">Experiment.MeasurementTypeNames</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.MetaDataKeys"><code class="docutils literal notranslate"><span class="pre">Experiment.MetaDataKeys</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.Name"><code class="docutils literal notranslate"><span class="pre">Experiment.Name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.Open"><code class="docutils literal notranslate"><span class="pre">Experiment.Open()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.OpenDataLess"><code class="docutils literal notranslate"><span class="pre">Experiment.OpenDataLess()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.RemoveTrackingDataDirectory"><code class="docutils literal notranslate"><span class="pre">Experiment.RemoveTrackingDataDirectory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.RenameMetaDataKey"><code class="docutils literal notranslate"><span class="pre">Experiment.RenameMetaDataKey()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.Save"><code class="docutils literal notranslate"><span class="pre">Experiment.Save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.SetAntShapeTypeName"><code class="docutils literal notranslate"><span class="pre">Experiment.SetAntShapeTypeName()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.SetMeasurementTypeName"><code class="docutils literal notranslate"><span class="pre">Experiment.SetMeasurementTypeName()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.SetMetaDataKey"><code class="docutils literal notranslate"><span class="pre">Experiment.SetMetaDataKey()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.Spaces"><code class="docutils literal notranslate"><span class="pre">Experiment.Spaces</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.Experiment.__init__"><code class="docutils literal notranslate"><span class="pre">Experiment.__init__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python/experiment.html#fort-myrmidon-trackingsolver">fort_myrmidon.TrackingSolver</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/experiment.html#fort_myrmidon.TrackingSolver"><code class="docutils literal notranslate"><span class="pre">TrackingSolver</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.TrackingSolver.CollideFrame"><code class="docutils literal notranslate"><span class="pre">TrackingSolver.CollideFrame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.TrackingSolver.IdentifyAnt"><code class="docutils literal notranslate"><span class="pre">TrackingSolver.IdentifyAnt()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.TrackingSolver.IdentifyFrame"><code class="docutils literal notranslate"><span class="pre">TrackingSolver.IdentifyFrame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/experiment.html#fort_myrmidon.TrackingSolver.__init__"><code class="docutils literal notranslate"><span class="pre">TrackingSolver.__init__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python/ant_identification.html">Ants and Identifications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python/ant_identification.html#fort-myrmidon-ant">fort_myrmidon.Ant</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Ant"><code class="docutils literal notranslate"><span class="pre">Ant</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Ant.AddCapsule"><code class="docutils literal notranslate"><span class="pre">Ant.AddCapsule()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Ant.Capsules"><code class="docutils literal notranslate"><span class="pre">Ant.Capsules</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Ant.ClearCapsules"><code class="docutils literal notranslate"><span class="pre">Ant.ClearCapsules()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Ant.DeleteCapsule"><code class="docutils literal notranslate"><span class="pre">Ant.DeleteCapsule()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Ant.DeleteValue"><code class="docutils literal notranslate"><span class="pre">Ant.DeleteValue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Ant.DisplayColor"><code class="docutils literal notranslate"><span class="pre">Ant.DisplayColor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Ant.DisplayState"><code class="docutils literal notranslate"><span class="pre">Ant.DisplayState</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Ant.DisplayStatus"><code class="docutils literal notranslate"><span class="pre">Ant.DisplayStatus</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Ant.GetValue"><code class="docutils literal notranslate"><span class="pre">Ant.GetValue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Ant.GetValues"><code class="docutils literal notranslate"><span class="pre">Ant.GetValues()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Ant.ID"><code class="docutils literal notranslate"><span class="pre">Ant.ID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Ant.Identifications"><code class="docutils literal notranslate"><span class="pre">Ant.Identifications</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Ant.IdentifiedAt"><code class="docutils literal notranslate"><span class="pre">Ant.IdentifiedAt()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Ant.SetValue"><code class="docutils literal notranslate"><span class="pre">Ant.SetValue()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python/ant_identification.html#fort-myrmidon-identification">fort_myrmidon.Identification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Identification"><code class="docutils literal notranslate"><span class="pre">Identification</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Identification.DEFAULT_TAG_SIZE"><code class="docutils literal notranslate"><span class="pre">Identification.DEFAULT_TAG_SIZE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Identification.AntAngle"><code class="docutils literal notranslate"><span class="pre">Identification.AntAngle</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Identification.AntPosition"><code class="docutils literal notranslate"><span class="pre">Identification.AntPosition</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Identification.ClearUserDefinedAntPose"><code class="docutils literal notranslate"><span class="pre">Identification.ClearUserDefinedAntPose()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Identification.End"><code class="docutils literal notranslate"><span class="pre">Identification.End</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Identification.HasDefaultTagSize"><code class="docutils literal notranslate"><span class="pre">Identification.HasDefaultTagSize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Identification.HasUserDefinedAntPose"><code class="docutils literal notranslate"><span class="pre">Identification.HasUserDefinedAntPose()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Identification.SetUserDefinedAntPose"><code class="docutils literal notranslate"><span class="pre">Identification.SetUserDefinedAntPose()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Identification.Start"><code class="docutils literal notranslate"><span class="pre">Identification.Start</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Identification.TagSize"><code class="docutils literal notranslate"><span class="pre">Identification.TagSize</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Identification.TagValue"><code class="docutils literal notranslate"><span class="pre">Identification.TagValue</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/ant_identification.html#fort_myrmidon.Identification.TargetAntID"><code class="docutils literal notranslate"><span class="pre">Identification.TargetAntID</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python/ant_identification.html#fort-myrmidon-overlappingidentification">fort_myrmidon.OverlappingIdentification</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python/space_zone.html">Spaces and Zones</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python/space_zone.html#fort-myrmidon-space">fort_myrmidon.Space</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/space_zone.html#fort_myrmidon.Space"><code class="docutils literal notranslate"><span class="pre">Space</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/space_zone.html#fort_myrmidon.Space.CreateZone"><code class="docutils literal notranslate"><span class="pre">Space.CreateZone()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/space_zone.html#fort_myrmidon.Space.DeleteZone"><code class="docutils literal notranslate"><span class="pre">Space.DeleteZone()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/space_zone.html#fort_myrmidon.Space.ID"><code class="docutils literal notranslate"><span class="pre">Space.ID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/space_zone.html#fort_myrmidon.Space.LocateMovieFrame"><code class="docutils literal notranslate"><span class="pre">Space.LocateMovieFrame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/space_zone.html#fort_myrmidon.Space.Name"><code class="docutils literal notranslate"><span class="pre">Space.Name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/space_zone.html#fort_myrmidon.Space.Zones"><code class="docutils literal notranslate"><span class="pre">Space.Zones</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python/space_zone.html#fort-myrmidon-zone">fort_myrmidon.Zone</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/space_zone.html#fort_myrmidon.Zone"><code class="docutils literal notranslate"><span class="pre">Zone</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/space_zone.html#fort_myrmidon.Zone.AddDefinition"><code class="docutils literal notranslate"><span class="pre">Zone.AddDefinition()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/space_zone.html#fort_myrmidon.Zone.Definitions"><code class="docutils literal notranslate"><span class="pre">Zone.Definitions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/space_zone.html#fort_myrmidon.Zone.DeleteDefinition"><code class="docutils literal notranslate"><span class="pre">Zone.DeleteDefinition()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/space_zone.html#fort_myrmidon.Zone.ID"><code class="docutils literal notranslate"><span class="pre">Zone.ID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/space_zone.html#fort_myrmidon.Zone.Name"><code class="docutils literal notranslate"><span class="pre">Zone.Name</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python/space_zone.html#fort-myrmidon-zonedefinition">fort_myrmidon.ZoneDefinition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/space_zone.html#fort_myrmidon.ZoneDefinition"><code class="docutils literal notranslate"><span class="pre">ZoneDefinition</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/space_zone.html#fort_myrmidon.ZoneDefinition.End"><code class="docutils literal notranslate"><span class="pre">ZoneDefinition.End</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/space_zone.html#fort_myrmidon.ZoneDefinition.Shapes"><code class="docutils literal notranslate"><span class="pre">ZoneDefinition.Shapes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/space_zone.html#fort_myrmidon.ZoneDefinition.Start"><code class="docutils literal notranslate"><span class="pre">ZoneDefinition.Start</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python/queries_matchers.html">Queries And Matchers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python/queries_matchers.html#fort-myrmidon-query">fort_myrmidon.Query</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Query"><code class="docutils literal notranslate"><span class="pre">Query</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Query.CollideFrames"><code class="docutils literal notranslate"><span class="pre">Query.CollideFrames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Query.ComputeAntInteractions"><code class="docutils literal notranslate"><span class="pre">Query.ComputeAntInteractions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Query.ComputeAntTrajectories"><code class="docutils literal notranslate"><span class="pre">Query.ComputeAntTrajectories()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Query.ComputeMeasurementFor"><code class="docutils literal notranslate"><span class="pre">Query.ComputeMeasurementFor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Query.ComputeTagStatistics"><code class="docutils literal notranslate"><span class="pre">Query.ComputeTagStatistics()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Query.FindVideoSegments"><code class="docutils literal notranslate"><span class="pre">Query.FindVideoSegments()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Query.GetDataInformations"><code class="docutils literal notranslate"><span class="pre">Query.GetDataInformations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Query.GetMetaDataKeyRanges"><code class="docutils literal notranslate"><span class="pre">Query.GetMetaDataKeyRanges()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Query.GetTagCloseUps"><code class="docutils literal notranslate"><span class="pre">Query.GetTagCloseUps()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Query.IdentifyFrames"><code class="docutils literal notranslate"><span class="pre">Query.IdentifyFrames()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python/queries_matchers.html#fort-myrmidon-matcher">fort_myrmidon.Matcher</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Matcher"><code class="docutils literal notranslate"><span class="pre">Matcher</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Matcher.And"><code class="docutils literal notranslate"><span class="pre">Matcher.And()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Matcher.AntAngleGreaterThan"><code class="docutils literal notranslate"><span class="pre">Matcher.AntAngleGreaterThan()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Matcher.AntAngleSmallerThan"><code class="docutils literal notranslate"><span class="pre">Matcher.AntAngleSmallerThan()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Matcher.AntDisplacement"><code class="docutils literal notranslate"><span class="pre">Matcher.AntDisplacement()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Matcher.AntDistanceGreaterThan"><code class="docutils literal notranslate"><span class="pre">Matcher.AntDistanceGreaterThan()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Matcher.AntDistanceSmallerThan"><code class="docutils literal notranslate"><span class="pre">Matcher.AntDistanceSmallerThan()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Matcher.AntID"><code class="docutils literal notranslate"><span class="pre">Matcher.AntID()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Matcher.AntMetaData"><code class="docutils literal notranslate"><span class="pre">Matcher.AntMetaData()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Matcher.InteractionType"><code class="docutils literal notranslate"><span class="pre">Matcher.InteractionType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Matcher.Or"><code class="docutils literal notranslate"><span class="pre">Matcher.Or()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python/queries_matchers.html#queries-result-structures">Queries’ result structures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#py-fort-myrmiond-anttrajectory">py_fort_myrmiond.AntTrajectory</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntTrajectory"><code class="docutils literal notranslate"><span class="pre">AntTrajectory</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntTrajectory.Ant"><code class="docutils literal notranslate"><span class="pre">AntTrajectory.Ant</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntTrajectory.Duration_s"><code class="docutils literal notranslate"><span class="pre">AntTrajectory.Duration_s</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntTrajectory.End"><code class="docutils literal notranslate"><span class="pre">AntTrajectory.End()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntTrajectory.Positions"><code class="docutils literal notranslate"><span class="pre">AntTrajectory.Positions</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntTrajectory.Space"><code class="docutils literal notranslate"><span class="pre">AntTrajectory.Space</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntTrajectory.Start"><code class="docutils literal notranslate"><span class="pre">AntTrajectory.Start</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#fort-myrmidon-antinteraction">fort_myrmidon.AntInteraction</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntInteraction"><code class="docutils literal notranslate"><span class="pre">AntInteraction</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntInteraction.End"><code class="docutils literal notranslate"><span class="pre">AntInteraction.End</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntInteraction.HasInteractionType"><code class="docutils literal notranslate"><span class="pre">AntInteraction.HasInteractionType()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntInteraction.IDs"><code class="docutils literal notranslate"><span class="pre">AntInteraction.IDs</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntInteraction.Space"><code class="docutils literal notranslate"><span class="pre">AntInteraction.Space</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntInteraction.Start"><code class="docutils literal notranslate"><span class="pre">AntInteraction.Start</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntInteraction.Trajectories"><code class="docutils literal notranslate"><span class="pre">AntInteraction.Trajectories</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntInteraction.Types"><code class="docutils literal notranslate"><span class="pre">AntInteraction.Types</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#fort-myrmidon-anttrajectorysegment">fort_myrmidon.AntTrajectorySegment</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntTrajectorySegment"><code class="docutils literal notranslate"><span class="pre">AntTrajectorySegment</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntTrajectorySegment.Begin"><code class="docutils literal notranslate"><span class="pre">AntTrajectorySegment.Begin</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntTrajectorySegment.End"><code class="docutils literal notranslate"><span class="pre">AntTrajectorySegment.End</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntTrajectorySegment.EndTime"><code class="docutils literal notranslate"><span class="pre">AntTrajectorySegment.EndTime()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntTrajectorySegment.StartTime"><code class="docutils literal notranslate"><span class="pre">AntTrajectorySegment.StartTime()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntTrajectorySegment.Trajectory"><code class="docutils literal notranslate"><span class="pre">AntTrajectorySegment.Trajectory</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#fort-myrmidon-anttrajectorysummary">fort_myrmidon.AntTrajectorySummary</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntTrajectorySummary"><code class="docutils literal notranslate"><span class="pre">AntTrajectorySummary</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntTrajectorySummary.Ant"><code class="docutils literal notranslate"><span class="pre">AntTrajectorySummary.Ant</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntTrajectorySummary.Mean"><code class="docutils literal notranslate"><span class="pre">AntTrajectorySummary.Mean</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.AntTrajectorySummary.Zones"><code class="docutils literal notranslate"><span class="pre">AntTrajectorySummary.Zones</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#fort-myrmidon-identifiedframe">fort_myrmidon.IdentifiedFrame</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.IdentifiedFrame"><code class="docutils literal notranslate"><span class="pre">IdentifiedFrame</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.IdentifiedFrame.At"><code class="docutils literal notranslate"><span class="pre">IdentifiedFrame.At()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.IdentifiedFrame.Contains"><code class="docutils literal notranslate"><span class="pre">IdentifiedFrame.Contains()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.IdentifiedFrame.FrameTime"><code class="docutils literal notranslate"><span class="pre">IdentifiedFrame.FrameTime</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.IdentifiedFrame.Height"><code class="docutils literal notranslate"><span class="pre">IdentifiedFrame.Height</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.IdentifiedFrame.Positions"><code class="docutils literal notranslate"><span class="pre">IdentifiedFrame.Positions</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.IdentifiedFrame.Space"><code class="docutils literal notranslate"><span class="pre">IdentifiedFrame.Space</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.IdentifiedFrame.Width"><code class="docutils literal notranslate"><span class="pre">IdentifiedFrame.Width</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#fort-myrmidon-collisionframe">fort_myrmidon.CollisionFrame</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.CollisionFrame"><code class="docutils literal notranslate"><span class="pre">CollisionFrame</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.CollisionFrame.Collisions"><code class="docutils literal notranslate"><span class="pre">CollisionFrame.Collisions</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.CollisionFrame.FrameTime"><code class="docutils literal notranslate"><span class="pre">CollisionFrame.FrameTime</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.CollisionFrame.Space"><code class="docutils literal notranslate"><span class="pre">CollisionFrame.Space</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Collision"><code class="docutils literal notranslate"><span class="pre">Collision</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Collision.IDs"><code class="docutils literal notranslate"><span class="pre">Collision.IDs</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Collision.Types"><code class="docutils literal notranslate"><span class="pre">Collision.Types</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.Collision.Zone"><code class="docutils literal notranslate"><span class="pre">Collision.Zone</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#fort-myrmidon-computedmeasurement">fort_myrmidon.ComputedMeasurement</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.ComputedMeasurement"><code class="docutils literal notranslate"><span class="pre">ComputedMeasurement</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.ComputedMeasurement.LengthMM"><code class="docutils literal notranslate"><span class="pre">ComputedMeasurement.LengthMM</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.ComputedMeasurement.LengthPixel"><code class="docutils literal notranslate"><span class="pre">ComputedMeasurement.LengthPixel</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.ComputedMeasurement.Time"><code class="docutils literal notranslate"><span class="pre">ComputedMeasurement.Time</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#fort-myrmidon-tagstatistics">fort_myrmidon.TagStatistics</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.TagStatistics"><code class="docutils literal notranslate"><span class="pre">TagStatistics</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.TagStatistics.Counts"><code class="docutils literal notranslate"><span class="pre">TagStatistics.Counts</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.TagStatistics.FirstSeen"><code class="docutils literal notranslate"><span class="pre">TagStatistics.FirstSeen</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.TagStatistics.ID"><code class="docutils literal notranslate"><span class="pre">TagStatistics.ID</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.TagStatistics.LastSeen"><code class="docutils literal notranslate"><span class="pre">TagStatistics.LastSeen</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="python/queries_matchers.html#fort-myrmidon-experimentdatainfo">fort_myrmidon.ExperimentDataInfo</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.ExperimentDataInfo"><code class="docutils literal notranslate"><span class="pre">ExperimentDataInfo</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.ExperimentDataInfo.End"><code class="docutils literal notranslate"><span class="pre">ExperimentDataInfo.End</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.ExperimentDataInfo.Frames"><code class="docutils literal notranslate"><span class="pre">ExperimentDataInfo.Frames</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.ExperimentDataInfo.Spaces"><code class="docutils literal notranslate"><span class="pre">ExperimentDataInfo.Spaces</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.ExperimentDataInfo.Start"><code class="docutils literal notranslate"><span class="pre">ExperimentDataInfo.Start</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.SpaceDataInfo"><code class="docutils literal notranslate"><span class="pre">SpaceDataInfo</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.SpaceDataInfo.End"><code class="docutils literal notranslate"><span class="pre">SpaceDataInfo.End</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.SpaceDataInfo.Frames"><code class="docutils literal notranslate"><span class="pre">SpaceDataInfo.Frames</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.SpaceDataInfo.Name"><code class="docutils literal notranslate"><span class="pre">SpaceDataInfo.Name</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.SpaceDataInfo.Start"><code class="docutils literal notranslate"><span class="pre">SpaceDataInfo.Start</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.SpaceDataInfo.TrackingDataDirectories"><code class="docutils literal notranslate"><span class="pre">SpaceDataInfo.TrackingDataDirectories</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.SpaceDataInfo.URI"><code class="docutils literal notranslate"><span class="pre">SpaceDataInfo.URI</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.TrackingDataDirectoryInfo"><code class="docutils literal notranslate"><span class="pre">TrackingDataDirectoryInfo</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.TrackingDataDirectoryInfo.AbsoluteFilePath"><code class="docutils literal notranslate"><span class="pre">TrackingDataDirectoryInfo.AbsoluteFilePath</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.TrackingDataDirectoryInfo.End"><code class="docutils literal notranslate"><span class="pre">TrackingDataDirectoryInfo.End</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.TrackingDataDirectoryInfo.Frames"><code class="docutils literal notranslate"><span class="pre">TrackingDataDirectoryInfo.Frames</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.TrackingDataDirectoryInfo.Start"><code class="docutils literal notranslate"><span class="pre">TrackingDataDirectoryInfo.Start</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="python/queries_matchers.html#fort_myrmidon.TrackingDataDirectoryInfo.URI"><code class="docutils literal notranslate"><span class="pre">TrackingDataDirectoryInfo.URI</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python/time.html">Time Representation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python/time.html#fort-myrmidon-duration">fort_myrmidon.Duration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/time.html#fort_myrmidon.Duration"><code class="docutils literal notranslate"><span class="pre">Duration</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Duration.Hour"><code class="docutils literal notranslate"><span class="pre">Duration.Hour</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Duration.Minute"><code class="docutils literal notranslate"><span class="pre">Duration.Minute</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Duration.Second"><code class="docutils literal notranslate"><span class="pre">Duration.Second</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Duration.Millisecond"><code class="docutils literal notranslate"><span class="pre">Duration.Millisecond</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Duration.Microsecond"><code class="docutils literal notranslate"><span class="pre">Duration.Microsecond</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Duration.Hours"><code class="docutils literal notranslate"><span class="pre">Duration.Hours()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Duration.Microseconds"><code class="docutils literal notranslate"><span class="pre">Duration.Microseconds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Duration.Milliseconds"><code class="docutils literal notranslate"><span class="pre">Duration.Milliseconds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Duration.Minutes"><code class="docutils literal notranslate"><span class="pre">Duration.Minutes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Duration.Nanoseconds"><code class="docutils literal notranslate"><span class="pre">Duration.Nanoseconds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Duration.Parse"><code class="docutils literal notranslate"><span class="pre">Duration.Parse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Duration.Seconds"><code class="docutils literal notranslate"><span class="pre">Duration.Seconds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Duration.__init__"><code class="docutils literal notranslate"><span class="pre">Duration.__init__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python/time.html#fort-myrmidon-time">fort_myrmidon.Time</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/time.html#fort_myrmidon.Time"><code class="docutils literal notranslate"><span class="pre">Time</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Time.Add"><code class="docutils literal notranslate"><span class="pre">Time.Add()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Time.After"><code class="docutils literal notranslate"><span class="pre">Time.After()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Time.Before"><code class="docutils literal notranslate"><span class="pre">Time.Before()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Time.Equals"><code class="docutils literal notranslate"><span class="pre">Time.Equals()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Time.Forever"><code class="docutils literal notranslate"><span class="pre">Time.Forever()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Time.FromDateTime"><code class="docutils literal notranslate"><span class="pre">Time.FromDateTime()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Time.IsForever"><code class="docutils literal notranslate"><span class="pre">Time.IsForever()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Time.IsInfinite"><code class="docutils literal notranslate"><span class="pre">Time.IsInfinite()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Time.IsSinceEver"><code class="docutils literal notranslate"><span class="pre">Time.IsSinceEver()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Time.Now"><code class="docutils literal notranslate"><span class="pre">Time.Now()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Time.Parse"><code class="docutils literal notranslate"><span class="pre">Time.Parse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Time.Reminder"><code class="docutils literal notranslate"><span class="pre">Time.Reminder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Time.Round"><code class="docutils literal notranslate"><span class="pre">Time.Round()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Time.SinceEver"><code class="docutils literal notranslate"><span class="pre">Time.SinceEver()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Time.Sub"><code class="docutils literal notranslate"><span class="pre">Time.Sub()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Time.ToDateTime"><code class="docutils literal notranslate"><span class="pre">Time.ToDateTime()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Time.ToTimestamp"><code class="docutils literal notranslate"><span class="pre">Time.ToTimestamp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/time.html#fort_myrmidon.Time.__init__"><code class="docutils literal notranslate"><span class="pre">Time.__init__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python/shapes.html">2D Geometric Shapes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python/shapes.html#fort-myrmidon-shape">fort_myrmidon.Shape</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/shapes.html#fort_myrmidon.Shape"><code class="docutils literal notranslate"><span class="pre">Shape</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/shapes.html#fort_myrmidon.Shape.ShapeType"><code class="docutils literal notranslate"><span class="pre">Shape.ShapeType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/shapes.html#fort_myrmidon.Shape.Type"><code class="docutils literal notranslate"><span class="pre">Shape.Type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/shapes.html#fort_myrmidon.Shape.contains"><code class="docutils literal notranslate"><span class="pre">Shape.contains()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python/shapes.html#fort-myrmidon-circle">fort_myrmidon.Circle</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/shapes.html#fort_myrmidon.Circle"><code class="docutils literal notranslate"><span class="pre">Circle</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/shapes.html#fort_myrmidon.Circle.Center"><code class="docutils literal notranslate"><span class="pre">Circle.Center</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/shapes.html#fort_myrmidon.Circle.Radius"><code class="docutils literal notranslate"><span class="pre">Circle.Radius</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python/shapes.html#fort-myrmidon-capsule">fort_myrmidon.Capsule</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/shapes.html#fort_myrmidon.Capsule"><code class="docutils literal notranslate"><span class="pre">Capsule</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/shapes.html#fort_myrmidon.Capsule.C1"><code class="docutils literal notranslate"><span class="pre">Capsule.C1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/shapes.html#fort_myrmidon.Capsule.C2"><code class="docutils literal notranslate"><span class="pre">Capsule.C2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/shapes.html#fort_myrmidon.Capsule.R1"><code class="docutils literal notranslate"><span class="pre">Capsule.R1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/shapes.html#fort_myrmidon.Capsule.R2"><code class="docutils literal notranslate"><span class="pre">Capsule.R2</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python/shapes.html#fort-myrmidon-polygon">fort_myrmidon.Polygon</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/shapes.html#fort_myrmidon.Polygon"><code class="docutils literal notranslate"><span class="pre">Polygon</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/shapes.html#fort_myrmidon.Polygon.Vertices"><code class="docutils literal notranslate"><span class="pre">Polygon.Vertices</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python/video.html">Video Sequence Matching</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python/video.html#fort-myrmidon-videosegment">fort_myrmidon.VideoSegment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/video.html#fort_myrmidon.VideoSegment"><code class="docutils literal notranslate"><span class="pre">VideoSegment</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/video.html#fort_myrmidon.VideoSegment.AbsoluteFilePath"><code class="docutils literal notranslate"><span class="pre">VideoSegment.AbsoluteFilePath</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/video.html#fort_myrmidon.VideoSegment.Begin"><code class="docutils literal notranslate"><span class="pre">VideoSegment.Begin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/video.html#fort_myrmidon.VideoSegment.Data"><code class="docutils literal notranslate"><span class="pre">VideoSegment.Data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/video.html#fort_myrmidon.VideoSegment.End"><code class="docutils literal notranslate"><span class="pre">VideoSegment.End</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/video.html#fort_myrmidon.VideoSegment.Match"><code class="docutils literal notranslate"><span class="pre">VideoSegment.Match()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/video.html#fort_myrmidon.VideoSegment.Space"><code class="docutils literal notranslate"><span class="pre">VideoSegment.Space</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python/video.html#fort-myrmidon-videosegmentlist">fort_myrmidon.VideoSegmentList</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/video.html#fort_myrmidon.VideoSegmentList"><code class="docutils literal notranslate"><span class="pre">VideoSegmentList</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/video.html#fort_myrmidon.VideoSegmentList.append"><code class="docutils literal notranslate"><span class="pre">VideoSegmentList.append()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/video.html#fort_myrmidon.VideoSegmentList.clear"><code class="docutils literal notranslate"><span class="pre">VideoSegmentList.clear()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/video.html#fort_myrmidon.VideoSegmentList.deepcopy"><code class="docutils literal notranslate"><span class="pre">VideoSegmentList.deepcopy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/video.html#fort_myrmidon.VideoSegmentList.extend"><code class="docutils literal notranslate"><span class="pre">VideoSegmentList.extend()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/video.html#fort_myrmidon.VideoSegmentList.insert"><code class="docutils literal notranslate"><span class="pre">VideoSegmentList.insert()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/video.html#fort_myrmidon.VideoSegmentList.pop"><code class="docutils literal notranslate"><span class="pre">VideoSegmentList.pop()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python/video.html#fort-myrmidon-videoframedata">fort_myrmidon.VideoFrameData</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/video.html#fort_myrmidon.VideoFrameData"><code class="docutils literal notranslate"><span class="pre">VideoFrameData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python/video.html#fort_myrmidon.VideoFrameData.Collided"><code class="docutils literal notranslate"><span class="pre">VideoFrameData.Collided</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/video.html#fort_myrmidon.VideoFrameData.Empty"><code class="docutils literal notranslate"><span class="pre">VideoFrameData.Empty()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/video.html#fort_myrmidon.VideoFrameData.Identified"><code class="docutils literal notranslate"><span class="pre">VideoFrameData.Identified</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/video.html#fort_myrmidon.VideoFrameData.Interactions"><code class="docutils literal notranslate"><span class="pre">VideoFrameData.Interactions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/video.html#fort_myrmidon.VideoFrameData.Position"><code class="docutils literal notranslate"><span class="pre">VideoFrameData.Position</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/video.html#fort_myrmidon.VideoFrameData.Time"><code class="docutils literal notranslate"><span class="pre">VideoFrameData.Time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="python/video.html#fort_myrmidon.VideoFrameData.Trajectories"><code class="docutils literal notranslate"><span class="pre">VideoFrameData.Trajectories</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python/video.html#fort-myrmidon-videosequence">fort_myrmidon.VideoSequence</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/video.html#fort_myrmidon.VideoSequence"><code class="docutils literal notranslate"><span class="pre">VideoSequence</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python/errors.html">Errors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python/errors.html#fort-myrmidon-overlappingidentification">fort_myrmidon.OverlappingIdentification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/errors.html#fort_myrmidon.OverlappingIdentification"><code class="docutils literal notranslate"><span class="pre">OverlappingIdentification</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python/errors.html#fort-myrmidon-fixableerror">fort_myrmidon.FixableError</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/errors.html#fort_myrmidon.FixableError"><code class="docutils literal notranslate"><span class="pre">FixableError</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python/misc.html">Miscanellous</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python/misc.html#fort-myrmidon-tagfamily">fort_myrmidon.TagFamily</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/misc.html#fort_myrmidon.TagFamily"><code class="docutils literal notranslate"><span class="pre">TagFamily</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python/misc.html#id-formatting">ID formatting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/misc.html#fort_myrmidon.FormatTagID"><code class="docutils literal notranslate"><span class="pre">FormatTagID()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python/misc.html#fort_myrmidon.FormatAntID"><code class="docutils literal notranslate"><span class="pre">FormatAntID()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python/misc.html#color">Color</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/misc.html#fort_myrmidon.DefaultPalette"><code class="docutils literal notranslate"><span class="pre">DefaultPalette()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="python/misc.html#fort_myrmidon.DefaultPaletteColor"><code class="docutils literal notranslate"><span class="pre">DefaultPaletteColor()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python/misc.html#zonepriority">ZonePriority</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python/misc.html#fort_myrmidon.ZonePriority"><code class="docutils literal notranslate"><span class="pre">ZonePriority</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="c">
+<h1>C++<a class="headerlink" href="#c" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cpp/experiment.html">API Entry Point</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp/experiment.html#fort-myrmidon-experiment">fort::myrmidon::Experiment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10ExperimentE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::Experiment</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment3PtrE"><code class="docutils literal notranslate"><span class="pre">Ptr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment4SaveERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4NK4fort8myrmidon10Experiment16AbsoluteFilePathEv"><code class="docutils literal notranslate"><span class="pre">AbsoluteFilePath()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment11CreateSpaceERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">CreateSpace()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment11DeleteSpaceE7SpaceID"><code class="docutils literal notranslate"><span class="pre">DeleteSpace()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4NK4fort8myrmidon10Experiment6SpacesEv"><code class="docutils literal notranslate"><span class="pre">Spaces()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment24AddTrackingDataDirectoryE7SpaceIDRKNSt6stringERR13OpenArguments"><code class="docutils literal notranslate"><span class="pre">AddTrackingDataDirectory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment27RemoveTrackingDataDirectoryERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">RemoveTrackingDataDirectory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment9CreateAntEv"><code class="docutils literal notranslate"><span class="pre">CreateAnt()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4NK4fort8myrmidon10Experiment4AntsEv"><code class="docutils literal notranslate"><span class="pre">Ants()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment9DeleteAntE5AntID"><code class="docutils literal notranslate"><span class="pre">DeleteAnt()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment17AddIdentificationE5AntID5TagIDRK4TimeRK4Time"><code class="docutils literal notranslate"><span class="pre">AddIdentification()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment20DeleteIdentificationERKN14Identification3PtrE"><code class="docutils literal notranslate"><span class="pre">DeleteIdentification()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4NK4fort8myrmidon10Experiment25FreeIdentificationRangeAtE5TagIDRK4Time"><code class="docutils literal notranslate"><span class="pre">FreeIdentificationRangeAt()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4NK4fort8myrmidon10Experiment4NameEv"><code class="docutils literal notranslate"><span class="pre">Name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment7SetNameERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">SetName()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4NK4fort8myrmidon10Experiment6AuthorEv"><code class="docutils literal notranslate"><span class="pre">Author()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment9SetAuthorERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">SetAuthor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4NK4fort8myrmidon10Experiment7CommentEv"><code class="docutils literal notranslate"><span class="pre">Comment()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment10SetCommentERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">SetComment()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4NK4fort8myrmidon10Experiment6FamilyEv"><code class="docutils literal notranslate"><span class="pre">Family()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4NK4fort8myrmidon10Experiment14DefaultTagSizeEv"><code class="docutils literal notranslate"><span class="pre">DefaultTagSize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment17SetDefaultTagSizeEd"><code class="docutils literal notranslate"><span class="pre">SetDefaultTagSize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment21CreateMeasurementTypeERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">CreateMeasurementType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment21DeleteMeasurementTypeE17MeasurementTypeID"><code class="docutils literal notranslate"><span class="pre">DeleteMeasurementType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment22SetMeasurementTypeNameE17MeasurementTypeIDRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">SetMeasurementTypeName()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4NK4fort8myrmidon10Experiment20MeasurementTypeNamesEv"><code class="docutils literal notranslate"><span class="pre">MeasurementTypeNames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment18CreateAntShapeTypeERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">CreateAntShapeType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4NK4fort8myrmidon10Experiment17AntShapeTypeNamesEv"><code class="docutils literal notranslate"><span class="pre">AntShapeTypeNames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment19SetAntShapeTypeNameE14AntShapeTypeIDRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">SetAntShapeTypeName()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment18DeleteAntShapeTypeE14AntShapeTypeID"><code class="docutils literal notranslate"><span class="pre">DeleteAntShapeType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment14SetMetaDataKeyERKNSt6stringE5Value"><code class="docutils literal notranslate"><span class="pre">SetMetaDataKey()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment17DeleteMetaDataKeyERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">DeleteMetaDataKey()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4NK4fort8myrmidon10Experiment12MetaDataKeysEv"><code class="docutils literal notranslate"><span class="pre">MetaDataKeys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment17RenameMetaDataKeyERKNSt6stringERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">RenameMetaDataKey()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4NK4fort8myrmidon10Experiment17IdentificationsAtERK4Timeb"><code class="docutils literal notranslate"><span class="pre">IdentificationsAt()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4NK4fort8myrmidon10Experiment21CompileTrackingSolverEb"><code class="docutils literal notranslate"><span class="pre">CompileTrackingSolver()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4NK4fort8myrmidon10Experiment21EnsureAllDataIsLoadedERR13OpenArguments"><code class="docutils literal notranslate"><span class="pre">EnsureAllDataIsLoaded()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment4OpenERKNSt6stringERR13OpenArguments"><code class="docutils literal notranslate"><span class="pre">Open()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment12OpenDataLessERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">OpenDataLess()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment6CreateERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Create()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon10Experiment29HEAD_TAIL_MEASUREMENT_TYPE_IDE"><code class="docutils literal notranslate"><span class="pre">HEAD_TAIL_MEASUREMENT_TYPE_ID</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/experiment.html#fort-myrmidon-trackingsolver">fort::myrmidon::TrackingSolver</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon14TrackingSolverE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::TrackingSolver</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4N4fort8myrmidon14TrackingSolver11IdentifyAntE5TagIDRK4Time"><code class="docutils literal notranslate"><span class="pre">IdentifyAnt()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4NK4fort8myrmidon14TrackingSolver13IdentifyFrameER15IdentifiedFrameRKN4fort6hermes12FrameReadoutE7SpaceID6size_t12ZonePriority"><code class="docutils literal notranslate"><span class="pre">IdentifyFrame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/experiment.html#_CPPv4NK4fort8myrmidon14TrackingSolver12CollideFrameER15IdentifiedFrameR14CollisionFrame"><code class="docutils literal notranslate"><span class="pre">CollideFrame()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cpp/ant_identification.html">Ants and Identifications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp/ant_identification.html#fort-myrmidon-ant">fort::myrmidon::Ant</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4N4fort8myrmidon3AntE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::Ant</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4N4fort8myrmidon3Ant12DisplayStateE"><code class="docutils literal notranslate"><span class="pre">DisplayState</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4N4fort8myrmidon3Ant12DisplayState7VISIBLEE"><code class="docutils literal notranslate"><span class="pre">VISIBLE</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4N4fort8myrmidon3Ant12DisplayState6HIDDENE"><code class="docutils literal notranslate"><span class="pre">HIDDEN</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4N4fort8myrmidon3Ant12DisplayState4SOLOE"><code class="docutils literal notranslate"><span class="pre">SOLO</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4N4fort8myrmidon3Ant3PtrE"><code class="docutils literal notranslate"><span class="pre">Ptr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant12IdentifiedAtERK4Time"><code class="docutils literal notranslate"><span class="pre">IdentifiedAt()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant15IdentificationsEv"><code class="docutils literal notranslate"><span class="pre">Identifications()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant2IDEv"><code class="docutils literal notranslate"><span class="pre">ID()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant12DisplayColorEv"><code class="docutils literal notranslate"><span class="pre">DisplayColor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4N4fort8myrmidon3Ant15SetDisplayColorERK5Color"><code class="docutils literal notranslate"><span class="pre">SetDisplayColor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant13DisplayStatusEv"><code class="docutils literal notranslate"><span class="pre">DisplayStatus()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4N4fort8myrmidon3Ant16SetDisplayStatusE12DisplayState"><code class="docutils literal notranslate"><span class="pre">SetDisplayStatus()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant8GetValueERKNSt6stringERK4Time"><code class="docutils literal notranslate"><span class="pre">GetValue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4N4fort8myrmidon3Ant8SetValueERKNSt6stringERK5ValueRK4Time"><code class="docutils literal notranslate"><span class="pre">SetValue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4N4fort8myrmidon3Ant11DeleteValueERKNSt6stringERK4Time"><code class="docutils literal notranslate"><span class="pre">DeleteValue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant9GetValuesERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">GetValues()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4N4fort8myrmidon3Ant10AddCapsuleE14AntShapeTypeIDRKNSt10shared_ptrI7CapsuleEE"><code class="docutils literal notranslate"><span class="pre">AddCapsule()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4NK4fort8myrmidon3Ant8CapsulesEv"><code class="docutils literal notranslate"><span class="pre">Capsules()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4N4fort8myrmidon3Ant13DeleteCapsuleEK6size_t"><code class="docutils literal notranslate"><span class="pre">DeleteCapsule()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4N4fort8myrmidon3Ant13ClearCapsulesEv"><code class="docutils literal notranslate"><span class="pre">ClearCapsules()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/ant_identification.html#fort-myrmidon-identification">fort::myrmidon::Identification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4N4fort8myrmidon14IdentificationE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::Identification</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4N4fort8myrmidon14Identification3PtrE"><code class="docutils literal notranslate"><span class="pre">Ptr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4NK4fort8myrmidon14Identification8TagValueEv"><code class="docutils literal notranslate"><span class="pre">TagValue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4N4fort8myrmidon14Identification6SetEndERK4Time"><code class="docutils literal notranslate"><span class="pre">SetEnd()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4NK4fort8myrmidon14Identification5StartEv"><code class="docutils literal notranslate"><span class="pre">Start()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4NK4fort8myrmidon14Identification3EndEv"><code class="docutils literal notranslate"><span class="pre">End()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4NK4fort8myrmidon14Identification11AntPositionEv"><code class="docutils literal notranslate"><span class="pre">AntPosition()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4NK4fort8myrmidon14Identification8AntAngleEv"><code class="docutils literal notranslate"><span class="pre">AntAngle()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4NK4fort8myrmidon14Identification21HasUserDefinedAntPoseEv"><code class="docutils literal notranslate"><span class="pre">HasUserDefinedAntPose()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4N4fort8myrmidon14Identification21SetUserDefinedAntPoseERKN5Eigen8Vector2dEd"><code class="docutils literal notranslate"><span class="pre">SetUserDefinedAntPose()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4N4fort8myrmidon14Identification23ClearUserDefinedAntPoseEv"><code class="docutils literal notranslate"><span class="pre">ClearUserDefinedAntPose()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4N4fort8myrmidon14Identification10SetTagSizeEd"><code class="docutils literal notranslate"><span class="pre">SetTagSize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4NK4fort8myrmidon14Identification7TagSizeEv"><code class="docutils literal notranslate"><span class="pre">TagSize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4NK4fort8myrmidon14Identification17HasDefaultTagSizeEv"><code class="docutils literal notranslate"><span class="pre">HasDefaultTagSize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/ant_identification.html#_CPPv4N4fort8myrmidon14Identification16DEFAULT_TAG_SIZEE"><code class="docutils literal notranslate"><span class="pre">DEFAULT_TAG_SIZE</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cpp/space_zone.html">Spaces and Zones</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp/space_zone.html#fort-myrmidon-space">fort::myrmidon::Space</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp/space_zone.html#_CPPv4N4fort8myrmidon5SpaceE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::Space</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/space_zone.html#_CPPv4NK4fort8myrmidon5Space2IDEv"><code class="docutils literal notranslate"><span class="pre">ID()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/space_zone.html#_CPPv4NK4fort8myrmidon5Space4NameEv"><code class="docutils literal notranslate"><span class="pre">Name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/space_zone.html#_CPPv4N4fort8myrmidon5Space7SetNameERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">SetName()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/space_zone.html#_CPPv4N4fort8myrmidon5Space10CreateZoneERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">CreateZone()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/space_zone.html#_CPPv4N4fort8myrmidon5Space10DeleteZoneE6ZoneID"><code class="docutils literal notranslate"><span class="pre">DeleteZone()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/space_zone.html#_CPPv4NK4fort8myrmidon5Space5ZonesEv"><code class="docutils literal notranslate"><span class="pre">Zones()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/space_zone.html#_CPPv4NK4fort8myrmidon5Space16LocateMovieFrameERK4Time"><code class="docutils literal notranslate"><span class="pre">LocateMovieFrame()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/space_zone.html#fort-myrmidon-zone">fort::myrmidon::Zone</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp/space_zone.html#_CPPv4N4fort8myrmidon4ZoneE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::Zone</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/space_zone.html#_CPPv4N4fort8myrmidon4Zone3PtrE"><code class="docutils literal notranslate"><span class="pre">Ptr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/space_zone.html#_CPPv4N4fort8myrmidon4Zone13AddDefinitionERKN5Shape4ListERK4TimeRK4Time"><code class="docutils literal notranslate"><span class="pre">AddDefinition()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/space_zone.html#_CPPv4NK4fort8myrmidon4Zone11DefinitionsEv"><code class="docutils literal notranslate"><span class="pre">Definitions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/space_zone.html#_CPPv4N4fort8myrmidon4Zone16DeleteDefinitionE6size_t"><code class="docutils literal notranslate"><span class="pre">DeleteDefinition()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/space_zone.html#_CPPv4NK4fort8myrmidon4Zone4NameEv"><code class="docutils literal notranslate"><span class="pre">Name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/space_zone.html#_CPPv4N4fort8myrmidon4Zone7SetNameERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">SetName()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/space_zone.html#_CPPv4NK4fort8myrmidon4Zone2IDEv"><code class="docutils literal notranslate"><span class="pre">ID()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/space_zone.html#fort-myrmidon-zonedefinition">fort::myrmidon::ZoneDefinition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp/space_zone.html#_CPPv4N4fort8myrmidon14ZoneDefinitionE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::ZoneDefinition</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/space_zone.html#_CPPv4N4fort8myrmidon14ZoneDefinition3PtrE"><code class="docutils literal notranslate"><span class="pre">Ptr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/space_zone.html#_CPPv4NK4fort8myrmidon14ZoneDefinition6ShapesEv"><code class="docutils literal notranslate"><span class="pre">Shapes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/space_zone.html#_CPPv4N4fort8myrmidon14ZoneDefinition9SetShapesERKN5Shape4ListE"><code class="docutils literal notranslate"><span class="pre">SetShapes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/space_zone.html#_CPPv4NK4fort8myrmidon14ZoneDefinition5StartEv"><code class="docutils literal notranslate"><span class="pre">Start()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/space_zone.html#_CPPv4NK4fort8myrmidon14ZoneDefinition3EndEv"><code class="docutils literal notranslate"><span class="pre">End()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/space_zone.html#_CPPv4N4fort8myrmidon14ZoneDefinition8SetStartERK4Time"><code class="docutils literal notranslate"><span class="pre">SetStart()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/space_zone.html#_CPPv4N4fort8myrmidon14ZoneDefinition6SetEndERK4Time"><code class="docutils literal notranslate"><span class="pre">SetEnd()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cpp/queries_matchers.html">Queries And Matchers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-query">fort::myrmidon::Query</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5QueryE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::Query</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query22IdentifyFramesCallbackE"><code class="docutils literal notranslate"><span class="pre">IdentifyFramesCallback</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query21CollideFramesCallbackE"><code class="docutils literal notranslate"><span class="pre">CollideFramesCallback</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query21NewTrajectoryCallbackE"><code class="docutils literal notranslate"><span class="pre">NewTrajectoryCallback</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query22NewInteractionCallbackE"><code class="docutils literal notranslate"><span class="pre">NewInteractionCallback</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query21ComputeMeasurementForERK10Experiment5AntID17MeasurementTypeID"><code class="docutils literal notranslate"><span class="pre">ComputeMeasurementFor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query19GetDataInformationsERK10Experiment"><code class="docutils literal notranslate"><span class="pre">GetDataInformations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query20ComputeTagStatisticsERK10ExperimentRRN16ProgressReporter3PtrEb"><code class="docutils literal notranslate"><span class="pre">ComputeTagStatistics()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query21IdentifyFramesFunctorERK10Experiment22IdentifyFramesCallbackRK18IdentifyFramesArgs"><code class="docutils literal notranslate"><span class="pre">IdentifyFramesFunctor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query14IdentifyFramesERK10ExperimentRNSt6vectorIN15IdentifiedFrame3PtrEEERK18IdentifyFramesArgs"><code class="docutils literal notranslate"><span class="pre">IdentifyFrames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query20CollideFramesFunctorERK10Experiment21CollideFramesCallbackRK17CollideFramesArgs"><code class="docutils literal notranslate"><span class="pre">CollideFramesFunctor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query13CollideFramesERK10ExperimentRNSt6vectorI13CollisionDataEERK17CollideFramesArgs"><code class="docutils literal notranslate"><span class="pre">CollideFrames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query29ComputeAntTrajectoriesFunctorERK10Experiment21NewTrajectoryCallbackRK26ComputeAntTrajectoriesArgs"><code class="docutils literal notranslate"><span class="pre">ComputeAntTrajectoriesFunctor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query22ComputeAntTrajectoriesERK10ExperimentRNSt6vectorIN13AntTrajectory3PtrEEERK26ComputeAntTrajectoriesArgs"><code class="docutils literal notranslate"><span class="pre">ComputeAntTrajectories()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query29ComputeAntInteractionsFunctorERK10Experiment21NewTrajectoryCallback22NewInteractionCallbackRK26ComputeAntInteractionsArgs"><code class="docutils literal notranslate"><span class="pre">ComputeAntInteractionsFunctor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query22ComputeAntInteractionsERK10ExperimentRNSt6vectorIN13AntTrajectory3PtrEEERNSt6vectorIN14AntInteraction3PtrEEERK26ComputeAntInteractionsArgs"><code class="docutils literal notranslate"><span class="pre">ComputeAntInteractions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query17FindVideoSegmentsERK10ExperimentRNSt6vectorI12VideoSegmentEE7SpaceIDRKN4fort4TimeERKN4fort4TimeE"><code class="docutils literal notranslate"><span class="pre">FindVideoSegments()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query20GetMetaDataKeyRangesERK10ExperimentRKNSt6stringERK5Value"><code class="docutils literal notranslate"><span class="pre">GetMetaDataKeyRanges()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query14GetTagCloseUpsERK10ExperimentRRN16ProgressReporter3PtrEb"><code class="docutils literal notranslate"><span class="pre">GetTagCloseUps()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query17CollideFramesArgsE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::Query::CollideFramesArgs</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query17CollideFramesArgs21CollisionsIgnoreZonesE"><code class="docutils literal notranslate"><span class="pre">CollisionsIgnoreZones</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query26ComputeAntInteractionsArgsE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::Query::ComputeAntInteractionsArgs</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query26ComputeAntInteractionsArgs10MaximumGapE"><code class="docutils literal notranslate"><span class="pre">MaximumGap</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query26ComputeAntInteractionsArgs7MatcherE"><code class="docutils literal notranslate"><span class="pre">Matcher</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query26ComputeAntInteractionsArgs22ReportFullTrajectoriesE"><code class="docutils literal notranslate"><span class="pre">ReportFullTrajectories</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query26ComputeAntInteractionsArgs27SegmentOnMatcherValueChangeE"><code class="docutils literal notranslate"><span class="pre">SegmentOnMatcherValueChange</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query26ComputeAntInteractionsArgs11ReportSmallE"><code class="docutils literal notranslate"><span class="pre">ReportSmall</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query26ComputeAntTrajectoriesArgsE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::Query::ComputeAntTrajectoriesArgs</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query26ComputeAntTrajectoriesArgs10MaximumGapE"><code class="docutils literal notranslate"><span class="pre">MaximumGap</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query26ComputeAntTrajectoriesArgs7MatcherE"><code class="docutils literal notranslate"><span class="pre">Matcher</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query26ComputeAntTrajectoriesArgs27SegmentOnMatcherValueChangeE"><code class="docutils literal notranslate"><span class="pre">SegmentOnMatcherValueChange</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query26ComputeAntTrajectoriesArgs11ReportSmallE"><code class="docutils literal notranslate"><span class="pre">ReportSmall</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query18IdentifyFramesArgsE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::Query::IdentifyFramesArgs</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query18IdentifyFramesArgs9ZoneDepthE"><code class="docutils literal notranslate"><span class="pre">ZoneDepth</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query18IdentifyFramesArgs5OrderE"><code class="docutils literal notranslate"><span class="pre">Order</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query9QueryArgsE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::Query::QueryArgs</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query9QueryArgs5StartE"><code class="docutils literal notranslate"><span class="pre">Start</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query9QueryArgs3EndE"><code class="docutils literal notranslate"><span class="pre">End</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query9QueryArgs14SingleThreadedE"><code class="docutils literal notranslate"><span class="pre">SingleThreaded</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon5Query9QueryArgs8ProgressE"><code class="docutils literal notranslate"><span class="pre">Progress</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-matcher">fort::myrmidon::Matcher</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon7MatcherE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::Matcher</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon7Matcher3PtrE"><code class="docutils literal notranslate"><span class="pre">Ptr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon7Matcher3AndENSt6vectorI3PtrEE"><code class="docutils literal notranslate"><span class="pre">And()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon7Matcher2OrENSt6vectorI3PtrEE"><code class="docutils literal notranslate"><span class="pre">Or()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon7Matcher5AntIDE5AntID"><code class="docutils literal notranslate"><span class="pre">AntID()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon7Matcher11AntMetaDataERKNSt6stringERKNSt8optionalI5ValueEE"><code class="docutils literal notranslate"><span class="pre">AntMetaData()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon7Matcher22AntDistanceSmallerThanEd"><code class="docutils literal notranslate"><span class="pre">AntDistanceSmallerThan()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon7Matcher22AntDistanceGreaterThanEd"><code class="docutils literal notranslate"><span class="pre">AntDistanceGreaterThan()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon7Matcher19AntAngleSmallerThanEd"><code class="docutils literal notranslate"><span class="pre">AntAngleSmallerThan()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon7Matcher19AntAngleGreaterThanEd"><code class="docutils literal notranslate"><span class="pre">AntAngleGreaterThan()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon7Matcher15InteractionTypeE14AntShapeTypeID14AntShapeTypeID"><code class="docutils literal notranslate"><span class="pre">InteractionType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon7Matcher15AntDisplacementEd8Duration"><code class="docutils literal notranslate"><span class="pre">AntDisplacement()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/queries_matchers.html#queries-result-structures">Queries’ result structures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-anttrajectory">fort::myrmidon::AntTrajectory</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon13AntTrajectoryE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::AntTrajectory</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon13AntTrajectory3PtrE"><code class="docutils literal notranslate"><span class="pre">Ptr</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4NK4fort8myrmidon13AntTrajectory3EndEv"><code class="docutils literal notranslate"><span class="pre">End()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon13AntTrajectory3AntE"><code class="docutils literal notranslate"><span class="pre">Ant</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon13AntTrajectory5SpaceE"><code class="docutils literal notranslate"><span class="pre">Space</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon13AntTrajectory5StartE"><code class="docutils literal notranslate"><span class="pre">Start</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon13AntTrajectory9PositionsE"><code class="docutils literal notranslate"><span class="pre">Positions</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon13AntTrajectory10Duration_sE"><code class="docutils literal notranslate"><span class="pre">Duration_s</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-antinteraction">fort::myrmidon::AntInteraction</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon14AntInteractionE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::AntInteraction</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon14AntInteraction3PtrE"><code class="docutils literal notranslate"><span class="pre">Ptr</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4NK4fort8myrmidon14AntInteraction18HasInteractionTypeE14AntShapeTypeID14AntShapeTypeID"><code class="docutils literal notranslate"><span class="pre">HasInteractionType()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon14AntInteraction3IDsE"><code class="docutils literal notranslate"><span class="pre">IDs</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon14AntInteraction5TypesE"><code class="docutils literal notranslate"><span class="pre">Types</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon14AntInteraction12TrajectoriesE"><code class="docutils literal notranslate"><span class="pre">Trajectories</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon14AntInteraction5StartE"><code class="docutils literal notranslate"><span class="pre">Start</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon14AntInteraction3EndE"><code class="docutils literal notranslate"><span class="pre">End</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon14AntInteraction5SpaceE"><code class="docutils literal notranslate"><span class="pre">Space</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-anttrajectorysegment">fort::myrmidon::AntTrajectorySegment</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon20AntTrajectorySegmentE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::AntTrajectorySegment</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon20AntTrajectorySegment10TrajectoryE"><code class="docutils literal notranslate"><span class="pre">Trajectory</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon20AntTrajectorySegment5BeginE"><code class="docutils literal notranslate"><span class="pre">Begin</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon20AntTrajectorySegment3EndE"><code class="docutils literal notranslate"><span class="pre">End</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-anttrajectorysummary">fort::myrmidon::AntTrajectorySummary</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon20AntTrajectorySummaryE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::AntTrajectorySummary</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon20AntTrajectorySummary4MeanE"><code class="docutils literal notranslate"><span class="pre">Mean</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon20AntTrajectorySummary5ZonesE"><code class="docutils literal notranslate"><span class="pre">Zones</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-identifiedframe">fort::myrmidon::IdentifiedFrame</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon15IdentifiedFrameE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::IdentifiedFrame</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon15IdentifiedFrame3PtrE"><code class="docutils literal notranslate"><span class="pre">Ptr</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon15IdentifiedFrame14PositionMatrixE"><code class="docutils literal notranslate"><span class="pre">PositionMatrix</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4NK4fort8myrmidon15IdentifiedFrame8ContainsE8uint64_t"><code class="docutils literal notranslate"><span class="pre">Contains()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4NK4fort8myrmidon15IdentifiedFrame2AtE6size_t"><code class="docutils literal notranslate"><span class="pre">At()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon15IdentifiedFrame9FrameTimeE"><code class="docutils literal notranslate"><span class="pre">FrameTime</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon15IdentifiedFrame5SpaceE"><code class="docutils literal notranslate"><span class="pre">Space</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon15IdentifiedFrame6HeightE"><code class="docutils literal notranslate"><span class="pre">Height</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon15IdentifiedFrame5WidthE"><code class="docutils literal notranslate"><span class="pre">Width</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon15IdentifiedFrame9PositionsE"><code class="docutils literal notranslate"><span class="pre">Positions</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-collisionframe">fort::myrmidon::CollisionFrame</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon14CollisionFrameE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::CollisionFrame</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon14CollisionFrame3PtrE"><code class="docutils literal notranslate"><span class="pre">Ptr</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon14CollisionFrame9FrameTimeE"><code class="docutils literal notranslate"><span class="pre">FrameTime</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon14CollisionFrame5SpaceE"><code class="docutils literal notranslate"><span class="pre">Space</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon14CollisionFrame10CollisionsE"><code class="docutils literal notranslate"><span class="pre">Collisions</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon9CollisionE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::Collision</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon9Collision3IDsE"><code class="docutils literal notranslate"><span class="pre">IDs</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon9Collision5TypesE"><code class="docutils literal notranslate"><span class="pre">Types</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon9Collision4ZoneE"><code class="docutils literal notranslate"><span class="pre">Zone</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-computedmeasurement">fort::myrmidon::ComputedMeasurement</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon19ComputedMeasurementE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::ComputedMeasurement</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon19ComputedMeasurement4ListE"><code class="docutils literal notranslate"><span class="pre">List</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon19ComputedMeasurement4TimeE"><code class="docutils literal notranslate"><span class="pre">Time</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon19ComputedMeasurement8LengthMME"><code class="docutils literal notranslate"><span class="pre">LengthMM</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon19ComputedMeasurement11LengthPixelE"><code class="docutils literal notranslate"><span class="pre">LengthPixel</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-tagstatistics">fort::myrmidon::TagStatistics</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon13TagStatisticsE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::TagStatistics</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon13TagStatistics7ByTagIDE"><code class="docutils literal notranslate"><span class="pre">ByTagID</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon13TagStatistics11CountVectorE"><code class="docutils literal notranslate"><span class="pre">CountVector</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/queries_matchers.html#fort-myrmidon-experimentdatainfo">fort::myrmidon::ExperimentDataInfo</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon18ExperimentDataInfoE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::ExperimentDataInfo</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon18ExperimentDataInfo6FramesE"><code class="docutils literal notranslate"><span class="pre">Frames</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon18ExperimentDataInfo5StartE"><code class="docutils literal notranslate"><span class="pre">Start</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon18ExperimentDataInfo3EndE"><code class="docutils literal notranslate"><span class="pre">End</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon18ExperimentDataInfo6SpacesE"><code class="docutils literal notranslate"><span class="pre">Spaces</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon13SpaceDataInfoE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::SpaceDataInfo</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon13SpaceDataInfo3URIE"><code class="docutils literal notranslate"><span class="pre">URI</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon13SpaceDataInfo4NameE"><code class="docutils literal notranslate"><span class="pre">Name</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon13SpaceDataInfo6FramesE"><code class="docutils literal notranslate"><span class="pre">Frames</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon13SpaceDataInfo5StartE"><code class="docutils literal notranslate"><span class="pre">Start</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon13SpaceDataInfo3EndE"><code class="docutils literal notranslate"><span class="pre">End</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon13SpaceDataInfo23TrackingDataDirectoriesE"><code class="docutils literal notranslate"><span class="pre">TrackingDataDirectories</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon25TrackingDataDirectoryInfoE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::TrackingDataDirectoryInfo</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon25TrackingDataDirectoryInfo3URIE"><code class="docutils literal notranslate"><span class="pre">URI</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon25TrackingDataDirectoryInfo16AbsoluteFilePathE"><code class="docutils literal notranslate"><span class="pre">AbsoluteFilePath</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon25TrackingDataDirectoryInfo6FramesE"><code class="docutils literal notranslate"><span class="pre">Frames</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon25TrackingDataDirectoryInfo5StartE"><code class="docutils literal notranslate"><span class="pre">Start</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/queries_matchers.html#_CPPv4N4fort8myrmidon25TrackingDataDirectoryInfo3EndE"><code class="docutils literal notranslate"><span class="pre">End</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cpp/time.html">Time Representation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp/time.html#fort-duration">fort::Duration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort8DurationE"><code class="docutils literal notranslate"><span class="pre">fort::Duration</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4I0_PNSt9enable_ifINSt13is_integral_vI1TEEEEEN4fort8Duration8DurationE1T"><code class="docutils literal notranslate"><span class="pre">Duration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort8Duration8DurationEv"><code class="docutils literal notranslate"><span class="pre">Duration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4I00EN4fort8Duration8DurationERKNSt6chrono8durationI1T1UEE"><code class="docutils literal notranslate"><span class="pre">Duration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort8Duration5HoursEv"><code class="docutils literal notranslate"><span class="pre">Hours()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort8Duration7MinutesEv"><code class="docutils literal notranslate"><span class="pre">Minutes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort8Duration7SecondsEv"><code class="docutils literal notranslate"><span class="pre">Seconds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort8Duration12MillisecondsEv"><code class="docutils literal notranslate"><span class="pre">Milliseconds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort8Duration12MicrosecondsEv"><code class="docutils literal notranslate"><span class="pre">Microseconds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort8Duration11NanosecondsEv"><code class="docutils literal notranslate"><span class="pre">Nanoseconds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort8Duration8TruncateE8Duration"><code class="docutils literal notranslate"><span class="pre">Truncate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort8DurationplERK8Duration"><code class="docutils literal notranslate"><span class="pre">operator+()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort8DurationmlERKN4fort8DurationE"><code class="docutils literal notranslate"><span class="pre">operator*()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort8DurationdvERKN4fort8DurationE"><code class="docutils literal notranslate"><span class="pre">operator/()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort8DurationmiERKN4fort8DurationE"><code class="docutils literal notranslate"><span class="pre">operator-()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort8DurationmiEv"><code class="docutils literal notranslate"><span class="pre">operator-()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort8DurationltERK8Duration"><code class="docutils literal notranslate"><span class="pre">operator&lt;()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort8DurationleERK8Duration"><code class="docutils literal notranslate"><span class="pre">operator&lt;=()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort8DurationgtERK8Duration"><code class="docutils literal notranslate"><span class="pre">operator&gt;()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort8DurationgeERK8Duration"><code class="docutils literal notranslate"><span class="pre">operator&gt;=()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort8DurationeqERK8Duration"><code class="docutils literal notranslate"><span class="pre">operator==()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort8Duration5ParseERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Parse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort8Duration4HourE"><code class="docutils literal notranslate"><span class="pre">Hour</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort8Duration6MinuteE"><code class="docutils literal notranslate"><span class="pre">Minute</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort8Duration6SecondE"><code class="docutils literal notranslate"><span class="pre">Second</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort8Duration11MillisecondE"><code class="docutils literal notranslate"><span class="pre">Millisecond</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort8Duration11MicrosecondE"><code class="docutils literal notranslate"><span class="pre">Microsecond</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort8Duration10NanosecondE"><code class="docutils literal notranslate"><span class="pre">Nanosecond</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/time.html#fort-time">fort::Time</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort4TimeE"><code class="docutils literal notranslate"><span class="pre">fort::Time</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort4Time11MonoclockIDE"><code class="docutils literal notranslate"><span class="pre">MonoclockID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4Time7ToTimeTEv"><code class="docutils literal notranslate"><span class="pre">ToTimeT()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4Time9ToTimevalEv"><code class="docutils literal notranslate"><span class="pre">ToTimeval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4Time11ToTimestampEv"><code class="docutils literal notranslate"><span class="pre">ToTimestamp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4Time11ToTimestampEPN6google8protobuf9TimestampE"><code class="docutils literal notranslate"><span class="pre">ToTimestamp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort4Time4TimeEv"><code class="docutils literal notranslate"><span class="pre">Time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4Time3AddERK8Duration"><code class="docutils literal notranslate"><span class="pre">Add()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4Time5RoundERK8Duration"><code class="docutils literal notranslate"><span class="pre">Round()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4Time8ReminderERK8Duration"><code class="docutils literal notranslate"><span class="pre">Reminder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4Time5AfterERK4Time"><code class="docutils literal notranslate"><span class="pre">After()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4Time6BeforeERK4Time"><code class="docutils literal notranslate"><span class="pre">Before()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4Time6EqualsERK4Time"><code class="docutils literal notranslate"><span class="pre">Equals()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4Time9IsForeverEv"><code class="docutils literal notranslate"><span class="pre">IsForever()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4Time11IsSinceEverEv"><code class="docutils literal notranslate"><span class="pre">IsSinceEver()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4Time10IsInfiniteEv"><code class="docutils literal notranslate"><span class="pre">IsInfinite()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4Time3SubERK4Time"><code class="docutils literal notranslate"><span class="pre">Sub()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4Time7HasMonoEv"><code class="docutils literal notranslate"><span class="pre">HasMono()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4Time6MonoIDEv"><code class="docutils literal notranslate"><span class="pre">MonoID()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4Time14MonotonicValueEv"><code class="docutils literal notranslate"><span class="pre">MonotonicValue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4Time6FormatEv"><code class="docutils literal notranslate"><span class="pre">Format()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4Time11DebugStringEv"><code class="docutils literal notranslate"><span class="pre">DebugString()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4TimeeqERK4Time"><code class="docutils literal notranslate"><span class="pre">operator==()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4TimeltERK4Time"><code class="docutils literal notranslate"><span class="pre">operator&lt;()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4TimeleERK4Time"><code class="docutils literal notranslate"><span class="pre">operator&lt;=()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4TimegtERK4Time"><code class="docutils literal notranslate"><span class="pre">operator&gt;()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4NK4fort4TimegeERK4Time"><code class="docutils literal notranslate"><span class="pre">operator&gt;=()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort4Time7ForeverEv"><code class="docutils literal notranslate"><span class="pre">Forever()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort4Time9SinceEverEv"><code class="docutils literal notranslate"><span class="pre">SinceEver()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort4Time3NowEv"><code class="docutils literal notranslate"><span class="pre">Now()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort4Time9FromTimeTE6time_t"><code class="docutils literal notranslate"><span class="pre">FromTimeT()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort4Time11FromTimevalERK7timeval"><code class="docutils literal notranslate"><span class="pre">FromTimeval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort4Time13FromTimestampERKN6google8protobuf9TimestampE"><code class="docutils literal notranslate"><span class="pre">FromTimestamp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort4Time8FromUnixE7int64_t7int32_t"><code class="docutils literal notranslate"><span class="pre">FromUnix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort4Time13FromTimePointERKNSt6chrono10time_pointINSt6chrono12system_clockENSt6chrono11nanosecondsEEE"><code class="docutils literal notranslate"><span class="pre">FromTimePoint()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort4Time25FromTimestampAndMonotonicERKN6google8protobuf9TimestampE8uint64_t11MonoclockID"><code class="docutils literal notranslate"><span class="pre">FromTimestampAndMonotonic()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort4Time5ParseERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Parse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort4Time15MonoFromSecNSecE8uint64_t8uint64_t"><code class="docutils literal notranslate"><span class="pre">MonoFromSecNSec()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort4Time22SYSTEM_MONOTONIC_CLOCKE"><code class="docutils literal notranslate"><span class="pre">SYSTEM_MONOTONIC_CLOCK</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort4Time8OverflowE"><code class="docutils literal notranslate"><span class="pre">fort::Time::Overflow</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort4Time8Overflow8OverflowERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Overflow()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/time.html#_CPPv4N4fort4Time8OverflowD0Ev"><code class="docutils literal notranslate"><span class="pre">~Overflow()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cpp/shapes.html">2D Geometric Shapes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp/shapes.html#fort-myrmidon-shape">fort::myrmidon::Shape</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon5ShapeE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::Shape</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon5Shape4TypeE"><code class="docutils literal notranslate"><span class="pre">Type</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon5Shape4Type7CAPSULEE"><code class="docutils literal notranslate"><span class="pre">CAPSULE</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon5Shape4Type6CIRCLEE"><code class="docutils literal notranslate"><span class="pre">CIRCLE</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon5Shape4Type7POLYGONE"><code class="docutils literal notranslate"><span class="pre">POLYGON</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon5Shape3PtrE"><code class="docutils literal notranslate"><span class="pre">Ptr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon5Shape4ListE"><code class="docutils literal notranslate"><span class="pre">List</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon5ShapeD0Ev"><code class="docutils literal notranslate"><span class="pre">~Shape()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4NK4fort8myrmidon5Shape9ShapeTypeEv"><code class="docutils literal notranslate"><span class="pre">ShapeType()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/shapes.html#fort-myrmidon-capsule">fort::myrmidon::Capsule</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon7CapsuleE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::Capsule</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon7Capsule3PtrE"><code class="docutils literal notranslate"><span class="pre">Ptr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon7Capsule7CapsuleEv"><code class="docutils literal notranslate"><span class="pre">Capsule()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon7Capsule7CapsuleERKN5Eigen8Vector2dERKN5Eigen8Vector2dEdd"><code class="docutils literal notranslate"><span class="pre">Capsule()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon7Capsule5SetC1ERKN5Eigen8Vector2dE"><code class="docutils literal notranslate"><span class="pre">SetC1()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon7Capsule5SetC2ERKN5Eigen8Vector2dE"><code class="docutils literal notranslate"><span class="pre">SetC2()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4NK4fort8myrmidon7Capsule2C1Ev"><code class="docutils literal notranslate"><span class="pre">C1()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4NK4fort8myrmidon7Capsule2C2Ev"><code class="docutils literal notranslate"><span class="pre">C2()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon7Capsule5SetR1Ed"><code class="docutils literal notranslate"><span class="pre">SetR1()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon7Capsule5SetR2Ed"><code class="docutils literal notranslate"><span class="pre">SetR2()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4NK4fort8myrmidon7Capsule2R1Ev"><code class="docutils literal notranslate"><span class="pre">R1()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4NK4fort8myrmidon7Capsule2R2Ev"><code class="docutils literal notranslate"><span class="pre">R2()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/shapes.html#fort-myrmidon-circle">fort::myrmidon::Circle</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon6CircleE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::Circle</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon6Circle3PtrE"><code class="docutils literal notranslate"><span class="pre">Ptr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon6Circle6CircleERKN5Eigen8Vector2dEd"><code class="docutils literal notranslate"><span class="pre">Circle()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon6Circle9SetCenterERKN5Eigen8Vector2dE"><code class="docutils literal notranslate"><span class="pre">SetCenter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4NK4fort8myrmidon6Circle6CenterEv"><code class="docutils literal notranslate"><span class="pre">Center()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon6Circle9SetRadiusEd"><code class="docutils literal notranslate"><span class="pre">SetRadius()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4NK4fort8myrmidon6Circle6RadiusEv"><code class="docutils literal notranslate"><span class="pre">Radius()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/shapes.html#fort-myrmidon-polygon">fort::myrmidon::Polygon</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon7PolygonE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::Polygon</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon7Polygon3PtrE"><code class="docutils literal notranslate"><span class="pre">Ptr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon7Polygon7PolygonERK12Vector2dList"><code class="docutils literal notranslate"><span class="pre">Polygon()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4NK4fort8myrmidon7Polygon8VerticesEv"><code class="docutils literal notranslate"><span class="pre">Vertices()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon7Polygon11SetVerticesERK12Vector2dList"><code class="docutils literal notranslate"><span class="pre">SetVertices()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4NK4fort8myrmidon7Polygon4SizeEv"><code class="docutils literal notranslate"><span class="pre">Size()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4NK4fort8myrmidon7Polygon6VertexE6size_t"><code class="docutils literal notranslate"><span class="pre">Vertex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon7Polygon9SetVertexE6size_tRKN5Eigen8Vector2dE"><code class="docutils literal notranslate"><span class="pre">SetVertex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/shapes.html#_CPPv4N4fort8myrmidon7Polygon12DeleteVertexE6size_t"><code class="docutils literal notranslate"><span class="pre">DeleteVertex()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cpp/video.html">Video Sequence Matching</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp/video.html#fort-myrmidon-videosegment">fort::myrmidon::VideoSegment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp/video.html#_CPPv4N4fort8myrmidon12VideoSegmentE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::VideoSegment</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/video.html#_CPPv4N4fort8myrmidon12VideoSegment4ListE"><code class="docutils literal notranslate"><span class="pre">List</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/video.html#_CPPv4N4fort8myrmidon12VideoSegment5SpaceE"><code class="docutils literal notranslate"><span class="pre">Space</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/video.html#_CPPv4N4fort8myrmidon12VideoSegment16AbsoluteFilePathE"><code class="docutils literal notranslate"><span class="pre">AbsoluteFilePath</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/video.html#_CPPv4N4fort8myrmidon12VideoSegment4DataE"><code class="docutils literal notranslate"><span class="pre">Data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/video.html#_CPPv4N4fort8myrmidon12VideoSegment5BeginE"><code class="docutils literal notranslate"><span class="pre">Begin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/video.html#_CPPv4N4fort8myrmidon12VideoSegment3EndE"><code class="docutils literal notranslate"><span class="pre">End</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/video.html#_CPPv4I0EN4fort8myrmidon12VideoSegment5MatchEvR4List8IterType8IterType"><code class="docutils literal notranslate"><span class="pre">Match()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/video.html#fort-myrmidon-videoframedata">fort::myrmidon::VideoFrameData</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp/video.html#_CPPv4N4fort8myrmidon14VideoFrameDataE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::VideoFrameData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/video.html#_CPPv4NK4fort8myrmidon14VideoFrameData5EmptyEv"><code class="docutils literal notranslate"><span class="pre">Empty()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/video.html#_CPPv4N4fort8myrmidon14VideoFrameData8PositionE"><code class="docutils literal notranslate"><span class="pre">Position</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/video.html#_CPPv4N4fort8myrmidon14VideoFrameData4TimeE"><code class="docutils literal notranslate"><span class="pre">Time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/video.html#_CPPv4N4fort8myrmidon14VideoFrameData10IdentifiedE"><code class="docutils literal notranslate"><span class="pre">Identified</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/video.html#_CPPv4N4fort8myrmidon14VideoFrameData8CollidedE"><code class="docutils literal notranslate"><span class="pre">Collided</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/video.html#_CPPv4N4fort8myrmidon14VideoFrameData12TrajectoriesE"><code class="docutils literal notranslate"><span class="pre">Trajectories</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/video.html#_CPPv4N4fort8myrmidon14VideoFrameData12InteractionsE"><code class="docutils literal notranslate"><span class="pre">Interactions</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/video.html#fort-myrmidon-videosequence">fort::myrmidon::VideoSequence</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp/video.html#_CPPv4N4fort8myrmidon13VideoSequenceE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::VideoSequence</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/video.html#_CPPv4N4fort8myrmidon13VideoSequence7ForEachERKN12VideoSegment4ListENSt8functionIFvRKN5video5FrameERK14VideoFrameDataEEE"><code class="docutils literal notranslate"><span class="pre">ForEach()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cpp/errors.html">Errors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp/errors.html#fort-myrmidon-overlappingidentification">fort::myrmidon::OverlappingIdentification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp/errors.html#_CPPv4N4fort8myrmidon25OverlappingIdentificationE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::OverlappingIdentification</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cpp/errors.html#fort-myrmidon-fixableerror">fort::myrmidon::FixableError</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp/errors.html#_CPPv4N4fort8myrmidon12FixableErrorE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::FixableError</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/errors.html#_CPPv4N4fort8myrmidon12FixableError3PtrE"><code class="docutils literal notranslate"><span class="pre">Ptr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/errors.html#_CPPv4NK4fort8myrmidon12FixableError14FixDescriptionEv"><code class="docutils literal notranslate"><span class="pre">FixDescription()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/errors.html#_CPPv4N4fort8myrmidon12FixableError3FixEv"><code class="docutils literal notranslate"><span class="pre">Fix()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/errors.html#_CPPv4N4fort8myrmidon16FixableErrorListE"><code class="docutils literal notranslate"><span class="pre">FixableErrorList</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/errors.html#_CPPv4N4fort8myrmidon13FixableErrorsE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::FixableErrors</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/errors.html#_CPPv4NK4fort8myrmidon13FixableErrors6ErrorsEv"><code class="docutils literal notranslate"><span class="pre">Errors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/errors.html#_CPPv4NK4fort8myrmidon13FixableErrors14FixDescriptionEv"><code class="docutils literal notranslate"><span class="pre">FixDescription()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/errors.html#_CPPv4N4fort8myrmidon13FixableErrors3FixEv"><code class="docutils literal notranslate"><span class="pre">Fix()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cpp/typedef.html">API generic types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp/typedef.html#simple-typedefs">Simple typedefs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon5TagIDE"><code class="docutils literal notranslate"><span class="pre">TagID</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon5AntIDE"><code class="docutils literal notranslate"><span class="pre">AntID</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon6ZoneIDE"><code class="docutils literal notranslate"><span class="pre">ZoneID</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon7SpaceIDE"><code class="docutils literal notranslate"><span class="pre">SpaceID</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon14AntShapeTypeIDE"><code class="docutils literal notranslate"><span class="pre">AntShapeTypeID</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon17MeasurementTypeIDE"><code class="docutils literal notranslate"><span class="pre">MeasurementTypeID</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon26HEAD_TAIL_MEASUREMENT_TYPEE"><code class="docutils literal notranslate"><span class="pre">HEAD_TAIL_MEASUREMENT_TYPE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon12Vector2dListE"><code class="docutils literal notranslate"><span class="pre">Vector2dList</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon9ValueTypeE"><code class="docutils literal notranslate"><span class="pre">ValueType</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon9ValueType4BOOLE"><code class="docutils literal notranslate"><span class="pre">BOOL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon9ValueType3INTE"><code class="docutils literal notranslate"><span class="pre">INT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon9ValueType6DOUBLEE"><code class="docutils literal notranslate"><span class="pre">DOUBLE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon9ValueType6STRINGE"><code class="docutils literal notranslate"><span class="pre">STRING</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon9ValueType4TIMEE"><code class="docutils literal notranslate"><span class="pre">TIME</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon5ValueE"><code class="docutils literal notranslate"><span class="pre">Value</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon10ValueUtilsE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::ValueUtils</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon10ValueUtils19ValuedTimeRangeListE"><code class="docutils literal notranslate"><span class="pre">ValuedTimeRangeList</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon10ValueUtils4TypeERK5Value"><code class="docutils literal notranslate"><span class="pre">Type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon10ValueUtils7DefaultE9ValueType"><code class="docutils literal notranslate"><span class="pre">Default()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon10ValueUtils5ParseE9ValueTypeRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Parse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon10ValueUtils8TypeNameE9ValueType"><code class="docutils literal notranslate"><span class="pre">TypeName()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon10ValueUtils8TypeNameERK5Value"><code class="docutils literal notranslate"><span class="pre">TypeName()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon10ValueUtils11BuildRangesERKNSt3mapI4Time5ValueEE"><code class="docutils literal notranslate"><span class="pre">BuildRanges()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon10ValueUtils13FindConflictsERKNSt3mapI4Time5ValueEERK5ValueRK15ValuedTimeRange"><code class="docutils literal notranslate"><span class="pre">FindConflicts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon10ValueUtils11MergeRangesERKNSt3mapI4Time5ValueEERK5ValueRK15ValuedTimeRange"><code class="docutils literal notranslate"><span class="pre">MergeRanges()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon10ValueUtils15OverwriteRangesERKNSt3mapI4Time5ValueEERK15ValuedTimeRange"><code class="docutils literal notranslate"><span class="pre">OverwriteRanges()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon10ValueUtils10OperationsE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::ValueUtils::Operations</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon10ValueUtils10Operations5ToSetE"><code class="docutils literal notranslate"><span class="pre">ToSet</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon10ValueUtils10Operations8ToDeleteE"><code class="docutils literal notranslate"><span class="pre">ToDelete</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon10ValueUtils15ValuedTimeRangeE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::ValueUtils::ValuedTimeRange</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon10ValueUtils15ValuedTimeRange5ValueE"><code class="docutils literal notranslate"><span class="pre">Value</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon10ValueUtils15ValuedTimeRange5StartE"><code class="docutils literal notranslate"><span class="pre">Start</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon10ValueUtils15ValuedTimeRange3EndE"><code class="docutils literal notranslate"><span class="pre">End</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon16TypedCapsuleListE"><code class="docutils literal notranslate"><span class="pre">TypedCapsuleList</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon13InteractionIDE"><code class="docutils literal notranslate"><span class="pre">InteractionID</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp/typedef.html#_CPPv4N4fort8myrmidon16InteractionTypesE"><code class="docutils literal notranslate"><span class="pre">InteractionTypes</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="r">
+<h1>R<a class="headerlink" href="#r" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="R.html">Disclaimer</a></li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../time.html" class="btn btn-neutral float-left" title="Time Representation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="python/experiment.html" class="btn btn-neutral float-right" title="API Entry Point" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Université de Lausanne.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

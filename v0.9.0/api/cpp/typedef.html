@@ -1,0 +1,481 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API generic types &mdash; fort-myrmidon  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/../version_dropdown.js?v=4f7105bd"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Disclaimer" href="../R.html" />
+    <link rel="prev" title="Errors" href="errors.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            fort-myrmidon
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-myrmidon Basics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../defining_ant_metadata.html">Defining Ant Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../performing_queries.html">Performing Queries</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">fort-studio Manual</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/linking_tdata.html">Linking Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/identifying_ants.html">Identifying Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/defining_ant_shapes.html">Defining Ant Shapes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/measuring_ants.html">Measuring Ants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/metadata_edition.html">Ant Metadata Edition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../studio/visualization.html">Tracking Data Visualization</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../space_zoning.html">Segmenting Spaces in Zones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matching_video.html">Matching Video and Tracking Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../time.html">Time Representation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API References</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Python</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html#c">C++</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="experiment.html">API Entry Point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ant_identification.html">Ants and Identifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="space_zone.html">Spaces and Zones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="queries_matchers.html">Queries And Matchers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="time.html">Time Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shapes.html">2D Geometric Shapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video.html">Video Sequence Matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors.html">Errors</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">API generic types</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#simple-typedefs">Simple typedefs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N4fort8myrmidon5TagIDE"><code class="docutils literal notranslate"><span class="pre">TagID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N4fort8myrmidon5AntIDE"><code class="docutils literal notranslate"><span class="pre">AntID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N4fort8myrmidon6ZoneIDE"><code class="docutils literal notranslate"><span class="pre">ZoneID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N4fort8myrmidon7SpaceIDE"><code class="docutils literal notranslate"><span class="pre">SpaceID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N4fort8myrmidon14AntShapeTypeIDE"><code class="docutils literal notranslate"><span class="pre">AntShapeTypeID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N4fort8myrmidon17MeasurementTypeIDE"><code class="docutils literal notranslate"><span class="pre">MeasurementTypeID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N4fort8myrmidon26HEAD_TAIL_MEASUREMENT_TYPEE"><code class="docutils literal notranslate"><span class="pre">HEAD_TAIL_MEASUREMENT_TYPE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N4fort8myrmidon12Vector2dListE"><code class="docutils literal notranslate"><span class="pre">Vector2dList</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N4fort8myrmidon9ValueTypeE"><code class="docutils literal notranslate"><span class="pre">ValueType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N4fort8myrmidon5ValueE"><code class="docutils literal notranslate"><span class="pre">Value</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N4fort8myrmidon10ValueUtilsE"><code class="docutils literal notranslate"><span class="pre">fort::myrmidon::ValueUtils</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N4fort8myrmidon16TypedCapsuleListE"><code class="docutils literal notranslate"><span class="pre">TypedCapsuleList</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N4fort8myrmidon13InteractionIDE"><code class="docutils literal notranslate"><span class="pre">InteractionID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N4fort8myrmidon16InteractionTypesE"><code class="docutils literal notranslate"><span class="pre">InteractionTypes</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html#r">R</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fort-myrmidon</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Python</a></li>
+      <li class="breadcrumb-item active">API generic types</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//formicidae-tracker/myrmidon/blob/master/docs/api/cpp/typedef.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="api-generic-types">
+<h1>API generic types<a class="headerlink" href="#api-generic-types" title="Link to this heading"></a></h1>
+<section id="simple-typedefs">
+<h2>Simple typedefs<a class="headerlink" href="#simple-typedefs" title="Link to this heading"></a></h2>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5TagIDE">
+<span id="_CPPv3N4fort8myrmidon5TagIDE"></span><span id="_CPPv2N4fort8myrmidon5TagIDE"></span><span id="fort::myrmidon::TagID"></span><span class="target" id="namespacefort_1_1myrmidon_1a4740c5497efc77ef02c54023ca2a7d6d"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">TagID</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5TagIDE" title="Link to this definition"></a><br /></dt>
+<dd><p>The ID for a tag. </p>
+<p>The identifier for a tag, which relates to <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> using <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Identification"><span class="std std-ref">Identification</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5AntIDE">
+<span id="_CPPv3N4fort8myrmidon5AntIDE"></span><span id="_CPPv2N4fort8myrmidon5AntIDE"></span><span id="fort::myrmidon::AntID"></span><span class="target" id="namespacefort_1_1myrmidon_1a93ee51c34fda526044d99551b5ceba71"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">AntID</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5AntIDE" title="Link to this definition"></a><br /></dt>
+<dd><p>The ID for an <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>. </p>
+<p><a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> are uniquely identified within an <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> with an AntID, which is at least <code class="docutils literal notranslate"><span class="pre">1</span></code>. <code class="docutils literal notranslate"><span class="pre">0</span></code> is an invalid AntID. </p>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon6ZoneIDE">
+<span id="_CPPv3N4fort8myrmidon6ZoneIDE"></span><span id="_CPPv2N4fort8myrmidon6ZoneIDE"></span><span id="fort::myrmidon::ZoneID"></span><span class="target" id="namespacefort_1_1myrmidon_1a65f234bac4a1757b4ea563ad9c3ce0c6"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">ZoneID</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon6ZoneIDE" title="Link to this definition"></a><br /></dt>
+<dd><p>The ID for a <a class="reference internal" href="space_zone.html#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a>. </p>
+<p><a class="reference internal" href="space_zone.html#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a> are uniquely identified within an <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> with a ZoneID, which is at least <code class="docutils literal notranslate"><span class="pre">1</span></code>. <code class="docutils literal notranslate"><span class="pre">0</span></code> is an invalid/undefined <a class="reference internal" href="space_zone.html#classfort_1_1myrmidon_1_1Zone"><span class="std std-ref">Zone</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon7SpaceIDE">
+<span id="_CPPv3N4fort8myrmidon7SpaceIDE"></span><span id="_CPPv2N4fort8myrmidon7SpaceIDE"></span><span id="fort::myrmidon::SpaceID"></span><span class="target" id="namespacefort_1_1myrmidon_1a673e335d86030eb1a7f1ac0309ee428d"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">SpaceID</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon7SpaceIDE" title="Link to this definition"></a><br /></dt>
+<dd><p>The ID for a <a class="reference internal" href="space_zone.html#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a>. </p>
+<p><a class="reference internal" href="space_zone.html#classfort_1_1myrmidon_1_1Space"><span class="std std-ref">Space</span></a> are uniquely identified within an <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> with a SpaceID, which is at least <code class="docutils literal notranslate"><span class="pre">1</span></code>. <code class="docutils literal notranslate"><span class="pre">0</span></code> is an invalid SpaceID. </p>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon14AntShapeTypeIDE">
+<span id="_CPPv3N4fort8myrmidon14AntShapeTypeIDE"></span><span id="_CPPv2N4fort8myrmidon14AntShapeTypeIDE"></span><span id="fort::myrmidon::AntShapeTypeID"></span><span class="target" id="namespacefort_1_1myrmidon_1a4d26638d097a8366b4e5ca62d118a144"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">AntShapeTypeID</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon14AntShapeTypeIDE" title="Link to this definition"></a><br /></dt>
+<dd><p>The ID for <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> virtual body parts. </p>
+<p>Uniquely identifies an <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> shape type in an <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>, from <code class="docutils literal notranslate"><span class="pre">1</span></code>. <code class="docutils literal notranslate"><span class="pre">0</span></code> is an invalid value. </p>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon17MeasurementTypeIDE">
+<span id="_CPPv3N4fort8myrmidon17MeasurementTypeIDE"></span><span id="_CPPv2N4fort8myrmidon17MeasurementTypeIDE"></span><span id="fort::myrmidon::MeasurementTypeID"></span><span class="target" id="namespacefort_1_1myrmidon_1a320fb1b4203197ae296d4eda8a69c2e4"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">MeasurementTypeID</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon17MeasurementTypeIDE" title="Link to this definition"></a><br /></dt>
+<dd><p>The ID for <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> manual measurement types. </p>
+<p>Uniquely identifies an <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> measurement type in an <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a>, from <code class="docutils literal notranslate"><span class="pre">1</span></code>. <code class="docutils literal notranslate"><span class="pre">0</span></code> is an invalid value. The value <code class="docutils literal notranslate"><span class="pre">1</span></code> always refers to the valid MeasurementTypeID <a class="reference internal" href="#namespacefort_1_1myrmidon_1a160328db24e8a6a82a110a42674001bd"><span class="std std-ref">HEAD_TAIL_MEASUREMENT_TYPE</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon26HEAD_TAIL_MEASUREMENT_TYPEE">
+<span id="_CPPv3N4fort8myrmidon26HEAD_TAIL_MEASUREMENT_TYPEE"></span><span id="_CPPv2N4fort8myrmidon26HEAD_TAIL_MEASUREMENT_TYPEE"></span><span id="fort::myrmidon::HEAD_TAIL_MEASUREMENT_TYPE__MeasurementTypeIDC"></span><span class="target" id="namespacefort_1_1myrmidon_1a160328db24e8a6a82a110a42674001bd"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon17MeasurementTypeIDE" title="fort::myrmidon::MeasurementTypeID"><span class="n"><span class="pre">MeasurementTypeID</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">HEAD_TAIL_MEASUREMENT_TYPE</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon26HEAD_TAIL_MEASUREMENT_TYPEE" title="Link to this definition"></a><br /></dt>
+<dd><p>The head-tail Measurement type. </p>
+<p>This Measurement type is always define for any <a class="reference internal" href="experiment.html#classfort_1_1myrmidon_1_1Experiment"><span class="std std-ref">Experiment</span></a> and cannot be deleted. However, it can be renamed. </p>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon12Vector2dListE">
+<span id="_CPPv3N4fort8myrmidon12Vector2dListE"></span><span id="_CPPv2N4fort8myrmidon12Vector2dListE"></span><span id="fort::myrmidon::Vector2dList"></span><span class="target" id="namespacefort_1_1myrmidon_1aca2b81033023feff9d38b711583909d6"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Eigen</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Vector2d</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Eigen</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">aligned_allocator</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Eigen</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Vector2d</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Vector2dList</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon12Vector2dListE" title="Link to this definition"></a><br /></dt>
+<dd><p>A List of 2D Vector. </p>
+</dd></dl>
+
+<dl class="cpp enum-class">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon9ValueTypeE">
+<span id="_CPPv3N4fort8myrmidon9ValueTypeE"></span><span id="_CPPv2N4fort8myrmidon9ValueTypeE"></span><span class="target" id="namespacefort_1_1myrmidon_1a4aa7d220bf54fc2e95d841d482394e16"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">ValueType</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon9ValueTypeE" title="Link to this definition"></a><br /></dt>
+<dd><p>Enumerates possible types for Value. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon9ValueType4BOOLE">
+<span id="_CPPv3N4fort8myrmidon9ValueType4BOOLE"></span><span id="_CPPv2N4fort8myrmidon9ValueType4BOOLE"></span><span class="target" id="namespacefort_1_1myrmidon_1a4aa7d220bf54fc2e95d841d482394e16aa97b2c144243b2b9d2c593ec268b62f5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BOOL</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon9ValueType4BOOLE" title="Link to this definition"></a><br /></dt>
+<dd><p>A boolean. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon9ValueType3INTE">
+<span id="_CPPv3N4fort8myrmidon9ValueType3INTE"></span><span id="_CPPv2N4fort8myrmidon9ValueType3INTE"></span><span class="target" id="namespacefort_1_1myrmidon_1a4aa7d220bf54fc2e95d841d482394e16a53f93baa3057821107c750323892fa92"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">INT</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon9ValueType3INTE" title="Link to this definition"></a><br /></dt>
+<dd><p>An integer. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon9ValueType6DOUBLEE">
+<span id="_CPPv3N4fort8myrmidon9ValueType6DOUBLEE"></span><span id="_CPPv2N4fort8myrmidon9ValueType6DOUBLEE"></span><span class="target" id="namespacefort_1_1myrmidon_1a4aa7d220bf54fc2e95d841d482394e16afd3e4ece78a7d422280d5ed379482229"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DOUBLE</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon9ValueType6DOUBLEE" title="Link to this definition"></a><br /></dt>
+<dd><p>a float </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon9ValueType6STRINGE">
+<span id="_CPPv3N4fort8myrmidon9ValueType6STRINGE"></span><span id="_CPPv2N4fort8myrmidon9ValueType6STRINGE"></span><span class="target" id="namespacefort_1_1myrmidon_1a4aa7d220bf54fc2e95d841d482394e16a63b588d5559f64f89a416e656880b949"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">STRING</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon9ValueType6STRINGE" title="Link to this definition"></a><br /></dt>
+<dd><p>a std::string </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon9ValueType4TIMEE">
+<span id="_CPPv3N4fort8myrmidon9ValueType4TIMEE"></span><span id="_CPPv2N4fort8myrmidon9ValueType4TIMEE"></span><span class="target" id="namespacefort_1_1myrmidon_1a4aa7d220bf54fc2e95d841d482394e16a346ff32eaa3c09983fb2ec057816d352"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TIME</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon9ValueType4TIMEE" title="Link to this definition"></a><br /></dt>
+<dd><p>a <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon5ValueE">
+<span id="_CPPv3N4fort8myrmidon5ValueE"></span><span id="_CPPv2N4fort8myrmidon5ValueE"></span><span id="fort::myrmidon::Value"></span><span class="target" id="namespacefort_1_1myrmidon_1a4b0f27417790d034a69c8bb39845f569"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">variant</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">bool</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Value</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon5ValueE" title="Link to this definition"></a><br /></dt>
+<dd><p>Can hold any kind of value in object. </p>
+<p>A c++ variant for the data that can be associated with certain fields, such as <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> timed Key/Values. </p>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon10ValueUtilsE">
+<span id="_CPPv3N4fort8myrmidon10ValueUtilsE"></span><span id="_CPPv2N4fort8myrmidon10ValueUtilsE"></span><span id="fort::myrmidon::ValueUtils"></span><span class="target" id="structfort_1_1myrmidon_1_1ValueUtils"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ValueUtils</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon10ValueUtilsE" title="Link to this definition"></a><br /></dt>
+<dd><p>Utilites function for Value. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon10ValueUtils19ValuedTimeRangeListE">
+<span id="_CPPv3N4fort8myrmidon10ValueUtils19ValuedTimeRangeListE"></span><span id="_CPPv2N4fort8myrmidon10ValueUtils19ValuedTimeRangeListE"></span><span id="fort::myrmidon::ValueUtils::ValuedTimeRangeList"></span><span class="target" id="structfort_1_1myrmidon_1_1ValueUtils_1aa90c4e979aa3988dce6aba97ecefc429"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon10ValueUtils15ValuedTimeRangeE" title="fort::myrmidon::ValueUtils::ValuedTimeRange"><span class="n"><span class="pre">ValuedTimeRange</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ValuedTimeRangeList</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon10ValueUtils19ValuedTimeRangeListE" title="Link to this definition"></a><br /></dt>
+<dd><p>A List of <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange"><span class="std std-ref">ValuedTimeRange</span></a>. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon10ValueUtils4TypeERK5Value">
+<span id="_CPPv3N4fort8myrmidon10ValueUtils4TypeERK5Value"></span><span id="_CPPv2N4fort8myrmidon10ValueUtils4TypeERK5Value"></span><span id="fort::myrmidon::ValueUtils::Type__ValueCR"></span><span class="target" id="structfort_1_1myrmidon_1_1ValueUtils_1a841a741895cb4d06e18656ac3a31440a"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon9ValueTypeE" title="fort::myrmidon::ValueType"><span class="n"><span class="pre">ValueType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Type</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5ValueE" title="fort::myrmidon::Value"><span class="n"><span class="pre">Value</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon10ValueUtils4TypeERK5Value" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns the type of a value. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon10ValueUtils7DefaultE9ValueType">
+<span id="_CPPv3N4fort8myrmidon10ValueUtils7DefaultE9ValueType"></span><span id="_CPPv2N4fort8myrmidon10ValueUtils7DefaultE9ValueType"></span><span id="fort::myrmidon::ValueUtils::Default__ValueType"></span><span class="target" id="structfort_1_1myrmidon_1_1ValueUtils_1a2e2168b6db1c54f532d4e7f5e3027fba"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5ValueE" title="fort::myrmidon::Value"><span class="n"><span class="pre">Value</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Default</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4fort8myrmidon9ValueTypeE" title="fort::myrmidon::ValueType"><span class="n"><span class="pre">ValueType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon10ValueUtils7DefaultE9ValueType" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns the default value for an Value. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon10ValueUtils5ParseE9ValueTypeRKNSt6stringE">
+<span id="_CPPv3N4fort8myrmidon10ValueUtils5ParseE9ValueTypeRKNSt6stringE"></span><span id="_CPPv2N4fort8myrmidon10ValueUtils5ParseE9ValueTypeRKNSt6stringE"></span><span id="fort::myrmidon::ValueUtils::Parse__ValueType.ssCR"></span><span class="target" id="structfort_1_1myrmidon_1_1ValueUtils_1a44787b54a294f2af3e1fd38b664c502f"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5ValueE" title="fort::myrmidon::Value"><span class="n"><span class="pre">Value</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Parse</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4fort8myrmidon9ValueTypeE" title="fort::myrmidon::ValueType"><span class="n"><span class="pre">ValueType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon10ValueUtils5ParseE9ValueTypeRKNSt6stringE" title="Link to this definition"></a><br /></dt>
+<dd><p>Parses to an Value. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon10ValueUtils8TypeNameE9ValueType">
+<span id="_CPPv3N4fort8myrmidon10ValueUtils8TypeNameE9ValueType"></span><span id="_CPPv2N4fort8myrmidon10ValueUtils8TypeNameE9ValueType"></span><span id="fort::myrmidon::ValueUtils::TypeName__ValueType"></span><span class="target" id="structfort_1_1myrmidon_1_1ValueUtils_1accf9e28c90c1348e2a1226d74aa7a40f"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">TypeName</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4fort8myrmidon9ValueTypeE" title="fort::myrmidon::ValueType"><span class="n"><span class="pre">ValueType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon10ValueUtils8TypeNameE9ValueType" title="Link to this definition"></a><br /></dt>
+<dd><p>Gives the type name of a ValueType. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>type</strong> – the type to query for its name </p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">cpptrace</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if type is unknown </p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the conventional name for type </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon10ValueUtils8TypeNameERK5Value">
+<span id="_CPPv3N4fort8myrmidon10ValueUtils8TypeNameERK5Value"></span><span id="_CPPv2N4fort8myrmidon10ValueUtils8TypeNameERK5Value"></span><span id="fort::myrmidon::ValueUtils::TypeName__ValueCR"></span><span class="target" id="structfort_1_1myrmidon_1_1ValueUtils_1a874349fc3679e4c6f067881032bb0add"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TypeName</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5ValueE" title="fort::myrmidon::Value"><span class="n"><span class="pre">Value</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon10ValueUtils8TypeNameERK5Value" title="Link to this definition"></a><br /></dt>
+<dd><p>Gives the type name of a Value. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> – the the value to query for its type’s name </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the conventional name for type’s value name </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon10ValueUtils11BuildRangesERKNSt3mapI4Time5ValueEE">
+<span id="_CPPv3N4fort8myrmidon10ValueUtils11BuildRangesERKNSt3mapI4Time5ValueEE"></span><span id="_CPPv2N4fort8myrmidon10ValueUtils11BuildRangesERKNSt3mapI4Time5ValueEE"></span><span id="fort::myrmidon::ValueUtils::BuildRanges__std::map:Time.Value:CR"></span><span class="target" id="structfort_1_1myrmidon_1_1ValueUtils_1a9aefb1548960dd5041d9d62a1ba43899"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon10ValueUtils19ValuedTimeRangeListE" title="fort::myrmidon::ValueUtils::ValuedTimeRangeList"><span class="n"><span class="pre">ValuedTimeRangeList</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BuildRanges</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">map</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5ValueE" title="fort::myrmidon::Value"><span class="n"><span class="pre">Value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">values</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon10ValueUtils11BuildRangesERKNSt3mapI4Time5ValueEE" title="Link to this definition"></a><br /></dt>
+<dd><p>Gets the <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange"><span class="std std-ref">ValuedTimeRange</span></a> from a list of <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a>’d Value. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>values</strong> – a list of timed values, such as returned by <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant_1ad761c08b160163c1386010b807c14327"><span class="std std-ref">Ant::GetValues()</span></a></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a ValuedTimeRangeList that would correspond to values </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon10ValueUtils13FindConflictsERKNSt3mapI4Time5ValueEERK5ValueRK15ValuedTimeRange">
+<span id="_CPPv3N4fort8myrmidon10ValueUtils13FindConflictsERKNSt3mapI4Time5ValueEERK5ValueRK15ValuedTimeRange"></span><span id="_CPPv2N4fort8myrmidon10ValueUtils13FindConflictsERKNSt3mapI4Time5ValueEERK5ValueRK15ValuedTimeRange"></span><span id="fort::myrmidon::ValueUtils::FindConflicts__std::map:Time.Value:CR.ValueCR.ValuedTimeRangeCR"></span><span class="target" id="structfort_1_1myrmidon_1_1ValueUtils_1a087c92cee6ee9710e8eb23615d09170d"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon10ValueUtils19ValuedTimeRangeListE" title="fort::myrmidon::ValueUtils::ValuedTimeRangeList"><span class="n"><span class="pre">ValuedTimeRangeList</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FindConflicts</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">map</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5ValueE" title="fort::myrmidon::Value"><span class="n"><span class="pre">Value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">values</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5ValueE" title="fort::myrmidon::Value"><span class="n"><span class="pre">Value</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">defaultValue</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon10ValueUtils15ValuedTimeRangeE" title="fort::myrmidon::ValueUtils::ValuedTimeRange"><span class="n"><span class="pre">ValuedTimeRange</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">r</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon10ValueUtils13FindConflictsERKNSt3mapI4Time5ValueEERK5ValueRK15ValuedTimeRange" title="Link to this definition"></a><br /></dt>
+<dd><p>Finds <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange"><span class="std std-ref">ValuedTimeRange</span></a> that conflicts with a set of timed Value. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values</strong> – a set of timed values as returned by <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant_1ad761c08b160163c1386010b807c14327"><span class="std std-ref">Ant::GetValues()</span></a></p></li>
+<li><p><strong>defaultValue</strong> – the value that is considered a default value </p></li>
+<li><p><strong>r</strong> – the <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange"><span class="std std-ref">ValuedTimeRange</span></a> to find any conflict with </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange"><span class="std std-ref">ValuedTimeRange</span></a> that conflict with r </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon10ValueUtils11MergeRangesERKNSt3mapI4Time5ValueEERK5ValueRK15ValuedTimeRange">
+<span id="_CPPv3N4fort8myrmidon10ValueUtils11MergeRangesERKNSt3mapI4Time5ValueEERK5ValueRK15ValuedTimeRange"></span><span id="_CPPv2N4fort8myrmidon10ValueUtils11MergeRangesERKNSt3mapI4Time5ValueEERK5ValueRK15ValuedTimeRange"></span><span id="fort::myrmidon::ValueUtils::MergeRanges__std::map:Time.Value:CR.ValueCR.ValuedTimeRangeCR"></span><span class="target" id="structfort_1_1myrmidon_1_1ValueUtils_1a45f7327fc860905602fac55c15c0bf4f"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon10ValueUtils10OperationsE" title="fort::myrmidon::ValueUtils::Operations"><span class="n"><span class="pre">Operations</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MergeRanges</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">map</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5ValueE" title="fort::myrmidon::Value"><span class="n"><span class="pre">Value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">values</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5ValueE" title="fort::myrmidon::Value"><span class="n"><span class="pre">Value</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">defaultValue</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon10ValueUtils15ValuedTimeRangeE" title="fort::myrmidon::ValueUtils::ValuedTimeRange"><span class="n"><span class="pre">ValuedTimeRange</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">r</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon10ValueUtils11MergeRangesERKNSt3mapI4Time5ValueEERK5ValueRK15ValuedTimeRange" title="Link to this definition"></a><br /></dt>
+<dd><p>Merges a <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange"><span class="std std-ref">ValuedTimeRange</span></a> with a list of timed value. </p>
+<p>This operation will kept the <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange"><span class="std std-ref">ValuedTimeRange</span></a> defined by values which are not defaultValue intact. However r may have its boundaries modified, or be split in several <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange"><span class="std std-ref">ValuedTimeRange</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values</strong> – the values to merge </p></li>
+<li><p><strong>defaultValue</strong> – the Value to be considered as an empty <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange"><span class="std std-ref">ValuedTimeRange</span></a></p></li>
+<li><p><strong>r</strong> – the <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange"><span class="std std-ref">ValuedTimeRange</span></a> to merge </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1Operations"><span class="std std-ref">Operations</span></a> to actually perform the merge </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon10ValueUtils15OverwriteRangesERKNSt3mapI4Time5ValueEERK15ValuedTimeRange">
+<span id="_CPPv3N4fort8myrmidon10ValueUtils15OverwriteRangesERKNSt3mapI4Time5ValueEERK15ValuedTimeRange"></span><span id="_CPPv2N4fort8myrmidon10ValueUtils15OverwriteRangesERKNSt3mapI4Time5ValueEERK15ValuedTimeRange"></span><span id="fort::myrmidon::ValueUtils::OverwriteRanges__std::map:Time.Value:CR.ValuedTimeRangeCR"></span><span class="target" id="structfort_1_1myrmidon_1_1ValueUtils_1ac8d5ef35609e22b128900b7ffc9360f1"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon10ValueUtils10OperationsE" title="fort::myrmidon::ValueUtils::Operations"><span class="n"><span class="pre">Operations</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OverwriteRanges</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">map</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5ValueE" title="fort::myrmidon::Value"><span class="n"><span class="pre">Value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">values</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon10ValueUtils15ValuedTimeRangeE" title="fort::myrmidon::ValueUtils::ValuedTimeRange"><span class="n"><span class="pre">ValuedTimeRange</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">r</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4fort8myrmidon10ValueUtils15OverwriteRangesERKNSt3mapI4Time5ValueEERK15ValuedTimeRange" title="Link to this definition"></a><br /></dt>
+<dd><p>Overwrites a list of timed values to contain a <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange"><span class="std std-ref">ValuedTimeRange</span></a>. </p>
+<p>This operation will modifies values to ensure that the wanted <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange_1a70be7f4f341be0de17cb6599b1dd2431"><span class="std std-ref">ValuedTimeRange::Value</span></a> is set over [<a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange_1a2a57ceda50a8040ba79434040747b72c"><span class="std std-ref">ValuedTimeRange::Start</span></a>;<a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange_1a515a927753552545257f4e26daadf63c"><span class="std std-ref">ValuedTimeRange::End</span></a>[.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values</strong> – the values to merge with r </p></li>
+<li><p><strong>r</strong> – the range to ensure existance </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the <a class="reference internal" href="#structfort_1_1myrmidon_1_1ValueUtils_1_1Operations"><span class="std std-ref">Operations</span></a> to actually perform the overwrite </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon10ValueUtils10OperationsE">
+<span id="_CPPv3N4fort8myrmidon10ValueUtils10OperationsE"></span><span id="_CPPv2N4fort8myrmidon10ValueUtils10OperationsE"></span><span id="fort::myrmidon::ValueUtils::Operations"></span><span class="target" id="structfort_1_1myrmidon_1_1ValueUtils_1_1Operations"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Operations</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon10ValueUtils10OperationsE" title="Link to this definition"></a><br /></dt>
+<dd><p>Represents the list of operation to perform with <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant_1ab15ae0f99b1ad4db9112b74d997a6650"><span class="std std-ref">Ant::SetValue()</span></a> and <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant_1a8abe79d02db27729e72b7d5073517342"><span class="std std-ref">Ant::DeleteValue</span></a> to merge a range in an existing list. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>it is implied that this operation only should happend on a given common key. </p>
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon10ValueUtils10Operations5ToSetE">
+<span id="_CPPv3N4fort8myrmidon10ValueUtils10Operations5ToSetE"></span><span id="_CPPv2N4fort8myrmidon10ValueUtils10Operations5ToSetE"></span><span id="fort::myrmidon::ValueUtils::Operations::ToSet__std::vector:std::tuple:Time.Value::"></span><span class="target" id="structfort_1_1myrmidon_1_1ValueUtils_1_1Operations_1aba2ccbaa01966f61f47f396b396a811b"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5ValueE" title="fort::myrmidon::Value"><span class="n"><span class="pre">Value</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ToSet</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon10ValueUtils10Operations5ToSetE" title="Link to this definition"></a><br /></dt>
+<dd><p>Arguments to feed on <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant_1ab15ae0f99b1ad4db9112b74d997a6650"><span class="std std-ref">Ant::SetValue()</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon10ValueUtils10Operations8ToDeleteE">
+<span id="_CPPv3N4fort8myrmidon10ValueUtils10Operations8ToDeleteE"></span><span id="_CPPv2N4fort8myrmidon10ValueUtils10Operations8ToDeleteE"></span><span id="fort::myrmidon::ValueUtils::Operations::ToDelete__std::vector:Time:"></span><span class="target" id="structfort_1_1myrmidon_1_1ValueUtils_1_1Operations_1a4c06c3fded89ec6a27915dbe1378a869"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ToDelete</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon10ValueUtils10Operations8ToDeleteE" title="Link to this definition"></a><br /></dt>
+<dd><p>Arguments to feed on <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant_1a8abe79d02db27729e72b7d5073517342"><span class="std std-ref">Ant::DeleteValue()</span></a></p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon10ValueUtils15ValuedTimeRangeE">
+<span id="_CPPv3N4fort8myrmidon10ValueUtils15ValuedTimeRangeE"></span><span id="_CPPv2N4fort8myrmidon10ValueUtils15ValuedTimeRangeE"></span><span id="fort::myrmidon::ValueUtils::ValuedTimeRange"></span><span class="target" id="structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ValuedTimeRange</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon10ValueUtils15ValuedTimeRangeE" title="Link to this definition"></a><br /></dt>
+<dd><p>Represents a <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> range assigned to a Value. </p>
+<p>This <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> range is valid for [Start;End[ </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon10ValueUtils15ValuedTimeRange5ValueE">
+<span id="_CPPv3N4fort8myrmidon10ValueUtils15ValuedTimeRange5ValueE"></span><span id="_CPPv2N4fort8myrmidon10ValueUtils15ValuedTimeRange5ValueE"></span><span id="fort::myrmidon::ValueUtils::ValuedTimeRange::Value__myrmidon::Value"></span><span class="target" id="structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange_1a70be7f4f341be0de17cb6599b1dd2431"></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5ValueE" title="fort::myrmidon::Value"><span class="n"><span class="pre">Value</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Value</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon10ValueUtils15ValuedTimeRange5ValueE" title="Link to this definition"></a><br /></dt>
+<dd><p>The Value on the <a class="reference internal" href="time.html#classfort_1_1Time"><span class="std std-ref">Time</span></a> range. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon10ValueUtils15ValuedTimeRange5StartE">
+<span id="_CPPv3N4fort8myrmidon10ValueUtils15ValuedTimeRange5StartE"></span><span id="_CPPv2N4fort8myrmidon10ValueUtils15ValuedTimeRange5StartE"></span><span id="fort::myrmidon::ValueUtils::ValuedTimeRange::Start__Time"></span><span class="target" id="structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange_1a2a57ceda50a8040ba79434040747b72c"></span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Start</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon10ValueUtils15ValuedTimeRange5StartE" title="Link to this definition"></a><br /></dt>
+<dd><p>First valid time for the range. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon10ValueUtils15ValuedTimeRange3EndE">
+<span id="_CPPv3N4fort8myrmidon10ValueUtils15ValuedTimeRange3EndE"></span><span id="_CPPv2N4fort8myrmidon10ValueUtils15ValuedTimeRange3EndE"></span><span id="fort::myrmidon::ValueUtils::ValuedTimeRange::End__Time"></span><span class="target" id="structfort_1_1myrmidon_1_1ValueUtils_1_1ValuedTimeRange_1a515a927753552545257f4e26daadf63c"></span><a class="reference internal" href="time.html#_CPPv4N4fort4TimeE" title="fort::Time"><span class="n"><span class="pre">Time</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">End</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon10ValueUtils15ValuedTimeRange3EndE" title="Link to this definition"></a><br /></dt>
+<dd><p>Last valid time for the range. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon16TypedCapsuleListE">
+<span id="_CPPv3N4fort8myrmidon16TypedCapsuleListE"></span><span id="_CPPv2N4fort8myrmidon16TypedCapsuleListE"></span><span id="fort::myrmidon::TypedCapsuleList"></span><span class="target" id="namespacefort_1_1myrmidon_1a7a42cb0fad9d96853f2f8fc703d1ab59"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon14AntShapeTypeIDE" title="fort::myrmidon::AntShapeTypeID"><span class="n"><span class="pre">AntShapeTypeID</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="shapes.html#_CPPv4N4fort8myrmidon7CapsuleE" title="fort::myrmidon::Capsule"><span class="n"><span class="pre">Capsule</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">TypedCapsuleList</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon16TypedCapsuleListE" title="Link to this definition"></a><br /></dt>
+<dd><p>A list of <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a> virtual shape part. </p>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon13InteractionIDE">
+<span id="_CPPv3N4fort8myrmidon13InteractionIDE"></span><span id="_CPPv2N4fort8myrmidon13InteractionIDE"></span><span id="fort::myrmidon::InteractionID"></span><span class="target" id="namespacefort_1_1myrmidon_1aff7eddf7a32f9472b954eedad4f91d77"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5AntIDE" title="fort::myrmidon::AntID"><span class="n"><span class="pre">AntID</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4fort8myrmidon5AntIDE" title="fort::myrmidon::AntID"><span class="n"><span class="pre">AntID</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">InteractionID</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon13InteractionIDE" title="Link to this definition"></a><br /></dt>
+<dd><p>Designates an interaction between two <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>. </p>
+<p>Designates an interaction between two <a class="reference internal" href="ant_identification.html#classfort_1_1myrmidon_1_1Ant"><span class="std std-ref">Ant</span></a>, using their AntID. InteractionID are always constructed such as the first ID is strictly smaller than the second ID, so it ensures uniqueness of the InteractionID to reports interactions and collisions. </p>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N4fort8myrmidon16InteractionTypesE">
+<span id="_CPPv3N4fort8myrmidon16InteractionTypesE"></span><span id="_CPPv2N4fort8myrmidon16InteractionTypesE"></span><span id="fort::myrmidon::InteractionTypes"></span><span class="target" id="namespacefort_1_1myrmidon_1a1d4870b58acfaf2cfef249b6edcb2c56"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">Eigen</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Matrix</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Eigen</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Dynamic</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">2</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">fort</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">myrmidon</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">InteractionTypes</span></span></span><a class="headerlink" href="#_CPPv4N4fort8myrmidon16InteractionTypesE" title="Link to this definition"></a><br /></dt>
+<dd><p>Designates list of interaction type for an interaction. </p>
+<p>Designates an interaction type for an interaction. Each line represent a colliding capsules type. First column specifies the type for the first ant and the second column the second ant. Therefore (2,1) is not identical to (1,2). </p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="errors.html" class="btn btn-neutral float-left" title="Errors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../R.html" class="btn btn-neutral float-right" title="Disclaimer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Université de Lausanne.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
