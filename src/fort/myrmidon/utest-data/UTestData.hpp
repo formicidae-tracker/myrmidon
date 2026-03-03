@@ -61,6 +61,7 @@ public:
 		bool               HasMovie;
 		bool               HasConfig;
 		bool               IsCorrupted;
+		bool               Legacy{true};
 		Time               Start, End;
 		uint64_t           StartFrame, EndFrame;
 

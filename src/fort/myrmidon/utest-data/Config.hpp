@@ -19,7 +19,7 @@ namespace myrmidon {
 
 struct TDDData {
 	std::string RelativeFilePath;
-	bool        HasFullFrame, HasMovie, HasConfig;
+	bool        HasFullFrame, HasMovie, HasConfig, Legacy{false};
 	Time        Start, End;
 };
 

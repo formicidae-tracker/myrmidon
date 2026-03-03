@@ -36,22 +36,26 @@ TagCloseUpCache::Load(const fs::path & tddAbsoluteFilePath,
 	return res;
 }
 
-void TagCloseUpCache::Save(const fs::path & tddAbsoluteFilePath,
-                           const std::vector<TagCloseUp::ConstPtr> & tagCloseUps) {
+void TagCloseUpCache::Save(
+    const fs::path                          &tddAbsoluteFilePath,
+    const std::vector<TagCloseUp::ConstPtr> &tagCloseUps
+) {
 	pb::TagCloseUpCacheHeader h;
 	h.set_version(CACHE_VERSION);
 	std::vector<ReadWriter::LineWriter> lines;
 
-	for ( const auto & tcu : tagCloseUps ) {
+	for (const auto &tcu : tagCloseUps) {
 		lines.push_back([tcu = std::ref(tcu),
-		                 &tddAbsoluteFilePath](pb::TagCloseUp & line) {
-			                proto::IOUtils::SaveTagCloseUp(&line,*tcu.get(),tddAbsoluteFilePath / "ants");
-		                });
+		                 &tddAbsoluteFilePath](pb::TagCloseUp &line) {
+			proto::IOUtils::SaveTagCloseUp(
+			    &line,
+			    *tcu.get(),
+			    tddAbsoluteFilePath / "ants"
+			);
+		});
 	}
 
-	ReadWriter::Write(tddAbsoluteFilePath / CACHE_PATH,
-	                  h,
-	                  lines);
+	ReadWriter::Write(tddAbsoluteFilePath / CACHE_PATH, h, lines);
 }
 
 } //namespace proto

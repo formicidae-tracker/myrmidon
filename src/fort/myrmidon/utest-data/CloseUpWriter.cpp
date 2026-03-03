@@ -19,7 +19,9 @@ CloseUpWriter::CloseUpWriter(
 )
     : d_tddInfo(tddInfo)
     , d_drawer(drawer) {
-	fs::create_directories(d_tddInfo.AbsoluteFilePath / "ants");
+
+	std::string closeUpDir = tddInfo.Legacy ? "ants" : "cu";
+	fs::create_directories(d_tddInfo.AbsoluteFilePath / closeUpDir);
 }
 
 CloseUpWriter::~CloseUpWriter() = default;
@@ -88,13 +90,17 @@ void CloseUpWriter::Finalize(size_t index, bool last) {
 }
 
 std::string CloseUpWriter::FullFramePath(uint64_t frameID) const {
-	return d_tddInfo.AbsoluteFilePath / "ants" /
+	std::string closeUpDir = d_tddInfo.Legacy ? "ants" : "cu";
+
+	return d_tddInfo.AbsoluteFilePath / closeUpDir /
 	       ("frame_" + std::to_string(frameID) + ".png");
 }
 
 std::string CloseUpWriter::CloseUpPath(uint64_t frameID, AntID antID) const {
-	return d_tddInfo.AbsoluteFilePath / "ants" /
-	       ("ant_" + std::to_string(antID - 1) + "_frame_" +
+	std::string closeUpDir = d_tddInfo.Legacy ? "ants" : "cu";
+	std::string tagPrefix  = d_tddInfo.Legacy ? "ant_" : "tag_";
+	return d_tddInfo.AbsoluteFilePath / closeUpDir /
+	       (tagPrefix + std::to_string(antID - 1) + "_frame_" +
 	        std::to_string(frameID) + ".png");
 }
 
