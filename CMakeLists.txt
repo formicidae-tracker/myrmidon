@@ -139,12 +139,6 @@ FetchContent_Declare(
 )
 
 FetchContent_Declare(
-	fort-hermes
-	GIT_REPOSITORY https://github.com/formicidae-tracker/hermes.git
-	GIT_TAG 19636c9fe64978072d2b6164e6fbb5fe91facc49
-)
-
-FetchContent_Declare(
 	semver
 	GIT_REPOSITORY https://github.com/Neargye/semver.git
 	GIT_TAG v0.3.0
@@ -171,6 +165,18 @@ else()
 		slogpp
 		GIT_REPOSITORY https://github.com/atuleu/slogpp.git
 		GIT_TAG 2aac2dd844471323d8b62704768610b85ef31f3e
+	)
+endif()
+
+if(EXISTS ${PROJECT_SOURCE_DIR}/deps/hermes)
+	FetchContent_Declare(
+		fort-hermes SOURCE_DIR ${PROJECT_SOURCE_DIR}/deps/hermes
+	)
+else()
+	FetchContent_Declare(
+		fort-hermes
+		GIT_REPOSITORY https://github.com/formicidae-tracker/hermes.git
+		GIT_TAG 19636c9fe64978072d2b6164e6fbb5fe91facc49
 	)
 endif()
 
