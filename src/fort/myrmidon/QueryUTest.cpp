@@ -348,7 +348,6 @@ TEST_F(QueryUTest, ComputeAntInteractions) {
 }
 
 TEST_F(QueryUTest, ComputeAntInteractionsSummarized) {
-	size_t i = 0;
 	for (const auto &expected : TestSetup::UTestData().ExpectedResults()) {
 		auto expectedInteractions = expected.Summarized();
 		std::vector<AntTrajectory::Ptr>  trajectories;

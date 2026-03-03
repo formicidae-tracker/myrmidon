@@ -8,22 +8,14 @@ class AntDisplayBridge;
 
 class TrackingVideoWidget : public QWidget {
 	Q_OBJECT
-	Q_PROPERTY(bool showID
-	           READ showID
-	           WRITE setShowID
-	           NOTIFY showIDChanged);
-	Q_PROPERTY(bool showCollisions
-	           READ showCollisions
-	           WRITE setShowCollisions
-	           NOTIFY showCollisionsChanged);
-	Q_PROPERTY(int opacity
-	           READ opacity
-	           WRITE setOpacity);
+	Q_PROPERTY(bool showID READ showID WRITE setShowID NOTIFY showIDChanged)
+	Q_PROPERTY(bool showCollisions READ showCollisions WRITE setShowCollisions
+	               NOTIFY showCollisionsChanged)
+	Q_PROPERTY(int opacity READ opacity WRITE setOpacity)
 
 public:
-	explicit TrackingVideoWidget(QWidget * parent = nullptr);
+	explicit TrackingVideoWidget(QWidget *parent = nullptr);
 	virtual ~TrackingVideoWidget();
-
 
 	void setup(AntDisplayBridge *antDisplay);
 
@@ -58,26 +50,37 @@ public slots:
 
 	void setFocus(quint32 antID);
 
-
 	void setShowID(bool show);
 	void setShowCollisions(bool show);
 
 	void setOpacity(int opacity);
 
 protected:
-	void paintEvent(QPaintEvent * event) override;
+	void paintEvent(QPaintEvent *event) override;
 
-	void paint(QPainter * painter);
+	void paint(QPainter *painter);
 
-	void paintAntsAndCollisions(QPainter * painter, const QRectF & focusRectangle);
+	void
+	paintAntsAndCollisions(QPainter *painter, const QRectF &focusRectangle);
 
-	void paintROI(QPainter * painter);
+	void paintROI(QPainter *painter);
 
-	void paintAnts(QPainter * painter, double ratio, const QRectF & focusRectangle, bool hasSolo);
-	void paintCollisions(QPainter * painter, double ratio, const QRectF & focusRectangle, bool hasSolo);
+	void paintAnts(
+	    QPainter     *painter,
+	    double        ratio,
+	    const QRectF &focusRectangle,
+	    bool          hasSolo
+	);
+	void paintCollisions(
+	    QPainter     *painter,
+	    double        ratio,
+	    const QRectF &focusRectangle,
+	    bool          hasSolo
+	);
 
-	void mousePressEvent(QMouseEvent * event) override;
-	void mouseDoubleClickEvent(QMouseEvent * event) override;
+	void mousePressEvent(QMouseEvent *event) override;
+	void mouseDoubleClickEvent(QMouseEvent *event) override;
+
 private:
 	friend class TrackingVideoWidgetUTest;
 	void focusAnt(quint32 antID, bool reset = false);
@@ -85,7 +88,7 @@ private:
 	void setHasTrackingTime(bool value);
 
 	TrackingVideoFrame d_frame;
-	AntDisplayBridge * d_antDisplay;
+	AntDisplayBridge  *d_antDisplay;
 	bool               d_hideLoadingBanner;
 	bool               d_showID;
 	bool               d_showCollisions;

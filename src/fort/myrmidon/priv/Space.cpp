@@ -104,9 +104,11 @@ const SpaceByID & Universe::Spaces() const {
 	return d_spaces.Objects();
 }
 
-Space::Space(SpaceID spaceID, const std::string & name, const Universe::Ptr & universe)
-	: d_universe(universe)
-	, d_spaceID(spaceID) {
+Space::Space(
+    SpaceID spaceID, const std::string &name, const Universe::Ptr &universe
+)
+    : d_spaceID(spaceID)
+    , d_universe(universe) {
 	SetName(name);
 }
 

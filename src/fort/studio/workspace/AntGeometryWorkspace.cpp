@@ -33,18 +33,19 @@
 
 #include <fort/studio/MyrmidonTypes/Conversion.hpp>
 
-
 AntGeometryWorkspace::AntGeometryWorkspace(QWidget *parent)
-	: Workspace(true,parent)
-	, d_ui(new Ui::AntGeometryWorkspace)
-	, d_experiment(nullptr)
-	, d_copyTimeAction(nullptr)
-	, d_vectorialScene( new VectorialScene(this)) {
+    : Workspace(true, parent)
+    , d_copyTimeAction(nullptr)
+    , d_ui(new Ui::AntGeometryWorkspace)
+    , d_experiment(nullptr)
+    , d_vectorialScene(new VectorialScene(this)) {
 
 	d_editToolBar = new QToolBar(this);
 
-	d_editAction = d_editToolBar->addAction(QIcon(":/icons/cursor.svg"),
-	                                        tr("Edit primitives"));
+	d_editAction = d_editToolBar->addAction(
+	    QIcon(":/icons/cursor.svg"),
+	    tr("Edit primitives")
+	);
 	d_editAction->setToolTip(tr("Edit primitives"));
 	d_editAction->setStatusTip(d_editAction->toolTip());
 	d_editAction->setObjectName("editAction");
@@ -55,7 +56,7 @@ AntGeometryWorkspace::AntGeometryWorkspace(QWidget *parent)
 	d_insertAction->setObjectName("insertAction");
 	d_comboBox = new QComboBox(this);
 	d_comboBox->setObjectName("comboBox");
-	d_comboBox->setMinimumSize(QSize(200,0));
+	d_comboBox->setMinimumSize(QSize(200, 0));
 	d_editToolBar->addWidget(d_comboBox);
 
 	d_insertAction->setCheckable(true);
@@ -66,22 +67,27 @@ AntGeometryWorkspace::AntGeometryWorkspace(QWidget *parent)
 	d_ui->setupUi(this);
 
 	d_ui->vectorialView->setScene(d_vectorialScene);
-	d_ui->vectorialView->setRenderHint(QPainter::Antialiasing,true);
-	connect(d_ui->vectorialView,
-	        &VectorialView::zoomed,
-	        d_vectorialScene,
-	        &VectorialScene::onZoomed);
+	d_ui->vectorialView->setRenderHint(QPainter::Antialiasing, true);
+	connect(
+	    d_ui->vectorialView,
+	    &VectorialView::zoomed,
+	    d_vectorialScene,
+	    &VectorialScene::onZoomed
+	);
 
-	connect(d_vectorialScene, &VectorialScene::modeChanged,
-	        this,&AntGeometryWorkspace::onVectorialSceneModeChanged);
+	connect(
+	    d_vectorialScene,
+	    &VectorialScene::modeChanged,
+	    this,
+	    &AntGeometryWorkspace::onVectorialSceneModeChanged
+	);
 
-
-	connect(d_comboBox,
-	        qOverload<int>(&QComboBox::currentIndexChanged),
-	        this,
-	        [this] (int index) {
-		        d_insertAction->setEnabled(index >= 0);
-	        });
+	connect(
+	    d_comboBox,
+	    qOverload<int>(&QComboBox::currentIndexChanged),
+	    this,
+	    [this](int index) { d_insertAction->setEnabled(index >= 0); }
+	);
 	d_insertAction->setEnabled(false);
 }
 
@@ -365,38 +371,45 @@ void AntMeasurementWorkspace::onClearScene() {
 
 void AntMeasurementWorkspace::onNewCloseUp() {
 	d_vectors.clear();
-	if ( d_closeUp == nullptr ) {
+	if (d_closeUp == nullptr) {
 		return;
 	}
 
-	for ( size_t i = 0; i < d_comboBox->count(); ++i) {
-		auto mType = d_comboBox->itemData(i,Qt::UserRole+1).value<fmp::MeasurementType::Ptr>();
-		if ( mType == nullptr ) {
+	for (int i = 0; i < d_comboBox->count(); ++i) {
+		auto mType = d_comboBox->itemData(i, Qt::UserRole + 1)
+		                 .value<fmp::MeasurementType::Ptr>();
+		if (mType == nullptr) {
 			continue;
 		}
-		auto m = d_experiment->measurements()->measurementForCloseUp(d_closeUp->URI(),
-		                                                             mType->MTID());
-		if ( m == nullptr ) {
+		auto m = d_experiment->measurements()->measurementForCloseUp(
+		    d_closeUp->URI(),
+		    mType->MTID()
+		);
+		if (m == nullptr) {
 			continue;
 		}
 
-		fmp::Isometry2Dd tagToOrig(d_closeUp->TagAngle(),d_closeUp->TagPosition());
+		fmp::Isometry2Dd tagToOrig(
+		    d_closeUp->TagAngle(),
+		    d_closeUp->TagPosition()
+		);
 		Eigen::Vector2d start = tagToOrig * m->StartFromTag();
-		Eigen::Vector2d end = tagToOrig * m->EndFromTag();
+		Eigen::Vector2d end   = tagToOrig * m->EndFromTag();
 
 		setColorFromType(mType->MTID());
-		auto vector = d_vectorialScene->appendVector(QPointF(start.x(),
-		                                                     start.y()),
-		                                             QPointF(end.x(),
-		                                                     end.y()));
+		auto vector = d_vectorialScene->appendVector(
+		    QPointF(start.x(), start.y()),
+		    QPointF(end.x(), end.y())
+		);
 
-		d_vectors.insert(std::make_pair(mType->MTID(),vector));
+		d_vectors.insert(std::make_pair(mType->MTID(), vector));
 
-		connect(vector.data(),
-		        &Shape::updated,
-		        this,
-		        &AntMeasurementWorkspace::onVectorUpdated);
-
+		connect(
+		    vector.data(),
+		    &Shape::updated,
+		    this,
+		    &AntMeasurementWorkspace::onVectorUpdated
+		);
 	}
 
 	setColorFromType(typeFromComboBox());

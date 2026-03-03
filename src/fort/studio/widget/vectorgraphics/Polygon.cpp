@@ -8,32 +8,31 @@
 
 #include <fort/studio/Utils.hpp>
 
-
-Polygon::Polygon(const QVector<QPointF> & points,
-                 QColor color,
-                 QGraphicsItem * parent)
-	: Shape(color,NULL)
-	, QGraphicsPolygonItem(QPolygonF(points),parent) {
+Polygon::Polygon(
+    const QVector<QPointF> &points, QColor color, QGraphicsItem *parent
+)
+    : Shape(color, NULL)
+    , QGraphicsPolygonItem(QPolygonF(points), parent) {
 
 	auto p = polygon();
-	size_t i = 0;
+
 	size_t size = p.size();
-	if ( p.size() > 2 && p.isClosed() ) {
+	if (p.size() > 2 && p.isClosed()) {
 		size -= 1;
 	}
-	for ( size_t i = 0; i < size; ++i ) {
-		auto h = new Handle([this,i]() {
-			                    update(i);
-		                    },
-			[this,i]() {
-				update(i);
-				emit updated();
-			});
+	for (size_t i = 0; i < size; ++i) {
+		auto h = new Handle(
+		    [this, i]() { update(i); },
+		    [this, i]() {
+			    update(i);
+			    emit updated();
+		    }
+		);
 		h->setPos(p[i]);
 		d_handles.push_back(h);
 	}
 
-	setFlag(QGraphicsItem::ItemIsSelectable,true);
+	setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
 Polygon::~Polygon() {

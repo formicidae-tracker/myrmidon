@@ -18,10 +18,10 @@ TrackingVideoPlayer::TrackingVideoPlayer(QObject *parent)
     , d_rate(1.0)
     , d_movieThread(new QThread())
     , d_timer(new QTimer(this))
-    , d_currentTaskID(0)
-    , d_seekReady(true)
+    , d_fps(8.0)
     , d_scrollMode(false)
-    , d_fps(8.0) {
+    , d_currentTaskID(0)
+    , d_seekReady(true) {
 	d_movieThread->start();
 	qRegisterMetaType<fort::Time>();
 	qRegisterMetaType<fort::Duration>();

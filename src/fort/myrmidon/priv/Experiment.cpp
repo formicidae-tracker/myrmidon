@@ -45,8 +45,8 @@ namespace priv {
 Experiment::Experiment(const fs::path &filepath)
     : d_absoluteFilepath(fs::absolute(fs::weakly_canonical(filepath)))
     , d_basedir(d_absoluteFilepath.parent_path())
-    , d_identifier(Identifier::Create())
     , d_universe(std::make_shared<Universe>())
+    , d_identifier(Identifier::Create())
     , d_defaultTagSize(1.0)
     , d_antShapeTypes(std::make_shared<AntShapeTypeContainer>()) {
 	av_log_set_level(AV_LOG_QUIET);

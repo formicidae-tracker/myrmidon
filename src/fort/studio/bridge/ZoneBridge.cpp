@@ -204,36 +204,38 @@ void ZoneBridge::addDefinition(QStandardItem * zoneRootItem) {
 	emit definitionUpdated();
 }
 
-
-void ZoneBridge::addZone(QStandardItem * spaceRootItem) {
+void ZoneBridge::addZone(QStandardItem *spaceRootItem) {
 	fmp::Zone::Ptr z;
 	auto space = spaceRootItem->data(DataRole).value<fmp::Space::Ptr>();
-	if ( !space == true ) {
+	if (!space == true) {
 		return;
 	}
 	try {
-		qDebug() << "[ZoneBridge]: Calling fort::myrmidon::priv::Space::CreateZone('new-zone')";
+		qDebug() << "[ZoneBridge]: Calling "
+		            "fort::myrmidon::priv::Space::CreateZone('new-zone')";
 		z = space->CreateZone(ToStdString(tr("new-zone")));
-		qDebug() << "[ZoneBridge]: Calling fort::myrmidon::priv::Zone::AddDefinition({},-∞,+∞)";
-		z->AddDefinition({},
-		                 fort::Time::SinceEver(),
-		                 fort::Time::Forever());
-	} catch ( const std::exception & e) {
+		qDebug() << "[ZoneBridge]: Calling "
+		            "fort::myrmidon::priv::Zone::AddDefinition({},-∞,+∞)";
+		z->AddDefinition({}, fort::Time::SinceEver(), fort::Time::Forever());
+	} catch (const std::exception &e) {
 		qCritical() << "Could not create Zone: " << e.what();
 		return;
 	}
 	setModified(true);
 	int insertionRow = 0;
-	for ( ; insertionRow < spaceRootItem->rowCount(); ++insertionRow) {
-		if ( spaceRootItem->child(insertionRow)->data(Qt::DisplayRole).toInt() > z->ID() ) {
+	for (; insertionRow < spaceRootItem->rowCount(); ++insertionRow) {
+		if (fort::myrmidon::ZoneID(spaceRootItem->child(insertionRow)
+		                               ->data(Qt::DisplayRole)
+		                               .toInt()) > z->ID()) {
 			break;
 		};
 	}
-	spaceRootItem->insertRow(insertionRow,buildZone(z));
-	getSibling(spaceRootItem,2)->setText(QString::number(spaceRootItem->rowCount()));
+	spaceRootItem->insertRow(insertionRow, buildZone(z));
+	getSibling(spaceRootItem, 2)
+	    ->setText(QString::number(spaceRootItem->rowCount()));
 	qInfo() << "Created zone " << spaceRootItem->data(Qt::DisplayRole).toInt()
 	        << "." << z->ID() << "'" << ToQString(z->Name()) << "'";
-	if ( space == d_selectedSpace ) {
+	if (space == d_selectedSpace) {
 		rebuildChildBridges();
 	}
 }
@@ -423,25 +425,30 @@ void ZoneBridge::changeZoneName(QStandardItem * zoneNameItem) {
 	}
 }
 
-void ZoneBridge::changeDefinitionTime(QStandardItem * definitionTimeItem, bool start) {
-	auto d = definitionTimeItem->data(DataRole).value<fmp::ZoneDefinition::Ptr>();
-	if ( !d == true  ) {
+void ZoneBridge::changeDefinitionTime(
+    QStandardItem *definitionTimeItem, bool start
+) {
+	auto d =
+	    definitionTimeItem->data(DataRole).value<fmp::ZoneDefinition::Ptr>();
+	if (!d == true) {
 		return;
 	}
 
-	auto prefix = start == true ? "-" : "+";
-	auto oldTime = start == true ? d->Start() : d->End();
+	auto oldTime    = start == true ? d->Start() : d->End();
 	auto oldTimeStr = ToQString(oldTime);
-	if ( oldTimeStr  == definitionTimeItem->text() ) {
+	if (oldTimeStr == definitionTimeItem->text()) {
 		return;
 	}
 
-	fort::Time newTime = start == true ? fort::Time::SinceEver() : fort::Time::Forever();
-	if ( definitionTimeItem->text().isEmpty() == false ) {
+	fort::Time newTime =
+	    start == true ? fort::Time::SinceEver() : fort::Time::Forever();
+	if (definitionTimeItem->text().isEmpty() == false) {
 		try {
-			newTime = fort::Time::Parse(ToStdString(definitionTimeItem->text()));
-		} catch ( const std::exception & e ) {
-			qCritical() << "Could not parse time " << definitionTimeItem->text();
+			newTime =
+			    fort::Time::Parse(ToStdString(definitionTimeItem->text()));
+		} catch (const std::exception &e) {
+			qCritical() << "Could not parse time "
+			            << definitionTimeItem->text();
 			definitionTimeItem->setText(oldTimeStr);
 			return;
 		}
@@ -449,20 +456,18 @@ void ZoneBridge::changeDefinitionTime(QStandardItem * definitionTimeItem, bool s
 	auto newTimeStr = ToQString(newTime);
 
 	try {
-		if ( start == true ) {
+		if (start == true) {
 			qDebug() << "[ZoneBridge]: Calling fmp::Zone::Definition::SetStart("
-			         << newTimeStr
-			         << ")";
+			         << newTimeStr << ")";
 			d->SetStart(newTime);
 		} else {
 			qDebug() << "[ZoneBridge]: Calling fmp::Zone::Definition::SetEnd("
-			         << newTimeStr
-			         << ")";
+			         << newTimeStr << ")";
 			d->SetEnd(newTime);
 		}
-	} catch ( std::exception & e ) {
-		qCritical() << "Could not set Zone::Definition start/end to " << newTimeStr
-		            << ": " << e.what();
+	} catch (std::exception &e) {
+		qCritical() << "Could not set Zone::Definition start/end to "
+		            << newTimeStr << ": " << e.what();
 		definitionTimeItem->setText(oldTimeStr);
 		return;
 	}
@@ -473,7 +478,6 @@ void ZoneBridge::changeDefinitionTime(QStandardItem * definitionTimeItem, bool s
 	rebuildChildBridges();
 	emit definitionUpdated();
 }
-
 
 void ZoneBridge::activateItem(QModelIndex index) {
 	fmp::Space::Ptr newSpace;
@@ -502,33 +506,35 @@ void ZoneBridge::clearFullFrames() {
 void ZoneBridge::rebuildFullFrameModel() {
 	clearFullFrames();
 
-	if ( !d_selectedSpace == true ) {
+	if (!d_selectedSpace == true) {
 		return;
 	}
-	std::vector<std::pair<std::string,FullFrame>> fullframes;
+	std::vector<std::pair<std::string, FullFrame>> fullframes;
 
-	for ( const auto & tdd : d_selectedSpace->TrackingDataDirectories() ) {
-		const auto & tddFullFrames = tdd->FullFrames();
-		if ( tdd->FullFramesComputed() == false ) {
+	for (const auto &tdd : d_selectedSpace->TrackingDataDirectories()) {
+		if (tdd->FullFramesComputed() == false) {
 			auto loaders = tdd->PrepareFullFramesLoaders();
-			QtConcurrent::blockingMap(loaders.begin(),loaders.end(),
-			                          []( const fmp::TrackingDataDirectory::Loader & l) {
-				                          l();
-			                          });
+			QtConcurrent::blockingMap(
+			    loaders.begin(),
+			    loaders.end(),
+			    [](const fmp::TrackingDataDirectory::Loader &l) { l(); }
+			);
 		}
-		for ( const auto & [ref,path] : tdd->FullFrames() ) {
-				fullframes.push_back(std::make_pair(ref.URI(),FullFrame{ref,path.c_str()}));
+		for (const auto &[ref, path] : tdd->FullFrames()) {
+			fullframes.push_back(
+			    std::make_pair(ref.URI(), FullFrame{ref, path.c_str()})
+			);
 		}
 	}
 
-	for ( const auto & [uri,ff] : fullframes ) {
-		auto roundedTime = ff.Reference.Time().Round(fort::Duration::Millisecond);
+	for (const auto &[uri, ff] : fullframes) {
+		auto roundedTime =
+		    ff.Reference.Time().Round(fort::Duration::Millisecond);
 		auto item = new QStandardItem(ToQString(roundedTime));
 		item->setEditable(false);
 		item->setData(QVariant::fromValue(ff));
 		d_fullFrameModel->appendRow({item});
 	}
-
 }
 
 std::pair<bool,ZoneBridge::FullFrame> ZoneBridge::fullFrameAtIndex(const QModelIndex & index) const {

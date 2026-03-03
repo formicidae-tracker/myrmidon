@@ -82,24 +82,25 @@ void AntMeasurementBridge::setUpExperiment() {
 	}
 }
 
-
-void AntMeasurementBridge::onMeasurementTypeModified(quint32 mtID, QString name) {
-	const auto & [headerItem,column] = headerForType(mtID);
-	if ( headerItem == nullptr ) {
-		QList<QStandardItem*> newCounts;
+void AntMeasurementBridge::onMeasurementTypeModified(
+    quint32 mtID, QString name
+) {
+	const auto &[headerItem, column] = headerForType(mtID);
+	if (headerItem == nullptr) {
+		QList<QStandardItem *> newCounts;
 		newCounts.reserve(d_model->rowCount());
-		for ( size_t i  = 0; i < d_model->rowCount(); ++i ) {
+		for (int i = 0; i < d_model->rowCount(); ++i) {
 			auto count = new QStandardItem("0");
 			count->setEditable(false);
 			newCounts.push_back(count);
 		}
-		d_model->insertColumn(column,newCounts);
+		d_model->insertColumn(column, newCounts);
 		auto item = new QStandardItem(name);
 		item->setEditable(false);
 		item->setData(int(mtID));
-		d_model->setHorizontalHeaderItem(column,item);
+		d_model->setHorizontalHeaderItem(column, item);
 	} else {
-		headerItem->setData(name,Qt::DisplayRole);
+		headerItem->setData(name, Qt::DisplayRole);
 	}
 }
 
@@ -155,17 +156,18 @@ QList<QStandardItem*> AntMeasurementBridge::buildAnt(const fmp::Ant::Ptr & ant) 
 	return res;
 }
 
-
-void AntMeasurementBridge::buildCountForAnt(const fmp::Ant::Ptr & ant) {
+void AntMeasurementBridge::buildCountForAnt(const fmp::Ant::Ptr &ant) {
 	auto antItem = d_model->itemFromAntID(ant->AntID());
-	if ( isActive() == false || antItem == nullptr ) {
+	if (isActive() == false || antItem == nullptr) {
 		return;
 	}
 	std::vector<fm::ComputedMeasurement> measurements;
-	for ( size_t column = 1; column < d_model->columnCount(); ++column) {
+	for (int column = 1; column < d_model->columnCount(); ++column) {
 		auto mtID = d_model->horizontalHeaderItem(column)->data().toInt();
-		d_experiment->ComputeMeasurementsForAnt(measurements,ant->AntID(),mtID);
-		d_model->item(antItem->row(),column)->setData(int(measurements.size()),Qt::DisplayRole);
+		d_experiment
+		    ->ComputeMeasurementsForAnt(measurements, ant->AntID(), mtID);
+		d_model->item(antItem->row(), column)
+		    ->setData(int(measurements.size()), Qt::DisplayRole);
 	}
 }
 
@@ -199,15 +201,16 @@ void AntMeasurementBridge::updateMeasurementCount(const fmp::Measurement::ConstP
 	valueItem->setData(valueItem->data(Qt::DisplayRole).toInt()+incrementValue,Qt::DisplayRole);
 }
 
-std::pair<QStandardItem*,int> AntMeasurementBridge::headerForType(quint32 mtID) const {
-	for ( size_t column = 1; column < d_model->columnCount(); ++column) {
-		auto item = d_model->horizontalHeaderItem(column);
+std::pair<QStandardItem *, int> AntMeasurementBridge::headerForType(qint32 mtID
+) const {
+	for (int column = 1; column < d_model->columnCount(); ++column) {
+		auto item     = d_model->horizontalHeaderItem(column);
 		auto columnID = item->data().toInt();
-		if ( columnID == mtID ) {
-			return {item,column};
-		} else if ( columnID > mtID ) {
-			return {nullptr,column};
+		if (columnID == mtID) {
+			return {item, column};
+		} else if (columnID > mtID) {
+			return {nullptr, column};
 		}
 	}
-	return {nullptr,d_model->columnCount()};
+	return {nullptr, d_model->columnCount()};
 }

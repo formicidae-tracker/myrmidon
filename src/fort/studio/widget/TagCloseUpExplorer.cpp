@@ -80,41 +80,41 @@ bool CloseUpFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex & sou
 	return matchCount && matchFilter;
 }
 
-
 TagCloseUpExplorer::TagCloseUpExplorer(QWidget *parent)
-	: QWidget(parent)
-	, d_sortedFilteredModel(new CloseUpFilterModel(this))
-	, d_ui(new Ui::TagCloseUpExplorer) {
+    : QWidget(parent)
+    , d_ui(new Ui::TagCloseUpExplorer)
+    , d_sortedFilteredModel(new CloseUpFilterModel(this)) {
 	d_ui->setupUi(this);
 
 	d_ui->closeUpView->setModel(d_sortedFilteredModel);
-    d_ui->closeUpView->setSelectionMode(QAbstractItemView::SingleSelection);
-    d_ui->closeUpView->setSelectionBehavior(QAbstractItemView::SelectRows);
+	d_ui->closeUpView->setSelectionMode(QAbstractItemView::SingleSelection);
+	d_ui->closeUpView->setSelectionBehavior(QAbstractItemView::SelectRows);
 
+	connect(
+	    d_ui->closeUpsScroller,
+	    &TagCloseUpScroller::currentCloseUpChanged,
+	    this,
+	    [this](const fmp::TagCloseUp::ConstPtr &closeUp) {
+		    emit currentCloseUpChanged(closeUp);
+	    }
+	);
 
-    connect(d_ui->closeUpsScroller,
-            &TagCloseUpScroller::currentCloseUpChanged,
-            this,
-            [this](const fmp::TagCloseUp::ConstPtr & closeUp) {
-	            emit currentCloseUpChanged(closeUp);
-            });
+	connect(
+	    d_ui->closeUpFilterEdit,
+	    &QLineEdit::textChanged,
+	    d_sortedFilteredModel,
+	    &CloseUpFilterModel::setFilter
+	);
 
+	connect(d_ui->hideUsedTagBox, &QCheckBox::stateChanged, [this](int state) {
+		d_sortedFilteredModel->setRemoveUsed(state == Qt::Checked);
+	});
+	d_sortedFilteredModel->setRemoveUsed(
+	    d_ui->hideUsedTagBox->checkState() == Qt::Checked
+	);
 
-    connect(d_ui->closeUpFilterEdit,
-            &QLineEdit::textChanged,
-            d_sortedFilteredModel,
-            &CloseUpFilterModel::setFilter);
-
-        connect(d_ui->hideUsedTagBox,
-            &QCheckBox::stateChanged,
-            [this](int state) {
-	            d_sortedFilteredModel->setRemoveUsed(state == Qt::Checked);
-            });
-    d_sortedFilteredModel->setRemoveUsed(d_ui->hideUsedTagBox->checkState() == Qt::Checked);
-
-    d_ui->closeUpView->setContextMenuPolicy(Qt::DefaultContextMenu);
+	d_ui->closeUpView->setContextMenuPolicy(Qt::DefaultContextMenu);
 }
-
 
 void TagCloseUpExplorer::initialize(TagCloseUpBridge * tagCloseUps) {
 	d_tagCloseUps = tagCloseUps;

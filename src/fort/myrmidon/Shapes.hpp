@@ -138,7 +138,7 @@ public:
 
 	std::unique_ptr<Shape> Clone() const override;
 
-	EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	/** \endcond PRIVATE */
 private:
 	Eigen::Vector2d d_center;
@@ -269,8 +269,7 @@ public:
 	                      double bR1,
 	                      double bR2);
 
-
-	EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 	/** \endcond PRIVATE */
 private:
 

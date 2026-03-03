@@ -128,8 +128,8 @@ public:
 		return defaultValue(find(key));
 	}
 
-	const fm::Value & defaultValue(int key) const {
-		if ( key < 0 || key >= d_keys.size() ) {
+	const fm::Value &defaultValue(int key) const {
+		if (key < 0 || size_t(key) >= d_keys.size()) {
 			static fm::Value invalid = fort::Time::Forever();
 			return invalid;
 		}
@@ -578,29 +578,29 @@ public:
 
 private slots:
 
-	bool setValue(quint32 antID,
-	              int key,
-	              const fort::Time & time,
-	              const fm::Value & value) {
-		if ( key < 0 || key >= d_keyModel->rowCount() ) {
+	bool setValue(
+	    quint32 antID, int key, const fort::Time &time, const fm::Value &value
+	) {
+		if (key < 0 || key >= d_keyModel->rowCount()) {
 			return false;
 		}
 		auto fi = find(antID);
-		if ( fi == d_ants.cend() ) {
+		if (fi == d_ants.cend()) {
 			return false;
 		}
-		auto & ant = **fi;
-		auto keyName = keyNameAt(key);
-		bool added = hasValue(ant,keyName,time) == false;
+		auto &ant     = **fi;
+		auto  keyName = keyNameAt(key);
+		bool  added   = hasValue(ant, keyName, time) == false;
 		try {
-			qInfo() << "[AntKeyValueBridge]: Ant{ID: " << fm::FormatAntID(antID).c_str()
+			qInfo() << "[AntKeyValueBridge]: Ant{ID: "
+			        << fm::FormatAntID(antID).c_str()
 			        << "}.SetValue(key =" << keyName.c_str()
 			        << ",value = " << ToQString(value)
-			        << ", time = " << ToQString(time)
-			        << ")";
-			ant.SetValue(keyName,value,time);
-		} catch ( const std::exception & e ) {
-			qCritical() << "[AntKeyValueBridge]: Ant{ID: " << fm::FormatAntID(antID).c_str()
+			        << ", time = " << ToQString(time) << ")";
+			ant.SetValue(keyName, value, time);
+		} catch (const std::exception &e) {
+			qCritical() << "[AntKeyValueBridge]: Ant{ID: "
+			            << fm::FormatAntID(antID).c_str()
 			            << "}.SetValue(key =" << keyName.c_str()
 			            << ",value = " << ToQString(value)
 			            << ", time = " << ToQString(time)
@@ -608,19 +608,19 @@ private slots:
 			return false;
 		}
 
-		if ( time.IsInfinite() ) {
-			auto keyIndex = index(key,0,index(fi-d_ants.cbegin(),0));
+		if (time.IsInfinite()) {
+			auto keyIndex = index(key, 0, index(fi - d_ants.cbegin(), 0));
 			auto defaultValueIndex = keyIndex.siblingAtColumn(3);
-			emit dataChanged(defaultValueIndex,defaultValueIndex);
-		} else if( added == false ) {
-			const auto & data = ant.DataMap().at(keyName);
-			int row = valueRow(ant,keyName,time);
-			auto i = index(row,3,index(key,0,index(fi-d_ants.cbegin(),0)));
-			emit dataChanged(i,i);
+			emit dataChanged(defaultValueIndex, defaultValueIndex);
+		} else if (added == false) {
+			int  row = valueRow(ant, keyName, time);
+			auto i =
+			    index(row, 3, index(key, 0, index(fi - d_ants.cbegin(), 0)));
+			emit dataChanged(i, i);
 		}
 
-		if ( added == true ) {
-			resetValueModel(*fi,fi - d_ants.cbegin(),keyName,key);
+		if (added == true) {
+			resetValueModel(*fi, fi - d_ants.cbegin(), keyName, key);
 		}
 		return true;
 	}
@@ -1040,61 +1040,69 @@ private:
 	         std::unique_ptr<Pointer>>       d_pointers;
 };
 
-
 #include "AntKeyValueBridge.moc"
 
-
-AntKeyValueBridge::AntKeyValueBridge(QObject * parent)
-	: GlobalBridge(parent)
-	, d_keyModel(new KeyModel(this))
-	, d_dataModel(new DataModel(d_keyModel,this))
-	, d_typeModel(new QStandardItemModel(parent)){
+AntKeyValueBridge::AntKeyValueBridge(QObject *parent)
+    : GlobalBridge(parent)
+    , d_typeModel(new QStandardItemModel(parent))
+    , d_keyModel(new KeyModel(this))
+    , d_dataModel(new DataModel(d_keyModel, this)) {
 	qRegisterMetaType<fort::Time>();
 	qRegisterMetaType<fm::Value>();
 
-#define add_item_type(t,T,tT) do {	  \
-		auto  item = new QStandardItem(#tT); \
-		item->setData(quint32(fm::ValueType::T),KeyTypeRole); \
-		d_typeModel->appendRow(item); \
-	}while(0)
-	add_item_type(bool,BOOL,Bool);
-	add_item_type(int,INT,Int);
-	add_item_type(double,DOUBLE,Double);
+#define add_item_type(t, T, tT)                                                \
+	do {                                                                       \
+		auto item = new QStandardItem(#tT);                                    \
+		item->setData(quint32(fm::ValueType::T), KeyTypeRole);                 \
+		d_typeModel->appendRow(item);                                          \
+	} while (0)
+	add_item_type(bool, BOOL, Bool);
+	add_item_type(int, INT, Int);
+	add_item_type(double, DOUBLE, Double);
 #undef add_item_type
 
 	auto stringItem = new QStandardItem("String");
-	stringItem->setData(quint32(fm::ValueType::STRING),KeyTypeRole);
+	stringItem->setData(quint32(fm::ValueType::STRING), KeyTypeRole);
 	d_typeModel->appendRow(stringItem);
 
 	auto timeItem = new QStandardItem("Time");
-	timeItem->setData(quint32(fm::ValueType::TIME),KeyTypeRole);
+	timeItem->setData(quint32(fm::ValueType::TIME), KeyTypeRole);
 	d_typeModel->appendRow(timeItem);
 
-	connect(d_keyModel,&QAbstractItemModel::dataChanged,
-	        this,&AntKeyValueBridge::markModified);
+	connect(
+	    d_keyModel,
+	    &QAbstractItemModel::dataChanged,
+	    this,
+	    &AntKeyValueBridge::markModified
+	);
 
-	connect(d_dataModel,&QAbstractItemModel::dataChanged,
-	        this,&AntKeyValueBridge::markModified);
+	connect(
+	    d_dataModel,
+	    &QAbstractItemModel::dataChanged,
+	    this,
+	    &AntKeyValueBridge::markModified
+	);
 
-	d_validators =
-		{
-		 new QRegularExpressionValidator(QRegularExpression("true|false"),this),
-		 new QIntValidator(this),
-		 new QDoubleValidator(this),
-		 nullptr,
-		 new QRegularExpressionValidator(QRegularExpression("\\d{4}-\\d{2}-\\d{2}T[0-2]\\d:[0-5]\\d:[0-5]\\d(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})"),this)
-		};
+	d_validators = {
+	    new QRegularExpressionValidator(QRegularExpression("true|false"), this),
+	    new QIntValidator(this),
+	    new QDoubleValidator(this),
+	    nullptr,
+	    new QRegularExpressionValidator(
+	        QRegularExpression("\\d{4}-\\d{2}-\\d{2}T[0-2]\\d:[0-5]\\d:[0-5]"
+	                           "\\d(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})"),
+	        this
+	    )
+	};
 
 	d_stringCompletion = new QStandardItemModel(this);
-	d_completers =
-		{
-		 new QCompleter({"false","true"},this),
-		 nullptr,
-		 nullptr,
-		 new QCompleter(d_stringCompletion,this),
-		 nullptr,
-		};
-
+	d_completers       = {
+        new QCompleter({"false", "true"}, this),
+        nullptr,
+        nullptr,
+        new QCompleter(d_stringCompletion, this),
+        nullptr,
+    };
 }
 
 AntKeyValueBridge::~AntKeyValueBridge() {

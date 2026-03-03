@@ -83,18 +83,19 @@ DataSegmenter::BuildingInteraction::BuildingInteraction(
     , Start(curTime)
     , Last(curTime)
     , LastValue(currentValue)
-    , Trajectories(trajectories)
-    , Space(std::get<0>(trajectories)->Trajectory->Space) {
+    , Space(std::get<0>(trajectories)->Trajectory->Space)
+    , Trajectories(trajectories) {
 	Trajectories.first->Interactions.insert(this);
 	Trajectories.second->Interactions.insert(this);
 	SegmentStarts = {
 	    trajectories.first->Size() - 1,
-	    trajectories.second->Size() - 1};
+	    trajectories.second->Size() - 1
+	};
 	MinEnd                         = SegmentStarts;
 	MaxEnd                         = SegmentStarts;
 	trajectories.first->ForceKeep  = true;
 	trajectories.second->ForceKeep = true;
-	for (size_t i = 0; i < collision.Types.rows(); ++i) {
+	for (int i = 0; i < collision.Types.rows(); ++i) {
 		Types.insert(
 		    std::make_pair(collision.Types(i, 0), collision.Types(i, 1))
 		);
@@ -123,7 +124,7 @@ void DataSegmenter::BuildingInteraction::Append(
 	Last    = curTime;
 	PastEnd = std::nullopt;
 
-	for (size_t i = 0; i < collision.Types.rows(); ++i) {
+	for (int i = 0; i < collision.Types.rows(); ++i) {
 		Types.insert(
 		    std::make_pair(collision.Types(i, 0), collision.Types(i, 1))
 		);
@@ -169,7 +170,7 @@ DataSegmenter::SummarizeTrajectorySegment(AntTrajectorySegment &s) {
 
 	Eigen::Vector3d  mean = Eigen::Vector3d::Zero();
 	std::set<ZoneID> zones;
-	for (int i = s.Begin; i < s.End; ++i) {
+	for (size_t i = s.Begin; i < s.End; ++i) {
 		mean += s.Trajectory->Positions.block<1, 3>(i, 1).transpose() /
 		        (s.End - s.Begin);
 		zones.insert(s.Trajectory->Positions(i, 4));
@@ -188,7 +189,7 @@ DataSegmenter::BuildingInteraction::SummarizeBuildingTrajectory(
 	Eigen::Vector3d  mean = Eigen::Vector3d::Zero();
 	std::set<ZoneID> zones;
 	auto             mapped = trajectory.Mapped();
-	for (int i = begin; i < end; ++i) {
+	for (size_t i = begin; i < end; ++i) {
 		mean += mapped.block<1, 3>(i, 1).transpose() / (end - begin);
 		zones.insert(mapped(i, 4));
 	}
@@ -327,7 +328,7 @@ void DataSegmenter::BuildTrajectories(
 		t->PushPastEnd(identified->FrameTime);
 	}
 
-	for (size_t i = 0; i < identified->Positions.rows(); ++i) {
+	for (int i = 0; i < identified->Positions.rows(); ++i) {
 		AntID    antID = identified->Positions(i, 0);
 		uint64_t matchValue =
 		    d_args.Matcher ? d_args.Matcher->Match(antID, 0, {}) : 1;

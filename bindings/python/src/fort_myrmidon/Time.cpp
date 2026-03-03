@@ -206,17 +206,6 @@ Returns:
 	py::implicitly_convertible<double, fort::Duration>();
 }
 
-static py::object &pyLocalTZInfo() {
-	static py::module_ datetime = py::module_::import("datetime");
-	static py::object  utc      = datetime.attr("timezone").attr("utc");
-	static py::object  tzinfo   = datetime.attr("datetime")
-	                               .attr("now")(utc)
-	                               .attr("astimezone")()
-	                               .attr("tzinfo");
-
-	return tzinfo;
-}
-
 fort::Time timeFromPythonTimestamp(const double &t) {
 	if (std::isinf(t)) {
 		return t > 0 ? fort::Time::Forever() : fort::Time::SinceEver();

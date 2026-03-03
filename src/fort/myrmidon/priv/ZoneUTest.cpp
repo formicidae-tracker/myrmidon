@@ -24,19 +24,15 @@ protected:
 
 	std::vector<Shape::Ptr> shapes;
 	Zone::Ptr               zone;
-
 };
 
-
-
-TEST_F(ZoneUTest,GeometryHaveAABB) {
+TEST_F(ZoneUTest, GeometryHaveAABB) {
 
 	Zone::Geometry g(std::move(shapes));
-	EXPECT_AABB_EQ(g.GlobalAABB(),shapes.front()->ComputeAABB());
+	EXPECT_AABB_EQ(g.GlobalAABB(), shapes.front()->ComputeAABB());
 	ASSERT_EQ(shapes.size(), g.IndividualAABB().size());
-	for( int i = 0; i < shapes.size(); ++i) {
-		EXPECT_AABB_EQ(shapes[i]->ComputeAABB(),
-		               g.IndividualAABB()[i]);
+	for (size_t i = 0; i < shapes.size(); ++i) {
+		EXPECT_AABB_EQ(shapes[i]->ComputeAABB(), g.IndividualAABB()[i]);
 	}
 }
 

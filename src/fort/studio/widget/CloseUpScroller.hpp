@@ -10,20 +10,21 @@ class QAbstractSlider;
 
 class CloseUpScroller : public QWidget {
 	Q_OBJECT
-	Q_PROPERTY(fmp::TagCloseUp::ConstPtr currentCloseUp
-	           READ currentCloseUp
-	           NOTIFY currentCloseUpChanged);
+	Q_PROPERTY(fmp::TagCloseUp::ConstPtr currentCloseUp READ currentCloseUp
+	               NOTIFY currentCloseUpChanged)
 public:
-	explicit CloseUpScroller(QWidget * parent = nullptr);
+	explicit CloseUpScroller(QWidget *parent = nullptr);
 	virtual ~CloseUpScroller();
 
-	virtual void setUp(TagCloseUpBridge * bridge) = 0;
+	virtual void setUp(TagCloseUpBridge *bridge) = 0;
 
-	const fmp::TagCloseUp::ConstPtr & currentCloseUp() const;
+	const fmp::TagCloseUp::ConstPtr &currentCloseUp() const;
 
-	void setCloseUps(uint32_t objectID,
-	                 const QVector<fmp::TagCloseUp::ConstPtr> & closeUps,
-	                 QVector<fmp::TagCloseUp::ConstPtr>::const_iterator currentCloseUp);
+	void setCloseUps(
+	    int32_t                                            objectID,
+	    const QVector<fmp::TagCloseUp::ConstPtr>          &closeUps,
+	    QVector<fmp::TagCloseUp::ConstPtr>::const_iterator currentCloseUp
+	);
 
 public slots:
 
@@ -31,7 +32,9 @@ public slots:
 	void previous();
 
 protected slots:
-	void onCloseUpsChanged(uint32_t objectID,const QVector<fmp::TagCloseUp::ConstPtr> & closeUps);
+	void onCloseUpsChanged(
+	    int32_t objectID, const QVector<fmp::TagCloseUp::ConstPtr> &closeUps
+	);
 
 	void clear();
 
@@ -39,24 +42,20 @@ private slots:
 	void onSliderValueChanged(int position);
 
 signals:
-	void currentCloseUpChanged(const fmp::TagCloseUp::ConstPtr & closeUp);
-
-
+	void currentCloseUpChanged(const fmp::TagCloseUp::ConstPtr &closeUp);
 
 private:
 	typedef QVector<fmp::TagCloseUp::ConstPtr> CloseUpList;
 
 	void updateWidgets();
 
-	CloseUpList                  d_closeUps;
-	CloseUpList::const_iterator  d_currentCloseUp;
-	uint32_t                     d_currentID;
+	CloseUpList                 d_closeUps;
+	CloseUpList::const_iterator d_currentCloseUp;
+	int32_t                     d_currentID;
 
-	QLabel          * d_label;
-	QAbstractSlider * d_slider;
-
+	QLabel          *d_label;
+	QAbstractSlider *d_slider;
 };
-
 
 class AntCloseUpScroller : public CloseUpScroller {
 public:

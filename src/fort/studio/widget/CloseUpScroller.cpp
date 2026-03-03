@@ -41,7 +41,7 @@ const fmp::TagCloseUp::ConstPtr & CloseUpScroller::currentCloseUp() const {
 }
 
 void CloseUpScroller::setCloseUps(
-    uint32_t                                           objectID,
+    int32_t                                            objectID,
     const QVector<fmp::TagCloseUp::ConstPtr>          &closeUps,
     QVector<fmp::TagCloseUp::ConstPtr>::const_iterator current
 ) {
@@ -85,27 +85,30 @@ void CloseUpScroller::previous() {
 	emit currentCloseUpChanged(currentCloseUp());
 }
 
-void CloseUpScroller::onCloseUpsChanged(uint32_t objectID,
-                                        const QVector<fmp::TagCloseUp::ConstPtr> & closeUps) {
-	if ( objectID != d_currentID ) {
+void CloseUpScroller::onCloseUpsChanged(
+    int32_t objectID, const QVector<fmp::TagCloseUp::ConstPtr> &closeUps
+) {
+	if (objectID != d_currentID) {
 		return;
 	}
 
 	bool changed = false;
-	// here is the super tricky part: we must found back the current closeUp in the new list
-	while( d_currentCloseUp != d_closeUps.end()
-	       && std::count(closeUps.begin(),closeUps.end(),*d_currentCloseUp) == 0 ) {
+	// here is the super tricky part: we must found back the current closeUp in
+	// the new list
+	while (d_currentCloseUp != d_closeUps.end() &&
+	       std::count(closeUps.begin(), closeUps.end(), *d_currentCloseUp) == 0
+	) {
 		changed = true;
 		++d_currentCloseUp;
 	}
 
-	if ( d_currentCloseUp == d_closeUps.end()
-	     && closeUps.empty() == false ) {
-		changed = true;
+	if (d_currentCloseUp == d_closeUps.end() && closeUps.empty() == false) {
+		changed          = true;
 		d_currentCloseUp = closeUps.begin();
 	}
-	if ( d_currentCloseUp != d_closeUps.end() ) {
-		d_currentCloseUp = std::find(closeUps.begin(),closeUps.end(),*d_currentCloseUp);
+	if (d_currentCloseUp != d_closeUps.end()) {
+		d_currentCloseUp =
+		    std::find(closeUps.begin(), closeUps.end(), *d_currentCloseUp);
 	} else {
 		d_currentCloseUp = closeUps.end();
 	}
@@ -114,7 +117,7 @@ void CloseUpScroller::onCloseUpsChanged(uint32_t objectID,
 
 	updateWidgets();
 
-	if (changed == true ) {
+	if (changed == true) {
 		emit currentCloseUpChanged(currentCloseUp());
 	}
 }

@@ -37,14 +37,15 @@ void FrameDrawer::Draw(video::Frame &buffer, const IdentifiedFrame &frame)
 		throw cpptrace::invalid_argument{
 		    "Output buffer must be a " + std::to_string(wantedResolution) +
 		    " buffer GRAY8 image, got a " + std::to_string(buffer.Size) + " " +
-		    std::to_string(buffer.Format) + " buffer"};
+		    std::to_string(buffer.Format) + " buffer"
+		};
 	}
 
 	// fills background
 	memset(buffer.Planes[0], 127, buffer.Linesize[0] * frame.Height);
 
 	// draw shapes at the right position
-	for (size_t i = 0; i < frame.Positions.rows(); ++i) {
+	for (int i = 0; i < frame.Positions.rows(); ++i) {
 		AntID antID = frame.Positions(i, 0);
 		if (d_ants.count(antID) == 0) {
 			continue;
@@ -168,7 +169,7 @@ computeAABB(const std::vector<Eigen::Vector2d> &vertices) {
 	        std::numeric_limits<int>::min(),
 	        std::numeric_limits<int>::min(),
 	    };
-	for (const auto v : vertices) {
+	for (const auto &v : vertices) {
 		pMin.x() = std::min(pMin.x(), int(std::floor(v.x())));
 		pMin.y() = std::min(pMin.y(), int(std::ceil(v.y())));
 		pMax.x() = std::max(pMax.x(), int(std::floor(v.x())));

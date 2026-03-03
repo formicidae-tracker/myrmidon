@@ -226,26 +226,35 @@ quint32 AntDisplayBridge::numberSoloAnt() const {
 }
 
 void AntDisplayBridge::showAll() {
-	for(size_t i = 0; i < d_model->rowCount(); ++i) {
-		auto hideItem = d_model->itemFromIndex(d_model->index(i,HIDE_COLUMN));
-		auto soloItem = d_model->itemFromIndex(d_model->index(i,SOLO_COLUMN));
-		auto ant = hideItem->data().value<fmp::Ant::Ptr>();
-		setAntDisplayState(hideItem,soloItem,ant,fmp::Ant::DisplayState::VISIBLE);
+	for (int i = 0; i < d_model->rowCount(); ++i) {
+		auto hideItem = d_model->itemFromIndex(d_model->index(i, HIDE_COLUMN));
+		auto soloItem = d_model->itemFromIndex(d_model->index(i, SOLO_COLUMN));
+		auto ant      = hideItem->data().value<fmp::Ant::Ptr>();
+		setAntDisplayState(
+		    hideItem,
+		    soloItem,
+		    ant,
+		    fmp::Ant::DisplayState::VISIBLE
+		);
 	}
 }
 
 void AntDisplayBridge::unsoloAll() {
-	for(size_t i = 0; i < d_model->rowCount(); ++i) {
-		auto hideItem = d_model->itemFromIndex(d_model->index(i,HIDE_COLUMN));
-		auto soloItem = d_model->itemFromIndex(d_model->index(i,SOLO_COLUMN));
-		auto ant = hideItem->data().value<fmp::Ant::Ptr>();
-		if (ant->DisplayStatus() != fmp::Ant::DisplayState::SOLO ) {
+	for (int i = 0; i < d_model->rowCount(); ++i) {
+		auto hideItem = d_model->itemFromIndex(d_model->index(i, HIDE_COLUMN));
+		auto soloItem = d_model->itemFromIndex(d_model->index(i, SOLO_COLUMN));
+		auto ant      = hideItem->data().value<fmp::Ant::Ptr>();
+		if (ant->DisplayStatus() != fmp::Ant::DisplayState::SOLO) {
 			continue;
 		}
-		setAntDisplayState(hideItem,soloItem,ant,fmp::Ant::DisplayState::VISIBLE);
+		setAntDisplayState(
+		    hideItem,
+		    soloItem,
+		    ant,
+		    fmp::Ant::DisplayState::VISIBLE
+		);
 	}
 }
-
 
 void AntDisplayBridge::clear() {
 	d_model->clear();

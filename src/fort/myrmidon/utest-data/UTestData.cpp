@@ -212,10 +212,10 @@ void UTestData::SplitTrajectoryWithTDDs(
 		    tddInfo.End >= t->End()) {
 			continue;
 		}
-		auto nt    = std::make_shared<AntTrajectory>();
-		nt->Ant    = t->Ant;
-		nt->Space  = t->Space;
-		size_t idx = 0;
+		auto nt   = std::make_shared<AntTrajectory>();
+		nt->Ant   = t->Ant;
+		nt->Space = t->Space;
+		int idx   = 0;
 		for (; idx < t->Positions.rows(); ++idx) {
 			nt->Start = t->Start.Add(
 			    t->Positions(idx, 0) * Duration::Second.Nanoseconds()
@@ -685,7 +685,8 @@ void UTestData::WriteExperimentFile(const ExperimentInfo &info) {
 	    )) {
 		throw cpptrace::runtime_error("could not write experiment data");
 	}
-	l.release_experiment();
+
+	static_cast<void>(l.release_experiment());
 
 	pb::Space s;
 	s.set_id(1);
@@ -703,7 +704,7 @@ void UTestData::WriteExperimentFile(const ExperimentInfo &info) {
 	    )) {
 		throw cpptrace::runtime_error("could not write space data");
 	}
-	l.release_space();
+	static_cast<void>(l.release_space());
 
 	s.set_id(2);
 	s.set_name("forage-area");
@@ -721,7 +722,7 @@ void UTestData::WriteExperimentFile(const ExperimentInfo &info) {
 	    )) {
 		throw cpptrace::runtime_error("could not write space data");
 	}
-	l.release_space();
+	static_cast<void>(l.release_space());
 
 	for (const auto &[antID, ant] : d_config.Ants) {
 		fort::myrmidon::pb::AntDescription a;
@@ -760,7 +761,7 @@ void UTestData::WriteExperimentFile(const ExperimentInfo &info) {
 			    "could not write ant data " + std::to_string(antID)
 			);
 		}
-		l.release_antdescription();
+		static_cast<void>(l.release_antdescription());
 	}
 }
 
@@ -896,9 +897,7 @@ void UTestData::GenerateMovieSegmentData(
 	videoSegments.clear();
 	videoSegments.reserve(info.Segments.size());
 
-	size_t index = -1;
-	for (const auto &segment : info.Segments) {
-		++index;
+	for (size_t index = 0; index < info.Segments.size(); ++index) {
 
 		videoSegments.push_back(
 		    {.Space = spaceID,
@@ -951,7 +950,7 @@ UTestData::CurrentExperimentDataInfo() const {
 		    .End    = fort::Time::SinceEver(),
 		};
 		std::vector<fort::myrmidon::TrackingDataDirectoryInfo> tdds;
-		for (const auto i_ : infos) {
+		for (const auto &i_ : infos) {
 			auto i = i_.ToInfo();
 			res.TrackingDataDirectories.push_back(i);
 			res.Start = std::min(res.Start, i.Start);
@@ -969,7 +968,7 @@ UTestData::CurrentExperimentDataInfo() const {
 	        {{1, buildSpaceInfo(1, "nest", d_nestTDDs)},
 	         {2, buildSpaceInfo(2, "foraging", d_foragingTDDs)}},
 	};
-	for (const auto [sID, s] : res.Spaces) {
+	for (const auto &[sID, s] : res.Spaces) {
 		res.Frames += s.Frames;
 		res.Start = std::min(res.Start, s.Start);
 		res.End   = std::max(res.End, s.End);

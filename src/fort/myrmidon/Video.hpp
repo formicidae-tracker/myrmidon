@@ -276,7 +276,6 @@ inline void VideoSegment::Match(List &list, IterType begin, IterType end) {
 		return TypeTraits::compare(MaybeDeref(a), MaybeDeref(b));
 	};
 
-	typedef typename TypeTraits::data_category data_category;
 	if constexpr (TypeTraits::spaced_data == false) {
 		std::sort(begin, end, compare);
 		MatchSortedFiltered(list, begin, end);

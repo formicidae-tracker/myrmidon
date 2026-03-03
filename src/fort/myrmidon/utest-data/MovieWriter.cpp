@@ -14,10 +14,10 @@ MovieWriter::MovieWriter(
     const FrameDrawer::Ptr &drawer
 )
     : d_basepath{basepath}
-    , d_framerate{config.Framerate}
-    , d_size{config.Width, config.Height}
     , d_drawer{drawer}
-    , d_frameBuffer{int(config.Width), int(config.Height), AV_PIX_FMT_GRAY8} {}
+    , d_frameBuffer{int(config.Width), int(config.Height), AV_PIX_FMT_GRAY8}
+    , d_framerate{config.Framerate}
+    , d_size{config.Width, config.Height} {}
 
 MovieWriter::~MovieWriter() {}
 

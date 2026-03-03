@@ -46,18 +46,16 @@ void UniverseBridge::setUpExperiment() {
 	rebuildAll(d_experiment->Spaces());
 }
 
-
-std::map<quint32,QString> UniverseBridge::spaceNamesByID() const {
-	std::map<quint32,QString> res;
-	if ( !d_experiment == true ) {
+std::map<quint32, QString> UniverseBridge::spaceNamesByID() const {
+	std::map<quint32, QString> res;
+	if (!d_experiment == true) {
 		return res;
 	}
-	for ( const auto [spaceID,space] : d_experiment->Spaces() ) {
+	for (const auto &[spaceID, space] : d_experiment->Spaces()) {
 		res[spaceID] = space->Name().c_str();
 	}
 	return res;
 }
-
 
 QString UniverseBridge::basepath() const {
 	if ( !d_experiment ) {

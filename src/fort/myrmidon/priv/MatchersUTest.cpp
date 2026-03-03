@@ -317,7 +317,7 @@ TEST_F(MatchersUTest, AntDisplacement) {
 			d.M->SetUp(f);
 		}
 
-		for (const auto [IDs, expected] : d.Expected) {
+		for (const auto &[IDs, expected] : d.Expected) {
 			EXPECT_EQ(d.M->Match(IDs.first, IDs.second, {}), expected);
 		}
 	}

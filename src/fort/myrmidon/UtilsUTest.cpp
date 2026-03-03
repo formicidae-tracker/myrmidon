@@ -301,49 +301,52 @@ AssertAABBAlmostEqual(const char * aExpr,
 	                               b.max());
 }
 
+::testing::AssertionResult AssertSingleStatsEqual(
+    const char                          *aExpr,
+    const char                          *bExpr,
+    const fort::myrmidon::TagStatistics &a,
+    const fort::myrmidon::TagStatistics &b
+) {
+	if (a.ID != b.ID) {
+		return failure_helper(aExpr, bExpr, a, b, ID);
+	}
 
-::testing::AssertionResult
-AssertSingleStatsEqual(const char * aExpr,
-                       const char * bExpr,
-                       const fort::myrmidon::TagStatistics & a,
-                       const fort::myrmidon::TagStatistics & b) {
-		if ( a.ID != b.ID ) {
-			return failure_helper(aExpr,bExpr,a,b,ID);
+	auto intermediary = AssertTimeEqual(
+	    (std::string(aExpr) + ".FirstSeen").c_str(),
+	    (std::string(bExpr) + ".FirstSeen").c_str(),
+	    a.FirstSeen,
+	    b.FirstSeen
+	);
+	if (!intermediary) {
+		return intermediary;
+	}
+	intermediary = AssertTimeEqual(
+	    (std::string(aExpr) + ".LastSeen").c_str(),
+	    (std::string(bExpr) + ".LastSeen").c_str(),
+	    a.LastSeen,
+	    b.LastSeen
+	);
+	if (!intermediary) {
+		return intermediary;
+	}
+
+	if (a.Counts.rows() != b.Counts.rows()) {
+		return failure_helper(aExpr, bExpr, a, b, Counts.rows());
+	}
+
+	for (int i = 0; i < a.Counts.rows(); ++i) {
+		if (a.Counts(i) != b.Counts(i)) {
+			return ::testing::AssertionFailure()
+			       << "Value Of: " << aExpr << ".Counts" << std::endl
+			       << "  Actual: " << a.Counts.transpose() << std::endl
+			       << "Expected: " << bExpr << ".Counts" << std::endl
+			       << "Which is: " << b.Counts.transpose() << std::endl
+			       << "   Index: " << i;
 		}
+	}
 
-		auto intermediary = AssertTimeEqual((std::string(aExpr)+".FirstSeen").c_str(),
-		                                    (std::string(bExpr)+".FirstSeen").c_str(),
-		                                    a.FirstSeen,
-		                                    b.FirstSeen);
-		if ( !intermediary ) {
-			return intermediary;
-		}
-		intermediary = AssertTimeEqual((std::string(aExpr)+".LastSeen").c_str(),
-		                               (std::string(bExpr)+".LastSeen").c_str(),
-		                               a.LastSeen,
-		                               b.LastSeen);
-		if ( !intermediary ) {
-			return intermediary;
-		}
-
-		if ( a.Counts.rows() != b.Counts.rows() ) {
-			return failure_helper(aExpr,bExpr,a,b,Counts.rows());
-		}
-
-		for ( size_t i = 0; i < a.Counts.rows(); ++i) {
-			if ( a.Counts(i) != b.Counts(i) ) {
-				return ::testing::AssertionFailure() << "Value Of: " << aExpr << ".Counts" << std::endl
-				                                     << "  Actual: " << a.Counts.transpose() << std::endl
-				                                     << "Expected: " << bExpr << ".Counts" << std::endl
-				                                     << "Which is: " << b.Counts.transpose() << std::endl
-				                                     << "   Index: " << i;
-
-			}
-		}
-
-		return ::testing::AssertionSuccess();
+	return ::testing::AssertionSuccess();
 }
-
 
 ::testing::AssertionResult
 AssertTagStatisticsEqual(const char * aExpr,
@@ -370,52 +373,58 @@ AssertTagStatisticsEqual(const char * aExpr,
 	return ::testing::AssertionSuccess();
 }
 
-::testing::AssertionResult
-AssertIdentifiedFrameEqual(const char * aExpr,
-                           const char * bExpr,
-                           const fort::myrmidon::IdentifiedFrame & a,
-                           const fort::myrmidon::IdentifiedFrame & b) {
-	auto intermediary = AssertTimeEqual((std::string(aExpr)+".FrameTime").c_str(),
-	                                    (std::string(bExpr)+".FrameTime").c_str(),
-	                                    a.FrameTime,
-	                                    b.FrameTime);
-	if ( !intermediary ) {
+::testing::AssertionResult AssertIdentifiedFrameEqual(
+    const char                            *aExpr,
+    const char                            *bExpr,
+    const fort::myrmidon::IdentifiedFrame &a,
+    const fort::myrmidon::IdentifiedFrame &b
+) {
+	auto intermediary = AssertTimeEqual(
+	    (std::string(aExpr) + ".FrameTime").c_str(),
+	    (std::string(bExpr) + ".FrameTime").c_str(),
+	    a.FrameTime,
+	    b.FrameTime
+	);
+	if (!intermediary) {
 		return intermediary;
 	}
-	if ( a.Space != b.Space ) {
-		return failure_helper(aExpr,bExpr,a,b,Space);
+	if (a.Space != b.Space) {
+		return failure_helper(aExpr, bExpr, a, b, Space);
 	}
-	if ( a.Height != b.Height ) {
-		return failure_helper(aExpr,bExpr,a,b,Height);
-	}
-
-	if ( a.Width != b.Width ) {
-		return failure_helper(aExpr,bExpr,a,b,Width);
+	if (a.Height != b.Height) {
+		return failure_helper(aExpr, bExpr, a, b, Height);
 	}
 
-	if ( a.Positions.rows() != b.Positions.rows() ) {
-		return failure_helper(aExpr,bExpr,a,b,Positions.rows());
+	if (a.Width != b.Width) {
+		return failure_helper(aExpr, bExpr, a, b, Width);
 	}
 
-	for ( size_t i = 0; i < b.Positions.rows(); ++i ) {
-		fort::myrmidon::AntID antID = b.Positions(i,0);
-		size_t j = 0;
-		for ( ; j < a.Positions.rows(); ++j) {
-			if (a.Positions(j,0) == antID) {
+	if (a.Positions.rows() != b.Positions.rows()) {
+		return failure_helper(aExpr, bExpr, a, b, Positions.rows());
+	}
+
+	for (int i = 0; i < b.Positions.rows(); ++i) {
+		fort::myrmidon::AntID antID = b.Positions(i, 0);
+		int                   j     = 0;
+		for (; j < a.Positions.rows(); ++j) {
+			if (a.Positions(j, 0) == antID) {
 				break;
 			}
 		}
-		if ( j == a.Positions.rows() ) {
-			return ::testing::AssertionFailure() << "Could not find expected AntID " << antID << " in frame";
+		if (j == a.Positions.rows()) {
+			return ::testing::AssertionFailure()
+			       << "Could not find expected AntID " << antID << " in frame";
 		}
-		for ( const auto & c : {1,2,3,4}) {
-			if ( std::abs(a.Positions(j,c) - b.Positions(i,c)) > 1e-3 ) {
+		for (const auto &c : {1, 2, 3, 4}) {
+			if (std::abs(a.Positions(j, c) - b.Positions(i, c)) > 1e-3) {
 				return ::testing::AssertionFailure()
-					<< "Value of: " << aExpr << ".Positions(" << j << "," << c << ")" << std::endl
-					<< "  Actual: " << a.Positions(j,c) << std::endl
-					<< "  Within: " << 1e-3 << std::endl
-					<< "      of: " << bExpr << ".Positions(" << i << "," << c << ")" << std::endl
-					<< "Which is: " << b.Positions(j,c);
+				       << "Value of: " << aExpr << ".Positions(" << j << ","
+				       << c << ")" << std::endl
+				       << "  Actual: " << a.Positions(j, c) << std::endl
+				       << "  Within: " << 1e-3 << std::endl
+				       << "      of: " << bExpr << ".Positions(" << i << ","
+				       << c << ")" << std::endl
+				       << "Which is: " << b.Positions(j, c);
 			}
 		}
 	}
@@ -430,27 +439,27 @@ std::ostream & operator<<(std::ostream & out,
 	           << fort::myrmidon::FormatAntID(v.second);
 }
 
-::testing::AssertionResult
-AssertInteractionTypesEqual(const char * aExpr,
-                            const char * bExpr,
-                            const fort::myrmidon::InteractionTypes & a,
-                            const fort::myrmidon::InteractionTypes & b) {
-	if ( a.rows() != b.rows() ) {
-		return failure_helper(aExpr,bExpr,a,b,rows());
+::testing::AssertionResult AssertInteractionTypesEqual(
+    const char                             *aExpr,
+    const char                             *bExpr,
+    const fort::myrmidon::InteractionTypes &a,
+    const fort::myrmidon::InteractionTypes &b
+) {
+	if (a.rows() != b.rows()) {
+		return failure_helper(aExpr, bExpr, a, b, rows());
 	}
 
-	for ( size_t i = 0; i < b.rows(); ++i) {
-		size_t j = 0;
-		for ( ; j < a.rows(); ++j ) {
-			if ( b.row(i) == a.row(j) ) {
+	for (int i = 0; i < b.rows(); ++i) {
+		int j = 0;
+		for (; j < a.rows(); ++j) {
+			if (b.row(i) == a.row(j)) {
 				break;
 			}
 		}
-		if ( j == a.rows() ) {
+		if (j == a.rows()) {
 			return ::testing::AssertionFailure()
-				<< "Could not found InteractionType("
-				<< b(i,0) << "," << b(i,1) << ")"
-				<< " in " << aExpr;
+			       << "Could not found InteractionType(" << b(i, 0) << ","
+			       << b(i, 1) << ")" << " in " << aExpr;
 		}
 	}
 	return ::testing::AssertionSuccess();
@@ -547,8 +556,8 @@ AssertCollisionFrameEqual(const char * aExpr,
 	if (a.Positions.rows() != b.Positions.rows()) {
 		return failure_helper(aExpr, bExpr, a, b, Positions.rows());
 	}
-	for (size_t i = 0; i < b.Positions.rows(); ++i) {
-		for (size_t j = 0; j < b.Positions.cols(); ++j) {
+	for (int i = 0; i < b.Positions.rows(); ++i) {
+		for (int j = 0; j < b.Positions.cols(); ++j) {
 			if (std::abs(a.Positions(i, j) - b.Positions(i, j)) > 1.0e-3) {
 				return ::testing::AssertionFailure()
 				       << "Value of: " << aExpr << ".Positions(" << i << ","
@@ -641,7 +650,7 @@ AssertTrajectorySegmentEqual(const char * aExpr,
 	if (a.IDs != a.IDs) {
 		return failure_helper(aExpr, bExpr, a, b, IDs);
 	}
-	if (a.Space != a.Space) {
+	if (a.Space != b.Space) {
 		return failure_helper(aExpr, bExpr, a, b, Space);
 	}
 

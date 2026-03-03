@@ -260,12 +260,17 @@ protected:
 	DenseMap<AntID,Eigen::Vector3d>          d_positions;
 public:
 	virtual ~AntGeometryMatcher(){}
-	void SetUpOnce(const AntByID & ) override {}
-	void SetUp(const IdentifiedFrame & identifiedFrame) override {
+	void SetUpOnce(const AntByID &) override {}
+
+	void SetUp(const IdentifiedFrame &identifiedFrame) override {
 		d_positions.clear();
-		for ( size_t i = 0; i < identifiedFrame.Positions.rows(); ++i) {
-			d_positions.insert(std::make_pair(AntID(identifiedFrame.Positions(i,0)),
-			                                  identifiedFrame.Positions.block<1,3>(i,1)));
+		for (IdentifiedFrame::PositionMatrix::Index i = 0;
+		     i < identifiedFrame.Positions.rows();
+		     ++i) {
+			d_positions.insert(std::make_pair(
+			    AntID(identifiedFrame.Positions(i, 0)),
+			    identifiedFrame.Positions.block<1, 3>(i, 1)
+			));
 		}
 	}
 };
@@ -347,15 +352,18 @@ public:
 	void SetUpOnce(const AntByID & ants) override {
 	}
 
-	void SetUp(const IdentifiedFrame & identifiedFrame) override {
-	}
+	void SetUp(const IdentifiedFrame &identifiedFrame) override {}
 
-	uint64_t Match(fort::myrmidon::AntID ant1,
-	               fort::myrmidon::AntID ant2,
-	               const fort::myrmidon::InteractionTypes & types) override {
-		if (ant2 == 0) { return 1; }
-		for ( size_t i = 0; i < types.rows(); ++i ) {
-			if ( types.row(i) == Eigen::Matrix<uint32_t,1,2>(d_type,d_type) ) {
+	uint64_t Match(
+	    fort::myrmidon::AntID                   ant1,
+	    fort::myrmidon::AntID                   ant2,
+	    const fort::myrmidon::InteractionTypes &types
+	) override {
+		if (ant2 == 0) {
+			return 1;
+		}
+		for (int i = 0; i < types.rows(); ++i) {
+			if (types.row(i) == Eigen::Matrix<uint32_t, 1, 2>(d_type, d_type)) {
 				return 1;
 			}
 		}
@@ -386,16 +394,21 @@ public:
 	void SetUpOnce(const AntByID & ants) override {
 	}
 
-	void SetUp(const IdentifiedFrame & identifiedFrame) override {
-	}
+	void SetUp(const IdentifiedFrame &identifiedFrame) override {}
 
-	uint64_t Match(fort::myrmidon::AntID ant1,
-	               fort::myrmidon::AntID ant2,
-	               const fort::myrmidon::InteractionTypes & types) override {
-		if (ant2 == 0) { return 1; }
-		for ( size_t i = 0; i < types.rows(); ++i ) {
-			if ( types.row(i) == Eigen::Matrix<uint32_t,1,2>(d_type1,d_type2)
-			     || types.row(i) == Eigen::Matrix<uint32_t,1,2>(d_type2,d_type1)) {
+	uint64_t Match(
+	    fort::myrmidon::AntID                   ant1,
+	    fort::myrmidon::AntID                   ant2,
+	    const fort::myrmidon::InteractionTypes &types
+	) override {
+		if (ant2 == 0) {
+			return 1;
+		}
+		for (int i = 0; i < types.rows(); ++i) {
+			if (types.row(i) ==
+			        Eigen::Matrix<uint32_t, 1, 2>(d_type1, d_type2) ||
+			    types.row(i) ==
+			        Eigen::Matrix<uint32_t, 1, 2>(d_type2, d_type1)) {
 				return 1;
 			}
 		}
@@ -442,17 +455,19 @@ public :
 	}
 	virtual ~AntDisplacementMatcher() {}
 
-	void SetUpOnce(const AntByID & ants) override {
-	}
+	void SetUpOnce(const AntByID &ants) override {}
 
-	void SetUp(const IdentifiedFrame & identifiedFrame) override {
-		for ( size_t i = 0; i < identifiedFrame.Positions.rows(); ++i) {
-			AntID antID = identifiedFrame.Positions(i,0);
-			auto [fi,inserted] = d_displacements.insert(std::make_pair(antID,Displacement()));
-			fi->second.Update(identifiedFrame.Space,
-			                  identifiedFrame.FrameTime,
-			                  identifiedFrame.Positions.block<1,2>(i,1).transpose(),
-			                  d_minimumGap);
+	void SetUp(const IdentifiedFrame &identifiedFrame) override {
+		for (int i = 0; i < identifiedFrame.Positions.rows(); ++i) {
+			AntID antID = identifiedFrame.Positions(i, 0);
+			auto [fi, inserted] =
+			    d_displacements.insert(std::make_pair(antID, Displacement()));
+			fi->second.Update(
+			    identifiedFrame.Space,
+			    identifiedFrame.FrameTime,
+			    identifiedFrame.Positions.block<1, 2>(i, 1).transpose(),
+			    d_minimumGap
+			);
 		}
 	}
 
@@ -485,11 +500,10 @@ private:
 		Eigen::Vector2d Position;
 		SpaceID         Space;
 		fort::Time      At;
-		EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
+		EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
 		Displacement()
-			: Space(0) {
-		}
+		    : Space(0) {}
 
 		void Update(SpaceID spaceID,const fort::Time & time,const Eigen::Vector2d & position, Duration minimumGap) {
 			auto gap = time.Sub(At);

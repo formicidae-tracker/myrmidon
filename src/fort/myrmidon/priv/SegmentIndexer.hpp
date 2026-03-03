@@ -15,7 +15,7 @@ namespace priv {
 // with a frame ID and a starting Time. Each segment is considered to
 // finish when the next starts.
 //
-// <Insert> can be used to add a new segement to the index. \
+// <Insert> can be used to add a new segement to the index.
 //
 // <Find> can be used to retrieve a segment from any frame number or
 // <Time>

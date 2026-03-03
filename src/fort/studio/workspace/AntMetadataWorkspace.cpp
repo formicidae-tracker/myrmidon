@@ -25,52 +25,59 @@ void AntMetadataWorkspace::initialize(QMainWindow * main,ExperimentBridge * expe
 	initialize(experiment->antKeyValues());
 }
 
-void AntMetadataWorkspace::initialize(AntKeyValueBridge * bridge) {
+void AntMetadataWorkspace::initialize(AntKeyValueBridge *bridge) {
 	d_keyValues = bridge;
 
 	d_ui->keyTypeEditor->setup(bridge);
 
 	d_ui->dataView->setModel(bridge->dataModel());
-	d_ui->dataView->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+	d_ui->dataView->header()->setSectionResizeMode(QHeaderView::ResizeToContents
+	);
 	d_ui->dataView->setSelectionMode(QAbstractItemView::SingleSelection);
 
-	connect(d_ui->dataView->selectionModel(),
-	        &QItemSelectionModel::selectionChanged,
-	        this,&AntMetadataWorkspace::onSelectionChanged);
+	connect(
+	    d_ui->dataView->selectionModel(),
+	    &QItemSelectionModel::selectionChanged,
+	    this,
+	    &AntMetadataWorkspace::onSelectionChanged
+	);
 
-	connect(d_ui->addButton,
-	        &QToolButton::clicked,
-	        this,
-	        &AntMetadataWorkspace::onAddButtonClicked);
+	connect(
+	    d_ui->addButton,
+	    &QToolButton::clicked,
+	    this,
+	    &AntMetadataWorkspace::onAddButtonClicked
+	);
 
-	connect(d_ui->removeButton,
-	        &QToolButton::clicked,
-	        this,
-	        &AntMetadataWorkspace::onRemoveButtonClicked);
+	connect(
+	    d_ui->removeButton,
+	    &QToolButton::clicked,
+	    this,
+	    &AntMetadataWorkspace::onRemoveButtonClicked
+	);
 
-	connect(bridge->dataModel(),
-	        &QAbstractItemModel::rowsInserted,
-	        [this](const QModelIndex & parent, int first, int last ) {
-		        if ( parent.isValid() == true ) {
-			        return;
-		        }
-		        for ( ; first <= last; ++first ) {
-			        d_ui->dataView->expand(d_keyValues->dataModel()->index(first,0));
-		        }
-	        });
+	connect(
+	    bridge->dataModel(),
+	    &QAbstractItemModel::rowsInserted,
+	    [this](const QModelIndex &parent, int first, int last) {
+		    if (parent.isValid() == true) {
+			    return;
+		    }
+		    for (; first <= last; ++first) {
+			    d_ui->dataView->expand(d_keyValues->dataModel()->index(first, 0)
+			    );
+		    }
+	    }
+	);
 
-	connect(bridge->dataModel(),
-	        &QAbstractItemModel::modelReset,
-	        [this]() {
-		        auto model = d_keyValues->dataModel();
-		        for ( size_t i = 0;i < model->rowCount(); ++i ) {
-			        d_ui->dataView->expand(model->index(i,0));
-		        }
-	        });
+	connect(bridge->dataModel(), &QAbstractItemModel::modelReset, [this]() {
+		auto model = d_keyValues->dataModel();
+		for (int i = 0; i < model->rowCount(); ++i) {
+			d_ui->dataView->expand(model->index(i, 0));
+		}
+	});
 	onSelectionChanged();
 }
-
-
 
 void AntMetadataWorkspace::onAddButtonClicked() {
 	auto index = d_ui->dataView->selectionModel()->selectedRows().front();

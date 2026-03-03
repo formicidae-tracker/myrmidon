@@ -26,8 +26,8 @@ class TrackingVideoPlayer : public QObject {
 	               playbackRateChanged)
 	Q_PROPERTY(State playbackState READ playbackState NOTIFY
 	               playbackStateChanged)
-	Q_PROPERTY(fort::Duration position READ position NOTIFY positionChanged);
-	Q_PROPERTY(bool scrollMode READ scrollMode WRITE setScrollMode);
+	Q_PROPERTY(fort::Duration position READ position NOTIFY positionChanged)
+	Q_PROPERTY(bool scrollMode READ scrollMode WRITE setScrollMode)
 
 public:
 	enum class State {

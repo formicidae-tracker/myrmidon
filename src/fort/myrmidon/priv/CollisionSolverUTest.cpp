@@ -171,7 +171,7 @@ void CollisionSolverUTest::SetUpTestSuite() {
 
 CollisionFrame::Ptr CollisionSolverUTest::NaiveCollisions() {
 	std::unordered_map<ZoneID, std::vector<PositionedAntConstRef>> locatedAnt;
-	for (size_t i = 0; i < frame->Positions.rows(); ++i) {
+	for (int i = 0; i < frame->Positions.rows(); ++i) {
 		bool found = false;
 		for (const auto &[zID, zone] : universe->Spaces().at(1)->Zones()) {
 			if (ZoneGeometry(zone->AtTime(Time()))
@@ -261,9 +261,9 @@ TEST_F(CollisionSolverUTest, TestE2E) {
 			continue;
 		}
 
-		for (size_t i = 0; i < inter.Types.rows(); ++i) {
+		for (int i = 0; i < inter.Types.rows(); ++i) {
 			bool good = false;
-			for (size_t j = 0; j < fi->Types.rows(); ++j) {
+			for (int j = 0; j < fi->Types.rows(); ++j) {
 				if (inter.Types.row(i) == fi->Types.row(j)) {
 					good = true;
 					break;

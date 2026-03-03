@@ -116,7 +116,6 @@ void AntZoner::LocateAnts(
 	if (ants.cols() <= 4) {
 		return;
 	}
-	size_t zoneDepth = ants.cols() - 4;
 	switch (priority) {
 	case ZonePriority::PREDECENCE_LOWER:
 		locateAntsLower(ants);
@@ -129,7 +128,7 @@ void AntZoner::LocateAnts(
 
 void AntZoner::locateAntsLower(IdentifiedFrame::PositionMatrix &ants) const {
 	size_t zoneDepth = ants.cols() - 4;
-	for (size_t i = 0; i < ants.rows(); ++i) {
+	for (int i = 0; i < ants.rows(); ++i) {
 		size_t matched{0};
 		for (auto iter = d_zoneGeometries.begin();
 		     iter != d_zoneGeometries.end();
@@ -148,7 +147,7 @@ void AntZoner::locateAntsLower(IdentifiedFrame::PositionMatrix &ants) const {
 
 void AntZoner::locateAntsHigher(IdentifiedFrame::PositionMatrix &ants) const {
 	size_t zoneDepth = ants.cols() - 4;
-	for (size_t i = 0; i < ants.rows(); ++i) {
+	for (int i = 0; i < ants.rows(); ++i) {
 		size_t matched{0};
 		for (auto iter = d_zoneGeometries.rbegin();
 		     iter != d_zoneGeometries.rend();
@@ -171,7 +170,7 @@ void CollisionSolver::LocateAnts(
 
 	size_t zoneDepth = frame.Positions.cols() - 4;
 	// now for each geometry. we test if the ants is in the zone
-	for (size_t i = 0; i < frame.Positions.rows(); ++i) {
+	for (int i = 0; i < frame.Positions.rows(); ++i) {
 		size_t islandIndex = 0;
 		if (d_ignoreZones == false && zoneDepth > 0) {
 			islandIndex = frame.Positions(i, 4);

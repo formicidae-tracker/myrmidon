@@ -11,8 +11,8 @@ class LoggerWidget;
 
 class Logger : public QObject {
 	Q_OBJECT
-	Q_PROPERTY(int warningCount READ warningCount NOTIFY warningCountChanged);
-	Q_PROPERTY(int errorCount READ errorCount NOTIFY errorCountChanged);
+	Q_PROPERTY(int warningCount READ warningCount NOTIFY warningCountChanged)
+	Q_PROPERTY(int errorCount READ errorCount NOTIFY errorCountChanged)
 
 public:
 	explicit Logger(QObject *parent);

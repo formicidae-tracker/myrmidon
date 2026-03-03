@@ -320,7 +320,7 @@ TEST_F(IOUtilsUTest, ShapeIO) {
 	    )),
 	};
 
-	for (const auto dS : shapes) {
+	for (const auto &dS : shapes) {
 		pb::Shape s;
 		IOUtils::SaveShape(&s, *dS);
 		size_t i = 0;
@@ -671,7 +671,7 @@ TEST_F(IOUtilsUTest, ExperimentIO) {
 	    e->AntMetadataPtr()->Keys().size(),
 	    res->AntMetadataPtr()->Keys().size()
 	);
-	for (const auto [name, key] : e->AntMetadataPtr()->Keys()) {
+	for (const auto &[name, key] : e->AntMetadataPtr()->Keys()) {
 		auto ci = res->AntMetadataPtr()->Keys().find(name);
 		if (ci == res->AntMetadataPtr()->Keys().cend()) {
 			ADD_FAILURE() << "missing meta data key '" << name << "'";
@@ -820,7 +820,7 @@ TEST_F(IOUtilsUTest, TrackingIndexIO) {
 	}
 
 	ASSERT_EQ(pbRes.size(), expected.size());
-	for (size_t i = 0; i < pbRes.size(); ++i) {
+	for (int i = 0; i < pbRes.size(); ++i) {
 		EXPECT_MESSAGE_EQ(pbRes.Get(i), expected.Get(i));
 	}
 	for (const auto &pb : pbRes) {
@@ -845,12 +845,6 @@ TEST_F(IOUtilsUTest, TrackingIndexIO) {
 TEST_F(IOUtilsUTest, MovieSegmentIO) {
 	MovieSegment::Ptr      ms;
 	MovieSegment::ConstPtr res;
-	Time::MonoclockID      monoID(42);
-	Time                   startTime = Time::FromTimestampAndMonotonic(
-        Time::FromTimeT(1).ToTimestamp(),
-        123456789,
-        monoID
-    );
 
 	fort::myrmidon::pb::MovieSegment expected, pbRes;
 	MovieSegment::ListOfOffset       offsets;

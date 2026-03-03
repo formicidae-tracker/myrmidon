@@ -27,20 +27,11 @@ class Shape;
 
 class VectorialScene : public QGraphicsScene {
 	Q_OBJECT
-	Q_PROPERTY(QColor color
-	           READ color
-	           WRITE setColor
-	           NOTIFY colorChanged)
-	Q_PROPERTY(Mode mode
-	           READ mode
-	           WRITE setMode
-	           NOTIFY modeChanged)
-	Q_PROPERTY(bool once
-	           READ once
-	           WRITE setOnce
-	           NOTIFY onceChanged);
+	Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
+	Q_PROPERTY(Mode mode READ mode WRITE setMode NOTIFY modeChanged)
+	Q_PROPERTY(bool once READ once WRITE setOnce NOTIFY onceChanged)
 public:
-	explicit VectorialScene(QObject * parent = nullptr);
+	explicit VectorialScene(QObject *parent = nullptr);
 	virtual ~VectorialScene();
 
 	enum class Mode {

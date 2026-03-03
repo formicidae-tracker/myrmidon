@@ -9,18 +9,17 @@ namespace fort {
 namespace myrmidon {
 namespace priv {
 
-
-Identification::Identification(TagID tagValue,
-                               const IdentifierPtr & identifier,
-                               const AntPtr & target)
-	: d_antToTag(0.0,Eigen::Vector2d::Zero())
-	, d_tagValue(tagValue)
-	, d_target(target)
-	, d_identifier(identifier)
-	, d_tagSize(myrmidon::Identification::DEFAULT_TAG_SIZE)
-	, d_userDefinedPose(false) {
+Identification::Identification(
+    TagID tagValue, const IdentifierPtr &identifier, const AntPtr &target
+)
+    : d_antToTag(0.0, Eigen::Vector2d::Zero())
+    , d_tagValue(tagValue)
+    , d_tagSize(myrmidon::Identification::DEFAULT_TAG_SIZE)
+    , d_target(target)
+    , d_identifier(identifier)
+    , d_userDefinedPose(false) {
 	d_start = Time::SinceEver();
-	d_end = Time::Forever();
+	d_end   = Time::Forever();
 }
 
 const Time & Identification::Start() const {

@@ -1,5 +1,6 @@
 #include "BindTypes.hpp"
 
+#include <cstdint>
 #include <fort/myrmidon/Video.hpp>
 #include <ios>
 #include <sstream>
@@ -134,37 +135,48 @@ public:
 	}
 
 	py::tuple Next() {
-		if ( d_segmentIter == d_segmentEnd ) {
+		if (d_segmentIter == d_segmentEnd) {
 			throw pybind11::stop_iteration();
 		}
-		if ( d_moviePos >= int(d_segmentIter->End) ) {
+		if (d_moviePos >= int(d_segmentIter->End)) {
 			IncrementSegment();
 			return Next();
 		}
 
-		if ( d_capture.is_none() == true ) {
-			d_capture = d_cv2.attr("VideoCapture")("filename"_a = d_segmentIter->AbsoluteFilePath);
-			d_capture.attr("set")(d_cv2.attr("CAP_PROP_POS_FRAMES"),d_segmentIter->Begin);
+		if (d_capture.is_none() == true) {
+			d_capture = d_cv2.attr("VideoCapture")(
+			    "filename"_a = d_segmentIter->AbsoluteFilePath
+			);
+			d_capture.attr("set")(
+			    d_cv2.attr("CAP_PROP_POS_FRAMES"),
+			    d_segmentIter->Begin
+			);
 			d_moviePos = d_segmentIter->Begin - 1;
 			d_dataIter = d_segmentIter->Data.begin();
 		}
 		py::tuple readVal = d_capture.attr("read")();
 		d_moviePos++;
-		if ( readVal[0].cast<bool>() == false ) {
+		if (readVal[0].cast<bool>() == false) {
 			IncrementSegment();
 			return Next();
 		}
 
-		while(d_dataIter != d_segmentIter->Data.end() && d_dataIter->Position < d_moviePos) {
+		while (d_dataIter != d_segmentIter->Data.end() &&
+		       d_dataIter->Position < uint32_t(d_moviePos)) {
 			++d_dataIter;
 		}
 
-		if ( d_dataIter != d_segmentIter->Data.end() && d_dataIter->Position == d_moviePos) {
-			return py::make_tuple(readVal[1],*d_dataIter);
+		if (d_dataIter != d_segmentIter->Data.end() &&
+		    d_dataIter->Position == uint32_t(d_moviePos)) {
+			return py::make_tuple(readVal[1], *d_dataIter);
 		} else {
-			return py::make_tuple(readVal[1],
-			                      fort::myrmidon::VideoFrameData{.Position = uint32_t(d_moviePos),
-				                                                     .Time = fort::Time::SinceEver()});
+			return py::make_tuple(
+			    readVal[1],
+			    fort::myrmidon::VideoFrameData{
+			        .Position = uint32_t(d_moviePos),
+			        .Time     = fort::Time::SinceEver()
+			    }
+			);
 		}
 	}
 

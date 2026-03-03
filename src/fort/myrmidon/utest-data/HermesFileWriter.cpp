@@ -106,7 +106,7 @@ void HermesFileWriter::FillReadout(
 	identified.FrameTime.ToTimestamp(ro->mutable_time());
 	ro->set_frameid(frameID);
 	ro->set_quads(identified.Positions.rows());
-	for (size_t i = 0; i < identified.Positions.rows(); ++i) {
+	for (int i = 0; i < identified.Positions.rows(); ++i) {
 		AntID  antID = identified.Positions(i, 0);
 		auto   t     = ro->add_tags();
 		double x, y, angle;

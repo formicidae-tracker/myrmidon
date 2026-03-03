@@ -18,10 +18,10 @@ TrackingVideoWidget::TrackingVideoWidget(QWidget *parent)
     , d_hideLoadingBanner(true)
     , d_showID(false)
     , d_showCollisions(false)
+    , d_hasTrackingTime(false)
     , d_focusedAntID(0)
     , d_zoom(1.0)
     , d_lastFocus(0, 0)
-    , d_hasTrackingTime(false)
     , d_opacity(150) {}
 
 TrackingVideoWidget::~TrackingVideoWidget() {}
@@ -145,7 +145,7 @@ void TrackingVideoWidget::paintCollisions(
 		return;
 	}
 	fmp::DenseMap<quint32, size_t> positionIndex;
-	for (size_t i = 0; i < tFrame->Positions.rows(); ++i) {
+	for (int i = 0; i < tFrame->Positions.rows(); ++i) {
 		fm::AntID antID = tFrame->Positions(i, 0);
 		positionIndex.insert(std::make_pair(antID, i));
 	}
@@ -201,7 +201,7 @@ void TrackingVideoWidget::paintAnts(
 	painter->setFont(font);
 	auto metrics = QFontMetrics(font);
 
-	for (size_t i = 0; i < tFrame->Positions.rows(); ++i) {
+	for (int i = 0; i < tFrame->Positions.rows(); ++i) {
 		fm::AntID antID    = tFrame->Positions(i, 0);
 		auto      position = tFrame->Positions.block<1, 2>(i, 1).transpose();
 		auto      angle    = tFrame->Positions(i, 3);
@@ -342,7 +342,7 @@ void TrackingVideoWidget::focusAnt(quint32 antID, bool reset) {
 		return;
 	}
 
-	for (size_t i = 0; i < d_frame.TrackingFrame->Positions.rows(); ++i) {
+	for (int i = 0; i < d_frame.TrackingFrame->Positions.rows(); ++i) {
 		const auto &[ID, position, zone] = d_frame.TrackingFrame->At(i);
 		if (ID == antID) {
 			double ratio = double(d_frame.Data->Size.Height) /

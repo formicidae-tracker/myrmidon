@@ -171,18 +171,20 @@ TEST_F(AntKeyValueUTest,KeyModel) {
 
 }
 
-void TestChild(const QAbstractItemModel * model,
-               const QModelIndex & parent,
-               const std::function<void (const QModelIndex & index, int row)> & test) {
-	for ( size_t i = 0; i < model->rowCount(parent); ++i ) {
-		auto index = model->index(i,0,parent);
-		SCOPED_TRACE(ToStdString(index.data(Qt::DisplayRole).toString())
-		             + " at "
-		             + std::to_string(i));
-		test(index,i);
+void TestChild(
+    const QAbstractItemModel                                     *model,
+    const QModelIndex                                            &parent,
+    const std::function<void(const QModelIndex &index, int row)> &test
+) {
+	for (int i = 0; i < model->rowCount(parent); ++i) {
+		auto index = model->index(i, 0, parent);
+		SCOPED_TRACE(
+		    ToStdString(index.data(Qt::DisplayRole).toString()) + " at " +
+		    std::to_string(i)
+		);
+		test(index, i);
 	}
 }
-
 
 TEST_F(AntKeyValueUTest,DataModel) {
 	auto m = bridge->dataModel();

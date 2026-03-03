@@ -127,9 +127,7 @@ private:
 	double d_angle;
 	Eigen::Matrix<T,2,1> d_translation;
 	 enum { NeedsToAlign = (sizeof(Eigen::Matrix<T,2,1>)%16)==0 };
-	EIGEN_MAKE_ALIGNED_OPERATOR_NEW_IF(NeedsToAlign);
-
-
+	 EIGEN_MAKE_ALIGNED_OPERATOR_NEW_IF(NeedsToAlign)
 };
 
 // An alias for <Isometry2D<double>>

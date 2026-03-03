@@ -74,58 +74,88 @@ void ZoningWorkspace::setUpUI() {
 }
 
 ZoningWorkspace::ZoningWorkspace(QWidget *parent)
-	: Workspace(false,parent)
-	, d_ui(new Ui::ZoningWorkspace)
-	, d_zones(nullptr)
-	, d_vectorialScene(new VectorialScene(this))
-	, d_copyAction(nullptr) {
+    : Workspace(false, parent)
+    , d_ui(new Ui::ZoningWorkspace)
+    , d_zones(nullptr)
+    , d_copyAction(nullptr)
+    , d_vectorialScene(new VectorialScene(this)) {
 	setUpUI();
 	d_ui->setupUi(this);
 
-
 	d_ui->vectorialView->setScene(d_vectorialScene);
-	d_ui->vectorialView->setRenderHint(QPainter::Antialiasing,true);
-    connect(d_ui->vectorialView,
-            &VectorialView::zoomed,
-            d_vectorialScene,
-            &VectorialScene::onZoomed);
+	d_ui->vectorialView->setRenderHint(QPainter::Antialiasing, true);
+	connect(
+	    d_ui->vectorialView,
+	    &VectorialView::zoomed,
+	    d_vectorialScene,
+	    &VectorialScene::onZoomed
+	);
 
+	d_editAction->setCheckable(true);
+	connect(d_editAction, &QAction::triggered, this, [this]() {
+		setSceneMode(VectorialScene::Mode::Edit);
+	});
+	d_polygonAction->setCheckable(true);
+	connect(d_polygonAction, &QAction::triggered, this, [this]() {
+		setSceneMode(VectorialScene::Mode::InsertPolygon);
+	});
+	d_circleAction->setCheckable(true);
+	connect(d_circleAction, &QAction::triggered, this, [this]() {
+		setSceneMode(VectorialScene::Mode::InsertCircle);
+	});
+	d_capsuleAction->setCheckable(true);
+	connect(d_capsuleAction, &QAction::triggered, this, [this]() {
+		setSceneMode(VectorialScene::Mode::InsertCapsule);
+	});
 
-    d_editAction->setCheckable(true);
-    connect(d_editAction,&QAction::triggered,
-            this,[this](){ setSceneMode(VectorialScene::Mode::Edit); });
-    d_polygonAction->setCheckable(true);
-    connect(d_polygonAction,&QAction::triggered,
-            this,[this](){ setSceneMode(VectorialScene::Mode::InsertPolygon); });
-    d_circleAction->setCheckable(true);
-    connect(d_circleAction,&QAction::triggered,
-            this,[this](){ setSceneMode(VectorialScene::Mode::InsertCircle); });
-    d_capsuleAction->setCheckable(true);
-    connect(d_capsuleAction,&QAction::triggered,
-            this,[this](){ setSceneMode(VectorialScene::Mode::InsertCapsule); });
+	d_editAction->setChecked(true);
+	connect(
+	    d_vectorialScene,
+	    &VectorialScene::modeChanged,
+	    this,
+	    &ZoningWorkspace::onSceneModeChanged
+	);
 
-    d_editAction->setChecked(Qt::Checked);
-    connect(d_vectorialScene,&VectorialScene::modeChanged,
-            this,&ZoningWorkspace::onSceneModeChanged);
+	connect(
+	    d_vectorialScene,
+	    &VectorialScene::polygonCreated,
+	    this,
+	    &ZoningWorkspace::onShapeCreated
+	);
+	connect(
+	    d_vectorialScene,
+	    &VectorialScene::polygonRemoved,
+	    this,
+	    &ZoningWorkspace::onShapeRemoved
+	);
 
-    connect(d_vectorialScene,&VectorialScene::polygonCreated,
-            this,&ZoningWorkspace::onShapeCreated);
-    connect(d_vectorialScene,&VectorialScene::polygonRemoved,
-            this,&ZoningWorkspace::onShapeRemoved);
+	connect(
+	    d_vectorialScene,
+	    &VectorialScene::circleCreated,
+	    this,
+	    &ZoningWorkspace::onShapeCreated
+	);
+	connect(
+	    d_vectorialScene,
+	    &VectorialScene::circleRemoved,
+	    this,
+	    &ZoningWorkspace::onShapeRemoved
+	);
 
-    connect(d_vectorialScene,&VectorialScene::circleCreated,
-            this,&ZoningWorkspace::onShapeCreated);
-    connect(d_vectorialScene,&VectorialScene::circleRemoved,
-            this,&ZoningWorkspace::onShapeRemoved);
-
-    connect(d_vectorialScene,&VectorialScene::capsuleCreated,
-            this,&ZoningWorkspace::onShapeCreated);
-    connect(d_vectorialScene,&VectorialScene::capsuleRemoved,
-            this,&ZoningWorkspace::onShapeRemoved);
+	connect(
+	    d_vectorialScene,
+	    &VectorialScene::capsuleCreated,
+	    this,
+	    &ZoningWorkspace::onShapeCreated
+	);
+	connect(
+	    d_vectorialScene,
+	    &VectorialScene::capsuleRemoved,
+	    this,
+	    &ZoningWorkspace::onShapeRemoved
+	);
 
 	setUpFullFrameLabels(nullptr);
-
-
 }
 
 ZoningWorkspace::~ZoningWorkspace() {
@@ -439,30 +469,28 @@ fm::ZoneID ZoningWorkspace::currentZoneID() const {
 	return d_comboBox->currentData().toInt();
 }
 
-
 void ZoningWorkspace::onSceneModeChanged(VectorialScene::Mode mode) {
 	d_editAction->setChecked(Qt::Unchecked);
 	d_polygonAction->setChecked(Qt::Unchecked);
 	d_circleAction->setChecked(Qt::Unchecked);
 	d_capsuleAction->setChecked(Qt::Unchecked);
-	switch(mode) {
+	switch (mode) {
 	case VectorialScene::Mode::Edit:
-		d_editAction->setChecked(Qt::Checked);
+		d_editAction->setChecked(true);
 		break;
 	case VectorialScene::Mode::InsertPolygon:
-		d_polygonAction->setChecked(Qt::Checked);
+		d_polygonAction->setChecked(true);
 		break;
 	case VectorialScene::Mode::InsertCircle:
-		d_circleAction->setChecked(Qt::Checked);
+		d_circleAction->setChecked(true);
 		break;
 	case VectorialScene::Mode::InsertCapsule:
-		d_capsuleAction->setChecked(Qt::Checked);
+		d_capsuleAction->setChecked(true);
 		break;
 	default:
 		break;
 	}
 }
-
 
 void ZoningWorkspace::onComboBoxCurrentIndexChanged(int) {
 	auto zoneID = currentZoneID();

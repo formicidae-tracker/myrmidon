@@ -17,33 +17,36 @@ class DenseMapUTest : public::testing::Test {};
 typedef DenseMap<uint32_t,uint32_t> DM;
 typedef DenseMap<uint32_t,std::shared_ptr<uint32_t>> DMOfPtr;
 
-TEST_F(DenseMapUTest,TestInsertion) {
+TEST_F(DenseMapUTest, TestInsertion) {
 	DM map;
-	EXPECT_THROW({
-			// could not insert object 0
-			auto res = map.insert(std::make_pair(0,0));
-		},cpptrace::invalid_argument);
+	EXPECT_THROW(
+	    {
+		    // could not insert object 0
+		    map.insert(std::make_pair(0, 0));
+	    },
+	    cpptrace::invalid_argument
+	);
 
-	auto res = map.insert(std::make_pair(1,0));
+	auto res = map.insert(std::make_pair(1, 0));
 	EXPECT_TRUE(res.second);
-	EXPECT_EQ(res.first->first,1);
-	EXPECT_EQ(res.first->second,0);
-	EXPECT_EQ((*res.first).first,1);
-	EXPECT_EQ((*res.first).second,0);
+	EXPECT_EQ(res.first->first, 1);
+	EXPECT_EQ(res.first->second, 0);
+	EXPECT_EQ((*res.first).first, 1);
+	EXPECT_EQ((*res.first).second, 0);
 
-	res = map.insert(std::make_pair(1,100));
+	res = map.insert(std::make_pair(1, 100));
 	EXPECT_FALSE(res.second);
-	EXPECT_EQ(res.first->first,1);
-	EXPECT_EQ(res.first->second,0);
-	EXPECT_EQ((*res.first).first,1);
-	EXPECT_EQ((*res.first).second,0);
+	EXPECT_EQ(res.first->first, 1);
+	EXPECT_EQ(res.first->second, 0);
+	EXPECT_EQ((*res.first).first, 1);
+	EXPECT_EQ((*res.first).second, 0);
 
-	res = map.insert(std::make_pair(10,100));
+	res = map.insert(std::make_pair(10, 100));
 	EXPECT_TRUE(res.second);
-	EXPECT_EQ(res.first->first,10);
-	EXPECT_EQ(res.first->second,100);
-	EXPECT_EQ((*res.first).first,10);
-	EXPECT_EQ((*res.first).second,100);
+	EXPECT_EQ(res.first->first, 10);
+	EXPECT_EQ(res.first->second, 100);
+	EXPECT_EQ((*res.first).first, 10);
+	EXPECT_EQ((*res.first).second, 100);
 }
 
 TEST_F(DenseMapUTest,IterationAndErase) {

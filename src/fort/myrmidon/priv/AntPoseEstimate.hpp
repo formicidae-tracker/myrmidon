@@ -38,34 +38,36 @@ public :
 	Eigen::Vector2d PositionFromTag() const;
 	double AngleFromTag() const;
 
-	TagID  TargetTagID() const;
+	TagID TargetTagID() const;
 
 	template <typename iterator_type>
-	static void ComputeMeanPose(Eigen::Vector2d & position,
-	                            double & angle,
-	                            iterator_type begin,
-	                            iterator_type end) {
+	static void ComputeMeanPose(
+	    Eigen::Vector2d &position,
+	    double          &angle,
+	    iterator_type    begin,
+	    iterator_type    end
+	) {
 		position.setZero();
 		angle = 0.0;
 		double sinAngle(0.0), cosAngle(0.0);
 		size_t s = 0;
-		for( auto iter = begin; iter != end; ++iter) {
+		for (auto iter = begin; iter != end; ++iter) {
 			++s;
 			position += (*iter)->PositionFromTag();
 			sinAngle += std::sin((*iter)->AngleFromTag());
 			cosAngle += std::cos((*iter)->AngleFromTag());
 		}
-		if ( s == 0 ) {
+		if (s == 0) {
 			return;
 		}
 		position /= s;
 		sinAngle /= s;
 		cosAngle /= s;
-		angle =  std::atan2(sinAngle,cosAngle);
-	};
+		angle = std::atan2(sinAngle, cosAngle);
+	}
 
 private:
-	double         d_x,d_y,d_angle;
+	double         d_x, d_y, d_angle;
 	FrameReference d_reference;
 	TagID          d_tid;
 	std::string    d_URI;

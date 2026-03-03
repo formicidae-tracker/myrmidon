@@ -287,7 +287,6 @@ void TrackingDataDirectory::BuildFrameReferenceCache(
 
 			fort::hermes::FileContext  fc(AbsoluteFilePath, false);
 			fort::hermes::FrameReadout ro;
-			bool                       first      = true;
 			FrameID                    curFrameID = 0;
 			for (auto iter = ToFind.begin(); iter != ToFind.end();) {
 				try {
@@ -1246,7 +1245,7 @@ public:
 		}
 		d_tdd->d_tagCloseUps =
 		    std::make_shared<std::vector<TagCloseUp::ConstPtr>>();
-		for (const auto tcus : d_closeUps) {
+		for (const auto &tcus : d_closeUps) {
 			d_tdd->d_tagCloseUps
 			    ->insert(d_tdd->d_tagCloseUps->end(), tcus.begin(), tcus.end());
 		}
@@ -1293,7 +1292,7 @@ private:
 
 		std::tuple<std::vector<TagCloseUp::ConstPtr>, FixableError::Ptr> Detect(
 		    const TrackingDataDirectory::TagCloseUpFileAndFilter &fileAndFilter,
-		    const FrameReference		                         &reference
+		    const FrameReference                                 &reference
 		) {
 
 			std::vector<TagCloseUp::ConstPtr> res;
@@ -1321,9 +1320,10 @@ private:
 				apriltag_detections_destroy(detections);
 			};
 			apriltag_detection *d;
-			for (size_t i = 0; i < zarray_size(detections); ++i) {
+			for (int i = 0; i < zarray_size(detections); ++i) {
 				zarray_get(detections, i, &d);
-				if (fileAndFilter.second && d->id != *fileAndFilter.second) {
+				if (fileAndFilter.second &&
+				    (unsigned int)(d->id) != *fileAndFilter.second) {
 					continue;
 				}
 				res.push_back(std::make_shared<TagCloseUp>(
@@ -1343,7 +1343,8 @@ private:
 				    std::make_unique<NoKnownAcquisitionTimeFor>(
 				        oss.str(),
 				        fileAndFilter.first
-				    )};
+				    )
+				};
 			}
 
 			return {res, nullptr};

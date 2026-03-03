@@ -200,15 +200,14 @@ void TrackingVideoControl::on_comboBox_currentIndexChanged(int index) {
 }
 
 void TrackingVideoControl::onPlayerPlaybackRateChanged(qreal rate) {
-	for( size_t i = 0 ; i < d_ui->comboBox->count(); ++i ) {
-		if ( d_ui->comboBox->itemData(i).toDouble() == rate ) {
+	for (int i = 0; i < d_ui->comboBox->count(); ++i) {
+		if (d_ui->comboBox->itemData(i).toDouble() == rate) {
 			d_ui->comboBox->setCurrentIndex(i);
 			return;
 		}
 	}
 	d_ui->comboBox->setCurrentIndex(-1);
 }
-
 
 void TrackingVideoControl::onAntSelection(quint32  antID) {
 	if ( antID == 0 ) {

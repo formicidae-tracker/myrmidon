@@ -173,124 +173,123 @@ TEST_F(IdentifierUTest,CanIdentifyAntByTag) {
 	idents = i->IdentificationsAt(start,false);
 	EXPECT_EQ(idents.size(),1);
 	EXPECT_EQ(idents[1],123);
-
 }
 
-
-TEST_F(IdentifierUTest,Compilation) {
-	std::random_device r;
+TEST_F(IdentifierUTest, Compilation) {
+	std::random_device         r;
 	// Choose a random mean between 1 and 6
-    std::default_random_engine e1(r());
+	std::default_random_engine e1(r());
 
-    std::uniform_int_distribution<uint32_t> duration(0, 600000);
-    std::uniform_real_distribution<double> uniform(0, 1.0);
-    auto identifier = Identifier::Create();
-    auto shapeTypes = std::make_shared<AntShapeTypeContainer>();
-    auto metadata = std::make_shared<AntMetadata>();
-	std::set<Time> times;
+	std::uniform_int_distribution<uint32_t> duration(0, 600000);
+	std::uniform_real_distribution<double>  uniform(0, 1.0);
+	auto                                    identifier = Identifier::Create();
+	auto            shapeTypes = std::make_shared<AntShapeTypeContainer>();
+	auto            metadata   = std::make_shared<AntMetadata>();
+	std::set<Time>  times;
 	std::set<TagID> tags;
-	const size_t NB_ANTS = 100;
-	for ( size_t i = 0; i < NB_ANTS; ++i) {
-		auto a = identifier->CreateAnt(shapeTypes,
-		                               metadata);
+	const size_t    NB_ANTS = 100;
+	for (size_t i = 0; i < NB_ANTS; ++i) {
+		auto           a = identifier->CreateAnt(shapeTypes, metadata);
 		std::set<Time> antTimes;
 
-		while( uniform(e1) < 0.8 ) {
-			antTimes.insert(Time::FromTimeT(0).Add(duration(e1) * Duration::Millisecond));
+		while (uniform(e1) < 0.8) {
+			antTimes.insert(
+			    Time::FromTimeT(0).Add(duration(e1) * Duration::Millisecond)
+			);
 		}
 		Time lastTime = Time::SinceEver();
 
-		for ( const auto & t : antTimes ) {
+		for (const auto &t : antTimes) {
 			times.insert(t);
 			auto tagID = NB_ANTS * a->Identifications().size() + i;
 			tags.insert(tagID);
-			Identifier::AddIdentification(identifier,
-			                              a->AntID(),tagID,
-			                              lastTime,
-			                              t);
+			Identifier::AddIdentification(
+			    identifier,
+			    a->AntID(),
+			    tagID,
+			    lastTime,
+			    t
+			);
 			lastTime = t;
 		}
 
 		auto tagID = NB_ANTS * a->Identifications().size() + i;
 		tags.insert(tagID);
-		Identifier::AddIdentification(identifier,
-		                              a->AntID(),
-		                              tagID,
-		                              lastTime,Time::Forever());
+		Identifier::AddIdentification(
+		    identifier,
+		    a->AntID(),
+		    tagID,
+		    lastTime,
+		    Time::Forever()
+		);
 	}
 
-	auto start = Time::Now();
 	auto compiled = Identifier::Compile(identifier);
-	auto end = Time::Now();
 
-	std::vector<Duration> flatTimes,compiledTimes;
+	std::vector<Duration> flatTimes, compiledTimes;
 
 	auto testEqualityAtTime =
-		[identifier,compiled,tags,&flatTimes,&compiledTimes](const Time & time) -> ::testing::AssertionResult {
-			for ( const auto & t : tags ) {
-				auto start = Time::Now();
-				auto expected = identifier->Identify(t,time);
-				auto middle = Time::Now();
-				auto res = compiled->Identify(t,time);
-				auto end = Time::Now();
+	    [identifier, compiled, tags, &flatTimes, &compiledTimes](
+	        const Time &time
+	    ) -> ::testing::AssertionResult {
+		for (const auto &t : tags) {
+			auto start    = Time::Now();
+			auto expected = identifier->Identify(t, time);
+			auto middle   = Time::Now();
+			auto res      = compiled->Identify(t, time);
+			auto end      = Time::Now();
 
-				if ( !expected ) {
-					if ( !res == false ) {
-						return ::testing::AssertionFailure() << " tag should not have been identified";
-					}
-					flatTimes.push_back(middle.Sub(start));
-					compiledTimes.push_back(end.Sub(middle));
-					continue;
-				}
-				if ( !res ) {
+			if (!expected) {
+				if (!res == false) {
 					return ::testing::AssertionFailure()
-						<< "tag " << t << " should have been identified to "
-						<< expected->Target()->AntID() << " idents: "
-						<< expected->Target()->Identifications().size();
-
-				}
-
-				if ( res->Target()->AntID() != expected->Target()->AntID() ) {
-					return ::testing::AssertionFailure()
-						<< "Got identification target mismatch, expected: "
-						<< expected->Target()->AntID()
-						<< " got: " << res->Target()->AntID();
-
+					       << " tag should not have been identified";
 				}
 				flatTimes.push_back(middle.Sub(start));
 				compiledTimes.push_back(end.Sub(middle));
+				continue;
 			}
-			return ::testing::AssertionSuccess();
-		};
+			if (!res) {
+				return ::testing::AssertionFailure()
+				       << "tag " << t << " should have been identified to "
+				       << expected->Target()->AntID() << " idents: "
+				       << expected->Target()->Identifications().size();
+			}
 
-	size_t i  = 0;
-	for ( const auto & t : times ) {
+			if (res->Target()->AntID() != expected->Target()->AntID()) {
+				return ::testing::AssertionFailure()
+				       << "Got identification target mismatch, expected: "
+				       << expected->Target()->AntID()
+				       << " got: " << res->Target()->AntID();
+			}
+			flatTimes.push_back(middle.Sub(start));
+			compiledTimes.push_back(end.Sub(middle));
+		}
+		return ::testing::AssertionSuccess();
+	};
+
+	size_t i = 0;
+	for (const auto &t : times) {
 		EXPECT_TRUE(testEqualityAtTime(t.Add(-1))) << i;
 		EXPECT_TRUE(testEqualityAtTime(t)) << i;
 		EXPECT_TRUE(testEqualityAtTime(t.Add(1))) << i;
 		++i;
 	}
 
-
 #ifdef MYRMIDON_TEST_TIMING
-	auto computeMean =
-		[](const std::vector<Duration> & durations) -> double {
-			double res = 0;
-			for ( const auto & d: durations) {
-				res += d.Microseconds() / durations.size();
-			}
-			return res;
-		};
-	double meanFlatTime = computeMean(flatTimes);
+	auto computeMean = [](const std::vector<Duration> &durations) -> double {
+		double res = 0;
+		for (const auto &d : durations) {
+			res += d.Microseconds() / durations.size();
+		}
+		return res;
+	};
+	double meanFlatTime     = computeMean(flatTimes);
 	double meanCompiledTime = computeMean(compiledTimes);
-	EXPECT_TRUE(meanFlatTime >  meanCompiledTime )
-		<< "flat time is " << meanFlatTime  <<"us "
-		<< "compiled time is " << meanCompiledTime << "us";
+	EXPECT_TRUE(meanFlatTime > meanCompiledTime)
+	    << "flat time is " << meanFlatTime << "us " << "compiled time is "
+	    << meanCompiledTime << "us";
 #endif
-
-
 }
-
 
 } // namespace fort
 } // namespace myrmidon

@@ -14,7 +14,7 @@ std::tuple<
     const Eigen::Ref<const Eigen::Vector3d>,
     const Eigen::Ref<const Eigen::VectorXd>>
 IdentifiedFrame::At(size_t index) const {
-	if (index > Positions.rows()) {
+	if (index > size_t(Positions.rows())) {
 		throw cpptrace::out_of_range(
 		    std::to_string(index) + " is out of range [0," +
 		    std::to_string(Positions.rows()) + "["

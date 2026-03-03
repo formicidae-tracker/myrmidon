@@ -76,7 +76,7 @@ void CorruptedHermesFileError::fix() {
 		    },
 		    [&last, &lineWriters, this](const hermes::FileLine &line) {
 			    if (line.has_readout() == false ||
-			        line.readout().frameid() > d_until) {
+			        line.readout().frameid() > int64_t(d_until)) {
 				    return;
 			    }
 			    hermes::FrameReadout ro;

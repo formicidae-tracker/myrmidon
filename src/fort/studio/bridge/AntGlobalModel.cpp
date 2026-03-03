@@ -68,19 +68,20 @@ void AntGlobalModel::initialize(IdentifierBridge * identifier) {
 
 }
 
-QStandardItem * AntGlobalModel::itemFromAntID(fm::AntID antID) const {
-	if ( rowCount() == 0 ) {
+QStandardItem *AntGlobalModel::itemFromAntID(fm::AntID antID) const {
+	if (rowCount() == 0) {
 		return nullptr;
 	}
-	if ( d_index.empty() ) {
-		for ( size_t i = 0; i < rowCount(); ++i ) {
-			auto it = item(i,0);
-			const_cast<AntGlobalModel*>(this)->d_index[it->data().value<fmp::Ant::Ptr>()->AntID()] = it;
+	if (d_index.empty()) {
+		for (int i = 0; i < rowCount(); ++i) {
+			auto it = item(i, 0);
+			const_cast<AntGlobalModel *>(this)
+			    ->d_index[it->data().value<fmp::Ant::Ptr>()->AntID()] = it;
 		}
 	}
 	auto fi = d_index.find(antID);
 
-	if ( fi == d_index.cend() ) {
+	if (fi == d_index.cend()) {
 		return nullptr;
 	}
 	return fi->second;

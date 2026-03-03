@@ -79,7 +79,6 @@ void RawFrame::IdentifyFrom(
 		if (!identification) {
 			continue;
 		}
-		double angle;
 		frame.Positions(index, 0) = identification->Target()->AntID();
 		if (zoneDepth > 0) {
 			frame.Positions.block(index, 4, 1, zoneDepth).setConstant(0.0);

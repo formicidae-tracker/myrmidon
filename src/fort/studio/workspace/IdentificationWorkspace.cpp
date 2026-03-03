@@ -162,55 +162,53 @@ IdentificationWorkspace::~IdentificationWorkspace() {
     d_tcu.reset();
 }
 
+void IdentificationWorkspace::initialize(
+    QMainWindow *main, ExperimentBridge *experiment
+) {
 
-void IdentificationWorkspace::initialize(QMainWindow * main,ExperimentBridge * experiment) {
-
-	d_experiment = experiment;
-	auto globalProperties = experiment->globalProperties();
+	d_experiment    = experiment;
 	auto identifier = experiment->identifier();
-	auto measurements = experiment->measurements();
 
+	connect(
+	    identifier,
+	    &IdentifierBridge::identificationAntPositionModified,
+	    this,
+	    &IdentificationWorkspace::onIdentificationAntPositionChanged
+	);
 
+	connect(
+	    identifier,
+	    &IdentifierBridge::identificationCreated,
+	    this,
+	    &IdentificationWorkspace::onIdentificationAntPositionChanged
+	);
 
-	connect(identifier,
-	        &IdentifierBridge::identificationAntPositionModified,
-	        this,
-	        &IdentificationWorkspace::onIdentificationAntPositionChanged);
-
-	connect(identifier,
-	        &IdentifierBridge::identificationCreated,
-	        this,
-	        &IdentificationWorkspace::onIdentificationAntPositionChanged);
-
-	connect(identifier,
-	        &IdentifierBridge::identificationDeleted,
-	        this,
-	        &IdentificationWorkspace::onIdentificationDeleted);
-
+	connect(
+	    identifier,
+	    &IdentifierBridge::identificationDeleted,
+	    this,
+	    &IdentificationWorkspace::onIdentificationDeleted
+	);
 
 	setTagCloseUp(fmp::TagCloseUp::Ptr());
 
 	main->addToolBar(d_actionToolBar);
 	d_actionToolBar->hide();
 
+	dynamic_cast<TagCloseUpExplorer *>(d_tagExplorer->widget())
+	    ->initialize(experiment->tagCloseUps());
 
-	dynamic_cast<TagCloseUpExplorer*>(d_tagExplorer->widget())->initialize(experiment->tagCloseUps());
-
-	main->addDockWidget(Qt::LeftDockWidgetArea,d_tagExplorer);
+	main->addDockWidget(Qt::LeftDockWidgetArea, d_tagExplorer);
 	d_tagExplorer->hide();
 
-
-
-
-	dynamic_cast<IdentificationListWidget*>(d_identificationList->widget())->initialize(experiment->identifier());
-	main->addDockWidget(Qt::RightDockWidgetArea,d_identificationList);
+	dynamic_cast<IdentificationListWidget *>(d_identificationList->widget())
+	    ->initialize(experiment->identifier());
+	main->addDockWidget(Qt::RightDockWidgetArea, d_identificationList);
 	d_identificationList->hide();
 
-	main->addDockWidget(Qt::RightDockWidgetArea,d_tagStatistics);
+	main->addDockWidget(Qt::RightDockWidgetArea, d_tagStatistics);
 	d_tagStatistics->hide();
-
 }
-
 
 void IdentificationWorkspace::addIdentification() {
 	if ( d_tcu == nullptr ) {

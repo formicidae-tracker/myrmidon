@@ -5,20 +5,21 @@
 namespace fort {
 namespace myrmidon {
 
-
-InteractionData::InteractionData(AntID other,
-                                 SpaceID spaceID,
-                                 const Time & start,
-                                 const Time & end,
-                                 const std::vector<uint32_t> & types)
-	: Other(other)
-	, Space(spaceID)
-	, Start(start)
-	, End(end) {
-	Types.resize(types.size()/2,2);
-	for ( size_t i = 0; i < types.size()/2; ++i) {
-		Types(i,0) = types[2*i];
-		Types(i,1) = types[2*i+1];
+InteractionData::InteractionData(
+    AntID                        other,
+    SpaceID                      spaceID,
+    const Time                  &start,
+    const Time                  &end,
+    const std::vector<uint32_t> &types
+)
+    : Other(other)
+    , Start(start)
+    , End(end)
+    , Space(spaceID) {
+	Types.resize(types.size() / 2, 2);
+	for (size_t i = 0; i < types.size() / 2; ++i) {
+		Types(i, 0) = types[2 * i];
+		Types(i, 1) = types[2 * i + 1];
 	}
 }
 

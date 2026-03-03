@@ -18,7 +18,7 @@
 static std::ostream &
 operator<<(std::ostream &out, const fort::myrmidon::InteractionTypes &types) {
 	std::string sep = "[";
-	for (size_t i = 0; i < types.rows(); ++i) {
+	for (int i = 0; i < types.rows(); ++i) {
 		out << sep << types(i, 0) << "-" << types(i, 1);
 		sep = ", ";
 	}
@@ -592,7 +592,7 @@ void BindExperimentDataInfo(py::module_ &m) {
 		        << ", End:" << i.End                        //
 		        << ", Spaces:";
 		    std::string sep = "[";
-		    for (const auto [sID, _] : i.Spaces) {
+		    for (const auto &[sID, _] : i.Spaces) {
 			    oss << sep << sID;
 			    sep = ", ";
 		    }

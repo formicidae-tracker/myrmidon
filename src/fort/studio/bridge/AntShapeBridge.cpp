@@ -88,29 +88,28 @@ int AntShapeBridge::addCapsule(fm::AntID antID,
 }
 
 void AntShapeBridge::clearCapsule(fm::AntID antID) {
-	auto ant = AntGlobalModel::findAnt(d_experiment,antID);
+	auto ant     = AntGlobalModel::findAnt(d_experiment, antID);
 	auto antItem = d_model->itemFromAntID(antID);
-	if ( ant == nullptr || antItem == nullptr ) {
+	if (ant == nullptr || antItem == nullptr) {
 		return;
 	}
 
 	try {
 		qDebug() << "[AntShapeBridge]: Calling fmp::Ant("
-		         << ant->FormattedID().c_str()
-		         << ")::DeleteCapsules()";
+		         << ant->FormattedID().c_str() << ")::DeleteCapsules()";
 		ant->ClearCapsules();
-	} catch ( const std::exception & e ) {
+	} catch (const std::exception &e) {
 		qCritical() << "[AntShapeBridge]: Could not remove Capsules "
-		            << " from Ant " << ant->FormattedID().c_str()
-		            << ": " << e.what();
+		            << " from Ant " << ant->FormattedID().c_str() << ": "
+		            << e.what();
 		return;
 	}
 	qInfo() << "[AntShapeBridge]: cleared capsule for ant "
 	        << ant->FormattedID().c_str();
 
-	for ( size_t i = 1; i < d_model->columnCount(); ++i ) {
-		auto item = d_model->item(antItem->row(),i);
-		item->setData(0,Qt::DisplayRole);
+	for (int i = 1; i < d_model->columnCount(); ++i) {
+		auto item = d_model->item(antItem->row(), i);
+		item->setData(0, Qt::DisplayRole);
 	}
 
 	setModified(true);
@@ -192,28 +191,28 @@ void AntShapeBridge::setUpExperiment() {
 	}
 }
 
-void AntShapeBridge::onTypeModified(quint32 shapeTypeID,
-                                    QString name) {
+void AntShapeBridge::onTypeModified(quint32 shapeTypeID, QString name) {
 	auto fi = d_columnIndex.lower_bound(shapeTypeID);
-	if ( fi != d_columnIndex.cend() && fi->first == shapeTypeID ) {
-		d_model->horizontalHeaderItem(fi->second)->setData(name,Qt::DisplayRole);
+	if (fi != d_columnIndex.cend() && fi->first == shapeTypeID) {
+		d_model->horizontalHeaderItem(fi->second)
+		    ->setData(name, Qt::DisplayRole);
 		return;
 	}
 	int column = d_model->columnCount();
-	if ( fi != d_columnIndex.cend() ) {
+	if (fi != d_columnIndex.cend()) {
 		column = fi->second;
 	}
-	QList<QStandardItem*> newCounts;
-	for ( size_t i = 0; i < d_model->rowCount(); ++i ) {
+	QList<QStandardItem *> newCounts;
+	for (int i = 0; i < d_model->rowCount(); ++i) {
 		auto count = new QStandardItem("0");
 		count->setEditable(false);
 		newCounts.push_back(count);
 	}
-	d_model->insertColumn(column,newCounts);
+	d_model->insertColumn(column, newCounts);
 	auto item = new QStandardItem(name);
 	item->setEditable(false);
 	item->setData(shapeTypeID);
-	d_model->setHorizontalHeaderItem(column,item);
+	d_model->setHorizontalHeaderItem(column, item);
 	rebuildColumnIndex();
 }
 
@@ -242,47 +241,45 @@ void AntShapeBridge::onAntDeleted(quint32 antID) {
 	d_model->removeRows(antItem->row(),1);
 }
 
-QList<QStandardItem*> AntShapeBridge::buildAnt(const fmp::Ant::Ptr & ant) {
+QList<QStandardItem *> AntShapeBridge::buildAnt(const fmp::Ant::Ptr &ant) {
 	auto antItem = new QStandardItem(AntGlobalModel::formatAntName(ant));
-	AntGlobalModel::setItemUserData(antItem,ant);
-	QList<QStandardItem*> res = {antItem};
-	for ( const auto & t : d_experiment->AntShapeTypes() ) {
+	AntGlobalModel::setItemUserData(antItem, ant);
+	QList<QStandardItem *> res = {antItem};
+	for (size_t i = 0; i < d_experiment->AntShapeTypes().size(); ++i) {
 		auto countItem = new QStandardItem("0");
 		res.push_back(countItem);
 	}
 
-	for ( const auto & item : res ) {
+	for (const auto &item : res) {
 		item->setEditable(false);
 	}
 	return res;
 }
 
-
-void AntShapeBridge::countAnt(fm::AntID antID,
-                              bool sendSignals) {
-	auto ant = AntGlobalModel::findAnt(d_experiment,antID);
+void AntShapeBridge::countAnt(fm::AntID antID, bool sendSignals) {
+	auto ant     = AntGlobalModel::findAnt(d_experiment, antID);
 	auto antItem = d_model->itemFromAntID(antID);
-	if ( ant == nullptr ) {
+	if (ant == nullptr) {
 		return;
 	}
-	std::map<fmp::AntShapeTypeID,size_t> counts;
+	std::map<fmp::AntShapeTypeID, size_t> counts;
 
-	for ( const auto & [typeID,shapeType] : d_experiment->AntShapeTypes() ) {
+	for (const auto &[typeID, shapeType] : d_experiment->AntShapeTypes()) {
 		counts[typeID] = 0;
 	}
 	int index = -1;
-	for ( const auto [typeID,capsule] : ant->Capsules() ) {
+	for (const auto &[typeID, capsule] : ant->Capsules()) {
 		++index;
 		counts[typeID] += 1;
-		if ( sendSignals == true ) {
-			emit capsuleCreated(antID,index,typeID,capsule);
+		if (sendSignals == true) {
+			emit capsuleCreated(antID, index, typeID, capsule);
 		}
 	}
 
-	for ( const auto & [typeID,count] : counts ) {
-		d_model->item(antItem->row(),d_columnIndex[typeID])->setData(int(count),Qt::DisplayRole);
+	for (const auto &[typeID, count] : counts) {
+		d_model->item(antItem->row(), d_columnIndex[typeID])
+		    ->setData(int(count), Qt::DisplayRole);
 	}
-
 }
 
 void AntShapeBridge::rebuildColumnIndex() {

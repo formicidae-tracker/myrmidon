@@ -35,9 +35,13 @@ else(${SKBUILD})
 		VERSION 0.9.0
 	)
 endif(${SKBUILD})
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED 1)
 set(CMAKE_C_STANDARD 11)
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+	add_compile_options(-Wall -Wpedantic -Werror)
+endif()
 
 if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
 	set(FORT_MYRMIDON_MAIN TRUE)
@@ -63,7 +67,8 @@ if(FORT_MYRMIDON_MAIN)
 	FetchContent_Declare(
 		googletest
 		GIT_REPOSITORY https://github.com/google/googletest.git
-		GIT_TAG 76bb2afb8b522d24496ad1c757a49784fbfa2e42
+		GIT_TAG 52eb8108c5bdec04579160ae17225d66034bd723
+		GIT_SHALLOW TRUE
 	)
 	# For Windows: Prevent overriding the parent project's compiler/linker
 	# settings
@@ -124,19 +129,19 @@ FetchContent_Declare(
 FetchContent_Declare(
 	yaml-cpp
 	GIT_REPOSITORY https://github.com/jbeder/yaml-cpp
-	GIT_TAG yaml-cpp-0.7.0
+	GIT_TAG yaml-cpp-0.9.0
 )
 
 FetchContent_Declare(
 	fort-tags
 	GIT_REPOSITORY https://github.com/formicidae-tracker/fort-tags.git
-	GIT_TAG v1.4.2
+	GIT_TAG v1.4.3
 )
 
 FetchContent_Declare(
 	fort-hermes
 	GIT_REPOSITORY https://github.com/formicidae-tracker/hermes.git
-	GIT_TAG v0.5.6
+	GIT_TAG 19636c9fe64978072d2b6164e6fbb5fe91facc49
 )
 
 FetchContent_Declare(
@@ -146,6 +151,7 @@ FetchContent_Declare(
 )
 
 set(FORT_CHARIS_BUILD_GL Off)
+
 if(NOT SKBUILD AND EXISTS ${PROJECT_SOURCE_DIR}/deps/charis)
 	FetchContent_Declare(
 		fort-charis SOURCE_DIR ${PROJECT_SOURCE_DIR}/deps/charis
@@ -154,7 +160,7 @@ else()
 	FetchContent_Declare(
 		fort-charis
 		GIT_REPOSITORY https://github.com/formicidae-tracker/charis.git
-		GIT_TAG 7d9f58d1281b7ca8eb89061a888b7ee98719380d
+		GIT_TAG df3c324f0be603beab98411a9c8b4a180b105274
 	)
 endif()
 

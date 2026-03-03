@@ -345,19 +345,23 @@ std::vector<AntTrajectorySegment> GeneratedData::FindTrajectorySegments(
 		);
 
 		if (fi == Trajectories.end()) {
-			throw cpptrace::runtime_error("could not find any suitable trajectory");
+			throw cpptrace::runtime_error(
+			    "could not find any suitable trajectory"
+			);
 		}
 		AntTrajectorySegment s;
 		s.Trajectory = *fi;
 		Duration offsetStart, offsetEnd;
-		for (s.Begin = 0; s.Begin < s.Trajectory->Positions.rows(); ++s.Begin) {
+		for (s.Begin = 0; s.Begin < size_t(s.Trajectory->Positions.rows());
+		     ++s.Begin) {
 			offsetStart = s.Trajectory->Positions(s.Begin, 0) *
 			              Duration::Second.Nanoseconds();
 			if (s.Trajectory->Start.Add(offsetStart) >= current) {
 				break;
 			}
 		}
-		for (s.End = s.Begin; s.End < s.Trajectory->Positions.rows(); ++s.End) {
+		for (s.End = s.Begin; s.End < size_t(s.Trajectory->Positions.rows());
+		     ++s.End) {
 			offsetEnd = s.Trajectory->Positions(s.End, 0) *
 			            Duration::Second.Nanoseconds();
 			if (s.Trajectory->Start.Add(offsetEnd) > end) {
@@ -365,7 +369,8 @@ std::vector<AntTrajectorySegment> GeneratedData::FindTrajectorySegments(
 			}
 		}
 		results.push_back(std::move(s));
-		if (results.back().End >= results.back().Trajectory->Positions.rows()) {
+		if (results.back().End >=
+		    size_t(results.back().Trajectory->Positions.rows())) {
 			current = results.back().EndTime().Add(1);
 		} else {
 			break;
@@ -384,7 +389,7 @@ void GeneratedData::GenerateFrames(const Config &config) {
 		    , Trajectory(t) {}
 
 		bool Done() const {
-			return !Trajectory || Index >= Trajectory->Positions.rows();
+			return !Trajectory || Index >= size_t(Trajectory->Positions.rows());
 		}
 
 		void Increment() {

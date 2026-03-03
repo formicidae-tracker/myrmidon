@@ -32,7 +32,7 @@ void CloseUpWriter::Prepare(size_t index) {
 void CloseUpWriter::WriteFrom(const IdentifiedFrame &data, uint64_t frameID) {
 	std::map<AntID, Eigen::Vector2f> neededCloseUp;
 
-	for (size_t i = 0; i < data.Positions.rows(); ++i) {
+	for (int i = 0; i < data.Positions.rows(); ++i) {
 		AntID antID = data.Positions(i, 0);
 		if (d_seen.count(antID) == 0) {
 			Eigen::Vector2d position;
@@ -55,7 +55,8 @@ void CloseUpWriter::WriteFrom(const IdentifiedFrame &data, uint64_t frameID) {
 	video::Frame frameBuffer{
 	    int(data.Width),
 	    int(data.Height),
-	    AV_PIX_FMT_GRAY8};
+	    AV_PIX_FMT_GRAY8
+	};
 
 	d_drawer->Draw(frameBuffer, data);
 
@@ -115,12 +116,13 @@ GetROI(const video::Frame &image, const ROI &roi) {
 	if (image.Format != AV_PIX_FMT_GRAY8) {
 		throw cpptrace::invalid_argument{
 		    std::string("Only ") + av_get_pix_fmt_name(AV_PIX_FMT_GRAY8) +
-		    " is supported"};
+		    " is supported"
+		};
 	}
 	auto res =
 	    std::make_unique<video::Frame>(roi.W, roi.H, AV_PIX_FMT_GRAY8, 32);
 
-	for (size_t i = 0; i < roi.H; i++) {
+	for (int i = 0; i < roi.H; i++) {
 		memcpy(
 		    res->Planes[0] + i * res->Linesize[0],
 		    image.Planes[0] + (i + roi.Y) * image.Linesize[0] + roi.X,
@@ -153,7 +155,7 @@ void CloseUpWriter::SaveExpectedFullFrame(
 ) {
 	auto path = FullFramePath(frameID);
 	d_tddInfo.TagCloseUpFiles.insert({frameID, {path, nullptr}});
-	for (size_t i = 0; i < data.Positions.rows(); ++i) {
+	for (int i = 0; i < data.Positions.rows(); ++i) {
 		SaveExpectedCloseUp(path, data, frameID, data.Positions(i, 0), true);
 	}
 }
@@ -176,7 +178,7 @@ void CloseUpWriter::SaveExpectedCloseUp(
     bool                   fullFrame
 ) {
 	int index = -1;
-	for (size_t i = 0; i < data.Positions.rows(); ++i) {
+	for (int i = 0; i < data.Positions.rows(); ++i) {
 		if (data.Positions(i, 0) == antID) {
 			index = i;
 			break;
@@ -184,7 +186,9 @@ void CloseUpWriter::SaveExpectedCloseUp(
 	}
 
 	if (index < 0) {
-		throw cpptrace::runtime_error("could not find ant " + std::to_string(antID));
+		throw cpptrace::runtime_error(
+		    "could not find ant " + std::to_string(antID)
+		);
 	}
 
 	Eigen::Vector2d position;
