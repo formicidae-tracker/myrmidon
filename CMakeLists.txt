@@ -164,7 +164,7 @@ else()
 	FetchContent_Declare(
 		slogpp
 		GIT_REPOSITORY https://github.com/atuleu/slogpp.git
-		GIT_TAG 11f2c8f86fb1d8226393e6810bc209eca88c652f
+		GIT_TAG fe4404f84129ff81beaec9b9b9787d18ce223fb9
 	)
 endif()
 
@@ -176,7 +176,7 @@ else()
 	FetchContent_Declare(
 		fort-hermes
 		GIT_REPOSITORY https://github.com/formicidae-tracker/hermes.git
-		GIT_TAG fbc73b13c4b1036ef337137b5a9fd6dad3a1efae
+		GIT_TAG 65053a9a1627d85d6eac73636ef03a92a8260394
 	)
 endif()
 

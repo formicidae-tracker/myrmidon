@@ -1,7 +1,5 @@
 #include "GlobalPropertyBridge.hpp"
 
-#include <QDebug>
-
 #include "ExperimentBridge.hpp"
 #include "UniverseBridge.hpp"
 

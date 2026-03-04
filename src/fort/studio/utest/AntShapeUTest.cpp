@@ -9,7 +9,6 @@
 #include <QAbstractItemModel>
 #include <QStandardItemModel>
 
-#include <QDebug>
 #include <QSignalSpy>
 
 void AntShapeUTest::SetUp() {

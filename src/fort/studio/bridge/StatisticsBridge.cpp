@@ -3,18 +3,20 @@
 #include <QStandardItemModel>
 #include <QtConcurrent>
 
-#include <fort/studio/Format.hpp>
 #include <fort/myrmidon/priv/Query.hpp>
+#include <fort/studio/Format.hpp>
 
 #include "ExperimentBridge.hpp"
 #include "UniverseBridge.hpp"
+#include "fort/myrmidon/utils/Exception.hpp"
 
-StatisticsBridge::StatisticsBridge(QObject * parent)
-	: GlobalBridge(parent)
-	, d_model(new QStandardItemModel(this) )
-	, d_outdated(false)
-	, d_watcher(nullptr)
-	, d_frameCount(0) {
+StatisticsBridge::StatisticsBridge(QObject *parent)
+    : GlobalBridge(parent)
+    , d_model(new QStandardItemModel(this))
+    , d_outdated(false)
+    , d_watcher(nullptr)
+    , d_frameCount(0)
+    , d_logger{slog::With(slog::String("module", "StatisticBridge"))} {
 	rebuildModel();
 }
 
@@ -136,7 +138,10 @@ void StatisticsBridge::compute() {
 			    false
 			);
 		} catch (const std::exception &e) {
-			qCritical() << "Could not compute tag statistics: " << e.what();
+			d_logger.Error(
+			    "could not compute tag statistics",
+			    slog::Err(fort::myrmidon::utils::What(e))
+			);
 		}
 	}
 	rebuildModel();

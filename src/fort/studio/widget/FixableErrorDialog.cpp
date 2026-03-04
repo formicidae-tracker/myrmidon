@@ -1,20 +1,21 @@
 #include "FixableErrorDialog.hpp"
 #include "ui_FixableErrorDialog.h"
 
-#include <QDebug>
+#include <slog++/slog++.hpp>
 
-FixableErrorDialog::FixableErrorDialog(fm::FixableErrorList errors,
-                                       const QString & context,
-                                       QWidget *parent)
-	: QDialog(parent)
-	, d_ui(new Ui::FixableErrorDialog)
-	, d_errors(std::move(errors)) {
+FixableErrorDialog::FixableErrorDialog(
+    fm::FixableErrorList errors, const QString &context, QWidget *parent
+)
+    : QDialog(parent)
+    , d_ui(new Ui::FixableErrorDialog)
+    , d_errors(std::move(errors)) {
 	d_ui->setupUi(this);
 
 	buildTable();
 
-	d_ui->label->setText(tr("Found %1 error(s) when %2").arg(d_errors.size()).arg(context));
-
+	d_ui->label->setText(
+	    tr("Found %1 error(s) when %2").arg(d_errors.size()).arg(context)
+	);
 }
 
 FixableErrorDialog::~FixableErrorDialog() {
@@ -22,16 +23,19 @@ FixableErrorDialog::~FixableErrorDialog() {
 }
 
 void FixableErrorDialog::fixSelected() {
-	for ( int i = 0; i < d_ui->tableWidget->rowCount(); ++i) {
-		auto item = d_ui->tableWidget->item(i,0);
-		if ( item->checkState() == Qt::Unchecked ) {
+	for (int i = 0; i < d_ui->tableWidget->rowCount(); ++i) {
+		auto item = d_ui->tableWidget->item(i, 0);
+		if (item->checkState() == Qt::Unchecked) {
 			continue;
 		}
 		try {
 			d_errors.at(i)->Fix();
-		} catch ( const std::exception & e ) {
-			qCritical() << "Could not " << d_errors.at(i)->FixDescription().c_str()
-			            << ": " << e.what();
+		} catch (const std::exception &e) {
+			slog::Error(
+			    "could not fix error",
+			    slog::String("module", "FixableErrorDialog"),
+			    slog::Err(e.what())
+			);
 		}
 	}
 }

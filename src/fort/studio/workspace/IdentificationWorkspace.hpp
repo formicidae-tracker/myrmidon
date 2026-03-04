@@ -1,8 +1,7 @@
 #pragma once
 
-
 #include <fort/myrmidon/priv/ForwardDeclaration.hpp>
-
+#include <slog++/Logger.hpp>
 
 #include "Workspace.hpp"
 
@@ -19,23 +18,21 @@ class QDockWidget;
 class TagCloseUpExplorer;
 class QAction;
 
-
 namespace fmp = fort::myrmidon::priv;
 
 namespace Ui {
 class IdentificationWorkspace;
 }
 
-
 class IdentificationWorkspace : public Workspace {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    explicit IdentificationWorkspace(QWidget *parent = 0);
+	explicit IdentificationWorkspace(QWidget *parent = 0);
 	virtual ~IdentificationWorkspace();
 
-	QAction * newAntFromTagAction() const;
-	QAction * addIdentificationToAntAction() const;
-	QAction * deletePoseEstimationAction() const;
+	QAction *newAntFromTagAction() const;
+	QAction *addIdentificationToAntAction() const;
+	QAction *deletePoseEstimationAction() const;
 
 public slots:
 	void onIdentificationAntPositionChanged(fmp::IdentificationConstPtr);
@@ -46,14 +43,12 @@ public slots:
 	void onVectorRemoved();
 
 protected:
-	void initialize(QMainWindow * main, ExperimentBridge * experiment) override;
-	void setUp(const NavigationAction & actions ) override;
-	void tearDown(const NavigationAction & actions ) override;
+	void initialize(QMainWindow *main, ExperimentBridge *experiment) override;
+	void setUp(const NavigationAction &actions) override;
+	void tearDown(const NavigationAction &actions) override;
 
 private slots:
-	void setTagCloseUp(const fmp::TagCloseUpConstPtr & tcu);
-
-
+	void setTagCloseUp(const fmp::TagCloseUpConstPtr &tcu);
 
 	void addIdentification();
 	void newAnt();
@@ -63,23 +58,24 @@ private slots:
 
 	void onCopyTime();
 
-
 	void updateActionStates();
 
 	void hideCurrentTag();
 
 private:
-	void setCloseUpLabels(const fmp::TagCloseUpConstPtr & closeUp);
+	void setCloseUpLabels(const fmp::TagCloseUpConstPtr &closeUp);
 
-	void setGraphicsFromMeasurement(const fmp::TagCloseUpConstPtr & tcu);
+	void setGraphicsFromMeasurement(const fmp::TagCloseUpConstPtr &tcu);
 
-	Ui::IdentificationWorkspace * d_ui;
-	ExperimentBridge            * d_experiment;
-	VectorialScene              * d_vectorialScene;
-	fmp::TagCloseUpConstPtr       d_tcu;
-	QAction                     * d_newAntAction,*d_addIdentificationAction,*d_deletePoseAction,*d_hideTagAction,*d_showAllTagsAction;
-	QAction                     * d_copyTimeAction;
-	QToolBar                    * d_actionToolBar,*d_navigationToolBar;
-	QToolBarSeparator           * d_toolBarSeparator;
-	QDockWidget                 * d_tagExplorer,*d_identificationList,*d_tagStatistics;
+	Ui::IdentificationWorkspace *d_ui;
+	ExperimentBridge            *d_experiment;
+	VectorialScene              *d_vectorialScene;
+	fmp::TagCloseUpConstPtr      d_tcu;
+	QAction *d_newAntAction, *d_addIdentificationAction, *d_deletePoseAction,
+	    *d_hideTagAction, *d_showAllTagsAction;
+	QAction           *d_copyTimeAction;
+	QToolBar          *d_actionToolBar, *d_navigationToolBar;
+	QToolBarSeparator *d_toolBarSeparator;
+	QDockWidget       *d_tagExplorer, *d_identificationList, *d_tagStatistics;
+	slog::Logger<1>    d_logger;
 };

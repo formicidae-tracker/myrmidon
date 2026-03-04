@@ -1,13 +1,15 @@
 #pragma once
 
-#include <fort/studio/MyrmidonTypes/TagCloseUp.hpp>
 #include <fort/studio/MyrmidonTypes/Identification.hpp>
+#include <fort/studio/MyrmidonTypes/TagCloseUp.hpp>
 
 #include <fort/studio/widget/vectorgraphics/VectorialScene.hpp>
 
 #include "Workspace.hpp"
 
 #include <fort/myrmidon/Shapes.hpp>
+#include <slog++/Logger.hpp>
+#include <slog++/slog++.hpp>
 
 namespace Ui {
 class AntGeometryWorkspace;
@@ -31,42 +33,43 @@ class AntMeasurementListWidget;
 class AntShapeTypeEditorWidget;
 class MeasurementTypeWidget;
 
-
 class AntGeometryWorkspace : public Workspace {
 	Q_OBJECT
 public:
-	explicit AntGeometryWorkspace(QWidget * parent = nullptr);
+	explicit AntGeometryWorkspace(QWidget *parent = nullptr);
 	virtual ~AntGeometryWorkspace();
 
-	QAction * insertAction() const;
-	QComboBox * typeBox() const;
+	QAction   *insertAction() const;
+	QComboBox *typeBox() const;
 
 protected:
-	void initialize(QMainWindow * main, ExperimentBridge * experiment) override;
-	void setUp(const NavigationAction & actions ) override;
-	void tearDown(const NavigationAction & actions ) override;
+	void initialize(QMainWindow *main, ExperimentBridge *experiment) override;
+	void setUp(const NavigationAction &actions) override;
+	void tearDown(const NavigationAction &actions) override;
 
 	virtual quint32 typeFromComboBox() const = 0;
 
 public slots:
-	void setTagCloseUp(const fmp::TagCloseUp::ConstPtr & closeUp);
+	void setTagCloseUp(const fmp::TagCloseUp::ConstPtr &closeUp);
 
 protected slots:
-	virtual void on_insertAction_triggered() = 0;
-	virtual void on_editAction_triggered() = 0;
+	virtual void on_insertAction_triggered()          = 0;
+	virtual void on_editAction_triggered()            = 0;
 	virtual void on_comboBox_currentIndexChanged(int) = 0;
 
-
 private slots:
-	void onIdentificationAntPositionChanged(const fmp::Identification::ConstPtr & identification);
-	void onIdentificationDeleted(const fmp::Identification::ConstPtr & ident);
+	void onIdentificationAntPositionChanged(
+	    const fmp::Identification::ConstPtr &identification
+	);
+	void onIdentificationDeleted(const fmp::Identification::ConstPtr &ident);
 
 	void onCopyTime();
 
 	void onVectorialSceneModeChanged(VectorialScene::Mode mode);
 
 	void updateAntLabel(quint32 antID);
-	void updateCloseUpLabels(const fmp::TagCloseUp::ConstPtr & closeUp);
+	void updateCloseUpLabels(const fmp::TagCloseUp::ConstPtr &closeUp);
+
 protected:
 	virtual void onClearScene() = 0;
 	virtual void onNewCloseUp() = 0;
@@ -74,18 +77,18 @@ protected:
 	void clearScene();
 	void setColorFromType(quint32 typeID);
 
+	QAction   *d_editAction;
+	QAction   *d_insertAction;
+	QComboBox *d_comboBox;
+	QToolBar  *d_editToolBar;
+	QAction   *d_copyTimeAction;
 
-	QAction * d_editAction;
-	QAction * d_insertAction;
-	QComboBox   * d_comboBox;
-	QToolBar    * d_editToolBar;
-	QAction     * d_copyTimeAction;
+	Ui::AntGeometryWorkspace *d_ui;
 
-	Ui::AntGeometryWorkspace * d_ui;
-
-	ExperimentBridge          * d_experiment;
-	fmp::TagCloseUp::ConstPtr   d_closeUp;
-	VectorialScene            * d_vectorialScene;
+	ExperimentBridge         *d_experiment;
+	fmp::TagCloseUp::ConstPtr d_closeUp;
+	VectorialScene           *d_vectorialScene;
+	slog::Logger<1>           d_logger;
 };
 
 class AntMeasurementWorkspace : public AntGeometryWorkspace {
@@ -143,12 +146,12 @@ public:
 	explicit AntShapeWorkspace(QWidget *parent = nullptr);
 	virtual ~AntShapeWorkspace();
 
-	QAction * cloneAntShapeAction() const;
+	QAction *cloneAntShapeAction() const;
 
 protected:
-	void initialize(QMainWindow * main, ExperimentBridge * experiment) override;
-	void setUp(const NavigationAction & actions ) override;
-	void tearDown(const NavigationAction & actions ) override;
+	void initialize(QMainWindow *main, ExperimentBridge *experiment) override;
+	void setUp(const NavigationAction &actions) override;
+	void tearDown(const NavigationAction &actions) override;
 
 	quint32 typeFromComboBox() const override;
 
@@ -159,30 +162,29 @@ protected:
 	void on_editAction_triggered() override;
 	void on_comboBox_currentIndexChanged(int) override;
 
-
 private slots:
 	void onCapsuleUpdated();
 	void onCapsuleCreated(QSharedPointer<Capsule> capsule);
 	void onCapsuleRemoved(QSharedPointer<Capsule> capsule);
 
-
 	void onCloneShapeActionTriggered();
 	void updateCloneAction();
 
 private:
-	void changeCapsuleType(Capsule * capsule,fmp::AntShapeTypeID stID);
+	void changeCapsuleType(Capsule *capsule, fmp::AntShapeTypeID stID);
 
-	fm::Capsule::Ptr capsuleFromScene(const QSharedPointer<Capsule> & capsule);
-	void rebuildCapsules();
+	fm::Capsule::Ptr capsuleFromScene(const QSharedPointer<Capsule> &capsule);
+	void             rebuildCapsules();
 
 	quint32 selectedAntID() const;
 
+	AntShapeListWidget       *d_antCloseUps;
+	AntShapeTypeEditorWidget *d_shapeTypes;
+	QDockWidget              *d_closeUpsDock, *d_shapeTypesDock;
 
-	AntShapeListWidget       * d_antCloseUps;
-	AntShapeTypeEditorWidget * d_shapeTypes;
-	QDockWidget              * d_closeUpsDock, * d_shapeTypesDock;
+	QAction *d_cloneShapeAction;
 
-	QAction * d_cloneShapeAction;
+	std::map<QSharedPointer<Capsule>, uint32_t> d_capsules;
 
-	std::map<QSharedPointer<Capsule>,uint32_t> d_capsules;
+	slog::Logger<1> d_logger;
 };

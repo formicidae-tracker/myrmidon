@@ -2,8 +2,9 @@
 
 #include "fort/myrmidon/types/Reporter.hpp"
 
-#include <QDebug>
 #include <QProgressDialog>
+
+#include <slog++/slog++.hpp>
 
 class ItemProgress : public fort::myrmidon::ProgressReporter {
 public:
@@ -31,7 +32,7 @@ public:
 	}
 
 	void ReportError(const std::string &error) override {
-		qWarning() << QString(error.c_str());
+		slog::Error("progress error", slog::Location(), slog::Err(error));
 	}
 
 private:

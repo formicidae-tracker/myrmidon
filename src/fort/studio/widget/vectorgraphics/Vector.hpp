@@ -33,9 +33,9 @@ protected:
 	void removeFromSceneProtected(QGraphicsScene *scene) override;
 
 	void paint(
-	    QPainter	                   *painter,
+	    QPainter                       *painter,
 	    const QStyleOptionGraphicsItem *option,
-	    QWidget	                    *widget
+	    QWidget                        *widget
 	) override;
 
 	void mousePressEvent(QGraphicsSceneMouseEvent *e) override;
@@ -78,4 +78,4 @@ private:
 	std::shared_ptr<QPointF> d_moveEvent;
 };
 
-QDebug operator<<(QDebug, const Vector *);
+QDebug operator<<(QDebug d, const Vector *v);

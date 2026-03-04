@@ -6,6 +6,7 @@
 #include <QList>
 
 #include <fort/studio/MyrmidonTypes/AntShapeType.hpp>
+#include <slog++/Logger.hpp>
 
 class QAbstractItemModel;
 class QStandardItemModel;
@@ -13,24 +14,25 @@ class QStandardItem;
 
 class AntShapeTypeBridge : public GlobalBridge {
 	Q_OBJECT
-public :
-	explicit AntShapeTypeBridge(QObject * parent = nullptr);
+public:
+	explicit AntShapeTypeBridge(QObject *parent = nullptr);
 	virtual ~AntShapeTypeBridge();
 
-	typedef std::map<fmp::AntShapeType::ID,fmp::AntShapeType::ConstPtr> AntShapeTypesByID;
+	typedef std::map<fmp::AntShapeType::ID, fmp::AntShapeType::ConstPtr>
+	    AntShapeTypesByID;
 
-	QAbstractItemModel * shapeModel() const;
+	QAbstractItemModel *shapeModel() const;
 
 	AntShapeTypesByID types() const;
 
-	void initialize(ExperimentBridge * experiment) override;
+	void initialize(ExperimentBridge *experiment) override;
 
 public slots:
-	void addType(const QString & name);
+	void addType(const QString &name);
 	void deleteType(quint32 typeID);
 
 signals:
-	void typeModified(quint32,QString);
+	void typeModified(quint32, QString);
 	void typeDeleted(quint32);
 
 protected:
@@ -38,10 +40,11 @@ protected:
 	void tearDownExperiment() override;
 
 private slots:
-	void onTypeItemChanged(QStandardItem * item);
+	void onTypeItemChanged(QStandardItem *item);
 
 private:
-	QList<QStandardItem*> buildTypeItem(const fmp::AntShapeTypePtr & shapeType);
+	QList<QStandardItem *> buildTypeItem(const fmp::AntShapeTypePtr &shapeType);
 
-	QStandardItemModel * d_model;
+	QStandardItemModel *d_model;
+	slog::Logger<1>     d_logger;
 };

@@ -41,7 +41,7 @@ std::string FixableErrors::BuildReason(const FixableErrorList &errors
 	std::ostringstream oss;
 	oss << errors.size() << " error(s):" << std::endl;
 	for (const auto &e : errors) {
-		oss << "- " << e->what() << std::endl;
+		oss << "- " << e->message() << std::endl;
 	};
 	return oss.str();
 }

@@ -110,7 +110,7 @@ void Experiment::DeleteIdentification(const Identification::Ptr &identification
 	try {
 		d_p->DeleteIdentification(identification);
 	} catch (const priv::Identifier::UnmanagedIdentification &e) {
-		throw cpptrace::invalid_argument(e.what());
+		throw cpptrace::invalid_argument(e.message());
 	}
 }
 

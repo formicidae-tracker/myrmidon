@@ -1,46 +1,46 @@
 #include "TagStatistics.hpp"
 
-#include <fort/hermes/FileContext.hpp>
 #include <fort/hermes/Error.hpp>
+#include <fort/hermes/FileContext.hpp>
 
-#include "Typedefs.hpp"
-#include "DenseMap.hpp"
 #include "TimeUtils.hpp"
+#include "Typedefs.hpp"
 
 #include "TrackingDataDirectoryError.hpp"
+
+#include <fort/myrmidon/utils/Exception.hpp>
 
 namespace fort {
 namespace myrmidon {
 namespace priv {
 
-
-TagStatistics TagStatisticsHelper::Create(TagID tagID,const Time & firstTime) {
+TagStatistics TagStatisticsHelper::Create(TagID tagID, const Time &firstTime) {
 	TagStatistics res;
-	res.ID = tagID;
+	res.ID        = tagID;
 	res.FirstSeen = firstTime;
-	res.LastSeen= firstTime;
-	res.Counts = Eigen::Matrix<uint64_t ,Eigen::Dynamic,1>(10);
+	res.LastSeen  = firstTime;
+	res.Counts    = Eigen::Matrix<uint64_t, Eigen::Dynamic, 1>(10);
 	res.Counts.setZero();
 	res.Counts(TagStatistics::TOTAL_SEEN) = 1;
 	return res;
 }
 
-TagStatistics::CountHeader TagStatisticsHelper::ComputeGap(const Time & lastSeen, const Time & currentTime) {
+TagStatistics::CountHeader
+TagStatisticsHelper::ComputeGap(const Time &lastSeen, const Time &currentTime) {
 
-	const static std::map<int64_t,TagStatistics::CountHeader> gapBounds
-		= {
-		   {0,TagStatistics::CountHeader(0)},
-		   {(500 * Duration::Millisecond).Nanoseconds(),TagStatistics::GAP_500MS},
-		   {(  1 * Duration::Second).Nanoseconds(), TagStatistics::GAP_1S},
-		   {( 10 * Duration::Second).Nanoseconds(), TagStatistics::GAP_10S},
-		   {(  1 * Duration::Minute).Nanoseconds(), TagStatistics::GAP_1M},
-		   {( 10 * Duration::Minute).Nanoseconds(), TagStatistics::GAP_10M},
-		   {(  1 * Duration::Hour).Nanoseconds(), TagStatistics::GAP_1H},
-		   {( 10 * Duration::Hour).Nanoseconds(), TagStatistics::GAP_10H},
+	const static std::map<int64_t, TagStatistics::CountHeader> gapBounds = {
+	    {0, TagStatistics::CountHeader(0)},
+	    {(500 * Duration::Millisecond).Nanoseconds(), TagStatistics::GAP_500MS},
+	    {(1 * Duration::Second).Nanoseconds(), TagStatistics::GAP_1S},
+	    {(10 * Duration::Second).Nanoseconds(), TagStatistics::GAP_10S},
+	    {(1 * Duration::Minute).Nanoseconds(), TagStatistics::GAP_1M},
+	    {(10 * Duration::Minute).Nanoseconds(), TagStatistics::GAP_10M},
+	    {(1 * Duration::Hour).Nanoseconds(), TagStatistics::GAP_1H},
+	    {(10 * Duration::Hour).Nanoseconds(), TagStatistics::GAP_10H},
 	};
 	Duration gap = currentTime.Sub(lastSeen);
-	auto fi = gapBounds.upper_bound(gap.Nanoseconds());
-	if ( fi == gapBounds.end() ) {
+	auto     fi  = gapBounds.upper_bound(gap.Nanoseconds());
+	if (fi == gapBounds.end()) {
 		return TagStatistics::GAP_MORE;
 	}
 	return fi->second;
@@ -50,7 +50,7 @@ std::tuple<TagStatisticsHelper::Timed, FixableError::Ptr>
 TagStatisticsHelper::BuildStats(const std::string &hermesFile) {
 	Timed res;
 
-	auto	            &stats = res.TagStats;
+	auto                &stats = res.TagStats;
 	hermes::FileContext  file(hermesFile, false);
 	hermes::FrameReadout ro;
 
@@ -88,9 +88,11 @@ TagStatisticsHelper::BuildStats(const std::string &hermesFile) {
 
 		} catch (const std::exception &e) {
 			throw cpptrace::runtime_error(
-			    "Could not build statistic for '" + hermesFile + "':" + e.what()
+			    "Could not build statistic for '" + hermesFile +
+			    "':" + utils::What(e)
 			);
 		}
+
 		FrameID current = ro.frameid();
 
 		// current time stripped from any monotonic data
@@ -137,86 +139,95 @@ TagStatisticsHelper::BuildStats(const std::string &hermesFile) {
 void TagStatisticsHelper::UpdateGaps(
     TagStatistics &stats, const Time &lastSeen, const Time &currentTime
 ) {
-	auto gap = ComputeGap(lastSeen,currentTime);
-	if ( gap < TagStatistics::GAP_500MS ) {
+	auto gap = ComputeGap(lastSeen, currentTime);
+	if (gap < TagStatistics::GAP_500MS) {
 		return;
 	}
 	stats.Counts(gap) += 1;
 }
 
-void TagStatisticsHelper::Merge(Timed & stats, const Timed & other) {
+void TagStatisticsHelper::Merge(Timed &stats, const Timed &other) {
 
-	if ( stats.End > other.Start ) {
+	if (stats.End > other.Start) {
 		throw cpptrace::runtime_error("Could ony merge time-upward");
 	}
-	for ( const auto & [tagID,tagStats] : other.TagStats ) {
+	for (const auto &[tagID, tagStats] : other.TagStats) {
 		auto fi = stats.TagStats.find(tagID);
-		if ( fi == stats.TagStats.end() ) {
-			stats.TagStats.insert(std::make_pair(tagID,tagStats));
+		if (fi == stats.TagStats.end()) {
+			stats.TagStats.insert(std::make_pair(tagID, tagStats));
 		} else {
-			fi->second = MergeTimed(fi->second,stats.End,tagStats,other.Start);
+			fi->second =
+			    MergeTimed(fi->second, stats.End, tagStats, other.Start);
 		}
 	}
 	stats.End = other.End;
 }
 
-void TagStatisticsHelper::Merge(TagStatistics::ByTagID & stats, const TagStatistics::ByTagID & other) {
-	for ( const auto & [tagID,tagStats] : other ) {
+void TagStatisticsHelper::Merge(
+    TagStatistics::ByTagID &stats, const TagStatistics::ByTagID &other
+) {
+	for (const auto &[tagID, tagStats] : other) {
 		auto fi = stats.find(tagID);
-		if ( fi == stats.end() ) {
-			stats.insert(std::make_pair(tagID,tagStats));
+		if (fi == stats.end()) {
+			stats.insert(std::make_pair(tagID, tagStats));
 		} else {
-			fi->second = MergeSpaced(fi->second,tagStats);
+			fi->second = MergeSpaced(fi->second, tagStats);
 		}
 	}
 }
 
-
-TagStatistics
-TagStatisticsHelper::MergeTimed(const TagStatistics & old, const Time & oldEnd,
-                                const TagStatistics & newer, const Time & newerStart) {
-	if ( old.ID != newer.ID ) {
-		throw cpptrace::invalid_argument("Mismatched ID "
-		                            + std::to_string(newer.ID)
-		                            + " (expected:" + std::to_string(old.ID) + ")");
+TagStatistics TagStatisticsHelper::MergeTimed(
+    const TagStatistics &old,
+    const Time          &oldEnd,
+    const TagStatistics &newer,
+    const Time          &newerStart
+) {
+	if (old.ID != newer.ID) {
+		throw cpptrace::invalid_argument(
+		    "Mismatched ID " + std::to_string(newer.ID) +
+		    " (expected:" + std::to_string(old.ID) + ")"
+		);
 	}
 
-
-	if ( oldEnd > newerStart ) {
-		throw cpptrace::runtime_error("Older statistics must happen after newer one");
+	if (oldEnd > newerStart) {
+		throw cpptrace::runtime_error(
+		    "Older statistics must happen after newer one"
+		);
 	}
 	TagStatistics res(old);
 	res.Counts += newer.Counts;
 	bool computeNew = false;
-	if ( newer.FirstSeen > newerStart ) {
-		res.Counts(ComputeGap(newerStart,newer.FirstSeen)) -= 1;
+	if (newer.FirstSeen > newerStart) {
+		res.Counts(ComputeGap(newerStart, newer.FirstSeen)) -= 1;
 		computeNew = true;
 	}
-	if ( res.LastSeen < oldEnd ) {
-		res.Counts(ComputeGap(old.LastSeen,oldEnd)) -= 1;
+	if (res.LastSeen < oldEnd) {
+		res.Counts(ComputeGap(old.LastSeen, oldEnd)) -= 1;
 		computeNew = true;
 	}
-	if ( computeNew ==  true ) {
-		res.Counts(ComputeGap(old.LastSeen,newer.FirstSeen)) += 1;
+	if (computeNew == true) {
+		res.Counts(ComputeGap(old.LastSeen, newer.FirstSeen)) += 1;
 	}
 
 	res.LastSeen = newer.LastSeen;
 	return res;
 }
 
-TagStatistics TagStatisticsHelper::MergeSpaced(const TagStatistics & a, const TagStatistics & b) {
-	if ( a.ID != b.ID ) {
-		throw cpptrace::invalid_argument("Mismatched ID "
-		                            + std::to_string(a.ID)
-		                            + " (expected:" + std::to_string(b.ID) + ")");
+TagStatistics TagStatisticsHelper::MergeSpaced(
+    const TagStatistics &a, const TagStatistics &b
+) {
+	if (a.ID != b.ID) {
+		throw cpptrace::invalid_argument(
+		    "Mismatched ID " + std::to_string(a.ID) +
+		    " (expected:" + std::to_string(b.ID) + ")"
+		);
 	}
 	TagStatistics res(a);
 	res.Counts += b.Counts;
-	res.LastSeen = a.LastSeen > b.LastSeen ? a.LastSeen : b.LastSeen;
+	res.LastSeen  = a.LastSeen > b.LastSeen ? a.LastSeen : b.LastSeen;
 	res.FirstSeen = a.FirstSeen < b.FirstSeen ? a.FirstSeen : b.FirstSeen;
 	return res;
 }
-
 
 } // namespace priv
 } // namespace myrmidon

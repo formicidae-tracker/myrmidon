@@ -101,7 +101,7 @@ AntZoner::ConstPtr CollisionSolver::ZonerFor(const IdentifiedFrame &frame
 	} catch (const cpptrace::out_of_range &e) {
 		throw cpptrace::invalid_argument(
 		    "Unknown SpaceID " + std::to_string(frame.Space) +
-		    " in collision solver: " + std::string(e.what()) +
+		    " in collision solver: " + std::string(e.message()) +
 		    d_spaceZoners.DebugString()
 		);
 	}

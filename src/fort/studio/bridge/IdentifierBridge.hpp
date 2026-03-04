@@ -19,24 +19,27 @@ class IdentifierBridge : public GlobalBridge {
 	Q_OBJECT
 
 public:
-	IdentifierBridge(QObject * parent);
+	IdentifierBridge(QObject *parent);
 	virtual ~IdentifierBridge();
 
-	QAbstractItemModel * model() const;
+	QAbstractItemModel *model() const;
 
-	fmp::Identification::ConstPtr identificationForIndex(const QModelIndex & index) const;
+	fmp::Identification::ConstPtr
+	identificationForIndex(const QModelIndex &index) const;
 
-	void initialize(ExperimentBridge * experiment) override;
+	void initialize(ExperimentBridge *experiment) override;
 
+	fmp::IdentificationConstPtr
+	identify(fmp::TagID tagID, const fort::Time &time) const;
 
-	fmp::IdentificationConstPtr identify(fmp::TagID tagID,
-	                                     const fort::Time & time) const;
+	bool freeRangeContaining(
+	    fort::Time       &start,
+	    fort::Time       &end,
+	    fmp::TagID        tagID,
+	    const fort::Time &time
+	) const;
 
-	bool freeRangeContaining(fort::Time & start,
-	                         fort::Time & end,
-	                         fmp::TagID tagID, const fort::Time & time) const;
-
-	std::vector<fm::AntID> unidentifiedAntAt(const fort::Time & time) const;
+	std::vector<fm::AntID> unidentifiedAntAt(const fort::Time &time) const;
 signals:
 	void identificationCreated(fmp::Identification::ConstPtr);
 	void identificationRangeModified(fmp::Identification::ConstPtr);
@@ -45,12 +48,14 @@ signals:
 	void identificationDeleted(fmp::Identification::ConstPtr);
 
 public slots:
-	fmp::Identification::Ptr addIdentification(quint32 antID,
-	                                           fmp::TagID tagID,
-	                                           const fort::Time & start,
-	                                           const fort::Time & end);
+	fmp::Identification::Ptr addIdentification(
+	    quint32           antID,
+	    fmp::TagID        tagID,
+	    const fort::Time &start,
+	    const fort::Time &end
+	);
 
-	void deleteIdentification(const fmp::Identification::ConstPtr & ident);
+	void deleteIdentification(const fmp::Identification::ConstPtr &ident);
 
 protected:
 	void setUpExperiment() override;
@@ -63,20 +68,23 @@ private slots:
 	void onDefaultTagSizeChanged(double tagSize);
 
 private:
-	QList<QStandardItem*> buildIdentification(const fmp::Identification::Ptr & identification);
-
+	QList<QStandardItem *>
+	buildIdentification(const fmp::Identification::Ptr &identification);
 
 	void rebuildModels();
 
-	QStandardItem * findIdentification(const fmp::Identification::ConstPtr & identification) const;
+	QStandardItem *
+	findIdentification(const fmp::Identification::ConstPtr &identification
+	) const;
 
-	void onAntPositionUpdate(const fmp::Identification::ConstPtr & identification,
-	                         const std::vector<fmp::AntPoseEstimateConstPtr> & estimations);
+	void onAntPositionUpdate(
+	    const fmp::Identification::ConstPtr             &identification,
+	    const std::vector<fmp::AntPoseEstimateConstPtr> &estimations
+	);
 
-	void onStartItemChanged(QStandardItem * item);
-	void onEndItemChanged(QStandardItem * item);
-	void onSizeItemChanged(QStandardItem * item);
-
+	void onStartItemChanged(QStandardItem *item);
+	void onEndItemChanged(QStandardItem *item);
+	void onSizeItemChanged(QStandardItem *item);
 
 	const static int TAG_ID_COLUMN = 0;
 	const static int ANT_ID_COLUMN = 1;
@@ -85,5 +93,6 @@ private:
 	const static int SIZE_COLUMN   = 4;
 	const static int POSES_COLUMN  = 5;
 
-	QStandardItemModel * d_model;
+	QStandardItemModel *d_model;
+	slog::Logger<1>     d_logger;
 };

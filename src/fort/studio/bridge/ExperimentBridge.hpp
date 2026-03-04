@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Bridge.hpp"
+#include <slog++/Logger.hpp>
 
 class UniverseBridge;
 class MeasurementBridge;
@@ -97,7 +98,7 @@ private:
 	friend class ExperimentBridgeUTest_ActiveModifiedState_Test;
 
 	fmp::Experiment::Ptr tryOpen(
-	    const QString	                                  &path,
+	    const QString                                      &path,
 	    std::unique_ptr<fort::myrmidon::ProgressReporter> &&progress
 	);
 	fmp::Experiment::Ptr openWithDialog(const QString &path, QWidget *parent);
@@ -106,7 +107,7 @@ private:
 	void setAbsoluteFilePathProperty(const QString &path);
 
 	fmp::Experiment::Ptr              d_experiment;
-	UniverseBridge	               *d_universe;
+	UniverseBridge                   *d_universe;
 	MeasurementBridge                *d_measurements;
 	IdentifierBridge                 *d_identifier;
 	AntDisplayBridge                 *d_antDisplay;
@@ -114,13 +115,14 @@ private:
 	ConcurrentFrameLoader            *d_frameLoader;
 	AntShapeTypeBridge               *d_antShapeTypes;
 	AntKeyValueBridge                *d_antKeyValues;
-	MovieBridge	                  *d_movies;
-	ZoneBridge	                   *d_zones;
+	MovieBridge                      *d_movies;
+	ZoneBridge                       *d_zones;
 	StatisticsBridge                 *d_statistics;
 	TagCloseUpBridge                 *d_tagCloseUps;
 	AntMeasurementBridge             *d_antMeasurements;
-	AntShapeBridge	               *d_antShapes;
+	AntShapeBridge                   *d_antShapes;
 	const std::vector<GlobalBridge *> d_children;
 	quint32                           d_selectedID;
 	QString                           d_absoluteFilePath;
+	slog::Logger<1>                   d_logger;
 };

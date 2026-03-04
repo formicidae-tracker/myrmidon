@@ -2,10 +2,11 @@
 
 #include "Bridge.hpp"
 
-#include <fort/studio/MyrmidonTypes/TrackingDataDirectory.hpp>
 #include <fort/studio/MyrmidonTypes/Experiment.hpp>
+#include <fort/studio/MyrmidonTypes/TrackingDataDirectory.hpp>
 
 #include <QFutureWatcher>
+#include <slog++/Logger.hpp>
 
 class QStandardItemModel;
 class QAbstractItemModel;
@@ -14,14 +15,14 @@ class StatisticsBridge : public GlobalBridge {
 	Q_OBJECT
 
 public:
-	StatisticsBridge(QObject * parent );
+	StatisticsBridge(QObject *parent);
 	virtual ~StatisticsBridge();
 
-	void initialize(ExperimentBridge * experiment) override;
+	void initialize(ExperimentBridge *experiment) override;
 
-	QAbstractItemModel * stats() const;
+	QAbstractItemModel *stats() const;
 
-	const fm::TagStatistics & statsForTag(fmp::TagID tagID) const;
+	const fm::TagStatistics &statsForTag(fmp::TagID tagID) const;
 
 	size_t frameCount() const;
 
@@ -41,10 +42,10 @@ private:
 	void rebuildModel();
 	void recountFrames();
 
-	QStandardItemModel       * d_model;
-	bool                       d_outdated;
-	QFutureWatcher<Stats*>   * d_watcher;
-
-	Stats                      d_stats;
-	size_t                     d_frameCount;
+	QStandardItemModel      *d_model;
+	bool                     d_outdated;
+	QFutureWatcher<Stats *> *d_watcher;
+	Stats                    d_stats;
+	size_t                   d_frameCount;
+	slog::Logger<1>          d_logger;
 };

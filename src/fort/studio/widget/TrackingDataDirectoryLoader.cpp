@@ -1,9 +1,11 @@
 #include "TrackingDataDirectoryLoader.hpp"
+#include "fort/myrmidon/utils/Exception.hpp"
 
 #include <fort/studio/widget/FixableErrorDialog.hpp>
 
 #include <QProgressDialog>
 #include <QtConcurrent>
+
 size_t TrackingDataDirectoryLoader::size() const {
 	return d_tagCloseUps.size() + d_tagStatistics.size() + d_fullFrames.size();
 }
@@ -70,47 +72,61 @@ TrackingDataDirectoryLoader::~TrackingDataDirectoryLoader(){
 	}
 }
 
-void TrackingDataDirectoryLoader::load(const std::vector<fmp::TrackingDataDirectory::Loader> & loaders,
-                                       const QString & caption) {
+void TrackingDataDirectoryLoader::load(
+    const std::vector<fmp::TrackingDataDirectory::Loader> &loaders,
+    const QString                                         &caption
+) {
 	std::atomic<int> counts;
 	counts.store(0);
 
-	if ( d_dialog != nullptr ) {
+	if (d_dialog != nullptr) {
 		d_dialog->setLabelText(caption);
-		d_dialog->setRange(0,loaders.size());
+		d_dialog->setRange(0, loaders.size());
 		d_dialog->setValue(0);
-		d_dialog->setWindowFlags(Qt::Dialog | Qt::WindowTitleHint | Qt::FramelessWindowHint);
+		d_dialog->setWindowFlags(
+		    Qt::Dialog | Qt::WindowTitleHint | Qt::FramelessWindowHint
+		);
 		d_dialog->adjustSize();
 	}
 
 	QFutureWatcher<void> watcher;
-	QEventLoop loop;
+	QEventLoop           loop;
 
-	connect(&watcher,&QFutureWatcher<void>::finished,
-	        &loop,&QEventLoop::quit);
+	connect(
+	    &watcher,
+	    &QFutureWatcher<void>::finished,
+	    &loop,
+	    &QEventLoop::quit
+	);
 
 	fm::FixableErrorList errors;
-	std::mutex mx;
-	watcher.setFuture(QtConcurrent::map(loaders,
-	                                    [&counts,&mx,&errors,this](const fmp::TrackingDataDirectory::Loader & l) {
-		                                    try {
-			                                    auto e = l();
-			                                    if ( e ) {
-				                                    std::lock_guard<std::mutex> lock(mx);
-				                                    errors.push_back(std::move(e));
-			                                    }
-		                                    } catch( const std::exception & e) {
-			                                    qWarning() << e.what();
-		                                    }
-		                                    int done = counts.fetch_add(1)+1;
-		                                    emit valueChanged(done);
-	                                    }));
+	std::mutex           mx;
+	watcher.setFuture(QtConcurrent::map(
+	    loaders,
+	    [&counts, &mx, &errors, this](
+	        const fmp::TrackingDataDirectory::Loader &l
+	    ) {
+		    try {
+			    auto e = l();
+			    if (e) {
+				    std::lock_guard<std::mutex> lock(mx);
+				    errors.push_back(std::move(e));
+			    }
+		    } catch (const std::exception &e) {
+			    slog::Error(
+			        "loading error",
+			        slog::String("module", "TrackingDataDirectoryLoader"),
+			        slog::Err(fort::myrmidon::utils::What(e))
+			    );
+		    }
+		    int  done = counts.fetch_add(1) + 1;
+		    emit valueChanged(done);
+	    }
+	));
 	loop.exec();
 
-	FixableErrorDialog::promptForFix("",std::move(errors),d_parent);
+	FixableErrorDialog::promptForFix("", std::move(errors), d_parent);
 }
-
-
 
 void TrackingDataDirectoryLoader::loadAll() {
 	load(d_tagCloseUps,tr("Computing tag's close-up..."));

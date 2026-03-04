@@ -1,160 +1,194 @@
 #include "IdentificationWorkspace.hpp"
+#include "fort/myrmidon/utils/Slogpp.hpp"
 #include "ui_IdentificationWorkspace.h"
 
-#include <QKeyEvent>
-#include <QClipboard>
-#include <QToolBar>
-#include <QSortFilterProxyModel>
 #include <QAction>
-#include <QMainWindow>
+#include <QClipboard>
 #include <QDockWidget>
 #include <QInputDialog>
+#include <QKeyEvent>
+#include <QMainWindow>
+#include <QSortFilterProxyModel>
+#include <QToolBar>
 
 #include <fort/studio/bridge/ExperimentBridge.hpp>
 #include <fort/studio/bridge/GlobalPropertyBridge.hpp>
-#include <fort/studio/bridge/MeasurementBridge.hpp>
 #include <fort/studio/bridge/IdentifierBridge.hpp>
+#include <fort/studio/bridge/MeasurementBridge.hpp>
 #include <fort/studio/bridge/StatisticsBridge.hpp>
 
 #include <fort/studio/Format.hpp>
 #include <fort/studio/Utils.hpp>
-#include <fort/studio/widget/vectorgraphics/VectorialScene.hpp>
-#include <fort/studio/widget/vectorgraphics/Vector.hpp>
-#include <fort/studio/widget/TagCloseUpExplorer.hpp>
 #include <fort/studio/widget/IdentificationListWidget.hpp>
+#include <fort/studio/widget/TagCloseUpExplorer.hpp>
 #include <fort/studio/widget/TagStatisticsWidget.hpp>
+#include <fort/studio/widget/vectorgraphics/Vector.hpp>
+#include <fort/studio/widget/vectorgraphics/VectorialScene.hpp>
 
 #include <fort/studio/MyrmidonTypes/Conversion.hpp>
 
-
-
-
 IdentificationWorkspace::IdentificationWorkspace(QWidget *parent)
-	: Workspace(false,parent)
-	, d_ui(new Ui::IdentificationWorkspace)
-	, d_experiment(nullptr)
-	, d_vectorialScene(new VectorialScene)
-	, d_newAntAction(nullptr)
-	, d_addIdentificationAction(nullptr)
-	, d_deletePoseAction(nullptr)
-	, d_copyTimeAction(nullptr)
-	, d_actionToolBar(new QToolBar("Identification",this))
-	, d_navigationToolBar(nullptr) {
+    : Workspace(false, parent)
+    , d_ui(new Ui::IdentificationWorkspace)
+    , d_experiment(nullptr)
+    , d_vectorialScene(new VectorialScene)
+    , d_newAntAction(nullptr)
+    , d_addIdentificationAction(nullptr)
+    , d_deletePoseAction(nullptr)
+    , d_copyTimeAction(nullptr)
+    , d_actionToolBar(new QToolBar("Identification", this))
+    , d_navigationToolBar(nullptr)
+    , d_logger(slog::With(slog::String("module", "IdentificationWorkspace"))) {
 	d_actionToolBar->setObjectName("identificationToolBar");
 
-#define set_action(res,legendStr,shortCutStr,toolTipStr) do { \
-		(res) = d_actionToolBar->addAction(tr(legendStr)); \
-		(res)->setShortcut(QKeySequence(tr(shortCutStr))); \
-		(res)->setToolTip(tr(toolTipStr " (" shortCutStr ")")); \
-		(res)->setStatusTip((res)->toolTip()); \
-	}while(0);
+#define set_action(res, legendStr, shortCutStr, toolTipStr)                    \
+	do {                                                                       \
+		(res) = d_actionToolBar->addAction(tr(legendStr));                     \
+		(res)->setShortcut(QKeySequence(tr(shortCutStr)));                     \
+		(res)->setToolTip(tr(toolTipStr " (" shortCutStr ")"));                \
+		(res)->setStatusTip((res)->toolTip());                                 \
+	} while (0);
 
-	set_action(d_newAntAction,
-	           "New Ant From Close-Up",
-	           "Ctrl+A",
-	           "Create a new ant from current close-up");
+	set_action(
+	    d_newAntAction,
+	    "New Ant From Close-Up",
+	    "Ctrl+A",
+	    "Create a new ant from current close-up"
+	);
 	d_newAntAction->setIcon(QIcon(":/icons/ant-add.svg"));
 
-	set_action(d_addIdentificationAction,
-	           "Add Identification To...",
-	           "Ctrl+I",
-	           "Add a new identifcation from current close-up to an existing ant");
+	set_action(
+	    d_addIdentificationAction,
+	    "Add Identification To...",
+	    "Ctrl+I",
+	    "Add a new identifcation from current close-up to an existing ant"
+	);
 	d_addIdentificationAction->setIcon(QIcon(":/icons/ident-ant.svg"));
 
-	set_action(d_deletePoseAction,
-	           "Delete Pose Estimation",
-	           "Ctrl+Shift+D",
-	           "Deletes current pose estimation");
+	set_action(
+	    d_deletePoseAction,
+	    "Delete Pose Estimation",
+	    "Ctrl+Shift+D",
+	    "Deletes current pose estimation"
+	);
 	d_deletePoseAction->setIcon(QIcon::fromTheme("edit-delete-symbolic"));
 
 	d_actionToolBar->addSeparator();
 
-	set_action(d_hideTagAction,
-	           "Hide Tag For Current Session",
-	           "Ctrl+Shift+H",
-	           "Hides current tag until next reload");
+	set_action(
+	    d_hideTagAction,
+	    "Hide Tag For Current Session",
+	    "Ctrl+Shift+H",
+	    "Hides current tag until next reload"
+	);
 	d_hideTagAction->setIcon(QIcon(":/icons/hide.svg"));
 
-
-	set_action(d_showAllTagsAction,
-	           "Show All Tags",
-	           "Ctrl+Shift+O",
-	           "Shows all hidden tags");
+	set_action(
+	    d_showAllTagsAction,
+	    "Show All Tags",
+	    "Ctrl+Shift+O",
+	    "Shows all hidden tags"
+	);
 	d_showAllTagsAction->setIcon(QIcon(":/icons/eye.svg"));
 
 #undef set_action
-    d_ui->setupUi(this);
+	d_ui->setupUi(this);
 
-	connect(d_newAntAction,&QAction::triggered,
-	        this,&IdentificationWorkspace::newAnt);
+	connect(
+	    d_newAntAction,
+	    &QAction::triggered,
+	    this,
+	    &IdentificationWorkspace::newAnt
+	);
 
-	connect(d_addIdentificationAction,&QAction::triggered,
-	        this,&IdentificationWorkspace::addIdentification);
+	connect(
+	    d_addIdentificationAction,
+	    &QAction::triggered,
+	    this,
+	    &IdentificationWorkspace::addIdentification
+	);
 
-	connect(d_deletePoseAction,&QAction::triggered,
-	        this,&IdentificationWorkspace::deletePose);
+	connect(
+	    d_deletePoseAction,
+	    &QAction::triggered,
+	    this,
+	    &IdentificationWorkspace::deletePose
+	);
 
+	connect(
+	    d_hideTagAction,
+	    &QAction::triggered,
+	    this,
+	    &IdentificationWorkspace::hideCurrentTag
+	);
 
-	connect(d_hideTagAction,&QAction::triggered,
-	        this,&IdentificationWorkspace::hideCurrentTag);
+	d_ui->vectorialView->setScene(d_vectorialScene);
+	d_ui->vectorialView->setRenderHint(QPainter::Antialiasing, true);
+	connect(
+	    d_ui->vectorialView,
+	    &VectorialView::zoomed,
+	    d_vectorialScene,
+	    &VectorialScene::onZoomed
+	);
+	d_vectorialScene->setColor(Conversion::colorFromFM(
+	    fmp::DefaultPaletteColor(fmp::Measurement::HEAD_TAIL_TYPE)
+	));
+	connect(
+	    d_vectorialScene,
+	    &VectorialScene::vectorCreated,
+	    this,
+	    &IdentificationWorkspace::onVectorCreated
+	);
+	connect(
+	    d_vectorialScene,
+	    &VectorialScene::vectorRemoved,
+	    this,
+	    &IdentificationWorkspace::onVectorRemoved
+	);
 
+	d_tagExplorer = new QDockWidget(tr("Tag Close-Ups"), this);
+	d_tagExplorer->setObjectName("identificationTagCloseUpDock");
+	auto tagExplorer = new TagCloseUpExplorer(this);
+	d_tagExplorer->setWidget(tagExplorer);
+	connect(
+	    tagExplorer,
+	    &TagCloseUpExplorer::currentCloseUpChanged,
+	    this,
+	    &IdentificationWorkspace::setTagCloseUp
+	);
+	connect(
+	    tagExplorer,
+	    &TagCloseUpExplorer::currentTagIDChanged,
+	    this,
+	    &IdentificationWorkspace::onTagIDChanged
+	);
 
-
-
-    d_ui->vectorialView->setScene(d_vectorialScene);
-    d_ui->vectorialView->setRenderHint(QPainter::Antialiasing,true);
-    connect(d_ui->vectorialView,
-            &VectorialView::zoomed,
-            d_vectorialScene,
-            &VectorialScene::onZoomed);
-    d_vectorialScene->setColor(Conversion::colorFromFM(fmp::DefaultPaletteColor(fmp::Measurement::HEAD_TAIL_TYPE)));
-    connect(d_vectorialScene,
-            &VectorialScene::vectorCreated,
-            this,
-            &IdentificationWorkspace::onVectorCreated);
-    connect(d_vectorialScene,
-            &VectorialScene::vectorRemoved,
-            this,
-            &IdentificationWorkspace::onVectorRemoved);
-
-
-
-    d_tagExplorer = new QDockWidget(tr("Tag Close-Ups"),this);
-    d_tagExplorer->setObjectName("identificationTagCloseUpDock");
-    auto tagExplorer = new TagCloseUpExplorer(this);
-    d_tagExplorer->setWidget(tagExplorer);
-	connect(tagExplorer,
-	        &TagCloseUpExplorer::currentCloseUpChanged,
-	        this,
-	        &IdentificationWorkspace::setTagCloseUp);
-	connect(tagExplorer,
-	        &TagCloseUpExplorer::currentTagIDChanged,
-	        this,
-	        &IdentificationWorkspace::onTagIDChanged);
-
-
-	connect(d_showAllTagsAction,&QAction::triggered,
-	        tagExplorer,&TagCloseUpExplorer::showAllTags);
-
+	connect(
+	    d_showAllTagsAction,
+	    &QAction::triggered,
+	    tagExplorer,
+	    &TagCloseUpExplorer::showAllTags
+	);
 
 	auto identificationList = new IdentificationListWidget(this);
-	d_identificationList = new QDockWidget(tr("Identifications"),this);
+	d_identificationList    = new QDockWidget(tr("Identifications"), this);
 	d_identificationList->setObjectName("identificationListDock");
 	d_identificationList->setWidget(identificationList);
-	//TODO connection
+	// TODO connection
 
-	connect(identificationList,
-	        &IdentificationListWidget::identificationSelected,
-	        tagExplorer,
-	        &TagCloseUpExplorer::selectCloseUpForIdentification);
-
+	connect(
+	    identificationList,
+	    &IdentificationListWidget::identificationSelected,
+	    tagExplorer,
+	    &TagCloseUpExplorer::selectCloseUpForIdentification
+	);
 
 	auto tagStatistics = new TagStatisticsWidget(this);
-	d_tagStatistics = new QDockWidget(tr("Tag Statistics"),this);
+	d_tagStatistics    = new QDockWidget(tr("Tag Statistics"), this);
 	d_tagStatistics->setObjectName("identificationTagStatsDock");
 	d_tagStatistics->setWidget(tagStatistics);
 
-    updateActionStates();
+	updateActionStates();
 }
 
 IdentificationWorkspace::~IdentificationWorkspace() {
@@ -211,69 +245,91 @@ void IdentificationWorkspace::initialize(
 }
 
 void IdentificationWorkspace::addIdentification() {
-	if ( d_tcu == nullptr ) {
+	if (d_tcu == nullptr) {
 		return;
 	}
-	auto m = d_experiment->measurements()->measurementForCloseUp(d_tcu->URI(),fmp::Measurement::HEAD_TAIL_TYPE);
-	if ( !m ) {
+	auto m = d_experiment->measurements()->measurementForCloseUp(
+	    d_tcu->URI(),
+	    fmp::Measurement::HEAD_TAIL_TYPE
+	);
+	if (!m) {
 		return;
 	}
-
-	fort::Time start,end;
-	if ( d_experiment->identifier()->freeRangeContaining(start,end,d_tcu->TagValue(),d_tcu->Frame().Time()) == false ) {
-		qCritical() << "TagID:" << fmp::FormatTagID(d_tcu->TagValue()).c_str()
-		            << " already identifies an Ant at Time "
-		            << ToQString(d_tcu->Frame().Time());
+	auto logger = d_logger.With(
+	    slog::Int("tagID", d_tcu->TagValue()),
+	    slog::FortTime("time", d_tcu->Frame().Time())
+	);
+	fort::Time start, end;
+	if (d_experiment->identifier()->freeRangeContaining(
+	        start,
+	        end,
+	        d_tcu->TagValue(),
+	        d_tcu->Frame().Time()
+	    ) == false) {
+		logger.Error("tag already identifies an Ant at this time: abording");
 		return;
 	}
 
 	QStringList items;
-	for ( const auto & antID : d_experiment->identifier()->unidentifiedAntAt(d_tcu->Frame().Time()) ) {
+	for (const auto &antID :
+	     d_experiment->identifier()->unidentifiedAntAt(d_tcu->Frame().Time())) {
 		items.push_back(fm::FormatAntID(antID).c_str());
 	}
-	if ( items.empty() ) {
-		qCritical() << "There are no unidentified ants, abording";
+	if (items.empty()) {
+		logger.Error("no unidentified ants at this time: abording");
 		return;
 	}
 
-	//TODO dialog to ask for an existing ant.
-	bool ok;
-	QVariant chosenID = QInputDialog::getItem(this,
-	                                          tr("Select an unidentified ant"),
-	                                          tr("Add identification to ant:"),
-	                                          items,0,false,&ok);
-	if ( ok == false ) {
+	bool     ok;
+	QVariant chosenID = QInputDialog::getItem(
+	    this,
+	    tr("Select an unidentified ant"),
+	    tr("Add identification to ant:"),
+	    items,
+	    0,
+	    false,
+	    &ok
+	);
+	if (ok == false) {
 		return;
 	}
 
-	d_experiment->identifier()->addIdentification(chosenID.toInt(),d_tcu->TagValue(),start,end);
-
+	d_experiment->identifier()
+	    ->addIdentification(chosenID.toInt(), d_tcu->TagValue(), start, end);
 
 	updateActionStates();
-
 }
 
 void IdentificationWorkspace::newAnt() {
-	if ( !d_tcu ) {
+	if (!d_tcu) {
 		return;
 	}
-	auto m = d_experiment->measurements()->measurementForCloseUp(d_tcu->URI(),fmp::Measurement::HEAD_TAIL_TYPE);
-	if ( !m ) {
+	auto m = d_experiment->measurements()->measurementForCloseUp(
+	    d_tcu->URI(),
+	    fmp::Measurement::HEAD_TAIL_TYPE
+	);
+	if (!m) {
 		return;
 	}
-	fort::Time start,end;
-	if ( d_experiment->identifier()->freeRangeContaining(start,end,d_tcu->TagValue(),d_tcu->Frame().Time()) == false ) {
-		qCritical() << "TagID:" << fmp::FormatTagID(d_tcu->TagValue()).c_str()
-		            << " already identifies an Ant at Time "
-		            << ToQString(d_tcu->Frame().Time());
-		return;
-	}
+	fort::Time start, end;
+	auto       logger = d_logger.With(
+        slog::Int("tagID", d_tcu->TagValue()),
+        slog::FortTime("time", d_tcu->Frame().Time())
+    );
 
+	if (d_experiment->identifier()->freeRangeContaining(
+	        start,
+	        end,
+	        d_tcu->TagValue(),
+	        d_tcu->Frame().Time()
+	    ) == false) {
+		logger.Error("tag already identifies an Ant at this time: abording");
+		return;
+	}
 
 	auto a = d_experiment->createAnt();
-	d_experiment->identifier()->addIdentification(a->AntID(),
-	                                              d_tcu->TagValue(),
-	                                              start,end);
+	d_experiment->identifier()
+	    ->addIdentification(a->AntID(), d_tcu->TagValue(), start, end);
 
 	updateActionStates();
 }
@@ -307,46 +363,61 @@ void IdentificationWorkspace::onIdentificationAntPositionChanged(fmp::Identifica
 	updateActionStates();
 }
 
-
-void IdentificationWorkspace::setTagCloseUp(const fmp::TagCloseUpConstPtr & tcu) {
-	if ( d_tcu == tcu ) {
+void IdentificationWorkspace::setTagCloseUp(const fmp::TagCloseUpConstPtr &tcu
+) {
+	if (d_tcu == tcu) {
 		return;
 	}
 	setCloseUpLabels(tcu);
 	d_tcu.reset();
-	for ( const auto & v : d_vectorialScene->vectors() ) {
+	for (const auto &v : d_vectorialScene->vectors()) {
 		d_vectorialScene->deleteShape(v.staticCast<Shape>());
 	}
 	d_tcu = tcu;
-	if ( d_copyTimeAction != nullptr ) {
-		d_copyTimeAction->setEnabled( !d_tcu == false );
+	if (d_copyTimeAction != nullptr) {
+		d_copyTimeAction->setEnabled(!d_tcu == false);
 	}
 
-	if ( !tcu ) {
+	if (!tcu) {
 		d_vectorialScene->setBackgroundPicture("");
 		d_vectorialScene->clearStaticPolygon();
-		d_ui->vectorialView->setBannerMessage("",QColor());
+		d_ui->vectorialView->setBannerMessage("", QColor());
 		updateActionStates();
 		return;
 	}
 
-	qInfo() << "Loading " << ToQString(tcu->URI()) << " image " << ToQString(tcu->AbsoluteFilePath());
+	auto logger = d_logger.With(
+	    slog::String("close_up", tcu->URI()),
+	    slog::String("image_path", tcu->AbsoluteFilePath())
+	);
 
-	double squareness = d_tcu->Squareness();
-	const static double threshold = 0.95;
-	if ( squareness < threshold ) {
+	logger.Info("loading image");
+
+	double              squareness = d_tcu->Squareness();
+	const static double threshold  = 0.95;
+	if (squareness < threshold) {
 		auto color = Conversion::colorFromFM(fmp::DefaultPaletteColor(5));
-		d_ui->vectorialView->setBannerMessage(tr("WARNING: Tag Squareness is Low (%1 < %2)").arg(squareness).arg(threshold),color);
+		d_ui->vectorialView->setBannerMessage(
+		    tr("WARNING: Tag Squareness is Low (%1 < %2)")
+		        .arg(squareness)
+		        .arg(threshold),
+		    color
+		);
 	} else {
-		d_ui->vectorialView->setBannerMessage("",QColor());
+		d_ui->vectorialView->setBannerMessage("", QColor());
 	}
 
-	d_vectorialScene->setBackgroundPicture(ToQString(tcu->AbsoluteFilePath().string()));
-	auto & tagPosition = tcu->TagPosition();
-	d_ui->vectorialView->centerOn(QPointF(tagPosition.x(),tagPosition.y()));
-	d_vectorialScene->setStaticPolygon(tcu->Corners(),QColor(255,0,0));
-	auto ident = d_experiment->identifier()->identify(tcu->TagValue(),tcu->Frame().Time());
-	if ( !ident ) {
+	d_vectorialScene->setBackgroundPicture(
+	    ToQString(tcu->AbsoluteFilePath().string())
+	);
+	auto &tagPosition = tcu->TagPosition();
+	d_ui->vectorialView->centerOn(QPointF(tagPosition.x(), tagPosition.y()));
+	d_vectorialScene->setStaticPolygon(tcu->Corners(), QColor(255, 0, 0));
+	auto ident = d_experiment->identifier()->identify(
+	    tcu->TagValue(),
+	    tcu->Frame().Time()
+	);
+	if (!ident) {
 		d_vectorialScene->clearPoseIndicator();
 	} else {
 		onIdentificationAntPositionChanged(ident);
@@ -356,7 +427,6 @@ void IdentificationWorkspace::setTagCloseUp(const fmp::TagCloseUpConstPtr & tcu)
 	d_tcu = tcu;
 	updateActionStates();
 }
-
 
 void IdentificationWorkspace::setGraphicsFromMeasurement(const fmp::TagCloseUpConstPtr & tcu) {
 	auto m = d_experiment->measurements()->measurementForCloseUp(tcu->URI(),fmp::Measurement::HEAD_TAIL_TYPE);
@@ -389,22 +459,24 @@ void IdentificationWorkspace::setGraphicsFromMeasurement(const fmp::TagCloseUpCo
 	}
 }
 
-
 void IdentificationWorkspace::onVectorUpdated() {
-	if ( !d_tcu ) {
-		qDebug() << "[IdentificationWorkspace]: Vector updated without TCU";
+
+	if (!d_tcu) {
+		d_logger.Warn("vector updated without a loaded close-up: abording");
 		return;
 	}
-	if ( d_vectorialScene->vectors().isEmpty() == true ) {
-		qDebug() << "[IdentificationWorkspace]: Vector updated without vector";
+	if (d_vectorialScene->vectors().isEmpty() == true) {
+		d_logger.Warn("vector updated but no vector in the scene: abording");
 		return;
 	}
 	auto vector = d_vectorialScene->vectors()[0];
 
-	d_experiment->measurements()->setMeasurement(d_tcu,
-	                                             fmp::Measurement::HEAD_TAIL_TYPE,
-	                                             vector->startPos(),
-	                                             vector->endPos());
+	d_experiment->measurements()->setMeasurement(
+	    d_tcu,
+	    fmp::Measurement::HEAD_TAIL_TYPE,
+	    vector->startPos(),
+	    vector->endPos()
+	);
 
 	setGraphicsFromMeasurement(d_tcu);
 
@@ -412,15 +484,17 @@ void IdentificationWorkspace::onVectorUpdated() {
 }
 
 void IdentificationWorkspace::onVectorCreated(QSharedPointer<Vector> vector) {
-	if ( !d_tcu ) {
-		qDebug() << "[IdentificationWorkspace]: Vector created without TCU";
+	if (!d_tcu) {
+		d_logger.Warn("vector created without a loaded close-up: deleting");
 		return;
 	}
 
-	if ( d_experiment->measurements()->setMeasurement(d_tcu,
-	                                                  fmp::Measurement::HEAD_TAIL_TYPE,
-	                                                  vector->startPos(),
-	                                                  vector->endPos()) == false ) {
+	if (d_experiment->measurements()->setMeasurement(
+	        d_tcu,
+	        fmp::Measurement::HEAD_TAIL_TYPE,
+	        vector->startPos(),
+	        vector->endPos()
+	    ) == false) {
 
 		d_vectorialScene->deleteShape(vector.staticCast<Shape>());
 		d_vectorialScene->setMode(VectorialScene::Mode::InsertVector);
@@ -428,30 +502,35 @@ void IdentificationWorkspace::onVectorCreated(QSharedPointer<Vector> vector) {
 		return;
 	};
 
-	connect(vector.data(),
-	        &Shape::updated,
-	        this,
-	        &IdentificationWorkspace::onVectorUpdated);
+	connect(
+	    vector.data(),
+	    &Shape::updated,
+	    this,
+	    &IdentificationWorkspace::onVectorUpdated
+	);
 
 	updateActionStates();
-
 }
 
-
 void IdentificationWorkspace::onVectorRemoved() {
-	if ( !d_tcu ) {
+	if (!d_tcu) {
 		return;
 	}
-	auto m = d_experiment->measurements()->measurementForCloseUp(d_tcu->URI(),fmp::Measurement::HEAD_TAIL_TYPE);
-	if ( !m ) {
-		qDebug() << "No measurement 'head-tail' for " << ToQString(d_tcu->URI());
+	auto m = d_experiment->measurements()->measurementForCloseUp(
+	    d_tcu->URI(),
+	    fmp::Measurement::HEAD_TAIL_TYPE
+	);
+	if (!m) {
+		d_logger.Warn(
+		    "vector removed but no measurement 'head-tail' in this experiment: "
+		    "abording"
+		);
 		return;
 	}
 	d_experiment->measurements()->deleteMeasurement(m);
 	d_vectorialScene->setMode(VectorialScene::Mode::InsertVector);
 	updateActionStates();
 }
-
 
 void IdentificationWorkspace::updateActionStates() {
 	d_hideTagAction->setEnabled(!d_tcu == false);

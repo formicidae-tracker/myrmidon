@@ -1,11 +1,11 @@
 #include "UniverseEditorWidget.hpp"
 #include "fort/myrmidon/types/Reporter.hpp"
+#include "fort/myrmidon/utils/Exception.hpp"
 #include "ui_UniverseEditorWidget.h"
 
 #include <fort/studio/bridge/UniverseBridge.hpp>
 #include <fort/studio/widget/ProgressDialog.hpp>
 
-#include <QDebug>
 #include <QEventLoop>
 #include <QFileDialog>
 #include <QFutureWatcher>
@@ -22,7 +22,8 @@
 
 UniverseEditorWidget::UniverseEditorWidget(QWidget *parent)
     : QWidget(parent)
-    , d_ui(new Ui::UniverseEditorWidget) {
+    , d_ui(new Ui::UniverseEditorWidget)
+    , d_logger(slog::With(slog::String("module", "UniverseEditorWidget"))) {
 	d_ui->setupUi(this);
 
 	d_ui->addButton->setEnabled(false);
@@ -78,39 +79,43 @@ UniverseEditorWidget::openTDD(const QString &path) {
 	    &QEventLoop::quit
 	);
 
-	QProgressDialog	                  *dialog;
+	QProgressDialog                      *dialog;
 	fort::myrmidon::ProgressReporter::Ptr progress;
 
 	std::tie(dialog, progress) = OpenItemProgressDialog(
 	    tr("Loading %1 frame references").arg(path),
 	    this
 	);
+	auto logger = d_logger.With(slog::String("path", path.toStdString()));
 
-	auto openDataDir = [&res, &errors, &path, &progress, dialog, this]() {
-		try {
-			std::tie(res, errors) = fmp::TrackingDataDirectory::Open(
-			    path.toUtf8().constData(),
-			    d_universe->basepath().toUtf8().constData(),
-			    {.Progress = std::move(progress)}
-			);
+	auto openDataDir =
+	    [&res, &errors, &path, &progress, &logger, dialog, this]() {
+		    try {
+			    std::tie(res, errors) = fmp::TrackingDataDirectory::Open(
+			        path.toUtf8().constData(),
+			        d_universe->basepath().toUtf8().constData(),
+			        {.Progress = std::move(progress)}
+			    );
 
-		} catch (const std::exception &e) {
-			qCritical() << "Could not open TrackingDataDirectory" << path
-			            << ": " << e.what();
-		}
+		    } catch (const std::exception &e) {
+			    logger.Error(
+			        "could not open tracking data directory path",
+			        slog::Err(fort::myrmidon::utils::What(e))
+			    );
+		    }
 
-		dialog->reset();
-	};
+		    dialog->reset();
+	    };
 	watcher.setFuture(QtConcurrent::run(openDataDir));
 
 	loop.exec();
 	dialog->deleteLater();
-	qWarning() << "done";
+	logger.Info("tracking data directory opened");
+
 	if (errors.empty() == false) {
 		if (FixableErrorDialog::promptForFix(path, std::move(errors), this) ==
 		    false) {
-			qWarning(
-			) << "[UniverseEditorWidget]: Fixing errors discarded by user";
+			logger.Warn("fixing errors discarded by user, not opening it");
 			return fmp::TrackingDataDirectory::Ptr();
 		}
 		res->SaveToCache();
@@ -151,7 +156,7 @@ void UniverseEditorWidget::addTrackingDataDirectory(const QString &filepath) {
 	auto space = SpaceChoiceDialog::Get(d_universe, this);
 
 	if (space.isEmpty()) {
-		qDebug() << "[UniverseEditorWidget]: TDD addition aborded by user";
+		d_logger.Debug("TDD addition aborded by user");
 		return;
 	}
 

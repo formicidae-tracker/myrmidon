@@ -12,51 +12,41 @@ class QItemSelection;
 
 class AntDisplayBridge : public GlobalBridge {
 	Q_OBJECT
-	Q_PROPERTY(quint32 numberSoloAnt
-	           READ numberSoloAnt
-	           NOTIFY numberSoloAntChanged)
-	Q_PROPERTY(quint32 numberHiddenAnt
-	           READ numberHiddenAnt
-	           NOTIFY numberHiddenAntChanged)
+	Q_PROPERTY(quint32 numberSoloAnt READ numberSoloAnt NOTIFY
+	               numberSoloAntChanged)
+	Q_PROPERTY(quint32 numberHiddenAnt READ numberHiddenAnt NOTIFY
+	               numberHiddenAntChanged)
 
 public:
-	AntDisplayBridge(QObject * parent);
+	AntDisplayBridge(QObject *parent);
 	virtual ~AntDisplayBridge();
 
-	void initialize(ExperimentBridge * experiment) override;
+	void initialize(ExperimentBridge *experiment) override;
 
-
-	QAbstractItemModel * model() const;
+	QAbstractItemModel *model() const;
 
 	quint32 numberSoloAnt() const;
 
 	quint32 numberHiddenAnt() const;
 
-	fm::AntID antIDForIndex(const QModelIndex & index) const;
+	fm::AntID antIDForIndex(const QModelIndex &index) const;
 
-	std::pair<fmp::Ant::DisplayState,fm::Color> displayStatusAndColor(fm::AntID antID) const;
-
+	std::pair<fmp::Ant::DisplayState, fm::Color>
+	displayStatusAndColor(fm::AntID antID) const;
 
 signals:
 
-	void antDisplayChanged(quint32,
-	                       fm::Color,
-	                       fmp::Ant::DisplayState);
+	void antDisplayChanged(quint32, fm::Color, fmp::Ant::DisplayState);
 
 	void numberSoloAntChanged(quint32 numberSolo);
 	void numberHiddenAntChanged(quint32 numberSolo);
 
-
 public slots:
-	void setAntDisplayColor(quint32 antID,
-	                        const QColor & color);
+	void setAntDisplayColor(quint32 antID, const QColor &color);
 
-	void setAntDisplayColor(const QModelIndex & index,
-	                        const QColor & color);
+	void setAntDisplayColor(const QModelIndex &index, const QColor &color);
 
-
-	void setAntDisplayStatus(quint32 antID,
-	                         fm::Ant::DisplayState state);
+	void setAntDisplayStatus(quint32 antID, fm::Ant::DisplayState state);
 
 	void showAll();
 	void unsoloAll();
@@ -66,29 +56,30 @@ protected:
 	void tearDownExperiment();
 
 private slots:
-	void onAntItemChanged(QStandardItem * item);
+	void onAntItemChanged(QStandardItem *item);
 
 	void onAntCreated(quint32 antID);
 	void onAntDeleted(quint32 antID);
 
-
 private:
-	static QIcon antDisplayColor(const fmp::Ant::Ptr & ant);
+	static QIcon antDisplayColor(const fmp::Ant::Ptr &ant);
 
-	void setAntDisplayColor(QStandardItem * item,
-	                        const QColor & color);
+	void setAntDisplayColor(QStandardItem *item, const QColor &color);
 
+	void setAntDisplayState(
+	    QStandardItem        *hideItem,
+	    QStandardItem        *soloItem,
+	    const fmp::Ant::Ptr  &ant,
+	    fm::Ant::DisplayState ds
+	);
 
-	void setAntDisplayState(QStandardItem * hideItem,
-	                        QStandardItem * soloItem,
-	                        const fmp::Ant::Ptr & ant,
-	                        fm::Ant::DisplayState ds);
+	QList<QStandardItem *> buildAnt(const fmp::Ant::Ptr &ant);
 
-	QList<QStandardItem*> buildAnt(const fmp::Ant::Ptr & ant);
-
-	void doOnSelection(const QItemSelection & selection,
-	                   const std::function<void (const fmp::Ant::Ptr & ant,
-	                                             QStandardItem * item)> & toDo);
+	void doOnSelection(
+	    const QItemSelection &selection,
+	    const std::function<void(const fmp::Ant::Ptr &ant, QStandardItem *item)>
+	        &toDo
+	);
 
 	void clear();
 	void rebuildModel();
@@ -96,8 +87,7 @@ private:
 	const static int HIDE_COLUMN = 1;
 	const static int SOLO_COLUMN = 2;
 
-
-	AntGlobalModel * d_model;
-	quint32          d_numberSoloAnt,d_numberHiddenAnt;
-
+	AntGlobalModel *d_model;
+	quint32         d_numberSoloAnt, d_numberHiddenAnt;
+	slog::Logger<1> d_logger;
 };

@@ -3,52 +3,57 @@
 
 #include <fort/myrmidon/types/ValueUtils.hpp>
 
-#include <fort/studio/bridge/AntKeyValueBridge.hpp>
 #include <fort/studio/MyrmidonTypes/Value.hpp>
+#include <fort/studio/bridge/AntKeyValueBridge.hpp>
 
 #include <QStyledItemDelegate>
-#include <QDebug>
-
 
 class KeyTypeDelegate : public QStyledItemDelegate {
 public:
-	KeyTypeDelegate(QWidget * parent, AntKeyValueBridge * bridge)
-		: QStyledItemDelegate(parent)
-		, d_bridge(bridge) {
-	};
+	KeyTypeDelegate(QWidget *parent, AntKeyValueBridge *bridge)
+	    : QStyledItemDelegate(parent)
+	    , d_bridge(bridge){};
 
 protected:
-
-	QWidget * createEditor( QWidget *parent,
-	                        const QStyleOptionViewItem &option,
-	                        const QModelIndex &index ) const override {
+	QWidget *createEditor(
+	    QWidget                    *parent,
+	    const QStyleOptionViewItem &option,
+	    const QModelIndex          &index
+	) const override {
 		auto res = new QComboBox(parent);
 		res->setModel(d_bridge->typeModel());
 		return res;
 	}
 
-	void setEditorData ( QWidget *editor, const QModelIndex &index ) const override {
-		auto text = index.data(Qt::DisplayRole).toString();
-		auto combo = qobject_cast<QComboBox*>(editor);
-		if ( combo == nullptr || text.isEmpty() ) {
+	void
+	setEditorData(QWidget *editor, const QModelIndex &index) const override {
+		auto text  = index.data(Qt::DisplayRole).toString();
+		auto combo = qobject_cast<QComboBox *>(editor);
+		if (combo == nullptr || text.isEmpty()) {
 			return;
 		}
 
 		combo->setCurrentIndex(combo->findText(text));
 	}
 
-	void setModelData ( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const override {
-		auto combo = qobject_cast<QComboBox*>(editor);
-		if ( combo == nullptr ) {
+	void setModelData(
+	    QWidget *editor, QAbstractItemModel *model, const QModelIndex &index
+	) const override {
+		auto combo = qobject_cast<QComboBox *>(editor);
+		if (combo == nullptr) {
 			return;
 		}
-		auto type = fm::ValueType(combo->currentData(AntKeyValueBridge::KeyTypeRole).toInt());
-		d_bridge->setKey(index.siblingAtColumn(0).data(Qt::DisplayRole).toString(),
-		                 fm::ValueUtils::Default(type));
+		auto type = fm::ValueType(
+		    combo->currentData(AntKeyValueBridge::KeyTypeRole).toInt()
+		);
+		d_bridge->setKey(
+		    index.siblingAtColumn(0).data(Qt::DisplayRole).toString(),
+		    fm::ValueUtils::Default(type)
+		);
 	}
 
-private :
-	AntKeyValueBridge * d_bridge;
+private:
+	AntKeyValueBridge *d_bridge;
 };
 
 KeyTypeListWidget::KeyTypeListWidget(QWidget *parent)

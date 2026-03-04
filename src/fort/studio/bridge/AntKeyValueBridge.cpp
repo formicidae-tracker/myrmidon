@@ -1,29 +1,32 @@
 #include "AntKeyValueBridge.hpp"
+#include "fort/myrmidon/utils/Slogpp.hpp"
 
-#include <QStandardItemModel>
-#include <QDebug>
-#include <QRegularExpressionValidator>
-#include <QIntValidator>
-#include <QDoubleValidator>
 #include <QCompleter>
+#include <QDoubleValidator>
+#include <QIntValidator>
+#include <QRegularExpressionValidator>
+#include <QStandardItemModel>
 
 #include <fort/studio/Format.hpp>
 
-
-#include <fort/myrmidon/types/ValueUtils.hpp>
-#include <fort/studio/MyrmidonTypes/Time.hpp>
 #include <fort/myrmidon/priv/Identifier.hpp>
+#include <fort/myrmidon/types/ValueUtils.hpp>
+#include <fort/myrmidon/utils/Exception.hpp>
+#include <fort/studio/MyrmidonTypes/Time.hpp>
 #include <fort/studio/MyrmidonTypes/Value.hpp>
 
 #include <fort/studio/bridge/ExperimentBridge.hpp>
-
+#include <slog++/Attribute.hpp>
 
 class KeyModel : public QAbstractItemModel {
 	Q_OBJECT
 public:
-	KeyModel(QObject * parent)
-		: QAbstractItemModel(parent) {
-	}
+	KeyModel(QObject *parent)
+	    : QAbstractItemModel(parent)
+	    , d_logger{
+	          slog::With(slog::String("module", "AntKeyValueBridge.KeyModel"))
+	      } {}
+
 	virtual ~KeyModel() {}
 
 	bool setKey(const QString &name, const fm::Value &defaultValue) {
@@ -33,15 +36,19 @@ public:
 			return addKey(sname, defaultValue);
 		}
 
+		auto logger = d_logger.With(
+		    slog::String("name", name.toStdString()),
+		    slog::String("value", ToQString(defaultValue).toStdString())
+		);
+
 		try {
-			qInfo() << "[AntKeyValueBridge]: Setting default value of '" << name
-			        << "' to '" << ToQString(defaultValue) << "'";
+			d_logger.Info("setting default value");
 			d_experiment->SetMetaDataKey((*fi)->Name(), defaultValue);
 		} catch (const std::exception &e) {
-			qCritical(
-			) << "[AntKeyValueBridge]: Could not set default value of '"
-			  << name << "' to '" << ToQString(defaultValue)
-			  << "': " << e.what();
+			d_logger.Error(
+			    "could not set value",
+			    slog::Err(fort::myrmidon::utils::What(e))
+			);
 			return false;
 		}
 
@@ -57,12 +64,15 @@ public:
 		if (fi == d_keys.end()) {
 			return false;
 		}
+		auto logger = d_logger.With(slog::String("name", name.toStdString()));
 		try {
-			qInfo() << "[AntKeyValueBridge]: Removing key '" << name << "'";
+			logger.Info("removing key");
 			d_experiment->DeleteMetaDataKey(sname);
 		} catch (const std::exception &e) {
-			qCritical() << "[AntKeyValueBridge]: Could not remove key '" << name
-			            << "': " << e.what();
+			logger.Error(
+			    "could not remove key",
+			    slog::Err(fort::myrmidon::utils::What(e))
+			);
 			return false;
 		}
 
@@ -80,14 +90,19 @@ public:
 		if (oldKey == newKey || fi == d_keys.end()) {
 			return false;
 		}
-		auto dest = lower_bound(sNewKey);
+		auto dest   = lower_bound(sNewKey);
+		auto logger = slog::With(
+		    slog::String("old_key", oldKey.toStdString()),
+		    slog::String("new_key", newKey.toStdString())
+		);
 		try {
-			qInfo() << "[AntKeyValueBridge]: Renaming key " << oldKey << " to "
-			        << newKey;
+			logger.Info("renaming key");
 			d_experiment->RenameMetaDataKey(sOldKey, sNewKey);
 		} catch (const std::exception &e) {
-			qCritical() << "[AntKeyValueBridge]: Could not rename key "
-			            << oldKey << " to " << newKey << ": " << e.what();
+			logger.Error(
+			    "could not rename key",
+			    slog::Err(fort::myrmidon::utils::What(e))
+			);
 			return false;
 		}
 
@@ -116,15 +131,15 @@ public:
 		return true;
 	}
 
-	int find(const QString & key) const {
+	int find(const QString &key) const {
 		auto fi = find(ToStdString(key));
-		if ( fi == d_keys.cend() ) {
+		if (fi == d_keys.cend()) {
 			return -1;
 		}
 		return fi - d_keys.cbegin();
 	}
 
-	const fm::Value & defaultValue(const QString & key) const {
+	const fm::Value &defaultValue(const QString &key) const {
 		return defaultValue(find(key));
 	}
 
@@ -136,16 +151,16 @@ public:
 		return d_keys.at(key)->DefaultValue();
 	}
 
-	void setUpExperiment(const fmp::Experiment::Ptr & experiment) {
-		if ( d_experiment != nullptr ) {
+	void setUpExperiment(const fmp::Experiment::Ptr &experiment) {
+		if (d_experiment != nullptr) {
 			tearDownExperiment();
 		}
-		if ( experiment == nullptr ) {
+		if (experiment == nullptr) {
 			return;
 		}
-		const auto & keys = experiment->AntMetadataPtr()->Keys();
-		beginInsertRows(QModelIndex(),0,keys.size()-1);
-		for ( const auto & [name,k] : keys ) {
+		const auto &keys = experiment->AntMetadataPtr()->Keys();
+		beginInsertRows(QModelIndex(), 0, keys.size() - 1);
+		for (const auto &[name, k] : keys) {
 			d_keys.push_back(k);
 		}
 		d_experiment = experiment;
@@ -153,53 +168,55 @@ public:
 	}
 
 	void tearDownExperiment() {
-		if ( d_experiment == nullptr || d_keys.empty() ) {
+		if (d_experiment == nullptr || d_keys.empty()) {
 			d_experiment = nullptr;
 			return;
 		}
-		beginRemoveRows(QModelIndex(),0,d_keys.size()-1);
+		beginRemoveRows(QModelIndex(), 0, d_keys.size() - 1);
 		d_keys.clear();
 		d_experiment = nullptr;
 		endRemoveRows();
 	}
 
-	QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex() ) const override {
-		if ( hasIndex(row,column,parent) == false ) {
+	QModelIndex index(
+	    int row, int column, const QModelIndex &parent = QModelIndex()
+	) const override {
+		if (hasIndex(row, column, parent) == false) {
 			return QModelIndex();
 		}
-		return createIndex(row,column,nullptr);
+		return createIndex(row, column, nullptr);
 	}
 
-	QModelIndex parent(const QModelIndex & child) const override {
+	QModelIndex parent(const QModelIndex &child) const override {
 		return QModelIndex();
 	}
 
-	int rowCount(const QModelIndex & parent = QModelIndex() ) const override {
-		if ( parent.isValid() ) {
+	int rowCount(const QModelIndex &parent = QModelIndex()) const override {
+		if (parent.isValid()) {
 			return 0;
 		}
 		return d_keys.size();
 	}
 
-	int columnCount(const QModelIndex & parent = QModelIndex()) const override {
+	int columnCount(const QModelIndex &parent = QModelIndex()) const override {
 		return 3;
 	};
 
-	QVariant data(const QModelIndex & index, int role) const override {
-		if ( hasIndex(index.row(),index.column(),index.parent()) == false ) {
+	QVariant data(const QModelIndex &index, int role) const override {
+		if (hasIndex(index.row(), index.column(), index.parent()) == false) {
 			return QVariant();
 		}
-		const auto & key = d_keys[index.row()];
+		const auto &key = d_keys[index.row()];
 
-		if ( role == Qt::DisplayRole || role == Qt::EditRole ) {
-			return displayData(key,index.column());
+		if (role == Qt::DisplayRole || role == Qt::EditRole) {
+			return displayData(key, index.column());
 		}
 
-		if ( role == AntKeyValueBridge::KeyTypeRole ) {
+		if (role == AntKeyValueBridge::KeyTypeRole) {
 			return QVariant::fromValue(int(key->Type()));
 		}
 
-		if ( role == AntKeyValueBridge::KeyNameRole ) {
+		if (role == AntKeyValueBridge::KeyNameRole) {
 			return ToQString(key->Name());
 		}
 
@@ -213,13 +230,13 @@ public:
 		return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable;
 	}
 
-	QVariant headerData(int section, Qt::Orientation orientation, int role) const override {
-		if ( role != Qt::DisplayRole
-		     || orientation != Qt::Horizontal ) {
+	QVariant headerData(int section, Qt::Orientation orientation, int role)
+	    const override {
+		if (role != Qt::DisplayRole || orientation != Qt::Horizontal) {
 			return QVariant();
 		}
-		switch ( section ) {
-		case 0 :
+		switch (section) {
+		case 0:
 			return tr("Key");
 		case 1:
 			return tr("Type");
@@ -229,57 +246,63 @@ public:
 		return QVariant();
 	}
 
-	bool setData(const QModelIndex & index,const QVariant & value, int role ) {
-		if ( hasIndex(index.row(),index.column(),index.parent()) == false ) {
+	bool setData(const QModelIndex &index, const QVariant &value, int role) {
+		if (hasIndex(index.row(), index.column(), index.parent()) == false) {
 			return false;
 		}
-		const auto & key = d_keys[index.row()];
-		if ( index.column() == 0 ) {
-			return renameKey(key->Name().c_str(),value.toString());
+		const auto &key = d_keys[index.row()];
+		if (index.column() == 0) {
+			return renameKey(key->Name().c_str(), value.toString());
 		}
-		if ( index.column() == 2 ) {
-			return setDefaultValue(*key,value.toString());
+		if (index.column() == 2) {
+			return setDefaultValue(*key, value.toString());
 		}
 		return false;
 	}
 
-	bool setDefaultValue(const fmp::AntMetadata::Key & key,
-	                     const QString & value) {
+	bool
+	setDefaultValue(const fmp::AntMetadata::Key &key, const QString &value) {
 		try {
-			auto v = fm::ValueUtils::Parse(key.Type(),ToStdString(value));
-			return setKey(key.Name().c_str(),v);
-		} catch ( const std::exception & e) {
-			qCritical() << "Could not parse " << value << ": " << e.what();
+			auto v = fm::ValueUtils::Parse(key.Type(), ToStdString(value));
+			return setKey(key.Name().c_str(), v);
+		} catch (const std::exception &e) {
+			d_logger.Error(
+			    "could not parse value",
+			    slog::String("value", value.toStdString()),
+			    slog::Err(fort::myrmidon::utils::What(e))
+			);
 			return false;
 		}
 		return true;
 	}
 
-
 private:
-	bool addKey(const std::string & name,
-	            const fm::Value & defaultValue) {
+	bool addKey(const std::string &name, const fm::Value &defaultValue) {
 		fmp::AntMetadata::Key::Ptr res;
+		auto                       logger = d_logger.With(
+            slog::String("name", name),
+            slog::String("default_value", ToQString(defaultValue).toStdString())
+        );
 		try {
-			qInfo() << "[AntKeyValueBridge]: Adding key '" << name.c_str()
-			        << "' with defaultValue '" << ToQString(defaultValue) << "'";
-			res = d_experiment->SetMetaDataKey(name,defaultValue);
-		} catch ( const std::exception & e ) {
-			qCritical() << "[AntKeyValueBridge]: Could not set key '" << name.c_str()
-			            << "' to value '" << ToQString(defaultValue) << "':"
-			            << e.what();
+			logger.Info("adding key");
+			res = d_experiment->SetMetaDataKey(name, defaultValue);
+		} catch (const std::exception &e) {
+			logger.Error(
+			    "could not set key",
+			    slog::Err(fort::myrmidon::utils::What(e))
+			);
 			return false;
 		}
 		auto lower = lower_bound(name);
-		auto pos = std::distance(d_keys.cbegin(),lower);
-		beginInsertRows(QModelIndex(),pos,pos);
-		d_keys.insert(lower,res);
+		auto pos   = std::distance(d_keys.cbegin(), lower);
+		beginInsertRows(QModelIndex(), pos, pos);
+		d_keys.insert(lower, res);
 		endInsertRows();
 		return true;
 	}
 
-	QVariant displayData(const fmp::AntMetadata::Key::Ptr & k,
-	                     int column) const {
+	QVariant
+	displayData(const fmp::AntMetadata::Key::Ptr &k, int column) const {
 		switch (column) {
 		case 0:
 			return k->Name().c_str();
@@ -292,21 +315,21 @@ private:
 	}
 
 	std::vector<fmp::AntMetadata::Key::Ptr>::const_iterator
-	lower_bound(const std::string & name) const {
-		return std::lower_bound(d_keys.cbegin(),
-		                        d_keys.cend(),
-		                        name,
-		                        [](const fmp::AntMetadata::Key::Ptr & k,
-		                           const std::string & name) {
-			                        return k->Name() < name;
-		                        });
+	lower_bound(const std::string &name) const {
+		return std::lower_bound(
+		    d_keys.cbegin(),
+		    d_keys.cend(),
+		    name,
+		    [](const fmp::AntMetadata::Key::Ptr &k, const std::string &name) {
+			    return k->Name() < name;
+		    }
+		);
 	}
 
 	std::vector<fmp::AntMetadata::Key::Ptr>::const_iterator
-	find(const std::string & name) const {
+	find(const std::string &name) const {
 		auto fi = lower_bound(name);
-		if ( fi != d_keys.end()
-		     && (*fi)->Name() == name ) {
+		if (fi != d_keys.end() && (*fi)->Name() == name) {
 			return fi;
 		}
 		return d_keys.cend();
@@ -314,14 +337,18 @@ private:
 
 	fmp::Experiment::Ptr                    d_experiment;
 	std::vector<fmp::AntMetadata::Key::Ptr> d_keys;
+	slog::Logger<1>                         d_logger;
 };
 
 class DataModel : public QAbstractItemModel {
 	Q_OBJECT
 public:
-	DataModel(KeyModel * keyModel, QObject * parent)
-		: QAbstractItemModel(parent)
-		, d_keyModel(keyModel) {
+	DataModel(KeyModel *keyModel, QObject *parent)
+	    : QAbstractItemModel(parent)
+	    , d_keyModel(keyModel)
+	    , d_logger{
+	          slog::With(slog::String("module", "AntKeyValueBridge.DataModel"))
+	      } {
 
 		connect(d_keyModel,&QAbstractItemModel::rowsAboutToBeInserted,
 		        this,&DataModel::onKeyModel_layoutAboutToBeChanged);
@@ -344,7 +371,6 @@ public:
 
 		connect(d_keyModel,&QAbstractItemModel::dataChanged,
 		        this,&DataModel::onKeyModel_dataChanged);
-
 	}
 	virtual ~DataModel() {
 	}
@@ -591,20 +617,20 @@ private slots:
 		auto &ant     = **fi;
 		auto  keyName = keyNameAt(key);
 		bool  added   = hasValue(ant, keyName, time) == false;
+		auto  logger  = d_logger.With(
+            slog::Int("antID", antID),
+            slog::String("key", keyName),
+            slog::String("value", ToQString(value).toStdString()),
+            slog::FortTime("time", time)
+        );
 		try {
-			qInfo() << "[AntKeyValueBridge]: Ant{ID: "
-			        << fm::FormatAntID(antID).c_str()
-			        << "}.SetValue(key =" << keyName.c_str()
-			        << ",value = " << ToQString(value)
-			        << ", time = " << ToQString(time) << ")";
+			logger.Info("set value for ant");
 			ant.SetValue(keyName, value, time);
 		} catch (const std::exception &e) {
-			qCritical() << "[AntKeyValueBridge]: Ant{ID: "
-			            << fm::FormatAntID(antID).c_str()
-			            << "}.SetValue(key =" << keyName.c_str()
-			            << ",value = " << ToQString(value)
-			            << ", time = " << ToQString(time)
-			            << ") error:" << e.what();
+			logger.Error(
+			    "could not set value",
+			    slog::Err(fort::myrmidon::utils::What(e))
+			);
 			return false;
 		}
 
@@ -625,40 +651,40 @@ private slots:
 		return true;
 	}
 
-	bool deleteValue(quint32 antID,
-	                 int key,
-	                 const fort::Time & time) {
-		if ( key < 0 || key >= d_keyModel->rowCount() ) {
+	bool deleteValue(quint32 antID, int key, const fort::Time &time) {
+		if (key < 0 || key >= d_keyModel->rowCount()) {
 			return false;
 		}
 		auto fi = find(antID);
-		if ( fi == d_ants.cend() ) {
+		if (fi == d_ants.cend()) {
 			return false;
 		}
-		auto & ant = **fi;
-		auto keyName = keyNameAt(key);
+		auto &ant     = **fi;
+		auto  keyName = keyNameAt(key);
+		auto  logger  = d_logger.With(
+            slog::Int("antID", antID),
+            slog::String("key", keyName),
+            slog::FortTime("time", time)
+        );
 		try {
-			qInfo() << "[AntKeyValueBridge]:  Ant{ID:" << fm::FormatAntID(antID).c_str()
-			        << "}.DeleteValue(key = " << keyName.c_str()
-			        << ", time = " << ToQString(time)
-			        << ")";
-			ant.DeleteValue(keyName,time);
-		} catch ( const std::exception & e ) {
-			qCritical() << "[AntKeyValueBridge]:  Ant{ID:" << fm::FormatAntID(antID).c_str()
-			            << "}.DeleteValue(key = " << keyName.c_str()
-			            << ", time = " << ToQString(time)
-			            << ") error:" << e.what();
+			logger.Info("delete value for ant");
+			ant.DeleteValue(keyName, time);
+		} catch (const std::exception &e) {
+			logger.Error(
+			    "could not delete value",
+			    slog::Err(fort::myrmidon::utils::What(e))
+			);
 			return false;
 		}
 
-		if ( time.IsInfinite() ) {
-			auto defaultValueIndex = index(key,3,index(fi-d_ants.begin(),0));
-			emit dataChanged(defaultValueIndex,defaultValueIndex);
+		if (time.IsInfinite()) {
+			auto defaultValueIndex =
+			    index(key, 3, index(fi - d_ants.begin(), 0));
+			emit dataChanged(defaultValueIndex, defaultValueIndex);
 		}
-		resetValueModel(*fi,fi - d_ants.cbegin(),keyName,key);
+		resetValueModel(*fi, fi - d_ants.cbegin(), keyName, key);
 		return true;
 	}
-
 
 	void onKeyModel_layoutAboutToBeChanged() {
 		beginResetModel();
@@ -669,28 +695,33 @@ private slots:
 		endResetModel();
 	}
 
-	void onKeyModel_dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight) {
-		auto inRange = [&](int column) { return topLeft.column() <= column && column <= bottomRight.column(); };
-		if ( inRange(0) ) {
-			for ( size_t i = 0; i < d_ants.size(); ++i ) {
-				auto keyIndex = index(topLeft.row(),1,index(i,0));
-				emit dataChanged(keyIndex,keyIndex);
+	void onKeyModel_dataChanged(
+	    const QModelIndex &topLeft, const QModelIndex &bottomRight
+	) {
+		auto inRange = [&](int column) {
+			return topLeft.column() <= column && column <= bottomRight.column();
+		};
+		if (inRange(0)) {
+			for (size_t i = 0; i < d_ants.size(); ++i) {
+				auto keyIndex = index(topLeft.row(), 1, index(i, 0));
+				emit dataChanged(keyIndex, keyIndex);
 			}
 		}
-		if ( inRange(2) || inRange(1) ) {
-			for ( size_t i = 0; i < d_ants.size();++i ) {
-				auto keyIndex = index(topLeft.row(),0,index(i,0));
+		if (inRange(2) || inRange(1)) {
+			for (size_t i = 0; i < d_ants.size(); ++i) {
+				auto keyIndex          = index(topLeft.row(), 0, index(i, 0));
 				auto defaultValueIndex = keyIndex.siblingAtColumn(3);
-				emit dataChanged(defaultValueIndex,defaultValueIndex);
+				emit dataChanged(defaultValueIndex, defaultValueIndex);
 				auto childCount = rowCount(keyIndex);
-				if ( childCount > 0 ) {
-					emit dataChanged(index(0,3,keyIndex),index(childCount-1,3,keyIndex));
+				if (childCount > 0) {
+					emit dataChanged(
+					    index(0, 3, keyIndex),
+					    index(childCount - 1, 3, keyIndex)
+					);
 				}
 			}
 		}
 	}
-
-
 
 private:
 	struct Pointer {
@@ -699,122 +730,151 @@ private:
 		int Value;
 	};
 
-	bool editValueTime(const QModelIndex & index, const QString & value) {
-		if ( index.isValid() == false ) {
+	bool editValueTime(const QModelIndex &index, const QString &value) {
+		if (index.isValid() == false) {
 			return false;
 		}
-		auto p = static_cast<Pointer*>(index.internalPointer());
-		if ( p->Value < 0 ) {
+		auto p = static_cast<Pointer *>(index.internalPointer());
+		if (p->Value < 0) {
 			return false;
 		}
 
 		try {
-			const auto & ant = *d_ants.at(p->Ant);
-			int key = p->Key;
-			auto newTime = fort::Time::Parse(ToStdString(value));
-			auto [oldTime,currentValue] = ant.DataMap().at(keyNameAt(p->Key)).at(p->Value);
+			const auto &ant     = *d_ants.at(p->Ant);
+			int         key     = p->Key;
+			auto        newTime = fort::Time::Parse(ToStdString(value));
+			auto [oldTime, currentValue] =
+			    ant.DataMap().at(keyNameAt(p->Key)).at(p->Value);
 
-			qInfo() << "Changing time of {Ant=" << fm::FormatAntID(ant.AntID()).c_str()
-			        << ", key=" << keyNameAt(p->Key).c_str()
-			        << ", time=" << ToQString(oldTime)
-			        << "} to" << ToQString(newTime);
+			d_logger.Info(
+			    "changing time for ant",
+			    slog::Int("antID", ant.AntID()),
+			    slog::String("key", keyNameAt(p->Key)),
+			    slog::FortTime("old_time", oldTime),
+			    slog::FortTime("new_time", newTime)
+			);
 
-			if ( deleteValue(ant.AntID(),key,oldTime) == false ) {
+			if (deleteValue(ant.AntID(), key, oldTime) == false) {
 				return false;
 			}
-			return setValue(ant.AntID(),key,newTime,currentValue);
-		} catch(const std::exception & e) {
-			qCritical() << "[AntKeyValueBridge]: Could set new time " << value << ":" << e.what();
+			return setValue(ant.AntID(), key, newTime, currentValue);
+		} catch (const std::exception &e) {
+			d_logger.Error(
+			    "could not set new time",
+			    slog::String("new_time", value.toStdString()),
+			    slog::Err(fort::myrmidon::utils::What(e))
+			);
 		}
 		return false;
 	}
 
-	bool editValue(const QModelIndex & index, const QString & value) {
-		if ( index.isValid() == false ) {
+	bool editValue(const QModelIndex &index, const QString &value) {
+		if (index.isValid() == false) {
 			return false;
 		}
-		auto p = static_cast<Pointer*>(index.internalPointer());
-		if ( p->Value < 0 || p->Key >= d_keyModel->rowCount()) {
+		auto p = static_cast<Pointer *>(index.internalPointer());
+		if (p->Value < 0 || p->Key >= d_keyModel->rowCount()) {
 			return false;
 		}
 		try {
-			auto keyType = fm::ValueType(d_keyModel->index(p->Key,0).data(AntKeyValueBridge::KeyTypeRole).toInt());
-			auto v = fm::ValueUtils::Parse(keyType,ToStdString(value));
-			auto & ant = *d_ants.at(p->Ant);
-			auto time = ant.DataMap().at(keyNameAt(p->Key)).at(p->Value).first;
-			return setValue(ant.AntID(),p->Key,time,v);
-		} catch(const std::exception & ) {
+			auto keyType =
+			    fm::ValueType(d_keyModel->index(p->Key, 0)
+			                      .data(AntKeyValueBridge::KeyTypeRole)
+			                      .toInt());
+			auto  v    = fm::ValueUtils::Parse(keyType, ToStdString(value));
+			auto &ant  = *d_ants.at(p->Ant);
+			auto  time = ant.DataMap().at(keyNameAt(p->Key)).at(p->Value).first;
+			return setValue(ant.AntID(), p->Key, time, v);
+		} catch (const std::exception &) {
 		}
 		return false;
 	}
 
-	bool editDefaultValue(const QModelIndex & index, const QString & value) {
-		if ( index.isValid() == false ) {
+	bool editDefaultValue(const QModelIndex &index, const QString &value) {
+		if (index.isValid() == false) {
 			return false;
 		}
-		auto p = static_cast<Pointer*>(index.internalPointer());
-		if ( p->Key >= d_keyModel->rowCount()) {
+		auto p = static_cast<Pointer *>(index.internalPointer());
+		if (p->Key >= d_keyModel->rowCount()) {
 			return false;
 		}
 		try {
-			auto & ant = *d_ants.at(p->Ant);
-			if ( value.isEmpty() ) {
-				return deleteValue(ant.AntID(),p->Key,fort::Time::SinceEver());
+			auto &ant = *d_ants.at(p->Ant);
+			if (value.isEmpty()) {
+				return deleteValue(
+				    ant.AntID(),
+				    p->Key,
+				    fort::Time::SinceEver()
+				);
 			}
-			auto keyType = fm::ValueType(d_keyModel->index(p->Key,0).data(AntKeyValueBridge::KeyTypeRole).toInt());
-			auto v = fm::ValueUtils::Parse(keyType,ToStdString(value));
-			return setValue(ant.AntID(),p->Key,fort::Time::SinceEver(),v);
-		} catch(const std::exception & e) {
+			auto keyType =
+			    fm::ValueType(d_keyModel->index(p->Key, 0)
+			                      .data(AntKeyValueBridge::KeyTypeRole)
+			                      .toInt());
+			auto v = fm::ValueUtils::Parse(keyType, ToStdString(value));
+			return setValue(ant.AntID(), p->Key, fort::Time::SinceEver(), v);
+		} catch (const std::exception &e) {
 		}
 		return false;
 	}
 
-	void resetValueModel(const fmp::Ant::Ptr & ant,
-	                     int antIndex,
-	                     const std::string & keyName,
-	                     int keyIndex) {
-		auto qKeyIndex = index(keyIndex,0,index(antIndex,0));
-		int count = rowCount(qKeyIndex);
-		if ( count > 0 ) {
-			beginRemoveRows(qKeyIndex,0,count-1);
-			d_pointers.erase(d_pointers.upper_bound(std::make_tuple(ant.get(),keyIndex,-1)),
-			                 d_pointers.lower_bound(std::make_tuple(ant.get(),keyIndex+1,-1)));
+	void resetValueModel(
+	    const fmp::Ant::Ptr &ant,
+	    int                  antIndex,
+	    const std::string   &keyName,
+	    int                  keyIndex
+	) {
+		auto qKeyIndex = index(keyIndex, 0, index(antIndex, 0));
+		int  count     = rowCount(qKeyIndex);
+		if (count > 0) {
+			beginRemoveRows(qKeyIndex, 0, count - 1);
+			d_pointers.erase(
+			    d_pointers.upper_bound(std::make_tuple(ant.get(), keyIndex, -1)
+			    ),
+			    d_pointers.lower_bound(
+			        std::make_tuple(ant.get(), keyIndex + 1, -1)
+			    )
+			);
 			endRemoveRows();
 		}
-		count = 0 ;
+		count = 0;
 		try {
-			const auto & values = ant->DataMap().at(keyName);
-			count = values.size();
-			if ( count > 0 && values.front().first.IsInfinite() ) {
+			const auto &values = ant->DataMap().at(keyName);
+			count              = values.size();
+			if (count > 0 && values.front().first.IsInfinite()) {
 				count -= 1;
 			}
-		} catch ( const std::exception & e) {
+		} catch (const std::exception &e) {
 		}
-		if ( count == 0 ) {
+		if (count == 0) {
 			return;
 		}
-		beginInsertRows(qKeyIndex,0,count-1);
-		rebuildValuePointers(ant,antIndex,keyName,keyIndex);
+		beginInsertRows(qKeyIndex, 0, count - 1);
+		rebuildValuePointers(ant, antIndex, keyName, keyIndex);
 		endInsertRows();
 	}
 
-	void rebuildValuePointers(const fmp::Ant::Ptr & ant,
-	                          int antIndex,
-	                          const std::string & keyName,
-	                          int keyIndex) {
+	void rebuildValuePointers(
+	    const fmp::Ant::Ptr &ant,
+	    int                  antIndex,
+	    const std::string   &keyName,
+	    int                  keyIndex
+	) {
 		try {
 			int v = -1;
-			for ( const auto & [time,value] : ant->DataMap().at(keyName) ) {
+			for (const auto &[time, value] : ant->DataMap().at(keyName)) {
 				++v;
-				if ( time.IsInfinite() ) {
+				if (time.IsInfinite()) {
 					continue;
 				}
-				d_pointers.insert({std::make_tuple(ant.get(),keyIndex,v),
-				                   std::make_unique<Pointer>(Pointer{.Ant = antIndex,
-				                                                     .Key = keyIndex,
-				                                                     .Value = v})});
+				d_pointers.insert(
+				    {std::make_tuple(ant.get(), keyIndex, v),
+				     std::make_unique<Pointer>(
+				         Pointer{.Ant = antIndex, .Key = keyIndex, .Value = v}
+				     )}
+				);
 			}
-		} catch ( const std::exception &) {
+		} catch (const std::exception &) {
 		}
 	}
 
@@ -822,222 +882,237 @@ private:
 		d_ants.clear();
 		d_pointers.clear();
 
-		if ( d_experiment == nullptr ) {
+		if (d_experiment == nullptr) {
 			return;
 		}
 
-		const auto & ants = d_experiment->Identifier()->Ants();
-		auto antSize = ants.size();
+		const auto &ants    = d_experiment->Identifier()->Ants();
+		auto        antSize = ants.size();
 		d_ants.reserve(antSize);
 		auto numberOfKeys = d_keyModel->rowCount();
-		for ( const auto & [antID,ant] : ants ) {
+		for (const auto &[antID, ant] : ants) {
 			int antIndex = int(d_ants.size());
 			d_ants.push_back(ant);
-			d_pointers.insert({std::make_tuple(ant.get(),-1,-1),
-			                   std::make_unique<Pointer>(Pointer{.Ant = antIndex,
-			                                                     .Key = -1,
-			                                                     .Value = -1})});
-			for ( int k = 0; k < numberOfKeys; ++k ) {
-				d_pointers.insert({std::make_tuple(ant.get(),k,-1),
-				                   std::make_unique<Pointer>(Pointer{.Ant = antIndex,
-				                                                     .Key = k,
-				                                                     .Value = -1})});
+			d_pointers.insert(
+			    {std::make_tuple(ant.get(), -1, -1),
+			     std::make_unique<Pointer>(
+			         Pointer{.Ant = antIndex, .Key = -1, .Value = -1}
+			     )}
+			);
+			for (int k = 0; k < numberOfKeys; ++k) {
+				d_pointers.insert(
+				    {std::make_tuple(ant.get(), k, -1),
+				     std::make_unique<Pointer>(
+				         Pointer{.Ant = antIndex, .Key = k, .Value = -1}
+				     )}
+				);
 				auto keyName = keyNameAt(k);
-				rebuildValuePointers(ant,antIndex,keyName,k);
+				rebuildValuePointers(ant, antIndex, keyName, k);
 			}
 		}
 	}
 
-
-	static int valueRow(const fmp::Ant & ant,
-	                    const std::string & keyName,
-	                    const fort::Time & time) {
+	static int valueRow(
+	    const fmp::Ant &ant, const std::string &keyName, const fort::Time &time
+	) {
 		try {
-			const auto & values = ant.DataMap().at(keyName);
-			auto fi = std::lower_bound(values.begin(),
-			                           values.end(),
-			                           time,
-			                           [](const fmp::TimedValue & v,
-			                              const fort::Time & t) {
-				                           return v.first < t;
-			                           });
-			if ( fi != values.cend()
-			     && fi->first == time) {
-				return fi - values.cbegin() + values.front().first.IsSinceEver() ? -1 : 0;
+			const auto &values = ant.DataMap().at(keyName);
+			auto        fi     = std::lower_bound(
+                values.begin(),
+                values.end(),
+                time,
+                [](const fmp::TimedValue &v, const fort::Time &t) {
+                    return v.first < t;
+                }
+            );
+			if (fi != values.cend() && fi->first == time) {
+				return fi - values.cbegin() + values.front().first.IsSinceEver()
+				           ? -1
+				           : 0;
 			}
-		} catch ( const std::exception & ) {
+		} catch (const std::exception &) {
 		}
 		return -1;
 	}
 
-	static bool hasValue(const fmp::Ant & ant,
-	                     const std::string & keyName,
-	                     const fort::Time & time) {
+	static bool hasValue(
+	    const fmp::Ant &ant, const std::string &keyName, const fort::Time &time
+	) {
 		try {
-			const auto & values = ant.DataMap().at(keyName);
-			auto fi = std::lower_bound(values.begin(),
-			                           values.end(),
-			                           time,
-			                           [](const fmp::TimedValue & v,
-			                              const fort::Time & t) {
-				                           return v.first < t;
-			                           });
+			const auto &values = ant.DataMap().at(keyName);
+			auto        fi     = std::lower_bound(
+                values.begin(),
+                values.end(),
+                time,
+                [](const fmp::TimedValue &v, const fort::Time &t) {
+                    return v.first < t;
+                }
+            );
 			return fi != values.cend() && fi->first == time;
-		} catch ( const std::exception &) {
+		} catch (const std::exception &) {
 		}
 		return false;
 	}
 
-	static bool hasDefaultValue(const fmp::Ant & ant,
-	                            const std::string & keyName ) {
-		return hasValue(ant,keyName,fort::Time::SinceEver());
+	static bool
+	hasDefaultValue(const fmp::Ant &ant, const std::string &keyName) {
+		return hasValue(ant, keyName, fort::Time::SinceEver());
 	}
 
-	QVariant keyTypeData(const QModelIndex & index) const {
-		if ( index.isValid() == false ) {
+	QVariant keyTypeData(const QModelIndex &index) const {
+		if (index.isValid() == false) {
 			return QVariant();
 		}
-		auto p = static_cast<Pointer*>(index.internalPointer());
-		if ( p->Key < 0 || p->Key >= d_keyModel->rowCount() ) {
+		auto p = static_cast<Pointer *>(index.internalPointer());
+		if (p->Key < 0 || p->Key >= d_keyModel->rowCount()) {
 			return QVariant();
 		}
-		return d_keyModel->index(p->Key,1).data(AntKeyValueBridge::KeyTypeRole);
+		return d_keyModel->index(p->Key, 1).data(AntKeyValueBridge::KeyTypeRole
+		);
 	}
 
-	QVariant keyNameData(const QModelIndex & index) const {
-		if ( index.isValid() == false ) {
+	QVariant keyNameData(const QModelIndex &index) const {
+		if (index.isValid() == false) {
 			return QVariant();
 		}
-		auto p = static_cast<Pointer*>(index.internalPointer());
-		if ( p->Key < 0 || p->Key >= d_keyModel->rowCount() ) {
+		auto p = static_cast<Pointer *>(index.internalPointer());
+		if (p->Key < 0 || p->Key >= d_keyModel->rowCount()) {
 			return QVariant();
 		}
-		return d_keyModel->index(p->Key,0).data(Qt::DisplayRole);
+		return d_keyModel->index(p->Key, 0).data(Qt::DisplayRole);
 	}
 
-	QVariant antIDData(const QModelIndex & index) const {
-		if ( index.isValid() == false ) {
+	QVariant antIDData(const QModelIndex &index) const {
+		if (index.isValid() == false) {
 			return QVariant();
 		}
-		auto p = static_cast<Pointer*>(index.internalPointer());
+		auto p = static_cast<Pointer *>(index.internalPointer());
 		try {
 			return d_ants.at(p->Ant)->AntID();
-		} catch ( const std::exception &) {
+		} catch (const std::exception &) {
 		}
 		return QVariant();
 	}
 
-	QVariant timeData(const QModelIndex & index) const {
-		if ( index.isValid() == false ) {
+	QVariant timeData(const QModelIndex &index) const {
+		if (index.isValid() == false) {
 			return QVariant();
 		}
-		auto p = static_cast<Pointer*>(index.internalPointer());
-		if ( p->Value < 0 ) {
+		auto p = static_cast<Pointer *>(index.internalPointer());
+		if (p->Value < 0) {
 			return QVariant();
 		}
 		try {
-			const auto & ant = d_ants.at(p->Ant);
-			const auto & values = ant->DataMap().at(keyNameAt(p->Key));
+			const auto &ant    = d_ants.at(p->Ant);
+			const auto &values = ant->DataMap().at(keyNameAt(p->Key));
 			return ToQString(values.at(p->Value).first.Format());
-		} catch ( const std::exception & ) {
+		} catch (const std::exception &) {
 		}
 		return QVariant();
 	}
 
-
-	QVariant displayData(const QModelIndex & index) const {
-		if ( index.isValid() == false ) {
+	QVariant displayData(const QModelIndex &index) const {
+		if (index.isValid() == false) {
 			return QVariant();
 		}
 
-		auto p = static_cast<Pointer*>(index.internalPointer());
-		if ( p->Value >= 0 ) {
-			return displayValue(p,index.column());
+		auto p = static_cast<Pointer *>(index.internalPointer());
+		if (p->Value >= 0) {
+			return displayValue(p, index.column());
 		}
-		if ( p->Key >= 0 ) {
-			return displayKey(p,index.column());
+		if (p->Key >= 0) {
+			return displayKey(p, index.column());
 		}
-		return displayAnt(p->Ant,index.column());
+		return displayAnt(p->Ant, index.column());
 	}
 
-	QVariant displayAnt(int ant,int column) const {
-		if ( column > 0 ) {
+	QVariant displayAnt(int ant, int column) const {
+		if (column > 0) {
 			return QVariant();
 		}
 		try {
 			return fm::FormatAntID(d_ants.at(ant)->AntID()).c_str();
-		} catch ( const std::exception & ) {
+		} catch (const std::exception &) {
 			return QVariant();
 		}
 	}
 
-	QVariant displayKey(Pointer * p,int column) const {
+	QVariant displayKey(Pointer *p, int column) const {
 		try {
-			const auto & ant = *d_ants.at(p->Ant);
-			const auto & keyName = keyNameAt(p->Key);
+			const auto &ant     = *d_ants.at(p->Ant);
+			const auto &keyName = keyNameAt(p->Key);
 			switch (column) {
 			case 1:
 				return keyName.c_str();
 			case 3: {
-				if ( ant.DataMap().count(keyName) > 0
-				     && ant.DataMap().at(keyName).size() > 0
-				     && ant.DataMap().at(keyName).front().first == fort::Time::SinceEver() ) {
+				if (ant.DataMap().count(keyName) > 0 &&
+				    ant.DataMap().at(keyName).size() > 0 &&
+				    ant.DataMap().at(keyName).front().first ==
+				        fort::Time::SinceEver()) {
 					return ToQString(ant.DataMap().at(keyName).front().second);
 				}
-				return tr("default (%1)").arg(d_keyModel->index(p->Key,2).data(Qt::DisplayRole).toString());
+				return tr("default (%1)")
+				    .arg(d_keyModel->index(p->Key, 2)
+				             .data(Qt::DisplayRole)
+				             .toString());
 			}
 			}
-		} catch (const std::exception & ) {
+		} catch (const std::exception &) {
 		}
 		return QVariant();
-
 	}
 
-	QVariant displayValue(Pointer * p, int column) const {
+	QVariant displayValue(Pointer *p, int column) const {
 		try {
-			const auto & ant = *d_ants.at(p->Ant);
-			const auto & keyName = keyNameAt(p->Key);
-			const auto & timedValue = ant.DataMap().at(keyName).at(p->Value);
+			const auto &ant        = *d_ants.at(p->Ant);
+			const auto &keyName    = keyNameAt(p->Key);
+			const auto &timedValue = ant.DataMap().at(keyName).at(p->Value);
 			switch (column) {
-			case 2 :
+			case 2:
 				return ToQString(timedValue.first);
 			case 3:
 				return ToQString(timedValue.second);
 			}
-		} catch ( const std::exception & ) {
+		} catch (const std::exception &) {
 		}
 		return QVariant();
 	}
 
 	std::string keyNameAt(int key) const {
-		if ( key < 0 || key >= d_keyModel->rowCount() ) {
+		if (key < 0 || key >= d_keyModel->rowCount()) {
 			throw cpptrace::out_of_range("key index is invalid");
 		}
-		return ToStdString(d_keyModel->index(key,0).data(Qt::DisplayRole).toString());
+		return ToStdString(
+		    d_keyModel->index(key, 0).data(Qt::DisplayRole).toString()
+		);
 	}
 
-	std::vector<fmp::Ant::Ptr>::const_iterator lower_bound(quint32 antID) const {
-		return std::lower_bound(d_ants.begin(),
-		                        d_ants.end(),
-		                        antID,
-		                        [](const fmp::Ant::Ptr & a , quint32 antID) {
-			                        return a->AntID() < antID;
-		                        });
+	std::vector<fmp::Ant::Ptr>::const_iterator lower_bound(quint32 antID
+	) const {
+		return std::lower_bound(
+		    d_ants.begin(),
+		    d_ants.end(),
+		    antID,
+		    [](const fmp::Ant::Ptr &a, quint32 antID) {
+			    return a->AntID() < antID;
+		    }
+		);
 	}
 
 	std::vector<fmp::Ant::Ptr>::const_iterator find(quint32 antID) const {
 		auto fi = lower_bound(antID);
-		if ( fi != d_ants.cend() && (*fi)->AntID() == antID ) {
+		if (fi != d_ants.cend() && (*fi)->AntID() == antID) {
 			return fi;
 		}
 		return d_ants.cend();
 	}
 
-	fmp::Experiment::Ptr                     d_experiment;
-	KeyModel                               * d_keyModel;
-	std::vector<fmp::Ant::Ptr>               d_ants;
-	std::map<std::tuple<fmp::Ant*,int,int>,
-	         std::unique_ptr<Pointer>>       d_pointers;
+	fmp::Experiment::Ptr       d_experiment;
+	KeyModel                  *d_keyModel;
+	std::vector<fmp::Ant::Ptr> d_ants;
+	std::map<std::tuple<fmp::Ant *, int, int>, std::unique_ptr<Pointer>>
+	                d_pointers;
+	slog::Logger<1> d_logger;
 };
 
 #include "AntKeyValueBridge.moc"
@@ -1046,7 +1121,8 @@ AntKeyValueBridge::AntKeyValueBridge(QObject *parent)
     : GlobalBridge(parent)
     , d_typeModel(new QStandardItemModel(parent))
     , d_keyModel(new KeyModel(this))
-    , d_dataModel(new DataModel(d_keyModel, this)) {
+    , d_dataModel(new DataModel(d_keyModel, this))
+    , d_logger{slog::With(slog::String("module", "AntKeyValueBridge"))} {
 	qRegisterMetaType<fort::Time>();
 	qRegisterMetaType<fm::Value>();
 

@@ -1,5 +1,6 @@
 #include "ConcurrentFrameLoader.hpp"
 #include "fort/myrmidon/types/IdentifiedFrame.hpp"
+#include "fort/myrmidon/utils/Exception.hpp"
 
 #include <QtConcurrent>
 
@@ -14,6 +15,8 @@
 
 #include <fort/studio/MyrmidonTypes/Experiment.hpp>
 #include <fort/studio/MyrmidonTypes/Time.hpp>
+#include <slog++/Attribute.hpp>
+#include <slog++/slog++.hpp>
 
 #ifdef NDEBUG
 #define FORT_STUDIO_CONC_LOADER_NDEBUG 1
@@ -35,7 +38,8 @@ ConcurrentFrameLoader::ConcurrentFrameLoader(QObject *parent)
     , d_done(0)
     , d_toDo(-1)
     , d_currentLoadingID(-1)
-    , d_connectionType(Qt::QueuedConnection) {
+    , d_connectionType(Qt::QueuedConnection)
+    , d_logger{slog::With(slog::String("module", "ConcurrentFrameLoader"))} {
 	qRegisterMetaType<fmp::Experiment::ConstPtr>();
 	qRegisterMetaType<fort::Time>();
 }
@@ -103,8 +107,11 @@ void ConcurrentFrameLoader::loadMovieSegment(
 
 	if (fs::path(segment->URI()).parent_path().parent_path().generic_string() !=
 	    tdd->URI()) {
-		qCritical() << "Cannot load frame from " << ToQString(segment->URI())
-		            << " from TrackingDataDirectory " << ToQString(tdd->URI());
+		d_logger.Error(
+		    "could not load frame",
+		    slog::String("segment", segment->URI()),
+		    slog::String("TDD", tdd->URI())
+		);
 		return;
 	}
 
@@ -121,20 +128,29 @@ void ConcurrentFrameLoader::loadMovieSegment(
 
 	int maxThreadCount = QThreadPool::globalInstance()->maxThreadCount();
 	if (maxThreadCount < 2) {
-		qWarning() << "Increases the work thread to at least 2 from "
-		           << maxThreadCount;
+		d_logger.Warn(
+		    "increases the work thread to at least 2",
+		    slog::Int("old_max", maxThreadCount)
+		);
 		maxThreadCount = 2;
 		// avoids deadlock on the global instance !!!
 		QThreadPool::globalInstance()->setMaxThreadCount(maxThreadCount);
 	}
 	CONC_LOADER_DEBUG({
-		std::cerr << "Setting nbFrames to "
-		          << segment->EndFrame() - segment->StartFrame() + 1
-		          << std::endl;
-		std::cerr << "Segment:[" << segment->StartFrame() << ";"
-		          << segment->EndFrame() << "]" << std::endl;
-		std::cerr << "TDD:[" << tdd->StartFrame() << ";" << tdd->EndFrame()
-		          << "]" << std::endl;
+		slog::Debug(
+		    "settings number of frames",
+		    slog::Int("value", segment->EndFrame() - segment->StartFrame() + 1),
+		    slog::Group(
+		        "segment",
+		        slog::Int("start", segment->StartFrame()),
+		        slog::Int("end", segment->EndFrame())
+		    ),
+		    slog::Group(
+		        "TDD",
+		        slog::Int("start", tdd->StartFrame()),
+		        slog::Int("end", tdd->EndFrame())
+		    )
+		);
 	});
 	setProgress(0, segment->EndFrame() - segment->StartFrame() + 1);
 	// even if we take one of the thread to populate tge other, we
@@ -158,9 +174,11 @@ void ConcurrentFrameLoader::loadMovieSegment(
 			while (abordFlag->load() != true) {
 				if (start == tdd->end()) {
 					CONC_LOADER_DEBUG(
-					    std::cerr << "marking "
-					              << segment->EndFrame() - lastFrame << " done"
-					              << std::endl
+					    slog::Debug(
+					        "marking frame done",
+					        slog::Location(),
+					        slog::Int("count", segment->EndFrame() - lastFrame)
+					    );
 					);
 					// mark all jumped frame done
 					this->metaObject()->invokeMethod(
@@ -180,9 +198,11 @@ void ConcurrentFrameLoader::loadMovieSegment(
 				if (!rawFrame ||
 				    rawFrame->Frame().FrameID() > segment->EndFrame()) {
 					CONC_LOADER_DEBUG(
-					    std::cerr << "marking "
-					              << segment->EndFrame() - lastFrame << " done"
-					              << std::endl
+					    slog::Debug(
+					        "marking frame done",
+					        slog::Location(),
+					        slog::Int("count", segment->EndFrame() - lastFrame)
+					    );
 					);
 					// mark all jumped frame done
 					this->metaObject()->invokeMethod(
@@ -195,9 +215,12 @@ void ConcurrentFrameLoader::loadMovieSegment(
 				}
 				auto frameID = rawFrame->Frame().FrameID();
 				// we mark all jumped frame done
-				CONC_LOADER_DEBUG(
-				    std::cerr << "advanced " << frameID - lastFrame << std::endl
-				);
+				CONC_LOADER_DEBUG({
+					slog::Debug(
+					    "advancing",
+					    slog::Int("count", frameID - lastFrame)
+					);
+				});
 				if ((frameID - lastFrame) > 1) {
 					this->metaObject()->invokeMethod(
 					    this,
@@ -208,16 +231,14 @@ void ConcurrentFrameLoader::loadMovieSegment(
 				}
 				lastFrame = frameID;
 
-				auto loadFrame = [rawFrame,
-				                  identifier,
-				                  solver,
-				                  spaceID,
-				                  segment,
-				                  frameID,
-				                  this]() -> ConcurrentResult {
+				auto loadFrame =
+				    [rawFrame, identifier, solver, spaceID, segment, frameID](
+				    ) -> ConcurrentResult {
 					CONC_LOADER_DEBUG(
-					    std::cerr << "Processing " << rawFrame->Frame().FID()
-					              << std::endl
+					    slog::Debug(
+					        "processing frame",
+					        slog::Int("frameID", rawFrame->Frame().FID())
+					    );
 					);
 					try {
 						auto movieID = segment->ToMovieFrameID(frameID);
@@ -248,9 +269,12 @@ void ConcurrentFrameLoader::loadMovieSegment(
 						);
 					}
 				};
-				CONC_LOADER_DEBUG(
-				    std::cerr << "Spawning " << frameID << std::endl
-				);
+				CONC_LOADER_DEBUG({
+					slog::Debug(
+					    "spawning frame",
+					    slog::Int("frameID", frameID)
+					);
+				});
 				sem->acquire(1);
 				QFuture<ConcurrentResult> future = QtConcurrent::run(loadFrame);
 				auto watcher = new QFutureWatcher<ConcurrentResult>();
@@ -261,12 +285,17 @@ void ConcurrentFrameLoader::loadMovieSegment(
 				    this,
 				    [watcher, currentLoadingID, segment, sem, frameID, this]() {
 					    CONC_LOADER_DEBUG({
-						    std::cerr << "Received " << frameID << " status "
-						              << d_done << "/" << d_toDo << std::endl;
-						    std::cerr
-						        << "Wanted Thread:" << this->thread()
-						        << " current: " << QThread::currentThread()
-						        << std::endl;
+						    slog::Debug(
+						        "received frame",
+						        slog::Int("frameID", frameID),
+						        slog::Int("done", d_done),
+						        slog::Int("toDo", d_toDo),
+						        slog::Pointer("wanted_thread", this->thread()),
+						        slog::Pointer(
+						            "current",
+						            QThread::currentThread()
+						        )
+						    );
 					    });
 					    auto res = watcher->result();
 					    watcher->deleteLater();
@@ -274,10 +303,14 @@ void ConcurrentFrameLoader::loadMovieSegment(
 
 					    if (currentLoadingID != this->d_currentLoadingID) {
 						    CONC_LOADER_DEBUG(
-						        std::cerr
-						        << "Unexpected loadingID " << currentLoadingID
-						        << " (expected:" << this->d_currentLoadingID
-						        << std::endl
+						        slog::Debug(
+						            "unexpected ID",
+						            slog::Int(
+						                "expectedLoadingID",
+						                this->d_currentLoadingID
+						            ),
+						            slog::Int("received", currentLoadingID)
+						        );
 						    );
 						    // outdated computation, we ignore it
 						    return;
@@ -305,8 +338,11 @@ void ConcurrentFrameLoader::loadMovieSegment(
 				++start;
 			}
 		} catch (const std::exception &e) {
-			qCritical() << "Could not extract tracking data for "
-			            << ToQString(segment->URI()) << ": " << e.what();
+			d_logger.Error(
+			    "could not extract tracking data",
+			    slog::String("segment", segment->URI()),
+			    slog::Err(fort::myrmidon::utils::What(e))
+			);
 			setProgress(d_toDo, d_toDo);
 			return;
 		}
@@ -330,27 +366,31 @@ void ConcurrentFrameLoader::abordCurrent() {
 	d_abordFlag.reset();
 }
 
-void ConcurrentFrameLoader::setProgress(int doneValue,int toDo) {
+void ConcurrentFrameLoader::setProgress(int doneValue, int toDo) {
 	CONC_LOADER_DEBUG({
-			std::cerr << "[setProgress]: wantedThread: " << this->thread() << " current: " << QThread::currentThread() <<  std::endl;
-			std::cerr << "[setProgress]: current:" << d_done << "/" << d_toDo << " wants:" << doneValue << "/" << toDo << std::endl;
-		});
+		slog::Debug(
+		    "setting progress",
+		    slog::Pointer("wanted_thread", this->thread()),
+		    slog::Pointer("current", QThread::currentThread()),
+		    slog::Int("done", d_done),
+		    slog::Int("toDo", d_toDo)
+		);
+	});
 
-	if ( d_done == doneValue && d_toDo == toDo ) {
+	if (d_done == doneValue && d_toDo == toDo) {
 		return;
 	}
 	bool doneState = isDone();
-	d_done = doneValue;
-	d_toDo = toDo;
-	emit progressChanged(d_done,d_toDo);
-	if ( doneState != isDone() ) {
+	d_done         = doneValue;
+	d_toDo         = toDo;
+	emit progressChanged(d_done, d_toDo);
+	if (doneState != isDone()) {
 		emit done(isDone());
 		if (isDone()) {
 			emit durationComputed(duration());
 		}
 	}
 }
-
 
 void ConcurrentFrameLoader::addDone(int done) {
 	setProgress(d_done + done,d_toDo);

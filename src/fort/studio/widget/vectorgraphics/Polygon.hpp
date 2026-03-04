@@ -3,7 +3,6 @@
 #include "Shape.hpp"
 #include <QGraphicsPolygonItem>
 
-#include <QDebug>
 #include <memory>
 
 class Handle;
@@ -34,9 +33,9 @@ protected:
 	void removeFromSceneProtected(QGraphicsScene *scene) override;
 
 	void paint(
-	    QPainter	                   *painter,
+	    QPainter                       *painter,
 	    const QStyleOptionGraphicsItem *option,
-	    QWidget	                    *widget
+	    QWidget                        *widget
 	) override;
 
 	void mousePressEvent(QGraphicsSceneMouseEvent *e) override;

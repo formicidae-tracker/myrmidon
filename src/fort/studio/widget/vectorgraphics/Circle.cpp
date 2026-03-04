@@ -130,8 +130,8 @@ void Circle::mouseReleaseEvent(QGraphicsSceneMouseEvent * e) {
 	emit updated();
 }
 
-void Circle::moveUpdate(const QPointF & newPos) {
-	auto delta = newPos -*d_moveEvent;
+void Circle::moveUpdate(const QPointF &newPos) {
+	auto delta   = newPos - *d_moveEvent;
 	*d_moveEvent = newPos;
 	d_center->setPos(d_center->pos() + delta);
 	update(true);

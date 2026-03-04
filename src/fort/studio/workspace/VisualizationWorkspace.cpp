@@ -1,41 +1,41 @@
 #include "VisualizationWorkspace.hpp"
+#include "fort/myrmidon/utils/Slogpp.hpp"
 #include "ui_VisualizationWorkspace.h"
 
+#include <fort/studio/bridge/AntKeyValueBridge.hpp>
 #include <fort/studio/bridge/ExperimentBridge.hpp>
 #include <fort/studio/bridge/MovieBridge.hpp>
 #include <fort/studio/bridge/UniverseBridge.hpp>
-#include <fort/studio/bridge/AntKeyValueBridge.hpp>
 
-#include <fort/studio/widget/TrackingVideoPlayer.hpp>
 #include <fort/studio/widget/AntListWidget.hpp>
 #include <fort/studio/widget/SetAntValueDialog.hpp>
+#include <fort/studio/widget/TrackingVideoPlayer.hpp>
 
-#include <QAction>
-#include <QShortcut>
-#include <QClipboard>
-#include <QDialog>
-#include <QFormLayout>
-#include <QDialogButtonBox>
-#include <QComboBox>
-#include <QLineEdit>
 #include <QAbstractButton>
+#include <QAction>
+#include <QClipboard>
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <QDockWidget>
-#include <QMainWindow>
-#include <QTreeView>
-#include <QDebug>
+#include <QFormLayout>
 #include <QHeaderView>
-#include <QToolBar>
-#include <QShortcut>
 #include <QKeySequence>
+#include <QLineEdit>
+#include <QMainWindow>
+#include <QShortcut>
+#include <QToolBar>
+#include <QTreeView>
 
 #include <fort/studio/Format.hpp>
+#include <slog++/Attribute.hpp>
 
 void VisualizationWorkspace::setUpUI() {
-	d_antDisplay = new AntDisplayListWidget(this);
+	d_antDisplay     = new AntDisplayListWidget(this);
 	d_antDisplayDock = new QDockWidget(tr("Ants Display States"));
 	d_antDisplayDock->setObjectName("visualizationAntDisplayDock");
 	d_antDisplayDock->setWidget(d_antDisplay);
-	d_antDisplay->setMaximumSize(QSize(400,65535));
+	d_antDisplay->setMaximumSize(QSize(400, 65535));
 
 	auto widget = new QWidget(this);
 	auto layout = new QVBoxLayout();
@@ -46,13 +46,12 @@ void VisualizationWorkspace::setUpUI() {
 	layout->addWidget(d_treeView);
 
 	widget->setLayout(layout);
-	widget->setMaximumSize(QSize(400,65535));
+	widget->setMaximumSize(QSize(400, 65535));
 
-	d_segmentListDock = new QDockWidget(tr("Movie Segments"),this);
+	d_segmentListDock = new QDockWidget(tr("Movie Segments"), this);
 	d_segmentListDock->setObjectName("visulizationMovieSegmentsDock");
 	d_segmentListDock->setWidget(widget);
 }
-
 
 void VisualizationWorkspace::setUpActions() {
 	d_toolbar = new QToolBar("Value Marking",this);
@@ -440,29 +439,30 @@ void VisualizationWorkspace::jumpToTimeAction() {
     }
     auto spaceID = spaceCombo->currentData().toInt();
     jumpToTime(spaceID,wanted);
-
 }
 
+void VisualizationWorkspace::jumpToTime(
+    uint32_t spaceID, const fort::Time &time
+) {
+	auto [tdd, segment, start] =
+	    d_experiment->movies()->findTime(spaceID, time);
+	if (!tdd || !segment) {
+		slog::Error(
+		    "could not find time in space",
+		    slog::String("module", "VisualizationWorkspace"),
+		    slog::FortTime("time", time),
+		    slog::Int("space_ID", spaceID)
+		);
+		return;
+	}
 
-void VisualizationWorkspace::jumpToTime(uint32_t spaceID,
-                                        const fort::Time & time) {
-	auto [tdd,segment,start] = d_experiment->movies()->findTime(spaceID,
-                                                                time);
-    if ( !tdd || !segment ) {
-	    qCritical() << "Could not find time " << ToQString(time) << " in space "
-	                << spaceID;
-	    return;
-    }
-
-    d_videoPlayer->pause();
-    const auto & currentSegment = d_videoPlayer->currentSegment();
-    if ( !currentSegment == true ||
-         currentSegment->URI() != segment->URI() ) {
-	    d_videoPlayer->setMovieSegment(spaceID,tdd,segment,start);
-    }
-    d_videoPlayer->setTime(time);
+	d_videoPlayer->pause();
+	const auto &currentSegment = d_videoPlayer->currentSegment();
+	if (!currentSegment == true || currentSegment->URI() != segment->URI()) {
+		d_videoPlayer->setMovieSegment(spaceID, tdd, segment, start);
+	}
+	d_videoPlayer->setTime(time);
 }
-
 
 void VisualizationWorkspace::updateActionsStates() {
 	if ( d_ui->trackingVideoWidget->hasTrackingTime() == false ) {

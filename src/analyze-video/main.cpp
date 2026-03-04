@@ -1,51 +1,50 @@
 #include <iostream>
+#include <slog++/slog++.hpp>
 #include <stdexcept>
 
 #include <fort/myrmidon/priv/TrackingDataDirectory.hpp>
 
-#include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
+#include <opencv2/imgcodecs.hpp>
 
 namespace fmp = fort::myrmidon::priv;
 
 typedef uint8_t fontchar[16];
 static fontchar fontdata[256];
 
-
-char ExtractDigit(const cv::Mat & frame) {
-	if ( frame.cols != 8 || frame.rows != 16 ) {
+char ExtractDigit(const cv::Mat &frame) {
+	if (frame.cols != 8 || frame.rows != 16) {
 		throw std::runtime_error("Could not extract digit: not right size");
 	}
-	std::string expected,got;
+	std::string expected, got;
 
 	fontchar actual;
-	for ( size_t iy = 0 ; iy < 16; ++iy) {
+	for (size_t iy = 0; iy < 16; ++iy) {
 		actual[iy] = 0;
 		for (size_t ix = 0; ix < 8; ++ix) {
-			auto value  = frame.at<cv::Vec3b>(iy,ix);
-			uint8_t gray = (int(value[0]) + int(value[1]) + int(value[2])) / 3;
-			if ( gray > 127 ) {
-				actual[iy] |=  1 << (7-ix);
+			auto    value = frame.at<cv::Vec3b>(iy, ix);
+			uint8_t gray  = (int(value[0]) + int(value[1]) + int(value[2])) / 3;
+			if (gray > 127) {
+				actual[iy] |= 1 << (7 - ix);
 			}
 		}
 	}
 
-	for ( size_t i = 0; i  < 10; ++i) {
-		char c = '0'+i;
+	for (size_t i = 0; i < 10; ++i) {
+		char   c      = '0' + i;
 		size_t errors = 0;
-		size_t iy = 0;
-		for (  ; iy < 16; ++iy) {
-			if ( fontdata[c][iy] != actual[iy] ) {
+		size_t iy     = 0;
+		for (; iy < 16; ++iy) {
+			if (fontdata[c][iy] != actual[iy]) {
 				break;
 			}
 		}
-		if ( iy == 16 ) {
+		if (iy == 16) {
 			return c;
 		}
 	}
 	throw std::runtime_error("COuld not extract digit");
 }
-
 
 uint64_t ExtractFrameNumber(const cv::Mat & frame) {
 	uint64_t res = 0;
@@ -111,12 +110,11 @@ void Execute(int argc, char ** argv) {
 	}
 }
 
-
-int main (int argc, char ** argv) {
+int main(int argc, char **argv) {
 	try {
-		Execute(argc,argv);
-	} catch (const std::exception & e) {
-		std::cerr << "Unhandled exception: " << e.what() << std::endl;
+		Execute(argc, argv);
+	} catch (const std::exception &e) {
+		slog::Fatal("unhandled exception", slog::Err(e));
 		return 1;
 	}
 }

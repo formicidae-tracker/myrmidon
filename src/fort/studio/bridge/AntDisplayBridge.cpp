@@ -1,6 +1,7 @@
 #include "AntDisplayBridge.hpp"
 
-#include <QDebug>
+#include <magic_enum/magic_enum.hpp>
+
 #include <QItemSelection>
 
 #include <fort/myrmidon/priv/Identifier.hpp>
@@ -9,14 +10,14 @@
 
 #include "AntGlobalModel.hpp"
 #include "ExperimentBridge.hpp"
-#include "IdentifierBridge.hpp"
+#include "fort/studio/Slogpp.hpp"
 
-
-AntDisplayBridge::AntDisplayBridge(QObject * parent)
-	: GlobalBridge(parent)
-	, d_model(new AntGlobalModel(this))
-	, d_numberSoloAnt(0)
-	, d_numberHiddenAnt(0) {
+AntDisplayBridge::AntDisplayBridge(QObject *parent)
+    : GlobalBridge(parent)
+    , d_model(new AntGlobalModel(this))
+    , d_numberSoloAnt(0)
+    , d_numberHiddenAnt(0)
+    , d_logger{slog::With(slog::String("module", "AntDisplayBridge"))} {
 
 	qRegisterMetaType<fmp::Ant::DisplayState>();
 	qRegisterMetaType<fm::Color>();
@@ -25,8 +26,6 @@ AntDisplayBridge::AntDisplayBridge(QObject * parent)
 	        &QStandardItemModel::itemChanged,
 	        this,
 	        &AntDisplayBridge::onAntItemChanged);
-
-
 }
 
 AntDisplayBridge::~AntDisplayBridge() {
@@ -118,18 +117,18 @@ QIcon AntDisplayBridge::antDisplayColor(const fmp::Ant::Ptr & ant) {
 	return Conversion::iconFromFM(c);
 }
 
-
-
-void AntDisplayBridge::setAntDisplayState(QStandardItem * hideItem,
-                                          QStandardItem * soloItem,
-                                          const fmp::Ant::Ptr & ant,
-                                          fmp::Ant::DisplayState ds) {
+void AntDisplayBridge::setAntDisplayState(
+    QStandardItem         *hideItem,
+    QStandardItem         *soloItem,
+    const fmp::Ant::Ptr   &ant,
+    fmp::Ant::DisplayState ds
+) {
 	auto oldDs = ant->DisplayStatus();
-	if ( oldDs == ds ) {
+	if (oldDs == ds) {
 		return;
 	}
 	ant->SetDisplayStatus(ds);
-	switch(oldDs) {
+	switch (oldDs) {
 	case fm::Ant::DisplayState::HIDDEN:
 		--d_numberHiddenAnt;
 		emit numberHiddenAntChanged(d_numberHiddenAnt);
@@ -141,25 +140,24 @@ void AntDisplayBridge::setAntDisplayState(QStandardItem * hideItem,
 	case fm::Ant::DisplayState::VISIBLE:
 		break;
 	}
+	d_logger.Info(
+	    "setting ant visible state",
+	    slog::Int("antID", ant->AntID()),
+	    slog::String("state", std::string{magic_enum::enum_name(ds)})
+	);
 
-	switch(ds) {
+	switch (ds) {
 	case fmp::Ant::DisplayState::VISIBLE:
-		qInfo() << "Setting Ant " << ant->FormattedID().c_str()
-		        << " to VISIBLE";
 		hideItem->setCheckState(Qt::Unchecked);
 		soloItem->setCheckState(Qt::Unchecked);
 		break;
 	case fmp::Ant::DisplayState::HIDDEN:
-		qInfo() << "Setting Ant " << ant->FormattedID().c_str()
-		        << " to HIDDEN";
 		++d_numberHiddenAnt;
 		emit numberHiddenAntChanged(d_numberHiddenAnt);
 		hideItem->setCheckState(Qt::Checked);
 		soloItem->setCheckState(Qt::Unchecked);
 		break;
 	case fmp::Ant::DisplayState::SOLO:
-		qInfo() << "Setting Ant " << ant->FormattedID().c_str()
-		        << " to SOLO";
 		++d_numberSoloAnt;
 		emit numberSoloAntChanged(d_numberSoloAnt);
 		hideItem->setCheckState(Qt::Unchecked);
@@ -167,7 +165,11 @@ void AntDisplayBridge::setAntDisplayState(QStandardItem * hideItem,
 		break;
 	}
 	setModified(true);
-	emit antDisplayChanged(ant->AntID(),ant->DisplayColor(),ant->DisplayStatus());
+	emit antDisplayChanged(
+	    ant->AntID(),
+	    ant->DisplayColor(),
+	    ant->DisplayStatus()
+	);
 }
 
 void AntDisplayBridge::onAntItemChanged(QStandardItem * item) {
@@ -283,24 +285,31 @@ void AntDisplayBridge::setAntDisplayColor(const QModelIndex & index,
 	setAntDisplayColor(item,color);
 }
 
-void AntDisplayBridge::setAntDisplayColor(QStandardItem * item,
-                                          const QColor & color) {
-	if ( color.isValid() == false
-	     || item == nullptr) {
+void AntDisplayBridge::setAntDisplayColor(
+    QStandardItem *item, const QColor &color
+) {
+	if (color.isValid() == false || item == nullptr) {
 		return;
 	}
 	auto ant = item->data().value<fmp::Ant::Ptr>();
-	if ( ant == nullptr ) {
+	if (ant == nullptr) {
 		return;
 	}
 
-	qInfo() << "Setting Display Color of Ant " << ant->FormattedID().c_str()
-	        << " to " << color;
-	ant->SetDisplayColor({color.red(),color.green(),color.blue()});
-	item->setData(antDisplayColor(ant),Qt::DecorationRole);
+	d_logger.Info(
+	    "setting display color",
+	    slog::Int("antID", ant->AntID()),
+	    slog::QColor("color", color)
+	);
+	ant->SetDisplayColor({color.red(), color.green(), color.blue()});
+	item->setData(antDisplayColor(ant), Qt::DecorationRole);
 
 	setModified(true);
-	emit antDisplayChanged(ant->AntID(),ant->DisplayColor(),ant->DisplayStatus());
+	emit antDisplayChanged(
+	    ant->AntID(),
+	    ant->DisplayColor(),
+	    ant->DisplayStatus()
+	);
 }
 
 fm::AntID AntDisplayBridge::antIDForIndex(const QModelIndex & index) const {

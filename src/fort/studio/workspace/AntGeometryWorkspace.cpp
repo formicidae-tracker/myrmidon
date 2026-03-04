@@ -1,44 +1,44 @@
 #include "AntGeometryWorkspace.hpp"
+#include "fort/studio/Slogpp.hpp"
 #include "ui_AntGeometryWorkspace.h"
 
-
-#include <QStandardItemModel>
-#include <QClipboard>
 #include <QAction>
-#include <QToolBar>
-#include <QMainWindow>
-#include <QDockWidget>
+#include <QClipboard>
 #include <QComboBox>
-
+#include <QDockWidget>
+#include <QMainWindow>
+#include <QStandardItemModel>
+#include <QToolBar>
 
 #include <fort/myrmidon/Shapes.hpp>
 
-
-#include <fort/studio/bridge/ExperimentBridge.hpp>
-#include <fort/studio/bridge/MeasurementBridge.hpp>
 #include <fort/studio/bridge/AntShapeBridge.hpp>
-#include <fort/studio/bridge/IdentifierBridge.hpp>
 #include <fort/studio/bridge/AntShapeTypeBridge.hpp>
+#include <fort/studio/bridge/ExperimentBridge.hpp>
+#include <fort/studio/bridge/IdentifierBridge.hpp>
+#include <fort/studio/bridge/MeasurementBridge.hpp>
 #include <fort/studio/bridge/TagCloseUpBridge.hpp>
 
-#include <fort/studio/Utils.hpp>
 #include <fort/studio/Format.hpp>
-#include <fort/studio/widget/vectorgraphics/Vector.hpp>
-#include <fort/studio/widget/vectorgraphics/Capsule.hpp>
-#include <fort/studio/widget/vectorgraphics/VectorialScene.hpp>
-#include <fort/studio/widget/CloneShapeDialog.hpp>
+#include <fort/studio/Utils.hpp>
 #include <fort/studio/widget/AntListWidget.hpp>
 #include <fort/studio/widget/AntShapeTypeEditorWidget.hpp>
+#include <fort/studio/widget/CloneShapeDialog.hpp>
 #include <fort/studio/widget/MeasurementTypeWidget.hpp>
+#include <fort/studio/widget/vectorgraphics/Capsule.hpp>
+#include <fort/studio/widget/vectorgraphics/Vector.hpp>
+#include <fort/studio/widget/vectorgraphics/VectorialScene.hpp>
 
 #include <fort/studio/MyrmidonTypes/Conversion.hpp>
+#include <slog++/slog++.hpp>
 
 AntGeometryWorkspace::AntGeometryWorkspace(QWidget *parent)
     : Workspace(true, parent)
     , d_copyTimeAction(nullptr)
     , d_ui(new Ui::AntGeometryWorkspace)
     , d_experiment(nullptr)
-    , d_vectorialScene(new VectorialScene(this)) {
+    , d_vectorialScene(new VectorialScene(this))
+    , d_logger(slog::With(slog::String("module", "AntGeometryWorkspace"))) {
 
 	d_editToolBar = new QToolBar(this);
 
@@ -450,68 +450,90 @@ void AntMeasurementWorkspace::on_comboBox_currentIndexChanged(int) {
 }
 
 void AntMeasurementWorkspace::onVectorUpdated() {
-	if ( d_closeUp == nullptr ) {
+	if (d_closeUp == nullptr) {
 		return;
 	}
 
 	auto sender = QObject::sender();
-	auto fi = findVector(dynamic_cast<Vector*>(sender));
-	if ( fi == d_vectors.end() ) {
-		qDebug() << "[AntMeasurementWorkspace]: could not find back sender";
+	auto fi     = findVector(dynamic_cast<Vector *>(sender));
+	if (fi == d_vectors.end()) {
+		d_logger.Error("could not find back sender");
 		return;
 	}
-	setMeasurement(fi->second,fi->first);
+	setMeasurement(fi->second, fi->first);
 }
 
-void AntMeasurementWorkspace::onVectorCreated(QSharedPointer<Vector> vector) {\
-	if ( d_closeUp == nullptr ) {
-		qDebug() << "[AntGeometryWorkspace]: Vector created without tcu";
+void AntMeasurementWorkspace::onVectorCreated(QSharedPointer<Vector> vector) {
+	if (vector == nullptr) {
+		return;
+	}
+
+	auto logger = d_logger.With(slog::Vector("vector", *vector));
+	if (d_closeUp == nullptr) {
+		logger.Warn("vector created without close-up: deleting");
 		d_vectorialScene->deleteShape(vector.staticCast<Shape>());
 		return;
 	}
 	auto mtID = typeFromComboBox();
-	if ( mtID == 0 ) {
-		qDebug() << "No measurement type selected";
+	if (mtID == 0) {
+		logger.Warn("no measurement type selected: deleting");
 		d_vectorialScene->deleteShape(vector.staticCast<Shape>());
 		return;
 	}
 
-	if ( d_vectors.count(mtID)  != 0 ) {
-		qWarning() << "Measurement already exist in Close-Up for type " << mtID;
+	if (d_vectors.count(mtID) != 0) {
+		logger.Warn(
+		    "measurement already exist for type: deleting",
+		    slog::Int("mtID", mtID)
+		);
 		d_vectorialScene->deleteShape(vector.staticCast<Shape>());
 		return;
 	}
 
-	if ( d_experiment->measurements()->setMeasurement(d_closeUp,
-	                                                  mtID,
-	                                                  vector->startPos(),
-	                                                  vector->endPos()) == false ) {
+	if (d_experiment->measurements()->setMeasurement(
+	        d_closeUp,
+	        mtID,
+	        vector->startPos(),
+	        vector->endPos()
+	    ) == false) {
 		d_vectorialScene->deleteShape(vector.staticCast<Shape>());
 		return;
 	}
 
-	connect(vector.data(),&Shape::updated,
-	        this,&AntMeasurementWorkspace::onVectorUpdated);
-
+	connect(
+	    vector.data(),
+	    &Shape::updated,
+	    this,
+	    &AntMeasurementWorkspace::onVectorUpdated
+	);
 }
 
 void AntMeasurementWorkspace::onVectorRemoved(QSharedPointer<Vector> vector) {
-	if ( d_closeUp == nullptr ) {
+	if (d_closeUp == nullptr) {
 		return;
 	}
+	auto logger = d_logger.With(
+	    slog::Vector("vector", *vector),
+	    slog::Pointer("address", vector.data()),
+	    slog::String("close_up", d_closeUp->URI())
+	);
+
 	auto fi = findVector(vector.data());
-	if ( fi == d_vectors.end() ) {
-		qDebug() << "[AntGeometryWorkspace]: could not find back vector";
+
+	if (fi == d_vectors.end()) {
+		logger.Debug("could not find back vector");
 		return;
 	}
-	auto m = d_experiment->measurements()->measurementForCloseUp(d_closeUp->URI(),fi->first);
-	if ( !m ) {
-		qWarning() << "No measurement of type " << fi->first << " for " << d_closeUp->URI().c_str();
+	auto m = d_experiment->measurements()->measurementForCloseUp(
+	    d_closeUp->URI(),
+	    fi->first
+	);
+	if (!m) {
+		logger.Warn("no measurement for type", slog::Int("mtID", fi->first));
 		return;
 	}
 	d_vectors.erase(fi);
 	d_experiment->measurements()->deleteMeasurement(m);
-
 }
 
 void AntMeasurementWorkspace::setMeasurement(const QSharedPointer<Vector> & vector, fmp::MeasurementTypeID mtID) {
@@ -569,9 +591,9 @@ void AntMeasurementWorkspace::changeVectorType(Vector * vector,
 	d_vectors.erase(fi);
 }
 
-
 AntShapeWorkspace::AntShapeWorkspace(QWidget *parent)
-	:  AntGeometryWorkspace(parent) {
+    : AntGeometryWorkspace(parent)
+    , d_logger{slog::With(slog::String("module", "AntShapeWorkspace"))} {
 
 	d_editToolBar->setWindowTitle("Ant Shape");
 	d_editToolBar->setObjectName("antShapeEditToolbar");
@@ -772,73 +794,82 @@ void AntShapeWorkspace::onCapsuleUpdated() {
 
 void AntShapeWorkspace::onCapsuleCreated(QSharedPointer<Capsule> capsule) {
 	auto antID  = selectedAntID();
-	if ( antID == 0
-	     || d_experiment == nullptr ) {
-		qDebug() << "[AntShapeWorkspace]: Capsule created without an ant";
+	auto logger = d_logger.With(
+	    slog::Capsule("capsule", *capsule),
+	    slog::Int("antID", antID)
+	);
+
+	if (antID == 0 || d_experiment == nullptr) {
+		logger.Warn("capsule created without an ant: deleting");
 		d_vectorialScene->deleteShape(capsule.staticCast<Shape>());
 		return;
 	}
 	quint32 type = typeFromComboBox();
-	if ( type == 0 ) {
-		qDebug() << "[AntShapeWorkspace]: no type selected";
+	if (type == 0) {
+		logger.Warn("capsule created without a type: deleting");
 		d_vectorialScene->deleteShape(capsule.staticCast<Shape>());
 		return;
 	}
 
 	auto c = capsuleFromScene(capsule);
-	if ( c == nullptr )  {
-		qDebug() << "[AntShapeWorkspace]: could not compute capsule, removing it";
+	if (c == nullptr) {
+		logger.Warn("could not compute capsule from scene: deleting");
 		d_vectorialScene->deleteShape(capsule.staticCast<Shape>());
 		return;
 	}
 
-	if ( d_experiment->antShapes()->addCapsule(antID,
-	                                           type,
-	                                           c) == -1 ) {
-		qDebug() << "[AntShapeWorkspace]: could not add capsule, removing it from the scene";
+	if (d_experiment->antShapes()->addCapsule(antID, type, c) == -1) {
+		logger.Warn(
+		    "could not add capsule to experiment: deleting it from the scene"
+		);
 		d_vectorialScene->deleteShape(capsule.staticCast<Shape>());
 	}
 
+	logger.Debug("added capsule");
 
-	d_capsules.insert(std::make_pair(capsule,type));
+	d_capsules.insert(std::make_pair(capsule, type));
 
-	connect(capsule.data(),
-	        &Shape::updated,
-	        this,
-	        &AntShapeWorkspace::onCapsuleUpdated);
-
-
+	connect(
+	    capsule.data(),
+	    &Shape::updated,
+	    this,
+	    &AntShapeWorkspace::onCapsuleUpdated
+	);
 }
 
 void AntShapeWorkspace::onCapsuleRemoved(QSharedPointer<Capsule> capsule) {
+	auto logger = d_logger.With(
+	    slog::Capsule("capsule", *capsule),
+	    slog::Pointer("address", capsule.data())
+	);
 	auto fi = d_capsules.find(capsule);
-	if ( fi == d_capsules.end() ) {
-		qDebug() << "[AntEditorWidget]: Could not find back capsule";
+
+	if (fi == d_capsules.end()) {
+		logger.Warn("could not find back capsule");
 		return;
 	}
 
 	d_capsules.erase(fi);
+	logger.Info("deleted capsule");
 	rebuildCapsules();
-
 }
 
 void AntShapeWorkspace::onCloneShapeActionTriggered() {
 	auto antID = selectedAntID();
 
-	if ( d_experiment == nullptr
-	     || antID == 0 ) {
+	if (d_experiment == nullptr || antID == 0) {
 		return;
 	}
 
-	auto opts = CloneShapeDialog::get(d_experiment,
-	                                  this);
+	auto opts = CloneShapeDialog::get(d_experiment, this);
 
-	if ( !opts == true ) {
-		qWarning() << "Not cloning ants";
+	if (!opts == true) {
+		d_logger.Warn("not cloning ants");
 		return;
 	}
 
-	d_experiment->antShapes()->cloneShape(antID,opts->ScaleToSize,opts->OverwriteShapes);
+	d_experiment->antShapes()
+	    ->cloneShape(antID, opts->ScaleToSize, opts->OverwriteShapes);
 }
 
 void AntShapeWorkspace::updateCloneAction() {
@@ -876,25 +907,31 @@ void AntShapeWorkspace::changeCapsuleType(Capsule * capsule,fmp::AntShapeTypeID 
 	rebuildCapsules();
 }
 
-fmp::CapsulePtr AntShapeWorkspace::capsuleFromScene(const QSharedPointer<Capsule> & capsule) {
-	if ( d_closeUp == nullptr
-	     || d_experiment == nullptr) {
+fmp::CapsulePtr
+AntShapeWorkspace::capsuleFromScene(const QSharedPointer<Capsule> &capsule) {
+	if (d_closeUp == nullptr || d_experiment == nullptr) {
 		return fmp::CapsulePtr();
 	}
-	auto identification = d_experiment->identifier()->identify(d_closeUp->TagValue(),
-	                                                  d_closeUp->Frame().Time());
-	if ( identification == nullptr ) {
-		qDebug() << "[AntShapeWorkspace]: No Identification for " << d_closeUp->URI().c_str();
+	auto identification = d_experiment->identifier()->identify(
+	    d_closeUp->TagValue(),
+	    d_closeUp->Frame().Time()
+	);
+	if (identification == nullptr) {
+		d_logger.Debug(
+		    "no identification for close-up",
+		    slog::String("close_up", d_closeUp->URI())
+		);
 		return fmp::CapsulePtr();
 	}
 
 	// we need origToAnt
 	// we have origToTag and antToTag
-	auto origToAnt = identification->AntToTagTransform().inverse() * d_closeUp->ImageToTag();
+	auto origToAnt =
+	    identification->AntToTagTransform().inverse() * d_closeUp->ImageToTag();
 	Eigen::Vector2d c1 = origToAnt * ToEigen(capsule->c1Pos());
 	Eigen::Vector2d c2 = origToAnt * ToEigen(capsule->c2Pos());
 
-	return std::make_shared<fmp::Capsule>(c1,c2,capsule->r1(),capsule->r2());
+	return std::make_shared<fmp::Capsule>(c1, c2, capsule->r1(), capsule->r2());
 }
 
 void AntShapeWorkspace::rebuildCapsules() {

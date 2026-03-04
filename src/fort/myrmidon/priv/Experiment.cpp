@@ -457,15 +457,15 @@ double Experiment::CornerWidthRatio(tags::Family f) {
 	    [&](const std::invalid_argument &e) {
 		    throw cpptrace::invalid_argument(
 		        e.what(),
-		        cpptrace::raw_trace{
-		            cpptrace::raw_trace_from_current_exception()}
+		        cpptrace::raw_trace{cpptrace::raw_trace_from_current_exception()
+		        }
 		    );
 	    },
 	    [&](const cpptrace::out_of_range &e) {
 		    throw cpptrace::out_of_range(
-		        e.what(),
-		        cpptrace::raw_trace{
-		            cpptrace::raw_trace_from_current_exception()}
+		        e.message(),
+		        cpptrace::raw_trace{cpptrace::raw_trace_from_current_exception()
+		        }
 		    );
 	    }
 	);

@@ -30,9 +30,9 @@ protected:
 	void removeFromSceneProtected(QGraphicsScene *scene) override;
 
 	void paint(
-	    QPainter	                   *painter,
+	    QPainter                       *painter,
 	    const QStyleOptionGraphicsItem *option,
-	    QWidget	                    *widget
+	    QWidget                        *widget
 	) override;
 
 	void mousePressEvent(QGraphicsSceneMouseEvent *e) override;
@@ -43,9 +43,9 @@ private:
 	void update(bool fixRadius);
 	void moveUpdate(const QPointF &mewPos);
 
-	Handle	              *d_center, *d_radiusHandle;
+	Handle                  *d_center, *d_radiusHandle;
 	qreal                    d_radius;
 	std::shared_ptr<QPointF> d_moveEvent;
 };
 
-QDebug operator<<(QDebug, const Circle *);
+QDebug operator<<(QDebug d, const Circle *c);

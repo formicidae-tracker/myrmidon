@@ -1,13 +1,16 @@
 #include "ExperimentBridge.hpp"
 
+#include <slog++/slog++.hpp>
+
 #include <QDir>
 #include <QFileInfo>
 #include <QProgressDialog>
 #include <QtConcurrent>
 
-#include <QDebug>
-
+#include <fort/myrmidon/priv/Experiment.hpp>
 #include <fort/myrmidon/priv/Identifier.hpp>
+#include <fort/myrmidon/types/Reporter.hpp>
+#include <fort/myrmidon/utils/Exception.hpp>
 
 #include <fort/studio/widget/ProgressDialog.hpp>
 #include <fort/studio/widget/TrackingDataDirectoryLoader.hpp>
@@ -26,55 +29,55 @@
 #include "TagCloseUpBridge.hpp"
 #include "UniverseBridge.hpp"
 #include "ZoneBridge.hpp"
-#include "fort/myrmidon/priv/Experiment.hpp"
-#include "fort/myrmidon/types/Reporter.hpp"
-#include "fort/studio/widget/ProgressDialog.hpp"
 
 namespace fm  = fort::myrmidon;
 namespace fmp = fm::priv;
 
 ExperimentBridge::~ExperimentBridge() {}
 
-ExperimentBridge::ExperimentBridge(QObject * parent)
-	: Bridge(parent)
-	, d_universe(new UniverseBridge(this))
-	, d_measurements(new MeasurementBridge(this))
-	, d_identifier(new IdentifierBridge(this))
-	, d_antDisplay(new AntDisplayBridge(this))
-	, d_globalProperties(new GlobalPropertyBridge(this))
-	, d_frameLoader(new ConcurrentFrameLoader(this))
-	, d_antShapeTypes(new AntShapeTypeBridge(this))
-	, d_antKeyValues(new AntKeyValueBridge(this))
-	, d_movies(new MovieBridge(this))
-	, d_zones(new ZoneBridge(this))
-	, d_statistics(new StatisticsBridge(this))
-	, d_tagCloseUps(new TagCloseUpBridge(this))
-	, d_antMeasurements(new AntMeasurementBridge(this))
-	, d_antShapes(new AntShapeBridge(this))
-	, d_children({
-	              d_universe,
-	              d_measurements,
-	              d_identifier,
-	              d_antDisplay,
-	              d_globalProperties,
-	              d_antShapeTypes,
-	              d_antKeyValues,
-	              d_movies,
-	              d_zones,
-	              d_statistics,
-	              d_tagCloseUps,
-	              d_antMeasurements,
-	              d_antShapes,
-		})
-	, d_selectedID(0) {
+ExperimentBridge::ExperimentBridge(QObject *parent)
+    : Bridge(parent)
+    , d_universe(new UniverseBridge(this))
+    , d_measurements(new MeasurementBridge(this))
+    , d_identifier(new IdentifierBridge(this))
+    , d_antDisplay(new AntDisplayBridge(this))
+    , d_globalProperties(new GlobalPropertyBridge(this))
+    , d_frameLoader(new ConcurrentFrameLoader(this))
+    , d_antShapeTypes(new AntShapeTypeBridge(this))
+    , d_antKeyValues(new AntKeyValueBridge(this))
+    , d_movies(new MovieBridge(this))
+    , d_zones(new ZoneBridge(this))
+    , d_statistics(new StatisticsBridge(this))
+    , d_tagCloseUps(new TagCloseUpBridge(this))
+    , d_antMeasurements(new AntMeasurementBridge(this))
+    , d_antShapes(new AntShapeBridge(this))
+    , d_children({
+          d_universe,
+          d_measurements,
+          d_identifier,
+          d_antDisplay,
+          d_globalProperties,
+          d_antShapeTypes,
+          d_antKeyValues,
+          d_movies,
+          d_zones,
+          d_statistics,
+          d_tagCloseUps,
+          d_antMeasurements,
+          d_antShapes,
+      })
+    , d_selectedID(0)
+    , d_logger{slog::With(slog::String("module", "ExperimentBridge"))} {
 
-
-	for ( const auto & child : d_children ) {
-		connect(child,&Bridge::modified,
-		        this,&ExperimentBridge::onChildModified);
+	for (const auto &child : d_children) {
+		connect(
+		    child,
+		    &Bridge::modified,
+		    this,
+		    &ExperimentBridge::onChildModified
+		);
 		child->initialize(this);
 	}
-
 }
 
 bool ExperimentBridge::isActive() const {
@@ -94,22 +97,23 @@ bool ExperimentBridge::save() {
 }
 
 bool ExperimentBridge::saveAs(const QString &path) {
+	auto logger = d_logger.With(slog::String("path", path.toStdString()));
 	if (!d_experiment) {
-		qDebug() << "[ExperimentBridge]: Ignoring ExperimentBridge::saveAs(): "
-		            "no experience loaded";
+		logger.Debug("ignoring: no experience loaded");
 		return false;
 	}
 	try {
-		qDebug() << "[ExperimentBridge]: Calling "
-		            "fort::myrmidon::priv::Experiment::Save('"
-		         << path << "')";
+		logger.Debug("calling fort::myrmidon::priv::Experiment::Save()");
+
 		d_experiment->Save(path.toUtf8().constData());
 		setModified(false);
 		resetChildModified();
-		qInfo() << "Saved experiment to '" << path << "'";
+		logger.Info("saved experiment");
 	} catch (const std::exception &e) {
-		qCritical() << "Could not save experiment to '" << path
-		            << "': " << e.what();
+		logger.Error(
+		    "could not save experiment",
+		    slog::Err(fort::myrmidon::utils::What(e))
+		);
 		return false;
 	}
 	setAbsoluteFilePathProperty(path);
@@ -120,17 +124,20 @@ fmp::Experiment::Ptr ExperimentBridge::tryOpen(
     const QString                                      &path,
     std::unique_ptr<fort::myrmidon::ProgressReporter> &&progress
 ) {
+	auto logger = d_logger.With(slog::String("path", path.toStdString()));
 	try {
-		qDebug() << "[ExperimentBridge]: Calling "
-		            "fort::myrmidon::priv::Experiment::Open('"
-		         << path << "')";
+		logger.Debug("calling fort::myrmidon::priv::Experiment::Open()");
 		return fmp::Experiment::Open(
 		    path.toUtf8().constData(),
 		    {.Progress = std::move(progress)}
 		);
 	} catch (const std::exception &e) {
-		qCritical() << "Could not open '" << path << "': " << e.what();
+		logger.Error(
+		    "could not open",
+		    slog::Err(fort::myrmidon::utils::What(e))
+		);
 	}
+
 	return nullptr;
 }
 
@@ -178,7 +185,7 @@ bool ExperimentBridge::open(const QString &path, QWidget *parent) {
 	if (experiment == nullptr) {
 		return false;
 	}
-
+	auto logger = d_logger.With(slog::String("path", path.toStdString()));
 	try {
 		std::vector<fmp::TrackingDataDirectory::Ptr> tdds;
 		for (const auto &[tddURI, tdd] :
@@ -187,33 +194,33 @@ bool ExperimentBridge::open(const QString &path, QWidget *parent) {
 		}
 		TrackingDataDirectoryLoader::EnsureLoaded(tdds, parent);
 	} catch (const std::exception &e) {
-		qCritical() << "Could not open '" << path
-		            << "': could not load computed data: " << e.what();
+		logger.Error("could not open experiment file", slog::Err(e));
 		return false;
 	}
-
-	qInfo() << "Opened experiment file '" << path << "'";
+	logger.Info("opened experiment file");
 	setExperiment(experiment);
 	return true;
 }
 
-bool ExperimentBridge::create(const QString & path) {
+bool ExperimentBridge::create(const QString &path) {
 	fmp::Experiment::Ptr experiment;
+	auto logger = d_logger.With(slog::String("path", path.toStdString()));
 	try {
-		qDebug() << "[ExperimentBridge]: Calling fort::myrmidon::priv::Experiment::NewFile('" << path << "')";
+		logger.Debug("calling fort::myrmidon::priv::Experiment::NewFile()");
 		fs::path fpath = path.toUtf8().constData();
-		experiment = fmp::Experiment::Create(fpath);
+		experiment     = fmp::Experiment::Create(fpath);
 		experiment->Save(fpath);
 	} catch (const std::exception &e) {
-		qCritical() << "Could not create file '" << path
-		            << "': " << e.what();
+		logger.Error(
+		    "could not create file",
+		    slog::Err(fort::myrmidon::utils::What(e))
+		);
 		return false;
 	}
-	qInfo() << "Created new experiment file '" << path  << "'";
+	logger.Info("created new experiment file");
 	setExperiment(experiment);
 	return true;
 }
-
 
 UniverseBridge * ExperimentBridge::universe() const {
 	return d_universe;
@@ -271,18 +278,18 @@ AntShapeBridge * ExperimentBridge::antShapes() const {
 	return d_antShapes;
 }
 
-void ExperimentBridge::setExperiment(const fmp::Experiment::Ptr & experiment) {
-	qDebug() << "[ExperimentBridge]: setting new fort::myrmidon::priv::Experiment in children";
+void ExperimentBridge::setExperiment(const fmp::Experiment::Ptr &experiment) {
+	d_logger.Debug("setting new fort::myrmidon::priv::Experiment in children");
 	d_experiment = experiment;
 
-	for ( const auto & child : d_children ) {
+	for (const auto &child : d_children) {
 		child->setExperiment(experiment);
 	}
 	d_frameLoader->setExperiment(experiment);
 	resetChildModified();
 
 	selectAnt(0);
-	if ( d_experiment == nullptr ) {
+	if (d_experiment == nullptr) {
 		setAbsoluteFilePathProperty("");
 		emit activated(false);
 	} else {
@@ -305,19 +312,22 @@ void ExperimentBridge::resetChildModified() {
 }
 
 fmp::Ant::Ptr ExperimentBridge::createAnt() {
-	if ( !d_experiment ) {
+	if (!d_experiment) {
 		return nullptr;
 	}
 	fmp::Ant::Ptr ant;
 	try {
-		qDebug() << "[ExperimentBridge]: Calling fort::myrmidon::priv::Experiment::CreateAnt()";
+		d_logger.Debug("calling fort::myrmidon::priv::Experiment::CreateAnt()");
 		ant = d_experiment->CreateAnt();
 	} catch (const std::exception &e) {
-		qCritical() << "Could not create Ant: " << e.what();
+		d_logger.Error(
+		    "could not create ant",
+		    slog::Err(fort::myrmidon::utils::What(e))
+		);
 		return nullptr;
 	}
 
-	qInfo() << "Created new Ant" << ant->FormattedID().c_str();
+	d_logger.Info("created new Ant", slog::Int("antID", ant->AntID()));
 
 	setModified(true);
 	emit antCreated(ant->AntID());
@@ -325,27 +335,27 @@ fmp::Ant::Ptr ExperimentBridge::createAnt() {
 }
 
 void ExperimentBridge::deleteAnt(fm::AntID antID) {
-	if ( !d_experiment ) {
-		qWarning() << "Not removing Ant " << fm::FormatAntID(antID).c_str();
+	auto logger = d_logger.With(slog::Int("antID", antID));
+	if (!d_experiment) {
+		logger.Warn("not removing Ant: no experiment");
 		return;
 	}
 
 	try {
-		qDebug() << "[ExperimentBridge]: Calling fort::myrmidon::priv::Identifier::DeleteAnt("
-		         << fm::FormatAntID(antID).c_str() << ")";
+		logger.Debug("calling fort::myrmidon::priv::Identifier::DeleteAnt()");
 		d_experiment->Identifier()->DeleteAnt(antID);
 	} catch (const std::exception &e) {
-		qCritical() << "Could not delete Ant '" <<  fm::FormatAntID(antID).c_str()
-		            << "': " << e.what();
+		logger.Error(
+		    "could not delete Ant",
+		    slog::Err(fort::myrmidon::utils::What(e))
+		);
 		return;
 	}
-
-	qInfo() << "Deleted Ant " << fm::FormatAntID(antID).c_str();
+	logger.Info("deleted Ant");
 
 	setModified(true);
 	emit antDeleted(antID);
 }
-
 
 void ExperimentBridge::selectAnt(quint32 antID) {
 	if ( d_selectedID == antID ) {

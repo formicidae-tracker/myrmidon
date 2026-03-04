@@ -1,27 +1,25 @@
 #include "AntListWidget.hpp"
 
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QLineEdit>
-#include <QTableView>
-#include <QPushButton>
-#include <QToolButton>
-#include <QHeaderView>
-#include <QIcon>
 #include "CloseUpScroller.hpp"
 #include "base/ColorComboBox.hpp"
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QIcon>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QTableView>
+#include <QToolButton>
+#include <QVBoxLayout>
 
-#include <fort/studio/bridge/ExperimentBridge.hpp>
 #include <fort/studio/bridge/AntDisplayBridge.hpp>
-#include <fort/studio/bridge/AntShapeBridge.hpp>
-#include <fort/studio/bridge/AntMeasurementBridge.hpp>
-#include <fort/studio/bridge/TagCloseUpBridge.hpp>
 #include <fort/studio/bridge/AntGlobalModel.hpp>
+#include <fort/studio/bridge/AntMeasurementBridge.hpp>
+#include <fort/studio/bridge/AntShapeBridge.hpp>
+#include <fort/studio/bridge/ExperimentBridge.hpp>
+#include <fort/studio/bridge/TagCloseUpBridge.hpp>
 
-#include <QDebug>
 #include <QSortFilterProxyModel>
-
 
 void AntListWidget::setUpUI() {
 	if (objectName().isEmpty()) {
@@ -34,7 +32,7 @@ void AntListWidget::setUpUI() {
 	d_horizontalLayoutFilter = new QHBoxLayout();
 	d_horizontalLayoutFilter->setObjectName("horizontalLayoutFilter");
 
-	d_filterLabel = new QLabel(tr("Filter:"),this);
+	d_filterLabel = new QLabel(tr("Filter:"), this);
 	d_filterLabel->setObjectName("filterLabel");
 	d_horizontalLayoutFilter->addWidget(d_filterLabel);
 

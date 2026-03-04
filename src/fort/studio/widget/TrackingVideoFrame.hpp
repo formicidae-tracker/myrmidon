@@ -17,6 +17,8 @@
 #include <iostream>
 #include <memory>
 
+#include <slog++/slog++.hpp>
+
 namespace fmp = fort::myrmidon::priv;
 namespace fm  = fort::myrmidon;
 
@@ -48,4 +50,16 @@ struct TrackingVideoFrame {
 
 Q_DECLARE_METATYPE(TrackingVideoFrame);
 
-std::ostream & operator<<(std::ostream & out, const TrackingVideoFrame & f);
+std::ostream &operator<<(std::ostream &out, const TrackingVideoFrame &f);
+
+template <typename Str>
+constexpr slog::Attribute
+slogVideoFrame(Str &&str, const TrackingVideoFrame &f) {
+	return slog::Group(
+	    std::forward<Str>(str),
+	    slog::Int("ID", f.FrameID),
+	    slog::Duration("start", f.StartPos.ToChrono()),
+	    slog::Duration("end", f.EndPos.ToChrono()),
+	    slog::Pointer("data", f.Data.get())
+	);
+}

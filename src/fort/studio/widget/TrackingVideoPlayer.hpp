@@ -143,6 +143,7 @@ private:
 	std::deque<TrackingVideoFrame> d_frames, d_stagging;
 	TrackingVideoFrame             d_displayed;
 	bool                           d_seekReady;
+	slog::Logger<1>                d_logger;
 };
 
 class TrackingVideoPlayerTask : public QObject {

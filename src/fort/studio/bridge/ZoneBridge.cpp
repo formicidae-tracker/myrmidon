@@ -1,28 +1,30 @@
 #include "ZoneBridge.hpp"
 
 #include <QStandardItemModel>
-#include <QDebug>
 #include <QtConcurrent>
 #include <fort/studio/Format.hpp>
 
-#include <fort/studio/MyrmidonTypes/Zone.hpp>
-#include <fort/studio/MyrmidonTypes/TrackingDataDirectory.hpp>
 #include <fort/studio/MyrmidonTypes/Space.hpp>
+#include <fort/studio/MyrmidonTypes/TrackingDataDirectory.hpp>
+#include <fort/studio/MyrmidonTypes/Zone.hpp>
 
 #include "ExperimentBridge.hpp"
 #include "UniverseBridge.hpp"
+#include "fort/myrmidon/utils/Exception.hpp"
+#include "fort/myrmidon/utils/Slogpp.hpp"
 
-const int ZoneBridge::TypeRole = Qt::UserRole+1;
-const int ZoneBridge::DataRole = Qt::UserRole+2;
+const int ZoneBridge::TypeRole = Qt::UserRole + 1;
+const int ZoneBridge::DataRole = Qt::UserRole + 2;
 
 Q_DECLARE_METATYPE(ZoneBridge::FullFrame)
 
 ZoneBridge::~ZoneBridge() {}
 
-ZoneBridge::ZoneBridge(QObject * parent)
-	: GlobalBridge(parent)
-	, d_spaceModel(new QStandardItemModel(this))
-	, d_fullFrameModel( new QStandardItemModel(this)) {
+ZoneBridge::ZoneBridge(QObject *parent)
+    : GlobalBridge(parent)
+    , d_spaceModel(new QStandardItemModel(this))
+    , d_fullFrameModel(new QStandardItemModel(this))
+    , d_logger{slog::With(slog::String("module", "ZoneBridge"))} {
 
 	qRegisterMetaType<fmp::Space::Ptr>();
 	qRegisterMetaType<fmp::Zone::Ptr>();
@@ -166,40 +168,48 @@ void ZoneBridge::removeItemAtIndex(const QModelIndex & index) {
 	}
 }
 
-
-void ZoneBridge::addDefinition(QStandardItem * zoneRootItem) {
+void ZoneBridge::addDefinition(QStandardItem *zoneRootItem) {
 	fmp::ZoneDefinition::Ptr definition;
-	auto z = zoneRootItem->data(DataRole).value<fmp::Zone::Ptr>();
-	fort::Time start,end;
-	if ( !z == true || z->NextFreeTimeRegion(start,end) == false ) {
+	auto       z = zoneRootItem->data(DataRole).value<fmp::Zone::Ptr>();
+	fort::Time start, end;
+	if (!z == true || z->NextFreeTimeRegion(start, end) == false) {
 		return;
 	}
 
 	fm::Shape::List shapes;
-	if ( start.IsInfinite() == false ) {
+	if (start.IsInfinite() == false) {
 		shapes = z->AtTime(start.Add(-1));
-	} else if ( end.IsInfinite() == false ) {
+	} else if (end.IsInfinite() == false) {
 		shapes = z->AtTime(end.Add(1));
 	}
 
+	auto logger = d_logger.With(
+	    slog::String("zone_name", z->Name()),
+	    slog::Int("zone_ID", z->ID()),
+	    slog::Int("shapes_count", shapes.size()),
+	    slog::FortTime("start", start),
+	    slog::FortTime("end", end)
+	);
+
 	try {
-		qDebug() << "[ZoneBridge]: Calling fmp::Zone::AddDefinition({},"
-		         << ToQString(start) << ","
-		         << ToQString(end)
-		         << ")";
-		z->AddDefinition(shapes,
-		                 start,end);
-	} catch ( const std::exception & e) {
-		qCritical() << "Coul not create definition: " << e.what();
+		logger.Debug("calling fmp::Zone::AddDefinition()");
+		z->AddDefinition(shapes, start, end);
+	} catch (const std::exception &e) {
+		logger.Error(
+		    "could not create definition",
+		    slog::Err(fort::myrmidon::utils::What(e))
+		);
 		return;
 	}
-	qInfo() << "Created new definition for zone " << ToQString(z->Name());
+	logger.Info("created new zone definition");
+
 	setModified(true);
-	zoneRootItem->removeRows(0,zoneRootItem->rowCount());
-	for ( const auto & definition : z->Definitions() ) {
+	zoneRootItem->removeRows(0, zoneRootItem->rowCount());
+	for (const auto &definition : z->Definitions()) {
 		zoneRootItem->appendRow(buildDefinition(definition));
 	}
-	getSibling(zoneRootItem,2)->setText(QString::number(zoneRootItem->rowCount()));
+	getSibling(zoneRootItem, 2)
+	    ->setText(QString::number(zoneRootItem->rowCount()));
 	rebuildChildBridges();
 	emit definitionUpdated();
 }
@@ -210,17 +220,26 @@ void ZoneBridge::addZone(QStandardItem *spaceRootItem) {
 	if (!space == true) {
 		return;
 	}
+	auto logger = d_logger.With(
+	    slog::String("space_name", space->Name()),
+	    slog::Int("space_ID", space->ID())
+	);
+
 	try {
-		qDebug() << "[ZoneBridge]: Calling "
-		            "fort::myrmidon::priv::Space::CreateZone('new-zone')";
+		logger.Debug("fort::myrmidon::priv::Space::CreateZone('new-zone')");
 		z = space->CreateZone(ToStdString(tr("new-zone")));
-		qDebug() << "[ZoneBridge]: Calling "
-		            "fort::myrmidon::priv::Zone::AddDefinition({},-∞,+∞)";
+		logger.Debug(
+		    "calling fort::myrmidon::priv::Zone::AddDefinition({},-∞,+∞)"
+		);
 		z->AddDefinition({}, fort::Time::SinceEver(), fort::Time::Forever());
 	} catch (const std::exception &e) {
-		qCritical() << "Could not create Zone: " << e.what();
+		logger.Error(
+		    "could not create Zone",
+		    slog::Err(fort::myrmidon::utils::What(e))
+		);
 		return;
 	}
+
 	setModified(true);
 	int insertionRow = 0;
 	for (; insertionRow < spaceRootItem->rowCount(); ++insertionRow) {
@@ -233,60 +252,91 @@ void ZoneBridge::addZone(QStandardItem *spaceRootItem) {
 	spaceRootItem->insertRow(insertionRow, buildZone(z));
 	getSibling(spaceRootItem, 2)
 	    ->setText(QString::number(spaceRootItem->rowCount()));
-	qInfo() << "Created zone " << spaceRootItem->data(Qt::DisplayRole).toInt()
-	        << "." << z->ID() << "'" << ToQString(z->Name()) << "'";
+
+	logger.Info(
+	    "created new zone",
+	    slog::String("zone_name", z->Name()),
+	    slog::Int("zone_ID", z->ID())
+	);
+
 	if (space == d_selectedSpace) {
 		rebuildChildBridges();
 	}
 }
 
-void ZoneBridge::removeZone(QStandardItem * zoneItem) {
+void ZoneBridge::removeZone(QStandardItem *zoneItem) {
 	auto spaceItem = zoneItem->parent();
-	auto zone = zoneItem->data(DataRole).value<fmp::Zone::Ptr>();
-	auto space = spaceItem->data(DataRole).value<fmp::Space::Ptr>();
-	if ( !space || !zone ) {
+	auto zone      = zoneItem->data(DataRole).value<fmp::Zone::Ptr>();
+	auto space     = spaceItem->data(DataRole).value<fmp::Space::Ptr>();
+	if (!space || !zone) {
 		return;
 	}
+	auto logger = d_logger.With(
+	    slog::String("space_name", space->Name()),
+	    slog::Int("space_ID", space->ID()),
+	    slog::String("zone_name", zone->Name()),
+	    slog::Int("zone_ID", zone->ID())
+	);
+
 	try {
-		qDebug() << "[ZoneBridge]: Calling fmp::Space::DeleteZone("
-		         << zone->ID()
-		         << ")";
+		logger.Debug("calling fmp::Space::DeleteZone()");
 		space->DeleteZone(zone->ID());
-	} catch ( const std::exception & e) {
-		qCritical() << "Could not delete zone: " << e.what();
+	} catch (const std::exception &e) {
+		logger.Error(
+		    "could not delete zone",
+		    slog::Err(fort::myrmidon::utils::What(e))
+		);
 		return;
 	}
+
+	logger.Info("deleted zone");
+
 	setModified(true);
-	spaceItem->removeRows(zoneItem->row(),1);
-	getSibling(spaceItem,2)->setText(QString::number(spaceItem->rowCount()));
-	if (space == d_selectedSpace ) {
+	spaceItem->removeRows(zoneItem->row(), 1);
+	getSibling(spaceItem, 2)->setText(QString::number(spaceItem->rowCount()));
+	if (space == d_selectedSpace) {
 		rebuildChildBridges();
 	}
 }
 
-void ZoneBridge::removeDefinition(QStandardItem * definitionItem) {
-	auto zoneItem = definitionItem->parent();
+void ZoneBridge::removeDefinition(QStandardItem *definitionItem) {
+	auto zoneItem  = definitionItem->parent();
+	auto spaceItem = zoneItem->parent();
+	auto zone      = zoneItem->data(DataRole).value<fmp::Zone::Ptr>();
+	auto space     = spaceItem->data(DataRole).value<fmp::Space::Ptr>();
+
 	auto z = zoneItem->data(DataRole).value<fmp::Zone::Ptr>();
-	if (!z == true ) {
+	if (!z == true) {
 		return;
 	}
+
+	auto logger = d_logger.With(
+	    slog::String("space_name", space->Name()),
+	    slog::Int("space_ID", space->ID()),
+	    slog::String("zone_name", zone->Name()),
+	    slog::Int("zone_ID", zone->ID()),
+	    slog::Int("index", definitionItem->row())
+	);
+
 	try {
-		qDebug() << "[ZoneBridge]: Calling fmp::Zone::EraseDefinition("
-		         << definitionItem->row() << ")";
+		logger.Debug("calling fmp::Zone::EraseDefinition()");
 		z->EraseDefinition(definitionItem->row());
-	} catch ( const std::exception & e ) {
-		qCritical() << "Could not remove definition: " << e.what();
+	} catch (const std::exception &e) {
+		logger.Error(
+		    "could not remove definition",
+		    slog::Err(fort::myrmidon::utils::What(e))
+		);
 		return;
 	}
 	setModified(true);
-	zoneItem->removeRows(definitionItem->row(),1);
-	getSibling(zoneItem,2)->setText(QString::number(zoneItem->rowCount()));
-	qInfo() << "Removed Zone definition";
+	zoneItem->removeRows(definitionItem->row(), 1);
+	getSibling(zoneItem, 2)->setText(QString::number(zoneItem->rowCount()));
+
+	logger.Info("removed Zone definition");
+
 	rebuildChildBridges();
 	emit definitionUpdated();
 }
-
-
 
 QList<QStandardItem*> ZoneBridge::buildSpace(const fmp::Space::Ptr & space) const {
 	auto typeData = QVariant(SpaceType);
@@ -395,32 +445,41 @@ void ZoneBridge::onItemChanged(QStandardItem * item) {
 	}
 }
 
-void ZoneBridge::changeZoneName(QStandardItem * zoneNameItem) {
+void ZoneBridge::changeZoneName(QStandardItem *zoneNameItem) {
 	auto z = zoneNameItem->data(DataRole).value<fmp::Zone::Ptr>();
+
 	std::string newName = ToStdString(zoneNameItem->text());
-	if ( !z == true || z->Name() == newName ) {
+	if (!z == true || z->Name() == newName) {
 		return;
 	}
 	auto oldName = ToQString(z->Name());
+
+	auto logger = d_logger.With(
+	    slog::String("old_name", z->Name()),
+	    slog::String("new_name", newName),
+	    slog::Int("zone_ID", z->ID())
+	);
+
 	try {
-		qDebug() << "[ZoneBridge]: Calling fmp::Zone::SetName("
-		         << zoneNameItem->text()
-		         << ")";
+		logger.Debug("Calling fmp::Zone::SetName()");
 		z->SetName(newName);
-	} catch ( const std::exception & e) {
-		qCritical() << "Could not set Zone '" << oldName
-		            << "' name to " << zoneNameItem->text()
-		            << ": " << e.what();
+	} catch (const std::exception &e) {
+		logger.Error(
+		    "could not set zone name",
+		    slog::Err(fort::myrmidon::utils::What(e))
+		);
 		zoneNameItem->setText(oldName);
 		return;
 	}
 
-	setModified(true);
-	qInfo() << "Changed zone name '" << oldName
-	        << "' to '" << zoneNameItem->text() << "'";
+	logger.Info("changed zone name");
 
-	auto space = getSibling(zoneNameItem,0)->parent()->data(DataRole).value<fmp::Space::Ptr>();
-	if ( !space == false && space == d_selectedSpace ) {
+	setModified(true);
+	auto space = getSibling(zoneNameItem, 0)
+	                 ->parent()
+	                 ->data(DataRole)
+	                 .value<fmp::Space::Ptr>();
+	if (!space == false && space == d_selectedSpace) {
 		rebuildChildBridges();
 	}
 }
@@ -440,6 +499,11 @@ void ZoneBridge::changeDefinitionTime(
 		return;
 	}
 
+	auto logger = d_logger.With(
+	    slog::String("old_time", oldTimeStr.toStdString()),
+	    slog::String("new_time", definitionTimeItem->text().toStdString())
+	);
+
 	fort::Time newTime =
 	    start == true ? fort::Time::SinceEver() : fort::Time::Forever();
 	if (definitionTimeItem->text().isEmpty() == false) {
@@ -447,8 +511,10 @@ void ZoneBridge::changeDefinitionTime(
 			newTime =
 			    fort::Time::Parse(ToStdString(definitionTimeItem->text()));
 		} catch (const std::exception &e) {
-			qCritical() << "Could not parse time "
-			            << definitionTimeItem->text();
+			logger.Error(
+			    "could not parse time",
+			    slog::Err(fort::myrmidon::utils::What(e))
+			);
 			definitionTimeItem->setText(oldTimeStr);
 			return;
 		}
@@ -457,24 +523,28 @@ void ZoneBridge::changeDefinitionTime(
 
 	try {
 		if (start == true) {
-			qDebug() << "[ZoneBridge]: Calling fmp::Zone::Definition::SetStart("
-			         << newTimeStr << ")";
+			logger.Debug("Calling fmp::Zone::Definition::SetStart()");
 			d->SetStart(newTime);
 		} else {
-			qDebug() << "[ZoneBridge]: Calling fmp::Zone::Definition::SetEnd("
-			         << newTimeStr << ")";
+			logger.Debug("Calling fmp::Zone::Definition::SetEnd()");
 			d->SetEnd(newTime);
 		}
 	} catch (std::exception &e) {
-		qCritical() << "Could not set Zone::Definition start/end to "
-		            << newTimeStr << ": " << e.what();
+		logger.Error(
+		    "could not set definition time",
+		    slog::Err(fort::myrmidon::utils::What(e))
+		);
 		definitionTimeItem->setText(oldTimeStr);
 		return;
 	}
 
 	setModified(true);
 	definitionTimeItem->setText(newTimeStr);
-	qInfo() << "Set Zone::Definition start to " << newTimeStr;
+
+	logger.Info(
+	    start == true ? "changed definition start" : "changed definition end"
+	);
+
 	rebuildChildBridges();
 	emit definitionUpdated();
 }
@@ -612,12 +682,12 @@ void ZoneBridge::selectTime(const fort::Time & time) {
 
 ZoneDefinitionBridge::~ZoneDefinitionBridge() {}
 
-ZoneDefinitionBridge::ZoneDefinitionBridge(const fmp::Zone::Ptr & zone,
-                                           const fmp::ZoneDefinition::Ptr & ptr)
-	: Bridge(nullptr)
-	, d_definition(ptr)
-	, d_zone(zone) {
-}
+ZoneDefinitionBridge::ZoneDefinitionBridge(
+    const fmp::Zone::Ptr &zone, const fmp::ZoneDefinition::Ptr &ptr
+)
+    : Bridge(nullptr)
+    , d_definition(ptr)
+    , d_zone(zone) {}
 
 bool ZoneDefinitionBridge::isActive() const {
 	return true;

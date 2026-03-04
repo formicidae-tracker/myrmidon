@@ -1,18 +1,15 @@
 #include "VectorialView.hpp"
 
-#include <QDebug>
-#include <QWheelEvent>
 #include <QApplication>
-#include <cmath>
 #include <QMetaObject>
+#include <QWheelEvent>
+#include <cmath>
 
-#include "VectorialScene.hpp"
-
-VectorialView::VectorialView(QWidget * parent)
-	: QGraphicsView(parent) {
+VectorialView::VectorialView(QWidget *parent)
+    : QGraphicsView(parent) {
 	viewport()->installEventFilter(this);
-	d_targetViewportPos = QPointF(1e8,1e8);
-	d_zoomFactorBase = 1.0015;
+	d_targetViewportPos = QPointF(1e8, 1e8);
+	d_zoomFactorBase    = 1.0015;
 }
 
 void VectorialView::setBannerMessage(const QString & bannerMessage, const QColor & color) {

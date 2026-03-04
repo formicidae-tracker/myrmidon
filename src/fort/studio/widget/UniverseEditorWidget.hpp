@@ -1,9 +1,9 @@
 #pragma once
 
-
 #include <QWidget>
 
 #include <fort/studio/MyrmidonTypes/TrackingDataDirectory.hpp>
+#include <slog++/Logger.hpp>
 
 class QItemSelection;
 class UniverseBridge;
@@ -12,14 +12,13 @@ namespace Ui {
 class UniverseEditorWidget;
 }
 
-
 class UniverseEditorWidget : public QWidget {
 	Q_OBJECT
 public:
 	explicit UniverseEditorWidget(QWidget *parent = 0);
 	virtual ~UniverseEditorWidget();
 
-	void setup(UniverseBridge * universe);
+	void setup(UniverseBridge *universe);
 
 public slots:
 
@@ -28,19 +27,14 @@ public slots:
 
 	void onSelectionChanged(const QItemSelection &);
 
-	void addTrackingDataDirectory(const QString & filepath);
-
+	void addTrackingDataDirectory(const QString &filepath);
 
 private:
-
-
 	friend class UniverseUTest_WidgetTest_Test;
 
-	fmp::TrackingDataDirectory::Ptr openTDD(const QString & path);
+	fmp::TrackingDataDirectory::Ptr openTDD(const QString &path);
 
-	Ui::UniverseEditorWidget * d_ui;
-	UniverseBridge           * d_universe;
-
-
-
+	Ui::UniverseEditorWidget *d_ui;
+	UniverseBridge           *d_universe;
+	slog::Logger<1>           d_logger;
 };

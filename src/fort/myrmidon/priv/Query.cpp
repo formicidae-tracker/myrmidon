@@ -99,7 +99,7 @@ void Query::ProcessLoaders(
 	for (auto &e : errors) {
 		e->Fix();
 		if (progress != nullptr) {
-			progress->ReportError(e->what());
+			progress->ReportError(e->message());
 		}
 	}
 }

@@ -1,4 +1,6 @@
 #include "fort/myrmidon/priv/FrameReference.hpp"
+#include "fort/myrmidon/utils/Exception.hpp"
+#include "fort/myrmidon/utils/Slogpp.hpp"
 #include <algorithm>
 #include <memory>
 #include <optional>
@@ -301,7 +303,7 @@ void TrackingDataDirectory::BuildFrameReferenceCache(
 						Logger.Trace(
 						    "found needed reference",
 						    slog::Int("ID", curFrameID),
-						    slog::Time("time", curTime.ToTimePoint())
+						    slog::FortTime("time", curTime)
 						);
 						Queue.push(
 						    {FrameReference(URI, curFrameID, curTime), nullptr}
@@ -335,7 +337,7 @@ void TrackingDataDirectory::BuildFrameReferenceCache(
 				} catch (const std::exception &e) {
 					throw cpptrace::runtime_error(
 					    "[TDD.BuildCache]: Could not find frame " +
-					    std::to_string(*iter) + ": " + e.what()
+					    std::to_string(*iter) + ": " + utils::What(e)
 					);
 				}
 			}
@@ -460,7 +462,7 @@ TrackingDataDirectory::BuildIndexes(
 				logger.Info(
 				    "directory start frame",
 				    slog::Int("ID", start),
-				    slog::Time("time", startTime.ToTimePoint())
+				    slog::FortTime("time", startTime)
 				);
 			}
 
@@ -473,7 +475,7 @@ TrackingDataDirectory::BuildIndexes(
 			sLogger.Info(
 			    "segment start",
 			    slog::Int("ID", curFrameID),
-			    slog::Time("time", startTime.ToTimePoint())
+			    slog::FortTime("time", startTime)
 			);
 
 			last = f.string();
@@ -481,12 +483,12 @@ TrackingDataDirectory::BuildIndexes(
 			if (last.empty()) {
 				throw cpptrace::runtime_error(
 				    "Could not read first frame from " + f.string() + ": " +
-				    e.what()
+				    utils::What(e)
 				);
 			} else {
 				error = std::make_unique<CorruptedHermesFileError>(
 				    "could not read first frame from '" + f.string() +
-				        "': " + e.what(),
+				        "': " + utils::What(e),
 				    last,
 				    std::numeric_limits<uint64_t>::max()
 				);
@@ -522,7 +524,7 @@ TrackingDataDirectory::BuildIndexes(
 		);
 	} catch (const std::exception &e) {
 		throw cpptrace::runtime_error(
-		    "could not extract last frame from " + last + ": " + e.what()
+		    "could not extract last frame from " + last + ": " + utils::What(e)
 		);
 	}
 
@@ -637,13 +639,10 @@ TrackingDataDirectory::Open(
 		res = LoadFromCache(absoluteFilePath, URI.generic_string());
 		logger.Debug("loaded from cache");
 	} catch (const std::exception &e) {
-		logger.Warn(
-		    "could not load from cache",
-		    slog::String("error", e.what())
-		);
+		logger.Warn("could not load from cache", slog::Err(utils::What(e)));
 		if (args.Progress) {
 			args.Progress->ReportError(
-			    std::string{"could not load from cache: "} + e.what()
+			    std::string{"could not load from cache: "} + utils::What(e)
 			);
 		}
 		std::tie(res, errors) = OpenFromFiles(
@@ -667,7 +666,7 @@ TrackingDataDirectory::Open(
 					    std::to_string(errors.size()) + " errors"
 					);
 					for (const auto &e : errors) {
-						args.Progress->ReportError(e->what());
+						args.Progress->ReportError(utils::What(*e));
 					}
 				}
 			} else {
@@ -696,11 +695,12 @@ TrackingDataDirectory::Open(
 		} catch (const std::exception &e) {
 			logger.Error(
 			    "could not cache tracking data",
-			    slog::String("error", e.what())
+			    slog::Err(utils::What(e))
 			);
 			if (args.Progress != nullptr) {
 				args.Progress->ReportError(
-				    "could not cache tracking data: " + std::string(e.what())
+				    std::string{"could not cache tracking data: "} +
+				    utils::What(e)
 				);
 			}
 		}
@@ -747,7 +747,7 @@ TrackingDataDirectory::OpenFromFiles(
 	if (error != nullptr) {
 		logger.Error(
 		    "Tracking segment indexation error",
-		    slog::Err(error->what())
+		    slog::Err(error->message())
 		);
 		errors.push_back(std::move(error));
 	}
@@ -835,7 +835,7 @@ TrackingDataDirectory::OpenFromFiles(
 			logger.Trace(
 			    "removing missed frame reference",
 			    slog::Int("ID", ref.FrameID()),
-			    slog::Time("time", ref.Time().ToTimePoint())
+			    slog::FortTime("time", ref.Time())
 			);
 		}
 	}
@@ -895,7 +895,8 @@ TrackingDataDirectory::OpenFromFiles(
 	        mi,
 	        referenceCache
 	    ),
-	    std::move(errors)};
+	    std::move(errors)
+	};
 }
 
 const TrackingDataDirectory::TrackingIndex &
@@ -1305,7 +1306,7 @@ private:
 			} catch (const std::exception &e) {
 				std::ostringstream oss;
 				oss << "could not read image " << fileAndFilter.first << ": "
-				    << e.what();
+				    << utils::What(e);
 
 				return {
 				    res,

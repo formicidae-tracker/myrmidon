@@ -1,20 +1,19 @@
 #pragma once
 
-#include <QGraphicsScene>
 #include <QGraphicsItemGroup>
+#include <QGraphicsScene>
 #include <QSharedPointer>
 
 #include <functional>
 
 #include <fort/myrmidon/types/ForwardDeclaration.hpp>
+#include <slog++/Logger.hpp>
 
 namespace fort {
 namespace myrmidon {
-namespace priv {
-}
-}
-}
-
+namespace priv {}
+} // namespace myrmidon
+} // namespace fort
 
 namespace fm = fort::myrmidon;
 
@@ -149,7 +148,6 @@ private:
 
 	PoseIndicator        * d_poseIndicator;
 	QGraphicsPixmapItem  * d_background;
-	QGraphicsPolygonItem * d_staticPolygon;
+	QGraphicsPolygonItem  *d_staticPolygon;
+	slog::Logger<1>        d_logger;
 };
-
-QDebug operator<<(QDebug, VectorialScene::Mode);

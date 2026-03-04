@@ -1,22 +1,21 @@
 #include "UniverseBridge.hpp"
+#include "fort/myrmidon/utils/Exception.hpp"
 
 #include <QStandardItemModel>
-#include <QDebug>
 
 #include <fort/myrmidon/priv/TrackingDataDirectory.hpp>
 
 #include <fort/studio/Format.hpp>
 
-
-UniverseBridge::UniverseBridge( QObject * parent)
-	: GlobalBridge(parent)
-	, d_model(new QStandardItemModel(this)) {
+UniverseBridge::UniverseBridge(QObject *parent)
+    : GlobalBridge(parent)
+    , d_model(new QStandardItemModel(this))
+    , d_logger{slog::With(slog::String("module", "UniverseBridge"))} {
 	qRegisterMetaType<fmp::TrackingDataDirectory::Ptr>();
 	connect(d_model,
 	        &QStandardItemModel::itemChanged,
 	        this,
 	        &UniverseBridge::onItemChanged);
-
 }
 
 UniverseBridge::~UniverseBridge(){}
@@ -64,32 +63,39 @@ QString UniverseBridge::basepath() const {
 	return d_experiment->AbsoluteFilePath().parent_path().c_str();
 }
 
-void UniverseBridge::onItemChanged(QStandardItem * item) {
-	if ( item->data(Qt::UserRole+1).toInt() != SPACE_TYPE || item->column() != 0 ) {
-		qDebug() << "[UniverseBridge]: Invalid item was changed!!!";
+void UniverseBridge::onItemChanged(QStandardItem *item) {
+	if (item->data(Qt::UserRole + 1).toInt() != SPACE_TYPE ||
+	    item->column() != 0) {
+		d_logger.Warn("invalid item was changed!!!");
 		return;
 	}
 
-	auto s = item->data(Qt::UserRole+2).value<fmp::Space::Ptr>();
+	auto s      = item->data(Qt::UserRole + 2).value<fmp::Space::Ptr>();
+	auto logger = d_logger.With(
+	    slog::String("old_name", s->Name()),
+	    slog::String("new_name", item->text().toStdString())
+	);
 	if (item->text() == s->Name().c_str()) {
-		qDebug() << "[UniverseBridge]: Ignoring change event as name is the same";
+		logger.Warn("ignoring change event as name is the same");
 		return;
 	}
 
 	try {
-		qDebug() << "[UniverseBridge]: Calling fort::myrmidon::Space::SetName('" << item->text() << "')";
+		logger.Debug("calling fort::myrmidon::Space::SetName()");
 		s->SetName(item->text().toUtf8().data());
-	} catch (const std::exception & e) {
-		qCritical() << "Could not change name: " << e.what();
+	} catch (const std::exception &e) {
+		logger.Error(
+		    "could not change space name",
+		    slog::Err(fort::myrmidon::utils::What(e))
+		);
 		item->setText(s->Name().c_str());
 		return;
 	}
-	qInfo() << "Changed Space name to '" << item->text() << "'";
+	logger.Info("changed space name");
 
 	setModified(true);
 	emit spaceChanged(s);
 }
-
 
 QList<QStandardItem*> UniverseBridge::buildTDD(const fmp::TrackingDataDirectory::Ptr & tdd) {
 	auto uri = new QStandardItem(tdd->URI().c_str());
@@ -131,27 +137,30 @@ QList<QStandardItem*> UniverseBridge::buildSpace(const fmp::Space::Ptr & s) {
 const std::vector<fmp::Space::Ptr> UniverseBridge::s_emptySpaces;
 const fmp::TrackingDataDirectoryByURI UniverseBridge::s_emptyTDDs;
 
-
-void UniverseBridge::addSpace(const QString & spaceName) {
+void UniverseBridge::addSpace(const QString &spaceName) {
 	if (!d_experiment) {
 		return;
 	}
 
+	auto logger = d_logger.With(slog::String("name", spaceName.toStdString()));
 	fmp::Space::Ptr newSpace;
 	try {
-		qDebug() << "[UniverseBridge]: Calling fort::myrmidon::priv::Experiment::Create('" << spaceName << "')";
+		logger.Debug("calling fort::myrmidon::priv::Experiment::Create()");
 		newSpace = d_experiment->CreateSpace(ToStdString(spaceName));
-	} catch (const std::exception & e) {
-		qCritical() << "Could not create space '" << spaceName
-		            <<"': " << e.what();
+	} catch (const std::exception &e) {
+		logger.Error(
+		    "could not create space",
+		    slog::Err(fort::myrmidon::utils::What(e))
+		);
 		return;
 	}
 
-	qInfo() << "Created space '" << spaceName << "' with ID" << newSpace->ID();
-	if ( newSpace->ID() == d_experiment->Spaces().size() ) {
+	logger.Info("created space", slog::Int("new_id", newSpace->ID()));
+
+	if (newSpace->ID() == d_experiment->Spaces().size()) {
 		d_model->appendRow(buildSpace(newSpace));
 	} else {
-		d_model->removeRows(0,d_model->rowCount());
+		d_model->removeRows(0, d_model->rowCount());
 		rebuildAll(d_experiment->Spaces());
 	}
 
@@ -159,118 +168,149 @@ void UniverseBridge::addSpace(const QString & spaceName) {
 	emit spaceAdded(newSpace);
 }
 
-void UniverseBridge::addTrackingDataDirectoryToSpace(const QString & spaceName,
-                                                     const fmp::TrackingDataDirectoryPtr & tdd) {
+void UniverseBridge::addTrackingDataDirectoryToSpace(
+    const QString &spaceName, const fmp::TrackingDataDirectoryPtr &tdd
+) {
 	if (!d_experiment) {
 		return;
 	}
 
-	auto s = d_experiment->LocateSpace(ToStdString(spaceName));
-	auto item = locateSpace(spaceName);
-	if ( !s || item == NULL) {
-		qWarning() << "Could not locate space '" << spaceName
-		           << "' abording addition of TDD;'" << ToQString(tdd->URI())
-		           << "'";
+	auto s      = d_experiment->LocateSpace(ToStdString(spaceName));
+	auto item   = locateSpace(spaceName);
+	auto logger = d_logger.With(
+	    slog::String("space_name", spaceName.toStdString()),
+	    slog::String("TDD", tdd->URI())
+	);
+	if (!s || item == NULL) {
+		logger.Warn("could not locate space, abording addition");
 		return;
 	}
-
 
 	try {
-		d_experiment->AddTrackingDataDirectory(s,tdd);
-	} catch (const std::exception & e) {
-		qCritical() << "Could not add '" << ToQString(tdd->URI())
-		            << "' to '" << spaceName
-		            << "': " << e.what();
+		d_experiment->AddTrackingDataDirectory(s, tdd);
+	} catch (const std::exception &e) {
+		logger.Error(
+		    "could not add TDD",
+		    slog::Err(fort::myrmidon::utils::What(e))
+		);
 		return;
 	}
-
-	qInfo() << "Added TDD:'" << ToQString(tdd->URI())
-	        << "' to Space:'" << spaceName << "'";
-	rebuildSpaceChildren(item,s);
+	logger.Info("added TDD");
+	rebuildSpaceChildren(item, s);
 
 	setModified(true);
 	emit trackingDataDirectoryAdded(tdd);
 	emit spaceChanged(s);
 }
 
-void UniverseBridge::deleteSpace(const QString & spaceName) {
+void UniverseBridge::deleteSpace(const QString &spaceName) {
 	auto item = locateSpace(spaceName);
-	if ( !d_experiment || item == NULL ) {
+	if (!d_experiment || item == NULL) {
 		return;
 	}
 	auto s = d_experiment->LocateSpace(ToStdString(spaceName));
-	if ( !s) {
-		qDebug() << "Could not locate space" << spaceName;
+	if (!s) {
+		d_logger.Debug(
+		    "could not locate space: abording",
+		    slog::String("space_name", spaceName.toStdString())
+		);
+		return;
 	}
+	auto logger = d_logger.With(
+	    slog::String("space_name", spaceName.toStdString()),
+	    slog::Int("space_ID", s->ID())
+	);
+
 	try {
-		qDebug() << "[UniverseBridge]: Calling fort::myrmidon::priv::Experiment::DeleteSpace("
-		         << s->ID() << ")";
+		logger.Debug("calling fort::myrmidon::priv::Experiment::DeleteSpace()");
 		d_experiment->DeleteSpace(s->ID());
-	} catch ( const std::exception & e) {
-		qCritical() << "Could not remove space '" << spaceName << "': " << e.what();
+	} catch (const std::exception &e) {
+		logger.Error(
+		    "could not remove space",
+		    slog::Err(fort::myrmidon::utils::What(e))
+		);
 		return;
 	}
 
-	qInfo() << "Deleted Space:'" << spaceName << "'";
-	d_model->removeRows(item->row(),1);
+	logger.Info("deleted space");
+
+	d_model->removeRows(item->row(), 1);
 
 	setModified(true);
 	emit spaceDeleted(spaceName);
 }
 
-void UniverseBridge::deleteTrackingDataDirectory(const QString & URI) {
-	if ( !d_experiment) {
-		return ;
+void UniverseBridge::deleteTrackingDataDirectory(const QString &URI) {
+	if (!d_experiment) {
+		return;
 	}
 
-	auto fi  = d_experiment->LocateTrackingDataDirectory(URI.toUtf8().data());
+	auto fi = d_experiment->LocateTrackingDataDirectory(URI.toUtf8().data());
 	if (!fi.first || !fi.second) {
-		qWarning() << "Could not locate TDD:'" << URI << "', abording its deletion";
+		d_logger.Warn(
+		    "could not locate TDD: abording",
+		    slog::String("TDD", URI.toStdString())
+		);
 		return;
 	}
 
 	auto item = locateSpace(fi.first->Name().c_str());
-	if ( item == NULL ) {
+	if (item == NULL) {
+		d_logger.Warn(
+		    "could not locate TDD's Space: abording",
+		    slog::String("TDD", URI.toStdString()),
+		    slog::String("space_name", fi.first->Name())
+		);
 		return;
 	}
+	auto logger = d_logger.With(
+	    slog::String("TDD", URI.toStdString()),
+	    slog::String("space_name", fi.first->Name()),
+	    slog::Int("space_ID", fi.first->ID())
+	);
 
 	try {
-		qDebug() << "[UniverseBridge]: Calling fort::myrmidon::priv::Experiment::DeleteTrackingDataDirectory("
-		         << URI << "')";
+		logger.Debug(
+		    "calling "
+		    "fort::myrmidon::priv::Experiment::DeleteTrackingDataDirectory()"
+		);
 		d_experiment->DeleteTrackingDataDirectory(URI.toUtf8().data());
-	} catch ( const std::exception & e) {
-		qCritical() << "Could not delete '" << URI
-		            <<"': " << e.what();
+	} catch (const std::exception &e) {
+		logger.Error(
+		    "could not delete TDD",
+		    slog::Err(fort::myrmidon ::utils::What(e))
+		);
 		return;
 	}
 
-	rebuildSpaceChildren(item,fi.first);
+	rebuildSpaceChildren(item, fi.first);
 
-	qInfo() << "Removed TDD:'" << URI << "' from Space '"
-	        << fi.first->URI().c_str() << "'";
+	logger.Info("removed TDD");
 
 	setModified(true);
 	emit trackingDataDirectoryDeleted(URI);
 	emit spaceChanged(fi.first);
 }
 
-
-QStandardItem * UniverseBridge::locateSpace(const QString & name) {
-	auto items = d_model->findItems(name);
-	QStandardItem  * item = nullptr;
-	for ( const auto & i : items) {
-		if ( i->data(Qt::UserRole+1) != SPACE_TYPE ) {
+QStandardItem *UniverseBridge::locateSpace(const QString &name) {
+	auto items  = d_model->findItems(name);
+	auto logger = d_logger.With(slog::String("space_name", name.toStdString()));
+	QStandardItem *item = nullptr;
+	for (const auto &i : items) {
+		if (i->data(Qt::UserRole + 1) != SPACE_TYPE) {
 			continue;
 		}
-		if ( item != nullptr ) {
-			qDebug() << "[UniverseBridge]: Could not locate Qt Item '" << name << "': multiple entry found";
+		if (item != nullptr) {
+			logger.Warn(
+			    "locating Qt Item: multiple entry found",
+			    slog::Location()
+			);
 		} else {
 			item = i;
 		}
-
 	}
-	if ( item == nullptr ) {
-		qDebug() << "[UniverseBridge]: Could not locate Qt Item '" << name << "'";
+	if (item == nullptr) {
+		logger.Debug("could not locate Qt Item");
 	}
 	return item;
 }

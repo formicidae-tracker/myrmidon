@@ -48,6 +48,8 @@ endforeach(f ${PROTO_HDR})
 set(HDR_PRIVATE_FILES
 	utils/StringManipulation.hpp
 	utils/ObjectPool.hpp
+	utils/Exception.hpp
+	utils/Slogpp.hpp
 	priv/AntTimedValue.hpp
 	priv/EigenRefs.hpp
 	priv/ForwardDeclaration.hpp

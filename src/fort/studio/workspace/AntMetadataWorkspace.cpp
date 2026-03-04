@@ -2,17 +2,14 @@
 #include "ui_AntMetadataWorkspace.h"
 
 #include <fort/studio/Format.hpp>
-#include <fort/studio/bridge/ExperimentBridge.hpp>
 #include <fort/studio/bridge/AntKeyValueBridge.hpp>
-
+#include <fort/studio/bridge/ExperimentBridge.hpp>
 
 #include <fort/studio/MyrmidonTypes/Value.hpp>
 
-#include <QDebug>
-
 AntMetadataWorkspace::AntMetadataWorkspace(QWidget *parent)
-	: Workspace(true,parent)
-	, d_ui(new Ui::AntMetadataWorkspace) {
+    : Workspace(true, parent)
+    , d_ui(new Ui::AntMetadataWorkspace) {
 	d_ui->setupUi(this);
 	d_ui->removeButton->setEnabled(false);
 }
@@ -89,17 +86,26 @@ void AntMetadataWorkspace::onAddButtonClicked() {
 void AntMetadataWorkspace::onRemoveButtonClicked() {
 	auto index = d_ui->dataView->selectionModel()->selectedRows().front();
 	auto antID = index.data(AntKeyValueBridge::AntIDRole).toInt();
-	auto key = index.data(AntKeyValueBridge::KeyNameRole).toString();
+	auto key   = index.data(AntKeyValueBridge::KeyNameRole).toString();
+
+	auto logger = slog::With(
+	    slog::String("module", "AntMetadataWorkspace"),
+	    slog::Int("antID", antID),
+	    slog::String("key", key.toStdString()),
+	    slog::String(
+	        "time",
+	        index.data(AntKeyValueBridge::TimeRole).toString().toStdString()
+	    )
+	);
 	try {
-		auto time = fort::Time::Parse(ToStdString(index.data(AntKeyValueBridge::TimeRole).toString()));
-		d_keyValues->deleteValue(antID,key,time);
-	} catch ( const std::exception & e) {
-		qCritical() << "Could not remove {Ant=" << fm::FormatAntID(antID).c_str()
-		            << ", key=" << key
-		            << ", time=" << index.data(AntKeyValueBridge::TimeRole).toString();
+		auto time = fort::Time::Parse(
+		    ToStdString(index.data(AntKeyValueBridge::TimeRole).toString())
+		);
+		d_keyValues->deleteValue(antID, key, time);
+	} catch (const std::exception &e) {
+		logger.Error("could not remove Ant metadata", slog::Err(e.what()));
 	}
 }
-
 
 void AntMetadataWorkspace::setUp(const NavigationAction & actions) {
 

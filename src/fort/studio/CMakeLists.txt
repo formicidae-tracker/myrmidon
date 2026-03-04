@@ -90,6 +90,7 @@ set(SRC_FILES
 
 set(HDR_FILES
 	Format.hpp
+	Slogpp.hpp
 	MyrmidonTypes/Ant.hpp
 	MyrmidonTypes/Value.hpp
 	MyrmidonTypes/AntShapeType.hpp
@@ -257,6 +258,7 @@ target_link_libraries(
 	fort-tags
 	Threads::Threads
 	${GLOG_LIBRARIES}
+	magic_enum::magic_enum
 )
 
 add_executable(fort-studio ${RCC_FILES} main.cpp)

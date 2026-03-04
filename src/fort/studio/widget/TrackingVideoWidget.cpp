@@ -10,8 +10,6 @@
 #include <QPainter>
 #include <QPainterPath>
 
-#include <QDebug>
-
 TrackingVideoWidget::TrackingVideoWidget(QWidget *parent)
     : QWidget(parent)
     , d_antDisplay(nullptr)
@@ -39,9 +37,13 @@ bool TrackingVideoWidget::showLoadingBanner() const {
 }
 
 void TrackingVideoWidget::display(TrackingVideoFrame frame) {
-	VIDEO_PLAYER_DEBUG(
-	    std::cerr << "[widget] Received frame:" << frame << std::endl
-	);
+	VIDEO_PLAYER_DEBUG({
+		slog::Debug(
+		    "received frame",
+		    slog::Location(),
+		    slogVideoFrame("frame", frame)
+		);
+	});
 	d_frame = frame;
 	setHasTrackingTime(!d_frame.TrackingFrame == false);
 	if (d_frame.TrackingFrame) {
@@ -51,9 +53,14 @@ void TrackingVideoWidget::display(TrackingVideoFrame frame) {
 }
 
 void TrackingVideoWidget::paintEvent(QPaintEvent *) {
-	VIDEO_PLAYER_DEBUG(
-	    std::cerr << "[widget] Paint Event with frame:" << d_frame << std::endl
-	);
+	VIDEO_PLAYER_DEBUG({
+		slog::Debug(
+		    "paint event",
+		    slog::Location(),
+		    slogVideoFrame("frame", frame)
+		);
+	});
+
 	QPainter painter(this);
 	paint(&painter);
 }
@@ -259,10 +266,14 @@ void TrackingVideoWidget::paintAnts(
 void TrackingVideoWidget::paintAntsAndCollisions(
     QPainter *painter, const QRectF &focusRectangle
 ) {
-	VIDEO_PLAYER_DEBUG(
-	    std::cerr << "[widget] identification painting on:" << d_frame
-	              << std::endl
-	);
+	VIDEO_PLAYER_DEBUG({
+		slog::Trace(
+		    "paintAntsAndCollisions",
+		    slog::Location(),
+		    slogVideoFrame("frame", d_frame)
+		);
+	});
+
 	const auto &tFrame = d_frame.TrackingFrame;
 	double ratio   = double(d_frame.Data->Size.Height) / double(tFrame->Height);
 	bool   hasSolo = d_antDisplay->numberSoloAnt() != 0;
@@ -402,8 +413,6 @@ void TrackingVideoWidget::mousePressEvent(QMouseEvent *event) {
 
 void TrackingVideoWidget::mouseDoubleClickEvent(QMouseEvent *event) {
 	if (event->button() == Qt::LeftButton) {
-		// qInfo() << "Fullscreen is not implemented";
-
 		// //we already received a click so we toggle again
 		emit togglePlayPause();
 	}
