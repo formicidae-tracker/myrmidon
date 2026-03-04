@@ -61,7 +61,7 @@ public:
 		bool               HasMovie;
 		bool               HasConfig;
 		bool               IsCorrupted;
-		bool               Legacy{true};
+		bool               UseAntsCU{true};
 		Time               Start, End;
 		uint64_t           StartFrame, EndFrame;
 
@@ -98,6 +98,8 @@ public:
 	const std::vector<TDDInfo> &NestDataDirs() const;
 
 	const std::vector<TDDInfo> &ForagingDataDirs() const;
+
+	const TDDInfo &AntsCUDataDir() const;
 
 	const TDDInfo &NoConfigDataDir() const;
 
@@ -179,7 +181,8 @@ private:
 	fort::myrmidon::Config d_config;
 
 	std::vector<TDDInfo> d_nestTDDs, d_foragingTDDs;
-	TDDInfo d_noConfigDir, d_ARTagDir, d_noFamilyDir, d_corruptedDir;
+	TDDInfo d_noConfigDir, d_ARTagDir, d_noFamilyDir, d_corruptedDir,
+	    d_antsCUDataDir;
 	std::vector<ExperimentInfo> d_experiments;
 
 	std::vector<ExpectedResult> d_results;

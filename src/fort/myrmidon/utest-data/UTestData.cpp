@@ -1,6 +1,7 @@
 #include "UTestData.hpp"
 
 #include <filesystem>
+#include <fort/tags/fort-tags.hpp>
 #include <fstream>
 
 #include "CloseUpWriter.hpp"
@@ -23,6 +24,7 @@
 #include <fort/myrmidon/priv/proto/TagStatisticsCache.hpp>
 
 #include <semver.hpp>
+#include <slog++/Attribute.hpp>
 
 #ifndef O_BINARY
 #define O_BINARY 0
@@ -119,9 +121,11 @@ void UTestData::CleanUpFilesystem() {
 	if (d_basedir.empty()) {
 		return;
 	}
-#ifndef NDEBUG
-	std::cerr << "Cleanup files in " << d_basedir << std::endl;
-#endif
+	slog::Debug(
+	    "cleanup files",
+	    slog::String("directory", d_basedir),
+	    slog::Location()
+	);
 	fs::remove_all(d_basedir);
 	d_basedir = "";
 };
@@ -129,11 +133,12 @@ void UTestData::CleanUpFilesystem() {
 void UTestData::BuildFakeData(const fs::path &basedir) {
 	d_basedir = basedir;
 
-#ifndef NDEBUG
 	auto start = Time::Now();
-	std::cerr << std::endl
-	          << "Generating UTestData in " << d_basedir << std::endl;
-#endif
+	slog::Debug(
+	    "generating data",
+	    slog::String("directory", d_basedir),
+	    slog::Location()
+	);
 
 	GenerateFakedata();
 
@@ -142,9 +147,12 @@ void UTestData::BuildFakeData(const fs::path &basedir) {
 	GenerateSegmentedResults();
 	GenerateMatchedResults();
 
-#ifndef NDEBUG
-	std::cerr << "Generated data in " << Time::Now().Sub(start) << std::endl;
-#endif
+	slog::Info(
+	    "generated data",
+	    slog::String("directory", d_basedir),
+	    slog::Location(),
+	    slog::Duration("duration", Time::Now().Sub(start).ToChrono())
+	);
 }
 
 void UTestData::GenerateFakedata() {
@@ -349,6 +357,18 @@ void UTestData::GenerateTDDStructure() {
 	    .Start            = d_config.Start,
 	    .End              = d_config.Start.Add(10 * Duration::Second),
 	};
+
+	d_antsCUDataDir = {
+	    .AbsoluteFilePath = d_basedir / "AntCU.0000",
+	    .Family           = fort::tags::Family::Standard41h12,
+	    .HasFullFrame     = true,
+	    .HasMovie         = false,
+	    .HasConfig        = true,
+	    .IsCorrupted      = false,
+	    .UseAntsCU        = true,
+	    .Start            = d_config.Start,
+	    .End              = d_config.Start.Add(10 * Duration::Second),
+	};
 }
 
 void UTestData::GenerateExperimentStructure() {
@@ -392,6 +412,7 @@ void UTestData::WriteTDDs() {
 	WriteTDD(d_ARTagDir, 2);
 	WriteTDD(d_noFamilyDir, 2);
 	WriteTDD(d_corruptedDir, 1);
+	WriteTDD(d_antsCUDataDir, 1);
 }
 
 class SegmentInfoWriter : public SegmentedDataWriter {
@@ -451,10 +472,13 @@ private:
 };
 
 void TruncateFile(const std::filesystem::path &filepath, int bytes) {
-#ifndef NDEBUG
-	std::cerr << "Truncating " << bytes << " bytes of " << filepath
-	          << " (size: " << fs::file_size(filepath) << ")" << std::endl;
-#endif // NDEBUG
+	slog::Debug(
+	    "truncating file from EOF",
+	    slog::Location(),
+	    slog::String("filepath", filepath),
+	    slog::Int("bytes", bytes),
+	    slog::Int("file_size", fs::file_size(filepath))
+	);
 
 	FILE *file = fopen(filepath.c_str(), "r+");
 	if (file == nullptr) {
@@ -913,14 +937,17 @@ void UTestData::GenerateMovieSegmentData(
 		    info.End
 		);
 	}
-#ifndef NDEBUG
+
 	for (const auto &s : videoSegments) {
-		std::cerr << "VideoSegment{ Space = " << s.Space
-		          << " , AbsoluteFilePath = " << s.AbsoluteFilePath
-		          << " , Begin = " << s.Begin << " , End = " << s.End
-		          << " , Data.size() = " << s.Data.size() << "}" << std::endl;
+		slog::Debug(
+		    "Generated VideoSegment",
+		    slog::Int("space", s.Space),
+		    slog::String("filepath", s.AbsoluteFilePath),
+		    slog::Int("begin", s.Begin),
+		    slog::Int("end", s.End),
+		    slog::Int("frames", s.Data.size())
+		);
 	}
-#endif // NDEBUG
 }
 
 const Config &UTestData::Config() const {

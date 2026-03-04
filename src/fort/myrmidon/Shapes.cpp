@@ -150,16 +150,12 @@ bool Capsule::Intersect(
 	do {                                                                       \
 		constraintToSegment(t, proj, point, startSegment, segment);            \
 		double distSqrd = (proj - point).squaredNorm();                        \
-		/* std::cerr << "Projecting " << #point << " on " << #segment << " t:  \
-		 * " << t << std::endl; */                                             \
 		if (distSqrd < 1.0e-6) {                                               \
 			/* Segments intersects */                                          \
 			return true;                                                       \
 		}                                                                      \
 		sumRadius = pRadius1 + t * (pRadius2 - pRadius1) + radius;             \
 		sumRadius *= sumRadius;                                                \
-		/*std::cerr << "sumRadius " << sumRadius << " tA " << tA << " tB " <<  \
-		 * tB <<  " aR1 " << aR1 << " bR1 " << bR1 << std::endl; */            \
 		if (distSqrd <= sumRadius) {                                           \
 			return true;                                                       \
 		}                                                                      \

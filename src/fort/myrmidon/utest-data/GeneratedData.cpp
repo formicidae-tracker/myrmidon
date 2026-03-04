@@ -2,12 +2,16 @@
 
 #include "Config.hpp"
 
+#include <chrono>
 #include <fort/time/Time.hpp>
 #include <limits>
 #include <random>
 
 #include <fort/myrmidon/priv/TagStatistics.hpp>
 #include <fort/myrmidon/priv/TrackingDataDirectory.hpp>
+#include <slog++/Attribute.hpp>
+#include <slog++/Types.hpp>
+#include <slog++/slog++.hpp>
 
 namespace fort {
 namespace myrmidon {
@@ -85,12 +89,15 @@ void DrawHistogram(const std::map<Time, Time> &time) {
 		auto d = RoundDuration(next.Sub(cur), round);
 		++hist[d];
 	}
-	std::cerr << "histogram of ticks" << std::endl;
 	for (const auto &[b, c] : hist) {
-		std::cerr << "+ " << b << " - " << (b + round) << ": "
-		          << std::string(c / 20, '*') << "(" << c << ") " << std::endl;
+		slog::Debug(
+		    "histogram of ticks",
+		    slog::Location(),
+		    slog::Int("start_ms", int(b.Milliseconds())),
+		    slog::Int("end_ms", int((b + round).Milliseconds())),
+		    slog::Int("count", c)
+		);
 	}
-	std::cerr << std::endl;
 }
 
 void GeneratedData::AssignTicks(
@@ -187,13 +194,15 @@ void GeneratedData::GenerateTrajectories(const Config &config) {
 		}
 	}
 
-#ifndef NDEBUG
 	for (const auto &t : Trajectories) {
-		std::cerr << "AntTrajectory{ Ant:" << t->Ant << " , Space: " << t->Space
-		          << " , Start: " << t->Start.Sub(config.Start)
-		          << " , Duration_s: " << t->Duration_s << std::endl;
+		slog::Debug(
+		    "generated ant trajectory",
+		    slog::Int("antID", t->Ant),
+		    slog::Int("spaceID", t->Space),
+		    slog::Duration("start", t->Start.Sub(config.Start).ToChrono()),
+		    slog::Duration("duration", t->End().Sub(t->Start).ToChrono())
+		);
 	}
-#endif
 }
 
 void GeneratedData::GenerateTrajectoriesFor(AntID antID, const AntData &ant) {
@@ -292,13 +301,15 @@ void GeneratedData::GenerateInteractions(const Config &config) {
 		}
 	}
 
-#ifndef NDEBUG
 	for (const auto &i : Interactions) {
-		std::cerr << "AntInteraction{ IDs:{" << i->IDs.first << ","
-		          << i->IDs.second << "}, Start: " << i->Start.Sub(config.Start)
-		          << ", End:" << i->End.Sub(config.Start) << "}" << std::endl;
+		slog::Debug(
+		    "generated ant interaction",
+		    slog::Int("Ant[0]", i->IDs.first),
+		    slog::Int("Ant[1]", i->IDs.second),
+		    slog::Duration("start", i->Start.Sub(config.Start).ToChrono()),
+		    slog::Duration("end", i->End.Sub(config.Start).ToChrono())
+		);
 	}
-#endif
 }
 
 void GeneratedData::GenerateInteractionsFor(AntID antID, const AntData &ant) {
@@ -478,14 +489,22 @@ void GeneratedData::GenerateTagStatistics(const Config &config) {
 	for (const auto &[antID, ant] : config.Ants) {
 		GenerateTagStatisticsFor(antID - 1, ant);
 	}
-#ifndef NDEBUG
+
 	for (const auto &[tagID, stats] : Statistics) {
-		std::cerr << " + TagID: " << FormatTagID(tagID) << std::endl
-		          << " +--+ FirstSeen: " << stats.FirstSeen << std::endl
-		          << " +--+ LastSeen: " << stats.LastSeen << std::endl
-		          << " +--+ Counts: " << stats.Counts.transpose() << std::endl;
+		slog::Debug(
+		    "statistic",
+		    slog::Int("tag", tagID),
+		    slog::Duration(
+		        "first_seen",
+		        stats.FirstSeen.Sub(config.Start).ToChrono()
+		    ),
+		    slog::Duration(
+		        "last_seen",
+		        stats.LastSeen.Sub(config.Start).ToChrono()
+		    ),
+		    slog::Int("counts", stats.Counts[0])
+		);
 	}
-#endif // NDEBUG
 }
 
 void GeneratedData::GenerateTagStatisticsFor(

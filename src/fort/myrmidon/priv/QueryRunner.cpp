@@ -1,5 +1,7 @@
 #include "QueryRunner.hpp"
 
+#include <slog++/Config.hpp>
+#include <slog++/slog++.hpp>
 #include <sys/sysinfo.h>
 #include <sys/types.h>
 
@@ -312,13 +314,16 @@ void QueryRunner::RunMultithread(
 	// a very high amount compaired to the limiter, but negligible in memory.
 	// What happend next only depends on the user regarding memory management
 	queue.set_capacity(8 * 1024);
-#ifndef NDEBUG
-	std::cerr << "Upper bound on queue memory is ~"
-	          << ((queue.capacity() * (4 + args.ZoneDepth) * sizeof(double) *
-	               experiment.Identifier()->Ants().size()) /
-	              1024.0 / 1024.0)
-	          << "MiB." << std::endl;
-#endif
+
+	slog::DInfo(
+	    "upper bound on queue memory",
+	    slog::Location(),
+	    slog::Int(
+	        "bytes",
+	        queue.capacity() * (4 + args.ZoneDepth * sizeof(double) *
+	                                    experiment.Identifier()->Ants().size())
+	    )
+	);
 	auto loader = std::make_shared<DataLoader>(experiment, args);
 
 	tbb::flow::graph g;

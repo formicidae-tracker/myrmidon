@@ -304,6 +304,10 @@ target_include_directories(
 	fort-myrmidon PUBLIC ${PROJECT_BINARY_DIR}/src ${PROJECT_SOURCE_DIR}/src
 )
 
+target_compile_options(
+	fort-myrmidon PRIVATE -ffile-prefix-map=${PROJECT_SOURCE_DIR}/src/=
+)
+
 target_link_libraries(
 	fort-myrmidon
 	protobuf::libprotobuf
@@ -347,6 +351,11 @@ if(FORT_MYRMIDON_MAIN)
 	)
 
 	target_link_libraries(fort-myrmidon-utestdata fort-myrmidon)
+
+	target_compile_options(
+		fort-myrmidon-utestdata
+		PRIVATE -ffile-prefix-map=${PROJECT_SOURCE_DIR}/src/=
+	)
 
 	install(TARGETS fort-myrmidon-utestdata DESTINATION lib)
 	install(FILES utest-data/UTestData.hpp utest-data/Config.hpp
