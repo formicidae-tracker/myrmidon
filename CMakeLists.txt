@@ -158,13 +158,14 @@ else()
 	)
 endif()
 
+set(SLOGPP_SMALLER_STRING_OBJECT Off)
 if(NOT SKBUILD AND EXISTS ${PROJECT_SOURCE_DIR}/deps/slogpp)
 	FetchContent_Declare(slogpp SOURCE_DIR ${PROJECT_SOURCE_DIR}/deps/slogpp)
 else()
 	FetchContent_Declare(
 		slogpp
 		GIT_REPOSITORY https://github.com/atuleu/slogpp.git
-		GIT_TAG fe4404f84129ff81beaec9b9b9787d18ce223fb9
+		GIT_TAG bf551b09125a476e5397eea856ba146cd3b4427c
 	)
 endif()
 

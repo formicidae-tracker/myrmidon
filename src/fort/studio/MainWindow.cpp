@@ -22,26 +22,64 @@
 #include <QDesktopServices>
 #include <QPushButton>
 #include <QToolBar>
+#include <qglobal.h>
+#include <slog++/TeeSink.hpp>
+#include <slog++/slog++.hpp>
+#include <variant>
 
-QPointer<Logger> myLogger;
+void slogMessageHandler(
+    QtMsgType type, const QMessageLogContext &context, const QString &msg
+) {
 
-static void
-myLog(QtMsgType type, const QMessageLogContext &, const QString &msg) {
-	myLogger->logMessage(type, msg);
+	auto fileAttr =
+	    context.file ? slog::String("file", context.file) : slog::Attribute{};
+
+	auto lineAttr =
+	    context.line ? slog::Int("line", context.line) : slog::Attribute{};
+
+	auto location = lineAttr.empty() && fileAttr.empty()
+	                    ? slog::Attribute{}
+	                    : slog::Group("location", lineAttr, fileAttr);
+
+	auto category = context.category
+	                    ? slog::String("qt_category", context.category)
+	                    : slog::Attribute{};
+
+	switch (type) {
+	case QtDebugMsg:
+		slog::Debug(msg.toStdString(), category, location);
+		break;
+
+	case QtInfoMsg:
+		slog::Info(msg.toStdString(), category, location);
+		break;
+
+	case QtWarningMsg:
+		slog::Warn(msg.toStdString(), category, location);
+		break;
+
+	case QtCriticalMsg:
+		slog::Error(msg.toStdString(), category, location);
+		break;
+
+	case QtFatalMsg:
+		slog::Fatal(msg.toStdString(), category, location);
+		break;
+	};
 }
 
 void MainWindow::setUpLogger() {
-	myLogger = d_logger;
 
-	d_handler = qInstallMessageHandler(myLog);
+	d_handler = qInstallMessageHandler(&slogMessageHandler);
 
-	d_logStatus = new LogStatusWidget(d_logger,this);
+	d_logStatus = new LogStatusWidget(d_logger, this);
 	d_ui->statusBar->addPermanentWidget(d_logStatus);
-	connect(d_logStatus,
-	        &LogStatusWidget::showLog,
-	        d_ui->actionShowLog,
-	        &QAction::trigger);
-
+	connect(
+	    d_logStatus,
+	    &LogStatusWidget::showLog,
+	    d_ui->actionShowLog,
+	    &QAction::trigger
+	);
 }
 
 void MainWindow::setUpSaveAndModificationEvents() {

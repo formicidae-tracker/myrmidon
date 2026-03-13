@@ -1,15 +1,16 @@
 #pragma once
 
-
-#include <QWidget>
 #include <QDateTime>
+#include <QWidget>
 
 #include <functional>
+#include <qglobal.h>
+#include <slog++/Sink.hpp>
 
 class QLabel;
 class LoggerWidget;
 
-class Logger : public QObject {
+class Logger : public QObject, public slog::Sink {
 	Q_OBJECT
 	Q_PROPERTY(int warningCount READ warningCount NOTIFY warningCountChanged)
 	Q_PROPERTY(int errorCount READ errorCount NOTIFY errorCountChanged)

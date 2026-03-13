@@ -1,99 +1,75 @@
 #include "Logger.hpp"
 #include "ui_LoggerWidget.h"
 
-#include <QDebug>
 #include <QDateTime>
+#include <QDebug>
 #include <QFontDatabase>
-
-#include <glog/logging.h>
 
 Logger::~Logger() {}
 
-Logger::Logger(QObject * parent)
-	: QObject(parent)
-	, d_warningCounts(0)
-	, d_errorCounts(0) {
-	d_loggerData =
-		{
+Logger::Logger(QObject *parent)
+    : QObject(parent)
+    , d_warningCounts(0)
+    , d_errorCounts(0) {
+	d_loggerData = {
 #ifndef NDEBUG
-		 {QtDebugMsg,
-		  {
-		   [](const QString & msg, const QDateTime & time) -> QString{
-			   return "I " + time.toString() + " : " + msg;
-		   },
-		   [](const QString & msg) -> QString {
-			   return "<span style=\"color:#0000ff;\">" + msg + "</span>";
-		   },
-		   [](const QString & msg) {
-			   LOG(INFO) << msg.toUtf8().constData();
-		   },
-		   {&d_infos}
-		  }
-		 },
+	    {QtDebugMsg,
+	     {[](const QString &msg, const QDateTime &time) -> QString {
+		      return "I " + time.toString() + " : " + msg;
+	      },
+	      [](const QString &msg) -> QString {
+		      return "<span style=\"color:#0000ff;\">" + msg + "</span>";
+	      },
+	      [](const QString &msg) { LOG(INFO) << msg.toUtf8().constData(); },
+	      {&d_infos}}},
 #endif
-		 {QtInfoMsg,
-		  {
-		   [](const QString & msg, const QDateTime & time) -> QString{
-			   return "I " + time.toString() + " : " + msg;
-		   },
-		   [](const QString & msg) -> QString {
-			   return msg;
-		   },
-		   [](const QString & msg) {
-			   LOG(INFO) << msg.toUtf8().constData();
-		   },
-		   {&d_infos}
-		  }
-		 },
-		 {QtWarningMsg,
-		  {
-		   [](const QString & msg, const QDateTime & time) -> QString{
-			   return "W " + time.toString() + " : " + msg;
-		   },
-		   [](const QString & msg) -> QString {
-			   return "<span style=\"color:#b8860b;\">" + msg + "</span>";
-		   },
-		   [this](const QString & msg) {
-			   ++d_warningCounts;
-			   emit warningCountChanged(d_warningCounts);
-			   LOG(WARNING) << msg.toUtf8().constData();
-		   },
-		   {&d_infos,&d_warnings}
-		  }
-		 },
-		 {QtCriticalMsg,
-		  {
-		   [](const QString & msg, const QDateTime & time) -> QString{
-			   return "E " + time.toString() + " : " + msg;
-		   },
-		   [](const QString & msg) -> QString {
-			   return "<span style=\"color:#ff0000;\">" + msg + "</span>";
-		   },
-		   [this](const QString & msg) {
-			   ++d_errorCounts;
-			   emit errorCountChanged(d_errorCounts);
-			   LOG(ERROR) << msg.toUtf8().constData();
-		   },
-		   {&d_infos,&d_warnings,&d_errors}
-		  }
-		 },
-		 {QtFatalMsg,
-		  {
-		   [](const QString & msg, const QDateTime & time) -> QString{
-			   return "F " + time.toString() + " : " + msg;
-		   },
-		   [](const QString & msg) -> QString {
-			   return "<span style=\"color:#ff0000;\">" + msg + "</span>";
-		   },
-		   [this](const QString & msg) {
-			   LOG(FATAL) << msg.toUtf8().constData();
-		   },
-		   {}
-		  }
-		 },
-		};
-}
+	    {QtInfoMsg,
+	     {[](const QString &msg, const QDateTime &time) -> QString {
+		      return "I " + time.toString() + " : " + msg;
+	      },
+	      [](const QString &msg) -> QString { return msg; },
+	      [](const QString &msg) { LOG(INFO) << msg.toUtf8().constData(); },
+	      {&d_infos}}},
+	    {QtWarningMsg,
+	     {[](const QString &msg, const QDateTime &time) -> QString {
+		      return "W " + time.toString() + " : " + msg;
+	      },
+	      [](const QString &msg) -> QString {
+		      return "<span style=\"color:#b8860b;\">" + msg + "</span>";
+	      },
+	      [this](const QString &msg) {
+		      ++d_warningCounts;
+		      emit warningCountChanged(d_warningCounts);
 
+		      LOG(WARNING) << msg.toUtf8().constData();
+	      },
+	      {&d_infos, &d_warnings}}},
+	    {QtCriticalMsg,
+	     {[](const QString &msg, const QDateTime &time) -> QString {
+		      return "E " + time.toString() + " : " + msg;
+	      },
+	      [](const QString &msg) -> QString {
+		      return "<span style=\"color:#ff0000;\">" + msg + "</span>";
+	      },
+	      [this](const QString &msg) {
+		      ++d_errorCounts;
+		      emit errorCountChanged(d_errorCounts);
+		      LOG(ERROR) << msg.toUtf8().constData();
+	      },
+	      {&d_infos, &d_warnings, &d_errors}}},
+	    {QtFatalMsg,
+	     {[](const QString &msg, const QDateTime &time) -> QString {
+		      return "F " + time.toString() + " : " + msg;
+	      },
+	      [](const QString &msg) -> QString {
+		      return "<span style=\"color:#ff0000;\">" + msg + "</span>";
+	      },
+	      [this](const QString &msg) {
+		      LOG(FATAL) << msg.toUtf8().constData();
+	      },
+	      {}}},
+	};
+}
 
 int Logger::warningCount() const {
 	return d_warningCounts;
