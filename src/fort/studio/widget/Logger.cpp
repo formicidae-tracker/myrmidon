@@ -1,13 +1,12 @@
 #include "Logger.hpp"
 #include "ui_LoggerWidget.h"
 
+#include <QComboBox>
 #include <QDateTime>
 #include <QDebug>
 #include <QFontDatabase>
 
 #include <memory>
-#include <qheaderview.h>
-#include <qnamespace.h>
 #include <type_traits>
 #include <variant>
 
@@ -17,6 +16,7 @@
 #include <slog++/Level.hpp>
 #include <slog++/Record.hpp>
 #include <slog++/Types.hpp>
+#include <slog++/slog++.hpp>
 
 Logger::Logger(QObject *parent)
     : QAbstractItemModel(parent) {
@@ -36,9 +36,9 @@ bool Logger::AllocateOnStack() const noexcept {
 
 bool Logger::Enabled(slog::Level level) const noexcept {
 #ifndef NDEBUG
-	return level >= slog::Level::Info;
-#else
 	return true;
+#else
+	return level >= slog::Level::Debug;
 #endif
 }
 
@@ -158,6 +158,8 @@ QVariant Logger::data(const QModelIndex &index, int role) const {
 		switch (role) {
 		case Qt::DisplayRole:
 			return recordDisplayRole(data, index.column());
+		case Logger::RoleLevelInt:
+			return int(std::get<const slog::Record *>(data->self)->level);
 		default:
 			return {};
 		}
@@ -281,14 +283,63 @@ Logger::headerData(int section, Qt::Orientation orientation, int role) const {
 	}
 }
 
+LoggerFilterProxyModel::LoggerFilterProxyModel(QObject *parent)
+    : QSortFilterProxyModel(parent) {
+	setRecursiveFilteringEnabled(false);
+	setDynamicSortFilter(true);
+}
+
+int LoggerFilterProxyModel::minimumLevel() const {
+	return d_minimumLevel;
+}
+
+void LoggerFilterProxyModel::setMinimumLevel(int lvl) {
+	if (d_minimumLevel == lvl) {
+		return;
+	}
+	slog::DDebug(
+	    "filter to new level",
+	    slog::String("module", "LoggerFilterProxyModel"),
+	    slog::Int("level", lvl),
+	    slog::Int("old", d_minimumLevel)
+	);
+	d_minimumLevel = lvl;
+	emit minimumLevelChanged(d_minimumLevel);
+	invalidateFilter();
+}
+
+bool LoggerFilterProxyModel::filterAcceptsRow(
+    int row, const QModelIndex &parent
+) const {
+
+	if (parent.isValid() == true) {
+		// Only filter at the root (records). Let attribute rows follow their
+		// parent.
+		return true;
+	}
+
+	auto v = sourceModel()->data(
+	    sourceModel()->index(row, 0, parent),
+	    Logger::RoleLevelInt
+	);
+
+	if (v.isValid() == false) {
+		return true;
+	}
+	const int level = v.toInt();
+	return level >= d_minimumLevel;
+}
+
 LoggerWidget::LoggerWidget(Logger *logger, QWidget *parent)
     : QWidget(parent)
     , d_ui(new Ui::LoggerWidget)
-    , d_logger(logger) {
+    , d_filteredModel(new LoggerFilterProxyModel(this)) {
 
 	d_ui->setupUi(this);
 
-	d_ui->treeView->setModel(d_logger);
+	d_filteredModel->setSourceModel(logger);
+
+	d_ui->treeView->setModel(d_filteredModel);
 	auto model = d_ui->treeView->model();
 	for (int r = 0; r < model->rowCount({}); ++r) {
 		expandAllFiltered(model->index(r, 0, {}));
@@ -309,13 +360,33 @@ LoggerWidget::LoggerWidget(Logger *logger, QWidget *parent)
 	h->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 	h->setSectionResizeMode(2, QHeaderView::Stretch);
 
-	d_ui->comboBox->insertItem(0, "Trace");
-	d_ui->comboBox->insertItem(1, "Debug");
-	d_ui->comboBox->insertItem(2, "Info");
-	d_ui->comboBox->insertItem(3, "Warning");
-	d_ui->comboBox->insertItem(4, "Error");
+	d_ui->comboBox->insertItem(0, "Trace", int(slog::Level::Trace));
+	d_ui->comboBox->insertItem(1, "Debug", int(slog::Level::Debug));
+	d_ui->comboBox->insertItem(2, "Info", int(slog::Level::Info));
+	d_ui->comboBox->insertItem(3, "Warning", int(slog::Level::Warn));
+	d_ui->comboBox->insertItem(4, "Error", int(slog::Level::Error));
 
-	d_ui->comboBox->setCurrentIndex(2);
+	d_ui->comboBox->setCurrentIndex(
+	    d_ui->comboBox->findData(d_filteredModel->minimumLevel())
+	);
+	connect(d_ui->comboBox, &QComboBox::currentIndexChanged, [this](int index) {
+		slog::DDebug(
+		    "setting new index",
+		    slog::String("module", "LoggerWidget"),
+		    slog::Int("index", index),
+		    slog::Int("level", d_ui->comboBox->currentData().toInt())
+		);
+		d_filteredModel->setMinimumLevel(d_ui->comboBox->currentData().toInt());
+	});
+	connect(
+	    d_filteredModel,
+	    &LoggerFilterProxyModel::minimumLevelChanged,
+	    [this](int minimumLevel) {
+		    d_ui->comboBox->setCurrentIndex(
+		        d_ui->comboBox->findData(minimumLevel)
+		    );
+	    }
+	);
 
 	auto logDir = std::string{"tmp"};
 	setWindowTitle(

@@ -2,6 +2,7 @@
 
 #include <QAbstractItemModel>
 #include <QDateTime>
+#include <QSortFilterProxyModel>
 #include <QWidget>
 
 #include <memory>
@@ -21,6 +22,10 @@ class Logger : public QAbstractItemModel, public slog::Sink {
 	Q_PROPERTY(int errorCount READ errorCount NOTIFY errorCountChanged)
 
 public:
+	enum Roles {
+		RoleLevelInt = Qt::UserRole + 1,
+	};
+
 	explicit Logger(QObject *parent = nullptr);
 	virtual ~Logger() = default;
 
@@ -102,7 +107,29 @@ namespace Ui {
 class LoggerWidget;
 }
 
+class LoggerFilterProxyModel final : public QSortFilterProxyModel {
+	Q_OBJECT
+	Q_PROPERTY(int minimumLevle READ minimumLevel NOTIFY minimumLevelChanged
+	               WRITE setMinimumLevel)
+
+public:
+	explicit LoggerFilterProxyModel(QObject *parent = nullptr);
+
+	int minimumLevel() const;
+public slots:
+	void setMinimumLevel(int lvl);
+signals:
+	void minimumLevelChanged(int lvl);
+
+protected:
+	bool filterAcceptsRow(int row, const QModelIndex &parent) const override;
+
+private:
+	int d_minimumLevel{int(slog::Level::Info)};
+};
+
 class LoggerWidget : public QWidget {
+
 	Q_OBJECT
 public:
 	explicit LoggerWidget(Logger *logger, QWidget *parent = 0);
@@ -114,8 +141,8 @@ protected slots:
 	void onRowInserted(const QModelIndex &index, int first, int last);
 
 private:
-	Ui::LoggerWidget *d_ui;
-	Logger           *d_logger;
+	Ui::LoggerWidget       *d_ui;
+	LoggerFilterProxyModel *d_filteredModel;
 };
 
 class LogStatusWidget : public QWidget {
