@@ -80,8 +80,10 @@ void Logger::appendRecord(const std::shared_ptr<const slog::Record> &record) {
 	beginInsertRows(QModelIndex{}, d_records.size(), d_records.size());
 	auto selfIndex = int(d_records.size());
 	d_records.push_back(record);
-	d_tree.emplace_back(NodeRef{.self = record.get(), .selfIndex = selfIndex});
-	d_tree.back().visitAttribute(
+	d_tree.emplace_back(
+	    new NodeRef{.self = record.get(), .selfIndex = selfIndex}
+	);
+	d_tree.back()->visitAttribute(
 	    record->attributes.begin(),
 	    record->attributes.end()
 	);
@@ -99,7 +101,7 @@ Logger::index(int row, int column, const QModelIndex &parent) const {
 			return {};
 		}
 
-		return createIndex(row, column, &d_tree[row]);
+		return createIndex(row, column, d_tree[row].get());
 	}
 
 	auto parentData = reinterpret_cast<NodeRef *>(parent.internalPointer());
@@ -287,6 +289,17 @@ LoggerWidget::LoggerWidget(Logger *logger, QWidget *parent)
 	d_ui->setupUi(this);
 
 	d_ui->treeView->setModel(d_logger);
+	auto model = d_ui->treeView->model();
+	for (int r = 0; r < model->rowCount({}); ++r) {
+		expandAllFiltered(model->index(r, 0, {}));
+	}
+
+	connect(
+	    d_ui->treeView->model(),
+	    &QAbstractItemModel::rowsInserted,
+	    this,
+	    &LoggerWidget::onRowInserted
+	);
 
 	d_ui->treeView->setHeaderHidden(false);
 	auto *h = d_ui->treeView->header();
@@ -315,6 +328,35 @@ LoggerWidget::LoggerWidget(Logger *logger, QWidget *parent)
 
 LoggerWidget::~LoggerWidget() {
 	delete d_ui;
+}
+
+void LoggerWidget::expandAllFiltered(const QModelIndex &index) {
+	if (index.isValid() == false) {
+		return;
+	}
+	auto view  = d_ui->treeView;
+	auto model = view->model();
+	if (index.parent().isValid() == false ||
+	    index.parent().parent().isValid() == true ||
+	    index.siblingAtColumn(0).data(Qt::DisplayRole).toString() !=
+	        "stacktrace") {
+		view->setExpanded(index, true);
+	}
+
+	d_ui->treeView->setExpanded(index, true);
+	for (int r = 0; r < model->rowCount(index); ++r) {
+		auto child = model->index(r, 0, index);
+		expandAllFiltered(child);
+	}
+}
+
+void LoggerWidget::onRowInserted(
+    const QModelIndex &parent, int first, int last
+) {
+	for (int r = first; r <= last; ++r) {
+		QModelIndex idx = d_ui->treeView->model()->index(r, 0, parent);
+		expandAllFiltered(idx);
+	}
 }
 
 LogStatusWidget::LogStatusWidget(Logger *logger, QWidget *parent)

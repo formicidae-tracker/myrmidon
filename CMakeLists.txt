@@ -119,7 +119,7 @@ set(YAML_BUILD_SHARED_LIBS
 	On
 	CACHE BOOL "Compile shared libraries"
 )
-
+set(CPPTRACE_UNWIND_WITH_LIBUNWIND On)
 FetchContent_Declare(
 	cpptrace
 	GIT_REPOSITORY https://github.com/jeremy-rifkin/cpptrace

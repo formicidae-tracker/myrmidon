@@ -71,6 +71,7 @@ private:
 		}
 
 		template <typename Iter> inline void visitAttribute(Iter b, Iter e) {
+			children.reserve(std::distance(b, e));
 			for (Iter it = b; it != e; ++it) {
 				if (std::holds_alternative<std::monostate>(it->value)) {
 					continue;
@@ -92,7 +93,7 @@ private:
 	QVariant foreground(const NodeRef *n) const;
 
 	std::vector<std::shared_ptr<const slog::Record>> d_records;
-	std::vector<NodeRef>                             d_tree;
+	std::vector<std::unique_ptr<NodeRef>>            d_tree;
 
 	int d_warningCounts{0}, d_errorCounts{0};
 };
@@ -107,6 +108,11 @@ public:
 	explicit LoggerWidget(Logger *logger, QWidget *parent = 0);
 	virtual ~LoggerWidget();
 
+protected:
+	void expandAllFiltered(const QModelIndex &index);
+protected slots:
+	void onRowInserted(const QModelIndex &index, int first, int last);
+
 private:
 	Ui::LoggerWidget *d_ui;
 	Logger           *d_logger;
@@ -120,7 +126,6 @@ public:
 
 protected:
 	void mouseDoubleClickEvent(QMouseEvent *event) override;
-
 protected slots:
 	void onNewMessage(int type, const QString &message);
 
