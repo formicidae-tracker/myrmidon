@@ -59,6 +59,8 @@ signals:
 public slots:
 	void appendRecord(const std::shared_ptr<const slog::Record> &record);
 
+	void writeLogRecords(const QString &filepath);
+
 private:
 	using DataPtr = std::variant<const slog::Record *, const slog::Attribute *>;
 
@@ -140,8 +142,12 @@ protected:
 protected slots:
 	void onRowInserted(const QModelIndex &index, int first, int last);
 
+protected slots:
+	void on_exportButton_clicked(bool);
+
 private:
 	Ui::LoggerWidget       *d_ui;
+	Logger                 *d_logger;
 	LoggerFilterProxyModel *d_filteredModel;
 };
 

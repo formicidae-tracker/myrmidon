@@ -4,19 +4,21 @@
 #include <QComboBox>
 #include <QDateTime>
 #include <QDebug>
+#include <QFileDialog>
 #include <QFontDatabase>
 
 #include <memory>
-#include <type_traits>
 #include <variant>
 
 #include <cpptrace/exceptions.hpp>
 
-#include <slog++/FormattersImpl.hpp>
+#include <slog++/Formatters.hpp>
 #include <slog++/Level.hpp>
 #include <slog++/Record.hpp>
 #include <slog++/Types.hpp>
 #include <slog++/slog++.hpp>
+
+#include <fort/utils/Defer.hpp>
 
 Logger::Logger(QObject *parent)
     : QAbstractItemModel(parent) {
@@ -330,10 +332,34 @@ bool LoggerFilterProxyModel::filterAcceptsRow(
 	return level >= d_minimumLevel;
 }
 
+void Logger::writeLogRecords(const QString &path) {
+	auto file = std::fopen(path.toStdString().c_str(), "w");
+	if (file == nullptr) {
+		slog::Error(
+		    "could not open file",
+		    slog::String("module", "Logger"),
+		    slog::String("path", path.toStdString()),
+		    slog::Int("errno", errno)
+		);
+		return;
+	}
+	defer {
+		std::fclose(file);
+	};
+
+	for (const auto &r : d_records) {
+		slog::Buffer buffer;
+		slog::RecordToJSON(*r, buffer);
+		std::fwrite(buffer.data(), sizeof(char), buffer.size(), file);
+		std::fputc('\n', file);
+	}
+}
+
 LoggerWidget::LoggerWidget(Logger *logger, QWidget *parent)
     : QWidget(parent)
-    , d_ui(new Ui::LoggerWidget)
-    , d_filteredModel(new LoggerFilterProxyModel(this)) {
+    , d_ui{new Ui::LoggerWidget}
+    , d_logger{logger}
+    , d_filteredModel{new LoggerFilterProxyModel(this)} {
 
 	d_ui->setupUi(this);
 
@@ -495,6 +521,21 @@ LogStatusWidget::LogStatusWidget(Logger *logger, QWidget *parent)
 	d_warningIcon->setEnabled(false);
 	d_errorIcon->setEnabled(false);
 	onNewMessage(QtWarningMsg, "");
+}
+
+void LoggerWidget::on_exportButton_clicked(bool) {
+	// open a file dialog modal to get export path.
+	auto path = QFileDialog::getSaveFileName(
+	    this,
+	    tr("Export log"),
+	    QString{},
+	    tr("JSON files (*.json);;All files (*.*)")
+	);
+	if (path.isEmpty()) {
+		return;
+	}
+
+	d_logger->writeLogRecords(path);
 }
 
 LogStatusWidget::~LogStatusWidget() {}
