@@ -8,6 +8,7 @@
 
 #include <fort/studio/MainWindow.hpp>
 #include <fort/studio/bridge/ExperimentBridge.hpp>
+#include <fort/studio/widget/Logger.hpp>
 
 #include "ui_MainWindow.h"
 
@@ -26,7 +27,7 @@ protected:
 		    settingsPath.c_str()
 		);
 
-		mainWindow = new MainWindow();
+		mainWindow = new MainWindow(std::make_shared<Logger>());
 		auto filepath =
 		    TestSetup::UTestData().Basedir() / "test-main-window.myrmidon";
 		Experiment()->create(filepath.c_str());

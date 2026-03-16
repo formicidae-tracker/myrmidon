@@ -1,31 +1,31 @@
 #include "MainWindow.hpp"
 #include "ui_MainWindow.h"
 
+#include <filesystem>
 #include <fort/myrmidon/myrmidon-version.h>
 
 #include <QAbstractItemModel>
+#include <QActionGroup>
 #include <QCloseEvent>
 #include <QComboBox>
+#include <QDesktopServices>
 #include <QFileDialog>
 #include <QLabel>
 #include <QMessageBox>
 #include <QPointer>
+#include <QPushButton>
 #include <QSettings>
 #include <QSortFilterProxyModel>
 #include <QTabBar>
+#include <QToolBar>
 #include <QtDebug>
 
 #include <fort/studio/bridge/ExperimentBridge.hpp>
 #include <fort/studio/widget/Logger.hpp>
 
-#include <QActionGroup>
-#include <QDesktopServices>
-#include <QPushButton>
-#include <QToolBar>
-#include <qglobal.h>
+#include <slog++/Config.hpp>
 #include <slog++/TeeSink.hpp>
 #include <slog++/slog++.hpp>
-#include <variant>
 
 void slogMessageHandler(
     QtMsgType type, const QMessageLogContext &context, const QString &msg
@@ -69,10 +69,9 @@ void slogMessageHandler(
 }
 
 void MainWindow::setUpLogger() {
-
 	d_handler = qInstallMessageHandler(&slogMessageHandler);
 
-	d_logStatus = new LogStatusWidget(d_logger, this);
+	d_logStatus = new LogStatusWidget(d_logger.get(), this);
 	d_ui->statusBar->addPermanentWidget(d_logStatus);
 	connect(
 	    d_logStatus,
@@ -232,15 +231,14 @@ void MainWindow::pushRecentFile(const QString & path) {
 	rebuildRecentsFiles();
 }
 
-
-MainWindow::MainWindow(QWidget *parent)
-	: QMainWindow(parent)
-	, d_ui(new Ui::MainWindow)
-	, d_experiment(new ExperimentBridge(this))
-	, d_logger( new Logger(this) )
-	, d_loggerWidget(nullptr)
-	, d_lastWorkspace(nullptr)
-	, d_navigationActions(this) {
+MainWindow::MainWindow(const std::shared_ptr<Logger> &logger, QWidget *parent)
+    : QMainWindow(parent)
+    , d_logger{logger}
+    , d_ui(new Ui::MainWindow)
+    , d_experiment(new ExperimentBridge(this))
+    , d_loggerWidget(nullptr)
+    , d_lastWorkspace(nullptr)
+    , d_navigationActions(this) {
 
 	d_ui->setupUi(this);
 
@@ -257,8 +255,6 @@ MainWindow::MainWindow(QWidget *parent)
 	setUpWorkspacesActions();
 
 	setWindowIcon(QIcon(":/icons/application-icon.svg"));
-
-
 }
 
 MainWindow::~MainWindow() {
@@ -473,26 +469,27 @@ void MainWindow::onExperimentActivated(bool active) {
 }
 
 void MainWindow::on_actionShowLog_triggered() {
-	if ( d_loggerWidget != NULL ) {
+	if (d_loggerWidget != NULL) {
 		d_loggerWidget->raise();
 		d_loggerWidget->activateWindow();
 		return;
 	}
 
-	d_loggerWidget = new LoggerWidget(d_logger,NULL);
+	d_loggerWidget = new LoggerWidget(d_logger.get(), NULL);
 	d_loggerWidget->setAttribute(Qt::WA_DeleteOnClose);
-	connect(d_loggerWidget,
-	        &QObject::destroyed,
-	        this,
-	        &MainWindow::onLoggerWidgetDestroyed);
+	connect(
+	    d_loggerWidget,
+	    &QObject::destroyed,
+	    this,
+	    &MainWindow::onLoggerWidgetDestroyed
+	);
 
 	d_loggerWidget->show();
 }
 
 void MainWindow::onLoggerWidgetDestroyed() {
-	d_loggerWidget = NULL;
+	d_loggerWidget = nullptr;
 }
-
 
 void MainWindow::onCurrentWorkspaceChanged(int index) {
 	auto currentWidget = d_ui->workspaceSelector->currentWidget();

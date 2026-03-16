@@ -16,12 +16,15 @@ class LogStatusWidget;
 namespace Ui {
 class MainWindow;
 }
+class Logger;
 
 class MainWindow : public QMainWindow {
 	Q_OBJECT
 public:
-	explicit MainWindow(QWidget *parent = nullptr);
-    virtual ~MainWindow();
+	explicit MainWindow(
+	    const std::shared_ptr<Logger> &logger, QWidget *parent = nullptr
+	);
+	virtual ~MainWindow();
 
 private slots:
 	void on_actionOpen_triggered();
@@ -46,8 +49,9 @@ private slots:
 	void onCurrentWorkspaceChanged(int);
 
 	void onLoggerWidgetDestroyed();
+
 protected:
-    void closeEvent(QCloseEvent *event) override;
+	void closeEvent(QCloseEvent *event) override;
 
 private:
 	friend class MainWindowUTest;
@@ -62,24 +66,24 @@ private:
 	void setUpWorkspacesSelectionActions();
 	void setUpNavigationActions();
 
-	bool maybeSave(bool * cancelled = NULL);
-	bool save(const QString & path);
+	bool maybeSave(bool *cancelled = NULL);
+	bool save(const QString &path);
 
 	QString promptPath();
 
 	void loadSettings();
 	void rebuildRecentsFiles();
 
-	void pushRecentFile(const QString & path);
+	void pushRecentFile(const QString &path);
 
-    Ui::MainWindow      * d_ui;
-	ExperimentBridge    * d_experiment;
-	QString               d_lastPath;
-	std::deque<QString>   d_recentPaths;
-	Logger              * d_logger;
-	LoggerWidget        * d_loggerWidget;
-	LogStatusWidget     * d_logStatus;
-	QtMessageHandler      d_handler;
-	Workspace           * d_lastWorkspace;
-	NavigationAction      d_navigationActions;
+	std::shared_ptr<Logger> d_logger;
+	Ui::MainWindow         *d_ui;
+	ExperimentBridge       *d_experiment;
+	QString                 d_lastPath;
+	std::deque<QString>     d_recentPaths;
+	LoggerWidget           *d_loggerWidget;
+	LogStatusWidget        *d_logStatus;
+	QtMessageHandler        d_handler;
+	Workspace              *d_lastWorkspace;
+	NavigationAction        d_navigationActions;
 };
