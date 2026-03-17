@@ -140,13 +140,34 @@ void MeasurementBridge::setMeasurementType(quint32 mtID, const QString &name) {
 			mtID      = type->MTID();
 			d_typeModel->appendRow(buildType(type));
 		} else {
+
 			auto items = d_typeModel->findItems(
 			    QString::number(mtID),
 			    Qt::MatchExactly,
-			    0
+			    1
 			);
+
 			if (items.size() != 1) {
-				throw std::logic_error("Internal type model error");
+				std::ostringstream oss;
+				oss << "internal type model error: " << items.size()
+				    << " items found for mtID " << mtID
+				    << ": possible values are: [" << std::endl;
+				for (int r = 0; r < d_typeModel->rowCount({}); ++r) {
+					if (r != 0) {
+						oss << ", ";
+					}
+					oss << "("
+					    << d_typeModel->data(d_typeModel->index(r, 1, {}))
+					           .toString()
+					           .toStdString()
+					    << ", "
+					    << d_typeModel->data(d_typeModel->index(r, 0, {}))
+					           .toString()
+					           .toStdString()
+					    << ")";
+				}
+				oss << "]";
+				throw cpptrace::logic_error{oss.str()};
 			}
 			logger.Debug(
 			    "calling fort::myrmidon::priv::MeasurementType::SetName()"
