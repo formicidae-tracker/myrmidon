@@ -197,7 +197,7 @@ void ZoneBridge::addDefinition(QStandardItem *zoneRootItem) {
 	} catch (const std::exception &e) {
 		logger.Error(
 		    "could not create definition",
-		    slog::Err(fort::myrmidon::utils::What(e))
+		    fort::myrmidon::utils::Err(e)
 		);
 		return;
 	}
@@ -233,10 +233,7 @@ void ZoneBridge::addZone(QStandardItem *spaceRootItem) {
 		);
 		z->AddDefinition({}, fort::Time::SinceEver(), fort::Time::Forever());
 	} catch (const std::exception &e) {
-		logger.Error(
-		    "could not create Zone",
-		    slog::Err(fort::myrmidon::utils::What(e))
-		);
+		logger.Error("could not create Zone", fort::myrmidon::utils::Err(e));
 		return;
 	}
 
@@ -282,10 +279,7 @@ void ZoneBridge::removeZone(QStandardItem *zoneItem) {
 		logger.Debug("calling fmp::Space::DeleteZone()");
 		space->DeleteZone(zone->ID());
 	} catch (const std::exception &e) {
-		logger.Error(
-		    "could not delete zone",
-		    slog::Err(fort::myrmidon::utils::What(e))
-		);
+		logger.Error("could not delete zone", fort::myrmidon::utils::Err(e));
 		return;
 	}
 
@@ -324,7 +318,7 @@ void ZoneBridge::removeDefinition(QStandardItem *definitionItem) {
 	} catch (const std::exception &e) {
 		logger.Error(
 		    "could not remove definition",
-		    slog::Err(fort::myrmidon::utils::What(e))
+		    fort::myrmidon::utils::Err(e)
 		);
 		return;
 	}
@@ -464,10 +458,7 @@ void ZoneBridge::changeZoneName(QStandardItem *zoneNameItem) {
 		logger.Debug("Calling fmp::Zone::SetName()");
 		z->SetName(newName);
 	} catch (const std::exception &e) {
-		logger.Error(
-		    "could not set zone name",
-		    slog::Err(fort::myrmidon::utils::What(e))
-		);
+		logger.Error("could not set zone name", fort::myrmidon::utils::Err(e));
 		zoneNameItem->setText(oldName);
 		return;
 	}
@@ -511,10 +502,7 @@ void ZoneBridge::changeDefinitionTime(
 			newTime =
 			    fort::Time::Parse(ToStdString(definitionTimeItem->text()));
 		} catch (const std::exception &e) {
-			logger.Error(
-			    "could not parse time",
-			    slog::Err(fort::myrmidon::utils::What(e))
-			);
+			logger.Error("could not parse time", fort::myrmidon::utils::Err(e));
 			definitionTimeItem->setText(oldTimeStr);
 			return;
 		}
@@ -532,7 +520,7 @@ void ZoneBridge::changeDefinitionTime(
 	} catch (std::exception &e) {
 		logger.Error(
 		    "could not set definition time",
-		    slog::Err(fort::myrmidon::utils::What(e))
+		    fort::myrmidon::utils::Err(e)
 		);
 		definitionTimeItem->setText(oldTimeStr);
 		return;

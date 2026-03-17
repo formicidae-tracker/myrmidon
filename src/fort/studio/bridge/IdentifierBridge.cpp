@@ -95,7 +95,7 @@ fmp::Identification::Ptr IdentifierBridge::addIdentification(
 	} catch (const std::exception &e) {
 		logger.Error(
 		    "could not create Identification",
-		    slog::Err(fort::myrmidon::utils::What(e))
+		    fort::myrmidon::utils::Err(e)
 		);
 		return fmp::Identification::Ptr();
 	}
@@ -135,7 +135,7 @@ void IdentifierBridge::deleteIdentification(
 	} catch (const std::exception &e) {
 		logger.Error(
 		    "could not delete identification",
-		    slog::Err(fort::myrmidon::utils::What(e))
+		    fort::myrmidon::utils::Err(e)
 		);
 		return;
 	}

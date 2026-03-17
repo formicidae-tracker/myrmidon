@@ -67,7 +67,7 @@ void AntShapeTypeBridge::addType(const QString &name) {
 	} catch (const std::exception &e) {
 		logger.Error(
 		    "could not create AntShapeType",
-		    slog::Err(fort::myrmidon::utils::What(e))
+		    fort::myrmidon::utils::Err(e)
 		);
 		return;
 	}
@@ -94,7 +94,7 @@ void AntShapeTypeBridge::deleteType(quint32 typeID) {
 	} catch (const std::exception &e) {
 		logger.Error(
 		    "could not delete AntShapeType",
-		    slog::Err(fort::myrmidon::utils::What(e))
+		    fort::myrmidon::utils::Err(e)
 		);
 		return;
 	}
@@ -123,7 +123,7 @@ void AntShapeTypeBridge::onTypeItemChanged(QStandardItem *item) {
 	} catch (const std::exception &e) {
 		logger.Error(
 		    "could not set ShapeTypeID",
-		    slog::Err(fort::myrmidon::utils::What(e))
+		    fort::myrmidon::utils::Err(e)
 		);
 		item->setText(ToQString(shapeType->Name()));
 		return;

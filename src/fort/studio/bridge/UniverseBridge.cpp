@@ -86,7 +86,7 @@ void UniverseBridge::onItemChanged(QStandardItem *item) {
 	} catch (const std::exception &e) {
 		logger.Error(
 		    "could not change space name",
-		    slog::Err(fort::myrmidon::utils::What(e))
+		    fort::myrmidon::utils::Err(e)
 		);
 		item->setText(s->Name().c_str());
 		return;
@@ -148,10 +148,7 @@ void UniverseBridge::addSpace(const QString &spaceName) {
 		logger.Debug("calling fort::myrmidon::priv::Experiment::Create()");
 		newSpace = d_experiment->CreateSpace(ToStdString(spaceName));
 	} catch (const std::exception &e) {
-		logger.Error(
-		    "could not create space",
-		    slog::Err(fort::myrmidon::utils::What(e))
-		);
+		logger.Error("could not create space", fort::myrmidon::utils::Err(e));
 		return;
 	}
 
@@ -189,10 +186,7 @@ void UniverseBridge::addTrackingDataDirectoryToSpace(
 	try {
 		d_experiment->AddTrackingDataDirectory(s, tdd);
 	} catch (const std::exception &e) {
-		logger.Error(
-		    "could not add TDD",
-		    slog::Err(fort::myrmidon::utils::What(e))
-		);
+		logger.Error("could not add TDD", fort::myrmidon::utils::Err(e));
 		return;
 	}
 	logger.Info("added TDD");
@@ -225,10 +219,7 @@ void UniverseBridge::deleteSpace(const QString &spaceName) {
 		logger.Debug("calling fort::myrmidon::priv::Experiment::DeleteSpace()");
 		d_experiment->DeleteSpace(s->ID());
 	} catch (const std::exception &e) {
-		logger.Error(
-		    "could not remove space",
-		    slog::Err(fort::myrmidon::utils::What(e))
-		);
+		logger.Error("could not remove space", fort::myrmidon::utils::Err(e));
 		return;
 	}
 
@@ -276,10 +267,7 @@ void UniverseBridge::deleteTrackingDataDirectory(const QString &URI) {
 		);
 		d_experiment->DeleteTrackingDataDirectory(URI.toUtf8().data());
 	} catch (const std::exception &e) {
-		logger.Error(
-		    "could not delete TDD",
-		    slog::Err(fort::myrmidon ::utils::What(e))
-		);
+		logger.Error("could not delete TDD", fort::myrmidon ::utils::Err(e));
 		return;
 	}
 

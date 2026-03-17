@@ -89,7 +89,7 @@ bool MeasurementBridge::setMeasurement(
 	} catch (const std::exception &e) {
 		logger.Error(
 		    "could not set measurement",
-		    slog::Err(fort::myrmidon::utils::What(e))
+		    fort::myrmidon::utils::Err(e)
 		);
 		return false;
 	}
@@ -113,7 +113,7 @@ void MeasurementBridge::deleteMeasurement(const fmp::Measurement::ConstPtr &m) {
 	} catch (const std::exception &e) {
 		logger.Error(
 		    "could not delete measurement",
-		    slog::Err(fort::myrmidon::utils::What(e))
+		    fort::myrmidon::utils::Err(e)
 		);
 		return;
 	}
@@ -154,10 +154,12 @@ void MeasurementBridge::setMeasurementType(quint32 mtID, const QString &name) {
 			fi->second->SetName(name.toUtf8().data());
 			d_typeModel->item(items[0]->row(), 1)->setText(name);
 		}
-	} catch (const std::exception &e) {
+	}
+
+	catch (const std::exception &e) {
 		logger.Error(
 		    "could not set MeasurementType",
-		    slog::Err(fort::myrmidon::utils::What(e))
+		    fort::myrmidon::utils::Err(e)
 		);
 		return;
 	}
@@ -196,7 +198,7 @@ void MeasurementBridge::deleteMeasurementType(quint32 mtID) {
 	} catch (const std::exception &e) {
 		logger.Error(
 		    "could not delete MeasurementType",
-		    slog::Err(fort::myrmidon::utils::What(e))
+		    fort::myrmidon::utils::Err(e)
 		);
 		return;
 	}
@@ -247,7 +249,7 @@ void MeasurementBridge::onTypeItemChanged(QStandardItem *item) {
 	} catch (const std::exception &e) {
 		logger.Error(
 		    "could not change measurement type",
-		    slog::Err(fort::myrmidon::utils::What(e))
+		    fort::myrmidon::utils::Err(e)
 		);
 		item->setText(type->Name().c_str());
 		return;

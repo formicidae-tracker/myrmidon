@@ -78,7 +78,7 @@ CloneShapeDialog::get(ExperimentBridge *experiment, QWidget *parent) {
 		slog::Error(
 		    "could not get dialog",
 		    slog::String("module", "CloneShapeDialog"),
-		    slog::Err(fort::myrmidon::utils::What(e))
+		    fort::myrmidon::utils::Err(e)
 		);
 		return nullptr;
 	}

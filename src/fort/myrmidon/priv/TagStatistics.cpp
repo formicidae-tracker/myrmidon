@@ -87,9 +87,9 @@ TagStatisticsHelper::BuildStats(const std::string &hermesFile) {
 			};
 
 		} catch (const std::exception &e) {
-			throw cpptrace::runtime_error(
-			    "Could not build statistic for '" + hermesFile +
-			    "':" + utils::What(e)
+			throw utils::Wrap<cpptrace::runtime_error>(
+			    e,
+			    "Could not build statistic for '" + hermesFile + "'"
 			);
 		}
 

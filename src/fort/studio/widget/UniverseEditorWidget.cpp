@@ -100,7 +100,7 @@ UniverseEditorWidget::openTDD(const QString &path) {
 		    } catch (const std::exception &e) {
 			    logger.Error(
 			        "could not open tracking data directory path",
-			        slog::Err(fort::myrmidon::utils::What(e))
+			        fort::myrmidon::utils::Err(e)
 			    );
 		    }
 

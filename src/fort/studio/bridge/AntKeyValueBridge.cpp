@@ -47,7 +47,7 @@ public:
 		} catch (const std::exception &e) {
 			d_logger.Error(
 			    "could not set value",
-			    slog::Err(fort::myrmidon::utils::What(e))
+			    fort::myrmidon::utils::Err(e)
 			);
 			return false;
 		}
@@ -69,10 +69,7 @@ public:
 			logger.Info("removing key");
 			d_experiment->DeleteMetaDataKey(sname);
 		} catch (const std::exception &e) {
-			logger.Error(
-			    "could not remove key",
-			    slog::Err(fort::myrmidon::utils::What(e))
-			);
+			logger.Error("could not remove key", fort::myrmidon::utils::Err(e));
 			return false;
 		}
 
@@ -99,10 +96,7 @@ public:
 			logger.Info("renaming key");
 			d_experiment->RenameMetaDataKey(sOldKey, sNewKey);
 		} catch (const std::exception &e) {
-			logger.Error(
-			    "could not rename key",
-			    slog::Err(fort::myrmidon::utils::What(e))
-			);
+			logger.Error("could not rename key", fort::myrmidon::utils::Err(e));
 			return false;
 		}
 
@@ -269,7 +263,7 @@ public:
 			d_logger.Error(
 			    "could not parse value",
 			    slog::String("value", value.toStdString()),
-			    slog::Err(fort::myrmidon::utils::What(e))
+			    fort::myrmidon::utils::Err(e)
 			);
 			return false;
 		}
@@ -287,10 +281,7 @@ private:
 			logger.Info("adding key");
 			res = d_experiment->SetMetaDataKey(name, defaultValue);
 		} catch (const std::exception &e) {
-			logger.Error(
-			    "could not set key",
-			    slog::Err(fort::myrmidon::utils::What(e))
-			);
+			logger.Error("could not set key", fort::myrmidon::utils::Err(e));
 			return false;
 		}
 		auto lower = lower_bound(name);
@@ -627,10 +618,7 @@ private slots:
 			logger.Info("set value for ant");
 			ant.SetValue(keyName, value, time);
 		} catch (const std::exception &e) {
-			logger.Error(
-			    "could not set value",
-			    slog::Err(fort::myrmidon::utils::What(e))
-			);
+			logger.Error("could not set value", fort::myrmidon::utils::Err(e));
 			return false;
 		}
 
@@ -672,7 +660,7 @@ private slots:
 		} catch (const std::exception &e) {
 			logger.Error(
 			    "could not delete value",
-			    slog::Err(fort::myrmidon::utils::What(e))
+			    fort::myrmidon::utils::Err(e)
 			);
 			return false;
 		}
@@ -762,7 +750,7 @@ private:
 			d_logger.Error(
 			    "could not set new time",
 			    slog::String("new_time", value.toStdString()),
-			    slog::Err(fort::myrmidon::utils::What(e))
+			    fort::myrmidon::utils::Err(e)
 			);
 		}
 		return false;

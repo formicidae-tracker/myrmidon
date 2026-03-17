@@ -64,10 +64,7 @@ int AntShapeBridge::addCapsule(
 		logger.Debug("calling fmp::Ant::AddCapsule()");
 		ant->AddCapsule(typeID, capsule);
 	} catch (const std::exception &e) {
-		logger.Error(
-		    "could not add capsule",
-		    slog::Err(fort::myrmidon::utils::What(e))
-		);
+		logger.Error("could not add capsule", fort::myrmidon::utils::Err(e));
 		return -1;
 	}
 
@@ -98,7 +95,7 @@ void AntShapeBridge::clearCapsule(fm::AntID antID) {
 	} catch (const std::exception &e) {
 		logger.Error(
 		    "could not remove capsules",
-		    slog::Err(fort::myrmidon::utils::What(e))
+		    fort::myrmidon::utils::Err(e)
 		);
 		return;
 	}
@@ -149,7 +146,7 @@ void AntShapeBridge::cloneShape(
 	} catch (const std::exception &e) {
 		logger.Error(
 		    "could not clone ant shape",
-		    slog::Err(fort::myrmidon::utils::What(e))
+		    fort::myrmidon::utils::Err(e)
 		);
 		return;
 	}

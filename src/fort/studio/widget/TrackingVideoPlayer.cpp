@@ -181,7 +181,7 @@ void TrackingVideoPlayer::setMovieSegment(
 	} catch (const std::exception &e) {
 		d_logger.Error(
 		    "unexpected error during loading",
-		    slog::Err(fort::myrmidon::utils::What(e))
+		    fort::myrmidon::utils::Err(e)
 		);
 		d_task = nullptr;
 		return;

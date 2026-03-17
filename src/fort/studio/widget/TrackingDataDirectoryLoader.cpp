@@ -116,7 +116,7 @@ void TrackingDataDirectoryLoader::load(
 			    slog::Error(
 			        "loading error",
 			        slog::String("module", "TrackingDataDirectoryLoader"),
-			        slog::Err(fort::myrmidon::utils::What(e))
+			        fort::myrmidon::utils::Err(e)
 			    );
 		    }
 		    int  done = counts.fetch_add(1) + 1;

@@ -112,7 +112,7 @@ bool ExperimentBridge::saveAs(const QString &path) {
 	} catch (const std::exception &e) {
 		logger.Error(
 		    "could not save experiment",
-		    slog::Err(fort::myrmidon::utils::What(e))
+		    fort::myrmidon::utils::Err(e)
 		);
 		return false;
 	}
@@ -132,10 +132,7 @@ fmp::Experiment::Ptr ExperimentBridge::tryOpen(
 		    {.Progress = std::move(progress)}
 		);
 	} catch (const std::exception &e) {
-		logger.Error(
-		    "could not open",
-		    slog::Err(fort::myrmidon::utils::What(e))
-		);
+		logger.Error("could not open", fort::myrmidon::utils::Err(e));
 	}
 
 	return nullptr;
@@ -211,10 +208,7 @@ bool ExperimentBridge::create(const QString &path) {
 		experiment     = fmp::Experiment::Create(fpath);
 		experiment->Save(fpath);
 	} catch (const std::exception &e) {
-		logger.Error(
-		    "could not create file",
-		    slog::Err(fort::myrmidon::utils::What(e))
-		);
+		logger.Error("could not create file", fort::myrmidon::utils::Err(e));
 		return false;
 	}
 	logger.Info("created new experiment file");
@@ -320,10 +314,7 @@ fmp::Ant::Ptr ExperimentBridge::createAnt() {
 		d_logger.Debug("calling fort::myrmidon::priv::Experiment::CreateAnt()");
 		ant = d_experiment->CreateAnt();
 	} catch (const std::exception &e) {
-		d_logger.Error(
-		    "could not create ant",
-		    slog::Err(fort::myrmidon::utils::What(e))
-		);
+		d_logger.Error("could not create ant", fort::myrmidon::utils::Err(e));
 		return nullptr;
 	}
 
@@ -345,10 +336,7 @@ void ExperimentBridge::deleteAnt(fm::AntID antID) {
 		logger.Debug("calling fort::myrmidon::priv::Identifier::DeleteAnt()");
 		d_experiment->Identifier()->DeleteAnt(antID);
 	} catch (const std::exception &e) {
-		logger.Error(
-		    "could not delete Ant",
-		    slog::Err(fort::myrmidon::utils::What(e))
-		);
+		logger.Error("could not delete Ant", fort::myrmidon::utils::Err(e));
 		return;
 	}
 	logger.Info("deleted Ant");

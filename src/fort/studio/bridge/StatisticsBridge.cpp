@@ -140,7 +140,7 @@ void StatisticsBridge::compute() {
 		} catch (const std::exception &e) {
 			d_logger.Error(
 			    "could not compute tag statistics",
-			    slog::Err(fort::myrmidon::utils::What(e))
+			    fort::myrmidon::utils::Err(e)
 			);
 		}
 	}

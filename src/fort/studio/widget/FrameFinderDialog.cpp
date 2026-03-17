@@ -55,7 +55,7 @@ FrameFinderDialog::Get(UniverseBridge *universe, QWidget *parent) {
 		    slog::String("module", "FrameFinderDialog"),
 		    slog::String("TDD", tdd->URI()),
 		    slog::Int("frame_ID", dialog.d_ui->spinBox->value()),
-		    slog::Err(fort::myrmidon::utils::What(e))
+		    fort::myrmidon::utils::Err(e)
 		);
 	};
 

@@ -2,6 +2,7 @@
 #include "fort/myrmidon/utils/Exception.hpp"
 #include "fort/myrmidon/utils/Slogpp.hpp"
 #include <algorithm>
+#include <cpptrace/exceptions.hpp>
 #include <memory>
 #include <optional>
 #include <slog++/Attribute.hpp>
@@ -335,9 +336,10 @@ void TrackingDataDirectory::BuildFrameReferenceCache(
 					Queue.push({FrameReference(), std::move(error)});
 					return;
 				} catch (const std::exception &e) {
-					throw cpptrace::runtime_error(
+					throw utils::Wrap<cpptrace::runtime_error>(
+					    e,
 					    "[TDD.BuildCache]: Could not find frame " +
-					    std::to_string(*iter) + ": " + utils::What(e)
+					        std::to_string(*iter)
 					);
 				}
 			}
@@ -481,9 +483,9 @@ TrackingDataDirectory::BuildIndexes(
 			last = f.string();
 		} catch (const std::exception &e) {
 			if (last.empty()) {
-				throw cpptrace::runtime_error(
-				    "Could not read first frame from " + f.string() + ": " +
-				    utils::What(e)
+				throw utils::Wrap<cpptrace::runtime_error>(
+				    e,
+				    "Could not read first frame from " + f.string()
 				);
 			} else {
 				error = std::make_unique<CorruptedHermesFileError>(
@@ -639,7 +641,7 @@ TrackingDataDirectory::Open(
 		res = LoadFromCache(absoluteFilePath, URI.generic_string());
 		logger.Debug("loaded from cache");
 	} catch (const std::exception &e) {
-		logger.Warn("could not load from cache", slog::Err(utils::What(e)));
+		logger.Warn("could not load from cache", utils::Err(e));
 		if (args.Progress) {
 			args.Progress->ReportError(
 			    std::string{"could not load from cache: "} + utils::What(e)
@@ -693,10 +695,7 @@ TrackingDataDirectory::Open(
 			res->SaveToCache();
 			logger.Info("cached tracking data");
 		} catch (const std::exception &e) {
-			logger.Error(
-			    "could not cache tracking data",
-			    slog::Err(utils::What(e))
-			);
+			logger.Error("could not cache tracking data", utils::Err(e));
 			if (args.Progress != nullptr) {
 				args.Progress->ReportError(
 				    std::string{"could not cache tracking data: "} +

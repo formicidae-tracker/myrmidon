@@ -341,7 +341,7 @@ void ConcurrentFrameLoader::loadMovieSegment(
 			d_logger.Error(
 			    "could not extract tracking data",
 			    slog::String("segment", segment->URI()),
-			    slog::Err(fort::myrmidon::utils::What(e))
+			    fort::myrmidon::utils::Err(e)
 			);
 			setProgress(d_toDo, d_toDo);
 			return;
