@@ -434,7 +434,8 @@ void LoggerWidget::expandAllFiltered(const QModelIndex &index) {
 	auto view  = d_ui->treeView;
 	auto model = view->model();
 	if (index.parent().isValid() == false ||
-	    index.parent().parent().isValid() == true ||
+	    index.parent().parent().isValid() == false ||
+	    index.parent().parent().parent().isValid() == true ||
 	    index.siblingAtColumn(0).data(Qt::DisplayRole).toString() !=
 	        "stacktrace") {
 		view->setExpanded(index, true);

@@ -1,3 +1,5 @@
+#include "fort/myrmidon/utest-data/UTestData.hpp"
+#include "fort/myrmidon/utils/Exception.hpp"
 #include <cpptrace/basic.hpp>
 #include <cpptrace/utils.hpp>
 #include <cstring>
@@ -285,6 +287,11 @@ int main(int argc, char **argv) {
 	QApplication fortStudio(argc, argv);
 
 	auto logger = setupLogger();
+
+	slog::Info(
+	    "coucou",
+	    fort::myrmidon::utils::Err(cpptrace::runtime_error("coucou"))
+	);
 
 	MainWindow window{logger};
 	window.show();

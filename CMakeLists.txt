@@ -165,7 +165,7 @@ else()
 	FetchContent_Declare(
 		slogpp
 		GIT_REPOSITORY https://github.com/atuleu/slogpp.git
-		GIT_TAG 1f3f992fc8ddeb02fe7f716992602253308c00cc
+		GIT_TAG ef45f923680a655e02ab4fa66b4b3f9954a74965
 	)
 endif()
 

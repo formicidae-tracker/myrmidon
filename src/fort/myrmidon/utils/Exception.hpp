@@ -36,7 +36,14 @@ inline ::slog::Attribute Err(const std::exception &e) {
 	return ::slog::Group(
 	    "error",
 	    ::slog::String("message", te->message()),
-	    ::slog::String("stacktrace", te->trace().to_string(false))
+	    ::slog::MapContainer(
+	        "stacktrace",
+	        te->trace().begin(),
+	        te->trace().end(),
+	        [](std::string &&key, const auto &a) {
+		        return slog::String(std::move(key), a.to_string());
+	        }
+	    )
 	);
 }
 } // namespace utils
