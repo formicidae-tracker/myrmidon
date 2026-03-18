@@ -1,4 +1,5 @@
 #include "FixableErrorDialog.hpp"
+#include "fort/myrmidon/utils/Exception.hpp"
 #include "ui_FixableErrorDialog.h"
 
 #include <slog++/slog++.hpp>
@@ -34,7 +35,7 @@ void FixableErrorDialog::fixSelected() {
 			slog::Error(
 			    "could not fix error",
 			    slog::String("module", "FixableErrorDialog"),
-			    slog::Err(e.what())
+			    fort::myrmidon::utils::Err(e)
 			);
 		}
 	}

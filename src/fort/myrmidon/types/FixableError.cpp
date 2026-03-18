@@ -1,5 +1,6 @@
 #include "FixableError.hpp"
 
+#include <cpptrace/exceptions.hpp>
 #include <sstream>
 
 namespace fort {
@@ -8,16 +9,24 @@ namespace myrmidon {
 namespace details {
 WrapLazyException::WrapLazyException(
     std::string &&message, cpptrace::lazy_exception &&wrapped
-)
-    : d_message{std::move(message)}
-    , d_wrapped{std::move(wrapped)} {}
+) noexcept
+    : cpptrace::lazy_exception{std::move(wrapped)}
+    , d_message{std::move(message)} {}
 
 const char *WrapLazyException::message() const noexcept {
 	return d_message.c_str();
 }
 
-const cpptrace::stacktrace &WrapLazyException::trace() const noexcept {
-	return d_wrapped.trace();
+cpptrace::lazy_exception
+WrapLazyException::FromException(const std::exception &e) noexcept {
+
+	const auto *ce = dynamic_cast<const cpptrace::lazy_exception *>(&e);
+	if (ce != nullptr) {
+		return cpptrace::lazy_exception{*ce};
+	}
+	return cpptrace::lazy_exception{
+	    cpptrace::detail::get_raw_trace_and_absorb(1) //
+	};
 }
 
 } // namespace details

@@ -13,15 +13,16 @@ class WrapLazyException : public cpptrace::lazy_exception {
 public:
 	explicit WrapLazyException(
 	    std::string &&message, cpptrace::lazy_exception &&wrapped
-	);
+	) noexcept;
 	virtual ~WrapLazyException() noexcept = default;
 
-	const char	             *message() const noexcept override;
-	const cpptrace::stacktrace &trace() const noexcept override;
+	const char *message() const noexcept override;
+
+	static cpptrace::lazy_exception
+	FromException(const std::exception &) noexcept;
 
 private:
-	mutable std::string      d_message;
-	cpptrace::lazy_exception d_wrapped;
+	mutable std::string d_message;
 };
 } // namespace details
 

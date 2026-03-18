@@ -1,4 +1,5 @@
 #include "fort/myrmidon/priv/FrameReference.hpp"
+#include "fort/myrmidon/types/FixableError.hpp"
 #include "fort/myrmidon/utils/Exception.hpp"
 #include "fort/myrmidon/utils/Slogpp.hpp"
 #include <algorithm>
@@ -336,11 +337,11 @@ void TrackingDataDirectory::BuildFrameReferenceCache(
 					Queue.push({FrameReference(), std::move(error)});
 					return;
 				} catch (const std::exception &e) {
-					throw utils::Wrap<cpptrace::runtime_error>(
-					    e,
+					throw details::WrapLazyException{
 					    "[TDD.BuildCache]: Could not find frame " +
-					        std::to_string(*iter)
-					);
+					        std::to_string(*iter) + ": " + utils::What(e),
+					    details::WrapLazyException::FromException(e)
+					};
 				}
 			}
 		}
@@ -483,16 +484,18 @@ TrackingDataDirectory::BuildIndexes(
 			last = f.string();
 		} catch (const std::exception &e) {
 			if (last.empty()) {
-				throw utils::Wrap<cpptrace::runtime_error>(
-				    e,
-				    "Could not read first frame from " + f.string()
-				);
+				throw details::WrapLazyException{
+				    "Could not read first frame from " + f.string() + ": " +
+				        utils::What(e),
+				    details::WrapLazyException::FromException(e)
+				};
 			} else {
 				error = std::make_unique<CorruptedHermesFileError>(
 				    "could not read first frame from '" + f.string() +
 				        "': " + utils::What(e),
 				    last,
-				    std::numeric_limits<uint64_t>::max()
+				    std::numeric_limits<uint64_t>::max(),
+				    details::WrapLazyException::FromException(e)
 				);
 				// very important, we only read a single file, we do
 				// not try to read the next one: it will most likely
@@ -525,9 +528,10 @@ TrackingDataDirectory::BuildIndexes(
 		    std::move(e)
 		);
 	} catch (const std::exception &e) {
-		throw cpptrace::runtime_error(
-		    "could not extract last frame from " + last + ": " + utils::What(e)
-		);
+		throw details::WrapLazyException{
+		    "could not extract last frame from " + last + ": " + utils::What(e),
+		    details::WrapLazyException::FromException(e)
+		};
 	}
 
 	return std::make_tuple(
@@ -746,7 +750,7 @@ TrackingDataDirectory::OpenFromFiles(
 	if (error != nullptr) {
 		logger.Error(
 		    "Tracking segment indexation error",
-		    slog::Err(error->message())
+		    fort::myrmidon::utils::Err(*error)
 		);
 		errors.push_back(std::move(error));
 	}
@@ -1018,7 +1022,9 @@ const RawFrameConstPtr &TrackingDataDirectory::const_iterator::operator*() {
 			    lastValidID,
 			    lastValidTime,
 			    next,
-			    parent};
+			    parent,
+			    details::WrapLazyException::FromException(e)
+			};
 		} catch (const fort::hermes::EndOfFile &) {
 			d_current = parent->d_endFrame + 1;
 			d_frame.reset();
@@ -1311,7 +1317,8 @@ private:
 				    res,
 				    std::make_unique<NoKnownAcquisitionTimeFor>(
 				        oss.str(),
-				        fileAndFilter.first
+				        fileAndFilter.first,
+				        details::WrapLazyException::FromException(e)
 				    ),
 				};
 			}

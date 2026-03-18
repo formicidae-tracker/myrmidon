@@ -7,6 +7,7 @@
 #include "Typedefs.hpp"
 
 #include "TrackingDataDirectoryError.hpp"
+#include "fort/myrmidon/types/FixableError.hpp"
 
 #include <fort/myrmidon/utils/Exception.hpp>
 
@@ -87,9 +88,10 @@ TagStatisticsHelper::BuildStats(const std::string &hermesFile) {
 			};
 
 		} catch (const std::exception &e) {
-			throw utils::Wrap<cpptrace::runtime_error>(
-			    e,
-			    "Could not build statistic for '" + hermesFile + "'"
+			throw details::WrapLazyException(
+			    "could not build statistics for '" + hermesFile +
+			        "': " + utils::What(e),
+			    details::WrapLazyException::FromException(e)
 			);
 		}
 

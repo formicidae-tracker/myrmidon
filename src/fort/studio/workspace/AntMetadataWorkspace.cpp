@@ -1,4 +1,5 @@
 #include "AntMetadataWorkspace.hpp"
+#include "fort/myrmidon/utils/Exception.hpp"
 #include "ui_AntMetadataWorkspace.h"
 
 #include <fort/studio/Format.hpp>
@@ -103,7 +104,10 @@ void AntMetadataWorkspace::onRemoveButtonClicked() {
 		);
 		d_keyValues->deleteValue(antID, key, time);
 	} catch (const std::exception &e) {
-		logger.Error("could not remove Ant metadata", slog::Err(e.what()));
+		logger.Error(
+		    "could not remove Ant metadata",
+		    fort::myrmidon::utils::Err(e)
+		);
 	}
 }
 

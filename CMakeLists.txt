@@ -122,8 +122,8 @@ set(YAML_BUILD_SHARED_LIBS
 set(CPPTRACE_UNWIND_WITH_LIBUNWIND On)
 FetchContent_Declare(
 	cpptrace
-	GIT_REPOSITORY https://github.com/formicidae-tracker/cpptrace
-	GIT_TAG a70688f055a0cac5aeeb2d7e4cd0452f2887a253
+	GIT_REPOSITORY https://github.com/jeremy-rifkin/cpptrace
+	GIT_TAG v1.0.4
 )
 
 FetchContent_Declare(

@@ -2,7 +2,6 @@
 
 #include <cpptrace/exceptions.hpp>
 #include <slog++/Attribute.hpp>
-#include <type_traits>
 
 namespace fort {
 namespace myrmidon {
@@ -13,19 +12,6 @@ inline const char *What(const std::exception &e) {
 		return e.what();
 	}
 	return te->message();
-}
-
-template <typename T, typename Str>
-requires std::derived_from<std::decay_t<T>, cpptrace::exception_with_message>      &&
-    std::is_convertible_v<std::decay_t<Str>, std::string> static inline T
-         Wrap(const std::exception &e, Str &&message) {
-    auto te = dynamic_cast<const cpptrace::lazy_exception *>(&e);
-    if (te == nullptr) {
-        return T{std::string{std::forward<Str>(message)} + ": " + e.what()};
-    }
-    return te->wrap<T>(
-        std::string{std::forward<Str>(message)} + ": " + te->message()
-    );
 }
 
 inline ::slog::Attribute Err(const std::exception &e) {
