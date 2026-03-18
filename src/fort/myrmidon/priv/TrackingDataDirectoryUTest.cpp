@@ -510,11 +510,42 @@ TEST_F(TrackingDataDirectoryUTest, ComputesAndCacheFullFrames) {
 	EXPECT_TRUE(tdd->FullFramesComputed());
 }
 
+TEST_F(TrackingDataDirectoryUTest, CanListTagCloseUpFileInAnts) {
+	const auto &tddInfo = TestSetup::UTestData().AntsCUDataDir();
+	UTestData::ClearCachedData(tddInfo.AbsoluteFilePath);
+	auto files = TrackingDataDirectory::ListTagCloseUpFiles(
+	    tddInfo.AbsoluteFilePath / "ants",
+	    "ant"
+	);
+	auto expectedFiles = tddInfo.TagCloseUpFiles;
+	ASSERT_EQ(files.size(), expectedFiles.size());
+	for (const auto &[frameID, ff] : expectedFiles) {
+		const auto &[fi, end] = files.equal_range(frameID);
+		if (fi == end) {
+			ADD_FAILURE() << "Returned a file for unexpected frameID "
+			              << frameID;
+		} else {
+			auto ffi = std::find_if(fi, end, [&ff](const auto &it) {
+				return ff.first == it.second.first;
+			});
+			if (ffi == end) {
+				ADD_FAILURE() << "Missing file " << ff.first.generic_string();
+			} else if (!(ff.second) != !(ffi->second.second)) {
+				ADD_FAILURE() << "Filtering mismatch for file "
+				              << ff.first.generic_string();
+			} else if (ff.second) {
+				EXPECT_EQ(*ff.second, *ffi->second.second);
+			}
+		}
+	}
+}
+
 TEST_F(TrackingDataDirectoryUTest, CanListTagCloseUpFiles) {
 	for (const auto &tddInfo : TestSetup::UTestData().NestDataDirs()) {
 		UTestData::ClearCachedData(tddInfo.AbsoluteFilePath);
 		auto files = TrackingDataDirectory::ListTagCloseUpFiles(
-		    tddInfo.AbsoluteFilePath / "ants"
+		    tddInfo.AbsoluteFilePath / "cu",
+		    "tag"
 		);
 		auto expectedFiles = tddInfo.TagCloseUpFiles;
 		ASSERT_EQ(files.size(), expectedFiles.size());

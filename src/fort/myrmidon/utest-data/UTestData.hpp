@@ -61,7 +61,7 @@ public:
 		bool               HasMovie;
 		bool               HasConfig;
 		bool               IsCorrupted;
-		bool               UseAntsCU{true};
+		bool               UseAntsCU{false};
 		Time               Start, End;
 		uint64_t           StartFrame, EndFrame;
 

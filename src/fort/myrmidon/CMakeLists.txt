@@ -154,6 +154,7 @@ set(SRC_PRIVATE_FILES
 	priv/SegmentIndexer.cpp
 	priv/Identification.cpp
 	priv/TrackingDataDirectory.cpp
+	priv/TrackingDataDirectory_static.cpp
 	priv/TrackingDataDirectoryError.cpp
 	priv/RawFrame.cpp
 	priv/DeletedReference.cpp

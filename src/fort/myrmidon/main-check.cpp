@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
 
 	slog::DefaultLogger().SetSink(slog::BuildSink(slog::WithProgramOutput(
 	    slog::FromLevel(level),
-	    slog::WithFormat(slog::OutputFormat::JSON)
+	    slog::WithFormat(slog::OutputFormat::TEXT)
 	)));
 
 	signal(SIGSEGV, handler);

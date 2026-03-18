@@ -96,7 +96,8 @@ public:
 
 	static UID GetUID(const fs::path &absoluteFilePath);
 
-	static TagCloseUpListing ListTagCloseUpFiles(const fs::path &subdir);
+	static TagCloseUpListing
+	ListTagCloseUpFiles(const fs::path &subdir, const std::string &prefix);
 
 	// Opens an actual TrackingDataDirectory on the filesystem
 	// @path path to the tracking data directory.
@@ -263,8 +264,18 @@ private:
 	    const slog::Logger<1>                   &logger
 	);
 
+	struct CloseUpPathData {
+		std::string Subdir, Prefix;
+	};
+
+	static constexpr CloseUpPathData CloseUpPaths[2] = {
+	    {"cu", "tag"},
+	    {"ants", "ant"},
+	};
+
 	TrackingDataDirectory(
 	    const std::string                 &uri,
+	    const CloseUpPathData             &closeUpLocation,
 	    const fs::path                    &absoluteFilePath,
 	    uint64_t                           startFrame,
 	    uint64_t                           endFrame,
@@ -276,13 +287,14 @@ private:
 	);
 
 	std::shared_ptr<std::map<FrameReference, fs::path>>
-	EnumerateFullFrames(const fs::path &subpath) const noexcept;
+	EnumerateFullFrames(const fs::path &subdir) const noexcept;
 
 	void LoadComputedFromCache();
 
 	void LoadDetectionSettings();
 
-	fs::path    d_absoluteFilePath;
+	fs::path        d_absoluteFilePath;
+	CloseUpPathData d_closeUpLocation;
 	std::string d_URI;
 	FrameID     d_startFrame, d_endFrame;
 	UID         d_uid;

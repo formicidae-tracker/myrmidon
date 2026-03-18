@@ -12,17 +12,24 @@ namespace proto {
 
 class TagCloseUpCache {
 public:
-	typedef FileReadWriter<pb::TagCloseUpCacheHeader,pb::TagCloseUp> ReadWriter;
-	static std::vector<TagCloseUp::ConstPtr> Load(const fs::path & tddAbsoluteFilePath,
-	                                              std::function<FrameReference (FrameID)> resolver);
+	typedef FileReadWriter<pb::TagCloseUpCacheHeader, pb::TagCloseUp>
+	                                         ReadWriter;
+	static std::vector<TagCloseUp::ConstPtr> Load(
+	    const fs::path                        &tddAbsoluteFilePath,
+	    const fs::path                        &closeUpSubdir,
+	    std::function<FrameReference(FrameID)> resolver
+	);
 
-	static void Save(const fs::path & tddAbsoluteFilePath,const std::vector<TagCloseUp::ConstPtr> & tagCloseUps);
+	static void Save(
+	    const fs::path                          &tddAbsoluteFilePath,
+	    const fs::path                          &closeUpSubdir,
+	    const std::vector<TagCloseUp::ConstPtr> &tagCloseUps
+	);
 
 	const static std::string CACHE_PATH;
 
 	const static uint32_t CACHE_VERSION;
 };
-
 
 } //namespace proto
 } //namespace priv

@@ -62,6 +62,10 @@ const std::vector<UTestData::TDDInfo> &UTestData::ForagingDataDirs() const {
 	return d_foragingTDDs;
 }
 
+const UTestData::TDDInfo &UTestData::AntsCUDataDir() const {
+	return d_antsCUDataDir;
+}
+
 const UTestData::TDDInfo &UTestData::CorruptedDataDir() const {
 	return d_corruptedDir;
 }

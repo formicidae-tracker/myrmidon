@@ -938,7 +938,7 @@ TEST_F(IOUtilsUTest, FamilyIO) {
 TEST_F(IOUtilsUTest, TagCloseUpIO) {
 	auto tddPath =
 	    TestSetup::UTestData().NestDataDirs().front().AbsoluteFilePath;
-	auto basedir = tddPath / "ants";
+	auto basedir = tddPath / "cu";
 
 	struct TestData {
 		EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -952,7 +952,7 @@ TEST_F(IOUtilsUTest, TagCloseUpIO) {
 
 	std::vector<TestData> testdata = {{
 	    Eigen::Vector2d(23.0, -3.0),
-	    "ant_123_frame_21.png",
+	    "tag_123_frame_21.png",
 	    FrameReference(tddPath.filename(), 21, Time::FromTimeT(2)),
 	    123,
 	    -M_PI / 5.0,
