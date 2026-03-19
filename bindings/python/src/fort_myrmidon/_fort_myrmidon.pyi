@@ -3142,4 +3142,4 @@ def FormatTagID(tagID: int) -> str:
     """
 PREDECENCE_HIGHER: ZonePriority  # value = <ZonePriority.PREDECENCE_HIGHER: 1>
 PREDECENCE_LOWER: ZonePriority  # value = <ZonePriority.PREDECENCE_LOWER: 0>
-__version__: str = '0.9.0+2.2010563f'
+__version__: str = '0.9.0+16.3ebcd42e'

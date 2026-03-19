@@ -2,11 +2,9 @@
 
 #include "Progress.hpp"
 
-#include <condition_variable>
 #include <fort/myrmidon/types/AntInteraction.hpp>
 #include <fort/myrmidon/types/AntTrajectory.hpp>
 #include <fort/myrmidon/types/IdentifiedFrame.hpp>
-#include <thread>
 
 #include <fort/myrmidon/Experiment.hpp>
 #include <fort/myrmidon/Matchers.hpp>
@@ -209,13 +207,15 @@ std::optional<std::tuple<py::list, py::list>> QueryComputeAntInteractions(
 	return std::nullopt;
 }
 
-std::shared_ptr<fort::myrmidon::VideoSegment::List>
-FindVideoSegments(const fort::myrmidon::Experiment & e,
-                  fort::myrmidon::SpaceID space,
-                  const fort::Time & start,
-                  const fort::Time & end) {
-	auto segments = std::make_shared<std::vector<fort::myrmidon::VideoSegment>>();
-	fort::myrmidon::Query::FindVideoSegments(e,*segments,space,start,end);
+std::shared_ptr<fort::myrmidon::VideoSegment::List> FindVideoSegments(
+    const fort::myrmidon::Experiment &e,
+    fort::myrmidon::SpaceID           space,
+    const fort::Time                 &start,
+    const fort::Time                 &end
+) {
+	auto segments =
+	    std::make_shared<std::vector<fort::myrmidon::VideoSegment>>();
+	fort::myrmidon::Query::FindVideoSegments(e, *segments, space, start, end);
 	return segments;
 }
 
@@ -234,9 +234,10 @@ GetTagCloseUps(const fort::myrmidon::Experiment &e, bool fixCorruptedData) {
 	std::tie(paths, IDs, data) =
 	    Query::GetTagCloseUps(e, std::move(p), fixCorruptedData);
 
-	py::object df = pd.attr("DataFrame"
-	)("data"_a = py::dict("path"_a = paths, "ID"_a = IDs));
-	py::list   cols;
+	py::object df = pd.attr("DataFrame")(
+	    "data"_a = py::dict("path"_a = paths, "ID"_a = IDs)
+	);
+	py::list cols;
 	cols.append("X");
 	cols.append("Y");
 	cols.append("Theta");
@@ -248,8 +249,9 @@ GetTagCloseUps(const fort::myrmidon::Experiment &e, bool fixCorruptedData) {
 	cols.append("c2_Y");
 	cols.append("c3_X");
 	cols.append("c3_Y");
-	return df.attr("join"
-	)(pd.attr("DataFrame")("data"_a = data, "columns"_a = cols));
+	return df.attr("join")(
+	    pd.attr("DataFrame")("data"_a = data, "columns"_a = cols)
+	);
 }
 
 void BindQuery(py::module_ &m) {

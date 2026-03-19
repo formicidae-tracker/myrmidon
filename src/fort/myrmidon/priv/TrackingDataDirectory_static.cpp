@@ -172,7 +172,7 @@ void TrackingDataDirectory::BuildFrameReferenceCache(
 				} catch (hermes::UnexpectedEndOfFileSequence &e) {
 					auto error = std::make_unique<CorruptedHermesFileError>(
 					    "Could not find frame " + std::to_string(*iter) +
-					        " in " + AbsoluteFilePath,
+					        " in '" + AbsoluteFilePath + "'",
 					    this->AbsoluteFilePath,
 					    curFrameID,
 					    std::move(e)
