@@ -1,6 +1,5 @@
 import os
 import re
-import sys
 import unittest
 
 import fort_myrmidon as m

@@ -439,6 +439,17 @@ TrackingDataDirectory::ListTagCloseUpFiles(
 	return res;
 }
 
+TrackingDataDirectory::CloseUpLocation
+TrackingDataDirectory::SelectCloseUpLocation(const fs::path &tddDIR) {
+	for (const auto &closeUpData : CLOSE_UP_PATH_CANDIDATES) {
+		if (fs::is_directory(tddDIR / closeUpData.Subdir) == true) {
+			return closeUpData;
+		}
+	}
+
+	return CLOSE_UP_PATH_CANDIDATES[0];
+}
+
 std::tuple<TrackingDataDirectory::Ptr, FixableErrorList>
 TrackingDataDirectory::OpenFromFiles(
     const fs::path                          &absoluteFilePath,
@@ -478,19 +489,11 @@ TrackingDataDirectory::OpenFromFiles(
 		errors.push_back(std::move(error));
 	}
 
-	decltype(ListTagCloseUpFiles("", "")) closeUpFiles;
-
-	for (const auto &location : CloseUpPaths) {
-		if (fs::is_directory(absoluteFilePath / location.Subdir) == false) {
-			continue;
-		}
-		closeUpFiles = ListTagCloseUpFiles(
-		    absoluteFilePath / location.Subdir,
-		    location.Prefix
-		);
-		break;
-	}
-
+	auto location     = SelectCloseUpLocation(absoluteFilePath);
+	auto closeUpFiles = ListTagCloseUpFiles(
+	    absoluteFilePath / location.Subdir,
+	    location.Prefix
+	);
 	for (const auto &[frameID, s] : closeUpFiles) {
 		auto [filepath, filter] = s;
 		if (frameID > endFrame || frameID < startFrame) {

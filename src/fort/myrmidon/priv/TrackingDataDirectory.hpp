@@ -264,18 +264,20 @@ private:
 	    const slog::Logger<1>                   &logger
 	);
 
-	struct CloseUpPathData {
+	struct CloseUpLocation {
 		std::string Subdir, Prefix;
 	};
 
-	static constexpr CloseUpPathData CloseUpPaths[2] = {
+	static constexpr CloseUpLocation CLOSE_UP_PATH_CANDIDATES[2] = {
 	    {"cu", "tag"},
 	    {"ants", "ant"},
 	};
 
+	static CloseUpLocation SelectCloseUpLocation(const fs::path &tddDIR);
+
 	TrackingDataDirectory(
 	    const std::string                 &uri,
-	    const CloseUpPathData             &closeUpLocation,
+	    const CloseUpLocation             &closeUpLocation,
 	    const fs::path                    &absoluteFilePath,
 	    uint64_t                           startFrame,
 	    uint64_t                           endFrame,
@@ -294,7 +296,7 @@ private:
 	void LoadDetectionSettings();
 
 	fs::path        d_absoluteFilePath;
-	CloseUpPathData d_closeUpLocation;
+	CloseUpLocation d_closeUpLocation;
 	std::string d_URI;
 	FrameID     d_startFrame, d_endFrame;
 	UID         d_uid;

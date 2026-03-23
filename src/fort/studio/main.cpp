@@ -288,11 +288,6 @@ int main(int argc, char **argv) {
 
 	auto logger = setupLogger();
 
-	slog::Info(
-	    "coucou",
-	    fort::myrmidon::utils::Err(cpptrace::runtime_error("coucou"))
-	);
-
 	MainWindow window{logger};
 	window.show();
 

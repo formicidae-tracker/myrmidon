@@ -46,23 +46,9 @@ TrackingDataDirectory::Ptr TrackingDataDirectory::Create(
 
 	FORT_MYRMIDON_CHECK_PATH_IS_ABSOLUTE(absoluteFilePath);
 
-	// check for possible location. Is there a viable path, if not default to
-	// first one.
-	CloseUpPathData closeUpLocation;
-	for (const auto &location : CloseUpPaths) {
-		if (fs::is_directory(location.Subdir) == true) {
-			closeUpLocation = location;
-			break;
-		}
-	}
-
-	if (closeUpLocation.Subdir.empty()) {
-		closeUpLocation = CloseUpPaths[0];
-	}
-
 	std::shared_ptr<TrackingDataDirectory> res(new TrackingDataDirectory(
 	    uri,
-	    closeUpLocation,
+	    SelectCloseUpLocation(absoluteFilePath),
 	    absoluteFilePath,
 	    startFrame,
 	    endFrame,
@@ -77,7 +63,7 @@ TrackingDataDirectory::Ptr TrackingDataDirectory::Create(
 
 TrackingDataDirectory::TrackingDataDirectory(
     const std::string                 &uri,
-    const CloseUpPathData             &closeUpLocation,
+    const CloseUpLocation             &closeUpLocation,
     const fs::path                    &absoluteFilePath,
     uint64_t                           startFrame,
     uint64_t                           endFrame,
