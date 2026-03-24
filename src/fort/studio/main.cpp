@@ -1,8 +1,7 @@
-#include "fort/myrmidon/utest-data/UTestData.hpp"
-#include "fort/myrmidon/utils/Exception.hpp"
 #include <cpptrace/basic.hpp>
 #include <cpptrace/utils.hpp>
 #include <cstring>
+#include <qguiapplication.h>
 #include <signal.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -13,6 +12,7 @@
 #include <QApplication>
 #include <QPointer>
 #include <QStandardPaths>
+#include <QStyleHints>
 
 #include <fort/studio/MainWindow.hpp>
 #include <fort/studio/widget/Logger.hpp>
@@ -238,7 +238,7 @@ std::shared_ptr<Logger> setupLogger() {
 #else
 
 	auto stderr = slog::BuildSink(slog::WithProgramOutput(
-	    slog::FromLevel(slog::Level::INFO),
+	    slog::FromLevel(slog::Level::Info),
 	    slog::WithFormat(slog::OutputFormat::JSON),
 	    slog::WithLocking()
 	));
@@ -287,6 +287,18 @@ int main(int argc, char **argv) {
 	QApplication fortStudio(argc, argv);
 
 	auto logger = setupLogger();
+
+	slog::Info(
+	    "Qt info",
+	    slog::String(
+	        "platformName",
+	        QGuiApplication::platformName().toStdString()
+	    ),
+	    slog::Int(
+	        "platformTheme",
+	        int(QApplication::styleHints()->colorScheme())
+	    )
+	);
 
 	MainWindow window{logger};
 	window.show();

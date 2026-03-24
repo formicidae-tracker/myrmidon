@@ -106,9 +106,13 @@ TagCloseUpExplorer::TagCloseUpExplorer(QWidget *parent)
 	    &CloseUpFilterModel::setFilter
 	);
 
-	connect(d_ui->hideUsedTagBox, &QCheckBox::stateChanged, [this](int state) {
-		d_sortedFilteredModel->setRemoveUsed(state == Qt::Checked);
-	});
+	connect(
+	    d_ui->hideUsedTagBox,
+	    &QCheckBox::checkStateChanged,
+	    [this](int state) {
+		    d_sortedFilteredModel->setRemoveUsed(state == Qt::Checked);
+	    }
+	);
 	d_sortedFilteredModel->setRemoveUsed(
 	    d_ui->hideUsedTagBox->checkState() == Qt::Checked
 	);
