@@ -34,6 +34,8 @@ else(${SKBUILD})
 		LANGUAGES C CXX
 		VERSION 0.9.0
 	)
+	set(PROJECT_VERSION_ABI 0.9)
+	set(PROJECT_VERSION_API 0.9)
 endif(${SKBUILD})
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED 1)
@@ -99,8 +101,13 @@ if(${SKBUILD})
 		set(PROJECT_VERSION_ABI ${PROJECT_VERSION_MAJOR})
 	endif(${PROJECT_VERSION_MAJOR} EQUAL 0)
 else(${SKBUILD})
-	include(VersionFromGit)
-	version_from_git()
+	FetchContent_Declare(
+		cmake_git_version_tracking
+		GIT_REPOSITORY
+			https://github.com/andrew-hardin/cmake-git-version-tracking.git
+		GIT_TAG 6c0cb87edd029ddfb403a8e24577c144a03605a6
+	)
+	FetchContent_MakeAvailable(cmake_git_version_tracking)
 endif(${SKBUILD})
 
 find_package(Eigen3 3.3.4 REQUIRED NO_MODULE)

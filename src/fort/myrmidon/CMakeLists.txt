@@ -15,7 +15,6 @@ int main(){
 set(MYRMIDON_USE_SYSTEM_CATEGORY 1)
 
 configure_file(config.h.in myrmidon-config.h)
-configure_file(version.h.in myrmidon-version.h)
 
 set(PROTO_FILES
 	priv/proto/Experiment.proto
@@ -134,6 +133,7 @@ set(HDR_PUBLIC_FILES
 	Query.hpp
 	Matchers.hpp
 	Video.hpp
+	Version.hpp
 )
 
 set(SRC_PRIVATE_FILES
@@ -326,6 +326,7 @@ target_link_libraries(
 	Eigen3::Eigen
 	semver::semver
 	slog++::slog++
+	cmake_git_version_tracking
 )
 
 set_target_properties(
@@ -343,7 +344,6 @@ foreach(f ${HDR_PUBLIC_FILES})
 	endif(dir)
 endforeach(f ${HDR_PUBLIC_FILES})
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/myrmidon-config.h
-			  ${CMAKE_CURRENT_BINARY_DIR}/myrmidon-version.h
 		DESTINATION include/fort/myrmidon
 )
 

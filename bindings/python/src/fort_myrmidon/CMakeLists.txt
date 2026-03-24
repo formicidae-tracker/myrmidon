@@ -47,8 +47,7 @@ else(FORT_MYRMIDON_PYTHON_MAIN)
 	# EXAMPLE_VERSION_INFO is defined by setup.py and passed into the C++ code
 	# as a define (VERSION_INFO) here.
 	target_compile_definitions(
-		_fort_myrmidon PRIVATE VERSION_INFO=${fort-myrmidon_SEMVER}
-							   FM_PYTHON_PACKAGE_NAME=_fort_myrmidon
+		_fort_myrmidon PRIVATE FM_PYTHON_PACKAGE_NAME=_fort_myrmidon
 	)
 	target_compile_options(_fort_myrmidon PRIVATE -fvisibility=hidden)
 
@@ -62,9 +61,7 @@ else(FORT_MYRMIDON_PYTHON_MAIN)
 										   ${CMAKE_CURRENT_BINARY_DIR}/..
 	)
 
-	target_compile_definitions(
-		fort_myrmidon_utestdata PRIVATE VERSION_INFO=${fort-myrmidon_SEMVER}
-	)
+	target_compile_definitions(fort_myrmidon_utestdata PRIVATE)
 
 	add_custom_command(
 		OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/__init__.py

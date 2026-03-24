@@ -12,12 +12,7 @@
 #include <signal.h>
 #include <unistd.h>
 
-#ifndef VERSION_INFO
-#include <fort/myrmidon/myrmidon-version.h>
-#else
-#define STRINGIFY(x)       #x
-#define MACRO_STRINGIFY(x) STRINGIFY(x)
-#endif
+#include <fort/myrmidon/Version.hpp>
 
 #ifndef FM_PYTHON_PACKAGE_NAME
 #error "Must define FM_PYTHON_PACKAGE_NAME"
@@ -94,9 +89,5 @@ PYBIND11_MODULE(FM_PYTHON_PACKAGE_NAME, m) {
 		}
 	});
 
-#ifdef VERSION_INFO
-	m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
-#else
-	m.attr("__version__") = MYRMIDON_VERSION;
-#endif
+	m.attr("__version__") = fort::myrmidon::Version();
 }
