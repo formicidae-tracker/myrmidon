@@ -1,8 +1,3 @@
-include(FindGLog)
-if(NOT GLog_FOUND)
-	message(FATAL_ERROR "Google Log is missing")
-endif(NOT GLog_FOUND)
-
 option(DEBUG_VIDEO_PLAYER Off
 	   "Debugs the video player with expensive STDERR output"
 )
