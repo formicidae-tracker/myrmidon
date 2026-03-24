@@ -28,8 +28,7 @@ if(FORT_MYRMIDON_PYTHON_MAIN)
 		PUBLIC fort-myrmidon::libfort-myrmidon
 	)
 	target_compile_definitions(
-		_fort_myrmidon PRIVATE VERSION_INFO=${PROJECT_VERSION}
-							   FM_PYTHON_PACKAGE_NAME=_fort_myrmidon
+		_fort_myrmidon PRIVATE FM_PYTHON_PACKAGE_NAME=_fort_myrmidon
 	)
 	target_compile_options(_fort_myrmidon PRIVATE -fvisibility=hidden)
 
@@ -86,6 +85,9 @@ else(FORT_MYRMIDON_PYTHON_MAIN)
 			${CMAKE_COMMAND} -E env PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}
 			${PYBIND11_STUBGEN_EXECUTABLE} _fort_myrmidon --ignore-all-errors -o
 			.
+		COMMAND
+			${CMAKE_COMMAND} -DSTUB_FILE=_fort_myrmidon.pyi -P
+			${PROJECT_SOURCE_DIR}/bindings/python/cmake/edit_attributes_from_stub.cmake
 		COMMAND ${CMAKE_COMMAND} -E copy _fort_myrmidon.pyi
 				${CMAKE_CURRENT_SOURCE_DIR}/_fort_myrmidon.pyi
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}

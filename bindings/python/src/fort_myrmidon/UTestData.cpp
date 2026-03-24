@@ -5,12 +5,7 @@
 
 namespace py = pybind11;
 
-#ifndef VERSION_INFO
-#include <fort/myrmidon/myrmidon-version.h>
-#else
-#define STRINGIFY(x)       #x
-#define MACRO_STRINGIFY(x) STRINGIFY(x)
-#endif
+#include <fort/myrmidon/Version.hpp>
 
 static std::unique_ptr<fort::myrmidon::UTestData> s_utestdata;
 
@@ -136,9 +131,5 @@ PYBIND11_MODULE(fort_myrmidon_utestdata, m) {
 
 	m.add_object("_cleanup", py::capsule([]() { s_utestdata.reset(); }));
 
-#ifdef VERSION_INFO
-	m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
-#else
-	m.attr("__version__") = MYRMIDON_VERSION;
-#endif
+	m.attr("__version__") = fort::myrmidon::Version();
 }
