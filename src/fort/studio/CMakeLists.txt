@@ -156,6 +156,7 @@ set(HDR_FILES
 	widget/SetAntValueDialog.hpp
 	widget/FixableErrorDialog.hpp
 	widget/ProgressDialog.hpp
+	widget/SchemedIcon.hpp
 	workspace/Workspace.hpp
 	workspace/TagStatisticsWorkspace.cpp
 	workspace/GeneralWorkspace.cpp

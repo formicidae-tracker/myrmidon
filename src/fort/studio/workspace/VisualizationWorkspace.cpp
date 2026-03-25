@@ -54,64 +54,114 @@ void VisualizationWorkspace::setUpUI() {
 }
 
 void VisualizationWorkspace::setUpActions() {
-	d_toolbar = new QToolBar("Value Marking",this);
+	d_toolbar = new QToolBar("Value Marking", this);
 	d_toolbar->setObjectName("visualizationToolbar");
-	d_markIn = d_toolbar->addAction(tr("Set In Time Marker"));
-	auto markInShortcut = new QShortcut(tr("I"),this);
-	connect(markInShortcut,&QShortcut::activated,
-	        d_markIn,&QAction::trigger);
+	d_markIn            = d_toolbar->addAction(tr("Set In Time Marker"));
+	auto markInShortcut = new QShortcut(tr("I"), this);
+	connect(markInShortcut, &QShortcut::activated, d_markIn, &QAction::trigger);
 	d_markIn->setToolTip(tr("Set the 'In' Time for time selection (I)"));
 	d_markIn->setStatusTip(d_markIn->toolTip());
+	d_markIn->setIcon(QIcon::fromTheme("selection-start-symbolic"));
 
-	d_markOut = d_toolbar->addAction(tr("Set Out Time Marker"));
-	auto markOutShortcut = new QShortcut(tr("O"),this);
-	connect(markOutShortcut,&QShortcut::activated,
-	        d_markOut,&QAction::trigger);
-	d_markOut->setToolTip(tr("Set the 'Out' Time for time selection (I)"));
+	d_markOut            = d_toolbar->addAction(tr("Set Out Time Marker"));
+	auto markOutShortcut = new QShortcut(tr("O"), this);
+	connect(
+	    markOutShortcut,
+	    &QShortcut::activated,
+	    d_markOut,
+	    &QAction::trigger
+	);
+	d_markOut->setToolTip(tr("Set the 'Out' Time for time selection (O)"));
 	d_markOut->setStatusTip(d_markOut->toolTip());
+	d_markOut->setIcon(QIcon::fromTheme("selection-end-symbolic"));
 
 	d_clearMarkers = d_toolbar->addAction(tr("Clear Time Selection"));
 	d_clearMarkers->setShortcut(QKeySequence(tr("Ctrl+Shift+U")));
 	d_clearMarkers->setToolTip(tr("Clear Time Markers (Ctrl+Shift+U)"));
 	d_clearMarkers->setStatusTip(d_clearMarkers->toolTip());
+	d_clearMarkers->setIcon(QIcon::fromTheme("edit-clear-symbolic"));
 
 	d_setValue = d_toolbar->addAction(tr("Set Value For Ant on Time Region"));
 	d_setValue->setShortcut(QKeySequence(tr("Ctrl+K")));
-	d_setValue->setToolTip(tr("Set value for Ant on Selected Region"));
+	d_setValue->setToolTip(tr("Set value for Ant on Selected Region (Ctrl+K)"));
 	d_setValue->setStatusTip(d_setValue->toolTip());
+	d_setValue->setIcon(QIcon::fromTheme("edit-symbolic"));
 
-	connect(d_setValueDialog,&SetAntValueDialog::inTimeChanged,
-	        this,&VisualizationWorkspace::updateActionsStates);
+	connect(
+	    d_setValueDialog,
+	    &SetAntValueDialog::inTimeChanged,
+	    this,
+	    &VisualizationWorkspace::updateActionsStates
+	);
 
-	connect(d_setValueDialog,&SetAntValueDialog::outTimeChanged,
-	        this,&VisualizationWorkspace::updateActionsStates);
+	connect(
+	    d_setValueDialog,
+	    &SetAntValueDialog::outTimeChanged,
+	    this,
+	    &VisualizationWorkspace::updateActionsStates
+	);
 
-	connect(d_ui->trackingVideoWidget,&TrackingVideoWidget::hasTrackingTimeChanged,
-	        this,&VisualizationWorkspace::updateActionsStates);
+	connect(
+	    d_ui->trackingVideoWidget,
+	    &TrackingVideoWidget::hasTrackingTimeChanged,
+	    this,
+	    &VisualizationWorkspace::updateActionsStates
+	);
 
-	connect(d_ui->trackingVideoWidget,&TrackingVideoWidget::trackingTimeChanged,
-	        this,&VisualizationWorkspace::updateActionsStates);
+	connect(
+	    d_ui->trackingVideoWidget,
+	    &TrackingVideoWidget::trackingTimeChanged,
+	    this,
+	    &VisualizationWorkspace::updateActionsStates
+	);
 
-	connect(d_markIn,&QAction::triggered,
-	        this,&VisualizationWorkspace::onActionSetInTime);
+	connect(
+	    d_markIn,
+	    &QAction::triggered,
+	    this,
+	    &VisualizationWorkspace::onActionSetInTime
+	);
 
-	connect(d_markOut,&QAction::triggered,
-	        this,&VisualizationWorkspace::onActionSetOutTime);
+	connect(
+	    d_markOut,
+	    &QAction::triggered,
+	    this,
+	    &VisualizationWorkspace::onActionSetOutTime
+	);
 
-	connect(d_clearMarkers,&QAction::triggered,
-	        this,&VisualizationWorkspace::onActionClearMarkers);
+	connect(
+	    d_clearMarkers,
+	    &QAction::triggered,
+	    this,
+	    &VisualizationWorkspace::onActionClearMarkers
+	);
 
-	connect(d_setValue,&QAction::triggered,
-	        this,&VisualizationWorkspace::onActionSetValue);
+	connect(
+	    d_setValue,
+	    &QAction::triggered,
+	    this,
+	    &VisualizationWorkspace::onActionSetValue
+	);
 
 	auto updateTimeRange = [this]() {
-		                       d_ui->videoControl->setSelectedTimeRange(d_setValueDialog->inTime(),d_setValueDialog->outTime());
-	                       };
+		d_ui->videoControl->setSelectedTimeRange(
+		    d_setValueDialog->inTime(),
+		    d_setValueDialog->outTime()
+		);
+	};
 
-	connect(d_setValueDialog,&SetAntValueDialog::inTimeChanged,
-	        this,updateTimeRange);
-	connect(d_setValueDialog,&SetAntValueDialog::outTimeChanged,
-	        this,updateTimeRange);
+	connect(
+	    d_setValueDialog,
+	    &SetAntValueDialog::inTimeChanged,
+	    this,
+	    updateTimeRange
+	);
+	connect(
+	    d_setValueDialog,
+	    &SetAntValueDialog::outTimeChanged,
+	    this,
+	    updateTimeRange
+	);
 
 	updateActionsStates();
 };

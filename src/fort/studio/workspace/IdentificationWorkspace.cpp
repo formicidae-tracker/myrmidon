@@ -1,5 +1,4 @@
 #include "IdentificationWorkspace.hpp"
-#include "fort/myrmidon/utils/Slogpp.hpp"
 #include "ui_IdentificationWorkspace.h"
 
 #include <QAction>
@@ -9,6 +8,7 @@
 #include <QKeyEvent>
 #include <QMainWindow>
 #include <QSortFilterProxyModel>
+#include <QTimer>
 #include <QToolBar>
 
 #include <fort/studio/bridge/ExperimentBridge.hpp>
@@ -18,6 +18,7 @@
 #include <fort/studio/bridge/StatisticsBridge.hpp>
 
 #include <fort/studio/Format.hpp>
+#include <fort/studio/MyrmidonTypes/Conversion.hpp>
 #include <fort/studio/Utils.hpp>
 #include <fort/studio/widget/IdentificationListWidget.hpp>
 #include <fort/studio/widget/TagCloseUpExplorer.hpp>
@@ -25,7 +26,10 @@
 #include <fort/studio/widget/vectorgraphics/Vector.hpp>
 #include <fort/studio/widget/vectorgraphics/VectorialScene.hpp>
 
-#include <fort/studio/MyrmidonTypes/Conversion.hpp>
+#include <fort/myrmidon/utils/Slogpp.hpp>
+#include <fort/studio/widget/SchemedIcon.hpp>
+
+#include <slog++/Attribute.hpp>
 
 IdentificationWorkspace::IdentificationWorkspace(QWidget *parent)
     : Workspace(false, parent)
@@ -55,7 +59,7 @@ IdentificationWorkspace::IdentificationWorkspace(QWidget *parent)
 	    "Ctrl+A",
 	    "Create a new ant from current close-up"
 	);
-	d_newAntAction->setIcon(QIcon(":/icons/ant-add.svg"));
+	addSchemedIcon(d_newAntAction, ":/icons/ant-add.svg");
 
 	set_action(
 	    d_addIdentificationAction,
@@ -63,7 +67,7 @@ IdentificationWorkspace::IdentificationWorkspace(QWidget *parent)
 	    "Ctrl+I",
 	    "Add a new identifcation from current close-up to an existing ant"
 	);
-	d_addIdentificationAction->setIcon(QIcon(":/icons/ident-ant.svg"));
+	addSchemedIcon(d_addIdentificationAction, ":/icons/ident-ant.svg");
 
 	set_action(
 	    d_deletePoseAction,
@@ -81,7 +85,7 @@ IdentificationWorkspace::IdentificationWorkspace(QWidget *parent)
 	    "Ctrl+Shift+H",
 	    "Hides current tag until next reload"
 	);
-	d_hideTagAction->setIcon(QIcon(":/icons/hide.svg"));
+	addSchemedIcon(d_hideTagAction, ":/icons/hide.svg");
 
 	set_action(
 	    d_showAllTagsAction,
@@ -89,7 +93,7 @@ IdentificationWorkspace::IdentificationWorkspace(QWidget *parent)
 	    "Ctrl+Shift+O",
 	    "Shows all hidden tags"
 	);
-	d_showAllTagsAction->setIcon(QIcon(":/icons/eye.svg"));
+	addSchemedIcon(d_showAllTagsAction, ":/icons/eye.svg");
 
 #undef set_action
 	d_ui->setupUi(this);
@@ -575,20 +579,40 @@ QAction * IdentificationWorkspace::deletePoseEstimationAction() const {
 	return d_deletePoseAction;
 }
 
-void IdentificationWorkspace::setUp(const NavigationAction & actions ) {
-	auto tagExplorer = dynamic_cast<TagCloseUpExplorer*>(d_tagExplorer->widget());
-	connect(actions.NextTag,&QAction::triggered,
-	        tagExplorer,&TagCloseUpExplorer::nextTag);
-	connect(actions.PreviousTag,&QAction::triggered,
-	        tagExplorer,&TagCloseUpExplorer::previousTag);
-	connect(actions.NextCloseUp,&QAction::triggered,
-	        tagExplorer,&TagCloseUpExplorer::nextTagCloseUp);
-	connect(actions.PreviousCloseUp,&QAction::triggered,
-	        tagExplorer,&TagCloseUpExplorer::previousTagCloseUp);
+void IdentificationWorkspace::setUp(const NavigationAction &actions) {
+	auto tagExplorer =
+	    dynamic_cast<TagCloseUpExplorer *>(d_tagExplorer->widget());
+	connect(
+	    actions.NextTag,
+	    &QAction::triggered,
+	    tagExplorer,
+	    &TagCloseUpExplorer::nextTag
+	);
+	connect(
+	    actions.PreviousTag,
+	    &QAction::triggered,
+	    tagExplorer,
+	    &TagCloseUpExplorer::previousTag
+	);
+	connect(
+	    actions.NextCloseUp,
+	    &QAction::triggered,
+	    tagExplorer,
+	    &TagCloseUpExplorer::nextTagCloseUp
+	);
+	connect(
+	    actions.PreviousCloseUp,
+	    &QAction::triggered,
+	    tagExplorer,
+	    &TagCloseUpExplorer::previousTagCloseUp
+	);
 
-	connect(actions.CopyCurrentTime,&QAction::triggered,
-	        this,&IdentificationWorkspace::onCopyTime);
-
+	connect(
+	    actions.CopyCurrentTime,
+	    &QAction::triggered,
+	    this,
+	    &IdentificationWorkspace::onCopyTime
+	);
 
 	actions.NextTag->setEnabled(true);
 	actions.PreviousTag->setEnabled(true);
@@ -603,6 +627,25 @@ void IdentificationWorkspace::setUp(const NavigationAction & actions ) {
 	d_tagExplorer->show();
 	d_identificationList->show();
 	d_tagStatistics->show();
+
+	QTimer::singleShot(2000, [this]() {
+		const auto &sizes = d_addIdentificationAction->icon().availableSizes();
+		slog::Info(
+		    "icon sizes",
+		    slog::MapContainer(
+		        "sizes",
+		        sizes.begin(),
+		        sizes.end(),
+		        [](std::string &&index, const QSize &s) {
+			        return slog::Group(
+			            std::move(index),
+			            slog::Int("width", s.width()),
+			            slog::Int("height", s.height())
+			        );
+		        }
+		    )
+		);
+	});
 }
 
 void IdentificationWorkspace::tearDown(const NavigationAction & actions ) {

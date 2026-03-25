@@ -1,14 +1,16 @@
 #pragma once
 
-#include "fort/studio/widget/vectorgraphics/Capsule.hpp"
-#include "fort/studio/widget/vectorgraphics/Vector.hpp"
 #include <QColor>
 #include <QDebug>
+#include <QMetaEnum>
 #include <QModelIndex>
 #include <QPointF>
 #include <QString>
 
 #include <slog++/Attribute.hpp>
+
+#include <fort/studio/widget/vectorgraphics/Capsule.hpp>
+#include <fort/studio/widget/vectorgraphics/Vector.hpp>
 
 namespace slog {
 template <typename Str>
@@ -57,6 +59,19 @@ inline constexpr Attribute Capsule(Str &&name, const Capsule &v) {
 	    slog::QPointF("C2", v.c2Pos()),
 	    slog::Float("R2", v.r2())
 	);
+}
+
+template <typename Str, typename Enum>
+slog::Attribute QEnum(Str &&name, Enum m) {
+	QMetaEnum me = QMetaEnum::fromType<Enum>();
+	if (me.isValid()) {
+		return slog::String(
+		    std::forward<Str>(name),
+		    me.valueToKey(static_cast<int>(m))
+		);
+	} else {
+		return slog::Int(std::forward<Str>(name), static_cast<int>(m));
+	}
 }
 
 } // namespace slog

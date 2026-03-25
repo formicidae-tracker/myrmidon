@@ -1,7 +1,11 @@
+#include "fort/studio/Slogpp.hpp"
 #include <cpptrace/basic.hpp>
 #include <cpptrace/utils.hpp>
 #include <cstring>
+#include <qapplication.h>
 #include <qguiapplication.h>
+#include <qnamespace.h>
+#include <qstylehints.h>
 #include <signal.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -294,10 +298,18 @@ int main(int argc, char **argv) {
 	        "platformName",
 	        QGuiApplication::platformName().toStdString()
 	    ),
-	    slog::Int(
-	        "platformTheme",
-	        int(QApplication::styleHints()->colorScheme())
-	    )
+	    slog::QEnum("platformTheme", QApplication::styleHints()->colorScheme())
+	);
+
+	fortStudio.connect(
+	    QApplication::styleHints(),
+	    &QStyleHints::colorSchemeChanged,
+	    [](Qt::ColorScheme scheme) {
+		    slog::Info(
+		        "color scheme changed",
+		        slog::QEnum("newScheme", scheme)
+		    );
+	    }
 	);
 
 	MainWindow window{logger};

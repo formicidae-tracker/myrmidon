@@ -1,13 +1,14 @@
 #include "ZoningWorkspace.hpp"
+#include "fort/studio/widget/SchemedIcon.hpp"
 #include "ui_ZoningWorkspace.h"
 
 #include <QAction>
 #include <QClipboard>
-#include <QToolBar>
 #include <QComboBox>
+#include <QDockWidget>
 #include <QLabel>
 #include <QListView>
-#include <QDockWidget>
+#include <QToolBar>
 
 #include <QMainWindow>
 
@@ -15,52 +16,56 @@
 
 #include <fort/studio/bridge/ExperimentBridge.hpp>
 
-#include <fort/studio/widget/vectorgraphics/VectorialScene.hpp>
-#include <fort/studio/widget/vectorgraphics/Polygon.hpp>
-#include <fort/studio/widget/vectorgraphics/Circle.hpp>
 #include <fort/studio/widget/vectorgraphics/Capsule.hpp>
+#include <fort/studio/widget/vectorgraphics/Circle.hpp>
+#include <fort/studio/widget/vectorgraphics/Polygon.hpp>
+#include <fort/studio/widget/vectorgraphics/VectorialScene.hpp>
 
 #include <fort/studio/Format.hpp>
 #include <fort/studio/MyrmidonTypes/Conversion.hpp>
 
-
 void ZoningWorkspace::setUpUI() {
-	d_toolBar = new QToolBar("Geometry",this);
+	d_toolBar = new QToolBar("Geometry", this);
 	d_toolBar->setObjectName("zoningGeometryToolBar");
-	d_editAction = d_toolBar->addAction(QIcon(":/icons/cursor.svg"),
-	                                    tr("Edit Shapes"));
+	d_editAction = d_toolBar->addAction(tr("Edit Shapes"));
+	addSchemedIcon(d_editAction, ":/icons/cursor.svg");
 	d_editAction->setToolTip(tr("Transform and move shapes"));
 	d_editAction->setStatusTip(d_editAction->toolTip());
-	d_polygonAction = d_toolBar->addAction(QIcon(":/icons/polygon.svg"),
-	                                    tr("Insert polygon"));
-	d_polygonAction->setToolTip(tr("Insert a polygon (right-click to finish edition)"));
+	d_polygonAction = d_toolBar->addAction(tr("Insert polygon"));
+	addSchemedIcon(d_polygonAction, ":/icons/polygon.svg");
+	d_polygonAction->setToolTip(
+	    tr("Insert a polygon (right-click to finish edition)")
+	);
 	d_polygonAction->setStatusTip(d_polygonAction->toolTip());
 
-	d_circleAction = d_toolBar->addAction(QIcon(":/icons/circle.svg"),
-	                                      tr("Insert circle"));
+	d_circleAction = d_toolBar->addAction(tr("Insert circle"));
+	addSchemedIcon(d_circleAction, ":/icons/circle.svg");
 	d_circleAction->setToolTip(tr("Insert a circle"));
 	d_circleAction->setStatusTip(d_circleAction->toolTip());
 
-	d_capsuleAction = d_toolBar->addAction(QIcon(":/icons/capsule.svg"),
-	                                       tr("Insert capsule"));
+	d_capsuleAction = d_toolBar->addAction(tr("Insert capsule"));
+	addSchemedIcon(d_capsuleAction, ":/icons/capsule.svg");
 
 	d_capsuleAction->setToolTip(tr("Insert a capsule"));
 	d_capsuleAction->setStatusTip(d_capsuleAction->toolTip());
 
-
-	d_toolBar->addWidget(new QLabel(tr("Zone:"),this));
+	d_toolBar->addWidget(new QLabel(tr("Zone:"), this));
 	d_comboBox = new QComboBox(this);
 	d_comboBox->setObjectName("comboBox");
-	d_comboBox->setMinimumSize(QSize(200,0));
+	d_comboBox->setMinimumSize(QSize(200, 0));
 	d_toolBar->addWidget(d_comboBox);
-	connect(d_comboBox,qOverload<int>(&QComboBox::currentIndexChanged),
-	        this,&ZoningWorkspace::onComboBoxCurrentIndexChanged);
+	connect(
+	    d_comboBox,
+	    qOverload<int>(&QComboBox::currentIndexChanged),
+	    this,
+	    &ZoningWorkspace::onComboBoxCurrentIndexChanged
+	);
 
 	auto widget = new QWidget(this);
 	auto layout = new QVBoxLayout();
 
 	d_listView = new QListView(widget);
-	d_listView->setMaximumSize(QSize(500,65535));
+	d_listView->setMaximumSize(QSize(500, 65535));
 	layout->addWidget(d_listView);
 
 	widget->setLayout(layout);
@@ -68,9 +73,7 @@ void ZoningWorkspace::setUpUI() {
 	d_fullFramesDock = new QDockWidget(tr("Space's Full-Frames"));
 	d_fullFramesDock->setObjectName("zoningFullFrameDock");
 	d_fullFramesDock->setWidget(widget);
-	d_fullFramesDock->setMaximumSize(QSize(500,65535));
-
-
+	d_fullFramesDock->setMaximumSize(QSize(500, 65535));
 }
 
 ZoningWorkspace::ZoningWorkspace(QWidget *parent)

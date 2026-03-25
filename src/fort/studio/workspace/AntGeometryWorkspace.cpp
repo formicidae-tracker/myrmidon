@@ -1,5 +1,6 @@
 #include "AntGeometryWorkspace.hpp"
 #include "fort/studio/Slogpp.hpp"
+#include "fort/studio/widget/SchemedIcon.hpp"
 #include "ui_AntGeometryWorkspace.h"
 
 #include <QAction>
@@ -42,10 +43,8 @@ AntGeometryWorkspace::AntGeometryWorkspace(QWidget *parent)
 
 	d_editToolBar = new QToolBar(this);
 
-	d_editAction = d_editToolBar->addAction(
-	    QIcon(":/icons/cursor.svg"),
-	    tr("Edit primitives")
-	);
+	d_editAction = d_editToolBar->addAction(tr("Edit primitives"));
+	addSchemedIcon(d_editAction, ":/icons/cursor.svg");
 	d_editAction->setToolTip(tr("Edit primitives"));
 	d_editAction->setStatusTip(d_editAction->toolTip());
 	d_editAction->setObjectName("editAction");
@@ -257,10 +256,8 @@ void AntGeometryWorkspace::updateCloseUpLabels(const fmp::TagCloseUp::ConstPtr &
 	d_ui->uriLabel->setText(tr("URI: %1").arg(URI));
 }
 
-
-
-AntMeasurementWorkspace::AntMeasurementWorkspace(QWidget * parent)
-	: AntGeometryWorkspace(parent) {
+AntMeasurementWorkspace::AntMeasurementWorkspace(QWidget *parent)
+    : AntGeometryWorkspace(parent) {
 
 	d_editToolBar->setWindowTitle("Ant Measurement");
 	d_editToolBar->setObjectName("antMeasurementEditToolbar");
@@ -270,8 +267,10 @@ AntMeasurementWorkspace::AntMeasurementWorkspace(QWidget * parent)
 	d_editAction->setStatusTip(d_editAction->toolTip());
 
 	d_insertAction->setText(tr("New Measurement Tool"));
-	d_insertAction->setIcon(QIcon(":/icons/line.svg"));
-	d_insertAction->setToolTip(tr("Add a new  measurement by clicking two points on the image"));
+	addSchemedIcon(d_insertAction, ":/icons/line.svg");
+	d_insertAction->setToolTip(
+	    tr("Add a new  measurement by clicking two points on the image")
+	);
 	d_insertAction->setStatusTip(d_insertAction->toolTip());
 
 	d_antCloseUps = new AntMeasurementListWidget(this);
@@ -280,26 +279,33 @@ AntMeasurementWorkspace::AntMeasurementWorkspace(QWidget * parent)
 	d_measurementTypes = new MeasurementTypeWidget(this);
 	d_measurementTypes->setObjectName("measurementTypes");
 
-	d_closeUpsDock = new QDockWidget(tr("Ant Close-Ups"),this);
+	d_closeUpsDock = new QDockWidget(tr("Ant Close-Ups"), this);
 	d_closeUpsDock->setObjectName("antMeasurementCloseUpDock");
 	d_closeUpsDock->setWidget(d_antCloseUps);
-	connect(d_antCloseUps, &AntMeasurementListWidget::currentCloseUpChanged,
-	        this,&AntGeometryWorkspace::setTagCloseUp);
+	connect(
+	    d_antCloseUps,
+	    &AntMeasurementListWidget::currentCloseUpChanged,
+	    this,
+	    &AntGeometryWorkspace::setTagCloseUp
+	);
 
-	d_measurementTypesDock = new QDockWidget(tr("Measurement Types"),this);
+	d_measurementTypesDock = new QDockWidget(tr("Measurement Types"), this);
 	d_measurementTypesDock->setObjectName("antMeasurementTypesDock");
 	d_measurementTypesDock->setWidget(d_measurementTypes);
 
-	connect(d_vectorialScene,
-	        &VectorialScene::vectorCreated,
-	        this,
-	        &AntMeasurementWorkspace::onVectorCreated);
+	connect(
+	    d_vectorialScene,
+	    &VectorialScene::vectorCreated,
+	    this,
+	    &AntMeasurementWorkspace::onVectorCreated
+	);
 
-	connect(d_vectorialScene,
-	        &VectorialScene::vectorRemoved,
-	        this,
-	        &AntMeasurementWorkspace::onVectorRemoved);
-
+	connect(
+	    d_vectorialScene,
+	    &VectorialScene::vectorRemoved,
+	    this,
+	    &AntMeasurementWorkspace::onVectorRemoved
+	);
 }
 
 AntMeasurementWorkspace::~AntMeasurementWorkspace() {
@@ -604,7 +610,7 @@ AntShapeWorkspace::AntShapeWorkspace(QWidget *parent)
 	d_editAction->setStatusTip(d_editAction->toolTip());
 
 	d_insertAction->setText(tr("New Capsule Tool"));
-	d_insertAction->setIcon(QIcon(":/icons/capsule.svg"));
+	addSchemedIcon(d_insertAction, ":/icons/capsule.svg");
 	d_insertAction->setToolTip(tr("Add a new capsule by clicking two points on the image"));
 	d_insertAction->setStatusTip(d_insertAction->toolTip());
 
