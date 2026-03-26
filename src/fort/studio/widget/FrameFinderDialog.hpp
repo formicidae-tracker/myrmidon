@@ -4,11 +4,9 @@
 
 #include <fort/myrmidon/priv/FrameReference.hpp>
 
-
 namespace Ui {
 class FrameFinderDialog;
 }
-
 
 namespace fmp = fort::myrmidon::priv;
 

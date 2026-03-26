@@ -1,11 +1,8 @@
-#include "fort/studio/Slogpp.hpp"
+
+#include "fort/studio/widget/ExternalCommandDialog.hpp"
 #include <cpptrace/basic.hpp>
 #include <cpptrace/utils.hpp>
 #include <cstring>
-#include <qapplication.h>
-#include <qguiapplication.h>
-#include <qnamespace.h>
-#include <qstylehints.h>
 #include <signal.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -14,11 +11,17 @@
 #include <memory>
 
 #include <QApplication>
+#include <QFileInfo>
+#include <QGuiApplication>
+#include <QMessageBox>
 #include <QPointer>
+#include <QPushButton>
+#include <QSettings>
 #include <QStandardPaths>
 #include <QStyleHints>
 
 #include <fort/studio/MainWindow.hpp>
+#include <fort/studio/Slogpp.hpp>
 #include <fort/studio/widget/Logger.hpp>
 
 #include <slog++/slog++.hpp>
@@ -281,6 +284,35 @@ std::shared_ptr<Logger> setupLogger() {
 	return logger;
 }
 
+void checkFlatpakInstallation() {
+	QFileInfo flatpakInfoFI{"/.flatpak-info"};
+	if (flatpakInfoFI.exists() == false) {
+		return;
+	}
+	slog::Info("flatpak installation detected, inspecting required extensions");
+	QSettings flatpakInfo("/.flatpak-info", QSettings::IniFormat, nullptr);
+	auto extensions = flatpakInfo.value("Instance/app-extensions").toString();
+	if (extensions.contains("org.freedesktop.Platform.ffmpeg-full") == true) {
+		return;
+	}
+
+	bool shouldContinue = ExternalCommandDialog::Prompt(
+	    QObject::tr("Invalid flatpak installation"),
+	    QObject::tr("FORT studio is run from a flatpak, however the "
+	                "installation is missing the <span style='font-family: "
+	                "monospace;'>org.freedesktop.Platform.ffmpeg-full</span> "
+	                "extension. This extension is required for the "
+	                "Visualization workspace to work properly."),
+	    "flatpak install org.freedesktop.Platform.ffmpeg-full//24.08",
+	    QObject::tr("You should quit now and finish the flatpak installation, "
+	                "or continue but the application may not work properly.")
+	);
+
+	if (shouldContinue == false) {
+		exit(0);
+	}
+}
+
 int main(int argc, char **argv) {
 	installFailureHandler();
 
@@ -291,6 +323,7 @@ int main(int argc, char **argv) {
 	QApplication fortStudio(argc, argv);
 
 	auto logger = setupLogger();
+	checkFlatpakInstallation();
 
 	slog::Info(
 	    "Qt info",

@@ -5,6 +5,7 @@
 #include <QMetaEnum>
 #include <QModelIndex>
 #include <QPointF>
+#include <QSize>
 #include <QString>
 
 #include <slog++/Attribute.hpp>
@@ -30,6 +31,15 @@ inline constexpr Attribute QPointF(Str &&name, const QPointF &p) {
 	    std::forward<Str>(name),
 	    slog::Float("x", p.x()),
 	    slog::Float("y", p.y())
+	);
+}
+
+template <typename Str>
+inline constexpr Attribute QSize(Str &&name, const QSize &size) {
+	return slog::Group(
+	    std::forward<Str>(name),
+	    slog::Int("width", size.width()),
+	    slog::Int("height", size.height())
 	);
 }
 

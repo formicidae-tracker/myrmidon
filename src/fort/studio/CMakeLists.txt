@@ -72,6 +72,7 @@ set(SRC_FILES
 	widget/SetAntValueDialog.cpp
 	widget/FixableErrorDialog.cpp
 	widget/ProgressDialog.cpp
+	widget/ExternalCommandDialog.cpp
 	workspace/Workspace.cpp
 	workspace/TagStatisticsWorkspace.cpp
 	workspace/GeneralWorkspace.cpp
@@ -157,6 +158,7 @@ set(HDR_FILES
 	widget/FixableErrorDialog.hpp
 	widget/ProgressDialog.hpp
 	widget/SchemedIcon.hpp
+	widget/ExternalCommandDialog.hpp
 	workspace/Workspace.hpp
 	workspace/TagStatisticsWorkspace.cpp
 	workspace/GeneralWorkspace.cpp
@@ -186,6 +188,7 @@ set(UI_FILES
 	widget/IdentificationListWidget.ui
 	widget/SetAntValueDialog.ui
 	widget/FixableErrorDialog.ui
+	widget/ExternalCommandDialog.ui
 	workspace/GeneralWorkspace.ui
 	workspace/TagStatisticsWorkspace.ui
 	workspace/IdentificationWorkspace.ui
