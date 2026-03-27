@@ -284,19 +284,20 @@ std::shared_ptr<Logger> setupLogger() {
 	return logger;
 }
 
-void checkFlatpakInstallation() {
+bool checkFlatpakInstallation() {
+
 	QFileInfo flatpakInfoFI{"/.flatpak-info"};
 	if (flatpakInfoFI.exists() == false) {
-		return;
+		return true;
 	}
 	slog::Info("flatpak installation detected, inspecting required extensions");
 	QSettings flatpakInfo("/.flatpak-info", QSettings::IniFormat, nullptr);
 	auto extensions = flatpakInfo.value("Instance/app-extensions").toString();
 	if (extensions.contains("org.freedesktop.Platform.ffmpeg-full") == true) {
-		return;
+		return true;
 	}
 
-	bool shouldContinue = ExternalCommandDialog::Prompt(
+	return ExternalCommandDialog::Prompt(
 	    QObject::tr("Invalid flatpak installation"),
 	    QObject::tr("FORT studio is run from a flatpak, however the "
 	                "installation is missing the <span style='font-family: "
@@ -307,10 +308,6 @@ void checkFlatpakInstallation() {
 	    QObject::tr("You should quit now and finish the flatpak installation, "
 	                "or continue but the application may not work properly.")
 	);
-
-	if (shouldContinue == false) {
-		exit(0);
-	}
 }
 
 int main(int argc, char **argv) {
@@ -323,7 +320,6 @@ int main(int argc, char **argv) {
 	QApplication fortStudio(argc, argv);
 
 	auto logger = setupLogger();
-	checkFlatpakInstallation();
 
 	slog::Info(
 	    "Qt info",
@@ -348,9 +344,14 @@ int main(int argc, char **argv) {
 	MainWindow window{logger};
 	window.show();
 
-	if (fortStudio.arguments().size() >= 2 &&
-	    fortStudio.arguments()[1] == "--debug-quit") {
-		return 0;
+	if (checkFlatpakInstallation() == false) {
+		window.close();
+		QMetaObject::invokeMethod(
+		    &fortStudio,
+		    &QApplication::exit,
+		    Qt::QueuedConnection,
+		    0
+		);
 	}
 
 	return fortStudio.exec();
