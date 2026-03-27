@@ -1,4 +1,5 @@
 id: io.github.formicidae_tracker.Studio
+branch: beta
 runtime: org.kde.Platform
 runtime-version: '6.9'
 sdk: org.kde.Sdk
