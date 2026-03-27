@@ -11,6 +11,7 @@
 #include <memory>
 
 #include <QApplication>
+#include <QClipboard>
 #include <QFileInfo>
 #include <QGuiApplication>
 #include <QMessageBox>
@@ -346,6 +347,14 @@ int main(int argc, char **argv) {
 
 	if (checkFlatpakInstallation() == false) {
 		window.close();
+#ifndef Q_OS_LINUX
+		auto clipboard = QApplication::clipboard();
+		if (clipboard->ownsClipboard()) {
+			// we are about to close, so we need to flush the clipboard
+			auto event = new QEvent{QEvent::Clipboard};
+			fortStudio.sendEvent(clipboard, event);
+		}
+#endif
 		QMetaObject::invokeMethod(
 		    &fortStudio,
 		    &QApplication::exit,
