@@ -1,3 +1,4 @@
+#include <filesystem>
 #include <gtest/gtest.h>
 
 #include "TrackingDataDirectory.hpp"
@@ -14,6 +15,7 @@
 #include "RawFrame.hpp"
 #include "TagCloseUp.hpp"
 #include "UtilsUTest.hpp"
+#include "fort/myrmidon/priv/proto/TagCloseUpCache.hpp"
 
 #include <yaml-cpp/yaml.h>
 
@@ -310,7 +312,10 @@ TEST_F(TrackingDataDirectoryUTest, AlmostRandomAccess) {
 	    cpptrace::out_of_range
 	);
 
-	EXPECT_THROW({ tdd->FrameReferenceAfter(tdd->End()); }, cpptrace::out_of_range);
+	EXPECT_THROW(
+	    { tdd->FrameReferenceAfter(tdd->End()); },
+	    cpptrace::out_of_range
+	);
 
 	EXPECT_NO_THROW({
 		auto ref = tdd->FrameReferenceAfter(tdd->Start());
@@ -605,6 +610,16 @@ TEST_F(TrackingDataDirectoryUTest, ComputesAndCacheTagCloseUps) {
 	}
 
 	EXPECT_TRUE(tdd->TagCloseUpsComputed());
+
+	EXPECT_TRUE(std::filesystem::exists(
+	    tddInfo.AbsoluteFilePath / "cu" /
+	    fort::myrmidon::priv::proto::TagCloseUpCache::CACHE_PATH
+	));
+
+	EXPECT_FALSE(std::filesystem::exists(
+	    tddInfo.AbsoluteFilePath / "ants" /
+	    fort::myrmidon::priv::proto::TagCloseUpCache::CACHE_PATH
+	));
 
 	ASSERT_NO_THROW({
 		computed              = tdd->TagCloseUps();
