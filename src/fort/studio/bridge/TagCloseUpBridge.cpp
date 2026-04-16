@@ -136,18 +136,23 @@ TagCloseUpBridge::addCloseUp(const fmp::TagCloseUp::ConstPtr & closeUp) {
 	return {tagID,antID};
 }
 
-std::pair<std::set<fmp::TagID>,std::set<fmp::AntID>>
-TagCloseUpBridge::addTrackingDataDirectory(const fmp::TrackingDataDirectory::Ptr & tdd) {
+std::pair<std::set<fmp::TagID>, std::set<fmp::AntID>>
+TagCloseUpBridge::addTrackingDataDirectory(
+    const fmp::TrackingDataDirectory::Ptr &tdd
+) {
 	std::set<fm::TagID> tags;
 	std::set<fm::AntID> ants;
 
-	for (const auto & tcu : tdd->TagCloseUps() ) {
-		const auto & [tagID,antID] = addCloseUp(tcu);
+	for (const auto &tcu : tdd->TagCloseUps()) {
+		if (tcu->Valid() == false) {
+			continue;
+		}
+		const auto &[tagID, antID] = addCloseUp(tcu);
 		tags.insert(tagID);
 		ants.insert(antID);
 	}
 	ants.erase(0);
-	return {tags,ants};
+	return {tags, ants};
 }
 
 void TagCloseUpBridge::onTrackingDataDirectoryAdded(const fmp::TrackingDataDirectory::Ptr & tdd) {

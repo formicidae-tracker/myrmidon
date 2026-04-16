@@ -36,13 +36,15 @@ public:
 
 	void ComputeTagPosition(
 	    Eigen::Vector2d       &position,
-	    double	            &angle,
+	    double                &angle,
 	    AntID                  antID,
 	    const Eigen::Vector3d &antPosition
 	);
 
 	void ComputeCorners(
-	    Vector2dList &results, AntID antID, const Eigen::Vector3d &antPosition
+	    Eigen::Matrix<double, 2, 4> &results,
+	    AntID                        antID,
+	    const Eigen::Vector3d       &antPosition
 	);
 
 private:

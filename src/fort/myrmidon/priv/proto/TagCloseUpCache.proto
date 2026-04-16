@@ -12,13 +12,21 @@ message TagCloseUpCacheHeader {
 	uint32 version  = 3;
 };
 
-message TagCloseUp {
+message TagDetection {
 	Vector2d position = 1;
-	double   angle    = 2;
-	uint32   value    = 3;
+	double angle = 2;
+	uint32 ID = 3;
 
 	repeated Vector2d corners = 4;
+}
 
-	uint64 frameid            = 5;
-	string imagepath          = 6;
+message TagCloseUp {
+	reserved 1, 2, 3, 4;
+	reserved "position", "angle", "value", "corners";
+
+	uint64 frameid = 5;
+	string imagepath = 6;
+	uint32 target = 7;
+
+	repeated TagDetection detections = 8;
 };

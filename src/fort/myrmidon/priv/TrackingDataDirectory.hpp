@@ -52,7 +52,7 @@ public:
 	typedef std::shared_ptr<const FrameReferenceCache>
 	    FrameReferenceCacheConstPtr;
 
-	typedef std::pair<fs::path, std::shared_ptr<TagID>> TagCloseUpFileAndFilter;
+	typedef std::pair<fs::path, std::optional<TagID>> TagCloseUpFileAndFilter;
 	typedef std::multimap<FrameID, TagCloseUpFileAndFilter> TagCloseUpListing;
 
 	class const_iterator {
@@ -187,7 +187,8 @@ public:
 		virtual ~ComputedRessourceUnavailable() noexcept;
 	};
 
-	const std::vector<TagCloseUpConstPtr>    &TagCloseUps() const;
+	const std::vector<TagCloseUpConstPtr> &TagCloseUps() const;
+
 	const std::map<FrameReference, fs::path> &FullFrames() const;
 	const TagStatisticsHelper::Timed         &TagStatistics() const;
 

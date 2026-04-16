@@ -1,7 +1,9 @@
 #include <gtest/gtest.h>
 
 #include "IOUtils.hpp"
+#include "fort/myrmidon/types/CloseUp.hpp"
 #include "fort/myrmidon/types/OpenArguments.hpp"
+#include "fort/myrmidon/types/Typedefs.hpp"
 
 #include <fort/myrmidon/AntDescription.pb.h>
 #include <fort/myrmidon/Experiment.pb.h>
@@ -942,26 +944,33 @@ TEST_F(IOUtilsUTest, TagCloseUpIO) {
 
 	struct TestData {
 		EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-		Eigen::Vector2d Position;
-		fs::path        Filepath;
-		FrameReference  Reference;
-		TagID           TID;
-		double          Angle;
-		Vector2dList    Corners;
+		Eigen::Vector2d             Position;
+		fs::path                    Filepath;
+		FrameReference              Reference;
+		TagID                       TID;
+		double                      Angle;
+		Eigen::Matrix<double, 2, 4> Corners;
 	};
 
+	static auto build = [](const Vector2dList &corners) {
+		Eigen::Matrix<double, 2, 4> res;
+		for (size_t i = 0; i < 4; ++i) {
+			res.col(i) = corners[i];
+		}
+		return res;
+	};
 	std::vector<TestData> testdata = {{
 	    Eigen::Vector2d(23.0, -3.0),
 	    "tag_123_frame_21.png",
 	    FrameReference(tddPath.filename(), 21, Time::FromTimeT(2)),
 	    123,
 	    -M_PI / 5.0,
-	    {
+	    build({
 	        Eigen::Vector2d(43, 17.0),
 	        Eigen::Vector2d(43, -23.0),
 	        Eigen::Vector2d(3, -23.0),
 	        Eigen::Vector2d(3, 17.0),
-	    },
+	    }),
 	}};
 
 	for (const auto &d : testdata) {
@@ -969,9 +978,12 @@ TEST_F(IOUtilsUTest, TagCloseUpIO) {
 		    basedir / d.Filepath,
 		    d.Reference,
 		    d.TID,
-		    d.Position,
-		    d.Angle,
-		    d.Corners
+		    std::vector<TagDetection>{TagDetection{
+		        .ID       = d.TID,
+		        .Position = d.Position,
+		        .Angle    = d.Angle,
+		        .Corners  = d.Corners
+		    }}
 		);
 
 		auto resolver = [&d](FrameID frameID) {
@@ -986,12 +998,12 @@ TEST_F(IOUtilsUTest, TagCloseUpIO) {
 		};
 
 		pb::TagCloseUp expected, pbRes;
-		IOUtils::SaveVector(expected.mutable_position(), d.Position);
-		expected.set_angle(d.Angle);
-		expected.set_value(d.TID);
-		for (const auto &c : d.Corners) {
-			IOUtils::SaveVector(expected.add_corners(), c);
-		}
+
+		expected.set_target(d.TID);
+		IOUtils::SaveTagDetection(
+		    expected.add_detections(),
+		    dTCU->Detections()[0]
+		);
 		expected.set_frameid(d.Reference.FrameID());
 		expected.set_imagepath(d.Filepath.generic_string());
 
@@ -1005,15 +1017,23 @@ TEST_F(IOUtilsUTest, TagCloseUpIO) {
 		EXPECT_EQ(res->AbsoluteFilePath(), dTCU->AbsoluteFilePath());
 		EXPECT_VECTOR2D_EQ(res->TagPosition(), dTCU->TagPosition());
 		EXPECT_DOUBLE_EQ(res->TagAngle(), dTCU->TagAngle());
-		ASSERT_EQ(4, res->Corners().size());
 		for (size_t i = 0; i < 4; ++i) {
-			EXPECT_VECTOR2D_EQ(res->Corners()[i], dTCU->Corners()[i]);
+			EXPECT_VECTOR2D_EQ(res->Corners().col(i), dTCU->Corners().col(i));
 		}
 
 		EXPECT_THROW(
 		    {
-			    // Needs 4 corners
-			    expected.clear_corners();
+			    // Needs 4
+			    expected.mutable_detections()->Mutable(0)->clear_corners();
+			    IOUtils::LoadTagCloseUp(expected, basedir, resolver);
+		    },
+		    cpptrace::invalid_argument
+		);
+
+		EXPECT_THROW(
+		    {
+			    // Needs 1 detections
+			    expected.clear_detections();
 			    IOUtils::LoadTagCloseUp(expected, basedir, resolver);
 		    },
 		    cpptrace::invalid_argument

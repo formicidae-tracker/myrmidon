@@ -1,6 +1,8 @@
 #include "IOUtils.hpp"
+#include "fort/myrmidon/types/CloseUp.hpp"
 #include "fort/myrmidon/types/OpenArguments.hpp"
 
+#include <cpptrace/exceptions.hpp>
 #include <fort/myrmidon/utils/Checker.hpp>
 
 #include <fort/myrmidon/Identification.hpp>
@@ -25,6 +27,7 @@
 #include <fort/myrmidon/priv/Space.hpp>
 #include <fort/myrmidon/priv/TagCloseUp.hpp>
 #include <fort/myrmidon/priv/TrackingDataDirectory.hpp>
+#include <google/protobuf/message.h>
 
 namespace fort {
 namespace myrmidon {
@@ -301,7 +304,8 @@ int IOUtils::SaveFamily(tags::Family f) {
 	};
 	auto fi = mapping.find(f);
 	if (fi == mapping.end()) {
-		throw cpptrace::runtime_error("invalid Experiment::TagFamily enum value");
+		throw cpptrace::runtime_error("invalid Experiment::TagFamily enum value"
+		);
 	}
 	return fi->second;
 }
@@ -550,6 +554,30 @@ void IOUtils::SaveMovieSegment(
 	}
 }
 
+TagDetection IOUtils::LoadTagDetection(const pb::TagDetection &d) {
+	Eigen::Vector2d             position;
+	Eigen::Matrix<double, 2, 4> corners;
+
+	if (d.corners_size() != 4) {
+		throw cpptrace::invalid_argument{
+		    "protobuf message does not contains 4 corners"
+		};
+	}
+	for (size_t i = 0; i < 4; ++i) {
+		Eigen::Vector2d c;
+		LoadVector(c, d.corners(i));
+		corners.col(i) = c;
+	}
+
+	LoadVector(position, d.position());
+	return TagDetection{
+	    .ID       = d.id(),
+	    .Position = position,
+	    .Angle    = d.angle(),
+	    .Corners  = corners
+	};
+}
+
 TagCloseUp::ConstPtr IOUtils::LoadTagCloseUp(
     const pb::TagCloseUp                  &pb,
     const fs::path                        &absoluteBasedir,
@@ -557,27 +585,32 @@ TagCloseUp::ConstPtr IOUtils::LoadTagCloseUp(
 ) {
 	FORT_MYRMIDON_CHECK_PATH_IS_ABSOLUTE(absoluteBasedir);
 
-	Vector2dList corners;
-	if (pb.corners_size() != 4) {
-		throw cpptrace::invalid_argument(
-		    "protobuf message does not contains 4 corners"
-		);
+	if (pb.detections_size() == 0) {
+		throw cpptrace::invalid_argument{
+		    "protobuf message contains no detections"
+		};
 	}
-	corners.resize(4);
-	for (size_t i = 0; i < 4; ++i) {
-		LoadVector(corners[i], pb.corners(i));
+	std::vector<TagDetection> detections;
+	detections.reserve(pb.detections_size());
+	for (int i = 0; i < pb.detections_size(); ++i) {
+		detections.emplace_back(LoadTagDetection(pb.detections()[i]));
 	}
-	Eigen::Vector2d position;
-	LoadVector(position, pb.position());
 
 	return std::make_shared<TagCloseUp>(
 	    absoluteBasedir / pb.imagepath(),
 	    resolver(pb.frameid()),
-	    pb.value(),
-	    position,
-	    pb.angle(),
-	    corners
+	    pb.target(),
+	    detections
 	);
+}
+
+void IOUtils::SaveTagDetection(pb::TagDetection *pb, const TagDetection &d) {
+	pb->set_id(d.ID);
+	pb->set_angle(d.Angle);
+	SaveVector(pb->mutable_position(), d.Position);
+	for (size_t i = 0; i < 4; ++i) {
+		SaveVector(pb->add_corners(), d.Corners.col(i));
+	}
 }
 
 void IOUtils::SaveTagCloseUp(
@@ -591,11 +624,9 @@ void IOUtils::SaveTagCloseUp(
 	pb->set_imagepath(
 	    fs::relative(tcu.AbsoluteFilePath(), absoluteBasedir).generic_string()
 	);
-	SaveVector(pb->mutable_position(), tcu.TagPosition());
-	pb->set_angle(tcu.TagAngle());
-	pb->set_value(tcu.TagValue());
-	for (const auto &c : tcu.Corners()) {
-		SaveVector(pb->add_corners(), c);
+	pb->set_target(tcu.TagValue());
+	for (const auto &d : tcu.Detections()) {
+		SaveTagDetection(pb->add_detections(), d);
 	}
 }
 

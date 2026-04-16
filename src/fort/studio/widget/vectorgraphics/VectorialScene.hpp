@@ -69,9 +69,10 @@ public:
 
 	void setBackgroundPicture(const QString & path);
 
+	void setStaticPolygon(
+	    const Eigen::Matrix<double, 2, 4> &corners, const QColor &color
+	);
 
-	void setStaticPolygon(const fm::Vector2dList & corners,
-	                      const QColor & color);
 	void clearStaticPolygon();
 
 public slots:

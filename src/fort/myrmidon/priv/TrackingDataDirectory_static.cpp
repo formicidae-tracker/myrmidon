@@ -1,6 +1,7 @@
 #include "TrackingDataDirectory.hpp"
 
 #include <filesystem>
+#include <optional>
 #include <regex>
 
 #include <tbb/concurrent_queue.h>
@@ -390,11 +391,11 @@ TrackingDataDirectory::BuildIndexes(
 	);
 }
 
-std::multimap<FrameID, std::pair<fs::path, std::shared_ptr<TagID>>>
+std::multimap<FrameID, TrackingDataDirectory::TagCloseUpFileAndFilter>
 TrackingDataDirectory::ListTagCloseUpFiles(
     const fs::path &path, const std::string &prefix
 ) {
-	std::multimap<FrameID, std::pair<fs::path, std::shared_ptr<TagID>>> res;
+	std::multimap<FrameID, TagCloseUpFileAndFilter> res;
 
 	std::regex        singleRx(prefix + "_([0-9]+)_(frame_)?([0-9]+).png");
 	static std::regex multiRx("frame_([0-9]+).png");
@@ -417,9 +418,9 @@ TrackingDataDirectory::ListTagCloseUpFiles(
 		if (std::regex_search(filename, ID, singleRx) && ID.size() > 3) {
 			std::istringstream IDS(ID.str(1));
 			std::istringstream FrameS(ID.str(3));
-			auto               tagID = std::make_shared<TagID>(0);
+			TagID              tagID = 0;
 
-			IDS >> *(tagID);
+			IDS >> tagID;
 			FrameS >> frameID;
 			res.insert(std::make_pair(frameID, std::make_pair(de.path(), tagID))
 			);
@@ -428,10 +429,9 @@ TrackingDataDirectory::ListTagCloseUpFiles(
 		if (std::regex_search(filename, ID, multiRx) && ID.size() > 1) {
 			std::istringstream FrameS(ID.str(1));
 			FrameS >> frameID;
-			res.insert(std::make_pair(
-			    frameID,
-			    std::make_pair(de.path(), std::shared_ptr<TagID>())
-			));
+			res.insert(
+			    std::make_pair(frameID, std::make_pair(de.path(), std::nullopt))
+			);
 			continue;
 		}
 	}

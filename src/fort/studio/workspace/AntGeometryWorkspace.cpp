@@ -1,4 +1,5 @@
 #include "AntGeometryWorkspace.hpp"
+#include "fort/myrmidon/types/Typedefs.hpp"
 #include "fort/studio/Slogpp.hpp"
 #include "fort/studio/widget/SchemedIcon.hpp"
 #include "ui_AntGeometryWorkspace.h"
@@ -195,30 +196,35 @@ void AntGeometryWorkspace::clearScene() {
 	d_ui->vectorialView->setBannerMessage("",QColor());
 }
 
-void AntGeometryWorkspace::setTagCloseUp(const fmp::TagCloseUp::ConstPtr & closeUp) {
-	if ( d_closeUp == closeUp ) {
+void AntGeometryWorkspace::setTagCloseUp(
+    const fmp::TagCloseUp::ConstPtr &closeUp
+) {
+	if (d_closeUp == closeUp) {
 		return;
 	}
 	updateCloseUpLabels(closeUp);
 	d_closeUp = closeUp;
 	clearScene();
-	if ( d_copyTimeAction != nullptr ) {
+	if (d_copyTimeAction != nullptr) {
 		d_copyTimeAction->setEnabled(d_closeUp != nullptr);
 	}
 
-	if ( d_closeUp == nullptr ) {
+	if (d_closeUp == nullptr) {
 		return;
 	}
 
-	d_vectorialScene->setBackgroundPicture(d_closeUp->AbsoluteFilePath().c_str());
-	const auto & tagPosition = d_closeUp->TagPosition();
-	d_ui->vectorialView->centerOn(QPointF(tagPosition.x(),tagPosition.y()));
-	d_vectorialScene->setStaticPolygon(d_closeUp->Corners(),QColor(255,0,0));
+	d_vectorialScene->setBackgroundPicture(d_closeUp->AbsoluteFilePath().c_str()
+	);
+	const auto &tagPosition = d_closeUp->TagPosition();
+	d_ui->vectorialView->centerOn(QPointF(tagPosition.x(), tagPosition.y()));
+	d_vectorialScene->setStaticPolygon(d_closeUp->Corners(), QColor(255, 0, 0));
 
-	auto identification = d_experiment->identifier()->identify(d_closeUp->TagValue(),
-	                                                           d_closeUp->Frame().Time());
+	auto identification = d_experiment->identifier()->identify(
+	    d_closeUp->TagValue(),
+	    d_closeUp->Frame().Time()
+	);
 
-	if ( identification != nullptr ) {
+	if (identification != nullptr) {
 		onIdentificationAntPositionChanged(identification);
 	}
 

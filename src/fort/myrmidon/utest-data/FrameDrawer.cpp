@@ -257,18 +257,19 @@ void FrameDrawer::ComputeTagPosition(
 }
 
 void FrameDrawer::ComputeCorners(
-    Vector2dList &results, AntID antID, const Eigen::Vector3d &antPosition
+    Eigen::Matrix<double, 2, 4> &results,
+    AntID                        antID,
+    const Eigen::Vector3d       &antPosition
 ) {
 
 	auto transform =
 	    priv::Isometry2Dd(antPosition.z(), antPosition.block<2, 1>(0, 0));
 	auto &shapes = d_ants.at(antID)[4].second;
 
-	results.resize(4);
-	results[0] = transform * shapes[3];
-	results[1] = transform * shapes[2];
-	results[2] = transform * shapes[1];
-	results[3] = transform * shapes[0];
+	results.col(0) = transform * shapes[3];
+	results.col(1) = transform * shapes[2];
+	results.col(2) = transform * shapes[1];
+	results.col(3) = transform * shapes[0];
 }
 
 } // namespace myrmidon

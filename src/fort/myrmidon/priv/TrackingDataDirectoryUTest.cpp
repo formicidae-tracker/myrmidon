@@ -664,13 +664,14 @@ TEST_F(TrackingDataDirectoryUTest, ComputesAndCacheTagCloseUps) {
 
 		for (int i = 0; i < 4; ++i) {
 			EXPECT_TRUE(
-			    (result->Corners()[i] - expected->Corners()[i]).squaredNorm() <
-			    9.0
+			    (result->Corners().col(i) - expected->Corners().col(i))
+			        .squaredNorm() < 9.0
 			) << " for "
 			  << expected->URI() << " - " << expected->AbsoluteFilePath()
 			  << " corner " << i << std::endl
-			  << " got:    " << result->Corners()[i].transpose() << std::endl
-			  << " expect: " << expected->Corners()[i].transpose();
+			  << " got:    " << result->Corners().col(i).transpose()
+			  << std::endl
+			  << " expect: " << expected->Corners().col(i).transpose();
 		}
 
 		EXPECT_TRUE(

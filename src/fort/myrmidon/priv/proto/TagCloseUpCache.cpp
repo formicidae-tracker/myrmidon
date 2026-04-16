@@ -9,10 +9,12 @@ namespace myrmidon {
 namespace priv {
 namespace proto {
 
+// Version 1: settings in the cache file.
+// Version 2: a single detection per close-up
+// Version 3: full close up detections
+const uint32_t TagCloseUpCache::CACHE_VERSION = 3;
 
-const uint32_t TagCloseUpCache::CACHE_VERSION = 2;
-
-const std::string TagCloseUpCache::CACHE_PATH = "ants/tag-close-up.cache";
+const std::string TagCloseUpCache::CACHE_PATH = "tag-close-up.cache";
 
 std::vector<TagCloseUp::ConstPtr> TagCloseUpCache::Load(
     const fs::path                        &tddAbsoluteFilePath,
@@ -21,7 +23,7 @@ std::vector<TagCloseUp::ConstPtr> TagCloseUpCache::Load(
 ) {
 	std::vector<TagCloseUp::ConstPtr> res;
 	ReadWriter::Read(
-	    tddAbsoluteFilePath / CACHE_PATH,
+	    tddAbsoluteFilePath / closeUpSubdir / CACHE_PATH,
 	    [&res](const pb::TagCloseUpCacheHeader &pb) {
 		    if (pb.version() != CACHE_VERSION) {
 			    throw cpptrace::runtime_error(
@@ -63,7 +65,11 @@ void TagCloseUpCache::Save(
 		});
 	}
 
-	ReadWriter::Write(tddAbsoluteFilePath / CACHE_PATH, h, lines);
+	ReadWriter::Write(
+	    tddAbsoluteFilePath / closeUpSubdir / CACHE_PATH,
+	    h,
+	    lines
+	);
 }
 
 } //namespace proto

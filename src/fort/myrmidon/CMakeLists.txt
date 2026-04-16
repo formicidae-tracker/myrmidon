@@ -122,6 +122,7 @@ set(HDR_PUBLIC_FILES
 	types/TraitsCategory.hpp
 	types/Typedefs.hpp
 	types/Reporter.hpp
+	types/CloseUp.hpp
 	utils/FileSystem.hpp
 	Shapes.hpp
 	Identification.hpp
@@ -205,6 +206,7 @@ set(SRC_FILES
 	types/TagStatistics.cpp
 	types/Traits.cpp
 	types/Typedefs.cpp
+	types/CloseUp.cpp
 	Shapes.cpp
 	Identification.cpp
 	Ant.cpp

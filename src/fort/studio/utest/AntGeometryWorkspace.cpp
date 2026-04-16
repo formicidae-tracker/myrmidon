@@ -1,5 +1,8 @@
 #include "AntGeometryWorkspace.hpp"
+#include "fort/myrmidon/types/CloseUp.hpp"
+#include "fort/myrmidon/types/Typedefs.hpp"
 
+#include <Eigen/src/Core/Matrix.h>
 #include <QAction>
 #include <QComboBox>
 #include <QMainWindow>
@@ -31,18 +34,29 @@ void AntShapeWorkspaceUTest::SetUp() {
 
 	bridge->antShapeTypes()->addType("foo");
 
+	static auto build = [](const fmp::Vector2dList &corners) {
+		Eigen::Matrix<double, 2, 4> res;
+		for (size_t i = 0; i < 4; ++i) {
+			res.col(i) = corners[i];
+		}
+		return res;
+	};
+
 	shapeWs->setTagCloseUp(std::make_shared<fmp::TagCloseUp>(
 	    TestSetup::UTestData().Basedir() / "",
 	    fmp::FrameReference("foo.0000", 1, fort::Time()),
 	    1,
-	    Eigen::Vector2d::Zero(),
-	    0.0,
-	    fmp::Vector2dList(
-	        {Eigen::Vector2d(1, 1),
-	         Eigen::Vector2d(1, -1),
-	         Eigen::Vector2d(-1, -1),
-	         Eigen::Vector2d(-1, 1)}
-	    )
+	    std::vector<fm::TagDetection>{fm::TagDetection{
+	        .ID       = 1,
+	        .Position = Eigen::Vector2d::Zero(),
+	        .Angle    = 0.0,
+	        .Corners  = build({
+                Eigen::Vector2d(1, 1),
+                Eigen::Vector2d(1, -1),
+                Eigen::Vector2d(-1, -1),
+                Eigen::Vector2d(-1, 1),
+            }),
+	    }}
 	));
 
 	bridge->selectAnt(1);

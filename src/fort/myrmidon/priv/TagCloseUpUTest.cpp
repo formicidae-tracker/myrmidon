@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 
 #include "TagCloseUp.hpp"
+#include "fort/myrmidon/types/CloseUp.hpp"
+#include "fort/myrmidon/types/Typedefs.hpp"
 
 #include <fort/myrmidon/TestSetup.hpp>
 #include <fort/myrmidon/UtilsUTest.hpp>
@@ -33,12 +35,8 @@ TEST_F(TagCloseUpUTest, CanBeFormatted) {
 		);
 	}
 
-	Vector2dList corners = {
-	    Eigen::Vector2d(0, 0),
-	    Eigen::Vector2d(0, 0),
-	    Eigen::Vector2d(0, 0),
-	    Eigen::Vector2d(0, 0),
-	};
+	Eigen::Matrix<double, 2, 4> corners;
+	corners.setConstant(0.0);
 
 	for (const auto &d : data) {
 		FrameReference a(
@@ -50,9 +48,12 @@ TEST_F(TagCloseUpUTest, CanBeFormatted) {
 		    TestSetup::UTestData().Basedir() / "foo",
 		    a,
 		    d.TagID,
-		    Eigen::Vector2d::Zero(),
-		    0.0,
-		    corners
+		    std::vector<TagDetection>{TagDetection{
+		        .ID       = d.TagID,
+		        .Position = Eigen::Vector2d::Zero(),
+		        .Angle    = 0.0,
+		        .Corners  = corners,
+		    }}
 		);
 		fs::path expectedParentPath(
 		    d.Path.generic_string().empty() ? "/" : d.Path
@@ -72,7 +73,8 @@ TEST_F(TagCloseUpUTest, CanComputeGeometricValues) {
 	    Eigen::Vector2d(1.0, 1.0),
 	    Eigen::Vector2d(2.0, 1.0),
 	    Eigen::Vector2d(2.0, 2.0),
-	    Eigen::Vector2d(1.0, 2.0)};
+	    Eigen::Vector2d(1.0, 2.0)
+	};
 
 	Eigen::Vector2d center =
 	    (corners[0] + corners[1] + corners[2] + corners[3]) / 4.0;
@@ -84,27 +86,27 @@ TEST_F(TagCloseUpUTest, CanComputeGeometricValues) {
 	};
 
 	for (const auto &a : angles) {
-		Isometry2Dd  trans(a, Eigen::Vector2d(2.0, 1.0));
-		Vector2dList transCorners = {
-		    trans * corners[0],
-		    trans * corners[1],
-		    trans * corners[2],
-		    trans * corners[3]};
-		double res = TagCloseUp::ComputeAngleFromCorners(
-		    transCorners[0],
-		    transCorners[1],
-		    transCorners[2],
-		    transCorners[3]
-		);
+		Isometry2Dd                 trans(a, Eigen::Vector2d(2.0, 1.0));
+		Eigen::Matrix<double, 2, 4> transCorners;
+
+		transCorners.col(0) = trans * corners[0];
+		transCorners.col(1) = trans * corners[1];
+		transCorners.col(2) = trans * corners[2];
+		transCorners.col(3) = trans * corners[3];
+
+		double res = TagDetection::ComputeAngleFromCorners(transCorners);
 		EXPECT_DOUBLE_EQ(res, a);
 
 		auto tcu = TagCloseUp(
 		    TestSetup::UTestData().Basedir() / "foo.png",
 		    FrameReference("", 0, Time()),
 		    0,
-		    trans * center,
-		    res,
-		    transCorners
+		    std::vector<TagDetection>{TagDetection{
+		        .ID       = 0,
+		        .Position = trans * center,
+		        .Angle    = res,
+		        .Corners  = transCorners
+		    }}
 		);
 
 		EXPECT_DOUBLE_EQ(tcu.TagSizePx(), 1.0);
@@ -121,22 +123,30 @@ TEST_F(TagCloseUpUTest, CanComputeGeometricValues) {
 
 TEST_F(TagCloseUpUTest, ComputesSquareness) {
 	struct TestData {
-		Vector2dList Corners;
-		double       Expected;
+		Eigen::Matrix<double, 2, 4> Corners;
+		double                      Expected;
+	};
+
+	static auto build = [](const Vector2dList &corners) {
+		Eigen::Matrix<double, 2, 4> res;
+		for (size_t i = 0; i < 4; ++i) {
+			res.col(i) = corners[i];
+		}
+		return res;
 	};
 
 	std::vector<TestData> testdata = {
 	    {
-	        {{1, 1}, {1, -1}, {-1, -1}, {-1, 1}},
+	        build({{1, 1}, {1, -1}, {-1, -1}, {-1, 1}}),
 	        1.0,
 	    },
 	    // this is a triangle, it is not square
 	    {
-	        {{1, 1}, {1, -1}, {-1, -1}, {1, 1}},
+	        build({{1, 1}, {1, -1}, {-1, -1}, {1, 1}}),
 	        0.0,
 	    },
 	    {
-	        {{11, 12}, {9, -11}, {-11, -10}, {-12, 9}},
+	        build({{11, 12}, {9, -11}, {-11, -10}, {-12, 9}}),
 	        0.8622,
 	    },
 	};
@@ -146,16 +156,18 @@ TEST_F(TagCloseUpUTest, ComputesSquareness) {
 		    TestSetup::UTestData().Basedir() / "foo.png",
 		    FrameReference("", 0, Time()),
 		    0,
-		    Eigen::Vector2d(0, 0),
-		    0,
-		    d.Corners
+		    std::vector<TagDetection>{TagDetection{
+		        .ID       = 0,
+		        .Position = Eigen::Vector2d(0, 0),
+		        .Angle    = 0,
+		        .Corners  = d.Corners,
+		    }}
 		);
 		EXPECT_NEAR(tcu.Squareness(), d.Expected, 1.0e-3);
 	}
 }
 
 TEST_F(TagCloseUpUTest, ClassInvariants) {
-
 	EXPECT_THROW(
 	    {
 		    // not an absolute path
@@ -163,33 +175,7 @@ TEST_F(TagCloseUpUTest, ClassInvariants) {
 		        "foo",
 		        FrameReference(),
 		        0,
-		        Eigen::Vector2d(),
-		        0.0,
-		        {
-		            Eigen::Vector2d(),
-		            Eigen::Vector2d(),
-		            Eigen::Vector2d(),
-		            Eigen::Vector2d(),
-		        }
-		    );
-	    },
-	    cpptrace::invalid_argument
-	);
-
-	EXPECT_THROW(
-	    {
-		    // Not having 4 corners
-		    TagCloseUp(
-		        TestSetup::UTestData().Basedir() / "foo",
-		        FrameReference(),
-		        0,
-		        Eigen::Vector2d(),
-		        0.0,
-		        {
-		            Eigen::Vector2d(),
-		            Eigen::Vector2d(),
-		            Eigen::Vector2d(),
-		        }
+		        std::vector<TagDetection>{TagDetection{.ID = 0, .Angle = 0.0}}
 		    );
 	    },
 	    cpptrace::invalid_argument

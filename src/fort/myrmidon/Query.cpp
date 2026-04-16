@@ -192,8 +192,18 @@ Query::GetMetaDataKeyRanges(const Experiment & e,
 
 std::tuple<std::vector<std::string>, std::vector<TagID>, Eigen::MatrixXd>
 Query::GetTagCloseUps(
-    const Experiment &e, ProgressReporter::Ptr &&progress, bool fixCorruptedData
+    const Experiment       &e,
+    ProgressReporter::Ptr &&progress,
+    bool                    fixCorruptedData,
+    bool                    reportAllDetections
 ) {
+	if (reportAllDetections) {
+		return priv::Query::GetAllTagDetections(
+		    e.d_p->Get(),
+		    std::move(progress),
+		    fixCorruptedData
+		);
+	}
 	return priv::Query::GetTagCloseUps(
 	    e.d_p->Get(),
 	    std::move(progress),

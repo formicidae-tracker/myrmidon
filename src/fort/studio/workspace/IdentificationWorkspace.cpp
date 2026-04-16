@@ -1,4 +1,5 @@
 #include "IdentificationWorkspace.hpp"
+#include "fort/myrmidon/types/Typedefs.hpp"
 #include "ui_IdentificationWorkspace.h"
 
 #include <QAction>

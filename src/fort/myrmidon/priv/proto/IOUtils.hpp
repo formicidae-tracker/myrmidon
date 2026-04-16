@@ -12,6 +12,7 @@
 
 #include <fort/myrmidon/Ant.hpp>
 #include <fort/myrmidon/Shapes.hpp>
+#include <fort/myrmidon/types/CloseUp.hpp>
 #include <fort/myrmidon/types/Color.hpp>
 #include <fort/myrmidon/types/OpenArguments.hpp>
 
@@ -40,6 +41,7 @@ class Circle;
 class Polygon;
 class Shape;
 class Experiment;
+class TagDetection;
 } // namespace pb
 
 namespace priv {
@@ -277,6 +279,10 @@ public:
 	    const TagCloseUp &tcu,
 	    const fs::path   &absoluteBasedir
 	);
+
+	static TagDetection LoadTagDetection(const pb::TagDetection &detections);
+
+	static void SaveTagDetection(pb::TagDetection *pb, const TagDetection &d);
 
 	// Loads a Capsule from a message
 	//

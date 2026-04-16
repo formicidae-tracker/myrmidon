@@ -395,6 +395,8 @@ public:
 	 * @param fixCorruptedData a boolean that will make data
 	 *         corruption error silently ignored. Could lead to the
 	 *         loss of some tag close-up
+	 * @param keepInvalid a boolean. If true, close-up without the targeted
+	 *        subject are kept.
 	 *
 	 * @return a tuple of a vector of string, TagID, and an Eigen::Matrix
 	 */
@@ -403,7 +405,8 @@ public:
 	    GetTagCloseUps(
 	        const Experiment       &e,
 	        ProgressReporter::Ptr &&progress,
-	        bool                    fixCorruptedData = false
+	        bool                    fixCorruptedData    = false,
+	        bool                    reportAllDetections = false
 	    );
 };
 

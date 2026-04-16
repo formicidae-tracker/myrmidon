@@ -197,9 +197,9 @@ void CloseUpWriter::SaveExpectedCloseUp(
 		);
 	}
 
-	Eigen::Vector2d position;
-	double          angle;
-	Vector2dList    corners;
+	Eigen::Vector2d             position;
+	double                      angle;
+	Eigen::Matrix<double, 2, 4> corners;
 
 	auto antPosition = data.Positions.block<1, 3>(index, 1).transpose();
 	d_drawer->ComputeCorners(corners, antID, antPosition);
@@ -210,8 +210,8 @@ void CloseUpWriter::SaveExpectedCloseUp(
 		offset.x() = std::clamp(150.0 - position.x(), 300.0 - data.Width, 0.0);
 		offset.y() = std::clamp(150.0 - position.y(), 300.0 - data.Height, 0.0);
 		position += offset;
-		for (auto &p : corners) {
-			p += offset;
+		for (size_t i = 0; i < 4; ++i) {
+			corners.col(i) += offset;
 		}
 	}
 
@@ -224,9 +224,12 @@ void CloseUpWriter::SaveExpectedCloseUp(
 	    path,
 	    ref,
 	    antID - 1,
-	    position,
-	    angle,
-	    corners
+	    std::vector<TagDetection>{TagDetection{
+	        .ID       = antID - 1,
+	        .Position = position,
+	        .Angle    = angle,
+	        .Corners  = corners
+	    }}
 	);
 	d_tddInfo.TagCloseUps.push_back(tcu);
 }

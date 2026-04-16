@@ -1,5 +1,8 @@
 #include "TagCloseUp.hpp"
+#include "fort/myrmidon/types/CloseUp.hpp"
 
+#include <Eigen/src/Core/Matrix.h>
+#include <limits>
 #include <regex>
 
 #include <apriltag/tag16h5.h>
@@ -19,20 +22,11 @@
 #include <fort/myrmidon/utils/Defer.hpp>
 
 #include <iostream>
+#include <stdexcept>
 
 namespace fort {
 namespace myrmidon {
 namespace priv {
-
-double TagCloseUp::ComputeAngleFromCorners(
-    const Eigen::Vector2d &c0,
-    const Eigen::Vector2d &c1,
-    const Eigen::Vector2d &c2,
-    const Eigen::Vector2d &c3
-) {
-	Eigen::Vector2d delta = (c1 + c2) / 2.0 - (c0 + c3) / 2.0;
-	return atan2(delta.y(), delta.x());
-}
 
 std::string
 TagCloseUp::FormatURI(const std::string &tddURI, FrameID frameID, TagID tagID) {
@@ -42,50 +36,17 @@ TagCloseUp::FormatURI(const std::string &tddURI, FrameID frameID, TagID tagID) {
 }
 
 TagCloseUp::TagCloseUp(
-    const fs::path        &absoluteFilePath,
-    const FrameReference  &reference,
-    TagID                  tagID,
-    const Eigen::Vector2d &position,
-    double                 angle,
-    const Vector2dList    &corners
+    const fs::path                  &absoluteFilePath,
+    const FrameReference            &reference,
+    TagID                            tagID,
+    const std::vector<TagDetection> &detections
 )
     : d_reference(reference)
     , d_URI(FormatURI(reference.ParentURI(), reference.FrameID(), tagID))
     , d_absoluteFilePath(absoluteFilePath)
-    , d_tagID(tagID)
-    , d_tagPosition(position)
-    , d_tagAngle(angle)
-    , d_corners(corners) {
+    , d_detections(detections) {
 	FORT_MYRMIDON_CHECK_PATH_IS_ABSOLUTE(absoluteFilePath);
-	if (corners.size() != 4) {
-		throw cpptrace::invalid_argument(
-		    "A tag needs 4 corners, only got " + std::to_string(corners.size())
-		);
-	}
-}
-
-TagCloseUp::TagCloseUp(
-    const fs::path             &absoluteFilePath,
-    const FrameReference       &reference,
-    const apriltag_detection_t *d
-)
-    : d_reference(reference)
-    , d_URI(FormatURI(reference.ParentURI(), reference.FrameID(), d->id))
-    , d_absoluteFilePath(absoluteFilePath)
-    , d_tagID(d->id)
-    , d_tagPosition(d->c[0], d->c[1])
-    , d_tagAngle(0.0)
-    , d_corners(4) {
-	FORT_MYRMIDON_CHECK_PATH_IS_ABSOLUTE(absoluteFilePath);
-	for (size_t i = 0; i < 4; ++i) {
-		d_corners[i] << d->p[i][0], d->p[i][1];
-	}
-	d_tagAngle = ComputeAngleFromCorners(
-	    d_corners[0],
-	    d_corners[1],
-	    d_corners[2],
-	    d_corners[3]
-	);
+	findTarget(tagID);
 }
 
 TagCloseUp::~TagCloseUp() {}
@@ -103,49 +64,61 @@ const fs::path &TagCloseUp::AbsoluteFilePath() const {
 }
 
 TagID TagCloseUp::TagValue() const {
-	return d_tagID;
+	if (d_target == d_detections.end()) {
+		return std::numeric_limits<TagID>::max();
+	}
+	return d_target->ID;
 }
 
 const Eigen::Vector2d &TagCloseUp::TagPosition() const {
-	return d_tagPosition;
+	check();
+	return d_target->Position;
 }
 
 double TagCloseUp::TagAngle() const {
-	return d_tagAngle;
+	check();
+	return d_target->Angle;
 }
 
-const Vector2dList &TagCloseUp::Corners() const {
-	return d_corners;
-}
-
-Isometry2Dd TagCloseUp::ImageToTag() const {
-	return Isometry2Dd(d_tagAngle, d_tagPosition).inverse();
+const Eigen::Matrix<double, 2, 4> &TagCloseUp::Corners() const {
+	check();
+	return d_target->Corners;
 }
 
 double TagCloseUp::TagSizePx() const {
-	double res = (d_corners[0] - d_corners[1]).norm() +
-	             (d_corners[1] - d_corners[2]).norm() +
-	             (d_corners[2] - d_corners[3]).norm() +
-	             (d_corners[3] - d_corners[0]).norm();
-
-	return res / 4.0;
+	check();
+	return d_target->SizePx();
 }
 
 double TagCloseUp::Squareness() const {
-	double maxAngleDistanceToPI_2 = 0.0;
-	for (size_t i = 0; i < 4; ++i) {
-		Eigen::Vector2d a     = d_corners[(i - 1) % 4] - d_corners[i];
-		Eigen::Vector2d b     = d_corners[(i + 1) % 4] - d_corners[i];
-		double          aNorm = a.norm();
-		double          bNorm = b.norm();
-		if (aNorm < 1.0e-3 || bNorm < 1.0e-3) {
-			return 0;
+	check();
+	return d_target->Squareness();
+}
+
+const std::vector<TagDetection> &TagCloseUp::Detections() const {
+	return d_detections;
+}
+
+Isometry2Dd TagCloseUp::ImageToTag() const {
+	return Isometry2Dd(TagAngle(), TagPosition()).inverse();
+}
+
+void TagCloseUp::findTarget(TagID tid) {
+	d_target = d_detections.end();
+	for (auto d = d_detections.begin(); d != d_detections.end(); ++d) {
+		if (d->ID == tid) {
+			d_target     = d;
+			d_tagWidthPx = (d->Corners.col(0) - d->Corners.col(1)).norm();
+			d_squareness = d->Squareness();
+			return;
 		}
-		double angle = std::acos(a.dot(b) / (aNorm * bNorm));
-		maxAngleDistanceToPI_2 =
-		    std::max(maxAngleDistanceToPI_2, std::abs(angle - (M_PI / 2.0)));
 	}
-	return 1.0 - maxAngleDistanceToPI_2 / M_PI * 2.0;
+}
+
+void TagCloseUp::check() const {
+	if (d_target == d_detections.end()) {
+		throw std::runtime_error("Target ID not found in CloseUp");
+	}
 }
 
 std::ostream &

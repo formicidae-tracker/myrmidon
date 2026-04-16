@@ -500,28 +500,26 @@ void VectorialScene::deleteShape(QSharedPointer<Shape> shape) {
 	if ( auto p = shape.dynamicCast<Polygon>() ) {
 		d_polygons.removeOne(p);
 	}
-
 }
 
-
-void VectorialScene::setStaticPolygon(const fm::Vector2dList & corners,
-                                      const QColor & color) {
-	if ( d_staticPolygon == nullptr ) {
+void VectorialScene::setStaticPolygon(
+    const Eigen::Matrix<double, 2, 4> &corners, const QColor &color
+) {
+	if (d_staticPolygon == nullptr) {
 		d_staticPolygon = new QGraphicsPolygonItem;
 		addItem(d_staticPolygon);
 		d_staticPolygon->setEnabled(false);
 		d_staticPolygon->setZValue(-99);
 	}
 	QVector<QPointF> vertices;
-	for ( const auto & c : corners ) {
-		vertices.push_back(QPointF(c.x(),c.y()));
+	vertices.reserve(4);
+	for (size_t i = 0; i < 4; ++i) {
+		vertices.push_back(QPointF(corners(0, i), corners(1, i)));
 	}
-	if ( corners.empty() == false ) {
-		vertices.push_back(QPointF(corners[0].x(),corners[0].y()));
-	}
+
 	QColor actual(color);
 	actual.setAlpha(Shape::BORDER_OPACITY);
-	d_staticPolygon->setPen(QPen(actual,Shape::LINE_WIDTH));
+	d_staticPolygon->setPen(QPen(actual, Shape::LINE_WIDTH));
 	actual.setAlpha(Shape::FILL_OPACITY);
 	d_staticPolygon->setBrush(actual);
 	d_staticPolygon->setPolygon(vertices);

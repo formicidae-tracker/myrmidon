@@ -62,6 +62,14 @@ public:
 	        bool                    fixCorruptedData
 	    );
 
+	static std::
+	    tuple<std::vector<std::string>, std::vector<TagID>, Eigen::MatrixXd>
+	    GetAllTagDetections(
+	        const Experiment       &e,
+	        ProgressReporter::Ptr &&progressCallback,
+	        bool                    fixCorruptedData
+	    );
+
 	static void ProcessLoaders(
 	    const std::vector<TrackingDataDirectory::Loader> &loaders,
 	    ProgressReporter::Ptr                           &&progress,

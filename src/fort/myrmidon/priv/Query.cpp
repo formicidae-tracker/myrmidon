@@ -374,12 +374,17 @@ Query::GetTagCloseUps(
 	std::vector<TagID>       IDs;
 	Eigen::MatrixXd          positions;
 	std::size_t              i = -1;
+
 	for (const auto &[URI, tdd] : e.TrackingDataDirectories()) {
 		const auto &closeUps = tdd->TagCloseUps();
 		paths.reserve(paths.size() + closeUps.size());
 		IDs.reserve(paths.size() + closeUps.size());
 		positions.conservativeResize(positions.rows() + closeUps.size(), 11);
+
 		for (const auto &cu : closeUps) {
+			if (cu->Valid() == false) {
+				continue;
+			}
 			++i;
 			paths.push_back(cu->AbsoluteFilePath());
 			IDs.push_back(cu->TagValue());
@@ -387,7 +392,48 @@ Query::GetTagCloseUps(
 			positions(i, 2)             = cu->TagAngle();
 			for (size_t j = 0; j < 4; ++j) {
 				positions.block<1, 2>(i, 2 * j + 3) =
-				    cu->Corners()[j].transpose();
+				    cu->Corners().col(j).transpose();
+			}
+		}
+		positions.conservativeResize(i + 1, 11);
+	}
+	return {paths, IDs, positions};
+}
+
+std::tuple<std::vector<std::string>, std::vector<TagID>, Eigen::MatrixXd>
+Query::GetAllTagDetections(
+    const Experiment &e, ProgressReporter::Ptr &&progress, bool fixCorruptedData
+) {
+
+	EnsureTagCloseUpsAreLoaded(e, std::move(progress), fixCorruptedData);
+
+	std::vector<std::string> paths;
+	std::vector<TagID>       IDs;
+	Eigen::MatrixXd          positions;
+	std::size_t              i = -1;
+
+	for (const auto &[URI, tdd] : e.TrackingDataDirectories()) {
+		const auto &closeUps       = tdd->TagCloseUps();
+		size_t      sizeDetections = 0;
+		for (const auto &cu : closeUps) {
+			sizeDetections += cu->Detections().size();
+		}
+
+		paths.reserve(paths.size() + sizeDetections);
+		IDs.reserve(paths.size() + sizeDetections);
+		positions.conservativeResize(positions.rows() + sizeDetections, 11);
+
+		for (const auto &cu : closeUps) {
+			for (const auto &d : cu->Detections()) {
+				++i;
+				paths.push_back(cu->AbsoluteFilePath());
+				IDs.push_back(cu->TagValue());
+				positions.block<1, 2>(i, 0) = d.Position.transpose();
+				positions(i, 2)             = d.Angle;
+				for (size_t j = 0; j < 4; ++j) {
+					positions.block<1, 2>(i, 2 * j + 3) =
+					    d.Corners.col(j).transpose();
+				}
 			}
 		}
 	}

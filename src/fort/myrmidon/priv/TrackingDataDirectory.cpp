@@ -1,3 +1,5 @@
+#include "fort/myrmidon/types/CloseUp.hpp"
+#include <filesystem>
 extern "C" {
 #include <libavutil/pixdesc.h>
 #include <libavutil/pixfmt.h>
@@ -532,7 +534,8 @@ TrackingDataDirectory::EnumerateFullFrames(const fs::path &subpath
 		auto listing = ListTagCloseUpFiles(dirpath, "");
 		auto res     = std::make_shared<std::map<FrameReference, fs::path>>();
 		for (const auto &[frameID, fileAndFilter] : listing) {
-			if (frameID <= d_endFrame && fileAndFilter.second == nullptr) {
+			if (frameID <= d_endFrame &&
+			    fileAndFilter.second.has_value() == false) {
 				res->insert(std::make_pair(
 				    FrameReferenceAt(frameID),
 				    fileAndFilter.first
@@ -702,32 +705,31 @@ private:
 				apriltag_detections_destroy(detections);
 			};
 			apriltag_detection *d;
+			if (fileAndFilter.second.has_value() == false) {
+				for (int i = 0; i < zarray_size(detections); ++i) {
+					zarray_get(detections, i, &d);
+					auto td = TagDetection::Convert(d);
+					res.push_back(std::make_shared<TagCloseUp>(
+					    fileAndFilter.first,
+					    reference,
+					    td.ID,
+					    std::vector<TagDetection>{td}
+					));
+				}
+				return {res, nullptr};
+			}
+			std::vector<TagDetection> all;
+			all.reserve(zarray_size(detections));
 			for (int i = 0; i < zarray_size(detections); ++i) {
 				zarray_get(detections, i, &d);
-				if (fileAndFilter.second &&
-				    (unsigned int)(d->id) != *fileAndFilter.second) {
-					continue;
-				}
-				res.push_back(std::make_shared<TagCloseUp>(
-				    fileAndFilter.first,
-				    reference,
-				    d
-				));
+				all.emplace_back(TagDetection::Convert(d));
 			}
-
-			if (fileAndFilter.second != nullptr && res.empty() == true) {
-				std::ostringstream oss;
-				oss << "could not detect tag 0x" << std::hex
-				    << *fileAndFilter.second << " (decimal: " << std::dec
-				    << *fileAndFilter.second << ") in " << fileAndFilter.first;
-				return {
-				    res,
-				    std::make_unique<NoKnownAcquisitionTimeFor>(
-				        oss.str(),
-				        fileAndFilter.first
-				    )
-				};
-			}
+			res.push_back(std::make_shared<TagCloseUp>(
+			    fileAndFilter.first,
+			    reference,
+			    fileAndFilter.second.value(),
+			    all
+			));
 
 			return {res, nullptr};
 		}
@@ -746,6 +748,21 @@ private:
 
 std::vector<TrackingDataDirectory::Loader>
 TrackingDataDirectory::PrepareTagCloseUpsLoaders() {
+	// remove all disabled frame
+	for (const auto &de : fs::directory_iterator(
+	         AbsoluteFilePath() / d_closeUpLocation.Subdir
+	     )) {
+		if (de.path().stem().extension() != ".dis" ||
+		    de.path().filename().string().starts_with(d_closeUpLocation.Prefix
+		    ) == false) {
+			continue;
+		}
+		auto newName =
+		    de.path().parent_path() /
+		    (de.path().stem().stem().string() + de.path().extension().string());
+		fs::rename(de.path(), newName);
+	}
+
 	auto tagCloseUpFiles = ListTagCloseUpFiles(
 	    AbsoluteFilePath() / d_closeUpLocation.Subdir,
 	    d_closeUpLocation.Prefix
