@@ -219,8 +219,11 @@ std::shared_ptr<fort::myrmidon::VideoSegment::List> FindVideoSegments(
 	return segments;
 }
 
-py::object
-GetTagCloseUps(const fort::myrmidon::Experiment &e, bool fixCorruptedData) {
+py::object GetTagCloseUps(
+    const fort::myrmidon::Experiment &e,
+    bool                              fixCorruptedData,
+    bool                              reportAllDetections
+) {
 	using namespace fort::myrmidon;
 	using namespace pybind11::literals;
 
@@ -231,8 +234,12 @@ GetTagCloseUps(const fort::myrmidon::Experiment &e, bool fixCorruptedData) {
 	Eigen::MatrixXd          data;
 
 	auto p = std::make_unique<ItemProgress>("Tag Close-Ups");
-	std::tie(paths, IDs, data) =
-	    Query::GetTagCloseUps(e, std::move(p), fixCorruptedData);
+	std::tie(paths, IDs, data) = Query::GetTagCloseUps(
+	    e,
+	    std::move(p),
+	    fixCorruptedData,
+	    reportAllDetections
+	);
 
 	py::object df = pd.attr("DataFrame")(
 	    "data"_a = py::dict("path"_a = paths, "ID"_a = IDs)
@@ -550,7 +557,8 @@ Raises:
 	        "GetTagCloseUps",
 	        &GetTagCloseUps,
 	        "experiment"_a,
-	        "fixCorruptedData"_a = false,
+	        "fixCorruptedData"_a    = false,
+	        "reportAllDetections"_a = false,
 	        R"pydoc(
 Gets the tag close-up in this experiment
 
@@ -559,6 +567,8 @@ Args:
     fixCorruptedData (bool): if True, data corruption will be silently
         fixed. In this case a few close-up may be lost. Otherwise it
         will raise an error.
+    reportAllDetections (bool): if True, report all detection in each close-up,
+        not only the targeted subject.
 
 Raises:
    RuntimeError: in case of data corruption and if fixCorruptedData == False.
@@ -566,7 +576,5 @@ Raises:
 Returns:
     pandas.DataFrame: the close-up data in the experiment
 )pydoc"
-	    )
-
-	    ;
+	    );
 }

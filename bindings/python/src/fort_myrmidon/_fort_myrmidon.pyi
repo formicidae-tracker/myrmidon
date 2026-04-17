@@ -1684,7 +1684,7 @@ class Query:
             ValueError: if **value** is not the right type for **key**
         """
     @staticmethod
-    def GetTagCloseUps(experiment: Experiment, fixCorruptedData: bool = False) -> typing.Any:
+    def GetTagCloseUps(experiment: Experiment, fixCorruptedData: bool = False, reportAllDetections: bool = False) -> typing.Any:
         """
         Gets the tag close-up in this experiment
         
@@ -1693,6 +1693,8 @@ class Query:
             fixCorruptedData (bool): if True, data corruption will be silently
                 fixed. In this case a few close-up may be lost. Otherwise it
                 will raise an error.
+            reportAllDetections (bool): if True, report all detection in each close-up,
+                not only the targeted subject.
         
         Raises:
            RuntimeError: in case of data corruption and if fixCorruptedData == False.
