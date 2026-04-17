@@ -133,6 +133,17 @@ FetchContent_Declare(
 	GIT_TAG v1.0.4
 )
 
+set(SLOGPP_SMALLER_STRING_OBJECT Off)
+if(NOT SKBUILD AND EXISTS ${PROJECT_SOURCE_DIR}/deps/slogpp)
+	FetchContent_Declare(slogpp SOURCE_DIR ${PROJECT_SOURCE_DIR}/deps/slogpp)
+else()
+	FetchContent_Declare(
+		slogpp
+		GIT_REPOSITORY https://github.com/atuleu/slogpp.git
+		GIT_TAG 6b8b91ccd74f3baebda513b4c4ee5ebf8a04e48a
+	)
+endif()
+
 FetchContent_Declare(
 	yaml-cpp
 	GIT_REPOSITORY https://github.com/jbeder/yaml-cpp
@@ -162,17 +173,6 @@ else()
 		fort-charis
 		GIT_REPOSITORY https://github.com/formicidae-tracker/charis.git
 		GIT_TAG df3c324f0be603beab98411a9c8b4a180b105274
-	)
-endif()
-
-set(SLOGPP_SMALLER_STRING_OBJECT Off)
-if(NOT SKBUILD AND EXISTS ${PROJECT_SOURCE_DIR}/deps/slogpp)
-	FetchContent_Declare(slogpp SOURCE_DIR ${PROJECT_SOURCE_DIR}/deps/slogpp)
-else()
-	FetchContent_Declare(
-		slogpp
-		GIT_REPOSITORY https://github.com/atuleu/slogpp.git
-		GIT_TAG ef45f923680a655e02ab4fa66b4b3f9954a74965
 	)
 endif()
 
