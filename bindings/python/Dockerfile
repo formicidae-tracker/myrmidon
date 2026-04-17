@@ -74,6 +74,9 @@ RUN PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig:/usr/local/lib64/p
 RUN make -j 12
 RUN make install
 
+WORKDIR /deps
+RUN dnf install -y libunwind-devel
+
 WORKDIR /project
 
 RUN rm -Rf /deps
